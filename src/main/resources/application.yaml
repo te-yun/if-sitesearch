@@ -2,6 +2,11 @@
 # Copyright 2017 Alexander Orlov <alexander.orlov@loxal.net>. All rights reserved.
 #
 
+elasticsearch:
+  clustername: mkyong-cluster
+  host: localhost
+  port: 9300
+
 server:
   port: 8200
 
