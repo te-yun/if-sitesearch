@@ -1,0 +1,66 @@
+#
+# Copyright 2017 Alexander Orlov <alexander.orlov@loxal.net>. All rights reserved.
+#
+
+server:
+  port: 8200
+
+security:
+  oauth2:
+    client:
+      client-id: some-id
+      client-secret: some-secret
+      scope: read,write
+      auto-approve-scopes: '.*'
+      access-token-uri: http://localhost:8080/oauth/token
+      user-authorization-uri: http://localhost:8080/oauth/authorize
+    resource:
+      user-info-uri: http://localhost:8080/me
+
+facebook:
+  client:
+    clientId: 696049080584138
+#    clientSecret: ${random.uuid} # add valid token to your local configuration
+    accessTokenUri: https://graph.facebook.com/oauth/access_token
+    userAuthorizationUri: https://www.facebook.com/dialog/oauth
+    tokenName: oauth_token
+    authenticationScheme: query
+    clientAuthenticationScheme: form
+  resource:
+    userInfoUri: https://graph.facebook.com/me
+
+github:
+  client:
+    clientId: 81737a2de2a17a289fba
+#    clientSecret: ${random.uuid} # add valid token to your local configuration
+    accessTokenUri: https://github.com/login/oauth/access_token
+    userAuthorizationUri: https://github.com/login/oauth/authorize
+    clientAuthenticationScheme: form
+  resource:
+    userInfoUri: https://api.github.com/user
+
+vault:
+  uri: http://${couchbase.cluster.ip}:8200
+  token: ${random.uuid} # add valid (root) token to your local configuration
+
+spring:
+  jackson:
+    serialization:
+      INDENT_OUTPUT: true
+  main:
+    banner-mode: "off"
+  output:
+    ansi:
+      enabled: always
+  application:
+    name: quizzer
+  data:
+    cassandra:
+      keyspace-name: ${couchbase.cluster.bucket}
+      contact-points: ${couchbase.cluster.ip}
+
+couchbase:
+  cluster:
+    ip: sky.loxal.net
+    bucket: ${spring.application.name}
+    password: ${security.user.password}
