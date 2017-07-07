@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Alexander Orlov <alexander.orlov@loxal.net>. All rights reserved.
+ * Copyright 2017 IntraFind Sofware AG. All rights reserved.
  */
 
 package net.loxal.quizzer.repository;
