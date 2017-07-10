@@ -21,11 +21,11 @@ to the `config` folder inside this project.
 
 ## Elasticsearch
 
-    docker rm -f couchbase
-    docker run -d --name couchbase \
-        -p 8091-8094:8091-8094 -p 11210:11210 \
+    docker rm -f sitesearch
+    docker run -d --name sitesearch \
+        -p 9200-9300:9200-9300 \
         -v ~/srv/couchbase:/opt/couchbase/var/lib/couchbase \
-        couchbase:community
+        elasticsearch:5.4.3-alpine
 
     CREATE PRIMARY INDEX `#primary` ON `quizzer` 
     
