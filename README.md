@@ -21,14 +21,8 @@ to the `config` folder inside this project.
 
 ## Elasticsearch
 
-    docker rm -f sitesearch
-    docker run -d --name sitesearch \
-        -p 9200-9300:9200-9300 \
-        -v ~/srv/couchbase:/opt/couchbase/var/lib/couchbase \
-        elasticsearch:5.4.3-alpine
+    docker run --rm -d --name sitesearch -p 9200-9300:9200-9300 -v c:/Users/alex/my/project/intrafind/elasticsearch/data:/usr/share/elasticsearch/data elasticsearch:5.4.3-alpine
 
-    CREATE PRIMARY INDEX `#primary` ON `quizzer` 
-    
 # Run 
 
     ./run.sh
