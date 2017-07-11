@@ -11,6 +11,5 @@ WORKDIR /home/$APP_USER
 
 ADD build/libs/*.jar app/
 #ENV SPRING_CONFIG_NAME prod,local,config
-ENV VAULT_TOKEN insert_token_here_dockerfile
 
 CMD ["java", "-jar", "-Xmx64m", "app/if-search-service-1.0.0.jar"]

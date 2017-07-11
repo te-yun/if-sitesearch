@@ -20,10 +20,10 @@ to the `config` folder inside this project.
 
 ## Elasticsearch
 
-    #docker rm -f sitesearch
+    docker rm -f sitesearch
     docker run -d --name sitesearch \
         -p 9200-9300:9200-9300 \
-        -v c:/Users/alex/my/project/intrafind/elasticsearch/data:/usr/share/elasticsearch/data \
+        -v ~/svc/elasticsearch/data:/usr/share/elasticsearch/data \
         elasticsearch:5.4.3-alpine
 
 # Run 
