@@ -8,18 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.data.cassandra.config.java.AbstractCassandraConfiguration;
-import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
-import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
-import org.springframework.data.couchbase.repository.config.EnableCouchbaseRepositories;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
@@ -29,8 +22,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.vault.annotation.VaultPropertySource;
-import org.springframework.vault.config.EnvironmentVaultConfiguration;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.filter.CompositeFilter;
@@ -39,13 +30,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import javax.servlet.Filter;
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @SpringBootApplication
 @RestController
-@Import(EnvironmentVaultConfiguration.class)
-@VaultPropertySource(value = "secret/quizzer")
 @EnableOAuth2Client
 @EnableSwagger2
 public class Application extends WebSecurityConfigurerAdapter {
@@ -117,53 +105,5 @@ public class Application extends WebSecurityConfigurerAdapter {
                 .ignoringAntMatchers("/polls/**", "/certificates/**", "/votes/**")
                 .and().addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class)
         ;
-    }
-
-    @EnableCassandraRepositories
-    @Configuration
-    static class ConfigurationCassandra extends AbstractCassandraConfiguration {
-        @Value("${spring.data.cassandra.contact-points}")
-        private String contactPoints;
-
-        @Value("${spring.data.cassandra.keyspace-name}")
-        private String keyspaceName;
-
-        @Override
-        public String getContactPoints() {
-            return contactPoints;
-        }
-
-        @Override
-        protected String getKeyspaceName() {
-            return keyspaceName;
-        }
-    }
-
-    @EnableCouchbaseRepositories
-    @Configuration
-    static class ConfigurationCouchbase extends AbstractCouchbaseConfiguration {
-        @Value("${couchbase.cluster.bucket}")
-        private String bucketName;
-
-        @Value("${couchbase.cluster.password}")
-        private String password;
-
-        @Value("${couchbase.cluster.ip}")
-        private String ip;
-
-        @Override
-        protected List<String> getBootstrapHosts() {
-            return Collections.singletonList(this.ip);
-        }
-
-        @Override
-        protected String getBucketName() {
-            return this.bucketName;
-        }
-
-        @Override
-        protected String getBucketPassword() {
-            return this.password;
-        }
     }
 }

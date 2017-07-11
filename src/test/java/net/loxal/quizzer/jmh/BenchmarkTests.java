@@ -4,9 +4,9 @@
 
 package net.loxal.quizzer.jmh;
 
-import net.loxal.quizzer.VoteTests;
+import net.loxal.quizzer.CustomerTests;
 import net.loxal.quizzer.controller.VoteController;
-import net.loxal.quizzer.dto.Vote;
+import net.loxal.quizzer.dto.Customer;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Mode;
@@ -31,9 +31,9 @@ public class BenchmarkTests {
     public void benchmark() throws Exception {
         final TestRestTemplate testRestTemplate = new TestRestTemplate();
 
-        final ResponseEntity<Vote> vote = testRestTemplate
+        final ResponseEntity<Customer> vote = testRestTemplate
                 .postForEntity("http://localhost:8200" + VoteController.ENDPOINT,
-                        VoteTests.EXPECTED_MULTIPLE_ANSWERS_CORRECT, Vote.class);
+                        CustomerTests.EXPECTED_MULTIPLE_ANSWERS_CORRECT, Customer.class);
 
         assertEquals(new URI("http://localhost:8200/"), vote.getHeaders().getLocation());
         assertThat(vote.getStatusCodeValue()).isEqualTo(HttpStatus.FOUND.value());

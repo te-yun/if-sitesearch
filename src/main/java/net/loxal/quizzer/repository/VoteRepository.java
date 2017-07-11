@@ -4,13 +4,15 @@
 
 package net.loxal.quizzer.repository;
 
-import net.loxal.quizzer.dto.Vote;
+import net.loxal.quizzer.dto.Customer;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Set;
+import java.util.List;
 
 @Repository
-public interface VoteRepository extends CrudRepository<Vote, String> {
-    Set<Vote> findBySession(String session);
+public interface VoteRepository extends CrudRepository<Customer, String> {
+    Customer findByFirstName(String firstName);
+
+    List<Customer> findByLastName(String lastName);
 }

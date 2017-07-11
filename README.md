@@ -1,5 +1,4 @@
 if-sitesearch
-    sfdsfa test
 =
 
 # About
@@ -21,7 +20,11 @@ to the `config` folder inside this project.
 
 ## Elasticsearch
 
-    docker run --rm -d --name sitesearch -p 9200-9300:9200-9300 -v c:/Users/alex/my/project/intrafind/elasticsearch/data:/usr/share/elasticsearch/data elasticsearch:5.4.3-alpine
+    #docker rm -f sitesearch
+    docker run -d --name sitesearch \
+        -p 9200-9300:9200-9300 \
+        -v c:/Users/alex/my/project/intrafind/elasticsearch/data:/usr/share/elasticsearch/data \
+        elasticsearch:5.4.3-alpine
 
 # Run 
 
