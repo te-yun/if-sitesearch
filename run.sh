@@ -2,11 +2,11 @@
 
 standalone_start() {
     SPRING_CONFIG_NAME=local,application ./gradlew clean bootRun \
-        --no-rebuild \
-        --build-cache \
         --continuous \
         --parallel \
-        --no-scan \
+#        --build-cache \
+#        --no-rebuild \
+#        --no-scan \
 #        -Ddebug \
 #        --debug
 }

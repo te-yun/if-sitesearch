@@ -14,7 +14,10 @@
     <title>iFinder Basic-UI</title>
     <link rel="stylesheet" type="text/css" href="css/app.css" media="all"/>
 
-    <!--<style>-->
+    <style>
+    #ifs-sb-searchfield {
+        font-size: 3em;
+    }
         <!--body {-->
             <!--background-color: #f1f4f6;-->
         <!--}-->
@@ -25,7 +28,7 @@
         <!--.holder {-->
             <!--margin-top: 50px;-->
         <!--}-->
-    <!--</style>-->
+    </style>
 </head>
 
 <body>
@@ -38,7 +41,6 @@
 
 <script type="text/javascript" src="js/app.js"></script>
 <script type="text/javascript">
-    console.info(1);
 
     // noConflict Mode
     // ==================
@@ -54,6 +56,8 @@
             withCredentials: true,
 			multiple: false
         });
+        //document.getElementById('ifs-sb-searchfield').placeholder = 'Site Search';
+        console.info(document.getElementById('ifs-sb-searchfield'));
 	});
 </script>
 </body>

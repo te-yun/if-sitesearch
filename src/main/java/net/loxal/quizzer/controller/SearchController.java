@@ -5,6 +5,7 @@
 package net.loxal.quizzer.controller;
 
 import net.loxal.quizzer.dto.Customer;
+import net.loxal.quizzer.dto.Hit;
 import net.loxal.quizzer.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,17 +25,34 @@ public class SearchController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     Customer create(@RequestBody Customer creation) {
-        return service.create(creation);
+        return null;
     }
 
     @RequestMapping(path = "{id}", method = RequestMethod.GET)
     Customer retrieve(@PathVariable("id") String id) {
-        return service.retrieve(id);
+        return null;
+    }
+
+//    http://ml-if-monster:8080/ifinder5DEV/api/search?iSearchIndex=1&action=facetsandsearch&sSearchTerm=test&start=0&limit=20&_=1499935120692
+    @RequestMapping(method = RequestMethod.GET)
+    Hit demo(@RequestParam("sSearchTerm") String sSearchTerm) {
+        return service.search(sSearchTerm);
+
+//        return "{" +
+//                "  \"facets\": [" +
+//                "  ]," +
+//                "  \"results\": [" +
+//                "    {" +
+//                "      \"text\": \"Any text\"," +
+//                "      \"title\": \"Any title\"" +
+//                "    }" +
+//                "  ]" +
+//                "}";
     }
 
     @RequestMapping(method = RequestMethod.PUT)
     Customer update(@RequestBody Customer update) {
-        return service.update(update);
+        return null;
     }
 
     @RequestMapping(path = "{id}", method = RequestMethod.DELETE)

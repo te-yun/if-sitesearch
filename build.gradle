@@ -53,12 +53,15 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
     compile "org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}"
 
+    compile("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
+
     compile "io.springfox:springfox-swagger2:${swaggerVersion}"
     compile "io.springfox:springfox-swagger-ui:${swaggerVersion}"
 
+//    compile 'net.java.dev.jna:jna-platform:4.4.0'
+    runtime 'net.java.dev.jna:jna:4.4.0'
+//    compile 'com.sun.jna:jna:3.0.9'
     compile "org.springframework.data:spring-data-elasticsearch:2.1.4.RELEASE"
-
-//    compile("org.springframework.boot:spring-boot-devtools")
 
     // required for: Cassandra, Vault
 //    runtime "io.netty:netty-codec-http2:4.1.12.Final"
@@ -82,5 +85,10 @@ tasks.withType(JavaCompile) {
 }
 
 bootRun {
+
+    // Use Spring Boot DevTool only when we run Gradle bootRun task
+//    classpath = sourceSets.main.runtimeClasspath + configurations.dev
+//    classpath = sourceSets.main.runtimeClasspath
+
 //    jvmArgs = ['-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=127.0.0.1:5005']
 }

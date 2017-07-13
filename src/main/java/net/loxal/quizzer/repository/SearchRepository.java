@@ -4,15 +4,13 @@
 
 package net.loxal.quizzer.repository;
 
-import net.loxal.quizzer.dto.Customer;
+import net.loxal.quizzer.dto.Hit;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface SearchRepository extends CrudRepository<Customer, String> {
-    Customer findByFirstName(String firstName);
+public interface SearchRepository extends CrudRepository<Hit, String> {
+    Hit findByName(String query);
 
-    List<Customer> findByLastName(String lastName);
+    Hit findByTitle(String query);
 }
