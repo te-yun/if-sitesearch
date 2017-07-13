@@ -37,17 +37,6 @@ public class SearchController {
     @RequestMapping(method = RequestMethod.GET)
     Hit demo(@RequestParam("sSearchTerm") String sSearchTerm) {
         return service.search(sSearchTerm);
-
-//        return "{" +
-//                "  \"facets\": [" +
-//                "  ]," +
-//                "  \"results\": [" +
-//                "    {" +
-//                "      \"text\": \"Any text\"," +
-//                "      \"title\": \"Any title\"" +
-//                "    }" +
-//                "  ]" +
-//                "}";
     }
 
     @RequestMapping(method = RequestMethod.PUT)

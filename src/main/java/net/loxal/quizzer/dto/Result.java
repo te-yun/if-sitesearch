@@ -5,7 +5,7 @@ public class Result {
     private String favored;
     private String score;
     private String thumbnail;
-    private String title = "Any title...";
+    private String title = "";
     private String type;
     private String url;
     private String urlbase64;
@@ -81,7 +81,7 @@ public class Result {
         this.urlbase64 = urlbase64;
     }
 
-    private String text = "Any text...";
+    private String text = "";
 
     public String getText() {
         return text;

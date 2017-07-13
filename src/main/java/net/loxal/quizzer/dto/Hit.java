@@ -31,7 +31,7 @@ public class Hit {
         this.results = results;
     }
 
-    private String name;
+    private String query;
 
     public Hit() {
     }
@@ -54,15 +54,16 @@ public class Hit {
         this.title = title;
     }
 
-    public String getName() {
-        return name;
+    public String getQuery() {
+        return query;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setQuery(String query) {
+        this.query = query;
     }
 
-    public Hit(String name) {
-        this.name = name;
+    public Hit(String query, List<Result> results) {
+        this.query = query;
+        this.results = results;
     }
 }

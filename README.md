@@ -1,11 +1,13 @@
 if-sitesearch
 =
+Here you can find a *non-technical* business focused abstract about [Sitesearch](http://if-wiki:8090/pages/viewpage.action?pageId=14714226).
 
 # About
 
-* [JIRA Project](http://jira/projects/SITESEARCH)
-* [PROD Release]() / [DEV Release]()
-* [PROD Release]()
+* [Product roadmap](http://if-wiki:8090/pages/viewpage.action?pageId=14714226)
+* [JIRA project](http://jira/projects/SITESEARCH)
+* [PROD release](http://localhost:8001) / [DEV Release](http://localhost:8001)
+* [SCM repository](http://ml-if-git/sitesearch/if-sitesearch)
     
 # Pre-requisite / Configuration
 
@@ -20,11 +22,7 @@ to the `config` folder inside this project.
 
 ## Elasticsearch
 
-    docker rm -f sitesearch
-    docker run -d --name sitesearch \
-        -p 9200-9300:9200-9300 \
-        -v ~/svc/elasticsearch/data:/usr/share/elasticsearch/data \
-        elasticsearch:5.4.3-alpine
+    ./run-elasticsearch.sh
 
 # Run 
 

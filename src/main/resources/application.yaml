@@ -9,12 +9,8 @@
 
 server:
   port: 8001
-#  port: 5050
 
 spring:
-  jackson:
-    serialization:
-      INDENT_OUTPUT: true
   main:
     banner-mode: "off"
   output:

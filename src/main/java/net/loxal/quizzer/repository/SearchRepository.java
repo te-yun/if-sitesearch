@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SearchRepository extends CrudRepository<Hit, String> {
-    Hit findByName(String query);
+    Hit findByQuery(String query);
 
-    Hit findByTitle(String query);
+    Hit findByTitle(String title);
 }

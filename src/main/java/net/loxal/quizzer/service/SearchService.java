@@ -27,11 +27,22 @@ public class SearchService {
     }
 
     public Hit search(String query) {
-        Result result = new Result("Any text...");
-        Hit hit = new Hit(query);
-        hit.setResults(Collections.singletonList(result));
+        final String qresult;
+        switch (query) {
+            case "ying":
+                qresult = "YING result";
+                break;
+            case "yang":
+                qresult = "YANG result";
+                break;
+            default:
+                qresult = "SOMETHING ELSE";
+                break;
+        }
+        Result result = new Result();
+        result.setTitle("Some TITLE with " + qresult + " in it.");
+        result.setText("Some TEXT with " + qresult + " in it.");
+        Hit hit = new Hit(query, Arrays.asList(result));
         return hit;
-//        return new Hit(query);
-//        return repository.findByName(query);
     }
 }
