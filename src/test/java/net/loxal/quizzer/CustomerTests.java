@@ -4,7 +4,7 @@
 
 package net.loxal.quizzer;
 
-import net.loxal.quizzer.controller.VoteController;
+import net.loxal.quizzer.controller.SearchController;
 import net.loxal.quizzer.dto.Customer;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -99,7 +99,7 @@ public class CustomerTests {
     }
 
     private void validateFetched(final Customer expected) {
-        ResponseEntity<Customer> retrieved = testRestTemplate.getForEntity(VoteController.ENDPOINT + "/" + expected.getId(), Customer.class);
+        ResponseEntity<Customer> retrieved = testRestTemplate.getForEntity(SearchController.ENDPOINT + "/" + expected.getId(), Customer.class);
 
         assertThat(retrieved.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(retrieved.getBody()).isNotNull();
@@ -110,7 +110,7 @@ public class CustomerTests {
     }
 
     private void createVote(Customer customer) {
-        ResponseEntity<Customer> response = testRestTemplate.postForEntity(VoteController.ENDPOINT, customer, Customer.class);
+        ResponseEntity<Customer> response = testRestTemplate.postForEntity(SearchController.ENDPOINT, customer, Customer.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(response.getBody()).isNotNull();
     }

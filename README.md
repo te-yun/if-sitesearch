@@ -3,7 +3,7 @@ if-sitesearch
 
 # About
 
-* [JIRA]()
+* [JIRA Project](http://jira/projects/SITESEARCH)
 * [PROD Release]() / [DEV Release]()
 * [PROD Release]()
     
@@ -29,7 +29,7 @@ to the `config` folder inside this project.
 # Run 
 
     ./run.sh
-    open http://localhost:8200
+    http://localhost:8001
     
 # Test
 

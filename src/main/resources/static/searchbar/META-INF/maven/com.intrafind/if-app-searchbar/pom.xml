@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.intrafind</groupId>
+    <artifactId>if-app-searchbar</artifactId>
+    <version>5.1.0.3-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+    <properties>
+        <maven-compiler-plugin.version>3.2</maven-compiler-plugin.version>
+        <java.version>1.8</java.version>
+        <lineman-maven-plugin.version>1.7</lineman-maven-plugin.version>
+        <maven-war-plugin.version>2.1.1</maven-war-plugin.version>
+        <warFileName>searchbar</warFileName>
+    </properties>
+
+
+    <dependencies>
+
+    </dependencies>
+
+    <pluginRepositories>
+
+    </pluginRepositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.github.maxxkrakoa.lineman-maven-plugin</groupId>
+                <artifactId>lineman-maven-plugin</artifactId>
+                <version>${lineman-maven-plugin.version}</version>
+                <configuration>
+                    <webappPath>.</webappPath>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>lineman-clean</id>
+                        <!-- run lineman clean in the pre-clean phase to get correct ordering with maven-clean-plugin -->
+                        <phase>pre-clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>lineman-build</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${maven-war-plugin.version}</version>
+                <configuration>
+                    <warName>${warFileName}</warName>
+                    <warSourceDirectory>${basedir}/dist</warSourceDirectory>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>deployToMonster7080</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.tomcat.maven</groupId>
+                        <artifactId>tomcat7-maven-plugin</artifactId>
+                        <version>2.2</version>
+                        <configuration>
+                            <warFile>${project.build.directory}/${warFileName}.war</warFile>
+                            <update>true</update>
+                            <url>http://ml-if-monster:7080/manager/text</url>
+                            <server>Catalina</server>
+                            <path>/${warFileName}DEV</path>
+                            <username>admin</username>
+                            <password>iFinder5</password>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>${maven-war-plugin.version}</version>
+                        <configuration>
+                            <warName>${warFileName}</warName>
+                            <warSourceDirectory>${basedir}/dist</warSourceDirectory>
+                            <failOnMissingWebXml>false</failOnMissingWebXml>
+                            <packagingExcludes>
+                                <![CDATA[
+                                   **/**.html,
+                                   data/config.json,
+                                   WEB-INF/classes,
+                                   WEB-INF/web.xml
+                                  ]]>
+                            </packagingExcludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>deployToMonster8080</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.tomcat.maven</groupId>
+                        <artifactId>tomcat7-maven-plugin</artifactId>
+                        <version>2.2</version>
+                        <configuration>
+                            <warFile>${project.build.directory}/${warFileName}.war</warFile>
+                            <update>true</update>
+                            <url>http://ml-if-monster:8080/manager/text</url>
+                            <server>Catalina</server>
+                            <path>/${warFileName}DEV</path>
+                            <username>admin</username>
+                            <password>iFinder5</password>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>${maven-war-plugin.version}</version>
+                        <configuration>
+                            <warName>${warFileName}</warName>
+                            <warSourceDirectory>${basedir}/dist</warSourceDirectory>
+                            <failOnMissingWebXml>false</failOnMissingWebXml>
+                            <packagingExcludes>
+                                <![CDATA[
+                                   **/**.html,
+                                   data/config.json,
+                                   WEB-INF/classes,
+                                   WEB-INF/web.xml
+                                  ]]>
+                            </packagingExcludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

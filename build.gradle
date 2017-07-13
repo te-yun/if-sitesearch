@@ -49,9 +49,6 @@ configurations {
 }
 
 dependencies {
-    runtime "org.webjars:angularjs:1.5.9"
-    runtime "org.webjars:webjars-locator:0.32-1"
-
     compile "org.springframework.boot:spring-boot-starter-hateoas:${springBootVersion}"
     compile "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
     compile "org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}"
@@ -59,7 +56,6 @@ dependencies {
     compile "io.springfox:springfox-swagger2:${swaggerVersion}"
     compile "io.springfox:springfox-swagger-ui:${swaggerVersion}"
 
-    compile "org.springframework.data:spring-data-couchbase:2.2.4.RELEASE"
     compile "org.springframework.data:spring-data-elasticsearch:2.1.4.RELEASE"
 
 //    compile("org.springframework.boot:spring-boot-devtools")
