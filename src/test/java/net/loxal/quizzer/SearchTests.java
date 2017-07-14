@@ -8,6 +8,7 @@ import net.loxal.quizzer.controller.SearchController;
 import net.loxal.quizzer.dto.Customer;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,20 +29,8 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = CustomerTests.Config.class)
-public class CustomerTests {
-    private static final List<Integer> CORRECT_ANSWERS = Arrays.asList(0, 3);
-    private static final List<Integer> INCORRECT_ANSWERS = Arrays.asList(0, 2);
-    private static final List<Integer> CORRECT_ANSWER = Collections.singletonList(2);
-    private static final List<Integer> INCORRECT_ANSWER = Collections.singletonList(0);
-    private static final String UNREVIEWABLE_POLL_ID = "unreviewable-poll-id";
-    private static final String SINGLE_ANSWER_VOTE_ID = "single-answer-vote-id";
-    private static final String SINGLE_ANSWER_POLL_ID = "single-answer-poll-id";
-    private static final String MULTIPLE_ANSWERS_POLL_ID = "multiple-answers-poll-id";
-    private static final String MULTIPLE_ANSWERS_CORRECT_ID = "multiple-answers-correct-vote-id";
-    private static final String MULTIPLE_ANSWERS_INCORRECT_ID = "multiple-answers-incorrect-vote-id";
-    private static final String SESSION_SINGLE_ANSWER_ID = "session-single-answer-id";
-    private static final String SESSION_MULTIPLE_ANSWERS_ID = "session-multiple-answers-id";
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = SearchTests.Config.class)
+public class SearchTests {
 
     @Autowired
     private TestRestTemplate testRestTemplate;

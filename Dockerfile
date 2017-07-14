@@ -12,4 +12,5 @@ WORKDIR /home/$APP_USER
 ADD build/libs/*.jar app/
 #ENV SPRING_CONFIG_NAME prod,local,config
 
-CMD ["java", "-jar", "-Xmx64m", "app/if-search-service-1.0.0.jar"]
+CMD java -jar -Xmx64m app/*.jar
+#CMD ["java", "-jar", "-Xmx64m", "app/if-sitesearch-1.0.0.jar"]

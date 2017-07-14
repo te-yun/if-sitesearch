@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = CustomerTests.Config.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = SearchTests.Config.class)
 public class SecurityTest {
     private static final Logger LOG = LoggerFactory.getLogger(SecurityTest.class);
 
@@ -55,7 +55,7 @@ public class SecurityTest {
     public void isBasicAuthEnabled() throws Exception {
         final ResponseEntity<Object> requestWithInvalidBasicAuthCredentials = testRestTemplate
                 .withBasicAuth("invalid username", "invalid password")
-                .getForEntity("/polls/simpsons-1", Object.class);
+                .getForEntity("/something", Object.class);
         final HttpStatus unauthorized = HttpStatus.UNAUTHORIZED;
         assertEquals(unauthorized, requestWithInvalidBasicAuthCredentials.getStatusCode());
         assertEquals(unauthorized.value(), requestWithInvalidBasicAuthCredentials.getStatusCodeValue());

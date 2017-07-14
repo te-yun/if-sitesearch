@@ -2,9 +2,10 @@
  * Copyright 2017 IntraFind Software AG. All rights reserved.
  */
 
-package net.loxal.quizzer.init;
+package net.loxal.quizzer.integration;
 
-import net.loxal.quizzer.CustomerTests;
+import net.loxal.quizzer.SearchTests;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,16 +13,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.UUID;
+
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = CustomerTests.Config.class)
-public class InitSimpsonsQuiz {
-    public static final String SIMPSON_QUIZ_PREFIX = "simpsons-";
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = SearchTests.Config.class)
+public class SearchExecutor {
     @Autowired
     private TestRestTemplate testRestTemplate;
 
     @Test
-    public void initSimpsonsQuiz() throws Exception {
-
+    public void execute() throws Exception {
     }
 }
 
