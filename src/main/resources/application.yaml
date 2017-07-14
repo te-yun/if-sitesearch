@@ -22,7 +22,7 @@ spring:
 #      cluster-name: elasticsearch
 #      host: sky.loxal.net
 #      port: 9300
-#      cluster-nodes: sky.loxal.net:9300
+#      cluster-nodes: localhost:9300
 #      client:
 #        transport:
 #          sniff: false
