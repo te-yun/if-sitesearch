@@ -45,9 +45,9 @@ public class SearchService {
 
 //        printElasticSearchInfo();
 //        final Hit save = repository.save(hit);
-        repository.findAll().forEach(e ->{
-            System.out.println("e.getTitle() = " + e.getTitle());
-        });
+//        repository.findAll().forEach(e ->{
+//            System.out.println("e.getTitle() = " + e.getTitle());
+//        });
         return hit;
     }
 
