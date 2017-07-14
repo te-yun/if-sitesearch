@@ -2,24 +2,15 @@
  * Copyright 2017 IntraFind Software AG. All rights reserved.
  */
 
-package net.loxal.quizzer.service;
+package de.intrafind.sitesearch.service;
 
-import net.loxal.quizzer.dto.Hit;
-import net.loxal.quizzer.dto.Result;
-import net.loxal.quizzer.repository.SearchRepository;
-import org.elasticsearch.action.ActionFuture;
-import org.elasticsearch.action.get.GetRequest;
-import org.elasticsearch.action.get.GetResponse;
-import org.elasticsearch.action.search.SearchRequest;
-import org.elasticsearch.client.Client;
+import de.intrafind.sitesearch.dto.Hit;
+import de.intrafind.sitesearch.dto.Result;
+import de.intrafind.sitesearch.repository.SearchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 @Service
 public class SearchService {

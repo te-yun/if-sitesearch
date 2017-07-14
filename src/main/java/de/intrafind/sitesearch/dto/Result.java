@@ -1,4 +1,4 @@
-package net.loxal.quizzer.dto;
+package de.intrafind.sitesearch.dto;
 
 public class Result {
     private String favor;
@@ -9,6 +9,7 @@ public class Result {
     private String type;
     private String url;
     private String urlbase64;
+    private String text = "";
 
     public Result(String text) {
         this.text = text;
@@ -80,8 +81,6 @@ public class Result {
     public void setUrlbase64(String urlbase64) {
         this.urlbase64 = urlbase64;
     }
-
-    private String text = "";
 
     public String getText() {
         return text;

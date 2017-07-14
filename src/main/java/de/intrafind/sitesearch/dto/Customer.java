@@ -2,7 +2,7 @@
  * Copyright 2017 IntraFind Software AG. All rights reserved.
  */
 
-package net.loxal.quizzer.dto;
+package de.intrafind.sitesearch.dto;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;

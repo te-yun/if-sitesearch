@@ -2,7 +2,7 @@
  * Copyright 2017 IntraFind Software AG. All rights reserved.
  */
 
-package net.loxal.quizzer.jmh;
+package de.intrafind.sitesearch.jmh;
 
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;

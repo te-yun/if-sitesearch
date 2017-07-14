@@ -2,7 +2,7 @@
  * Copyright 2017 IntraFind Software AG. All rights reserved.
  */
 
-package net.loxal.quizzer;
+package de.intrafind.sitesearch;
 
 import org.junit.Before;
 import org.junit.Test;

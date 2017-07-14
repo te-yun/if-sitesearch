@@ -2,10 +2,9 @@
  * Copyright 2017 IntraFind Software AG. All rights reserved.
  */
 
-package net.loxal.quizzer.init;
+package de.intrafind.sitesearch.integration;
 
-import net.loxal.quizzer.SearchTests;
-import org.junit.Ignore;
+import de.intrafind.sitesearch.SearchTests;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +14,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = SearchTests.Config.class)
-public class Init {
+public class SearchExecutor {
     @Autowired
     private TestRestTemplate testRestTemplate;
 
     @Test
-    public void init() throws Exception {
+    public void execute() throws Exception {
     }
 }
 

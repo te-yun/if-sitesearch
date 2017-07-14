@@ -1,4 +1,4 @@
-package net.loxal.quizzer.dto;
+package de.intrafind.sitesearch.dto;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -12,6 +12,17 @@ public class Hit {
     private String id;
 
     private List<Object> facets = Collections.emptyList();
+    private List<Result> results;
+    private String query;
+    private String title;
+
+    public Hit() {
+    }
+
+    public Hit(String query, List<Result> results) {
+        this.query = query;
+        this.results = results;
+    }
 
     public List<Object> getFacets() {
         return facets;
@@ -21,8 +32,6 @@ public class Hit {
         this.facets = facets;
     }
 
-    private List<Result> results;
-
     public List<Result> getResults() {
         return results;
     }
@@ -30,13 +39,6 @@ public class Hit {
     public void setResults(List<Result> results) {
         this.results = results;
     }
-
-    private String query;
-
-    public Hit() {
-    }
-
-    private String title;
 
     public String getId() {
         return id;
@@ -60,10 +62,5 @@ public class Hit {
 
     public void setQuery(String query) {
         this.query = query;
-    }
-
-    public Hit(String query, List<Result> results) {
-        this.query = query;
-        this.results = results;
     }
 }

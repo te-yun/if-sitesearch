@@ -2,11 +2,11 @@
  * Copyright 2017 IntraFind Software AG. All rights reserved.
  */
 
-package net.loxal.quizzer.controller;
+package de.intrafind.sitesearch.controller;
 
-import net.loxal.quizzer.dto.Customer;
-import net.loxal.quizzer.dto.Hit;
-import net.loxal.quizzer.service.SearchService;
+import de.intrafind.sitesearch.dto.Customer;
+import de.intrafind.sitesearch.dto.Hit;
+import de.intrafind.sitesearch.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
