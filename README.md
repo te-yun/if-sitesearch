@@ -16,7 +16,7 @@ to the `config` folder inside this project.
 
 # API Reference
 
-    http://localhost:8200/swagger-ui.html
+    http://localhost:8001/swagger-ui.html
 
 # Initialization
 
