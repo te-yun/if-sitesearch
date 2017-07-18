@@ -16,13 +16,15 @@ server:
   port: 8001
 
 spring:
-#  data:
-#    elasticsearch:
+  data:
+    elasticsearch:
 #      name: vpTNI7K
-#      cluster-name: elasticsearch
+      cluster-name: elasticsearch
 #      host: sky.loxal.net
 #      port: 9300
 #      cluster-nodes: localhost:9300
+#      cluster-nodes: localhost:9300
+#      cluster-nodes: localhost:9200
 #      client:
 #        transport:
 #          sniff: false

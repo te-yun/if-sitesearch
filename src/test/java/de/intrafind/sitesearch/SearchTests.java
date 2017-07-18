@@ -1,11 +1,23 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2017 [name of copyright owner]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package de.intrafind.sitesearch;
 
 import de.intrafind.sitesearch.controller.SearchController;
-import de.intrafind.sitesearch.dto.Customer;
+import de.intrafind.sitesearch.dto.Hit;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -82,19 +94,19 @@ public class SearchTests {
     public void delete() throws Exception {
     }
 
-    private void validateFetched(final Customer expected) {
-        ResponseEntity<Customer> retrieved = testRestTemplate.getForEntity(SearchController.ENDPOINT + "/" + expected.getId(), Customer.class);
+    private void validateFetched(final Hit expected) {
+        ResponseEntity<Hit> retrieved = testRestTemplate.getForEntity(SearchController.ENDPOINT + "/" + expected.getId(), Hit.class);
 
         assertThat(retrieved.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(retrieved.getBody()).isNotNull();
 
-        Customer actual = retrieved.getBody();
+        Hit actual = retrieved.getBody();
         assertThat(actual).isEqualToComparingFieldByField(expected);
-        assertThat(actual).isExactlyInstanceOf(Customer.class);
+        assertThat(actual).isExactlyInstanceOf(Hit.class);
     }
 
-    private void createVote(Customer customer) {
-        ResponseEntity<Customer> response = testRestTemplate.postForEntity(SearchController.ENDPOINT, customer, Customer.class);
+    private void createVote(Hit customer) {
+        ResponseEntity<Hit> response = testRestTemplate.postForEntity(SearchController.ENDPOINT, customer, Hit.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(response.getBody()).isNotNull();
     }

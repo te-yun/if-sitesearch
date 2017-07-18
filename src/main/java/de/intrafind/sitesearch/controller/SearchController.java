@@ -1,10 +1,21 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2017 [name of copyright owner]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package de.intrafind.sitesearch.controller;
 
-import de.intrafind.sitesearch.dto.Customer;
 import de.intrafind.sitesearch.dto.Hit;
 import de.intrafind.sitesearch.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,23 +35,23 @@ public class SearchController {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    Customer create(@RequestBody Customer creation) {
+    Hit create(@RequestBody Hit creation) {
         return null;
     }
 
     @RequestMapping(path = "{id}", method = RequestMethod.GET)
-    Customer retrieve(@PathVariable("id") String id) {
+    Hit retrieve(@PathVariable("id") String id) {
         return null;
     }
 
 //    http://ml-if-monster:8080/ifinder5DEV/api/search?iSearchIndex=1&action=facetsandsearch&sSearchTerm=test&start=0&limit=20&_=1499935120692
     @RequestMapping(method = RequestMethod.GET)
-    Hit demo(@RequestParam("sSearchTerm") String sSearchTerm) {
-        return service.search(sSearchTerm);
+    Hit search(@RequestParam("sSearchTerm") String sSearchTerm) {
+        return service.demo(sSearchTerm);
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    Customer update(@RequestBody Customer update) {
+    Hit update(@RequestBody Hit update) {
         return null;
     }
 

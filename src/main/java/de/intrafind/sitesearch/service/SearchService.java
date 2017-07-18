@@ -1,5 +1,17 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2017 [name of copyright owner]
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package de.intrafind.sitesearch.service;
@@ -10,7 +22,8 @@ import de.intrafind.sitesearch.repository.SearchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.logging.Logger;
 
 @Service
 public class SearchService {
@@ -25,7 +38,7 @@ public class SearchService {
         repository.delete(id);
     }
 
-    public Hit search(String query) {
+    public Hit demo(String query) {
         final String qresult;
         switch (query) {
             case "ying":
@@ -41,55 +54,13 @@ public class SearchService {
         Result result = new Result();
         result.setTitle("Some TITLE with " + qresult + " in it.");
         result.setText("Some TEXT with " + qresult + " in it.");
-        Hit hit = new Hit(query, Arrays.asList(result));
+        Hit hit = new Hit(query, Collections.singletonList(result));
 
-//        printElasticSearchInfo();
-//        final Hit save = repository.save(hit);
-//        repository.findAll().forEach(e ->{
-//            System.out.println("e.getTitle() = " + e.getQuery());
-//        });
+        final Hit save = repository.save(hit);
+        repository.findAll().forEach(e -> {
+            Logger.getGlobal().info("query: " + e.getQuery());
+        });
+        Logger.getGlobal().info(save.getId());
         return hit;
     }
-
-//    @Autowired
-//         private ElasticsearchOperations es;
-//
-//        //useful for debug, print elastic search details
-//        private void printElasticSearchInfo() {
-//
-//            System.out.println("--ElasticSearch--");
-//            Client client = es.getClient();
-//            Map<String, String> asMap = client.settings().getAsMap();
-//
-//            asMap.forEach((k, v) -> {
-//                System.out.println(k + " = " + v);
-//            });
-//            System.out.println("--ElasticSearch--");
-//
-////            try {
-//                client.prepareIndex().setIndex("alex").setType("some").setSource("{\n" +
-//                        "  \"title\": \"Spring + Spring Data + ElasticSearch\",\n" +
-//                        "  \"category\":\"Spring Boot\",\n" +
-//                        "  \"published_date\":\"23-MAR-2017\",\n" +
-//                        "  \"author\":\"Rambabu Posa\"\n" +
-//                        "}").execute().actionGet().getVersion();
-////            } catch (InterruptedException e) {
-////                e.printStackTrace();
-////            } catch (ExecutionException e) {
-////                e.printStackTrace();
-////            }
-//
-////            SearchRequest sr = new SearchRequest();
-////            GetRequest gr = new GetRequest();
-////            gr.index("mkyong").type("posts").id("1003");
-////            final ActionFuture<GetResponse> getResponseActionFuture = client.get(gr);
-////            try {
-////                System.out.println("getResponseActionFuture.    get().isExists() = " + getResponseActionFuture.get().isExists());
-////            } catch (InterruptedException e) {
-////                e.printStackTrace();
-////            } catch (ExecutionException e) {
-////                e.printStackTrace();
-////            }
-//        }
-
 }
