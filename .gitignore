@@ -1,3 +1,5 @@
+generated_tests/
+
 data/
 *.jks
 *.cer
