@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 [name of copyright owner]
+ * Copyright 2017 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ public class SearchController {
 
 //    http://ml-if-monster:8080/ifinder5DEV/api/search?iSearchIndex=1&action=facetsandsearch&sSearchTerm=test&start=0&limit=20&_=1499935120692
     @RequestMapping(method = RequestMethod.GET)
-    Hit search(@RequestParam("sSearchTerm") String sSearchTerm) {
+    Hit demo(@RequestParam("sSearchTerm") String sSearchTerm) {
         return service.demo(sSearchTerm);
     }
 
