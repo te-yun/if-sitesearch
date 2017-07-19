@@ -1,20 +1,20 @@
 generated_tests/
 
-data/
+/data
 *.jks
 *.cer
 
 # Spring Boot
-config/
+/config
 
-target/
+/target
 
-build/
-.gradle/
+/build
+/.gradle
 
 # IntelliJ
 \.idea/workspace\.xml
-out/
+/out
 
 # Eclipse
 .project
