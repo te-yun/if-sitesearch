@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 #SPRING_CONFIG_NAME=prod,local,config ./gradlew clean build
 ./gradlew clean build
