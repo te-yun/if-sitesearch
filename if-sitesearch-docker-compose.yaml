@@ -1,0 +1,25 @@
+version: "2.1"
+
+services:
+  web:
+    image: if-sitesearch:latest
+    container_name: if-sitesearch-my
+    environment:
+      - var1=1
+      - var
+      var3: ""
+      var4: ""
+    labels:
+      - 'my-label=blub'
+      - 'my-label-empty'
+      another-label: "another-value"
+      another-label1: ""
+    ports:
+      - "80:8001"
+      - 81:8002"
+    volumes:
+      - ~/tmp/if-sitesearch/data:/vault/file:rw
+    stop_signal: SIGTERM
+    cap_add:
+      - IPC_LOCK
+    entrypoint: java -jar -Xmx64m app/*.jar
