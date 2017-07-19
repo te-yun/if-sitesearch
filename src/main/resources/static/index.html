@@ -19,8 +19,8 @@
 <title>Sitesearch</title>
 <link rel="stylesheet" type="text/css" href="searchbar/css/app.css" media="all"/>
 
-<h1>Sitesearch</h1>
 <img src="img/logo.png"/>
+<h1 style="float: left;">Sitesearch</h1>
 
 <div class="container" style="margin-top:150px; font-size: 3em;">
     <div id="searchbar"></div>
@@ -36,7 +36,7 @@
         IFS.initClient({
             sbTarget: '#searchbar',
             rlTarget: '#resultlist',
-            configurl: 'data/config.json',
+            configurl: 'searchbar/data/config.json',
             sitesearch: false,
             cors: true,
             withCredentials: true,
