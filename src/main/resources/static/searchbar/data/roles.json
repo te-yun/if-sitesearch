@@ -1,0 +1,21 @@
+{
+  "results": [
+    {
+      "roles": [
+        "sb_queryfit",
+        "sb_querydistance",
+        "sb_settings",
+        "sb_sources",
+        "sb_synonyms",
+        "sb_translations",
+        "sb_searchExtend",
+        "sb_extendedAutocomplete"
+      ]
+    }
+  ],
+  "systemData": {
+    "version": "5.1.2.0-SNAPSHOT",
+    "timestamp": "1500482490475",
+    "username": "alexander.orlov@MUC.INTRAFIND.DE"
+  }
+}
