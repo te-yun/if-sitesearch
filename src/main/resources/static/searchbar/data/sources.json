@@ -1,0 +1,116 @@
+{
+  "results": [
+    {
+      "value": "1",
+      "type": "Filesystem",
+      "name": "Alles",
+      "default": true,
+      "searchfields": [
+        {
+          "field": "_str.filename",
+          "label": "Dateiname",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "value": "1##Q01JUw==",
+      "type": "Filesystem",
+      "name": "CMIS",
+      "searchfields": []
+    },
+    {
+      "value": "1##Q29uZmx1ZW5jZQ==",
+      "type": "Filesystem",
+      "name": "Confluence",
+      "searchfields": []
+    },
+    {
+      "value": "1##RXhjaGFuZ2U=",
+      "type": "Filesystem",
+      "name": "Exchange",
+      "searchfields": []
+    },
+    {
+      "value": "1##R292ZG9jcw==",
+      "type": "Filesystem",
+      "name": "Govdocs",
+      "searchfields": []
+    },
+    {
+      "value": "1##SGFuZGJ1Y2g=",
+      "type": "Filesystem",
+      "name": "Handbuch",
+      "searchfields": []
+    },
+    {
+      "value": "1##SGVpc2U=",
+      "type": "Filesystem",
+      "name": "Heise",
+      "searchfields": []
+    },
+    {
+      "value": "1##SklSQQ==",
+      "type": "Filesystem",
+      "name": "JIRA",
+      "searchfields": []
+    },
+    {
+      "value": "1##TmV3cw==",
+      "type": "Filesystem",
+      "name": "News",
+      "searchfields": []
+    },
+    {
+      "value": "1##UGVyc29uZW4=",
+      "type": "Filesystem",
+      "name": "Personen",
+      "searchfields": []
+    },
+    {
+      "value": "1##UHVibGlj",
+      "type": "Filesystem",
+      "name": "Public",
+      "searchfields": [
+        {
+          "field": "_str.author",
+          "label": "Autor",
+          "type": "string"
+        },
+        {
+          "field": "_long.lastmodifieddate",
+          "label": "Änderungsdatum",
+          "type": "date"
+        },
+        {
+          "field": "_str.filename",
+          "label": "Dateiname",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "value": "1##UUE=",
+      "type": "Filesystem",
+      "name": "QA",
+      "searchfields": []
+    },
+    {
+      "value": "1##U3BpZWdlbA==",
+      "type": "Filesystem",
+      "name": "Spiegel",
+      "searchfields": []
+    },
+    {
+      "value": "1##U3Rlcm4=",
+      "type": "Filesystem",
+      "name": "Stern",
+      "searchfields": []
+    }
+  ],
+  "systemData": {
+    "version": "5.1.2.0-SNAPSHOT",
+    "timestamp": "1500482601402",
+    "username": "alexander.orlov@MUC.INTRAFIND.DE"
+  }
+}

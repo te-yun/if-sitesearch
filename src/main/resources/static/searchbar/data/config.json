@@ -48,7 +48,7 @@
         "url": "searchbar/data/roles.json"
       },
       "sources": {
-        "url": "ifinder5/api/search?action=sources"
+        "url": "searchbar/data/sources.json"
       },
       "indexfields": {
         "template": "app/templates/default/indexfields.hbs"
