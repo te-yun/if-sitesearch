@@ -1,7 +1,7 @@
 {
   "ajax": {
     "baseUrl": "http://dev.sitesearch.cloud/",
-    "endpointSearch": "searches",
+    "endpointSearch": "api/search",
     "start": 0,
     "limit": 20
   },
@@ -29,7 +29,6 @@
         }
       },
       "categories": [
-        "actionable",
         "autocomplete",
         "synonyms",
         "translations",
@@ -45,10 +44,11 @@
       "searchbar_template": "app/templates/default/searchbar.hbs",
       "group_template": "app/templates/default/groups.hbs",
       "roles": {
-        "url": "http://ml-if-monster:8080/ifinder5DEV/api/config?action=roles"
+        "handle": true,
+        "url": "searchbar/data/roles.json"
       },
       "sources": {
-        "url": "http://ml-if-monster:8080/ifinder5DEV/api/search?action=sources"
+        "url": "ifinder5/api/search?action=sources"
       },
       "indexfields": {
         "template": "app/templates/default/indexfields.hbs"
@@ -226,7 +226,6 @@
             "display": [
               "term"
             ],
-            "url": "/stub/default/lastsearches",
             "delay": 0,
             "maxLength": 0,
             "searchOnClick": true
@@ -307,30 +306,6 @@
             "searchOnClick": false,
             "type": "swyt",
             "searchByAutocompleteSuggestion": false
-          },
-          "actionable": {
-            "name": "actionable",
-            "wrapperTemplate": "app/templates/default/swyt/actionable-wrapper.hbs",
-            "itemTemplate": "app/templates/default/swyt/actionable.hbs",
-            "display": [
-              "name"
-            ],
-            "delay": 400,
-            "minLength": 1,
-            "searchOnClick": false,
-            "actionUrls": [
-              {
-                "name": "@portal1"
-              },
-              {
-                "name": "@portal2"
-              },
-              {
-                "name": "@portal3"
-              }
-            ],
-            "type": "actionable",
-            "searchByAutocompleteSuggestion": false
           }
         }
       },
@@ -345,11 +320,11 @@
     "baseurl": "https://intrafind/myportal/deeplink/",
     "minLength": 2
   },
-  "langUrlPrefix": "data/language/",
-  "iconPath": "img/filetypes",
-  "lyncIconPath": "img/shared/lync",
-  "defaultLang": "en",
+  "langUrlPrefix": "searchbar/data/language/",
+  "iconPath": "searchbar/img/filetypes",
+  "lyncIconPath": "searchbar/img/shared/lync",
+  "defaultLang": "de",
   "appLang": "de",
   "rootDir": ".",
-  "debug": false
+  "debug": true
 }
