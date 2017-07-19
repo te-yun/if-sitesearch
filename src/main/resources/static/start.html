@@ -17,35 +17,17 @@
 
 <meta charset="utf-8"/>
 <title>Sitesearch</title>
-<link rel="stylesheet" type="text/css" href="searchbar/css/app.css" media="all"/>
 
 <h1>Sitesearch</h1>
-<img src="img/logo.png"/>
 
-<div class="container" style="margin-top:150px; font-size: 3em;">
-    <div id="searchbar"></div>
-    <div id="resultlist" style="margin-top:20px;"></div>
-</div>
+<ul>
+    <li><a href="/swagger-ui.html" style="font-size: 1.5em; text-decoration: none;">API Specification</a></li>
+</ul>
 
-<script src="searchbar/js/app.js"></script>
-<script>
-
-    jQuery.noConflict();
-    jQuery(document).ready(function ($) {
-
-        IFS.initClient({
-            sbTarget: '#searchbar',
-            rlTarget: '#resultlist',
-            configurl: 'data/config.json',
-            sitesearch: false,
-            cors: true,
-            withCredentials: true,
-            multiple: false
-        });
-        console.info(document.getElementById('ifs-sb-searchfield'));
-    });
-
-</script>
+<p>
+    <a href="sign-up.html" style="margin-top: 400px; font-size: 2em; text-decoration: none;">Sign-up and start the user
+        journey for Sitesearch</a>
+</p>
 
 <div style="float: right">
     <a href="privacy.html">Privacy</a> | <a href="tos.html">Terms of Service</a>
