@@ -19,11 +19,13 @@ package de.intrafind.sitesearch.dto;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
+// TODO change to hitS?
 @Document(indexName = "hit", type = "hit", shards = 1, replicas = 0, refreshInterval = "-1")
-public class Hit {
+public class Hit implements Serializable {
     @Id
     private String id;
 

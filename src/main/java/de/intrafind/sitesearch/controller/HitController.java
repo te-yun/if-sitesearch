@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(HitController.ENDPOINT)
 public class HitController {
-    public static final String ENDPOINT = "/hits";
+    static final String ENDPOINT = "/hits";
     private static final Logger LOG = LoggerFactory.getLogger(HitController.class);
     private final HitService service;
 
