@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 execute() {
     SPRING_CONFIG_NAME=application,local ./gradlew clean test \

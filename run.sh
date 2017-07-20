@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 standalone_start() {
     SPRING_CONFIG_NAME=local,application ./gradlew clean bootRun \

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 # TODO make the container accessible on host only, not to the Internet!
 docker rm -f sitesearch

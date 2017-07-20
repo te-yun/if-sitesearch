@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 teamcity_server() {
     docker rm -f teamcity-server

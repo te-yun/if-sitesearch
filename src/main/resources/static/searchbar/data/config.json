@@ -1,7 +1,7 @@
 {
   "ajax": {
-    "baseUrl": "http://dev.sitesearch.cloud/",
-    "endpointSearch": "api/search",
+    "baseUrl": "http://sitesearch.cloud/",
+    "endpointSearch": "searches",
     "start": 0,
     "limit": 20
   },
