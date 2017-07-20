@@ -17,19 +17,22 @@
 package de.intrafind.sitesearch.controller;
 
 import de.intrafind.sitesearch.dto.Hit;
-import de.intrafind.sitesearch.service.SearchService;
+import de.intrafind.sitesearch.service.HitService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(SearchController.ENDPOINT)
-public class SearchController {
-    public static final String ENDPOINT = "/searches";
-    private final SearchService service;
+@RequestMapping(HitController.ENDPOINT)
+public class HitController {
+    public static final String ENDPOINT = "/hits";
+    private static final Logger LOG = LoggerFactory.getLogger(HitController.class);
+    private final HitService service;
 
     @Autowired
-    SearchController(SearchService service) {
+    HitController(HitService service) {
         this.service = service;
     }
 
@@ -44,10 +47,22 @@ public class SearchController {
         return null;
     }
 
-//    http://ml-if-monster:8080/ifinder5DEV/api/search?iSearchIndex=1&action=facetsandsearch&sSearchTerm=test&start=0&limit=20&_=1499935120692
     @RequestMapping(method = RequestMethod.GET)
-    Hit demo(@RequestParam("sSearchTerm") String sSearchTerm) {
-        return service.demo(sSearchTerm);
+    Hit search(
+            @RequestParam(value = "sSearchTerm", required = true) String sSearchTerm,
+            @RequestParam(value = "action", defaultValue = "facetsandsearch") String action,
+            @RequestParam(value = "iSearchIndex", defaultValue = "1") int iSearchIndex,
+            @RequestParam(value = "limit", defaultValue = "20") int limit,
+            @RequestParam(value = "limit", defaultValue = "0") int start
+    ) {
+        LOG.info("==========");
+        LOG.info(sSearchTerm);
+        LOG.info(action);
+        LOG.info("" + iSearchIndex);
+        LOG.info("" + limit);
+        LOG.info("" + start);
+        LOG.info("==========");
+        return service.search(sSearchTerm);
     }
 
     @RequestMapping(method = RequestMethod.PUT)

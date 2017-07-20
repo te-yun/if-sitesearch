@@ -16,7 +16,7 @@
 
 package de.intrafind.sitesearch;
 
-import de.intrafind.sitesearch.controller.SearchController;
+import de.intrafind.sitesearch.controller.HitController;
 import de.intrafind.sitesearch.dto.Hit;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -95,7 +95,7 @@ public class SearchTests {
     }
 
     private void validateFetched(final Hit expected) {
-        ResponseEntity<Hit> retrieved = testRestTemplate.getForEntity(SearchController.ENDPOINT + "/" + expected.getId(), Hit.class);
+        ResponseEntity<Hit> retrieved = testRestTemplate.getForEntity(HitController.ENDPOINT + "/" + expected.getId(), Hit.class);
 
         assertThat(retrieved.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(retrieved.getBody()).isNotNull();
@@ -106,7 +106,7 @@ public class SearchTests {
     }
 
     private void createVote(Hit customer) {
-        ResponseEntity<Hit> response = testRestTemplate.postForEntity(SearchController.ENDPOINT, customer, Hit.class);
+        ResponseEntity<Hit> response = testRestTemplate.postForEntity(HitController.ENDPOINT, customer, Hit.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(response.getBody()).isNotNull();
     }

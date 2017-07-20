@@ -21,7 +21,7 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SearchRepository extends ElasticsearchRepository<Hit, String> {
+public interface HitRepository extends ElasticsearchRepository<Hit, String> {
     Hit findByQuery(String query);
 
     Hit findByTitle(String title);

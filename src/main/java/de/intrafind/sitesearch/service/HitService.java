@@ -18,7 +18,7 @@ package de.intrafind.sitesearch.service;
 
 import de.intrafind.sitesearch.dto.Hit;
 import de.intrafind.sitesearch.dto.Result;
-import de.intrafind.sitesearch.repository.SearchRepository;
+import de.intrafind.sitesearch.repository.HitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,11 +26,11 @@ import java.util.Collections;
 import java.util.logging.Logger;
 
 @Service
-public class SearchService {
-    private final SearchRepository repository;
+public class HitService {
+    private final HitRepository repository;
 
     @Autowired
-    public SearchService(final SearchRepository repository) {
+    public HitService(final HitRepository repository) {
         this.repository = repository;
     }
 
@@ -38,7 +38,7 @@ public class SearchService {
         repository.delete(id);
     }
 
-    public Hit demo(String query) {
+    public Hit search(String query) {
         final String qresult;
         switch (query) {
             case "ying":
@@ -57,9 +57,9 @@ public class SearchService {
         Hit hit = new Hit(query, Collections.singletonList(result));
 
         final Hit save = repository.save(hit);
-        repository.findAll().forEach(e -> {
-            Logger.getGlobal().info("query: " + e.getQuery());
-        });
+//        repository.findAll().forEach(e -> {
+//            Logger.getGlobal().info("query: " + e.getQuery());
+//        });
         Logger.getGlobal().info(save.getId());
         return hit;
     }
