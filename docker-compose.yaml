@@ -1,26 +1,23 @@
-version: "2.1"
+version: '3.3'
 
 services:
-  web:
+  sitesearch:
     image: intrafind/if-sitesearch:latest
-#    container_name: if-sitesearch-my
-    container_name: if-sitesearch
+    container_name: sitesearch
     environment:
-#      - var1=1
-#      - var
-      var3: ""
-      var4: ""
+      VAULT_TOKEN:
+      secure_user_name: "my-user-name"
+      secure_user_password: "my-password"
     labels:
-#      - 'my-label=blub'
-#      - 'my-label-empty'
-      another-label: "another-value"
-      another-label1: ""
+      upstream: "true"
+      basic-auth-protected: 'true'
     ports:
-      - "80:8001"
-#      - 81:8002"
+      - 80:8001
+      - 127.0.0.1:9200:9200
+      - 127.0.0.1:9300:9300
     volumes:
-      - ~/tmp/if-sitesearch/data:/vault/file:rw
+      - ~/srv/sitesearch/data:/home/app_user/data:rw
     stop_signal: SIGTERM
-    cap_add:
-      - IPC_LOCK
+#    cap_add:
+#      - IPC_LOCK
     entrypoint: java -jar -Xmx64m app/if-sitesearch-1.0.0.jar
