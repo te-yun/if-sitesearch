@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/loxal/if-sitesearch.svg)](https://travis-ci.org/loxal/if-sitesearch)
+
+
 if-sitesearch
 =
 Here you can find a *non-technical* business focused abstract about [Sitesearch](http://if-wiki:8090/pages/viewpage.action?pageId=14714226).
