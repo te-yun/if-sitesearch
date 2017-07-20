@@ -2,7 +2,8 @@ language: java
 sudo: false # Use container based builds. They are faster and we do not need sudo.
 
 jdk:
-- oraclejdk8
+- openjdk8
+#- oraclejdk8
 
 branches:
   only:
@@ -22,5 +23,5 @@ cache:
 script:
 - "./gradlew clean build"
 
-after_success:
-- "./gradlew clean test"
+#after_success:
+#- "./gradlew clean test"
