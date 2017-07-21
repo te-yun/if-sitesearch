@@ -1,13 +1,13 @@
 #!/usr/bin/env sh
 
-standalone_start() {
-    SPRING_CONFIG_NAME=local,application ./gradlew clean bootRun \
-        --continuous \
-        --parallel \
-#        --build-cache \
-#        --no-rebuild \
-#        --no-scan \
-#        -Ddebug \
-#        --debug
+main() {
+#    SPRING_CONFIG_NAME=local,application \
+        ./gradlew clean bootRun \
+            --continuous \
+            --parallel \
+            --build-cache \
+            --no-rebuild \
+            --no-scan \
+            --debug-jvm
 }
-standalone_start
+main

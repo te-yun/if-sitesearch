@@ -1,5 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Attach Debugger" type="Remote" factoryName="Remote" singleton="true">
+    <module name="if-sitesearch" />
     <option name="USE_SOCKET_TRANSPORT" value="true" />
     <option name="SERVER_MODE" value="false" />
     <option name="SHMEM_ADDRESS" value="javadebug" />

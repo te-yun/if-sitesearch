@@ -25,13 +25,6 @@ buildscript {
             url 'https://plugins.gradle.org/m2'
         }
     }
-//    dependencies {
-//        https://github.com/GoogleCloudPlatform/gradle-appengine-plugin
-//        classpath 'com.google.appengine:gradle-appengine-plugin:1.9.42'
-// (APPENGINE_HOME ENV or system property required)
-//        OR
-// appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.42' (with “downloadSdk” set to true)
-//    }
 }
 
 plugins {
@@ -41,7 +34,6 @@ plugins {
 
 apply plugin: "java-library"
 apply plugin: "idea"
-//apply plugin: "appengine"
 
 jar {
     baseName = rootProject.name
@@ -93,6 +85,4 @@ bootRun {
     // Use Spring Boot DevTool only when we run Gradle bootRun task
 //    classpath = sourceSets.main.runtimeClasspath + configurations.dev
 //    classpath = sourceSets.main.runtimeClasspath
-
-//    jvmArgs = ['-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=127.0.0.1:5005']
 }
