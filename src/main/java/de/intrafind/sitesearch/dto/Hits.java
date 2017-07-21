@@ -20,5 +20,5 @@ import java.util.Collections;
 import java.util.List;
 
 public class Hits {
-    List<Document> hits = Collections.emptyList();
+    List<Site> hits = Collections.emptyList();
 }

@@ -21,15 +21,18 @@ import org.springframework.data.annotation.Id;
 import java.io.Serializable;
 
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "documents")
-public class Document implements Serializable {
+public class Site implements Serializable {
+    // TODO highlight when returning in Hits
     private String tenant;
+    // TODO highlight when returning in Hits
+    private String title;
     private String url;
     private String highlightedUrl;
-    private String title;
 
     @Id
     private String id;
 
+    // TODO highlight when returning in Hits
     private String content;
 
     public String getContent() {

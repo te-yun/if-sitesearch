@@ -16,7 +16,7 @@
 
 package de.intrafind.sitesearch.service;
 
-import de.intrafind.sitesearch.dto.Document;
+import de.intrafind.sitesearch.dto.Site;
 import de.intrafind.sitesearch.repository.IndexRepository;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -38,12 +38,12 @@ public class IndexService {
         this.repository = repository;
     }
 
-    public void index(List<Document> documents) {
+    public void index(List<Site> sites) {
         LOG.info("INDEXED!");
-        documents.forEach(document -> {
-            final Document index = repository.index(document);
+        sites.forEach(site -> {
+            final Site index = repository.index(site);
             LOG.info("id: " + index.getId());
-            final Document one = repository.findOne(index.getId());
+            final Site one = repository.findOne(index.getId());
             LOG.info(one.getId());
         });
 
@@ -72,21 +72,21 @@ public class IndexService {
 //        SearchQuery searchQuery;
 
 
-//        final Iterable<Document> search = repository.search(queryBuilder);
+//        final Iterable<Site> search = repository.search(queryBuilder);
 //        search.forEach(e -> {
 //            LOG.info(e.getId());
 //            LOG.info(e.getContent());
 //        });
 
-//        final Document tml1 = repository.findByContent("some random text with HTML, actually an HTML site");
-        final List<Document> tml1 = repository.findAllByContent("HTML");
+//        final Site tml1 = repository.findByContent("some random text with HTML, actually an HTML site");
+        final List<Site> tml1 = repository.findAllByContent("HTML");
         tml1.forEach(e -> {
             LOG.info("e.getContent() = " + e.getContent());
             System.out.println("e.getId() = " + e.getId());
         });
 //        repository.findBy
 //        LOG.info("tml1 = " + tml1);
-//        final Document tml = repository.findByContent("HTML");
+//        final Site tml = repository.findByContent("HTML");
 //        System.out.println("tml.getContent() =---------- " + tml);
 //        LOG.info("tml ========= " + tml);
 //        System.out.println("tml.getContent() = " + tml.getContent());
@@ -95,7 +95,7 @@ public class IndexService {
 //        LOG.info("tml = " + tml.getId());
 //        LOG.info("tml = " + tml.getContent());
 
-//        final Iterable<Document> search = repository.search(queryBuilder);
+//        final Iterable<Site> search = repository.search(queryBuilder);
 //        search.forEach(e -> {
 //            System.out.println("e.getContent() = " + e.getContent());
 //            LOG.info(e.getContent());

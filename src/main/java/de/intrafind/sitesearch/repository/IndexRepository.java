@@ -16,15 +16,15 @@
 
 package de.intrafind.sitesearch.repository;
 
-import de.intrafind.sitesearch.dto.Document;
+import de.intrafind.sitesearch.dto.Site;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface IndexRepository extends ElasticsearchRepository<Document, String> {
-    Document findByContent(String content);
+public interface IndexRepository extends ElasticsearchRepository<Site, String> {
+    Site findByContent(String content);
 
-    List<Document> findAllByContent(String content);
+    List<Site> findAllByContent(String content);
 }
