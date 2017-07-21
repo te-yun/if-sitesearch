@@ -54,7 +54,6 @@ configurations {
 
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-hateoas:${springBootVersion}"
-//    compile "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
     compile "org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}"
 
     compile("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
@@ -68,7 +67,6 @@ dependencies {
 
     testCompile "org.openjdk.jmh:jmh-generator-annprocess:1.19"
     testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
-//    testCompile "org.springframework.restdocs:spring-restdocs-mockmvc:1.2.1.RELEASE"
 }
 
 jmh {
@@ -79,11 +77,4 @@ jmh {
 tasks.withType(JavaCompile) {
     options.fork = true
     options.incremental = true
-}
-
-bootRun {
-
-    // Use Spring Boot DevTool only when we run Gradle bootRun task
-//    classpath = sourceSets.main.runtimeClasspath + configurations.dev
-//    classpath = sourceSets.main.runtimeClasspath
 }
