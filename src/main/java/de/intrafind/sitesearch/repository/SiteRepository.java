@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package de.intrafind.sitesearch.dto;
+package de.intrafind.sitesearch.repository;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
+import de.intrafind.sitesearch.dto.Site;
+import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.Collections;
 import java.util.List;
 
-@Document(indexName = "suggestion")
-public class Suggestions {
-    @Id
-    private String id;
-    private List<String> completions = Collections.emptyList();
-    private List<String> images = Collections.emptyList();
+@Repository
+public interface SiteRepository extends ElasticsearchRepository<Site, String> {
+
+    List<Site> findAllByContent(String content);
+
+    List<Site> findAllByTitleOrUrlOrContent(String query);
 }

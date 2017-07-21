@@ -17,7 +17,7 @@
 package de.intrafind.sitesearch.controller;
 
 import de.intrafind.sitesearch.dto.Site;
-import de.intrafind.sitesearch.service.IndexService;
+import de.intrafind.sitesearch.service.SiteService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
@@ -30,21 +30,22 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 import java.util.List;
 
-// TODO rename to Documents endpoint or /<tenant>/index/sites
 @RestController
-@RequestMapping(IndexController.ENDPOINT)
-public class IndexController {
-    static final String ENDPOINT = "/default-tenant/indexes";
-    private static final Logger LOG = LoggerFactory.getLogger(IndexController.class);
-    private final IndexService service;
+@RequestMapping(SiteController.ENDPOINT)
+public class SiteController {
+    static final String ENDPOINT = "/sites";
+    private static final Logger LOG = LoggerFactory.getLogger(SiteController.class);
+    private final SiteService service;
 
     @Autowired
-    IndexController(IndexService service) {
+    SiteController(SiteService service) {
         this.service = service;
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    void index(@RequestBody List<Site> site) {
+    void index(
+            @RequestBody List<Site> site
+    ) {
         service.index(site);
     }
 

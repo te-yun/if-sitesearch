@@ -14,18 +14,7 @@
  * limitations under the License.
  */
 
-package de.intrafind.sitesearch.dto;
+package de.intrafind.sitesearch.service;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
-
-import java.util.Collections;
-import java.util.List;
-
-@Document(indexName = "suggestion")
-public class Suggestions {
-    @Id
-    private String id;
-    private List<String> completions = Collections.emptyList();
-    private List<String> images = Collections.emptyList();
+public class SuggestionService {
 }

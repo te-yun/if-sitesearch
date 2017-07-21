@@ -17,7 +17,7 @@
 package de.intrafind.sitesearch.service;
 
 import de.intrafind.sitesearch.dto.Site;
-import de.intrafind.sitesearch.repository.IndexRepository;
+import de.intrafind.sitesearch.repository.SiteRepository;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.slf4j.Logger;
@@ -29,12 +29,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class IndexService {
-    private static final Logger LOG = LoggerFactory.getLogger(IndexService.class);
-    private final IndexRepository repository;
+public class SiteService {
+    private static final Logger LOG = LoggerFactory.getLogger(SiteService.class);
+    private final SiteRepository repository;
 
     @Autowired
-    public IndexService(final IndexRepository repository) {
+    public SiteService(final SiteRepository repository) {
         this.repository = repository;
     }
 

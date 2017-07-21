@@ -8,6 +8,6 @@ main() {
             --build-cache \
             --no-rebuild \
             --no-scan \
-            --debug-jvm
+#            --debug-jvm
 }
 main

@@ -1,16 +1,11 @@
 #
-# Copyright 2017 Alexander Orlov <alexander.orlov@loxal.net>. All rights reserved.
+# Copyright 2017 IntraFind Software AG. All rights reserved.
 #
 
-#elasticsearch:
-#  clustername: elasticsearch
-#  host: localhost
-#  port: 9200
-
-security:
-  user:
-    name: ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=
-    password: jOLtvCtDi1YxR/IW4XPI6hjvi2LNOYgMEY6YSz9HWJs=
+#security:
+#  user:
+#    name: ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=
+#    password: jOLtvCtDi1YxR/IW4XPI6hjvi2LNOYgMEY6YSz9HWJs=
 
 server:
   port: 8001
@@ -18,22 +13,7 @@ server:
 spring:
   data:
     elasticsearch:
-#      name: vpTNI7K
       cluster-name: elasticsearch
-#      host: sky.loxal.net
-#      port: 9300
-#      cluster-nodes: localhost:9300
-#      cluster-nodes: localhost:9300
-#      cluster-nodes: localhost:9200
-#      client:
-#        transport:
-#          sniff: false
-#      spring.data.elasticsearch.client.transport.sniff=false
-#      cluster-name: elasticsearch
-#      host: localhost
-#      port: 9300
-#      name: elasticsearch
-#      cluster
   main:
     banner-mode: "off"
   output:
