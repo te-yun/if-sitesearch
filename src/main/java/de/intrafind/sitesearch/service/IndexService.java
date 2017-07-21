@@ -26,6 +26,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class IndexService {
     private static final Logger LOG = LoggerFactory.getLogger(IndexService.class);
@@ -36,28 +38,36 @@ public class IndexService {
         this.repository = repository;
     }
 
-    public void index(Document document) {
+    public void index(List<Document> documents) {
         LOG.info("INDEXED!");
-        final Document index = repository.index(document);
-        LOG.info("id: " + index.getId());
-        final Document one = repository.findOne(index.getId());
-        LOG.info(one.getId());
-
-
-        // TODO use Query builder, check bookmarked tutorial
+        documents.forEach(document -> {
+            final Document index = repository.index(document);
+            LOG.info("id: " + index.getId());
+            final Document one = repository.findOne(index.getId());
+            LOG.info(one.getId());
+        });
 
         new NativeSearchQueryBuilder().build().getQuery();
         QueryBuilder queryBuilder = QueryBuilders.termsLookupQuery("content");
         QueryBuilder queryBuilder1 = QueryBuilders.termsQuery("content", "HTML");
         QueryBuilder queryBuilder2 = QueryBuilders.commonTermsQuery("content", "HTML");
-//        LOG.info("++++++++++++++");
-//        LOG.info(queryBuilder.toString());
-//        LOG.info(queryBuilder1.toString());
-//        LOG.info(queryBuilder2.toString());
-//        LOG.info(queryBuilder2.toString());
-//        LOG.info("++++++++++++++");
-//        QueryBuilder queryBuilder = QueryBuilders.matchQuery()
-//        QueryBuilder queryBuilder = QueryBuilder.EMPTY_PARAMS.param("content", "HTML").;
+        LOG.info("++++++++++++++");
+        LOG.info(queryBuilder.toString());
+        LOG.info(queryBuilder1.toString());
+        LOG.info(queryBuilder2.toString());
+        LOG.info(queryBuilder2.toString());
+        LOG.info("++++++++++++++");
+
+        QueryBuilder qqueryBuilder = QueryBuilders.matchQuery("content", "HTML");
+        QueryBuilder qqueryBuilder1 = QueryBuilders.matchPhraseQuery("content", "HTML");
+        QueryBuilder qqueryBuilder2 = QueryBuilders.matchPhrasePrefixQuery("content", "HTML");
+
+        LOG.info("========");
+        LOG.info(qqueryBuilder.toString());
+        LOG.info(qqueryBuilder1.toString());
+        LOG.info(qqueryBuilder2.toString());
+        LOG.info(qqueryBuilder2.toString());
+        LOG.info("========");
 
 //        SearchQuery searchQuery;
 
@@ -67,6 +77,29 @@ public class IndexService {
 //            LOG.info(e.getId());
 //            LOG.info(e.getContent());
 //        });
-//        repository.search(searchQuery);
+
+//        final Document tml1 = repository.findByContent("some random text with HTML, actually an HTML site");
+        final List<Document> tml1 = repository.findAllByContent("HTML");
+        tml1.forEach(e -> {
+            LOG.info("e.getContent() = " + e.getContent());
+            System.out.println("e.getId() = " + e.getId());
+        });
+//        repository.findBy
+//        LOG.info("tml1 = " + tml1);
+//        final Document tml = repository.findByContent("HTML");
+//        System.out.println("tml.getContent() =---------- " + tml);
+//        LOG.info("tml ========= " + tml);
+//        System.out.println("tml.getContent() = " + tml.getContent());
+//        System.out.println("tml.getContent() = " + tml.getId());
+//        LOG.info("tml = " + tml);
+//        LOG.info("tml = " + tml.getId());
+//        LOG.info("tml = " + tml.getContent());
+
+//        final Iterable<Document> search = repository.search(queryBuilder);
+//        search.forEach(e -> {
+//            System.out.println("e.getContent() = " + e.getContent());
+//            LOG.info(e.getContent());
+//            LOG.info(e.getId());
+//        });
     }
 }

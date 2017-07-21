@@ -18,8 +18,15 @@ package de.intrafind.sitesearch.dto;
 
 import org.springframework.data.annotation.Id;
 
+import java.io.Serializable;
+
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "documents")
-public class Document {
+public class Document implements Serializable {
+    private String tenant;
+    private String url;
+    private String highlightedUrl;
+    private String title;
+
     @Id
     private String id;
 

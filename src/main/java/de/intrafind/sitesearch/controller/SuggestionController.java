@@ -14,17 +14,7 @@
  * limitations under the License.
  */
 
-package de.intrafind.sitesearch.repository;
+package de.intrafind.sitesearch.controller;
 
-import de.intrafind.sitesearch.dto.Document;
-import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
-import org.springframework.stereotype.Repository;
-
-import java.util.List;
-
-@Repository
-public interface IndexRepository extends ElasticsearchRepository<Document, String> {
-    Document findByContent(String content);
-
-    List<Document> findAllByContent(String content);
+public class SuggestionController {
 }
