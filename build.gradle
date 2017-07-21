@@ -54,7 +54,7 @@ configurations {
 
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-hateoas:${springBootVersion}"
-    compile "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
+//    compile "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
     compile "org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}"
 
     compile("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
