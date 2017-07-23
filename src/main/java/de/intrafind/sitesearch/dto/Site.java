@@ -20,6 +20,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.io.Serializable;
+import java.net.URI;
 
 // TODO probably the only DTO that deserves the @Document annotation, remove this annotation from all other DTOs
 @Document(indexName = "site")
@@ -28,8 +29,24 @@ public class Site implements Serializable {
     private String tenant;
     // TODO highlight when returning in Hits
     private String title;
-    private String url;
-    private String highlightedUrl;
+    private URI url;
+//    private String highlightedUrl;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public URI getUrl() {
+        return url;
+    }
+
+    public String getTenant() {
+        return tenant;
+    }
 
     @Id
     private String id;

@@ -18,15 +18,10 @@ package de.intrafind.sitesearch.service;
 
 import de.intrafind.sitesearch.dto.Site;
 import de.intrafind.sitesearch.repository.SiteRepository;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class SiteService {
@@ -38,68 +33,21 @@ public class SiteService {
         this.repository = repository;
     }
 
-    public void index(List<Site> sites) {
-        LOG.info("INDEXED!");
-        sites.forEach(site -> {
-            final Site index = repository.index(site);
-            LOG.info("id: " + index.getId());
-            final Site one = repository.findOne(index.getId());
-            LOG.info(one.getId());
-        });
+    public Site index(Site site) {
+        Site indexed = repository.save(site);
 
-        new NativeSearchQueryBuilder().build().getQuery();
-        QueryBuilder queryBuilder = QueryBuilders.termsLookupQuery("content");
-        QueryBuilder queryBuilder1 = QueryBuilders.termsQuery("content", "HTML");
-        QueryBuilder queryBuilder2 = QueryBuilders.commonTermsQuery("content", "HTML");
-        LOG.info("++++++++++++++");
-        LOG.info(queryBuilder.toString());
-        LOG.info(queryBuilder1.toString());
-        LOG.info(queryBuilder2.toString());
-        LOG.info(queryBuilder2.toString());
-        LOG.info("++++++++++++++");
+        LOG.info("indexed = " + indexed);
+        LOG.info("indexed = " + indexed.getContent());
+        LOG.info("indexed = " + indexed.getId());
+        return indexed;
+    }
 
-        QueryBuilder qqueryBuilder = QueryBuilders.matchQuery("content", "HTML");
-        QueryBuilder qqueryBuilder1 = QueryBuilders.matchPhraseQuery("content", "HTML");
-        QueryBuilder qqueryBuilder2 = QueryBuilders.matchPhrasePrefixQuery("content", "HTML");
+    public Site fetchById(String id) {
+        Site fetched = repository.findOne(id);
 
-        LOG.info("========");
-        LOG.info(qqueryBuilder.toString());
-        LOG.info(qqueryBuilder1.toString());
-        LOG.info(qqueryBuilder2.toString());
-        LOG.info(qqueryBuilder2.toString());
-        LOG.info("========");
-
-//        SearchQuery searchQuery;
-
-
-//        final Iterable<Site> search = repository.search(queryBuilder);
-//        search.forEach(e -> {
-//            LOG.info(e.getId());
-//            LOG.info(e.getContent());
-//        });
-
-//        final Site tml1 = repository.findByContent("some random text with HTML, actually an HTML site");
-        final List<Site> tml1 = repository.findAllByContent("HTML");
-        tml1.forEach(e -> {
-            LOG.info("e.getContent() = " + e.getContent());
-            System.out.println("e.getId() = " + e.getId());
-        });
-//        repository.findBy
-//        LOG.info("tml1 = " + tml1);
-//        final Site tml = repository.findByContent("HTML");
-//        System.out.println("tml.getContent() =---------- " + tml);
-//        LOG.info("tml ========= " + tml);
-//        System.out.println("tml.getContent() = " + tml.getContent());
-//        System.out.println("tml.getContent() = " + tml.getId());
-//        LOG.info("tml = " + tml);
-//        LOG.info("tml = " + tml.getId());
-//        LOG.info("tml = " + tml.getContent());
-
-//        final Iterable<Site> search = repository.search(queryBuilder);
-//        search.forEach(e -> {
-//            System.out.println("e.getContent() = " + e.getContent());
-//            LOG.info(e.getContent());
-//            LOG.info(e.getId());
-//        });
+        LOG.info("fetched = " + fetched);
+        LOG.info("fetched = " + fetched.getContent());
+        LOG.info("fetched = " + fetched.getId());
+        return fetched;
     }
 }

@@ -16,18 +16,22 @@
 
 package de.intrafind.sitesearch.controller;
 
-import de.intrafind.sitesearch.dto.Hit;
+import de.intrafind.sitesearch.dto.Site;
 import de.intrafind.sitesearch.service.HitService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(HitController.ENDPOINT)
 public class HitController {
-    public static final String ENDPOINT = "/default-tenant/hits";
+    public static final String ENDPOINT = "/hits";
     private static final Logger LOG = LoggerFactory.getLogger(HitController.class);
     private final HitService service;
 
@@ -36,20 +40,9 @@ public class HitController {
         this.service = service;
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.CREATED)
-    Hit create(@RequestBody Hit creation) {
-        return null;
-    }
-
-    @RequestMapping(path = "{id}", method = RequestMethod.GET)
-    Hit retrieve(@PathVariable("id") String id) {
-        return null;
-    }
-
     @RequestMapping(method = RequestMethod.GET)
-    Hit search(
-            @RequestParam(value = "sSearchTerm", required = true) String sSearchTerm,
+    List<Site> search(
+            @RequestParam(value = "sSearchTerm") String sSearchTerm,
             @RequestParam(value = "action", defaultValue = "facetsandsearch") String action,
             @RequestParam(value = "iSearchIndex", defaultValue = "1") int iSearchIndex,
             @RequestParam(value = "limit", defaultValue = "20") int limit,
@@ -62,16 +55,7 @@ public class HitController {
         LOG.info("" + limit);
         LOG.info("" + start);
         LOG.info("==========");
+
         return service.search(sSearchTerm);
-    }
-
-    @RequestMapping(method = RequestMethod.PUT)
-    Hit update(@RequestBody Hit update) {
-        return null;
-    }
-
-    @RequestMapping(path = "{id}", method = RequestMethod.DELETE)
-    void delete(@PathVariable("id") String id) {
-        service.delete(id);
     }
 }

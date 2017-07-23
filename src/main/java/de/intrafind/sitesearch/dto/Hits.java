@@ -16,9 +16,19 @@
 
 package de.intrafind.sitesearch.dto;
 
-import java.util.Collections;
-import java.util.List;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
 
-public class Hits {
-    List<Site> hits = Collections.emptyList();
+import java.io.Serializable;
+
+@Document(indexName = "hitsdummy", createIndex = true)
+public class Hits implements Serializable {
+    @Id
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+//    List<Site> hits = Collections.emptyList();
 }

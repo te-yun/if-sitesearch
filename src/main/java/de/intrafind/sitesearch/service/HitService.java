@@ -16,51 +16,38 @@
 
 package de.intrafind.sitesearch.service;
 
-import de.intrafind.sitesearch.dto.Hit;
-import de.intrafind.sitesearch.dto.Result;
-import de.intrafind.sitesearch.repository.HitRepository;
+import de.intrafind.sitesearch.dto.Site;
+import de.intrafind.sitesearch.repository.SiteRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class HitService {
-    private final HitRepository repository;
+    private final SiteRepository repository;
+    private Logger LOG = LoggerFactory.getLogger(HitService.class);
 
     @Autowired
-    public HitService(final HitRepository repository) {
+    public HitService(final SiteRepository repository) {
         this.repository = repository;
     }
 
-    public void delete(String id) {
-        repository.delete(id);
-    }
+    public List<Site> search(String query) {
+        final List<Site> found = new ArrayList<>();
+//        repository.findAll();
+        repository.findAll().forEach(site -> {
+            found.add(site);
+        });
+//        final List<Site> found = repository.findAllByTitleOrUrlOrContent(query);
+//
+//        for (Site site : found) {
+//            LOG.info("site.getId() = " + site.getId());
+//        }
 
-    public Hit search(String query) {
-        final String qresult;
-        switch (query) {
-            case "ying":
-                qresult = "YING result";
-                break;
-            case "yang":
-                qresult = "YANG result";
-                break;
-            default:
-                qresult = "SOMETHING ELSE";
-                break;
-        }
-        Result result = new Result();
-        result.setTitle("Some TITLE with " + qresult + " in it.");
-        result.setText("Some TEXT with " + qresult + " in it.");
-        Hit hit = new Hit(query, Collections.singletonList(result));
-
-        final Hit save = repository.save(hit);
-//        repository.findAll().forEach(e -> {
-//            Logger.getGlobal().info("query: " + e.getQuery());
-//        });
-        Logger.getGlobal().info(save.getId());
-        return hit;
+        return found;
     }
 }
