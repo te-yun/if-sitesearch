@@ -40,20 +40,32 @@ public class HitController {
 
     @RequestMapping(method = RequestMethod.GET)
     Hits search(
-            @RequestParam(value = "sSearchTerm") String sSearchTerm,
-            @RequestParam(value = "action", defaultValue = "facetsandsearch") String action,
-            @RequestParam(value = "iSearchIndex", defaultValue = "1") int iSearchIndex,
-            @RequestParam(value = "limit", defaultValue = "20") int limit,
-            @RequestParam(value = "limit", defaultValue = "0") int start
+            @RequestParam(value = "sSearchTerm") String sSearchTerm, // legacy parameter
+            @RequestParam(value = "query", required = false) String query
     ) {
-        LOG.info("==========");
-        LOG.info(sSearchTerm);
-        LOG.info(action);
-        LOG.info("" + iSearchIndex);
-        LOG.info("" + limit);
-        LOG.info("" + start);
-        LOG.info("==========");
+        LOG.info("query = " + query);
+        // to stay compatible to the legacy API for now
+        query = sSearchTerm;
 
-        return service.search(sSearchTerm);
+        return service.search(query);
     }
+
+//    @RequestMapping(method = RequestMethod.GET)
+//    Hits iFinderLegacySearch(
+//            @RequestParam(value = "sSearchTerm") String sSearchTerm,
+//            @RequestParam(value = "action", defaultValue = "facetsandsearch") String action,
+//            @RequestParam(value = "iSearchIndex", defaultValue = "1") int iSearchIndex,
+//            @RequestParam(value = "limit", defaultValue = "20") int limit,
+//            @RequestParam(value = "limit", defaultValue = "0") int start
+//    ) {
+//        LOG.info("==========");
+//        LOG.info(sSearchTerm);
+//        LOG.info(action);
+//        LOG.info("" + iSearchIndex);
+//        LOG.info("" + limit);
+//        LOG.info("" + start);
+//        LOG.info("==========");
+//
+//        return search(sSearchTerm);
+//    }
 }
