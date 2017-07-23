@@ -16,7 +16,7 @@
 
 package de.intrafind.sitesearch.controller;
 
-import de.intrafind.sitesearch.dto.Site;
+import de.intrafind.sitesearch.dto.Hits;
 import de.intrafind.sitesearch.service.HitService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(HitController.ENDPOINT)
@@ -41,7 +39,7 @@ public class HitController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    List<Site> search(
+    Hits search(
             @RequestParam(value = "sSearchTerm") String sSearchTerm,
             @RequestParam(value = "action", defaultValue = "facetsandsearch") String action,
             @RequestParam(value = "iSearchIndex", defaultValue = "1") int iSearchIndex,

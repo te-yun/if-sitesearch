@@ -16,6 +16,7 @@
 
 package de.intrafind.sitesearch.service;
 
+import de.intrafind.sitesearch.dto.Hits;
 import de.intrafind.sitesearch.dto.Site;
 import de.intrafind.sitesearch.repository.SiteRepository;
 import org.slf4j.Logger;
@@ -23,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -36,18 +36,9 @@ public class HitService {
         this.repository = repository;
     }
 
-    public List<Site> search(String query) {
-        final List<Site> found = new ArrayList<>();
-//        repository.findAll();
-        repository.findAll().forEach(site -> {
-            found.add(site);
-        });
-//        final List<Site> found = repository.findAllByTitleOrUrlOrContent(query);
-//
-//        for (Site site : found) {
-//            LOG.info("site.getId() = " + site.getId());
-//        }
+    public Hits search(String query) {
+        final List<Site> found = repository.findAllByContent(query);
 
-        return found;
+        return new Hits(query, found);
     }
 }
