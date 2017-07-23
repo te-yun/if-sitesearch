@@ -37,17 +37,13 @@ public class SiteService {
         Site indexed = repository.save(site);
 
         LOG.info("indexed = " + indexed);
-        LOG.info("indexed = " + indexed.getContent());
-        LOG.info("indexed = " + indexed.getId());
         return indexed;
     }
 
     public Site fetchById(String id) {
-        Site fetched = repository.findOne(id);
+        Site found = repository.findOne(id);
 
-        LOG.info("fetched = " + fetched);
-        LOG.info("fetched = " + fetched.getContent());
-        LOG.info("fetched = " + fetched.getId());
-        return fetched;
+        LOG.info("found = " + found);
+        return found;
     }
 }

@@ -24,5 +24,7 @@ import java.util.List;
 
 @Repository
 public interface SiteRepository extends ElasticsearchRepository<Site, String> {
-    List<Site> findAllByContent(String content);
+    List<Site> findAllByContent(String query);
+
+    List<Site> findAllByTitle(String query);
 }
