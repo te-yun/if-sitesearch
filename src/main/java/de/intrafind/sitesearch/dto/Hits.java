@@ -21,28 +21,33 @@ import java.util.Collections;
 import java.util.List;
 
 public class Hits implements Serializable {
-    List<Site> sites = Collections.emptyList();
-    //    private String id;
+    private List<Object> facets = Collections.emptyList();
+    private String title;
+    private List<Site> results = Collections.emptyList();
     private String query;
 
-//    public String getId() {
-//        return id;
-//    }
-
-    public Hits(String query, List<Site> sites) {
+    public Hits(String query, List<Site> results) {
         this.query = query;
-        this.sites = sites;
+        this.results = results;
+    }
+
+    public List<Object> getFacets() {
+        return facets;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public String getQuery() {
         return query;
     }
 
-    public List<Site> getSites() {
-        return sites;
+    public List<Site> getResults() {
+        return results;
     }
 
-    public void setSites(List<Site> sites) {
-        this.sites = sites;
+    public void setResults(List<Site> sites) {
+        this.results = sites;
     }
 }
