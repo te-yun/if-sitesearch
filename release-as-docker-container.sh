@@ -11,6 +11,9 @@ DOCKER_TAG=latest
 docker build --tag=intrafind/$DOCKER_IMAGE_NAME:$DOCKER_TAG .
 docker push intrafind/$DOCKER_IMAGE_NAME:$DOCKER_TAG
 docker rm -f $DOCKER_IMAGE_NAME
-docker run -d -p 80:8001 --name $DOCKER_IMAGE_NAME intrafind/$DOCKER_IMAGE_NAME:$DOCKER_TAG
+docker run -d --name $DOCKER_IMAGE_NAME \
+    -p 80:8001 \
+    -v ~/data:/srv/$DOCKER_IMAGE_NAME \
+    intrafind/$DOCKER_IMAGE_NAME:$DOCKER_TAG
 
 docker rmi $(docker images -f "dangling=true" -q) # cleanup, GC for dangling images
