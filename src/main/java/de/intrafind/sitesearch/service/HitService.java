@@ -25,8 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class HitService {
@@ -40,12 +38,12 @@ public class HitService {
 
     public Hits search(String query) {
         final List<Site> foundInContent = repository.findAllByContent(query);
-        final List<Site> foundInTitle = repository.findAllByTitle(query);
+//        final List<Site> foundInTitle = repository.findAllByTitle(query);
+//
+//        final List<Site> found = Stream.concat(foundInContent.stream(), foundInTitle.stream())
+//                .distinct()
+//                .collect(Collectors.toList());
 
-        final List<Site> found = Stream.concat(foundInContent.stream(), foundInTitle.stream())
-                .distinct()
-                .collect(Collectors.toList());
-
-        return new Hits(query, found);
+        return new Hits(query, foundInContent);
     }
 }

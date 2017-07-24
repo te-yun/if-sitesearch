@@ -2,10 +2,10 @@
 # Copyright 2017 IntraFind Software AG. All rights reserved.
 #
 
-#security:
-#  user:
-#    name: ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=
-#    password: jOLtvCtDi1YxR/IW4XPI6hjvi2LNOYgMEY6YSz9HWJs=
+security:
+  user:
+    name: ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=
+    password: jOLtvCtDi1YxR/IW4XPI6hjvi2LNOYgMEY6YSz9HWJs=
 
 server:
   port: 8001
