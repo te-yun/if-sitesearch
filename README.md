@@ -21,27 +21,19 @@ to the `config` folder inside this project.
 
     http://localhost:8001/swagger-ui.html
 
-# Initialization
+# Operations
 
-## Elasticsearch
+* [PowerShell required](https://github.com/PowerShell/PowerShell)
 
-    ./run-elasticsearch.sh
-
-# Run 
-
+## Run 
     ./run.sh
     http://localhost:8001
     
-# Test
-
+## Test
     ./test.sh
 
-`SPRING_CONFIG_NAME=application,local` environment property is required to add a specific configuration’s properties.    
-
-# Benchmark / Performance Test
-
+## Benchmark / Performance Test
     ./gradlew clean jmh
 
-# Release
-
+## Release
     ./release.sh
