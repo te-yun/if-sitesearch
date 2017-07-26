@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/loxal/if-sitesearch.svg)](https://travis-ci.org/loxal/if-sitesearch)
 
 
-if-sitesearch
+sitesearch-dispatcher
 =
 Here you can find a *non-technical* business focused abstract about [Sitesearch](http://if-wiki:8090/pages/viewpage.action?pageId=14714226).
 
@@ -9,8 +9,9 @@ Here you can find a *non-technical* business focused abstract about [Sitesearch]
 
 * [Product roadmap](http://if-wiki:8090/pages/viewpage.action?pageId=14714226)
 * [JIRA project](http://jira/projects/SITESEARCH)
-* [PROD release](http://localhost:8001) / [DEV Release](http://localhost:8001)
+* [PROD release](http://sitesearch.cloud) / [DEV Release](http://dev.sitesearch.cloud)
 * [SCM repository](http://ml-if-git/sitesearch/if-sitesearch)
+* [Container](http://ml-if-git/sitesearch/docker-container)
     
 # Pre-requisite / Configuration
 
@@ -23,7 +24,7 @@ to the `config` folder inside this project.
 
 # Operations
 
-* [PowerShell required](https://github.com/PowerShell/PowerShell)
+* [PowerShell (not yet) required](https://github.com/PowerShell/PowerShell)
 
 ## Run 
     ./run.sh
