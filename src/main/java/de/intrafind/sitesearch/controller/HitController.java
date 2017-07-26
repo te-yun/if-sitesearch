@@ -43,9 +43,9 @@ public class HitController {
             @RequestParam(value = "sSearchTerm") String sSearchTerm, // legacy parameter
             @RequestParam(value = "query", required = false) String query
     ) {
-        LOG.info("query = " + query);
         // to stay compatible to the legacy API for now
         query = sSearchTerm;
+        LOG.info("query = " + query);
 
         return service.search(query);
     }
