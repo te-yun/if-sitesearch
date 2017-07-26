@@ -28,12 +28,14 @@ buildscript {
 }
 
 plugins {
+    id "java"
+    id "idea"
     id "org.springframework.boot" version "1.5.4.RELEASE"
     id "me.champeau.gradle.jmh" version "0.3.1"
 }
 
-apply plugin: "java-library"
-apply plugin: "idea"
+//apply plugin: "java-library"
+//apply plugin: "idea"
 
 jar {
     baseName = rootProject.name

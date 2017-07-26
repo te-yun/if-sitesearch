@@ -12,7 +12,7 @@ MAINTAINER Alexander Orlov <alexander.orlov@intrafind.de>
 ADD build/libs/*.jar app/
 #ENV SPRING_CONFIG_NAME prod,local,config
 
+VOLUME /home/app_user/data
 EXPOSE 8001
 
 CMD java -jar -Xmx64m app/*.jar
-#CMD ["java", "-jar", "-Xmx64m", "app/if-sitesearch-1.0.0.jar"]
