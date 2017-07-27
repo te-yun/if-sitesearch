@@ -20,7 +20,8 @@ buildscript {
         swaggerVersion = '2.7.0'
     }
     repositories {
-        mavenCentral()
+//        mavenCentral()
+        maven { url 'https://plugins.gradle.org/m2' }
     }
 }
 
@@ -41,7 +42,6 @@ targetCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
     mavenCentral()
-    maven { url 'https://plugins.gradle.org/m2' }
 }
 
 configurations {
