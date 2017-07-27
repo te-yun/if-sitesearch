@@ -16,12 +16,12 @@
 
 buildscript {
     ext {
-        springBootVersion = '1.5.6.RELEASE'
-        swaggerVersion = '2.7.0'
+        springBootVersion = "1.5.6.RELEASE"
+        swaggerVersion = "2.7.0"
     }
     repositories {
         mavenCentral()
-        maven { url 'https://plugins.gradle.org/m2' }
+        maven { url "https://plugins.gradle.org/m2" }
     }
 }
 
@@ -34,7 +34,7 @@ plugins {
 
 jar {
     baseName = rootProject.name
-    version = '1.0.0'
+    version = "1.0.0"
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -45,8 +45,8 @@ repositories {
 }
 
 configurations {
-    compile.exclude module: 'spring-boot-starter-tomcat'
-    compile.exclude module: 'undertow-websockets-jsr'
+    compile.exclude module: "spring-boot-starter-tomcat"
+    compile.exclude module: "undertow-websockets-jsr"
 }
 
 dependencies {
@@ -60,7 +60,7 @@ dependencies {
 
     compile "org.springframework.data:spring-data-elasticsearch:2.1.6.RELEASE"
 
-    runtime 'net.java.dev.jna:jna:4.4.0'
+    runtime "net.java.dev.jna:jna:4.4.0"
 
     testCompile "org.openjdk.jmh:jmh-generator-annprocess:1.19"
     testCompile "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
