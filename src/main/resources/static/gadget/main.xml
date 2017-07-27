@@ -23,6 +23,6 @@
         <Locale messages="ALL_ALL.xml"/>
     </ModulePrefs>
 
-    <Content href="http://sitesearch.cloud" type="url"/>
+    <Content href="http://sitesearch.cloud/searchbar-gadget.html" type="url"/>
 </Module>
         

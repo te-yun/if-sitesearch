@@ -9,10 +9,10 @@ MAINTAINER Alexander Orlov <alexander.orlov@intrafind.de>
 #WORKDIR /home/$APP_USER
 ### /execute as non-root user
 
-ADD build/libs/*.jar app/
+ADD build/libs/*.jar svc/
 #ENV SPRING_CONFIG_NAME prod,local,config
 
-VOLUME /home/app_user/data
+VOLUME /home/svc_user/data
 EXPOSE 8001
 
-CMD java -jar -Xmx64m app/*.jar
+CMD java -jar -Xmx64m svc/*.jar
