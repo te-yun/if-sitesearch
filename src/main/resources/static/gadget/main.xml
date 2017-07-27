@@ -16,7 +16,7 @@
   -->
 
 <Module>
-    <ModulePrefs title="__MSG_gadget_title__" title_url="http://dev.loxal.net"
+    <ModulePrefs title="__MSG_gadget_title__" title_url="https://www.intrafind.de"
                  description="__MSG_gadget_description__" author_link="https://www.intrafind.de"
                  author="IntraFind Software AG" author_email="alexander.orlov@intrafind.de"
                  thumbnail="__MSG_gadget_thumbnail__" screenshot="__MSG_gadget_screenshot__">
