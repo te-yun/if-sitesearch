@@ -1,6 +1,6 @@
-Set-StrictMode -Version Latest
-$ErrorActionPreference = "Stop"
-$PSDefaultParameterValues["*:ErrorAction"] = "Stop"
+#Set-StrictMode -Version Latest
+#$ErrorActionPreference = "Stop"
+#$PSDefaultParameterValues["*:ErrorAction"] = "Stop"
 
 curl 172.18.0.1:9605/json/state?method=get --data param0='[system]'
 curl sitesearch.cloud:9605/json/state?method=get --data param0='[system]'
