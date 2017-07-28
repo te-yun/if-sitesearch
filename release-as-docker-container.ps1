@@ -1,7 +1,6 @@
 ./gradlew clean build
 
-echo `ls build/libs/*.jar | sed "s/.*\/\(.\+\)-.*\.jar/\1/"`
-$DOCKER_IMAGE_NAME='`ls build/libs/*.jar | sed "s/.*\/\(.\+\)-.*\.jar/\1/"`'
+$DOCKER_IMAGE_NAME='`ls build/libs/*.jar | sed "s/.*\/\(.\+\).*\.jar/\1/"`'
 $DOCKER_TAG = "latest"
 
 docker build --tag intrafind/$DOCKER_IMAGE_NAME:$DOCKER_TAG .
