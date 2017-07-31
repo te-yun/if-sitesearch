@@ -60,11 +60,12 @@ public class SiteController {
      *
      * @param site to be indexed
      */
-    @RequestMapping(method = RequestMethod.PUT)
+    @RequestMapping(path = "{id}", method = RequestMethod.PUT)
     Site index(
+            @PathVariable("id") String id,
             @RequestBody Site site
     ) {
-        return service.index(site);
+        return service.index(id, site);
     }
 
     /**

@@ -51,6 +51,14 @@ public class Site implements Serializable {
     @Id
     private String id;
 
+    public void setTenant(String tenant) {
+        this.tenant = tenant;
+    }
+
+    public void setUrl(URI url) {
+        this.url = url;
+    }
+
     // TODO highlight when returning in Hits
     private String content;
 

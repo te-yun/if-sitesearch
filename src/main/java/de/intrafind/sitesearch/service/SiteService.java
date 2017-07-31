@@ -16,6 +16,9 @@
 
 package de.intrafind.sitesearch.service;
 
+import com.intrafind.api.Document;
+import com.intrafind.api.Fields;
+import com.intrafind.api.index.Index;
 import de.intrafind.sitesearch.dto.Site;
 import de.intrafind.sitesearch.repository.SiteRepository;
 import org.slf4j.Logger;
@@ -23,27 +26,54 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
+import java.util.Optional;
+
 @Service
 public class SiteService {
     private static final Logger LOG = LoggerFactory.getLogger(SiteService.class);
     private final SiteRepository repository;
+    private Index indexerService = de.intrafind.sitesearch.service.Service.getHessianClient(Index.class, "http://sitesearch.cloud:9605/hessian/index");
 
     @Autowired
     public SiteService(final SiteRepository repository) {
         this.repository = repository;
     }
 
-    public Site index(Site site) {
-        Site indexed = repository.save(site);
+    public Site index(String id, Site site) {
+        Document indexable = new Document(id);
+        indexable.set(Fields.BODY, site.getContent());
+        indexable.set(Fields.TITLE, site.getTitle());
+        indexable.set(Fields.URL, site.getUrl());
+        indexable.set(Fields.TENANT, site.getTenant());
+        indexerService.index(indexable);
 
-        LOG.info("indexed = " + indexed);
-        return indexed;
+//        Site indexed = repository.save(site);
+//        LOG.info("indexed = " + indexed);
+
+        return fetchById(id);
     }
 
     public Site fetchById(String id) {
-        Site found = repository.findOne(id);
+        Optional<Document> found = indexerService.fetch(Index.ALL, id).stream().findAny();
 
-        LOG.info("found = " + found);
-        return found;
+        if (found.isPresent()) {
+            Site representationOfFoundDocument = new Site();
+            Document foundDocument = found.get();
+            representationOfFoundDocument.setId(foundDocument.getId());
+            representationOfFoundDocument.setTitle(foundDocument.get(Fields.TITLE));
+            representationOfFoundDocument.setContent(foundDocument.get(Fields.BODY));
+            representationOfFoundDocument.setUrl(URI.create(foundDocument.get(Fields.URL)));
+            representationOfFoundDocument.setTenant(foundDocument.get(Fields.TENANT));
+
+            return representationOfFoundDocument;
+        } else {
+            return new Site();
+        }
+//
+//        Site found = repository.findOne(id);
+//
+//        LOG.info("found = " + found);
+//        return found;
     }
 }

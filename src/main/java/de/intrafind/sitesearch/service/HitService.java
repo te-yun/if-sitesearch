@@ -16,6 +16,8 @@
 
 package de.intrafind.sitesearch.service;
 
+import com.intrafind.api.Fields;
+import com.intrafind.api.search.Search;
 import de.intrafind.sitesearch.dto.Hits;
 import de.intrafind.sitesearch.dto.Site;
 import de.intrafind.sitesearch.repository.SiteRepository;
@@ -25,6 +27,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -39,7 +43,7 @@ public class HitService {
     }
 
     public Hits search(String query) {
-        final List<Site> foundInContent = repository.findAllByContent(query);
+//        final List<Site> foundInContent = repository.findAllByContent(query);
 
 
 //        HttpHeaders headers = new HttpHeaders();
@@ -58,10 +62,67 @@ public class HitService {
 //
 //        LOG.info("response = " + response);
 
-        return new Hits(query, foundInContent);
-    }
 
-//    class SearchHits{
-//        List<IfDocument> =
-//    }
+//        Search search= de.intrafind.sitesearch.service.Service.getHessianClient(Search.class, "http://sitesearch.cloud:9605/search/hessian/search");
+//        Index index= de.intrafind.sitesearch.service.Service.getHessianClient(Index.class, "http://sitesearch.cloud:9605/hessian/index");
+//
+//        Document document1 = new Document("doc1").set("title", "document 1")
+//            .add("body" , "this is a test")
+//            .add("body" , "some additional test body terms")
+//            .add("key"  , "valueA")
+//            .add("key"  , "valueB")
+//            .add("facet", "red");
+//
+//        Document document2 = new Document("doc2").set("title", "second document")
+//            .set("body" , "the body")
+//            .add("key"  , "valueA")
+//            .add("facet", "red");
+//
+//        Document document3 = new Document("doc3").set("title", "third document")
+//            .set("body" , "the body", "varags allowed!!!")
+//            .add("key"  , "valueC")
+//            .add("facet", "green");
+//
+//        index.index(document1, document2, document3);
+//
+//        LOG.info("index.fetch(Index.ALL) = " + index.fetch(Index.ALL, "doc1", "doc2"));
+
+
+        Search search = de.intrafind.sitesearch.service.Service.getHessianClient(Search.class, "http://sitesearch.cloud:9605/hessian/search");
+
+        com.intrafind.api.search.Hits hits = search.search(query);
+
+        List<Site> siteDocuments = new ArrayList<>();
+        hits.getDocuments().forEach(document -> {
+            Site site = new Site();
+            site.setId(document.getId());
+            site.setUrl(URI.create(document.get(Fields.URL)));
+            site.setTenant(document.get(Fields.TENANT));
+            site.setContent(document.get(Fields.BODY));
+            site.setTitle(document.get(Fields.TITLE));
+
+            siteDocuments.add(site);
+        });
+
+//        LOG.info("hits.getDocuments() = " + hits.getMetaData());
+//        LOG.info("hits.getDocuments() = " + hits.getDocuments().size());
+//        LOG.info("hits.getDocuments() = " + hits.getDocuments().size());
+//        hits.getDocuments().forEach(d ->
+//        {
+//            LOG.info("d.getId() = " + d.getId());
+//            d.getFields().forEach((f, k) -> {
+//                LOG.info("f = " + f);
+//                LOG.info("k = " + k);
+//                k.forEach(e -> {
+//                    LOG.info("e = " + e);
+//                });
+////                LOG.info("d.get(f) = " + d.get(f));
+//            });
+//        });
+
+//        System.out.println("s = " + s);
+//        de.intrafind.sitesearch.service.Service.getHessianClient(Object.class, "http://sitesearch.cloud:9605/search/hessian/search");
+
+        return new Hits(query, siteDocuments);
+    }
 }
