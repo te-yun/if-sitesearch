@@ -33,7 +33,7 @@ to the `config` folder inside this project.
 ## Test
     ./test.sh
 
-## Benchmark / Performance Test
+## Load Test
     ./gradlew clean jmh
 
 ## Release
