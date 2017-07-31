@@ -21,10 +21,8 @@ import com.intrafind.api.search.Search;
 import de.intrafind.sitesearch.Application;
 import de.intrafind.sitesearch.dto.Hits;
 import de.intrafind.sitesearch.dto.Site;
-import de.intrafind.sitesearch.repository.SiteRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -34,16 +32,16 @@ import java.util.List;
 
 @Service
 public class HitService {
-    private final SiteRepository repository;
+    //    private final SiteRepository repository;
     private static final Logger LOG = LoggerFactory.getLogger(HitService.class);
     private final RestTemplate call = new RestTemplate();
 
     private Search search = IfinderCoreClient.newHessianClient(Search.class, Application.iFinderCore + "/search");
 
-    @Autowired
-    public HitService(final SiteRepository repository) {
-        this.repository = repository;
-    }
+//    @Autowired
+//    public HitService(final SiteRepository repository) {
+//        this.repository = repository;
+//    }
 
     public Hits search(String query) {
         com.intrafind.api.search.Hits hits = search.search(query);
