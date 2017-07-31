@@ -23,10 +23,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.net.URI;
+
 @SpringBootApplication
 @RestController
 @EnableSwagger2
 public class Application {
+    public static final URI iFinderCore = URI.create("http://sitesearch.cloud:9605/hessian");
+
     private final static Logger LOG = LoggerFactory.getLogger(Application.class);
 
     public static void main(final String... args) {

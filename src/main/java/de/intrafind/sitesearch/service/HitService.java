@@ -18,6 +18,7 @@ package de.intrafind.sitesearch.service;
 
 import com.intrafind.api.Fields;
 import com.intrafind.api.search.Search;
+import de.intrafind.sitesearch.Application;
 import de.intrafind.sitesearch.dto.Hits;
 import de.intrafind.sitesearch.dto.Site;
 import de.intrafind.sitesearch.repository.SiteRepository;
@@ -34,8 +35,10 @@ import java.util.List;
 @Service
 public class HitService {
     private final SiteRepository repository;
-    private Logger LOG = LoggerFactory.getLogger(HitService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HitService.class);
     private final RestTemplate call = new RestTemplate();
+
+    private Search search = IfinderCoreClient.newHessianClient(Search.class, Application.iFinderCore + "/search");
 
     @Autowired
     public HitService(final SiteRepository repository) {
@@ -43,53 +46,6 @@ public class HitService {
     }
 
     public Hits search(String query) {
-//        final List<Site> foundInContent = repository.findAllByContent(query);
-
-
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-//
-//        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-//        map.add("param0", "hello");
-//
-//        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
-//
-//
-//        Object response = call.postForObject(
-//                "http://sitesearch.cloud:9605/json/search?method=search",
-//                request, Object.class
-//        );
-//
-//        LOG.info("response = " + response);
-
-
-//        Search search= de.intrafind.sitesearch.service.Service.getHessianClient(Search.class, "http://sitesearch.cloud:9605/search/hessian/search");
-//        Index index= de.intrafind.sitesearch.service.Service.getHessianClient(Index.class, "http://sitesearch.cloud:9605/hessian/index");
-//
-//        Document document1 = new Document("doc1").set("title", "document 1")
-//            .add("body" , "this is a test")
-//            .add("body" , "some additional test body terms")
-//            .add("key"  , "valueA")
-//            .add("key"  , "valueB")
-//            .add("facet", "red");
-//
-//        Document document2 = new Document("doc2").set("title", "second document")
-//            .set("body" , "the body")
-//            .add("key"  , "valueA")
-//            .add("facet", "red");
-//
-//        Document document3 = new Document("doc3").set("title", "third document")
-//            .set("body" , "the body", "varags allowed!!!")
-//            .add("key"  , "valueC")
-//            .add("facet", "green");
-//
-//        index.index(document1, document2, document3);
-//
-//        LOG.info("index.fetch(Index.ALL) = " + index.fetch(Index.ALL, "doc1", "doc2"));
-
-
-        Search search = de.intrafind.sitesearch.service.Service.getHessianClient(Search.class, "http://sitesearch.cloud:9605/hessian/search");
-
         com.intrafind.api.search.Hits hits = search.search(query);
 
         List<Site> siteDocuments = new ArrayList<>();
@@ -103,25 +59,6 @@ public class HitService {
 
             siteDocuments.add(site);
         });
-
-//        LOG.info("hits.getDocuments() = " + hits.getMetaData());
-//        LOG.info("hits.getDocuments() = " + hits.getDocuments().size());
-//        LOG.info("hits.getDocuments() = " + hits.getDocuments().size());
-//        hits.getDocuments().forEach(d ->
-//        {
-//            LOG.info("d.getId() = " + d.getId());
-//            d.getFields().forEach((f, k) -> {
-//                LOG.info("f = " + f);
-//                LOG.info("k = " + k);
-//                k.forEach(e -> {
-//                    LOG.info("e = " + e);
-//                });
-////                LOG.info("d.get(f) = " + d.get(f));
-//            });
-//        });
-
-//        System.out.println("s = " + s);
-//        de.intrafind.sitesearch.service.Service.getHessianClient(Object.class, "http://sitesearch.cloud:9605/search/hessian/search");
 
         return new Hits(query, siteDocuments);
     }

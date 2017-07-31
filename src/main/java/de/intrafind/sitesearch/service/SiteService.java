@@ -19,6 +19,7 @@ package de.intrafind.sitesearch.service;
 import com.intrafind.api.Document;
 import com.intrafind.api.Fields;
 import com.intrafind.api.index.Index;
+import de.intrafind.sitesearch.Application;
 import de.intrafind.sitesearch.dto.Site;
 import de.intrafind.sitesearch.repository.SiteRepository;
 import org.slf4j.Logger;
@@ -33,7 +34,8 @@ import java.util.Optional;
 public class SiteService {
     private static final Logger LOG = LoggerFactory.getLogger(SiteService.class);
     private final SiteRepository repository;
-    private Index indexerService = de.intrafind.sitesearch.service.Service.getHessianClient(Index.class, "http://sitesearch.cloud:9605/hessian/index");
+
+    private Index indexerService = IfinderCoreClient.newHessianClient(Index.class, Application.iFinderCore + "/index");
 
     @Autowired
     public SiteService(final SiteRepository repository) {
@@ -47,9 +49,6 @@ public class SiteService {
         indexable.set(Fields.URL, site.getUrl());
         indexable.set(Fields.TENANT, site.getTenant());
         indexerService.index(indexable);
-
-//        Site indexed = repository.save(site);
-//        LOG.info("indexed = " + indexed);
 
         return fetchById(id);
     }
@@ -70,10 +69,5 @@ public class SiteService {
         } else {
             return new Site();
         }
-//
-//        Site found = repository.findOne(id);
-//
-//        LOG.info("found = " + found);
-//        return found;
     }
 }

@@ -17,17 +17,21 @@
 package de.intrafind.sitesearch.service;
 
 import com.caucho.hessian.client.HessianProxyFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.Authenticator;
+import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
 import java.net.URL;
 
 /**
  * This class is a helper class for the instantiation of IntraFind's services.
  */
-public enum Service {
+public enum IfinderCoreClient {
     ;
 
+    private static final Logger LOG = LoggerFactory.getLogger(HitService.class);
     private final static HessianProxyFactory hessianProxyFactory;
 
     static {
@@ -50,11 +54,11 @@ public enum Service {
      * If you need to add basic authentication: <code>http://username:password@server:8090/hessian/serviceID</code>
      */
     @SuppressWarnings("unchecked")
-    public static <T> T getHessianClient(Class<T> aInterface, String aUrl) {
+    public static <T> T newHessianClient(Class<T> aInterface, String aUrl) {
         try {
             return (T) hessianProxyFactory.create(aInterface, aUrl);
-
-        } catch (Exception exception) {
+        } catch (MalformedURLException exception) {
+            LOG.info(exception.getMessage());
             throw new RuntimeException(exception);
         }
     }
