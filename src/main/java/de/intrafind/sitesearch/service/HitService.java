@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -30,6 +31,7 @@ import java.util.List;
 public class HitService {
     private final SiteRepository repository;
     private Logger LOG = LoggerFactory.getLogger(HitService.class);
+    private final RestTemplate call = new RestTemplate();
 
     @Autowired
     public HitService(final SiteRepository repository) {
@@ -38,12 +40,28 @@ public class HitService {
 
     public Hits search(String query) {
         final List<Site> foundInContent = repository.findAllByContent(query);
-//        final List<Site> foundInTitle = repository.findAllByTitle(query);
+
+
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 //
-//        final List<Site> found = Stream.concat(foundInContent.stream(), foundInTitle.stream())
-//                .distinct()
-//                .collect(Collectors.toList());
+//        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+//        map.add("param0", "hello");
+//
+//        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+//
+//
+//        Object response = call.postForObject(
+//                "http://sitesearch.cloud:9605/json/search?method=search",
+//                request, Object.class
+//        );
+//
+//        LOG.info("response = " + response);
 
         return new Hits(query, foundInContent);
     }
+
+//    class SearchHits{
+//        List<IfDocument> =
+//    }
 }
