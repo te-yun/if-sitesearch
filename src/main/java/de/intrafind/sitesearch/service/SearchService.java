@@ -31,17 +31,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class HitService {
-    //    private final SiteRepository repository;
-    private static final Logger LOG = LoggerFactory.getLogger(HitService.class);
+public class SearchService {
+    private static final Logger LOG = LoggerFactory.getLogger(SearchService.class);
     private final RestTemplate call = new RestTemplate();
 
     private Search search = IfinderCoreClient.newHessianClient(Search.class, Application.iFinderCore + "/search");
-
-//    @Autowired
-//    public HitService(final SiteRepository repository) {
-//        this.repository = repository;
-//    }
 
     public Hits search(String query) {
         com.intrafind.api.search.Hits hits = search.search(query);

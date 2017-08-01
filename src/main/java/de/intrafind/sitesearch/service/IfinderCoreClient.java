@@ -31,7 +31,7 @@ import java.net.URL;
 public enum IfinderCoreClient {
     ;
 
-    private static final Logger LOG = LoggerFactory.getLogger(HitService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(IfinderCoreClient.class);
     private final static HessianProxyFactory hessianProxyFactory;
 
     static {

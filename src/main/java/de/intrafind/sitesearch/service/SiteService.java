@@ -31,14 +31,8 @@ import java.util.Optional;
 @Service
 public class SiteService {
     private static final Logger LOG = LoggerFactory.getLogger(SiteService.class);
-//    private final SiteRepository repository;
 
     private Index indexerService = IfinderCoreClient.newHessianClient(Index.class, Application.iFinderCore + "/index");
-
-//    @Autowired
-//    public SiteService(final SiteRepository repository) {
-//        this.repository = repository;
-//    }
 
     public Site index(String id, Site site) {
         Document indexable = new Document(id);

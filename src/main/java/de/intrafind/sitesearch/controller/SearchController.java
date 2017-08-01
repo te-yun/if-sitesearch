@@ -17,7 +17,7 @@
 package de.intrafind.sitesearch.controller;
 
 import de.intrafind.sitesearch.dto.Hits;
-import de.intrafind.sitesearch.service.HitService;
+import de.intrafind.sitesearch.service.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +27,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(HitController.ENDPOINT)
-public class HitController {
+@RequestMapping(SearchController.ENDPOINT)
+public class SearchController {
     public static final String ENDPOINT = "/hits";
-    private static final Logger LOG = LoggerFactory.getLogger(HitController.class);
-    private final HitService service;
+    private static final Logger LOG = LoggerFactory.getLogger(SearchController.class);
+    private final SearchService service;
 
     @Autowired
-    HitController(HitService service) {
+    SearchController(SearchService service) {
         this.service = service;
     }
 
