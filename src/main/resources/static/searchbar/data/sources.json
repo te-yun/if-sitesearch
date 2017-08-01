@@ -12,42 +12,6 @@
           "type": "string"
         }
       ]
-    },
-    {
-      "value": "1##SklSQQ==",
-      "type": "Filesystem",
-      "name": "JIRA",
-      "searchfields": []
-    },
-    {
-      "value": "1##TmV3cw==",
-      "type": "Filesystem",
-      "name": "News",
-      "searchfields": []
-    },
-    {
-      "value": "1##UGVyc29uZW4=",
-      "type": "Filesystem",
-      "name": "Personen",
-      "searchfields": []
-    },
-    {
-      "value": "1##UUE=",
-      "type": "Filesystem",
-      "name": "QA",
-      "searchfields": []
-    },
-    {
-      "value": "1##U3BpZWdlbA==",
-      "type": "Filesystem",
-      "name": "Spiegel",
-      "searchfields": []
-    },
-    {
-      "value": "1##U3Rlcm4=",
-      "type": "Filesystem",
-      "name": "Stern",
-      "searchfields": []
     }
   ],
   "systemData": {
