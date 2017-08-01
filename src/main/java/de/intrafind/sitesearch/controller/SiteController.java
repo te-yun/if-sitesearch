@@ -33,7 +33,7 @@ import java.util.List;
 @RestController
 @RequestMapping(SiteController.ENDPOINT)
 public class SiteController {
-    static final String ENDPOINT = "sites";
+    public static final String ENDPOINT = "/sites";
     private static final Logger LOG = LoggerFactory.getLogger(SiteController.class);
     private final SiteService service;
 
@@ -56,11 +56,11 @@ public class SiteController {
     }
 
     /**
-     * Inserts a site into index.
+     * Inserts a site into index. TODO should be a PUT method as it is idempotent
      *
      * @param site to be indexed
      */
-    @RequestMapping(path = "{id}", method = RequestMethod.PUT)
+    @RequestMapping(path = "{id}", method = RequestMethod.POST)
     Site index(
             @PathVariable("id") String id,
             @RequestBody Site site

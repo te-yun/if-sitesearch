@@ -29,6 +29,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static de.intrafind.sitesearch.controller.SearchController.ENDPOINT;
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
@@ -40,7 +41,7 @@ public class SearchTest {
 
     @Test
     public void simpleSearchLegacyApi() throws Exception {
-        final ResponseEntity<Hits> actualLegacy = caller.getForEntity("/hits?sSearchTerm=Autocomplete", Hits.class);
+        final ResponseEntity<Hits> actualLegacy = caller.getForEntity(ENDPOINT + "?sSearchTerm=Autocomplete", Hits.class);
         assertEquals(HttpStatus.OK, actualLegacy.getStatusCode());
         assertNotNull(actualLegacy.getBody());
         assertTrue(actualLegacy.getBody() instanceof Hits);
@@ -48,7 +49,7 @@ public class SearchTest {
 
     @Test
     public void simpleSearch() throws Exception {
-        final ResponseEntity<Hits> actual = caller.getForEntity("/hits?query=Autocomplete", Hits.class);
+        final ResponseEntity<Hits> actual = caller.getForEntity(ENDPOINT + "?query=Autocomplete", Hits.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertNotNull(actual.getBody());
@@ -70,7 +71,7 @@ public class SearchTest {
      */
     @Test
     public void simpleSearchNotFound() throws Exception {
-        final ResponseEntity<Hits> actual = caller.getForEntity("/hits?query=not_found", Hits.class);
+        final ResponseEntity<Hits> actual = caller.getForEntity(ENDPOINT + "?query=not_found", Hits.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertNotNull(actual.getBody());

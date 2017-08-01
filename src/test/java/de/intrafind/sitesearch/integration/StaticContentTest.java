@@ -50,6 +50,9 @@ public class StaticContentTest {
         assertTrue(staticContent.getBody().contains("js/app.js"));
     }
 
+    /**
+     * Reduces probability of a broken searchbar due to lack of proper configuration.
+     */
     @Test
     public void searchbarConfiguration() throws Exception {
         final ResponseEntity<String> staticContent = caller.getForEntity("/searchbar/data/config.json", String.class);

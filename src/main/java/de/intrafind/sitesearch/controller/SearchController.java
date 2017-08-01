@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(SearchController.ENDPOINT)
 public class SearchController {
-    public static final String ENDPOINT = "/hits";
+    public static final String ENDPOINT = "/search";
     private static final Logger LOG = LoggerFactory.getLogger(SearchController.class);
     private final SearchService service;
 
