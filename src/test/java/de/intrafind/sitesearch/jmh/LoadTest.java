@@ -28,7 +28,6 @@ import org.springframework.http.ResponseEntity;
 
 import static org.junit.Assert.*;
 
-//@State(Scope.Benchmark)
 public class LoadTest {
     private final static Logger LOG = LoggerFactory.getLogger(LoadTest.class);
     private static final String LOAD_TARGET = "http://sitesearch.cloud/index.html";
@@ -40,12 +39,10 @@ public class LoadTest {
         final TestRestTemplate testRestTemplate = new TestRestTemplate();
 
         final String forObject = testRestTemplate.getForObject(LOAD_TARGET, String.class);
-        final ResponseEntity<String> forEntity = testRestTemplate.getForEntity(LOAD_TARGET, String.class);
-
-        System.out.println("MY TEST");
+        final ResponseEntity<String> indexPage = testRestTemplate.getForEntity(LOAD_TARGET, String.class);
 
         assertNotNull(forObject);
         assertFalse(forObject.isEmpty());
-        assertEquals(forEntity.getStatusCode(), HttpStatus.OK);
+        assertEquals(indexPage.getStatusCode(), HttpStatus.OK);
     }
 }

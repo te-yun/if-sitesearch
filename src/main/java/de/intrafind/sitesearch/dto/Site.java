@@ -16,14 +16,11 @@
 
 package de.intrafind.sitesearch.dto;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
-
 import java.io.Serializable;
 import java.net.URI;
 
 // TODO probably the only DTO that deserves the @Document annotation, remove this annotation from all other DTOs
-@Document(indexName = "site")
+//@Document(indexName = "site")
 public class Site implements Serializable {
     // TODO highlight when returning in Hits
     private String tenant;
@@ -48,7 +45,7 @@ public class Site implements Serializable {
         return tenant;
     }
 
-    @Id
+    //    @Id
     private String id;
 
     public void setTenant(String tenant) {

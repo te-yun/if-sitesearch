@@ -16,15 +16,12 @@
 
 package de.intrafind.sitesearch.dto;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
-
 import java.util.Collections;
 import java.util.List;
 
-@Document(indexName = "suggestion")
+//@Document(indexName = "suggestion")
 public class Suggestions {
-    @Id
+    //    @Id
     private String id;
     private List<String> completions = Collections.emptyList();
     private List<String> images = Collections.emptyList();
