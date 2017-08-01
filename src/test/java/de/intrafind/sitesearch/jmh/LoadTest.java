@@ -22,13 +22,30 @@ import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.Threads;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-public class BenchmarkTests {
-    private final static Logger LOG = LoggerFactory.getLogger(BenchmarkTests.class);
+import static org.junit.Assert.*;
+
+//@State(Scope.Benchmark)
+public class LoadTest {
+    private final static Logger LOG = LoggerFactory.getLogger(LoadTest.class);
+    private static final String LOAD_TARGET = "http://sitesearch.cloud/index.html";
 
     @BenchmarkMode(Mode.SingleShotTime)
     @Threads(2)
     @Benchmark
     public void benchmark() throws Exception {
+        final TestRestTemplate testRestTemplate = new TestRestTemplate();
+
+        final String forObject = testRestTemplate.getForObject(LOAD_TARGET, String.class);
+        final ResponseEntity<String> forEntity = testRestTemplate.getForEntity(LOAD_TARGET, String.class);
+
+        System.out.println("MY TEST");
+
+        assertNotNull(forObject);
+        assertFalse(forObject.isEmpty());
+        assertEquals(forEntity.getStatusCode(), HttpStatus.OK);
     }
 }

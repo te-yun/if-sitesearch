@@ -29,13 +29,8 @@ plugins {
     id "java"
     id "idea"
     id "org.springframework.boot" version "1.5.6.RELEASE"
-    id "me.champeau.gradle.jmh" version "0.3.1"
+    id "me.champeau.gradle.jmh" version "0.4.4"
 }
-
-//jar {
-//    baseName = rootProject.name
-//    version = "1.0.0"
-//}
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -68,6 +63,7 @@ dependencies {
     runtime "net.java.dev.jna:jna:4.4.0"
 
     testCompile "org.openjdk.jmh:jmh-generator-annprocess:1.19"
+//    testCompile "org.openjdk.jmh:jmh-core:1.19"
     testCompile "org.springframework.boot:spring-boot-starter-test:$spring_boot_version"
 }
 
@@ -75,6 +71,17 @@ jmh {
     fork = 0
     setDuplicateClassesStrategy(DuplicatesStrategy.INCLUDE)
 }
+
+//jmh {
+//    iterations = 10
+//    fork = 1
+//    jvmArgs = '-server'
+//    timeUnit = 'ns'
+//    warmupIterations =10
+//    jmhVersion = '1.18'
+//    benchmarkMode = ['avgt']
+//    duplicateClassesStrategy = 'warn'
+//}
 
 tasks.withType(JavaCompile) {
     options.fork = true
