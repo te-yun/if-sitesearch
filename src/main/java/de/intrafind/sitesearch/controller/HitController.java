@@ -40,13 +40,13 @@ public class HitController {
 
     @RequestMapping(method = RequestMethod.GET)
     Hits search(
-            @RequestParam(value = "sSearchTerm") String sSearchTerm, // legacy parameter
-            @RequestParam(value = "query", required = false) String query
+            @RequestParam(value = "sSearchTerm", required = false, defaultValue = "") String sSearchTerm, // legacy parameter
+            @RequestParam(value = "query", required = false, defaultValue = "") String query
     ) {
-        // to stay compatible to the legacy API for now
-        query = sSearchTerm;
-        LOG.info("query = " + query);
+        // to stay compatible with the legacy API for now
+        if (!sSearchTerm.isEmpty()) query = sSearchTerm;
 
+        LOG.info("query = " + query);
         return service.search(query);
     }
 

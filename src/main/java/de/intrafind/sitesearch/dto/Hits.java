@@ -26,9 +26,24 @@ public class Hits implements Serializable {
     private List<Site> results = Collections.emptyList();
     private String query;
 
+    public Hits() {
+    }
+
     public Hits(String query, List<Site> results) {
         this.query = query;
         this.results = results;
+    }
+
+    public void setFacets(List<Object> facets) {
+        this.facets = facets;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
     }
 
     public List<Object> getFacets() {
