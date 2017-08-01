@@ -39,12 +39,15 @@ public class SearchTest {
     private TestRestTemplate caller;
 
     @Test
-    public void simpleSearch() throws Exception {
+    public void simpleSearchLegacyApi() throws Exception {
         final ResponseEntity<Hits> actualLegacy = caller.getForEntity("/hits?sSearchTerm=Autocomplete", Hits.class);
         assertEquals(HttpStatus.OK, actualLegacy.getStatusCode());
         assertNotNull(actualLegacy.getBody());
         assertTrue(actualLegacy.getBody() instanceof Hits);
+    }
 
+    @Test
+    public void simpleSearch() throws Exception {
         final ResponseEntity<Hits> actual = caller.getForEntity("/hits?query=Autocomplete", Hits.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
