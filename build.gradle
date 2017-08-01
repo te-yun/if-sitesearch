@@ -19,10 +19,6 @@ buildscript {
         spring_boot_version = "1.5.6.RELEASE"
         swagger_version = "2.7.0"
     }
-//    repositories {
-//        mavenCentral()
-//        maven { url "https://plugins.gradle.org/m2" }
-//    }
 }
 
 plugins {
@@ -65,6 +61,12 @@ dependencies {
     testCompile "org.openjdk.jmh:jmh-generator-annprocess:1.19"
 //    testCompile "org.openjdk.jmh:jmh-core:1.19"
     testCompile "org.springframework.boot:spring-boot-starter-test:$spring_boot_version"
+}
+
+test {
+    testLogging {
+        exceptionFormat = "full"
+    }
 }
 
 jmh {

@@ -1,18 +1,5 @@
 {
   "results": [
-    {
-      "value": "1",
-      "type": "Filesystem",
-      "name": "Alles",
-      "default": true,
-      "searchfields": [
-        {
-          "field": "_str.filename",
-          "label": "Dateiname",
-          "type": "string"
-        }
-      ]
-    }
   ],
   "systemData": {
     "version": "5.1.2.0-SNAPSHOT",

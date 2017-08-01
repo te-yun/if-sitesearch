@@ -104,7 +104,21 @@ public class SiteTest {
         assertNotEquals(actualYingFetched, actualYangFetched);
     }
 
-    // TODO provoke 400 responses
+    @Test
+    public void updatedSite() throws Exception {
+        String siteId = "2001";
+        Site updatable = buildSite(siteId);
+        final ResponseEntity<Site> create = caller.postForEntity(ENDPOINT + "/" + siteId, updatable, Site.class);
+        assertEquals(HttpStatus.OK, create.getStatusCode());
+        assertEquals(updatable, create.getBody());
 
-    // TODO overwrite Site with same ID but other content, aka update
+        Site updatedSite = buildSite(siteId);
+        updatedSite.setContent("updated");
+        final ResponseEntity<Site> updated = caller.postForEntity(ENDPOINT + "/" + siteId, updatedSite, Site.class);
+        assertEquals(HttpStatus.OK, updated.getStatusCode());
+        assertNotEquals(updatable, updated.getBody());
+        assertEquals(updatedSite, updated.getBody());
+    }
+
+    // TODO provoke 400 responses
 }
