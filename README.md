@@ -24,17 +24,17 @@ to the `config` folder inside this project.
 
 # Operations
 
-* [PowerShell (not yet) required](https://github.com/PowerShell/PowerShell)
+* [PowerShell required](https://github.com/PowerShell/PowerShell)
 
 ## Run 
-    ./run.sh
+    ./run.ps1
     http://localhost:8001
     
 ## Test
-    ./test.sh
+    ./test.ps1
 
 ## Load Test
-    ./gradlew clean jmh
+    ./test-load.ps1
 
 ## Release
     ./release.sh
