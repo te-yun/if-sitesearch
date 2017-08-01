@@ -36,34 +36,34 @@ public class StaticContentTest {
 
     @Test
     public void indexPage() throws Exception {
-        final ResponseEntity<String> indexPage = caller.getForEntity("/index.html", String.class);
+        final ResponseEntity<String> staticContent = caller.getForEntity("/index.html", String.class);
 
-        assertEquals(HttpStatus.OK, indexPage.getStatusCode());
-        assertTrue(indexPage.getBody().contains("API Specification"));
+        assertEquals(HttpStatus.OK, staticContent.getStatusCode());
+        assertTrue(staticContent.getBody().contains("API Specification"));
     }
 
     @Test
     public void searchbarPage() throws Exception {
-        final ResponseEntity<String> indexPage = caller.getForEntity("/searchbar/searchbar.html", String.class);
+        final ResponseEntity<String> staticContent = caller.getForEntity("/searchbar/searchbar.html", String.class);
 
-        assertEquals(HttpStatus.OK, indexPage.getStatusCode());
-        assertTrue(indexPage.getBody().contains("js/app.js"));
+        assertEquals(HttpStatus.OK, staticContent.getStatusCode());
+        assertTrue(staticContent.getBody().contains("js/app.js"));
     }
 
     @Test
     public void searchbarConfiguration() throws Exception {
-        final ResponseEntity<String> indexPage = caller.getForEntity("/searchbar/data/config.json", String.class);
+        final ResponseEntity<String> staticContent = caller.getForEntity("/searchbar/data/config.json", String.class);
 
-        assertEquals(HttpStatus.OK, indexPage.getStatusCode());
-        assertTrue(indexPage.getBody().contains("\"baseUrl\": \"http://sitesearch.cloud/\","));
+        assertEquals(HttpStatus.OK, staticContent.getStatusCode());
+        assertTrue(staticContent.getBody().contains("\"baseUrl\": \"http://sitesearch.cloud/\","));
     }
 
     @Test
     public void searchbarAppJs() throws Exception {
-        final ResponseEntity<String> indexPage = caller.getForEntity("/searchbar/js/app.js", String.class);
+        final ResponseEntity<String> staticContent = caller.getForEntity("/searchbar/js/app.js", String.class);
 
-        assertEquals(HttpStatus.OK, indexPage.getStatusCode());
-        assertTrue(indexPage.getBody().contains("if-app-searchbar"));
+        assertEquals(HttpStatus.OK, staticContent.getStatusCode());
+        assertTrue(staticContent.getBody().contains("if-app-searchbar"));
     }
 }
 
