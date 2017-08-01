@@ -33,16 +33,15 @@ public class LoadTest {
     private static final String LOAD_TARGET = "http://sitesearch.cloud/index.html";
 
     @BenchmarkMode(Mode.SingleShotTime)
-    @Threads(2)
+    @Threads(22)
     @Benchmark
-    public void benchmark() throws Exception {
-        final TestRestTemplate testRestTemplate = new TestRestTemplate();
+    public void staticLoad() throws Exception {
+        final TestRestTemplate caller = new TestRestTemplate();
 
-        final String forObject = testRestTemplate.getForObject(LOAD_TARGET, String.class);
-        final ResponseEntity<String> indexPage = testRestTemplate.getForEntity(LOAD_TARGET, String.class);
+        final ResponseEntity<String> actual = caller.getForEntity(LOAD_TARGET, String.class);
 
-        assertNotNull(forObject);
-        assertFalse(forObject.isEmpty());
-        assertEquals(indexPage.getStatusCode(), HttpStatus.OK);
+        assertNotNull(actual);
+        assertFalse(actual.getBody().isEmpty());
+        assertEquals(HttpStatus.OK, actual.getStatusCode());
     }
 }

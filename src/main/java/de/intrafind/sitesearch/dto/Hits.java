@@ -26,7 +26,7 @@ public class Hits implements Serializable {
     private List<Site> results = Collections.emptyList();
     private String query;
 
-    public Hits() {
+    private Hits() {
     }
 
     public Hits(String query, List<Site> results) {

@@ -32,7 +32,6 @@ import java.net.URI;
 
 import static de.intrafind.sitesearch.controller.SiteController.ENDPOINT;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -42,32 +41,36 @@ public class SiteTest {
     private TestRestTemplate caller;
 
     @Test
-    public void simpleIndex() throws Exception {
-        Site simpleCloud = new Site();
-        simpleCloud.setUrl(URI.create("https://www.intrafind.de/cloud"));
-        simpleCloud.setTenant("1a6715d9-119f-48d1-9329-e8763273bbea");
-        simpleCloud.setContent("Sitesearch is IntraFind's new SaaS solution.");
-        simpleCloud.setTitle("Cloud Solution");
-//        {
-//        	"tenant" : "1a6715d9-119f-48d1-9329-e8763273bbea",
-//        	"url" : "https://www.intrafind.de/cloud",
-//        	"title": "Cloud Solution",
-//        	"content": "Sitesearch is IntraFind's new SaaS solution."
-//        }
-        Site simpleSaaS = new Site();
-//        {
-//        	"tenant" : "1a6715d9-119f-48d1-9329-e8763273bbea",
-//        	"url" : "https://www.intrafind.de/saas",
-//        	"title": "SaaS Solution",
-//        	"content": "Sitesearch is IntraFind's new SaaS solution."
-//        }
+    public void simpleIndexWithCloudInside() throws Exception {
+        Site simple = new Site();
+        simple.setUrl(URI.create("https://www.intrafind.de/cloud"));
+        simple.setTenant("1a6715d9-119f-48d1-9329-e8763273bbea");
+        simple.setContent("Sitesearch is IntraFind's new SaaS solution.");
+        simple.setTitle("Cloud Solution");
+        simple.setId("123"); // is ignored
 
-        final ResponseEntity<Site> actual = caller.postForEntity(ENDPOINT + "/123", simpleCloud, Site.class);
+        final ResponseEntity<Site> actual = caller.postForEntity(ENDPOINT + "/123", simple, Site.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
-        assertNotNull(actual.getBody());
-//        assertEquals("not_found", actual.getBody().getContent());
+        assertEquals(simple, actual.getBody());
+    }
+
+    @Test
+    public void simpleIndexWithSaaSinside() throws Exception {
+        Site simple = new Site();
+        simple.setUrl(URI.create("https://www.intrafind.de/saas"));
+        simple.setTenant("1a6715d9-119f-48d1-9329-e8763273bbea");
+        simple.setContent("Sitesearch is IntraFind's new SaaS solution.");
+        simple.setTitle("SaaS Solution");
+        simple.setId("124"); // is ignored
+
+        final ResponseEntity<Site> actual = caller.postForEntity(ENDPOINT + "/124", simple, Site.class);
+
+        assertEquals(HttpStatus.OK, actual.getStatusCode());
+        assertEquals(simple, actual.getBody());
     }
 
     // TODO provoke 400 responses
+
+    // TODO overwrite Site with same ID but other content, aka update
 }

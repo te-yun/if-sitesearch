@@ -18,16 +18,12 @@ package de.intrafind.sitesearch.dto;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.util.Objects;
 
-// TODO probably the only DTO that deserves the @Document annotation, remove this annotation from all other DTOs
-//@Document(indexName = "site")
 public class Site implements Serializable {
-    // TODO highlight when returning in Hits
     private String tenant;
-    // TODO highlight when returning in Hits
     private String title;
     private URI url;
-//    private String highlightedUrl;
 
     public String getTitle() {
         return title;
@@ -45,7 +41,6 @@ public class Site implements Serializable {
         return tenant;
     }
 
-    //    @Id
     private String id;
 
     public void setTenant(String tenant) {
@@ -56,7 +51,6 @@ public class Site implements Serializable {
         this.url = url;
     }
 
-    // TODO highlight when returning in Hits
     private String content;
 
     public String getContent() {
@@ -73,5 +67,23 @@ public class Site implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Site site = (Site) o;
+        return Objects.equals(tenant, site.tenant) &&
+                Objects.equals(title, site.title) &&
+                Objects.equals(url, site.url) &&
+                Objects.equals(id, site.id) &&
+                Objects.equals(content, site.content);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(tenant, title, url, id, content);
     }
 }
