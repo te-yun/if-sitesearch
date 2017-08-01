@@ -16,32 +16,43 @@
 
 package de.intrafind.sitesearch.jmh;
 
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Mode;
-import org.openjdk.jmh.annotations.Threads;
+import de.intrafind.sitesearch.dto.Hits;
+import org.openjdk.jmh.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import static de.intrafind.sitesearch.controller.SearchController.ENDPOINT;
 import static org.junit.Assert.*;
 
 public class LoadTest {
     private final static Logger LOG = LoggerFactory.getLogger(LoadTest.class);
     private static final String LOAD_TARGET = "http://sitesearch.cloud/index.html";
+    private static final TestRestTemplate CALLER = new TestRestTemplate();
 
     @BenchmarkMode(Mode.SingleShotTime)
     @Threads(22)
     @Benchmark
     public void staticLoad() throws Exception {
-        final TestRestTemplate caller = new TestRestTemplate();
 
-        final ResponseEntity<String> actual = caller.getForEntity(LOAD_TARGET, String.class);
+        final ResponseEntity<String> actual = CALLER.getForEntity(LOAD_TARGET, String.class);
 
         assertNotNull(actual);
         assertFalse(actual.getBody().isEmpty());
         assertEquals(HttpStatus.OK, actual.getStatusCode());
+    }
+
+    @BenchmarkMode(Mode.SingleShotTime)
+    @Threads(22)
+    @OperationsPerInvocation(99)
+    @Benchmark
+    public void simpleSearch() throws Exception {
+        final ResponseEntity<Hits> actual = CALLER.getForEntity(ENDPOINT + "?query=Munich", Hits.class);
+
+        assertEquals(HttpStatus.OK, actual.getStatusCode());
+        assertNotNull(actual);
+        assertNotNull(actual.getBody());
     }
 }
