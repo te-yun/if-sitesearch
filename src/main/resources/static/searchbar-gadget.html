@@ -30,6 +30,7 @@
                 console.info(JSON.parse(this.responseText));
                 console.info(JSON.parse(this.responseText)['tenantId']);
                 document.getElementById('tenantId').value = JSON.parse(this.responseText)['tenantId'];
+                document.getElementById('tenantSecret').value = JSON.parse(this.responseText)['tenantSecret'];
             };
             xhr.send();
 //        };
@@ -40,9 +41,8 @@
 </script>
 
 <input id="feedUrl" placeholder="Feed URL" value="http://intrafind.de/share/enterprise-search-blog.xml">
-
-<input id="tenantId" placeholder="Tenant">
-<input id="tenantSecret" placeholder="Tenant Secret">
+<input id="tenantId" placeholder="Tenant" style="width: 300px">
+<input id="tenantSecret" placeholder="Tenant Secret" style="width: 200px">
 <button onclick="triggerFirstUsageOwnership(document.getElementById('feedUrl').value)">Provide feed URL and start
     searching only this tenant
 </button>
