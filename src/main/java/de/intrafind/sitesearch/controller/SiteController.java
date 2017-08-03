@@ -29,10 +29,11 @@ import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -76,19 +77,18 @@ public class SiteController {
     /**
      * Inserts a site into index. TODO should be a PUT method as it is idempotent
      */
-    @RequestMapping(path = "rss", method = RequestMethod.POST)
-    Site index(
-            @RequestParam(name = "feedUrl", required = false) URL feedUrl
+    @RequestMapping(path = "rss", method = RequestMethod.PUT)
+    ResponseEntity index(
+            @RequestParam(name = "feedUrl", required = false) URI feedUrl
     ) {
         LOG.info("feedUrl: " + feedUrl);
         try {
-            SyndFeed feed = new SyndFeedInput().build(new XmlReader(feedUrl));
-            LOG.info("feed: " + feed);
+            SyndFeed feed = new SyndFeedInput().build(new XmlReader(feedUrl.toURL()));
+            return ResponseEntity.ok().build();
         } catch (FeedException | IOException e) {
-            e.printStackTrace();
+            LOG.warn(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-
-        return null;
     }
 
     /**

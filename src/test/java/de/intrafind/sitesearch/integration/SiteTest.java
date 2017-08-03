@@ -24,17 +24,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.net.URI;
-import java.util.Random;
-import java.util.UUID;
 
 import static de.intrafind.sitesearch.controller.SiteController.ENDPOINT;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -67,7 +65,7 @@ public class SiteTest {
     public void assureIrrelevancyOfSiteIdInBody() throws Exception {
         String relevantSiteId = "124";
         String irrelevantSiteId = "random";
-        
+
         Site simple = new Site();
         simple.setUrl(URI.create("https://www.intrafind.de/saas"));
         simple.setTenant("1a6715d9-119f-48d1-9329-e8763273bbea");
@@ -123,18 +121,25 @@ public class SiteTest {
     }
 
     @Test
-    public void dojo() throws Exception {
-        new Random().longs(10).forEach(i -> {
-            LOG.info("i>>> = " + i);
-            String siteId = UUID.randomUUID().toString();
-            Site ingestable = buildSite(String.valueOf(i));
-            final ResponseEntity<Site> create = caller.postForEntity(ENDPOINT + "/" + String.valueOf(i), ingestable, Site.class);
-            // TODO go from OK to NOT_FOUND to CREATED
-//            assertEquals(HttpStatus.CREATED, create.getStatusCode());
-            assertEquals(ingestable, create.getBody());
-        });
-
+    public void importFeed() throws Exception {
+        final ResponseEntity<Object> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml", HttpMethod.PUT, null, Object.class);
+        assertEquals(HttpStatus.OK, exchange.getStatusCode());
+        assertNull(exchange.getBody());
     }
+
+//    @Test
+//    public void dojo() throws Exception {
+//        new Random().longs(10).forEach(i -> {
+//            LOG.info("i>>> = " + i);
+//            String siteId = UUID.randomUUID().toString();
+//            Site ingestable = buildSite(String.valueOf(i));
+//            final ResponseEntity<Site> create = caller.postForEntity(ENDPOINT + "/" + String.valueOf(i), ingestable, Site.class);
+//            // TODO go from OK to NOT_FOUND to CREATED
+////            assertEquals(HttpStatus.CREATED, create.getStatusCode());
+//            assertEquals(ingestable, create.getBody());
+//        });
+//
+//    }
 
     // TODO provoke 400 responses
 }
