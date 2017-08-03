@@ -38,3 +38,6 @@ to the `config` folder inside this project.
 
 ## Release
     ./release.sh
+    
+## Postman Export
+    ./*.postman_collection.json
