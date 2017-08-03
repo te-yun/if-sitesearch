@@ -44,11 +44,11 @@ public class LoadTest {
         assertEquals(HttpStatus.OK, actual.getStatusCode());
     }
 
-    //    @BenchmarkMode(Mode.SingleShotTime)
+    //        @BenchmarkMode(Mode.SingleShotTime)
     @BenchmarkMode(Mode.All)
-    @Threads(22)
-    @Fork(22)
-    @OperationsPerInvocation(50)
+    @Threads(9)
+    @Fork(9)
+    @OperationsPerInvocation(9)
     @Benchmark
     public void simpleSearch() throws Exception {
         final ResponseEntity<Hits> actual = CALLER.getForEntity("http://sitesearch.cloud" + ENDPOINT + "?query=Cloud", Hits.class);
@@ -57,7 +57,6 @@ public class LoadTest {
         assertNotNull(actual);
         assertNotNull(actual.getBody());
         assertEquals(5, actual.getBody().getResults().size());
-        LOG.error("actual.getBody().getResults().get(0).getContent() = " + actual.getBody().getResults().get(2).getContent());
-//        assertTrue("Sitesearch is IntraFind's new SaaS solution.",actual.getBody().getResults().get(0).getContent().contains("Cloud"));
+        LOG.info(actual.getBody().getResults().get(2).getContent());
     }
 }

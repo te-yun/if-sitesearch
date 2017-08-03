@@ -16,6 +16,10 @@
 
 package de.intrafind.sitesearch.controller;
 
+import com.rometools.rome.feed.synd.SyndFeed;
+import com.rometools.rome.io.FeedException;
+import com.rometools.rome.io.SyndFeedInput;
+import com.rometools.rome.io.XmlReader;
 import de.intrafind.sitesearch.dto.Site;
 import de.intrafind.sitesearch.service.SiteService;
 import io.swagger.annotations.ApiOperation;
@@ -25,9 +29,10 @@ import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 @RestController
@@ -69,12 +74,29 @@ public class SiteController {
     }
 
     /**
+     * Inserts a site into index. TODO should be a PUT method as it is idempotent
+     */
+    @RequestMapping(path = "rss", method = RequestMethod.POST)
+    Site index(
+            @RequestParam(name = "feedUrl", required = false) URL feedUrl
+    ) {
+        LOG.info("feedUrl: " + feedUrl);
+        try {
+            SyndFeed feed = new SyndFeedInput().build(new XmlReader(feedUrl));
+            LOG.info("feed: " + feed);
+        } catch (FeedException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
      * Deletes sites from the index.
      *
      * @param documentId of a single document to delete
      */
     @RequestMapping(method = RequestMethod.DELETE, path = "{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "IDs of not deleted documents", response = List.class, reference = "my-reference")}
     )
