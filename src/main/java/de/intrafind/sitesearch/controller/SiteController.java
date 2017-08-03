@@ -35,8 +35,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController
 @RequestMapping(SiteController.ENDPOINT)
@@ -83,6 +85,8 @@ public class SiteController {
         String tenant = UUID.randomUUID().toString();
         String tenantSecret = UUID.randomUUID().toString();
         LOG.info("URL-received: " + feedUrl);
+        final AtomicInteger successfullyIndexed = new AtomicInteger(0);
+        List<URI> failedToIndex = new ArrayList<>();
         try {
             SyndFeed feed = new SyndFeedInput().build(new XmlReader(feedUrl.toURL()));
 
@@ -94,13 +98,15 @@ public class SiteController {
 
                 Site indexed = index(UUID.randomUUID().toString(), toIndex);
                 if (indexed != null && !indexed.getId().isEmpty()) {
+                    successfullyIndexed.incrementAndGet();
                     LOG.info("successfully-indexed: " + indexed.getId());
                 } else {
+                    failedToIndex.add(URI.create(entry.getLink()));
                     LOG.warn("unsuccessfully-indexed:" + entry.getLink());
                 }
             });
 
-            return ResponseEntity.ok(new TenantCreation(tenant, tenantSecret));
+            return ResponseEntity.ok(new TenantCreation(tenant, tenantSecret, successfullyIndexed.get(), failedToIndex));
         } catch (FeedException | IOException e) {
             LOG.warn(e.getMessage());
             return ResponseEntity.badRequest().build();

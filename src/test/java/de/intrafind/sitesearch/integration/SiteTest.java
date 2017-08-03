@@ -33,8 +33,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.net.URI;
 
 import static de.intrafind.sitesearch.controller.SiteController.ENDPOINT;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -126,8 +125,11 @@ public class SiteTest {
     public void importFeed() throws Exception {
         final ResponseEntity<TenantCreation> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml", HttpMethod.PUT, null, TenantCreation.class);
         assertEquals(HttpStatus.OK, exchange.getStatusCode());
-        assertEquals(36, exchange.getBody().getTenant().length());
-        assertEquals(36, exchange.getBody().getTenantSecret().length());
+        final TenantCreation tenantInfo = exchange.getBody();
+        assertEquals(36, tenantInfo.getTenantId().length());
+        assertEquals(36, tenantInfo.getTenantSecret().length());
+        assertEquals(25, tenantInfo.getSuccessfullyIndexed().intValue());
+        assertTrue(tenantInfo.getFailed().isEmpty());
     }
 
 //    @Test

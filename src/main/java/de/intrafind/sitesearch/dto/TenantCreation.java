@@ -17,26 +17,47 @@
 package de.intrafind.sitesearch.dto;
 
 import java.io.Serializable;
+import java.net.URI;
+import java.util.List;
 
 public class TenantCreation implements Serializable {
-    // TODO rename to tenant id
-    private String tenant;
+    private String tenantId;
     private String tenantSecret;
+    private Integer successfullyIndexed;
+    private List<URI> failed;
 
     private TenantCreation() {
     }
 
-    public TenantCreation(String tenant, String tenantSecret) {
-        this.tenant = tenant;
+    public TenantCreation(String tenantId, String tenantSecret, Integer successfullyIndexed, List<URI> failed) {
+        this.tenantId = tenantId;
         this.tenantSecret = tenantSecret;
+        this.successfullyIndexed = successfullyIndexed;
+        this.failed = failed;
     }
 
-    public String getTenant() {
-        return tenant;
+    public List<URI> getFailed() {
+        return failed;
     }
 
-    public void setTenant(String tenant) {
-        this.tenant = tenant;
+    public void setFailed(List<URI> failed) {
+        this.failed = failed;
+    }
+
+    public Integer getSuccessfullyIndexed() {
+        return successfullyIndexed;
+    }
+
+    public void setSuccessfullyIndexed(Integer successfullyIndexed) {
+        this.successfullyIndexed = successfullyIndexed;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
     }
 
     public String getTenantSecret() {
