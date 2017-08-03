@@ -19,6 +19,20 @@
 <title>Sitesearch</title>
 <link rel="stylesheet" type="text/css" href="searchbar/css/app.css" media="all"/>
 
+<script>
+    function triggerFirstUsageOwnership() {
+        console.info("Make a feed register to Sitesearch call with this URL" + document.getElementByid("feedUrl").value);
+        document.getElementByid("tenantId").value = "my tenant";
+        document.getElementByid("tenantSecret").value = "my tenant secret";
+    }
+</script>
+
+<input id="feedUrl" placeholder="Feed URL">
+
+<input id="tenantId" placeholder="Tenant">
+<input id="tenantSecret" placeholder="Tenant Secret">
+<button onclick="triggerFirstUsageOwnership()">Provide feed URL and start searching only this tenant</button>
+
 <div class="container" style="margin-top:0; font-size: 3em;">
     <div id="searchbar"></div>
     <div id="resultlist" style="margin-top:20px;"></div>

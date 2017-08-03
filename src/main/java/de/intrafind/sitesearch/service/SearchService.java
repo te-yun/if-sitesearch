@@ -41,6 +41,7 @@ public class SearchService {
         com.intrafind.api.search.Hits hits = search.search(query);
 
         List<Site> siteDocuments = new ArrayList<>();
+        // TODO introduce the tenant filter much earlier, at 9605 service level
         hits.getDocuments().stream().filter(document -> tenantId.equals(document.get(Fields.TENANT))).forEach(document -> {
             Site site = new Site();
             site.setId(document.getId());

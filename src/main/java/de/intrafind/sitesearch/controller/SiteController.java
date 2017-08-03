@@ -82,7 +82,6 @@ public class SiteController {
     ResponseEntity<TenantCreation> index(
             @RequestParam(name = "feedUrl", required = false) URI feedUrl
     ) {
-//        String tenant = "global";
         String tenant = UUID.randomUUID().toString();
         String tenantSecret = UUID.randomUUID().toString();
         LOG.info("URL-received: " + feedUrl);
