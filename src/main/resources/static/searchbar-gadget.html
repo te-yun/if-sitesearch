@@ -20,7 +20,15 @@
 <link rel="stylesheet" type="text/css" href="searchbar/css/app.css" media="all"/>
 
 <script>
-    function triggerFirstUsageOwnership() {
+    function triggerFirstUsageOwnership(feedUrl) {
+        const whoisCall = function () {
+            const xhr = new XMLHttpRequest();
+            xhr.open('PUT', 'http://sitesearch.cloud/sites/rss?feedUrl=' + feedUrl);
+            xhr.onload = function () {
+                document.getElementById('whois').innerHTML = JSON.parse(this.responseText)['tenantId'];
+            };
+            xhr.send();
+        };
         console.info("Make a feed register to Sitesearch call with this URL" + document.getElementById("feedUrl").value);
         document.getElementById("tenantId").value = "my tenant";
         document.getElementById("tenantSecret").value = "my tenant secret";

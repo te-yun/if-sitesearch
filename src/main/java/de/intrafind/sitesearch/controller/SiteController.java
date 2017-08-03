@@ -80,7 +80,7 @@ public class SiteController {
 
     @RequestMapping(path = "rss", method = RequestMethod.PUT)
     ResponseEntity<TenantCreation> index(
-            @RequestParam(name = "feedUrl", required = false) URI feedUrl
+            @RequestParam(value = "feedUrl", required = false) URI feedUrl
     ) {
         String tenant = UUID.randomUUID().toString();
         String tenantSecret = UUID.randomUUID().toString();
