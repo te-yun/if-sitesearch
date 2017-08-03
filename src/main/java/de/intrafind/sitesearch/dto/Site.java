@@ -21,9 +21,21 @@ import java.net.URI;
 import java.util.Objects;
 
 public class Site implements Serializable {
+    private String id;
     private String tenant;
     private String title;
+    private String content;
     private URI url;
+
+    public Site() {
+    }
+
+    public Site(String tenant, String title, String content, URI url) {
+        this.tenant = tenant;
+        this.title = title;
+        this.content = content;
+        this.url = url;
+    }
 
     public String getTitle() {
         return title;
@@ -41,8 +53,6 @@ public class Site implements Serializable {
         return tenant;
     }
 
-    private String id;
-
     public void setTenant(String tenant) {
         this.tenant = tenant;
     }
@@ -50,8 +60,6 @@ public class Site implements Serializable {
     public void setUrl(URI url) {
         this.url = url;
     }
-
-    private String content;
 
     public String getContent() {
         return content;

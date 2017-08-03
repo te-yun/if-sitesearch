@@ -49,13 +49,13 @@ public class SiteService {
         Optional<Document> found = indexerService.fetch(Index.ALL, id).stream().findAny();
 
         if (found.isPresent()) {
-            Site representationOfFoundDocument = new Site();
             Document foundDocument = found.get();
+            Site representationOfFoundDocument = new Site(foundDocument.get(Fields.TENANT), foundDocument.get(Fields.TITLE), foundDocument.get(Fields.BODY), URI.create(foundDocument.get(Fields.URL)));
             representationOfFoundDocument.setId(foundDocument.getId());
-            representationOfFoundDocument.setTitle(foundDocument.get(Fields.TITLE));
-            representationOfFoundDocument.setContent(foundDocument.get(Fields.BODY));
-            representationOfFoundDocument.setUrl(URI.create(foundDocument.get(Fields.URL)));
-            representationOfFoundDocument.setTenant(foundDocument.get(Fields.TENANT));
+//            representationOfFoundDocument.setTitle();
+//            representationOfFoundDocument.setContent(foundDocument.get(Fields.BODY));
+//            representationOfFoundDocument.setUrl(URI.create(foundDocument.get(Fields.URL)));
+//            representationOfFoundDocument.setTenant();
 
             return representationOfFoundDocument;
         } else {

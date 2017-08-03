@@ -21,6 +21,7 @@ import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 import de.intrafind.sitesearch.dto.Site;
+import de.intrafind.sitesearch.dto.TenantCreation;
 import de.intrafind.sitesearch.service.SiteService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(SiteController.ENDPOINT)
@@ -74,20 +76,34 @@ public class SiteController {
         return service.index(id, site);
     }
 
-    /**
-     * Inserts a site into index. TODO should be a PUT method as it is idempotent
-     */
     @RequestMapping(path = "rss", method = RequestMethod.PUT)
-    ResponseEntity index(
+    ResponseEntity<TenantCreation> index(
             @RequestParam(name = "feedUrl", required = false) URI feedUrl
     ) {
-        LOG.info("feedUrl: " + feedUrl);
+        String tenant = UUID.randomUUID().toString();
+        String tenantSecret = UUID.randomUUID().toString();
+        LOG.info("URL-received: " + feedUrl);
         try {
             SyndFeed feed = new SyndFeedInput().build(new XmlReader(feedUrl.toURL()));
-            return ResponseEntity.ok().build();
+
+            feed.getEntries().forEach(entry -> {
+                LOG.info("entry: " + entry.getTitle());
+                LOG.info("link: " + entry.getLink());
+                LOG.info("description: " + entry.getDescription().getValue());
+                Site toIndex = new Site(tenant, entry.getTitle(), entry.getDescription().getValue(), URI.create(entry.getLink()));
+
+                Site indexed = index(UUID.randomUUID().toString(), toIndex);
+                if (indexed != null && !indexed.getId().isEmpty()) {
+                    LOG.info("successfully-indexed: " + indexed.getId());
+                } else {
+                    LOG.warn("unsuccessfully-indexed:" + entry.getLink());
+                }
+            });
+
+            return ResponseEntity.ok(new TenantCreation(tenant, tenantSecret));
         } catch (FeedException | IOException e) {
             LOG.warn(e.getMessage());
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().build();
         }
     }
 
