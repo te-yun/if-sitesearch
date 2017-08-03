@@ -23,6 +23,7 @@ import java.util.Objects;
 public class Site implements Serializable {
     private String id;
     private String tenant;
+    private String tenantSecret;
     private String title;
     private String content;
     private URI url;

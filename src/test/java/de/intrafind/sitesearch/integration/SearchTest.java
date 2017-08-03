@@ -49,21 +49,21 @@ public class SearchTest {
 
     @Test
     public void simpleSearch() throws Exception {
-        final ResponseEntity<Hits> actual = caller.getForEntity(ENDPOINT + "?query=Autocomplete", Hits.class);
+        final ResponseEntity<Hits> actual = caller.getForEntity(ENDPOINT + "?query=Knowledge&tenantId=global", Hits.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertNotNull(actual.getBody());
-        assertEquals("Autocomplete", actual.getBody().getQuery());
+        assertEquals("Knowledge", actual.getBody().getQuery());
         // TODO remove title attribute from Hits
         assertEquals(null, actual.getBody().getTitle());
         assertTrue(actual.getBody().getFacets().isEmpty());
         assertEquals(1, actual.getBody().getResults().size());
         Site found = actual.getBody().getResults().get(0);
-        assertEquals("99", found.getId());
-        assertEquals("1a6715d9-119f-48d1-9329-e8763273bbea", found.getTenant());
-        assertEquals("Autocomplete Service - IntraFind Software AG", found.getTitle());
-        assertEquals("https://www.intrafind.de/produkte/autocomplete", found.getUrl().toString());
-        assertEquals("<h1>IntraFind Autocomplete - Ein kleines Instrument mit großen Auswirkungen für jeden starken Online Auftritt.</h1> <p>Klassische Autovervollständigungs-Technologien (Autocomplete) helfen dem Anwender während er seinen Suchbegriff eintippt den Suchbegriff automatisch zu vervollständigen und nach starten des Suchauftrages entsprechend Ergebnisse in Form einer Trefferliste zu erhalten. Dies geschieht jedoch meist 1:1 auf Basis der Worte, die dem Autocomplete bekannt sind (also z.B. vorhandene Produktnamen). Doch wie viele Anwender wollen viel Zeit darauf verwenden, die korrekte Schreibweise von Produktnamen oder von Markenbezeichnungen zu recherchieren?</p>", found.getContent());
+        assertEquals("c1c9b6f0-3232-4586-b90d-824ed2f3d81b", found.getId());
+        assertEquals("global", found.getTenant());
+        assertEquals("Wie die Semantische Suche vom Knowledge Graph profitiert", found.getTitle());
+        assertEquals("http://intrafind.de/blog/wie-die-semantische-suche-vom-knowledge-graph-profitiert", found.getUrl().toString());
+        assertTrue(found.getContent().startsWith("<p>Der Knowledge Graph ist vielen Nutzern bereits durch Google oder Facebook bekannt."));
     }
 
     /**

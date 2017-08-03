@@ -41,13 +41,14 @@ public class SearchController {
     @RequestMapping(method = RequestMethod.GET)
     Hits search(
             @RequestParam(value = "sSearchTerm", required = false, defaultValue = "") String sSearchTerm, // legacy parameter
-            @RequestParam(value = "query", required = false, defaultValue = "") String query
+            @RequestParam(value = "query", required = false, defaultValue = "") String query,
+            @RequestParam(value = "tenantId", required = false, defaultValue = "global") String tenantId
     ) {
         // to stay compatible with the legacy API for now
         if (!sSearchTerm.isEmpty()) query = sSearchTerm;
 
         LOG.info("query = " + query);
-        return service.search(query);
+        return service.search(query, tenantId);
     }
 
 //    @RequestMapping(method = RequestMethod.GET)

@@ -37,11 +37,11 @@ public class SearchService {
 
     private Search search = IfinderCoreClient.newHessianClient(Search.class, Application.iFinderCore + "/search");
 
-    public Hits search(String query) {
+    public Hits search(String query, String tenantId) {
         com.intrafind.api.search.Hits hits = search.search(query);
 
         List<Site> siteDocuments = new ArrayList<>();
-        hits.getDocuments().forEach(document -> {
+        hits.getDocuments().stream().filter(document -> tenantId.equals(document.get(Fields.TENANT))).forEach(document -> {
             Site site = new Site();
             site.setId(document.getId());
             site.setUrl(URI.create(document.get(Fields.URL)));
