@@ -60,11 +60,7 @@ public class SiteService {
     }
 
     private Optional<UUID> fetchTenantSecret(UUID tenantId) {
-//        Optional<Document> singleEntryWithAparticularFieldMatch = indexService.fetch(Index.ALL, id).stream().findAny();
         Hits documentWithTenantSecret = searchService.search(Fields.TENANT + ":" + tenantId.toString(), Search.HITS_LIST_SIZE, 1);
-//        searchService.search("" +Fields.TENANT + ":my-tenant-value", Search.HITS_LIST_OFFSET, startWithNumber)
-//        Optional<Document> singleEntryWithAparticularFieldMatch = indexService.fetch(Index.ALL, id).stream().findAny();
-//        Optional<Document> allEntriesWithAparticularFieldMatch = indexService.fetch(Index.ALL, id).stream().findAny();
 
         if (documentWithTenantSecret.getDocuments().isEmpty()) {
             return Optional.empty();
@@ -91,7 +87,7 @@ public class SiteService {
     public Optional<TenantCreation> indexFeed(URI feedUrl, String tenantId, String tenantSecret) {
         String tenantIdToUse;
         String tenantSecretToUse;
-        if (!tenantId.isEmpty() && !tenantSecret.isEmpty()) {
+        if (!tenantId.isEmpty() && !tenantSecret.isEmpty()) { // credentials are provided as a tuple only
             tenantIdToUse = tenantId;
             tenantSecretToUse = tenantSecret;
 
