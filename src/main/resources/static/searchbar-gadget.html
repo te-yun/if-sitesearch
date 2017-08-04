@@ -29,6 +29,7 @@
                 console.info(JSON.parse(this.responseText));
                 console.info(JSON.parse(this.responseText)['tenantId']);
                 document.getElementById('tenantId').value = JSON.parse(this.responseText)['tenantId'];
+                document.cookie = "override-tenant = " + JSON.parse(this.responseText)['tenantId'];
                 document.getElementById('tenantSecret').value = JSON.parse(this.responseText)['tenantSecret'];
             };
             xhr.send();
