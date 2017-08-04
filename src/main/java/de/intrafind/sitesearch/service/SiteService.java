@@ -69,9 +69,20 @@ public class SiteService {
         }
     }
 
-    public Optional<TenantCreation> indexFeed(URI feedUrl) {
-        String tenantId = UUID.randomUUID().toString();
-        String tenantSecret = UUID.randomUUID().toString();
+    public Optional<TenantCreation> indexFeed(URI feedUrl, String tenantId, String tenantSecret) {
+        String tenantIdToUse;
+        String tenantSecretToUse;
+        if (!tenantId.isEmpty() && !tenantSecret.isEmpty()) {
+            tenantIdToUse = tenantId;
+            tenantSecretToUse = tenantSecret;
+        } else if (tenantId.isEmpty() ^ tenantSecret.isEmpty()) {
+            // it does not make any sense if only one of the parameters is set
+            return Optional.empty();
+        } else {
+            tenantIdToUse = UUID.randomUUID().toString();
+            tenantSecretToUse = UUID.randomUUID().toString();
+        }
+        
         LOG.info("URL-received: " + feedUrl);
         final AtomicInteger successfullyIndexed = new AtomicInteger(0);
         List<URI> failedToIndex = new ArrayList<>();
@@ -82,7 +93,7 @@ public class SiteService {
                 LOG.info("entry: " + entry.getTitle());
                 LOG.info("link: " + entry.getLink());
                 LOG.info("description: " + entry.getDescription().getValue());
-                Site toIndex = new Site(tenantId, entry.getTitle(), entry.getDescription().getValue(), URI.create(entry.getLink()));
+                Site toIndex = new Site(tenantIdToUse, entry.getTitle(), entry.getDescription().getValue(), URI.create(entry.getLink()));
 
                 Site indexed = index(UUID.randomUUID().toString(), toIndex);
                 if (indexed != null && !indexed.getId().isEmpty()) {
@@ -94,7 +105,7 @@ public class SiteService {
                 }
             });
 
-            return Optional.of(new TenantCreation(tenantId, tenantSecret, successfullyIndexed.get(), failedToIndex));
+            return Optional.of(new TenantCreation(tenantIdToUse, tenantSecretToUse, successfullyIndexed.get(), failedToIndex));
         } catch (FeedException | IOException e) {
             return Optional.empty();
         }
