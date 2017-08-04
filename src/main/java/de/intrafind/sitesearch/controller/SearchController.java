@@ -37,14 +37,17 @@ public class SearchController {
 
     @RequestMapping(method = RequestMethod.GET)
     Hits search(
-            @CookieValue(value = "foo", defaultValue = "hello") String fooCookie,
+            @CookieValue(value = "override-tenant", defaultValue = "") String cookieTenant,
             @RequestParam(value = "sSearchTerm", required = false, defaultValue = "") String sSearchTerm, // legacy parameter
             @RequestParam(value = "query", required = false, defaultValue = "") String query,
             @RequestParam(value = "tenantId", required = false, defaultValue = "5f2b9c2e-6071-4f30-8972-7781fac73726") String tenantId
     ) {
-        LOG.info("fooCookie: " + fooCookie);
+
         // to stay compatible with the legacy API for now
         if (!sSearchTerm.isEmpty()) query = sSearchTerm;
+
+        // override tenantId with cookie value for debugging & speed up the getting started experience 
+        if (!cookieTenant.isEmpty()) tenantId = cookieTenant;
 
         LOG.info("query = " + query);
         return service.search(query, tenantId);
