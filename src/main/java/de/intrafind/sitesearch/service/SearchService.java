@@ -35,17 +35,23 @@ public class SearchService {
     private static final Logger LOG = LoggerFactory.getLogger(SearchService.class);
     private final RestTemplate call = new RestTemplate();
 
-    private Search search = IfinderCoreClient.newHessianClient(Search.class, Application.iFinderCore + "/search");
+    private Search search = IfinderCoreClient.newHessianClient(Search.class, Application.I_FINDER_CORE + "/search");
 
     public Hits search(String query, String tenantId) {
-        com.intrafind.api.search.Hits hits = search.search(query);
+//        com.intrafind.api.search.Hits hits = search.search(".*");
+        com.intrafind.api.search.Hits hits = search.search(query, Search.HITS_LIST_SIZE, 500);
+//        com.intrafind.api.search.Hits hits = search.search(query);
 
+        LOG.info("query: " + query);
         List<Site> siteDocuments = new ArrayList<>();
         // TODO introduce the tenant filter much earlier, at 9605 service level
-        hits.getDocuments().stream().filter(document -> tenantId.equals(document.get(Fields.TENANT))).forEach(document -> {
+        hits.getDocuments().stream()
+                .filter(document -> tenantId.equals(document.get(Fields.TENANT)))
+                .forEach(document -> {
             Site site = new Site();
             site.setId(document.getId());
             site.setUrl(URI.create(document.get(Fields.URL)));
+                    // TODO remove tenant INFO as it is not relevant here, consider separate DTO
             site.setTenant(document.get(Fields.TENANT));
             site.setContent(document.get(Fields.BODY));
             site.setTitle(document.get(Fields.TITLE));

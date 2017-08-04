@@ -42,7 +42,7 @@ public class SearchController {
     Hits search(
             @RequestParam(value = "sSearchTerm", required = false, defaultValue = "") String sSearchTerm, // legacy parameter
             @RequestParam(value = "query", required = false, defaultValue = "") String query,
-            @RequestParam(value = "tenantId", required = false, defaultValue = "global") String tenantId
+            @RequestParam(value = "tenantId", required = false, defaultValue = "5f2b9c2e-6071-4f30-8972-7781fac73726") String tenantId
     ) {
         // to stay compatible with the legacy API for now
         if (!sSearchTerm.isEmpty()) query = sSearchTerm;

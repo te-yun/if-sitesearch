@@ -44,19 +44,20 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SiteService {
     private static final Logger LOG = LoggerFactory.getLogger(SiteService.class);
 
-    private Search searchService = IfinderCoreClient.newHessianClient(Search.class, Application.iFinderCore + "/search");
-    // TODO rename index (NOT indexer) Service
-    private Index indexService = IfinderCoreClient.newHessianClient(Index.class, Application.iFinderCore + "/index");
+    private Search searchService = IfinderCoreClient.newHessianClient(Search.class, Application.I_FINDER_CORE + "/search");
+    private Index indexService = IfinderCoreClient.newHessianClient(Index.class, Application.I_FINDER_CORE + "/index");
 
-    public Site index(String id, Site site) {
-        Document indexable = new Document(id);
+    public Site index(UUID id, Site site) {
+        Document indexable = new Document(id.toString());
         indexable.set(Fields.BODY, site.getContent());
         indexable.set(Fields.TITLE, site.getTitle());
         indexable.set(Fields.URL, site.getUrl());
         indexable.set(Fields.TENANT, site.getTenant());
+        indexable.set("tenantSecret", site.getTenantSecret());
+        // TODO introduce tenant Secret
         indexService.index(indexable);
 
-        return fetchById(id);
+        return fetchById(id.toString());
     }
 
     private Optional<UUID> fetchTenantSecret(UUID tenantId) {
@@ -75,7 +76,7 @@ public class SiteService {
 
         if (found.isPresent()) {
             Document foundDocument = found.get();
-            Site representationOfFoundDocument = new Site(foundDocument.get(Fields.TENANT), foundDocument.get(Fields.TITLE), foundDocument.get(Fields.BODY), URI.create(foundDocument.get(Fields.URL)));
+            Site representationOfFoundDocument = new Site(foundDocument.get(Fields.TENANT), null, foundDocument.get(Fields.TITLE), foundDocument.get(Fields.BODY), URI.create(foundDocument.get(Fields.URL)));
             representationOfFoundDocument.setId(foundDocument.getId());
 
             return representationOfFoundDocument;
@@ -117,9 +118,9 @@ public class SiteService {
                 LOG.info("entry: " + entry.getTitle());
                 LOG.info("link: " + entry.getLink());
                 LOG.info("description: " + entry.getDescription().getValue());
-                Site toIndex = new Site(tenantIdToUse, entry.getTitle(), entry.getDescription().getValue(), URI.create(entry.getLink()));
 
-                Site indexed = index(UUID.randomUUID().toString(), toIndex);
+                Site toIndex = new Site(tenantIdToUse, UUID.fromString(tenantSecretToUse), entry.getTitle(), entry.getDescription().getValue(), URI.create(entry.getLink()));
+                Site indexed = index(UUID.randomUUID(), toIndex);
                 if (indexed != null && !indexed.getId().isEmpty()) {
                     successfullyIndexed.incrementAndGet();
                     LOG.info("successfully-indexed: " + indexed.getId());

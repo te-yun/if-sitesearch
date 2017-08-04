@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(SiteController.ENDPOINT)
@@ -65,7 +66,7 @@ public class SiteController {
      */
     @RequestMapping(path = "{id}", method = RequestMethod.POST)
     Site index(
-            @PathVariable("id") String id,
+            @PathVariable("id") UUID id,
             @RequestBody Site site
     ) {
         return service.index(id, site);

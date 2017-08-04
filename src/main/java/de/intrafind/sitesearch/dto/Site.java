@@ -19,11 +19,12 @@ package de.intrafind.sitesearch.dto;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Site implements Serializable {
     private String id;
     private String tenant;
-    private String tenantSecret;
+    private UUID tenantSecret;
     private String title;
     private String content;
     private URI url;
@@ -31,11 +32,20 @@ public class Site implements Serializable {
     public Site() {
     }
 
-    public Site(String tenant, String title, String content, URI url) {
+    public Site(String tenant, UUID tenantSecret, String title, String content, URI url) {
         this.tenant = tenant;
+        this.tenantSecret = tenantSecret;
         this.title = title;
         this.content = content;
         this.url = url;
+    }
+
+    public UUID getTenantSecret() {
+        return tenantSecret;
+    }
+
+    public void setTenantSecret(UUID tenantSecret) {
+        this.tenantSecret = tenantSecret;
     }
 
     public String getTitle() {

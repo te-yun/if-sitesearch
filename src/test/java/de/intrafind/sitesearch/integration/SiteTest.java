@@ -16,6 +16,8 @@
 
 package de.intrafind.sitesearch.integration;
 
+import de.intrafind.sitesearch.controller.SearchController;
+import de.intrafind.sitesearch.dto.Hits;
 import de.intrafind.sitesearch.dto.Site;
 import de.intrafind.sitesearch.dto.TenantCreation;
 import org.junit.Test;
@@ -31,6 +33,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.net.URI;
+import java.util.UUID;
 
 import static de.intrafind.sitesearch.controller.SiteController.ENDPOINT;
 import static org.junit.Assert.*;
@@ -53,10 +56,10 @@ public class SiteTest {
     }
 
     @Test
-    public void simpleIndexWithCloudInside() throws Exception {
-        Site simple = buildSite("123");
-
-        final ResponseEntity<Site> actual = caller.postForEntity(ENDPOINT + "/123", simple, Site.class);
+    public void simpleIndexWithContentInside() throws Exception {
+        UUID siteId = UUID.fromString("dd29d1ee-7912-11e7-96e0-025041000001");
+        Site simple = buildSite(siteId.toString());
+        final ResponseEntity<Site> actual = caller.postForEntity(ENDPOINT + "/" + siteId.toString(), simple, Site.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertEquals(simple, actual.getBody());
@@ -64,8 +67,8 @@ public class SiteTest {
 
     @Test
     public void assureIrrelevancyOfSiteIdInBody() throws Exception {
-        String relevantSiteId = "124";
-        String irrelevantSiteId = "random";
+        String relevantSiteId = "f55d093a-7911-11e7-8fc8-025041000001";
+        String irrelevantSiteId = "any-value";
 
         Site simple = new Site();
         simple.setUrl(URI.create("https://www.intrafind.de/saas"));
@@ -84,21 +87,23 @@ public class SiteTest {
 
     @Test
     public void fetchById() throws Exception {
-        Site ying = buildSite("200");
-        Site yang = buildSite("300");
+        final String yingId = "265fff4c-7912-11e7-8e0d-025041000001";
+        Site ying = buildSite(yingId);
+        final String yangId = "25585162-7912-11e7-a8c6-025041000001";
+        Site yang = buildSite(yangId);
 
-        final ResponseEntity<Site> actualYing = caller.postForEntity(ENDPOINT + "/200", ying, Site.class);
+        final ResponseEntity<Site> actualYing = caller.postForEntity(ENDPOINT + "/" + yingId, ying, Site.class);
         assertEquals(HttpStatus.OK, actualYing.getStatusCode());
         assertEquals(ying, actualYing.getBody());
-        final ResponseEntity<Site> actualYang = caller.postForEntity(ENDPOINT + "/300", yang, Site.class);
+        final ResponseEntity<Site> actualYang = caller.postForEntity(ENDPOINT + "/" + yangId, yang, Site.class);
         assertEquals(HttpStatus.OK, actualYang.getStatusCode());
         assertEquals(yang, actualYang.getBody());
 
-        final ResponseEntity<Site> actualYingFetched = caller.getForEntity(ENDPOINT + "/200", Site.class);
+        final ResponseEntity<Site> actualYingFetched = caller.getForEntity(ENDPOINT + "/" + yingId, Site.class);
         assertEquals(HttpStatus.OK, actualYingFetched.getStatusCode());
         assertEquals(ying, actualYingFetched.getBody());
 
-        final ResponseEntity<Site> actualYangFetched = caller.getForEntity(ENDPOINT + "/300", Site.class);
+        final ResponseEntity<Site> actualYangFetched = caller.getForEntity(ENDPOINT + "/" + yangId, Site.class);
         assertEquals(HttpStatus.OK, actualYangFetched.getStatusCode());
         assertEquals(yang, actualYangFetched.getBody());
 
@@ -107,7 +112,7 @@ public class SiteTest {
 
     @Test
     public void updatedSite() throws Exception {
-        String siteId = "2001";
+        String siteId = "2c269452-7914-11e7-a634-025041000001";
         Site updatable = buildSite(siteId);
         final ResponseEntity<Site> create = caller.postForEntity(ENDPOINT + "/" + siteId, updatable, Site.class);
         assertEquals(HttpStatus.OK, create.getStatusCode());
@@ -130,6 +135,26 @@ public class SiteTest {
         assertEquals(36, tenantInfo.getTenantSecret().length());
         assertEquals(25, tenantInfo.getSuccessfullyIndexed().intValue());
         assertTrue(tenantInfo.getFailed().isEmpty());
+    }
+
+    @Test
+    public void importFeedAndReadSingleSite() throws Exception {
+        final ResponseEntity<TenantCreation> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml", HttpMethod.PUT, null, TenantCreation.class);
+        assertEquals(HttpStatus.OK, exchange.getStatusCode());
+        final TenantCreation tenantInfo = exchange.getBody();
+        assertEquals(36, tenantInfo.getTenantId().length());
+        assertEquals(36, tenantInfo.getTenantSecret().length());
+        assertEquals(25, tenantInfo.getSuccessfullyIndexed().intValue());
+        assertTrue(tenantInfo.getFailed().isEmpty());
+
+        LOG.info("tenantId: " + tenantInfo.getTenantId());
+        final ResponseEntity<Hits> hitFromTenant = caller.exchange(SearchController.ENDPOINT + "?query=Knowledge&tenantId=" + tenantInfo.getTenantId(), HttpMethod.GET, null, Hits.class);
+        assertEquals(HttpStatus.OK, hitFromTenant.getStatusCode());
+        assertEquals(1, hitFromTenant.getBody().getResults().size());
+        assertEquals(tenantInfo.getTenantId(), hitFromTenant.getBody().getResults().get(0).getTenant());
+        assertTrue(hitFromTenant.getBody().getResults().get(0).getContent().contains("Knowledge"));
+        assertNull(hitFromTenant.getBody().getResults().get(0).getTenantSecret());
+        assertTrue(hitFromTenant.getBody().getResults().get(0).getUrl().isAbsolute());
     }
 
 //    @Test

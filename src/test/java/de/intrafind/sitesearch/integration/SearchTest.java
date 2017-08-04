@@ -29,6 +29,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.UUID;
+
 import static de.intrafind.sitesearch.controller.SearchController.ENDPOINT;
 import static org.junit.Assert.*;
 
@@ -49,7 +51,8 @@ public class SearchTest {
 
     @Test
     public void simpleSearch() throws Exception {
-        final ResponseEntity<Hits> actual = caller.getForEntity(ENDPOINT + "?query=Knowledge&tenantId=global", Hits.class);
+        UUID tenantId = UUID.fromString("f0372e4f-e93a-42a0-8576-bf537bcf2021");
+        final ResponseEntity<Hits> actual = caller.getForEntity(ENDPOINT + "?query=Knowledge&tenantId=" + tenantId.toString(), Hits.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertNotNull(actual.getBody());
@@ -59,8 +62,8 @@ public class SearchTest {
         assertTrue(actual.getBody().getFacets().isEmpty());
         assertEquals(1, actual.getBody().getResults().size());
         Site found = actual.getBody().getResults().get(0);
-        assertEquals("c1c9b6f0-3232-4586-b90d-824ed2f3d81b", found.getId());
-        assertEquals("global", found.getTenant());
+        assertEquals("8b985664-4070-4d13-a8c4-5f79ecc58bde", found.getId());
+        assertEquals(tenantId.toString(), found.getTenant());
         assertEquals("Wie die Semantische Suche vom Knowledge Graph profitiert", found.getTitle());
         assertEquals("http://intrafind.de/blog/wie-die-semantische-suche-vom-knowledge-graph-profitiert", found.getUrl().toString());
         assertTrue(found.getContent().startsWith("<p>Der Knowledge Graph ist vielen Nutzern bereits durch Google oder Facebook bekannt."));
