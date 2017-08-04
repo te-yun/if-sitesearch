@@ -19,6 +19,8 @@ package de.intrafind.sitesearch.service;
 import com.intrafind.api.Document;
 import com.intrafind.api.Fields;
 import com.intrafind.api.index.Index;
+import com.intrafind.api.search.Hits;
+import com.intrafind.api.search.Search;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
@@ -42,7 +44,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SiteService {
     private static final Logger LOG = LoggerFactory.getLogger(SiteService.class);
 
-    private Index indexerService = IfinderCoreClient.newHessianClient(Index.class, Application.iFinderCore + "/index");
+    private Search searchService = IfinderCoreClient.newHessianClient(Search.class, Application.iFinderCore + "/search");
+    // TODO rename index (NOT indexer) Service
+    private Index indexService = IfinderCoreClient.newHessianClient(Index.class, Application.iFinderCore + "/index");
 
     public Site index(String id, Site site) {
         Document indexable = new Document(id);
@@ -50,13 +54,28 @@ public class SiteService {
         indexable.set(Fields.TITLE, site.getTitle());
         indexable.set(Fields.URL, site.getUrl());
         indexable.set(Fields.TENANT, site.getTenant());
-        indexerService.index(indexable);
+        indexService.index(indexable);
 
         return fetchById(id);
     }
 
+    private Optional<UUID> fetchTenantSecret(UUID tenantId) {
+//        Optional<Document> singleEntryWithAparticularFieldMatch = indexService.fetch(Index.ALL, id).stream().findAny();
+        Hits documentWithTenantSecret = searchService.search(Fields.TENANT + ":" + tenantId.toString(), Search.HITS_LIST_SIZE, 1);
+//        searchService.search("" +Fields.TENANT + ":my-tenant-value", Search.HITS_LIST_OFFSET, startWithNumber)
+//        Optional<Document> singleEntryWithAparticularFieldMatch = indexService.fetch(Index.ALL, id).stream().findAny();
+//        Optional<Document> allEntriesWithAparticularFieldMatch = indexService.fetch(Index.ALL, id).stream().findAny();
+
+        if (documentWithTenantSecret.getDocuments().isEmpty()) {
+            return Optional.empty();
+        } else {
+            String tenantSecret = documentWithTenantSecret.getDocuments().get(0).get(Fields.TENANT);
+            return Optional.of(UUID.fromString(tenantSecret));
+        }
+    }
+
     public Site fetchById(String id) {
-        Optional<Document> found = indexerService.fetch(Index.ALL, id).stream().findAny();
+        Optional<Document> found = indexService.fetch(Index.ALL, id).stream().findAny();
 
         if (found.isPresent()) {
             Document foundDocument = found.get();
@@ -75,6 +94,18 @@ public class SiteService {
         if (!tenantId.isEmpty() && !tenantSecret.isEmpty()) {
             tenantIdToUse = tenantId;
             tenantSecretToUse = tenantSecret;
+
+            // TODO fetch any entry for the tenant
+            final Optional<UUID> fetchedTenantSecret = fetchTenantSecret(UUID.fromString(tenantId));
+            if (!fetchedTenantSecret.isPresent()) { // tenant exists
+                return Optional.empty();
+            } else {
+                if (!tenantSecret.equals(fetchedTenantSecret.get().toString())) { // correct authorization
+                    return Optional.empty();
+                }
+            }
+            // TODO lookup the tenantSecret of the entry
+            // TODO if tenantSecret from the request and the looked up secret match allow operation, otherwise 403
         } else if (tenantId.isEmpty() ^ tenantSecret.isEmpty()) {
             // it does not make any sense if only one of the parameters is set
             return Optional.empty();
@@ -82,7 +113,7 @@ public class SiteService {
             tenantIdToUse = UUID.randomUUID().toString();
             tenantSecretToUse = UUID.randomUUID().toString();
         }
-        
+
         LOG.info("URL-received: " + feedUrl);
         final AtomicInteger successfullyIndexed = new AtomicInteger(0);
         List<URI> failedToIndex = new ArrayList<>();
