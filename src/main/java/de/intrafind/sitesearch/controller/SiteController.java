@@ -16,10 +16,6 @@
 
 package de.intrafind.sitesearch.controller;
 
-import com.rometools.rome.feed.synd.SyndFeed;
-import com.rometools.rome.io.FeedException;
-import com.rometools.rome.io.SyndFeedInput;
-import com.rometools.rome.io.XmlReader;
 import de.intrafind.sitesearch.dto.Site;
 import de.intrafind.sitesearch.dto.TenantCreation;
 import de.intrafind.sitesearch.service.SiteService;
@@ -33,12 +29,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(SiteController.ENDPOINT)
@@ -79,36 +72,13 @@ public class SiteController {
     }
 
     @RequestMapping(path = "rss", method = RequestMethod.PUT)
-    ResponseEntity<TenantCreation> index(
-            @RequestParam(value = "feedUrl", required = false) URI feedUrl
+    ResponseEntity<TenantCreation> indexFeed(
+            @RequestParam(value = "feedUrl") URI feedUrl
     ) {
-        String tenant = UUID.randomUUID().toString();
-        String tenantSecret = UUID.randomUUID().toString();
-        LOG.info("URL-received: " + feedUrl);
-        final AtomicInteger successfullyIndexed = new AtomicInteger(0);
-        List<URI> failedToIndex = new ArrayList<>();
-        try {
-            SyndFeed feed = new SyndFeedInput().build(new XmlReader(feedUrl.toURL()));
-
-            feed.getEntries().forEach(entry -> {
-                LOG.info("entry: " + entry.getTitle());
-                LOG.info("link: " + entry.getLink());
-                LOG.info("description: " + entry.getDescription().getValue());
-                Site toIndex = new Site(tenant, entry.getTitle(), entry.getDescription().getValue(), URI.create(entry.getLink()));
-
-                Site indexed = index(UUID.randomUUID().toString(), toIndex);
-                if (indexed != null && !indexed.getId().isEmpty()) {
-                    successfullyIndexed.incrementAndGet();
-                    LOG.info("successfully-indexed: " + indexed.getId());
-                } else {
-                    failedToIndex.add(URI.create(entry.getLink()));
-                    LOG.warn("unsuccessfully-indexed:" + entry.getLink());
-                }
-            });
-
-            return ResponseEntity.ok(new TenantCreation(tenant, tenantSecret, successfullyIndexed.get(), failedToIndex));
-        } catch (FeedException | IOException e) {
-            LOG.warn(e.getMessage());
+        Optional<TenantCreation> tenantCreatedInfo = service.indexFeed(feedUrl);
+        if (tenantCreatedInfo.isPresent()) {
+            return ResponseEntity.ok(tenantCreatedInfo.get());
+        } else {
             return ResponseEntity.badRequest().build();
         }
     }

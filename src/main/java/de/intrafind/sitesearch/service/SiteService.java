@@ -19,14 +19,24 @@ package de.intrafind.sitesearch.service;
 import com.intrafind.api.Document;
 import com.intrafind.api.Fields;
 import com.intrafind.api.index.Index;
+import com.rometools.rome.feed.synd.SyndFeed;
+import com.rometools.rome.io.FeedException;
+import com.rometools.rome.io.SyndFeedInput;
+import com.rometools.rome.io.XmlReader;
 import de.intrafind.sitesearch.Application;
 import de.intrafind.sitesearch.dto.Site;
+import de.intrafind.sitesearch.dto.TenantCreation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class SiteService {
@@ -56,6 +66,37 @@ public class SiteService {
             return representationOfFoundDocument;
         } else {
             return new Site();
+        }
+    }
+
+    public Optional<TenantCreation> indexFeed(URI feedUrl) {
+        String tenantId = UUID.randomUUID().toString();
+        String tenantSecret = UUID.randomUUID().toString();
+        LOG.info("URL-received: " + feedUrl);
+        final AtomicInteger successfullyIndexed = new AtomicInteger(0);
+        List<URI> failedToIndex = new ArrayList<>();
+        try {
+            SyndFeed feed = new SyndFeedInput().build(new XmlReader(feedUrl.toURL()));
+
+            feed.getEntries().forEach(entry -> {
+                LOG.info("entry: " + entry.getTitle());
+                LOG.info("link: " + entry.getLink());
+                LOG.info("description: " + entry.getDescription().getValue());
+                Site toIndex = new Site(tenantId, entry.getTitle(), entry.getDescription().getValue(), URI.create(entry.getLink()));
+
+                Site indexed = index(UUID.randomUUID().toString(), toIndex);
+                if (indexed != null && !indexed.getId().isEmpty()) {
+                    successfullyIndexed.incrementAndGet();
+                    LOG.info("successfully-indexed: " + indexed.getId());
+                } else {
+                    failedToIndex.add(URI.create(entry.getLink()));
+                    LOG.warn("unsuccessfully-indexed:" + entry.getLink());
+                }
+            });
+
+            return Optional.of(new TenantCreation(tenantId, tenantSecret, successfullyIndexed.get(), failedToIndex));
+        } catch (FeedException | IOException e) {
+            return Optional.empty();
         }
     }
 }
