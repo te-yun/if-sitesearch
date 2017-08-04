@@ -21,10 +21,7 @@ import de.intrafind.sitesearch.service.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(SearchController.ENDPOINT)
@@ -40,10 +37,12 @@ public class SearchController {
 
     @RequestMapping(method = RequestMethod.GET)
     Hits search(
+            @CookieValue(value = "foo", defaultValue = "hello") String fooCookie,
             @RequestParam(value = "sSearchTerm", required = false, defaultValue = "") String sSearchTerm, // legacy parameter
             @RequestParam(value = "query", required = false, defaultValue = "") String query,
             @RequestParam(value = "tenantId", required = false, defaultValue = "5f2b9c2e-6071-4f30-8972-7781fac73726") String tenantId
     ) {
+        LOG.info("fooCookie: " + fooCookie);
         // to stay compatible with the legacy API for now
         if (!sSearchTerm.isEmpty()) query = sSearchTerm;
 

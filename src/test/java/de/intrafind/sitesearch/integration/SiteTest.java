@@ -147,7 +147,7 @@ public class SiteTest {
         assertEquals(25, tenantInfo.getSuccessfullyIndexed().intValue());
         assertTrue(tenantInfo.getFailed().isEmpty());
 
-        Thread.sleep(3000);
+        Thread.sleep(2000);
         LOG.info("tenantId: " + tenantInfo.getTenantId());
         final ResponseEntity<Hits> hitFromTenant = caller.exchange(SearchController.ENDPOINT + "?query=Knowledge&tenantId=" + tenantInfo.getTenantId(), HttpMethod.GET, null, Hits.class);
         assertEquals(HttpStatus.OK, hitFromTenant.getStatusCode());
