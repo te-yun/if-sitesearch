@@ -96,19 +96,16 @@ public class SiteService {
             tenantSecretToUse = tenantSecret;
 
             // TODO fetch any entry for the tenant
+            // TODO lookup the tenantSecret of the entry
+            // TODO if tenantSecret from the request and the looked up secret match allow operation, otherwise 403
             final Optional<UUID> fetchedTenantSecret = fetchTenantSecret(UUID.fromString(tenantId));
             if (!fetchedTenantSecret.isPresent()) { // tenant exists
                 return Optional.empty();
-            } else {
-                if (!tenantSecret.equals(fetchedTenantSecret.get().toString())) { // correct authorization
-                    return Optional.empty();
-                }
+            } else if (!tenantSecret.equals(fetchedTenantSecret.get().toString())) { // correct authorization
+                return Optional.empty();
             }
-            // TODO lookup the tenantSecret of the entry
-            // TODO if tenantSecret from the request and the looked up secret match allow operation, otherwise 403
         } else if (tenantId.isEmpty() ^ tenantSecret.isEmpty()) {
-            // it does not make any sense if only one of the parameters is set
-            return Optional.empty();
+            return Optional.empty(); // it does not make any sense if only one of the parameters is set
         } else {
             tenantIdToUse = UUID.randomUUID().toString();
             tenantSecretToUse = UUID.randomUUID().toString();
