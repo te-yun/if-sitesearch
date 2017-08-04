@@ -17,30 +17,23 @@
 
 <meta charset="utf-8"/>
 <title>Sitesearch</title>
-<link rel="stylesheet" type="text/css" href="searchbar/css/app.css" media="all"/>
+<link rel="stylesheet" type="text/css" href="searchbar/css/app.css"/>
 
 <script>
     function triggerFirstUsageOwnership(feedUrl) {
-            console.info(feedUrl);
             const xhr = new XMLHttpRequest();
             xhr.open('PUT', 'http://sitesearch.cloud/sites/rss?feedUrl=' + feedUrl);
             xhr.onload = function () {
-                console.info(this.responseText);
-                console.info(JSON.parse(this.responseText));
-                console.info(JSON.parse(this.responseText)['tenantId']);
                 document.getElementById('tenantId').value = JSON.parse(this.responseText)['tenantId'];
                 document.cookie = "override-tenant = " + JSON.parse(this.responseText)['tenantId'];
                 document.getElementById('tenantSecret').value = JSON.parse(this.responseText)['tenantSecret'];
             };
             xhr.send();
-        console.info("Make a feed register to Sitesearch call with this URL: " + document.getElementById("feedUrl").value);
-        document.getElementById("tenantId").value = "my tenant";
-        document.getElementById("tenantSecret").value = "my tenant secret";
     }
 </script>
 
 <input id="feedUrl" placeholder="Feed URL" value="http://intrafind.de/share/enterprise-search-blog.xml">
-<input id="tenantId" placeholder="Tenant" style="width: 275px">
+<input id="tenantId" placeholder="Tenant ID" style="width: 275px">
 <input id="tenantSecret" placeholder="Tenant Secret" style="width: 275px">
 <button onclick="triggerFirstUsageOwnership(document.getElementById('feedUrl').value)">
     Create Index
@@ -53,7 +46,6 @@
 
 <script src="searchbar/js/app.js"></script>
 <script>
-
     jQuery.noConflict();
     jQuery(document).ready(function ($) {
 
@@ -67,5 +59,4 @@
             multiple: false
         });
     });
-
 </script>
