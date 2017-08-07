@@ -28,31 +28,49 @@
     console.info(window.location.href);
     console.info(document.getElementById("feedUrl"));
 
-    function triggerFirstUsageOwnership(feedUrl) {
+    const triggerFirstUsageOwnership = function (feedUrl) {
         const xhr = new XMLHttpRequest();
         xhr.open("PUT", "http://sitesearch.cloud/sites/rss?feedUrl=" + feedUrl);
         xhr.onload = function () {
             document.getElementById('tenantId').value = JSON.parse(this.response)['tenantId'];
             document.cookie = "override-tenant = " + JSON.parse(this.response)['tenantId'];
-            console.info(document.cookie + JSON.parse(this.response)['tenantId']);
             document.getElementById('tenantSecret').value = JSON.parse(this.response)['tenantSecret'];
         };
         xhr.send();
     }
 </script>
 
+<style>
+    label {
+        font-weight: bold;
+    }
+
+    .wrapper {
+        display: grid;
+        grid-template-columns: 100px 300px;
+    }
+
+    label, input {
+        border-radius: .1em;
+    }
+
+    #index {
+        text-align: center;
+        font-weight: bold;
+        width: 400px;
+    }
+</style>
 <body onload="setFeedUrl();">
-<label for="feedUrl">Feed URL</label>
-<input id="feedUrl" placeholder="Feed URL"
-       value="http://intrafind.de/share/enterprise-search-blog.xml">
-<br>
-<label for="tenantId">Tenant ID</label>
-<input id="tenantId" placeholder="Tenant ID" style="width: 275px">
-<br>
-<label for="tenantId">Tenant Secret</label>
-<input id="tenantSecret" placeholder="Tenant Secret" style="width: 275px">
-<br>
-<button onclick="triggerFirstUsageOwnership(document.getElementById('feedUrl').value)">
+<div class="wrapper">
+    <label for="feedUrl">Feed URL</label>
+    <input id="feedUrl" placeholder="Feed URL"
+           value="http://intrafind.de/share/enterprise-search-blog.xml">
+    <label for="tenantId">Tenant ID</label>
+    <input id="tenantId" placeholder="Tenant ID">
+    <label for="tenantId">Tenant Secret</label>
+    <input id="tenantSecret" placeholder="Tenant Secret">
+</div>
+<button id="index" onclick="triggerFirstUsageOwnership(document.getElementById('feedUrl').value)">
     Create Index
 </button>
 
