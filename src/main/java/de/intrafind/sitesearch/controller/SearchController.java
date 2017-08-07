@@ -50,8 +50,8 @@ public class SearchController {
         // override tenantId with cookie value for debugging & speed up the getting started experience 
         if (!cookieTenant.isEmpty()) tenantId = cookieTenant;
 
-        LOG.info("cookieTenant: >>>>>>>>>>>>>>>>>>>>>>" + cookieTenant);
-        LOG.info("query = " + query);
+        LOG.info("cookieTenant: " + cookieTenant);
+        LOG.info("query: " + query);
         return service.search(query, tenantId);
     }
 

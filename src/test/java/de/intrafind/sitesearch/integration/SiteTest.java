@@ -158,19 +158,5 @@ public class SiteTest {
         assertTrue(hitFromTenant.getBody().getResults().get(0).getUrl().isAbsolute());
     }
 
-//    @Test
-//    public void dojo() throws Exception {
-//        new Random().longs(10).forEach(i -> {
-//            LOG.info("i>>> = " + i);
-//            String siteId = UUID.randomUUID().toString();
-//            Site ingestable = buildSite(String.valueOf(i));
-//            final ResponseEntity<Site> create = caller.postForEntity(ENDPOINT + "/" + String.valueOf(i), ingestable, Site.class);
-//            // TODO go from OK to NOT_FOUND to CREATED
-////            assertEquals(HttpStatus.CREATED, create.getStatusCode());
-//            assertEquals(ingestable, create.getBody());
-//        });
-//
-//    }
-
     // TODO provoke 400 responses
 }

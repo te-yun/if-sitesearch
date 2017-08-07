@@ -21,7 +21,8 @@
 
 <script>
     const setFeedUrl = function () {
-        document.getElementById("feedUrl").setAttribute("value", window.location.href);
+        console.info("location.href: " + location.href)
+//        document.getElementById("feedUrl").setAttribute("value", window.location.href);
     };
     console.info(location.href);
     console.info(window.location.href);
@@ -29,10 +30,11 @@
 
     function triggerFirstUsageOwnership(feedUrl) {
         const xhr = new XMLHttpRequest();
-        xhr.open('PUT', 'http://sitesearch.cloud/sites/rss?feedUrl=' + feedUrl);
+        xhr.open("PUT", "http://sitesearch.cloud/sites/rss?feedUrl=" + feedUrl);
         xhr.onload = function () {
             document.getElementById('tenantId').value = JSON.parse(this.response)['tenantId'];
             document.cookie = "override-tenant = " + JSON.parse(this.response)['tenantId'];
+            console.info(document.cookie + JSON.parse(this.response)['tenantId']);
             document.getElementById('tenantSecret').value = JSON.parse(this.response)['tenantSecret'];
         };
         xhr.send();
@@ -40,10 +42,16 @@
 </script>
 
 <body onload="setFeedUrl();">
+<label for="feedUrl">Feed URL</label>
 <input id="feedUrl" placeholder="Feed URL"
        value="http://intrafind.de/share/enterprise-search-blog.xml">
+<br>
+<label for="tenantId">Tenant ID</label>
 <input id="tenantId" placeholder="Tenant ID" style="width: 275px">
+<br>
+<label for="tenantId">Tenant Secret</label>
 <input id="tenantSecret" placeholder="Tenant Secret" style="width: 275px">
+<br>
 <button onclick="triggerFirstUsageOwnership(document.getElementById('feedUrl').value)">
     Create Index
 </button>
