@@ -28,6 +28,8 @@
     console.info(window.location.href);
     console.info(document.getElementById("feedUrl"));
 
+    //    http://www.mvv-muenchen.de/de/aktuelles/meldungen/detail/rss.xml
+    //    http://www.mvv-muenchen.de/de/aktuelles/fahrplanaenderungen/detail/rss.xml
     const triggerFirstUsageOwnership = function (feedUrl) {
         const xhr = new XMLHttpRequest();
         xhr.open("PUT", "http://sitesearch.cloud/sites/rss?feedUrl=" + feedUrl);
