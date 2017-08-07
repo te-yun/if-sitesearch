@@ -26,17 +26,17 @@ public class Site implements Serializable {
     private String tenant;
     private UUID tenantSecret;
     private String title;
-    private String content;
+    private String body;
     private URI url;
 
     public Site() {
     }
 
-    public Site(String tenant, UUID tenantSecret, String title, String content, URI url) {
+    public Site(String tenant, UUID tenantSecret, String title, String body, URI url) {
         this.tenant = tenant;
         this.tenantSecret = tenantSecret;
         this.title = title;
-        this.content = content;
+        this.body = body;
         this.url = url;
     }
 
@@ -72,12 +72,12 @@ public class Site implements Serializable {
         this.url = url;
     }
 
-    public String getContent() {
-        return content;
+    public String getBody() {
+        return body;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setBody(String body) {
+        this.body = body;
     }
 
     public String getId() {
@@ -98,11 +98,11 @@ public class Site implements Serializable {
                 Objects.equals(title, site.title) &&
                 Objects.equals(url, site.url) &&
                 Objects.equals(id, site.id) &&
-                Objects.equals(content, site.content);
+                Objects.equals(body, site.body);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(tenant, title, url, id, content);
+        return Objects.hash(tenant, title, url, id, body);
     }
 }

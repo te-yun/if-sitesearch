@@ -57,6 +57,6 @@ public class LoadTest {
         assertNotNull(actual);
         assertNotNull(actual.getBody());
         assertEquals(5, actual.getBody().getResults().size());
-        LOG.info(actual.getBody().getResults().get(2).getContent());
+        LOG.info(actual.getBody().getResults().get(2).getBody());
     }
 }

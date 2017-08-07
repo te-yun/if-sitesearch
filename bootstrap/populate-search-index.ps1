@@ -9,5 +9,5 @@ $PSDefaultParameterValues["*:ErrorAction"] = "Stop"
 #curl -X POST 172.18.0.1:9605/json/index?method=index --data-urlencode param0='[{"id": "2", "fields": {"_str.body": ["Sitesearch is a great search service."]}}]'
 #
 # curl 172.18.0.1:9605/json/search?method=search --data-urlencode param0=*
-# curl 172.18.0.1:9605/json/search?method=search --data-urlencode param0=field:content
+# curl 172.18.0.1:9605/json/search?method=search --data-urlencode param0=field:body
 # curl 172.18.0.1:9605/json/autocomplete?method=search --data param0=hello | python -m json.tool

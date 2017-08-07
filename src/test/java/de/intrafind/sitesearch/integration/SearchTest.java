@@ -66,7 +66,7 @@ public class SearchTest {
         assertEquals(tenantId.toString(), found.getTenant());
         assertEquals("Wie die Semantische Suche vom Knowledge Graph profitiert", found.getTitle());
         assertEquals("http://intrafind.de/blog/wie-die-semantische-suche-vom-knowledge-graph-profitiert", found.getUrl().toString());
-        assertTrue(found.getContent().startsWith("<p>Der Knowledge Graph ist vielen Nutzern bereits durch Google oder Facebook bekannt."));
+        assertTrue(found.getBody().startsWith("<p>Der Knowledge Graph ist vielen Nutzern bereits durch Google oder Facebook bekannt."));
     }
 
     /**

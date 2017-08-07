@@ -49,7 +49,7 @@ public class SiteService {
 
     public Site index(UUID id, Site site) {
         Document indexable = new Document(id.toString());
-        indexable.set(Fields.BODY, site.getContent());
+        indexable.set(Fields.BODY, site.getBody());
         indexable.set(Fields.TITLE, site.getTitle());
         indexable.set(Fields.URL, site.getUrl());
         indexable.set(Fields.TENANT, site.getTenant());

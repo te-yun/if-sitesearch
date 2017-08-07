@@ -1,6 +1,6 @@
 {
   "ajax": {
-    "baseUrl": "http://sitesearch.cloud/",
+    "baseUrl": "http://sitesearch.cloud",
     "endpointSearch": "/search",
     "start": 0,
     "limit": 20
@@ -152,67 +152,8 @@
         "resulttype": {
           "all": {
             "title": "ifs.category.all",
-            "hitTemplate": "app/templates/default/resultlist/default.hbs",
+            "hitTemplate": "app/templates/sitesearch/resultlist/crawler.hbs",
             "showMenu": false
-          },
-          "filesystem": {
-            "title": "ifs.category.documents",
-            "hitTemplate": "app/templates/default/resultlist/documents.hbs",
-            "showMenu": true,
-            "menuItems": [
-              "forward",
-              "favorite"
-            ]
-          },
-          "people": {
-            "title": "ifs.category.people",
-            "hitTemplate": "app/templates/default/resultlist/people.hbs",
-            "showMenu": true,
-            "menuItems": [
-              "forward",
-              "favorite"
-            ]
-          },
-          "crawler": {
-            "title": "ifs.category.websites",
-            "hitTemplate": "app/templates/default/resultlist/crawler.hbs",
-            "showMenu": true,
-            "menuItems": [
-              "forward",
-              "favorite"
-            ]
-          },
-          "sharepoint": {
-            "title": "ifs.category.websites",
-            "hitTemplate": "app/templates/default/resultlist/crawler.hbs",
-            "showMenu": true,
-            "menuItems": [
-              "forward",
-              "favorite"
-            ]
-          },
-          "images": {
-            "title": "ifs.category.images",
-            "hitTemplate": "app/templates/default/resultlist/images.hbs",
-            "showMenu": true,
-            "menuItems": [
-              "forward",
-              "favorite"
-            ]
-          },
-          "bestbets": {
-            "title": "ifs.category.bestbets",
-            "hitTemplate": "app/templates/default/resultlist/bestbets.hbs",
-            "showMenu": false
-          },
-          "confluence": {
-            "title": "ifs.category.confluence",
-            "hitTemplate": "app/templates/default/resultlist/confluence.hbs",
-            "showMenu": true,
-            "menuItems": [
-              "forward",
-              "favorite"
-            ]
           }
         }
       },

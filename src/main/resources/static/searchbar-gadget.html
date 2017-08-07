@@ -21,18 +21,20 @@
 
 <script>
     function triggerFirstUsageOwnership(feedUrl) {
-            const xhr = new XMLHttpRequest();
-            xhr.open('PUT', 'http://sitesearch.cloud/sites/rss?feedUrl=' + feedUrl);
-            xhr.onload = function () {
-                document.getElementById('tenantId').value = JSON.parse(this.responseText)['tenantId'];
-                document.cookie = "override-tenant = " + JSON.parse(this.responseText)['tenantId'];
-                document.getElementById('tenantSecret').value = JSON.parse(this.responseText)['tenantSecret'];
-            };
-            xhr.send();
+        const xhr = new XMLHttpRequest();
+        xhr.open('PUT', 'http://sitesearch.cloud/sites/rss?feedUrl=' + feedUrl);
+        xhr.onload = function () {
+            document.getElementById('tenantId').value = JSON.parse(this.responseText)['tenantId'];
+            document.cookie = "override-tenant = " + JSON.parse(this.responseText)['tenantId'];
+            document.getElementById('tenantSecret').value = JSON.parse(this.responseText)['tenantSecret'];
+        };
+        xhr.send();
     }
 </script>
 
-<input id="feedUrl" placeholder="Feed URL" value="http://intrafind.de/share/enterprise-search-blog.xml">
+<input id="feedUrl" placeholder="Feed URL"
+       value="http://intrafind.de/share/enterprise-search-blog.xml"
+       onload="console.info(1)" onshow="console.info(2)">
 <input id="tenantId" placeholder="Tenant ID" style="width: 275px">
 <input id="tenantSecret" placeholder="Tenant Secret" style="width: 275px">
 <button onclick="triggerFirstUsageOwnership(document.getElementById('feedUrl').value)">

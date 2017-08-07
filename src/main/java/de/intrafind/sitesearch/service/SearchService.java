@@ -53,7 +53,7 @@ public class SearchService {
             site.setUrl(URI.create(document.get(Fields.URL)));
                     // TODO remove tenant INFO as it is not relevant here, consider separate DTO
             site.setTenant(document.get(Fields.TENANT));
-            site.setContent(document.get(Fields.BODY));
+                    site.setBody(document.get(Fields.BODY));
             site.setTitle(document.get(Fields.TITLE));
 
             siteDocuments.add(site);

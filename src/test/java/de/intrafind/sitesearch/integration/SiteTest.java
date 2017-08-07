@@ -49,7 +49,7 @@ public class SiteTest {
         Site simple = new Site();
         simple.setUrl(URI.create("https://www.intrafind.de/cloud"));
         simple.setTenant("1a6715d9-119f-48d1-9329-e8763273bbea");
-        simple.setContent("Sitesearch is IntraFind's new SaaS solution.");
+        simple.setBody("Sitesearch is IntraFind's new SaaS solution.");
         simple.setTitle("Cloud Solution");
         simple.setId(id); // is ignored when persisted
         return simple;
@@ -73,7 +73,7 @@ public class SiteTest {
         Site simple = new Site();
         simple.setUrl(URI.create("https://www.intrafind.de/saas"));
         simple.setTenant("1a6715d9-119f-48d1-9329-e8763273bbea");
-        simple.setContent("Sitesearch is IntraFind's new SaaS solution.");
+        simple.setBody("Sitesearch is IntraFind's new SaaS solution.");
         simple.setTitle("SaaS Solution");
         simple.setId(irrelevantSiteId);
 
@@ -119,7 +119,7 @@ public class SiteTest {
         assertEquals(updatable, create.getBody());
 
         Site updatedSite = buildSite(siteId);
-        updatedSite.setContent("updated");
+        updatedSite.setBody("updated");
         final ResponseEntity<Site> updated = caller.postForEntity(ENDPOINT + "/" + siteId, updatedSite, Site.class);
         assertEquals(HttpStatus.OK, updated.getStatusCode());
         assertNotEquals(updatable, updated.getBody());
@@ -153,7 +153,7 @@ public class SiteTest {
         assertEquals(HttpStatus.OK, hitFromTenant.getStatusCode());
         assertEquals(1, hitFromTenant.getBody().getResults().size());
         assertEquals(tenantInfo.getTenantId(), hitFromTenant.getBody().getResults().get(0).getTenant());
-        assertTrue(hitFromTenant.getBody().getResults().get(0).getContent().contains("Knowledge"));
+        assertTrue(hitFromTenant.getBody().getResults().get(0).getBody().contains("Knowledge"));
         assertNull(hitFromTenant.getBody().getResults().get(0).getTenantSecret());
         assertTrue(hitFromTenant.getBody().getResults().get(0).getUrl().isAbsolute());
     }
