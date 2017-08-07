@@ -31,9 +31,9 @@
         const xhr = new XMLHttpRequest();
         xhr.open('PUT', 'http://sitesearch.cloud/sites/rss?feedUrl=' + feedUrl);
         xhr.onload = function () {
-            document.getElementById('tenantId').value = JSON.parse(this.responseText)['tenantId'];
-            document.cookie = "override-tenant = " + JSON.parse(this.responseText)['tenantId'];
-            document.getElementById('tenantSecret').value = JSON.parse(this.responseText)['tenantSecret'];
+            document.getElementById('tenantId').value = JSON.parse(this.response)['tenantId'];
+            document.cookie = "override-tenant = " + JSON.parse(this.response)['tenantId'];
+            document.getElementById('tenantSecret').value = JSON.parse(this.response)['tenantSecret'];
         };
         xhr.send();
     }
