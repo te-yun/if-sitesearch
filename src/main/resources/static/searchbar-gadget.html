@@ -20,6 +20,13 @@
 <link rel="stylesheet" type="text/css" href="searchbar/css/app.css"/>
 
 <script>
+    const setFeedUrl = function () {
+        document.getElementById("feedUrl").setAttribute("value", window.location.href);
+    };
+    console.info(location.href);
+    console.info(window.location.href);
+    console.info(document.getElementById("feedUrl"));
+
     function triggerFirstUsageOwnership(feedUrl) {
         const xhr = new XMLHttpRequest();
         xhr.open('PUT', 'http://sitesearch.cloud/sites/rss?feedUrl=' + feedUrl);
@@ -32,9 +39,9 @@
     }
 </script>
 
+<body onload="setFeedUrl();">
 <input id="feedUrl" placeholder="Feed URL"
-       value="http://intrafind.de/share/enterprise-search-blog.xml"
-       onload="console.info(1)" onshow="console.info(2)">
+       value="http://intrafind.de/share/enterprise-search-blog.xml">
 <input id="tenantId" placeholder="Tenant ID" style="width: 275px">
 <input id="tenantSecret" placeholder="Tenant Secret" style="width: 275px">
 <button onclick="triggerFirstUsageOwnership(document.getElementById('feedUrl').value)">
