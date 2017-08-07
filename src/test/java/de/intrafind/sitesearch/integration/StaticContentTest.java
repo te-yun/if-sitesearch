@@ -59,7 +59,7 @@ public class StaticContentTest {
         final ResponseEntity<String> staticContent = caller.getForEntity("/searchbar/data/config.json", String.class);
 
         assertEquals(HttpStatus.OK, staticContent.getStatusCode());
-        assertTrue(staticContent.getBody().contains("\"baseUrl\": \"http://sitesearch.cloud/\","));
+        assertTrue(staticContent.getBody().contains("\"baseUrl\": \"http://sitesearch.cloud\","));
         assertTrue(staticContent.getBody().contains("\"endpointSearch\": \"" + SearchController.ENDPOINT + "\","));
     }
 
