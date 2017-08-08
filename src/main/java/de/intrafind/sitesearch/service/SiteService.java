@@ -27,7 +27,7 @@ import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 import de.intrafind.sitesearch.Application;
 import de.intrafind.sitesearch.dto.Site;
-import de.intrafind.sitesearch.dto.TenantCreation;
+import de.intrafind.sitesearch.dto.Tenant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -84,7 +84,7 @@ public class SiteService {
         }
     }
 
-    public Optional<TenantCreation> indexFeed(URI feedUrl, UUID tenantId, UUID tenantSecret) {
+    public Optional<Tenant> indexFeed(URI feedUrl, UUID tenantId, UUID tenantSecret) {
         UUID tenantIdToUse;
         UUID tenantSecretToUse;
         if (tenantId != null && tenantSecret != null) { // credentials are provided as a tuple only
@@ -109,7 +109,7 @@ public class SiteService {
         return createNewIndex(feedUrl, tenantIdToUse, tenantSecretToUse);
     }
 
-    private Optional<TenantCreation> createNewIndex(URI feedUrl, UUID tenantId, UUID tenantSecret) {
+    private Optional<Tenant> createNewIndex(URI feedUrl, UUID tenantId, UUID tenantSecret) {
         LOG.info("URL-received: " + feedUrl);
         final AtomicInteger successfullyIndexed = new AtomicInteger(0);
         final List<UUID> documents = new ArrayList<>();
@@ -135,7 +135,7 @@ public class SiteService {
                 }
             });
 
-            return Optional.of(new TenantCreation(tenantId, tenantSecret, successfullyIndexed.get(), documents, failedToIndex));
+            return Optional.of(new Tenant(tenantId, tenantSecret, successfullyIndexed.get(), documents, failedToIndex));
         } catch (FeedException | IOException e) {
             return Optional.empty();
         }

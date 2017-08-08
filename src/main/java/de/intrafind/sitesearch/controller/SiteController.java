@@ -17,7 +17,7 @@
 package de.intrafind.sitesearch.controller;
 
 import de.intrafind.sitesearch.dto.Site;
-import de.intrafind.sitesearch.dto.TenantCreation;
+import de.intrafind.sitesearch.dto.Tenant;
 import de.intrafind.sitesearch.service.SiteService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -74,12 +74,12 @@ public class SiteController {
     }
 
     @RequestMapping(path = "rss", method = RequestMethod.PUT)
-    ResponseEntity<TenantCreation> indexFeed(
+    ResponseEntity<Tenant> indexFeed(
             @RequestParam(value = "tenantId", required = false, defaultValue = "") UUID tenantId,
             @RequestParam(value = "tenantSecret", required = false, defaultValue = "") UUID tenantSecret,
             @RequestParam(value = "feedUrl") URI feedUrl
     ) {
-        Optional<TenantCreation> tenantCreatedInfo = service.indexFeed(feedUrl, tenantId, tenantSecret);
+        Optional<Tenant> tenantCreatedInfo = service.indexFeed(feedUrl, tenantId, tenantSecret);
         if (tenantCreatedInfo.isPresent()) {
             return ResponseEntity.ok(tenantCreatedInfo.get());
         } else {
