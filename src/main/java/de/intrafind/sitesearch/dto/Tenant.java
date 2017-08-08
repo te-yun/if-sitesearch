@@ -25,6 +25,7 @@ import java.util.UUID;
 public class Tenant implements Serializable {
     private UUID tenantId;
     private UUID tenantSecret;
+    // TODO remove successfullyIndexed as it's an implicit part of documents(.size)
     private int successfullyIndexed;
     private List<UUID> documents = Collections.emptyList();
     private List<URI> failed = Collections.emptyList();

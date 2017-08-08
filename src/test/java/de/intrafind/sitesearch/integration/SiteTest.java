@@ -141,22 +141,27 @@ public class SiteTest {
     public void importFeedAndReadSingleSite() throws Exception {
         final ResponseEntity<Tenant> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml", HttpMethod.PUT, null, Tenant.class);
         assertEquals(HttpStatus.OK, exchange.getStatusCode());
-        final Tenant tenantInfo = exchange.getBody();
-        assertEquals(UUID_SIZE, tenantInfo.getTenantId().toString().length());
-        assertEquals(UUID_SIZE, tenantInfo.getTenantSecret().toString().length());
-        assertEquals(25, tenantInfo.getSuccessfullyIndexed());
-        assertTrue(tenantInfo.getFailed().isEmpty());
+        final Tenant tenant = exchange.getBody();
+        assertTrue(tenant.getTenantId() != null);
+        assertTrue(tenant.getTenantSecret() != null);
+        assertEquals(25, tenant.getSuccessfullyIndexed());
+        assertEquals(25, tenant.getDocuments().size());
+        assertTrue(tenant.getFailed().isEmpty());
 
         // TODO replace this check with query by ID
-//        Thread.sleep(23000);
-//        LOG.info("tenantId: " + tenantInfo.getTenantId());
-//        final ResponseEntity<Hits> hitFromTenant = caller.exchange(SearchController.ENDPOINT + "?query=Knowledge&tenantId=" + tenantInfo.getTenantId(), HttpMethod.GET, null, Hits.class);
-//        assertEquals(HttpStatus.OK, hitFromTenant.getStatusCode());
-//        assertEquals(1, hitFromTenant.getBody().getResults().size());
-//        assertEquals(tenantInfo.getTenantId(), hitFromTenant.getBody().getResults().get(0).getTenant());
-//        assertTrue(hitFromTenant.getBody().getResults().get(0).getBody().contains("Knowledge"));
-//        assertNull(hitFromTenant.getBody().getResults().get(0).getTenantSecret());
-//        assertTrue(hitFromTenant.getBody().getResults().get(0).getUrl().isAbsolute());
+        LOG.info("tenantId: " + tenant.getTenantId());
+        validate(tenant);
+    }
+
+    private void validate(Tenant tenant) {
+        tenant.getDocuments().forEach(documentId -> {
+            final ResponseEntity<Site> fetchedById = caller.exchange(ENDPOINT + "/" + documentId, HttpMethod.GET, null, Site.class);
+            assertTrue(HttpStatus.OK.equals(fetchedById.getStatusCode()));
+            assertTrue(tenant.getTenantId().equals(fetchedById.getBody().getTenant()));
+            assertTrue(!fetchedById.getBody().getBody().isEmpty());
+            assertTrue(fetchedById.getBody().getUrl().isAbsolute());
+            assertNull(fetchedById.getBody().getTenantSecret());
+        });
     }
 
     @Test
@@ -179,23 +184,15 @@ public class SiteTest {
                         + "?tenantId=" + tenantIdFromCreation + "&tenantSecret=" + tenantSecretFromCreation,
                 HttpMethod.PUT, null, Tenant.class);
         assertEquals(HttpStatus.OK, exchange.getStatusCode());
-        final Tenant tenantUpdateInfo = exchange.getBody();
-        assertTrue(tenantUpdateInfo.getTenantId() != null);
-        assertTrue(tenantUpdateInfo.getTenantSecret() != null);
-        assertEquals(10, tenantUpdateInfo.getSuccessfullyIndexed());
-        assertTrue(tenantUpdateInfo.getFailed().isEmpty());
+        final Tenant tenantUpdate = exchange.getBody();
+        assertTrue(tenantUpdate.getTenantId() != null);
+        assertTrue(tenantUpdate.getTenantSecret() != null);
+        assertEquals(10, tenantUpdate.getSuccessfullyIndexed());
+        assertEquals(10, tenantUpdate.getDocuments().size());
+        assertTrue(tenantUpdate.getFailed().isEmpty());
 
         // search in updated index
-        // TODO replace this check with query by ID
-//        Thread.sleep(23000);
-//        LOG.info("tenantId: " + tenantIdFromCreation);
-//        final ResponseEntity<Hits> hitFromTenant = caller.exchange(SearchController.ENDPOINT + "?query=Fahrplanänderungen&tenantId=" + tenantIdFromCreation, HttpMethod.GET, null, Hits.class);
-//        assertEquals(HttpStatus.OK, hitFromTenant.getStatusCode());
-//        assertEquals(1, hitFromTenant.getBody().getResults().size());
-//        assertEquals(tenantIdFromCreation, hitFromTenant.getBody().getResults().get(0).getTenant());
-//        assertTrue(hitFromTenant.getBody().getResults().get(0).getBody().contains("Fahrplanänderungen"));
-//        assertNull(hitFromTenant.getBody().getResults().get(0).getTenantSecret());
-//        assertTrue(hitFromTenant.getBody().getResults().get(0).getUrl().isAbsolute());
+        validate(tenantUpdate);
     }
 
     // TODO https for feeds does not work yet, do not use URL class
