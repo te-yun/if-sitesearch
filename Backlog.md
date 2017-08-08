@@ -2,6 +2,8 @@ Backlog
 =
 
 # now
+* update all feeds
+* update a single feed
 
 # next
 

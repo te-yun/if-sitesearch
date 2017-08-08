@@ -29,6 +29,7 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class SearchService {
@@ -44,20 +45,20 @@ public class SearchService {
 
         LOG.info("query: " + query);
         List<Site> siteDocuments = new ArrayList<>();
-        // TODO introduce the tenant filter much earlier, at 9605 service level
         hits.getDocuments().stream()
+                // TODO introduce the tenant filter much earlier, at 9605 service level
                 .filter(document -> tenantId.equals(document.get(Fields.TENANT)))
                 .forEach(document -> {
-            Site site = new Site();
-            site.setId(document.getId());
-            site.setUrl(URI.create(document.get(Fields.URL)));
+                    Site site = new Site();
+                    site.setId(document.getId());
+                    site.setUrl(URI.create(document.get(Fields.URL)));
                     // TODO remove tenant INFO as it is not relevant here, consider separate DTO
-            site.setTenant(document.get(Fields.TENANT));
+                    site.setTenant(UUID.fromString(document.get(Fields.TENANT)));
                     site.setBody(document.get(Fields.BODY));
-            site.setTitle(document.get(Fields.TITLE));
+                    site.setTitle(document.get(Fields.TITLE));
 
-            siteDocuments.add(site);
-        });
+                    siteDocuments.add(site);
+                });
 
         return new Hits(query, siteDocuments);
     }

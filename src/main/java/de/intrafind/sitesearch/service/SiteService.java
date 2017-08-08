@@ -76,7 +76,7 @@ public class SiteService {
 
         if (found.isPresent()) {
             Document foundDocument = found.get();
-            Site representationOfFoundDocument = new Site(foundDocument.get(Fields.TENANT), null, foundDocument.get(Fields.TITLE), foundDocument.get(Fields.BODY), URI.create(foundDocument.get(Fields.URL)));
+            Site representationOfFoundDocument = new Site(UUID.fromString(foundDocument.get(Fields.TENANT)), null, foundDocument.get(Fields.TITLE), foundDocument.get(Fields.BODY), URI.create(foundDocument.get(Fields.URL)));
             representationOfFoundDocument.setId(foundDocument.getId());
 
             return representationOfFoundDocument;
@@ -92,22 +92,25 @@ public class SiteService {
             tenantIdToUse = tenantId;
             tenantSecretToUse = tenantSecret;
 
-            // TODO fetch any entry for the tenant
-            // TODO lookup the tenantSecret of the entry
-            // TODO if tenantSecret from the request and the looked up secret match allow operation, otherwise 403
             final Optional<UUID> fetchedTenantSecret = fetchTenantSecret(UUID.fromString(tenantId));
-            if (!fetchedTenantSecret.isPresent()) { // tenant exists
+            if (!fetchedTenantSecret.isPresent()) { // tenant does not exist
                 return Optional.empty();
-            } else if (!tenantSecret.equals(fetchedTenantSecret.get().toString())) { // correct authorization
+            } else if (tenantSecret.equals(fetchedTenantSecret.get().toString())) { // authorized
+                updateIndex(UUID.fromString(tenantIdToUse));
+            } else { // unauthorized
                 return Optional.empty();
             }
-        } else if (tenantId.isEmpty() ^ tenantSecret.isEmpty()) {
-            return Optional.empty(); // it does not make any sense if only one of the parameters is set
-        } else {
+        } else if (tenantId.isEmpty() ^ tenantSecret.isEmpty()) { // it does not make any sense if only one of the parameters is set
+            return Optional.empty();
+        } else { // consider request as first-usage-ownership-granting request, create new index
             tenantIdToUse = UUID.randomUUID().toString();
             tenantSecretToUse = UUID.randomUUID().toString();
         }
 
+        return createNewIndex(feedUrl, UUID.fromString(tenantIdToUse), UUID.fromString(tenantSecretToUse));
+    }
+
+    private Optional<TenantCreation> createNewIndex(URI feedUrl, UUID tenantId, UUID tenantSecret) {
         LOG.info("URL-received: " + feedUrl);
         final AtomicInteger successfullyIndexed = new AtomicInteger(0);
         List<URI> failedToIndex = new ArrayList<>();
@@ -119,7 +122,7 @@ public class SiteService {
                 LOG.info("link: " + entry.getLink());
                 LOG.info("description: " + entry.getDescription().getValue());
 
-                Site toIndex = new Site(tenantIdToUse, UUID.fromString(tenantSecretToUse), entry.getTitle(), entry.getDescription().getValue(), URI.create(entry.getLink()));
+                Site toIndex = new Site(tenantId, tenantSecret, entry.getTitle(), entry.getDescription().getValue(), URI.create(entry.getLink()));
                 Site indexed = index(UUID.randomUUID(), toIndex);
                 if (indexed != null && !indexed.getId().isEmpty()) {
                     successfullyIndexed.incrementAndGet();
@@ -130,9 +133,14 @@ public class SiteService {
                 }
             });
 
-            return Optional.of(new TenantCreation(tenantIdToUse, tenantSecretToUse, successfullyIndexed.get(), failedToIndex));
+            return Optional.of(new TenantCreation(tenantId, tenantSecret, successfullyIndexed.get(), failedToIndex));
         } catch (FeedException | IOException e) {
             return Optional.empty();
         }
+    }
+
+    private void updateIndex(UUID tenantId) {
+//        delete Index
+//        create Index
     }
 }

@@ -44,11 +44,12 @@ public class SiteTest {
     private final static Logger LOG = LoggerFactory.getLogger(SiteTest.class);
     @Autowired
     private TestRestTemplate caller;
+    private static final UUID TEST_TENANT = UUID.fromString("1a6715d9-119f-48d1-9329-e8763273bbea");
 
     private static Site buildSite(String id) {
         Site simple = new Site();
         simple.setUrl(URI.create("https://www.intrafind.de/cloud"));
-        simple.setTenant("1a6715d9-119f-48d1-9329-e8763273bbea");
+        simple.setTenant(TEST_TENANT);
         simple.setBody("Sitesearch is IntraFind's new SaaS solution.");
         simple.setTitle("Cloud Solution");
         simple.setId(id); // is ignored when persisted
@@ -72,7 +73,7 @@ public class SiteTest {
 
         Site simple = new Site();
         simple.setUrl(URI.create("https://www.intrafind.de/saas"));
-        simple.setTenant("1a6715d9-119f-48d1-9329-e8763273bbea");
+        simple.setTenant(TEST_TENANT);
         simple.setBody("Sitesearch is IntraFind's new SaaS solution.");
         simple.setTitle("SaaS Solution");
         simple.setId(irrelevantSiteId);
@@ -131,8 +132,8 @@ public class SiteTest {
         final ResponseEntity<TenantCreation> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml", HttpMethod.PUT, null, TenantCreation.class);
         assertEquals(HttpStatus.OK, exchange.getStatusCode());
         final TenantCreation tenantInfo = exchange.getBody();
-        assertEquals(36, tenantInfo.getTenantId().length());
-        assertEquals(36, tenantInfo.getTenantSecret().length());
+        assertEquals(36, tenantInfo.getTenantId().toString().length());
+        assertEquals(36, tenantInfo.getTenantSecret().toString().length());
         assertEquals(25, tenantInfo.getSuccessfullyIndexed().intValue());
         assertTrue(tenantInfo.getFailed().isEmpty());
     }
@@ -142,8 +143,8 @@ public class SiteTest {
         final ResponseEntity<TenantCreation> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml", HttpMethod.PUT, null, TenantCreation.class);
         assertEquals(HttpStatus.OK, exchange.getStatusCode());
         final TenantCreation tenantInfo = exchange.getBody();
-        assertEquals(36, tenantInfo.getTenantId().length());
-        assertEquals(36, tenantInfo.getTenantSecret().length());
+        assertEquals(36, tenantInfo.getTenantId().toString().length());
+        assertEquals(36, tenantInfo.getTenantSecret().toString().length());
         assertEquals(25, tenantInfo.getSuccessfullyIndexed().intValue());
         assertTrue(tenantInfo.getFailed().isEmpty());
 

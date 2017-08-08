@@ -23,7 +23,7 @@ import java.util.UUID;
 
 public class Site implements Serializable {
     private String id;
-    private String tenant;
+    private UUID tenant;
     private UUID tenantSecret;
     private String title;
     private String body;
@@ -32,7 +32,7 @@ public class Site implements Serializable {
     public Site() {
     }
 
-    public Site(String tenant, UUID tenantSecret, String title, String body, URI url) {
+    public Site(UUID tenant, UUID tenantSecret, String title, String body, URI url) {
         this.tenant = tenant;
         this.tenantSecret = tenantSecret;
         this.title = title;
@@ -60,11 +60,11 @@ public class Site implements Serializable {
         return url;
     }
 
-    public String getTenant() {
+    public UUID getTenant() {
         return tenant;
     }
 
-    public void setTenant(String tenant) {
+    public void setTenant(UUID tenant) {
         this.tenant = tenant;
     }
 

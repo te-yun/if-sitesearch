@@ -58,7 +58,6 @@ dependencies {
     runtime "net.java.dev.jna:jna:4.4.0"
 
     testCompile "org.openjdk.jmh:jmh-generator-annprocess:1.19"
-//    testCompile "org.openjdk.jmh:jmh-core:1.19"
     testCompile "org.springframework.boot:spring-boot-starter-test:$spring_boot_version"
 }
 
