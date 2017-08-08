@@ -129,28 +129,18 @@ public class SiteTest {
     @Test
     public void importFeed() throws Exception {
         final ResponseEntity<Tenant> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/fahrplanaenderungen/detail/rss.xml", HttpMethod.PUT, null, Tenant.class);
-        assertEquals(HttpStatus.OK, exchange.getStatusCode());
-        final Tenant tenantInfo = exchange.getBody();
-        assertEquals(UUID_SIZE, tenantInfo.getTenantId().toString().length());
-        assertEquals(UUID_SIZE, tenantInfo.getTenantSecret().toString().length());
-        assertEquals(10, tenantInfo.getSuccessfullyIndexed());
-        assertTrue(tenantInfo.getFailed().isEmpty());
+        final Tenant creation = validateTenantSummary(exchange, 10);
+
+        validate(creation);
     }
 
     @Test
     public void importFeedAndReadSingleSite() throws Exception {
         final ResponseEntity<Tenant> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml", HttpMethod.PUT, null, Tenant.class);
-        assertEquals(HttpStatus.OK, exchange.getStatusCode());
-        final Tenant tenant = exchange.getBody();
-        assertTrue(tenant.getTenantId() != null);
-        assertTrue(tenant.getTenantSecret() != null);
-        assertEquals(25, tenant.getSuccessfullyIndexed());
-        assertEquals(25, tenant.getDocuments().size());
-        assertTrue(tenant.getFailed().isEmpty());
+        final Tenant creation = validateTenantSummary(exchange, 25);
 
-        // TODO replace this check with query by ID
-        LOG.info("tenantId: " + tenant.getTenantId());
-        validate(tenant);
+        LOG.info("tenantId: " + creation.getTenantId());
+        validate(creation);
     }
 
     private void validate(Tenant tenant) {
@@ -170,34 +160,30 @@ public class SiteTest {
         final ResponseEntity<Tenant> initialIndexCreation = caller.exchange(
                 ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/meldungen/detail/rss.xml",
                 HttpMethod.PUT, null, Tenant.class);
-        assertEquals(HttpStatus.OK, initialIndexCreation.getStatusCode());
-        final Tenant tenantInfo = initialIndexCreation.getBody();
-        assertTrue(tenantInfo.getTenantId() != null);
-        assertTrue(tenantInfo.getTenantSecret() != null);
-        assertEquals(10, tenantInfo.getSuccessfullyIndexed());
-        assertTrue(tenantInfo.getFailed().isEmpty());
+        final Tenant tenantCreation = validateTenantSummary(initialIndexCreation, 10);
 
-        UUID tenantIdFromCreation = tenantInfo.getTenantId();
-        UUID tenantSecretFromCreation = tenantInfo.getTenantSecret();
+        UUID tenantIdFromCreation = tenantCreation.getTenantId();
+        UUID tenantSecretFromCreation = tenantCreation.getTenantSecret();
 
         // update index
-        LOG.info("tenantIdFromCreation: " + tenantIdFromCreation);
-        LOG.info("tenantSecretFromCreation: " + tenantSecretFromCreation);
         final ResponseEntity<Tenant> anotherFeedReplacement = caller.exchange(
-//                ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/fahrplanaenderungen/detail/rss.xml"
                 ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
                         + "&tenantId=" + tenantIdFromCreation + "&tenantSecret=" + tenantSecretFromCreation,
                 HttpMethod.PUT, null, Tenant.class);
-        LOG.info("anotherFeedReplacement.getHeaders(): " + anotherFeedReplacement.getHeaders());
+        final Tenant tenantUpdate = validateTenantSummary(anotherFeedReplacement, 25);
+
+        validate(tenantUpdate);
+    }
+
+    private Tenant validateTenantSummary(ResponseEntity<Tenant> anotherFeedReplacement, int indexEntriesCount) {
         assertEquals(HttpStatus.OK, anotherFeedReplacement.getStatusCode());
         final Tenant tenantUpdate = anotherFeedReplacement.getBody();
         assertTrue(tenantUpdate.getTenantId() != null);
         assertTrue(tenantUpdate.getTenantSecret() != null);
-        assertEquals(10, tenantUpdate.getSuccessfullyIndexed());
-        assertEquals(10, tenantUpdate.getDocuments().size());
+        assertEquals(indexEntriesCount, tenantUpdate.getSuccessfullyIndexed());
+        assertEquals(indexEntriesCount, tenantUpdate.getDocuments().size());
         assertTrue(tenantUpdate.getFailed().isEmpty());
-
-        validate(tenantUpdate);
+        return tenantUpdate;
     }
 
     // TODO https for feeds does not work yet, do not use URL class
