@@ -130,7 +130,7 @@ public class SiteTest {
 
     @Test
     public void importFeed() throws Exception {
-        final ResponseEntity<TenantCreation> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml", HttpMethod.PUT, null, TenantCreation.class);
+        final ResponseEntity<TenantCreation> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/fahrplanaenderungen/detail/rss.xml", HttpMethod.PUT, null, TenantCreation.class);
         assertEquals(HttpStatus.OK, exchange.getStatusCode());
         final TenantCreation tenantInfo = exchange.getBody();
         assertEquals(UUID_SIZE, tenantInfo.getTenantId().toString().length());
@@ -141,7 +141,7 @@ public class SiteTest {
 
     @Test
     public void importFeedAndReadSingleSite() throws Exception {
-        final ResponseEntity<TenantCreation> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/fahrplanaenderungen/detail/rss.xml", HttpMethod.PUT, null, TenantCreation.class);
+        final ResponseEntity<TenantCreation> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml", HttpMethod.PUT, null, TenantCreation.class);
         assertEquals(HttpStatus.OK, exchange.getStatusCode());
         final TenantCreation tenantInfo = exchange.getBody();
         assertEquals(UUID_SIZE, tenantInfo.getTenantId().toString().length());
