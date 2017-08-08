@@ -42,6 +42,7 @@ import static org.junit.Assert.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SiteTest {
     private final static Logger LOG = LoggerFactory.getLogger(SiteTest.class);
+    private static final int UUID_SIZE = 36;
     @Autowired
     private TestRestTemplate caller;
     private static final UUID TEST_TENANT = UUID.fromString("1a6715d9-119f-48d1-9329-e8763273bbea");
@@ -132,20 +133,20 @@ public class SiteTest {
         final ResponseEntity<TenantCreation> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml", HttpMethod.PUT, null, TenantCreation.class);
         assertEquals(HttpStatus.OK, exchange.getStatusCode());
         final TenantCreation tenantInfo = exchange.getBody();
-        assertEquals(36, tenantInfo.getTenantId().toString().length());
-        assertEquals(36, tenantInfo.getTenantSecret().toString().length());
+        assertEquals(UUID_SIZE, tenantInfo.getTenantId().toString().length());
+        assertEquals(UUID_SIZE, tenantInfo.getTenantSecret().toString().length());
         assertEquals(25, tenantInfo.getSuccessfullyIndexed().intValue());
         assertTrue(tenantInfo.getFailed().isEmpty());
     }
 
     @Test
     public void importFeedAndReadSingleSite() throws Exception {
-        final ResponseEntity<TenantCreation> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml", HttpMethod.PUT, null, TenantCreation.class);
+        final ResponseEntity<TenantCreation> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/fahrplanaenderungen/detail/rss.xml", HttpMethod.PUT, null, TenantCreation.class);
         assertEquals(HttpStatus.OK, exchange.getStatusCode());
         final TenantCreation tenantInfo = exchange.getBody();
-        assertEquals(36, tenantInfo.getTenantId().toString().length());
-        assertEquals(36, tenantInfo.getTenantSecret().toString().length());
-        assertEquals(25, tenantInfo.getSuccessfullyIndexed().intValue());
+        assertEquals(UUID_SIZE, tenantInfo.getTenantId().toString().length());
+        assertEquals(UUID_SIZE, tenantInfo.getTenantSecret().toString().length());
+        assertEquals(10, tenantInfo.getSuccessfullyIndexed().intValue());
         assertTrue(tenantInfo.getFailed().isEmpty());
 
         Thread.sleep(13000);
@@ -161,15 +162,19 @@ public class SiteTest {
 
     @Test
     public void importFeedAndUpdate() throws Exception {
-//        final ResponseEntity<TenantCreation> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml", HttpMethod.PUT, null, TenantCreation.class);
-//        assertEquals(HttpStatus.OK, exchange.getStatusCode());
-//        final TenantCreation tenantInfo = exchange.getBody();
-//        assertEquals(36, tenantInfo.getTenantId().toString().length());
-//        assertEquals(36, tenantInfo.getTenantSecret().toString().length());
-//        assertEquals(25, tenantInfo.getSuccessfullyIndexed().intValue());
-//        assertTrue(tenantInfo.getFailed().isEmpty());
+        final ResponseEntity<TenantCreation> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/meldungen/detail/rss.xml", HttpMethod.PUT, null, TenantCreation.class);
+        assertEquals(HttpStatus.OK, exchange.getStatusCode());
+        final TenantCreation tenantInfo = exchange.getBody();
+        assertEquals(UUID_SIZE, tenantInfo.getTenantId().toString().length());
+        assertEquals(UUID_SIZE, tenantInfo.getTenantSecret().toString().length());
+        assertEquals(10, tenantInfo.getSuccessfullyIndexed().intValue());
+        assertTrue(tenantInfo.getFailed().isEmpty());
+
+
+        
     }
 
+    // TODO https for feeds does not work yet, do not use URL class
     // TODO check if a tenant has the total number of sites that TenantCreation reports
     // TODO provoke 400 responses
 }

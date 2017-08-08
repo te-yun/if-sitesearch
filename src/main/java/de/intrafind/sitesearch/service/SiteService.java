@@ -85,29 +85,29 @@ public class SiteService {
         }
     }
 
-    public Optional<TenantCreation> indexFeed(URI feedUrl, String tenantId, String tenantSecret) {
-        String tenantIdToUse;
-        String tenantSecretToUse;
-        if (!tenantId.isEmpty() && !tenantSecret.isEmpty()) { // credentials are provided as a tuple only
+    public Optional<TenantCreation> indexFeed(URI feedUrl, UUID tenantId, UUID tenantSecret) {
+        UUID tenantIdToUse;
+        UUID tenantSecretToUse;
+        if (tenantId != null && tenantSecret != null) { // credentials are provided as a tuple only
             tenantIdToUse = tenantId;
             tenantSecretToUse = tenantSecret;
 
-            final Optional<UUID> fetchedTenantSecret = fetchTenantSecret(UUID.fromString(tenantId));
+            final Optional<UUID> fetchedTenantSecret = fetchTenantSecret(tenantId);
             if (!fetchedTenantSecret.isPresent()) { // tenant does not exist
                 return Optional.empty();
-            } else if (tenantSecret.equals(fetchedTenantSecret.get().toString())) { // authorized
-                updateIndex(UUID.fromString(tenantIdToUse));
+            } else if (tenantSecret.equals(fetchedTenantSecret.get())) { // authorized
+                updateIndex(tenantIdToUse);
             } else { // unauthorized
                 return Optional.empty();
             }
-        } else if (tenantId.isEmpty() ^ tenantSecret.isEmpty()) { // it does not make any sense if only one of the parameters is set
+        } else if (tenantId == null ^ tenantSecret == null) { // it does not make any sense if only one of the parameters is set
             return Optional.empty();
         } else { // consider request as first-usage-ownership-granting request, create new index
-            tenantIdToUse = UUID.randomUUID().toString();
-            tenantSecretToUse = UUID.randomUUID().toString();
+            tenantIdToUse = UUID.randomUUID();
+            tenantSecretToUse = UUID.randomUUID();
         }
 
-        return createNewIndex(feedUrl, UUID.fromString(tenantIdToUse), UUID.fromString(tenantSecretToUse));
+        return createNewIndex(feedUrl, tenantIdToUse, tenantSecretToUse);
     }
 
     private Optional<TenantCreation> createNewIndex(URI feedUrl, UUID tenantId, UUID tenantSecret) {

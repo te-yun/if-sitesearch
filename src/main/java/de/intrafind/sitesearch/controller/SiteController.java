@@ -75,8 +75,8 @@ public class SiteController {
 
     @RequestMapping(path = "rss", method = RequestMethod.PUT)
     ResponseEntity<TenantCreation> indexFeed(
-            @RequestParam(value = "tenantId", required = false, defaultValue = "") String tenantId,
-            @RequestParam(value = "tenantSecret", required = false, defaultValue = "") String tenantSecret,
+            @RequestParam(value = "tenantId", required = false, defaultValue = "") UUID tenantId,
+            @RequestParam(value = "tenantSecret", required = false, defaultValue = "") UUID tenantSecret,
             @RequestParam(value = "feedUrl") URI feedUrl
     ) {
         Optional<TenantCreation> tenantCreatedInfo = service.indexFeed(feedUrl, tenantId, tenantSecret);
