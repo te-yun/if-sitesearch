@@ -40,7 +40,6 @@ import static org.junit.Assert.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SiteTest {
     private final static Logger LOG = LoggerFactory.getLogger(SiteTest.class);
-    private static final int UUID_SIZE = 36;
     @Autowired
     private TestRestTemplate caller;
     private static final UUID TEST_TENANT = UUID.fromString("1a6715d9-119f-48d1-9329-e8763273bbea");
