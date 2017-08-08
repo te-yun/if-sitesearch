@@ -43,6 +43,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 public class SiteService {
     private static final Logger LOG = LoggerFactory.getLogger(SiteService.class);
+    private static final String TENANT_SECRET_FIELD = "tenantSecret";
 
     private Search searchService = IfinderCoreClient.newHessianClient(Search.class, Application.I_FINDER_CORE + "/search");
     private Index indexService = IfinderCoreClient.newHessianClient(Index.class, Application.I_FINDER_CORE + "/index");
@@ -53,7 +54,7 @@ public class SiteService {
         indexable.set(Fields.TITLE, site.getTitle());
         indexable.set(Fields.URL, site.getUrl());
         indexable.set(Fields.TENANT, site.getTenant());
-        indexable.set("tenantSecret", site.getTenantSecret());
+        indexable.set(TENANT_SECRET_FIELD, site.getTenantSecret());
         indexService.index(indexable);
 
         return fetchById(id.toString());
@@ -65,7 +66,7 @@ public class SiteService {
         if (documentWithTenantSecret.getDocuments().isEmpty()) {
             return Optional.empty();
         } else {
-            String tenantSecret = documentWithTenantSecret.getDocuments().get(0).get(Fields.TENANT);
+            String tenantSecret = documentWithTenantSecret.getDocuments().get(0).get(TENANT_SECRET_FIELD);
             return Optional.of(UUID.fromString(tenantSecret));
         }
     }

@@ -167,11 +167,13 @@ public class SiteTest {
     @Test
     public void importFeedAndUpdate() throws Exception {
         // create index
-        final ResponseEntity<Tenant> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/meldungen/detail/rss.xml", HttpMethod.PUT, null, Tenant.class);
-        assertEquals(HttpStatus.OK, exchange.getStatusCode());
-        final Tenant tenantInfo = exchange.getBody();
-        assertEquals(UUID_SIZE, tenantInfo.getTenantId().toString().length());
-        assertEquals(UUID_SIZE, tenantInfo.getTenantSecret().toString().length());
+        final ResponseEntity<Tenant> initialIndexCreation = caller.exchange(
+                ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/meldungen/detail/rss.xml",
+                HttpMethod.PUT, null, Tenant.class);
+        assertEquals(HttpStatus.OK, initialIndexCreation.getStatusCode());
+        final Tenant tenantInfo = initialIndexCreation.getBody();
+        assertTrue(tenantInfo.getTenantId() != null);
+        assertTrue(tenantInfo.getTenantSecret() != null);
         assertEquals(10, tenantInfo.getSuccessfullyIndexed());
         assertTrue(tenantInfo.getFailed().isEmpty());
 
@@ -179,19 +181,22 @@ public class SiteTest {
         UUID tenantSecretFromCreation = tenantInfo.getTenantSecret();
 
         // update index
+        LOG.info("tenantIdFromCreation: " + tenantIdFromCreation);
+        LOG.info("tenantSecretFromCreation: " + tenantSecretFromCreation);
         final ResponseEntity<Tenant> anotherFeedReplacement = caller.exchange(
-                ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/fahrplanaenderungen/detail/rss.xml"
-                        + "?tenantId=" + tenantIdFromCreation + "&tenantSecret=" + tenantSecretFromCreation,
+//                ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/fahrplanaenderungen/detail/rss.xml"
+                ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
+                        + "&tenantId=" + tenantIdFromCreation + "&tenantSecret=" + tenantSecretFromCreation,
                 HttpMethod.PUT, null, Tenant.class);
-        assertEquals(HttpStatus.OK, exchange.getStatusCode());
-        final Tenant tenantUpdate = exchange.getBody();
+        LOG.info("anotherFeedReplacement.getHeaders(): " + anotherFeedReplacement.getHeaders());
+        assertEquals(HttpStatus.OK, anotherFeedReplacement.getStatusCode());
+        final Tenant tenantUpdate = anotherFeedReplacement.getBody();
         assertTrue(tenantUpdate.getTenantId() != null);
         assertTrue(tenantUpdate.getTenantSecret() != null);
         assertEquals(10, tenantUpdate.getSuccessfullyIndexed());
         assertEquals(10, tenantUpdate.getDocuments().size());
         assertTrue(tenantUpdate.getFailed().isEmpty());
 
-        // search in updated index
         validate(tenantUpdate);
     }
 
