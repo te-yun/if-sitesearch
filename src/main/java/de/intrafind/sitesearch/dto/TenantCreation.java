@@ -24,7 +24,7 @@ import java.util.UUID;
 public class TenantCreation implements Serializable {
     private UUID tenantId;
     private UUID tenantSecret;
-    private Integer successfullyIndexed;
+    private int successfullyIndexed;
     private List<URI> failed;
 
     private TenantCreation() {

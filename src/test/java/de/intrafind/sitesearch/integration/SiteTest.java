@@ -148,7 +148,7 @@ public class SiteTest {
         assertEquals(25, tenantInfo.getSuccessfullyIndexed().intValue());
         assertTrue(tenantInfo.getFailed().isEmpty());
 
-        Thread.sleep(8000);
+        Thread.sleep(13000);
         LOG.info("tenantId: " + tenantInfo.getTenantId());
         final ResponseEntity<Hits> hitFromTenant = caller.exchange(SearchController.ENDPOINT + "?query=Knowledge&tenantId=" + tenantInfo.getTenantId(), HttpMethod.GET, null, Hits.class);
         assertEquals(HttpStatus.OK, hitFromTenant.getStatusCode());
@@ -159,5 +159,17 @@ public class SiteTest {
         assertTrue(hitFromTenant.getBody().getResults().get(0).getUrl().isAbsolute());
     }
 
+    @Test
+    public void importFeedAndUpdate() throws Exception {
+//        final ResponseEntity<TenantCreation> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml", HttpMethod.PUT, null, TenantCreation.class);
+//        assertEquals(HttpStatus.OK, exchange.getStatusCode());
+//        final TenantCreation tenantInfo = exchange.getBody();
+//        assertEquals(36, tenantInfo.getTenantId().toString().length());
+//        assertEquals(36, tenantInfo.getTenantSecret().toString().length());
+//        assertEquals(25, tenantInfo.getSuccessfullyIndexed().intValue());
+//        assertTrue(tenantInfo.getFailed().isEmpty());
+    }
+
+    // TODO check if a tenant has the total number of sites that TenantCreation reports
     // TODO provoke 400 responses
 }
