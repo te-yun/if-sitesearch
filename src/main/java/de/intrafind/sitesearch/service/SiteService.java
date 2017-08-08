@@ -54,7 +54,6 @@ public class SiteService {
         indexable.set(Fields.URL, site.getUrl());
         indexable.set(Fields.TENANT, site.getTenant());
         indexable.set("tenantSecret", site.getTenantSecret());
-        // TODO introduce tenant Secret
         indexService.index(indexable);
 
         return fetchById(id.toString());
@@ -113,6 +112,7 @@ public class SiteService {
     private Optional<TenantCreation> createNewIndex(URI feedUrl, UUID tenantId, UUID tenantSecret) {
         LOG.info("URL-received: " + feedUrl);
         final AtomicInteger successfullyIndexed = new AtomicInteger(0);
+        final List<UUID> documents = new ArrayList<>();
         List<URI> failedToIndex = new ArrayList<>();
         try {
             SyndFeed feed = new SyndFeedInput().build(new XmlReader(feedUrl.toURL()));
@@ -123,9 +123,11 @@ public class SiteService {
                 LOG.info("description: " + entry.getDescription().getValue());
 
                 Site toIndex = new Site(tenantId, tenantSecret, entry.getTitle(), entry.getDescription().getValue(), URI.create(entry.getLink()));
-                Site indexed = index(UUID.randomUUID(), toIndex);
+                final UUID siteId = UUID.randomUUID();
+                Site indexed = index(siteId, toIndex);
                 if (indexed != null && !indexed.getId().isEmpty()) {
                     successfullyIndexed.incrementAndGet();
+                    documents.add(siteId);
                     LOG.info("successfully-indexed: " + indexed.getId());
                 } else {
                     failedToIndex.add(URI.create(entry.getLink()));
@@ -133,7 +135,7 @@ public class SiteService {
                 }
             });
 
-            return Optional.of(new TenantCreation(tenantId, tenantSecret, successfullyIndexed.get(), failedToIndex));
+            return Optional.of(new TenantCreation(tenantId, tenantSecret, successfullyIndexed.get(), documents, failedToIndex));
         } catch (FeedException | IOException e) {
             return Optional.empty();
         }

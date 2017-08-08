@@ -25,16 +25,23 @@ public class TenantCreation implements Serializable {
     private UUID tenantId;
     private UUID tenantSecret;
     private int successfullyIndexed;
+    private List<UUID> documents;
     private List<URI> failed;
 
-    private TenantCreation() {
-    }
-
-    public TenantCreation(UUID tenantId, UUID tenantSecret, Integer successfullyIndexed, List<URI> failed) {
+    public TenantCreation(UUID tenantId, UUID tenantSecret, int successfullyIndexed, List<UUID> documents, List<URI> failedToIndex) {
         this.tenantId = tenantId;
         this.tenantSecret = tenantSecret;
         this.successfullyIndexed = successfullyIndexed;
+        this.documents = documents;
         this.failed = failed;
+    }
+
+    public List<UUID> getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(List<UUID> documents) {
+        this.documents = documents;
     }
 
     public List<URI> getFailed() {
