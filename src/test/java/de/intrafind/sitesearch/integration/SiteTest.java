@@ -135,7 +135,7 @@ public class SiteTest {
         final TenantCreation tenantInfo = exchange.getBody();
         assertEquals(UUID_SIZE, tenantInfo.getTenantId().toString().length());
         assertEquals(UUID_SIZE, tenantInfo.getTenantSecret().toString().length());
-        assertEquals(25, tenantInfo.getSuccessfullyIndexed().intValue());
+        assertEquals(10, tenantInfo.getSuccessfullyIndexed().intValue());
         assertTrue(tenantInfo.getFailed().isEmpty());
     }
 
@@ -146,7 +146,7 @@ public class SiteTest {
         final TenantCreation tenantInfo = exchange.getBody();
         assertEquals(UUID_SIZE, tenantInfo.getTenantId().toString().length());
         assertEquals(UUID_SIZE, tenantInfo.getTenantSecret().toString().length());
-        assertEquals(10, tenantInfo.getSuccessfullyIndexed().intValue());
+        assertEquals(25, tenantInfo.getSuccessfullyIndexed().intValue());
         assertTrue(tenantInfo.getFailed().isEmpty());
 
         Thread.sleep(13000);
@@ -162,16 +162,40 @@ public class SiteTest {
 
     @Test
     public void importFeedAndUpdate() throws Exception {
+        // create index
         final ResponseEntity<TenantCreation> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/meldungen/detail/rss.xml", HttpMethod.PUT, null, TenantCreation.class);
         assertEquals(HttpStatus.OK, exchange.getStatusCode());
-        final TenantCreation tenantInfo = exchange.getBody();
-        assertEquals(UUID_SIZE, tenantInfo.getTenantId().toString().length());
-        assertEquals(UUID_SIZE, tenantInfo.getTenantSecret().toString().length());
-        assertEquals(10, tenantInfo.getSuccessfullyIndexed().intValue());
-        assertTrue(tenantInfo.getFailed().isEmpty());
+        final TenantCreation tenantCreationInfo = exchange.getBody();
+        assertEquals(UUID_SIZE, tenantCreationInfo.getTenantId().toString().length());
+        assertEquals(UUID_SIZE, tenantCreationInfo.getTenantSecret().toString().length());
+        assertEquals(10, tenantCreationInfo.getSuccessfullyIndexed().intValue());
+        assertTrue(tenantCreationInfo.getFailed().isEmpty());
 
+        UUID tenantIdFromCreation = tenantCreationInfo.getTenantId();
+        UUID tenantSecretFromCreation = tenantCreationInfo.getTenantSecret();
 
-        
+        // update index
+        final ResponseEntity<TenantCreation> anotherFeedReplacement = caller.exchange(
+                ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/fahrplanaenderungen/detail/rss.xml"
+                        + "?tenantId=" + tenantIdFromCreation + "&tenantSecret=" + tenantSecretFromCreation,
+                HttpMethod.PUT, null, TenantCreation.class);
+        assertEquals(HttpStatus.OK, exchange.getStatusCode());
+        final TenantCreation tenantUpdateInfo = exchange.getBody();
+        assertTrue(tenantUpdateInfo.getTenantId() != null);
+        assertTrue(tenantUpdateInfo.getTenantSecret() != null);
+        assertEquals(10, tenantUpdateInfo.getSuccessfullyIndexed().intValue());
+        assertTrue(tenantUpdateInfo.getFailed().isEmpty());
+
+        // search in updated index
+        Thread.sleep(13000);
+//        LOG.info("tenantId: " + tenantIdFromCreation);
+//        final ResponseEntity<Hits> hitFromTenant = caller.exchange(SearchController.ENDPOINT + "?query=Fahrplanänderungen&tenantId=" + tenantIdFromCreation, HttpMethod.GET, null, Hits.class);
+//        assertEquals(HttpStatus.OK, hitFromTenant.getStatusCode());
+//        assertEquals(1, hitFromTenant.getBody().getResults().size());
+//        assertEquals(tenantIdFromCreation, hitFromTenant.getBody().getResults().get(0).getTenant());
+//        assertTrue(hitFromTenant.getBody().getResults().get(0).getBody().contains("Fahrplanänderungen"));
+//        assertNull(hitFromTenant.getBody().getResults().get(0).getTenantSecret());
+//        assertTrue(hitFromTenant.getBody().getResults().get(0).getUrl().isAbsolute());
     }
 
     // TODO https for feeds does not work yet, do not use URL class
