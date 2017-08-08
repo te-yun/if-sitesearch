@@ -28,6 +28,9 @@ public class TenantCreation implements Serializable {
     private List<UUID> documents;
     private List<URI> failed;
 
+    private TenantCreation() {
+    }
+
     public TenantCreation(UUID tenantId, UUID tenantSecret, int successfullyIndexed, List<UUID> documents, List<URI> failedToIndex) {
         this.tenantId = tenantId;
         this.tenantSecret = tenantSecret;
