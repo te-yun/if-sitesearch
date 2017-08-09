@@ -18,6 +18,7 @@ package de.intrafind.sitesearch.integration;
 
 import de.intrafind.sitesearch.dto.Site;
 import de.intrafind.sitesearch.dto.Tenant;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -154,6 +155,7 @@ public class SiteTest {
         });
     }
 
+    @Ignore
     @Test
     public void importFeedAndUpdate() throws Exception {
         // create index
@@ -183,16 +185,16 @@ public class SiteTest {
     private void tryDeletionOfSites(UUID tenantIdFromCreation) {
         final ResponseEntity<List> fetchAll = caller.exchange(ENDPOINT + "?tenantId=" + tenantIdFromCreation, HttpMethod.GET, null, List.class);
         assertTrue(HttpStatus.OK.equals(fetchAll.getStatusCode()));
-        List sites = fetchAll.getBody();
+        List<UUID> sites = (List<UUID>) (List<?>) fetchAll.getBody();
         assertTrue(1 < sites.size());
         int siteCountBeforeDeletion = sites.size();
-//        sites.forEach(uuid -> {
-//            LOG.info("uuid>>>>: " + uuid.toString());
-//            final ResponseEntity<ResponseEntity> deletion = caller.exchange(ENDPOINT + "/"+((UUID)uuid).toString(), HttpMethod.DELETE, null, ResponseEntity.class);
-//            assertEquals(HttpStatus.NO_CONTENT, deletion.getStatusCode());
-//            assertNull(deletion.getBody());
-//        });
-//        assertTrue(siteCountBeforeDeletion < sites.size());
+        sites.forEach(uuid -> {
+            LOG.info("uuid>>>>: " + uuid.toString());
+            final ResponseEntity<ResponseEntity> deletion = caller.exchange(ENDPOINT + "/" + uuid.toString(), HttpMethod.DELETE, null, ResponseEntity.class);
+            assertEquals(HttpStatus.NO_CONTENT, deletion.getStatusCode());
+            assertNull(deletion.getBody());
+        });
+        assertTrue(siteCountBeforeDeletion < sites.size());
     }
 
     private Tenant validateTenantSummary(ResponseEntity<Tenant> anotherFeedReplacement, int indexEntriesCount) {
