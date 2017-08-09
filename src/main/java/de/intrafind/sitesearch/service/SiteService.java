@@ -112,7 +112,8 @@ public class SiteService {
             if (!fetchedTenantSecret.isPresent()) { // tenant does not exist
                 return Optional.empty();
             } else if (tenantSecret.equals(fetchedTenantSecret.get())) { // authorized
-                updateIndex(tenantIdToUse);
+//                updateIndex(tenantIdToUse); // TODO implement updateIndex(tenantIdToUse)
+                updateIndex(tenantIdToUse); // TODO implement updateIndex(tenantIdToUse)
             } else { // unauthorized
                 return Optional.empty();
             }

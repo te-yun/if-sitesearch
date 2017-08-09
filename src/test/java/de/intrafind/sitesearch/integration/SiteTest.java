@@ -173,8 +173,8 @@ public class SiteTest {
                         + "&tenantId=" + tenantIdFromCreation + "&tenantSecret=" + tenantSecretFromCreation,
                 HttpMethod.PUT, null, Tenant.class);
         final Tenant tenantUpdate = validateTenantSummary(anotherFeedReplacement, 25);
-//
-//        validateSites(tenantUpdate);
+
+        validateSites(tenantUpdate);
     }
 
     private Tenant validateTenantSummary(ResponseEntity<Tenant> anotherFeedReplacement, int indexEntriesCount) {
