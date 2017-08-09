@@ -125,22 +125,22 @@ public class SiteTest {
         assertEquals(updatedSite, updated.getBody());
     }
 
-//    @Test
-//    public void importFeed() throws Exception {
-//        final ResponseEntity<Tenant> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/fahrplanaenderungen/detail/rss.xml", HttpMethod.PUT, null, Tenant.class);
-//        final Tenant creation = validateTenantSummary(exchange, 10);
-//
-//        validateSites(creation);
-//    }
-//
-//    @Test
-//    public void importFeedAndReadSingleSite() throws Exception {
-//        final ResponseEntity<Tenant> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml", HttpMethod.PUT, null, Tenant.class);
-//        final Tenant creation = validateTenantSummary(exchange, 25);
-//
-//        LOG.info("tenantId: " + creation.getTenantId());
-//        validateSites(creation);
-//    }
+    @Test
+    public void importFeed() throws Exception {
+        final ResponseEntity<Tenant> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/fahrplanaenderungen/detail/rss.xml", HttpMethod.PUT, null, Tenant.class);
+        final Tenant creation = validateTenantSummary(exchange, 10);
+
+        validateSites(creation);
+    }
+
+    @Test
+    public void importFeedAndReadSingleSite() throws Exception {
+        final ResponseEntity<Tenant> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml", HttpMethod.PUT, null, Tenant.class);
+        final Tenant creation = validateTenantSummary(exchange, 25);
+
+        LOG.info("tenantId: " + creation.getTenantId());
+        validateSites(creation);
+    }
 
     private void validateSites(Tenant tenant) {
         tenant.getDocuments().forEach(documentId -> {
@@ -168,13 +168,13 @@ public class SiteTest {
         LOG.info("tenantSecretFromCreation: " + tenantSecretFromCreation);
 
         // update index
-        final ResponseEntity<Tenant> anotherFeedReplacement = caller.exchange(
-                ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
-                        + "&tenantId=" + tenantIdFromCreation + "&tenantSecret=" + tenantSecretFromCreation,
-                HttpMethod.PUT, null, Tenant.class);
-        final Tenant tenantUpdate = validateTenantSummary(anotherFeedReplacement, 25);
-
-        validateSites(tenantUpdate);
+//        final ResponseEntity<Tenant> anotherFeedReplacement = caller.exchange(
+//                ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
+//                        + "&tenantId=" + tenantIdFromCreation + "&tenantSecret=" + tenantSecretFromCreation,
+//                HttpMethod.PUT, null, Tenant.class);
+//        final Tenant tenantUpdate = validateTenantSummary(anotherFeedReplacement, 25);
+//
+//        validateSites(tenantUpdate);
     }
 
     private Tenant validateTenantSummary(ResponseEntity<Tenant> anotherFeedReplacement, int indexEntriesCount) {
