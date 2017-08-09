@@ -1,4 +1,5 @@
 generated_tests/
+config.json
 
 /data
 *.jks
