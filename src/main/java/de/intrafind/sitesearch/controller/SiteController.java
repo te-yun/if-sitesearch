@@ -72,11 +72,11 @@ public class SiteController {
     }
 
     /**
-     * Inserts a site into index. TODO should be a PUT method as it is idempotent
+     * Inserts a site into index. 
      *
      * @param site to be indexed
      */
-    @RequestMapping(path = "{id}", method = RequestMethod.POST)
+    @RequestMapping(path = "{id}", method = RequestMethod.PUT)
     Site index(
             @PathVariable("id") UUID id,
             @RequestBody Site site
