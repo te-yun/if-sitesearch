@@ -36,18 +36,27 @@ public class SearchService {
     private static final Logger LOG = LoggerFactory.getLogger(SearchService.class);
     private final RestTemplate call = new RestTemplate();
 
-    private Search search = IfinderCoreClient.newHessianClient(Search.class, Application.I_FINDER_CORE + "/search");
+    private Search searchService = IfinderCoreClient.newHessianClient(Search.class, Application.I_FINDER_CORE + "/search");
 
     public Hits search(String query, String tenantId) {
-//        com.intrafind.api.search.Hits hits = search.search(".*");
-        com.intrafind.api.search.Hits hits = search.search(query, Search.HITS_LIST_SIZE, 5_000);
-//        com.intrafind.api.search.Hits hits = search.search(query);
+        com.intrafind.api.search.Hits hits = searchService.search(
+                query + " AND " + Fields.TENANT + ":" + tenantId,
+
+                Search.RETURN_FIELDS, Fields.BODY + "," + Fields.TITLE + "," + Fields.URL + "," + Fields.TENANT,
+
+                Search.RETURN_TEASER_FIELDS, Fields.BODY,
+                Search.RETURN_TEASER_COUNT, 1,
+                Search.RETURN_TEASER_SIZE, 200,
+
+                Search.HITS_LIST_SIZE, 1_000
+        );
 
         LOG.info("query: " + query);
         List<Site> siteDocuments = new ArrayList<>();
-        hits.getDocuments().stream()
+        hits.getDocuments()
+//                .stream()
                 // TODO introduce the tenant filter much earlier, at 9605 service level
-                .filter(document -> tenantId.equals(document.get(Fields.TENANT)))
+//                .filter(document -> tenantId.equals(document.get(Fields.TENANT)))
                 .forEach(document -> {
                     Site site = new Site();
                     site.setId(document.getId());

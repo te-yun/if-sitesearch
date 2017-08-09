@@ -184,16 +184,16 @@ public class SiteTest {
     private void tryDeletionOfSites(UUID tenantIdFromCreation) {
         final ResponseEntity<List> fetchAll = caller.exchange(ENDPOINT + "?tenantId=" + tenantIdFromCreation, HttpMethod.GET, HttpEntity.EMPTY, List.class);
         assertTrue(HttpStatus.OK.equals(fetchAll.getStatusCode()));
-        List<UUID> sites = (List<UUID>) (List<?>) fetchAll.getBody();
+        List<String> sites = fetchAll.getBody();
         assertTrue(1 < sites.size());
         int siteCountBeforeDeletion = sites.size();
-//        sites.forEach(uuid -> {
-//            LOG.info("uuid>>>>: " + uuid.toString());
-//            final ResponseEntity<ResponseEntity> deletion = caller.exchange(ENDPOINT + "/" + uuid.toString(), HttpMethod.DELETE, HttpEntity.EMPTY, ResponseEntity.class);
-//            assertEquals(HttpStatus.NO_CONTENT, deletion.getStatusCode());
-//            assertNull(deletion.getBody());
-//        });
-        assertTrue(siteCountBeforeDeletion < sites.size());
+        sites.forEach(uuid -> {
+            LOG.info("uuid: " + uuid);
+            final ResponseEntity<ResponseEntity> deletion = caller.exchange(ENDPOINT + "/" + uuid, HttpMethod.DELETE, HttpEntity.EMPTY, ResponseEntity.class);
+            assertEquals(HttpStatus.NO_CONTENT, deletion.getStatusCode());
+            assertNull(deletion.getBody());
+        });
+        LOG.info("siteCountBeforeDeletion: " + siteCountBeforeDeletion);
     }
 
     private Tenant validateTenantSummary(ResponseEntity<Tenant> anotherFeedReplacement, int indexEntriesCount) {

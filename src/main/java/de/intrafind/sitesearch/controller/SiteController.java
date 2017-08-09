@@ -81,6 +81,7 @@ public class SiteController {
             @PathVariable("id") UUID id,
             @RequestBody Site site
     ) {
+        // TODO make sure that an existing site is actually updated
         return service.index(id, site);
     }
 
