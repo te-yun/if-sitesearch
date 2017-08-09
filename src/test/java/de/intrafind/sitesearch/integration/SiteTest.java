@@ -168,11 +168,11 @@ public class SiteTest {
         LOG.info("tenantSecretFromCreation: " + tenantSecretFromCreation);
 
         // update index
-//        final ResponseEntity<Tenant> anotherFeedReplacement = caller.exchange(
-//                ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
-//                        + "&tenantId=" + tenantIdFromCreation + "&tenantSecret=" + tenantSecretFromCreation,
-//                HttpMethod.PUT, null, Tenant.class);
-//        final Tenant tenantUpdate = validateTenantSummary(anotherFeedReplacement, 25);
+        final ResponseEntity<Tenant> anotherFeedReplacement = caller.exchange(
+                ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
+                        + "&tenantId=" + tenantIdFromCreation + "&tenantSecret=" + tenantSecretFromCreation,
+                HttpMethod.PUT, null, Tenant.class);
+        final Tenant tenantUpdate = validateTenantSummary(anotherFeedReplacement, 25);
 //
 //        validateSites(tenantUpdate);
     }
