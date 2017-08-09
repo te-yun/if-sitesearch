@@ -48,7 +48,7 @@ public class SiteService {
     private Search searchService = IfinderCoreClient.newHessianClient(Search.class, Application.I_FINDER_CORE + "/search");
     private Index indexService = IfinderCoreClient.newHessianClient(Index.class, Application.I_FINDER_CORE + "/index");
 
-    public Site index(UUID id, Site site) {
+    public Optional<Site> index(UUID id, Site site) {
         Document indexable = new Document(id.toString());
         indexable.set(Fields.BODY, site.getBody());
         indexable.set(Fields.TITLE, site.getTitle());
@@ -87,17 +87,22 @@ public class SiteService {
         }
     }
 
-    public Site fetchById(String id) {
+    public Optional<Site> fetchById(String id) {
         Optional<Document> found = indexService.fetch(Index.ALL, id).stream().findAny();
 
         if (found.isPresent()) {
             Document foundDocument = found.get();
-            Site representationOfFoundDocument = new Site(UUID.fromString(foundDocument.get(Fields.TENANT)), null, foundDocument.get(Fields.TITLE), foundDocument.get(Fields.BODY), URI.create(foundDocument.get(Fields.URL)));
-            representationOfFoundDocument.setId(foundDocument.getId());
+            Site representationOfFoundDocument = new Site(
+                    UUID.fromString(foundDocument.getId()),
+                    UUID.fromString(foundDocument.get(Fields.TENANT)), null,
+                    foundDocument.get(Fields.TITLE), foundDocument.get(Fields.BODY),
+                    URI.create(foundDocument.get(Fields.URL))
+            );
+//            representationOfFoundDocument.setId(UUID.fromString(foundDocument.getId()));
 
-            return representationOfFoundDocument;
+            return Optional.of(representationOfFoundDocument);
         } else {
-            return new Site();
+            return Optional.empty();
         }
     }
 
@@ -139,13 +144,20 @@ public class SiteService {
                 LOG.info("link: " + entry.getLink());
                 LOG.info("description: " + entry.getDescription().getValue());
 
-                Site toIndex = new Site(tenantId, tenantSecret, entry.getTitle(), entry.getDescription().getValue(), URI.create(entry.getLink()));
+                Site toIndex = new Site(
+                        null,
+                        tenantId, tenantSecret,
+                        entry.getTitle(), entry.getDescription().getValue(),
+                        URI.create(entry.getLink())
+                );
                 final UUID siteId = UUID.randomUUID();
-                Site indexed = index(siteId, toIndex);
-                if (indexed != null && !indexed.getId().isEmpty()) {
+                Optional<Site> indexed = index(siteId, toIndex);
+//                if (indexed != null && indexed.getId() != null) {
+                if (indexed.isPresent()) {
                     successfullyIndexed.incrementAndGet();
                     documents.add(siteId);
-                    LOG.info("successfully-indexed: " + indexed.getId());
+//                    LOG.info("successfully-indexed: " + indexed.getId());
+                    LOG.info("successfully-indexed: " + indexed.get().getId());
                 } else {
                     failedToIndex.add(URI.create(entry.getLink()));
                     LOG.warn("unsuccessfully-indexed:" + entry.getLink());

@@ -22,17 +22,18 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class Site implements Serializable {
-    private String id;
+    private UUID id;
     private UUID tenant;
     private UUID tenantSecret;
     private String title;
     private String body;
     private URI url;
 
-    public Site() {
+    private Site() {
     }
 
-    public Site(UUID tenant, UUID tenantSecret, String title, String body, URI url) {
+    public Site(UUID id, UUID tenant, UUID tenantSecret, String title, String body, URI url) {
+        this.id = id;
         this.tenant = tenant;
         this.tenantSecret = tenantSecret;
         this.title = title;
@@ -80,11 +81,11 @@ public class Site implements Serializable {
         this.body = body;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -94,15 +95,15 @@ public class Site implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Site site = (Site) o;
-        return Objects.equals(tenant, site.tenant) &&
+        return Objects.equals(id, site.id) &&
+                Objects.equals(tenant, site.tenant) &&
                 Objects.equals(title, site.title) &&
-                Objects.equals(url, site.url) &&
-                Objects.equals(id, site.id) &&
-                Objects.equals(body, site.body);
+                Objects.equals(body, site.body) &&
+                Objects.equals(url, site.url);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(tenant, title, url, id, body);
+        return Objects.hash(id, tenant, title, body, url);
     }
 }

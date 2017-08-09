@@ -53,10 +53,15 @@ public class SiteController {
      * @return site as it is present in index
      */
     @RequestMapping(method = RequestMethod.GET, path = "{id}")
-    Site fetchById(
+    ResponseEntity<Site> fetchById(
             @PathVariable("id") String id
     ) {
-        return service.fetchById(id);
+        Optional<Site> fetched = service.fetchById(id);
+        if (fetched.isPresent()) {
+            return ResponseEntity.ok(fetched.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -72,17 +77,23 @@ public class SiteController {
     }
 
     /**
-     * Inserts a site into index. 
+     * Inserts a site into index.
      *
      * @param site to be indexed
      */
     @RequestMapping(path = "{id}", method = RequestMethod.PUT)
-    Site index(
+    ResponseEntity<Site> index(
             @PathVariable("id") UUID id,
             @RequestBody Site site
     ) {
         // TODO make sure that an existing site is actually updated
-        return service.index(id, site);
+//        return service.index(id, site);
+        Optional<Site> indexed = service.index(id, site);
+        if (indexed.isPresent()) {
+            return ResponseEntity.ok(indexed.get());
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @RequestMapping(path = "rss", method = RequestMethod.PUT)

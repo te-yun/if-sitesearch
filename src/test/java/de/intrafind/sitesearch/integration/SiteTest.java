@@ -46,21 +46,27 @@ public class SiteTest {
     private TestRestTemplate caller;
     private static final UUID TEST_TENANT = UUID.fromString("1a6715d9-119f-48d1-9329-e8763273bbea");
 
-    private static Site buildSite(String id) {
-        Site simple = new Site();
-        simple.setUrl(URI.create("https://www.intrafind.de/cloud"));
-        simple.setTenant(TEST_TENANT);
-        simple.setBody("Sitesearch is IntraFind's new SaaS solution.");
-        simple.setTitle("Cloud Solution");
-        simple.setId(id); // is ignored when persisted
+    private static Site buildSite(UUID id) {
+        Site simple = new Site(
+                id,
+                TEST_TENANT, UUID.randomUUID(),
+                "Cloud Solution", "Sitesearch is IntraFind's new SaaS solution.",
+                URI.create("https://sitesearch.cloud")
+        );
+//        simple.setUrl(URI.create("https://www.intrafind.de/cloud"));
+//        simple.setTenant(TEST_TENANT);
+//        simple.setTenantSecret(UUID.randomUUID());
+//        simple.setBody("Sitesearch is IntraFind's new SaaS solution.");
+//        simple.setTitle("Cloud Solution");
+//        simple.setId(UUID.randomUUID()); // is ignored when persisted
         return simple;
     }
 
     @Test
     public void simpleIndexWithContentInside() throws Exception {
         UUID siteId = UUID.fromString("dd29d1ee-7912-11e7-96e0-025041000001");
-        Site simple = buildSite(siteId.toString());
-        final ResponseEntity<Site> actual = caller.exchange(ENDPOINT + "/" + siteId.toString(), HttpMethod.PUT, new HttpEntity<>(simple), Site.class);
+        Site simple = buildSite(siteId);
+        final ResponseEntity<Site> actual = caller.exchange(ENDPOINT + "/" + siteId, HttpMethod.PUT, new HttpEntity<>(simple), Site.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertEquals(simple, actual.getBody());
@@ -68,15 +74,21 @@ public class SiteTest {
 
     @Test
     public void assureIrrelevancyOfSiteIdInBody() throws Exception {
-        String relevantSiteId = "f55d093a-7911-11e7-8fc8-025041000001";
-        String irrelevantSiteId = "any-value";
+        UUID relevantSiteId = UUID.fromString("f55d093a-7911-11e7-8fc8-025041000001");
+        UUID irrelevantSiteId = UUID.randomUUID();
 
-        Site simple = new Site();
-        simple.setUrl(URI.create("https://www.intrafind.de/saas"));
-        simple.setTenant(TEST_TENANT);
-        simple.setBody("Sitesearch is IntraFind's new SaaS solution.");
-        simple.setTitle("SaaS Solution");
-        simple.setId(irrelevantSiteId);
+        Site simple = new Site(
+                irrelevantSiteId,
+                TEST_TENANT, UUID.randomUUID(),
+                "SaaS Solution", "Sitesearch is IntraFind's new SaaS solution.",
+                URI.create("https://sitesearch.cloud/tos.html")
+        );
+//        Site simple = new Site();
+//        simple.setUrl(URI.create("https://www.intrafind.de/saas"));
+//        simple.setTenant(TEST_TENANT);
+//        simple.setBody("Sitesearch is IntraFind's new SaaS solution.");
+//        simple.setTitle("SaaS Solution");
+//        simple.setId(irrelevantSiteId);
 
         ResponseEntity<Site> actual = caller.exchange(ENDPOINT + "/" + relevantSiteId, HttpMethod.PUT, new HttpEntity<>(simple), Site.class);
 
@@ -88,9 +100,9 @@ public class SiteTest {
 
     @Test
     public void fetchById() throws Exception {
-        final String yingId = "265fff4c-7912-11e7-8e0d-025041000001";
+        final UUID yingId = UUID.fromString("265fff4c-7912-11e7-8e0d-025041000001");
         Site ying = buildSite(yingId);
-        final String yangId = "25585162-7912-11e7-a8c6-025041000001";
+        final UUID yangId = UUID.fromString("25585162-7912-11e7-a8c6-025041000001");
         Site yang = buildSite(yangId);
 
         final ResponseEntity<Site> actualYing = caller.exchange(ENDPOINT + "/" + yingId, HttpMethod.PUT, new HttpEntity<>(ying), Site.class);
@@ -113,7 +125,7 @@ public class SiteTest {
 
     @Test
     public void updatedSite() throws Exception {
-        String siteId = "2c269452-7914-11e7-a634-025041000001";
+        UUID siteId = UUID.fromString("2c269452-7914-11e7-a634-025041000001");
         Site updatable = buildSite(siteId);
         final ResponseEntity<Site> create = caller.exchange(ENDPOINT + "/" + siteId, HttpMethod.PUT, new HttpEntity<>(updatable), Site.class);
         assertEquals(HttpStatus.OK, create.getStatusCode());
@@ -184,6 +196,7 @@ public class SiteTest {
     private void tryDeletionOfSites(UUID tenantIdFromCreation) {
         final ResponseEntity<List> fetchAll = caller.exchange(ENDPOINT + "?tenantId=" + tenantIdFromCreation, HttpMethod.GET, HttpEntity.EMPTY, List.class);
         assertTrue(HttpStatus.OK.equals(fetchAll.getStatusCode()));
+        @SuppressWarnings("unchecked")
         List<String> sites = fetchAll.getBody();
         assertTrue(1 < sites.size());
         int siteCountBeforeDeletion = sites.size();

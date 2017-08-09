@@ -58,13 +58,19 @@ public class SearchService {
                 // TODO introduce the tenant filter much earlier, at 9605 service level
 //                .filter(document -> tenantId.equals(document.get(Fields.TENANT)))
                 .forEach(document -> {
-                    Site site = new Site();
-                    site.setId(document.getId());
-                    site.setUrl(URI.create(document.get(Fields.URL)));
+                    Site site = new Site(
+                            UUID.fromString(document.getId()),
+                            UUID.fromString(document.get(Fields.TENANT)), null,
+                            document.get(Fields.TITLE),
+                            document.get(Fields.BODY),
+                            URI.create(document.get(Fields.URL))
+                    );
+//                    site.setId(document.getId());
+//                    site.setUrl(URI.create(document.get(Fields.URL)));
                     // TODO remove tenant INFO as it is not relevant here, consider separate DTO
-                    site.setTenant(UUID.fromString(document.get(Fields.TENANT)));
-                    site.setBody(document.get(Fields.BODY));
-                    site.setTitle(document.get(Fields.TITLE));
+//                    site.setTenant(UUID.fromString(document.get(Fields.TENANT)));
+//                    site.setBody(document.get(Fields.BODY));
+//                    site.setTitle(document.get(Fields.TITLE));
 
                     siteDocuments.add(site);
                 });
