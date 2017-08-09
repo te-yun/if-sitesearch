@@ -21,15 +21,9 @@
 
 <script>
     const setFeedUrl = function () {
-        console.info("location.href: " + location.href)
 //        document.getElementById("feedUrl").setAttribute("value", window.location.href);
     };
-    console.info(location.href);
-    console.info(window.location.href);
-    console.info(document.getElementById("feedUrl"));
 
-    //    http://www.mvv-muenchen.de/de/aktuelles/meldungen/detail/rss.xml
-    //    http://www.mvv-muenchen.de/de/aktuelles/fahrplanaenderungen/detail/rss.xml
     const triggerFirstUsageOwnership = function (feedUrl) {
         const xhr = new XMLHttpRequest();
         xhr.open("PUT", "http://sitesearch.cloud/sites/rss?feedUrl=" + feedUrl);
@@ -49,7 +43,7 @@
 
     .wrapper {
         display: grid;
-        grid-template-columns: 100px 300px;
+        grid-template-columns: 100px 400px;
     }
 
     label, input {
@@ -59,7 +53,7 @@
     #index {
         text-align: center;
         font-weight: bold;
-        width: 400px;
+        width: 500px;
     }
 </style>
 <body onload="setFeedUrl();">

@@ -40,7 +40,7 @@ public class SearchService {
 
     public Hits search(String query, String tenantId) {
 //        com.intrafind.api.search.Hits hits = search.search(".*");
-        com.intrafind.api.search.Hits hits = search.search(query, Search.HITS_LIST_SIZE, 500);
+        com.intrafind.api.search.Hits hits = search.search(query, Search.HITS_LIST_SIZE, 1_000);
 //        com.intrafind.api.search.Hits hits = search.search(query);
 
         LOG.info("query: " + query);

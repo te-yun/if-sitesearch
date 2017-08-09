@@ -60,6 +60,18 @@ public class SiteController {
         return service.fetchById(id);
     }
 
+    @RequestMapping(method = RequestMethod.GET)
+    ResponseEntity<List<UUID>> fetchAll(
+            @RequestParam(value = "tenantId") UUID tenantId
+    ) {
+        Optional<List<UUID>> allDocumentsOfTenant = service.fetchAllDocuments(tenantId);
+        if (allDocumentsOfTenant.isPresent()) {
+            return ResponseEntity.ok(allDocumentsOfTenant.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     /**
      * Inserts a site into index. TODO should be a PUT method as it is idempotent
      *
@@ -98,10 +110,11 @@ public class SiteController {
     )
     @ApiOperation(value = "Deletes a document from index", response = ApiResponses.class)
     void deleteById(
-            @ApiParam(value = "ID of a single document to delete", example = "AV1kx0NCAsVjD7bV7B17")
+            @ApiParam(value = "ID of a single document to delete", example = "5f2b9c2e-6071-4f30-8972-7781fac73726")
             @PathVariable(name = "documentId", required = false) String documentId
     ) {
         LOG.info("DELETE documentId = " + documentId);
+        service.delete(documentId);
     }
 
 //    /**

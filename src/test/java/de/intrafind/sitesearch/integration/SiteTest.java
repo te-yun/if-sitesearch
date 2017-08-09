@@ -130,7 +130,7 @@ public class SiteTest {
         final ResponseEntity<Tenant> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/fahrplanaenderungen/detail/rss.xml", HttpMethod.PUT, null, Tenant.class);
         final Tenant creation = validateTenantSummary(exchange, 10);
 
-        validate(creation);
+        validateSites(creation);
     }
 
     @Test
@@ -139,10 +139,10 @@ public class SiteTest {
         final Tenant creation = validateTenantSummary(exchange, 25);
 
         LOG.info("tenantId: " + creation.getTenantId());
-        validate(creation);
+        validateSites(creation);
     }
 
-    private void validate(Tenant tenant) {
+    private void validateSites(Tenant tenant) {
         tenant.getDocuments().forEach(documentId -> {
             final ResponseEntity<Site> fetchedById = caller.exchange(ENDPOINT + "/" + documentId, HttpMethod.GET, null, Site.class);
             assertTrue(HttpStatus.OK.equals(fetchedById.getStatusCode()));
@@ -171,7 +171,7 @@ public class SiteTest {
                 HttpMethod.PUT, null, Tenant.class);
         final Tenant tenantUpdate = validateTenantSummary(anotherFeedReplacement, 25);
 
-        validate(tenantUpdate);
+        validateSites(tenantUpdate);
     }
 
     private Tenant validateTenantSummary(ResponseEntity<Tenant> anotherFeedReplacement, int indexEntriesCount) {
@@ -184,6 +184,8 @@ public class SiteTest {
         assertTrue(tenantUpdate.getFailed().isEmpty());
         return tenantUpdate;
     }
+
+    // TODO single page update
 
     // TODO https for feeds does not work yet, do not use URL class
     // TODO check if a tenant has the total number of sites that Tenant reports

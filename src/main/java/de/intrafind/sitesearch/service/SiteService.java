@@ -60,7 +60,23 @@ public class SiteService {
         return fetchById(id.toString());
     }
 
+    public Optional<List<UUID>> fetchAllDocuments(UUID tenantId) {
+        // TODO only fetch ID info
+        Hits documentWithTenantSecret = searchService.search(Fields.TENANT + ":" + tenantId.toString(), Search.HITS_LIST_SIZE, 1_000);
+
+        if (documentWithTenantSecret.getDocuments().isEmpty()) {
+            return Optional.empty();
+        } else {
+            List<UUID> documents = new ArrayList<>();
+            documentWithTenantSecret.getDocuments().forEach(document -> {
+                documents.add(UUID.fromString(document.getId()));
+            });
+            return Optional.of(documents);
+        }
+    }
+
     private Optional<UUID> fetchTenantSecret(UUID tenantId) {
+        // TODO only fetch SECRET info
         Hits documentWithTenantSecret = searchService.search(Fields.TENANT + ":" + tenantId.toString(), Search.HITS_LIST_SIZE, 1);
 
         if (documentWithTenantSecret.getDocuments().isEmpty()) {
@@ -145,5 +161,9 @@ public class SiteService {
     private void updateIndex(UUID tenantId) {
 //        delete Index
 //        create Index
+    }
+
+    public void delete(String documentId) {
+
     }
 }
