@@ -31,6 +31,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 import static de.intrafind.sitesearch.controller.SiteController.ENDPOINT;
@@ -130,7 +131,7 @@ public class SiteTest {
         final ResponseEntity<Tenant> exchange = caller.exchange(ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/fahrplanaenderungen/detail/rss.xml", HttpMethod.PUT, null, Tenant.class);
         final Tenant creation = validateTenantSummary(exchange, 10);
 
-        validateSites(creation);
+        validateUpdatedSites(creation);
     }
 
     @Test
@@ -139,10 +140,10 @@ public class SiteTest {
         final Tenant creation = validateTenantSummary(exchange, 25);
 
         LOG.info("tenantId: " + creation.getTenantId());
-        validateSites(creation);
+        validateUpdatedSites(creation);
     }
 
-    private void validateSites(Tenant tenant) {
+    private void validateUpdatedSites(Tenant tenant) {
         tenant.getDocuments().forEach(documentId -> {
             final ResponseEntity<Site> fetchedById = caller.exchange(ENDPOINT + "/" + documentId, HttpMethod.GET, null, Site.class);
             assertTrue(HttpStatus.OK.equals(fetchedById.getStatusCode()));
@@ -174,7 +175,24 @@ public class SiteTest {
                 HttpMethod.PUT, null, Tenant.class);
         final Tenant tenantUpdate = validateTenantSummary(anotherFeedReplacement, 25);
 
-        validateSites(tenantUpdate);
+        validateUpdatedSites(tenantUpdate);
+
+        tryDeletionOfSites(tenantIdFromCreation);
+    }
+
+    private void tryDeletionOfSites(UUID tenantIdFromCreation) {
+        final ResponseEntity<List> fetchAll = caller.exchange(ENDPOINT + "?tenantId=" + tenantIdFromCreation, HttpMethod.GET, null, List.class);
+        assertTrue(HttpStatus.OK.equals(fetchAll.getStatusCode()));
+        List sites = fetchAll.getBody();
+        assertTrue(1 < sites.size());
+        int siteCountBeforeDeletion = sites.size();
+//        sites.forEach(uuid -> {
+//            LOG.info("uuid>>>>: " + uuid.toString());
+//            final ResponseEntity<ResponseEntity> deletion = caller.exchange(ENDPOINT + "/"+((UUID)uuid).toString(), HttpMethod.DELETE, null, ResponseEntity.class);
+//            assertEquals(HttpStatus.NO_CONTENT, deletion.getStatusCode());
+//            assertNull(deletion.getBody());
+//        });
+//        assertTrue(siteCountBeforeDeletion < sites.size());
     }
 
     private Tenant validateTenantSummary(ResponseEntity<Tenant> anotherFeedReplacement, int indexEntriesCount) {

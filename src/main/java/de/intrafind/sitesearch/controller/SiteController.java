@@ -21,7 +21,6 @@ import de.intrafind.sitesearch.dto.Tenant;
 import de.intrafind.sitesearch.service.SiteService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,21 +99,20 @@ public class SiteController {
     }
 
     /**
-     * Deletes sites from the index.
+     * Deletes site from the index.
      *
-     * @param documentId of a single document to delete
+     * @param id of a single document to delete
      */
     @RequestMapping(method = RequestMethod.DELETE, path = "{id}")
-    @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "IDs of not deleted documents", response = List.class, reference = "my-reference")}
-    )
     @ApiOperation(value = "Deletes a document from index", response = ApiResponses.class)
-    void deleteById(
+    ResponseEntity deleteById(
             @ApiParam(value = "ID of a single document to delete", example = "5f2b9c2e-6071-4f30-8972-7781fac73726")
-            @PathVariable(name = "documentId", required = false) String documentId
+            @PathVariable(name = "id") UUID id
     ) {
-        LOG.info("DELETE documentId = " + documentId);
-        service.delete(documentId);
+        LOG.info("delete-event" + id);
+
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 //    /**

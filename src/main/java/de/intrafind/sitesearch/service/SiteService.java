@@ -102,32 +102,31 @@ public class SiteService {
     }
 
     public Optional<Tenant> indexFeed(URI feedUrl, UUID tenantId, UUID tenantSecret) {
-        UUID tenantIdToUse;
-        UUID tenantSecretToUse;
+//        final UUID tenantIdToUse;
+//        final UUID tenantSecretToUse;
         if (tenantId != null && tenantSecret != null) { // credentials are provided as a tuple only
-            tenantIdToUse = tenantId;
-            tenantSecretToUse = tenantSecret;
+//            tenantIdToUse = tenantId;
+//            tenantSecretToUse = tenantSecret;
 
             final Optional<UUID> fetchedTenantSecret = fetchTenantSecret(tenantId);
             if (!fetchedTenantSecret.isPresent()) { // tenant does not exist
                 return Optional.empty();
             } else if (tenantSecret.equals(fetchedTenantSecret.get())) { // authorized
 //                updateIndex(tenantIdToUse); // TODO implement updateIndex(tenantIdToUse)
-                updateIndex(tenantIdToUse); // TODO implement updateIndex(tenantIdToUse)
+                return updateIndex(feedUrl, tenantId, tenantSecret);
             } else { // unauthorized
                 return Optional.empty();
             }
         } else if (tenantId == null ^ tenantSecret == null) { // it does not make any sense if only one of the parameters is set
             return Optional.empty();
         } else { // consider request as first-usage-ownership-granting request, create new index
-            tenantIdToUse = UUID.randomUUID();
-            tenantSecretToUse = UUID.randomUUID();
+//            tenantIdToUse = UUID.randomUUID();
+//            tenantSecretToUse = UUID.randomUUID();
+            return updateIndex(feedUrl, UUID.randomUUID(), UUID.randomUUID());
         }
-
-        return createNewIndex(feedUrl, tenantIdToUse, tenantSecretToUse);
     }
 
-    private Optional<Tenant> createNewIndex(URI feedUrl, UUID tenantId, UUID tenantSecret) {
+    private Optional<Tenant> updateIndex(URI feedUrl, UUID tenantId, UUID tenantSecret) {
         LOG.info("URL-received: " + feedUrl);
         final AtomicInteger successfullyIndexed = new AtomicInteger(0);
         final List<UUID> documents = new ArrayList<>();
@@ -160,11 +159,13 @@ public class SiteService {
     }
 
     private void updateIndex(UUID tenantId) {
-//        delete Index
-//        create Index
+//        delete complete index & create a new index under the same tenantId
+//        vs
+//        update existing sites based on their url, add new sites that are not part of the index
     }
 
-    public void delete(String documentId) {
-
+    public void delete(UUID documentId) {
+        // just assume everything works... right?
+        indexService.delete(documentId.toString());
     }
 }
