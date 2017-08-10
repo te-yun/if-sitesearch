@@ -1,7 +1,7 @@
 {
   "ajax": {
-    "baseUrl": "http://sitesearch.cloud",
-    "endpointSearch": "/search",
+    "baseUrl": "http://localhost:8001/stub/",
+    "endpointSearch": "api/search",
     "start": 0,
     "limit": 20
   },
@@ -51,7 +51,7 @@
       },
       "resultlist": {
         "scrollContainer": "window",
-        "scrollReloadsBeforeButtonAppears": -1,
+        "scrollReloadsBeforeButtonAppears" : -1,
         "templates": {
           "resultlistWrapper": "app/templates/default/resultlist/resultlist-wrapper.hbs",
           "resultlistHeader": "app/templates/default/resultlist/resultlist-header.hbs",
@@ -79,9 +79,7 @@
             "title": "ifs.category.documents",
             "query": {
               "filter": {
-                "++_str.connector": [
-                  "filesystem"
-                ]
+                "++_str.connector": [ "filesystem" ]
               }
             }
           },
@@ -89,9 +87,7 @@
             "title": "ifs.category.people",
             "query": {
               "filter": {
-                "++_str.connector": [
-                  "people"
-                ]
+                "++_str.connector": ["people"]
               }
             }
           },
@@ -99,12 +95,10 @@
             "title": "ifs.category.websites",
             "query": {
               "filter": {
-                "++_str.connector": [
-                  "crawler"
-                ]
+                "++_str.connector": ["crawler"]
               }
             },
-            "facetWhitelist": [
+            "facetWhitelist":[
               "_facet.author"
             ]
           },
@@ -112,36 +106,30 @@
             "title": "ifs.category.images",
             "query": {
               "filter": {
-                "++_str.connector": [
-                  "images"
-                ]
+                "++_str.connector": ["images"]
               }
             },
-            "facetWhitelist": [
+            "facetWhitelist":[
             ]
           },
           "bestbets": {
             "title": "ifs.category.bestbets",
             "query": {
               "filter": {
-                "++_str.connector": [
-                  "bestbets"
-                ]
+                "++_str.connector": ["bestbets"]
               }
             },
-            "facetWhitelist": [
+            "facetWhitelist":[
             ]
           },
           "confluence": {
             "title": "ifs.category.confluence",
             "query": {
               "filter": {
-                "++_str.connector": [
-                  "confluence"
-                ]
+                "++_str.connector": ["confluence"]
               }
             },
-            "facetWhitelist": [
+            "facetWhitelist":[
             ]
           }
         },
@@ -317,16 +305,10 @@
             "delay": 400,
             "minLength": 1,
             "searchOnClick": false,
-            "actionUrls": [
-              {
-                "name": "@portal1"
-              },
-              {
-                "name": "@portal2"
-              },
-              {
-                "name": "@portal3"
-              }
+            "actionUrls" : [
+              { "name": "@portal1" },
+              { "name": "@portal2"},
+              { "name": "@portal3" }
             ],
             "type": "actionable",
             "searchByAutocompleteSuggestion": false
@@ -341,8 +323,8 @@
     "js": []
   },
   "portalcode": {
-    "baseurl": "https://intrafind/myportal/deeplink/",
-    "minLength": 2
+  	"baseurl": "https://intrafind/myportal/deeplink/",
+  	"minLength" : 2
   },
   "langUrlPrefix": "data/language/",
   "iconPath": "img/filetypes",

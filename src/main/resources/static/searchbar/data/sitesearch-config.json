@@ -10,7 +10,7 @@
   },
   "components": {
     "searchbar": {
-      "templatesUrl": "",
+      "templatesUrl": "searchbar/data/quickfix.hbs",
       "inputMaxLength": 250,
       "typeaheadProps": {
         "maxItemPerGroup": 4,
@@ -89,7 +89,7 @@
         "resulttype": {
           "all": {
             "title": "ifs.category.all",
-            "hitTemplate": "app/templates/default/resultlist/default.hbs",
+            "hitTemplate": "facets-template",
             "showMenu": false
           },
           "crawler": {
