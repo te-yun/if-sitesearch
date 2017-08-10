@@ -77,7 +77,7 @@ public class SiteService {
 
     private Optional<UUID> fetchTenantSecret(UUID tenantId) {
         // TODO only fetch SECRET info
-        Hits documentWithTenantSecret = searchService.search(Fields.TENANT + ":" + tenantId.toString(), Search.HITS_LIST_SIZE, 1);
+        Hits documentWithTenantSecret = searchService.search(Fields.TENANT + ":" + tenantId, Search.HITS_LIST_SIZE, 1);
 
         if (documentWithTenantSecret.getDocuments().isEmpty()) {
             return Optional.empty();

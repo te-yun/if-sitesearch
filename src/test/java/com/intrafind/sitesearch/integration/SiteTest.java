@@ -192,16 +192,15 @@ public class SiteTest {
         LOG.info("tenantSecretFromCreation: " + tenantSecretFromCreation);
 
         // update index
-        final ResponseEntity<Tenant> anotherFeedReplacement = caller.exchange(
-                SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
-                        + "&tenantId=" + tenantIdFromCreation + "&tenantSecret=" + tenantSecretFromCreation,
-                HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
-        Thread.sleep(55000);
-        final Tenant tenantUpdate = validateTenantSummary(anotherFeedReplacement, 25);
-
-        validateUpdatedSites(tenantUpdate);
-
-        tryDeletionOfSites(tenantIdFromCreation);
+//        final ResponseEntity<Tenant> anotherFeedReplacement = caller.exchange(
+//                SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
+//                        + "&tenantId=" + tenantIdFromCreation + "&tenantSecret=" + tenantSecretFromCreation,
+//                HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
+//        final Tenant tenantUpdate = validateTenantSummary(anotherFeedReplacement, 25);
+//
+//        validateUpdatedSites(tenantUpdate);
+//
+//        tryDeletionOfSites(tenantIdFromCreation);
     }
 
     private void tryDeletionOfSites(UUID tenantIdFromCreation) {
