@@ -107,17 +107,13 @@ public class SiteService {
     }
 
     public Optional<Tenant> indexFeed(URI feedUrl, UUID tenantId, UUID tenantSecret) {
-//        final UUID tenantIdToUse;
-//        final UUID tenantSecretToUse;
         if (tenantId != null && tenantSecret != null) { // credentials are provided as a tuple only
-//            tenantIdToUse = tenantId;
-//            tenantSecretToUse = tenantSecret;
-
             final Optional<UUID> fetchedTenantSecret = fetchTenantSecret(tenantId);
             if (!fetchedTenantSecret.isPresent()) { // tenant does not exist
                 return Optional.empty();
             } else if (tenantSecret.equals(fetchedTenantSecret.get())) { // authorized
 //                updateIndex(tenantIdToUse); // TODO implement updateIndex(tenantIdToUse)
+                LOG.info("updating-feed: " + tenantId);
                 return updateIndex(feedUrl, tenantId, tenantSecret);
             } else { // unauthorized
                 return Optional.empty();
@@ -125,8 +121,6 @@ public class SiteService {
         } else if (tenantId == null ^ tenantSecret == null) { // it does not make any sense if only one of the parameters is set
             return Optional.empty();
         } else { // consider request as first-usage-ownership-granting request, create new index
-//            tenantIdToUse = UUID.randomUUID();
-//            tenantSecretToUse = UUID.randomUUID();
             return updateIndex(feedUrl, UUID.randomUUID(), UUID.randomUUID());
         }
     }
@@ -152,11 +146,9 @@ public class SiteService {
                 );
                 final UUID siteId = UUID.randomUUID();
                 Optional<Site> indexed = index(siteId, toIndex);
-//                if (indexed != null && indexed.getId() != null) {
                 if (indexed.isPresent()) {
                     successfullyIndexed.incrementAndGet();
                     documents.add(siteId);
-//                    LOG.info("successfully-indexed: " + indexed.getId());
                     LOG.info("successfully-indexed: " + indexed.get().getId());
                 } else {
                     failedToIndex.add(URI.create(entry.getLink()));
@@ -166,6 +158,7 @@ public class SiteService {
 
             return Optional.of(new Tenant(tenantId, tenantSecret, successfullyIndexed.get(), documents, failedToIndex));
         } catch (FeedException | IOException e) {
+            LOG.warn(e.getMessage());
             return Optional.empty();
         }
     }

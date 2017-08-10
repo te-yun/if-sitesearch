@@ -46,10 +46,10 @@ public class SiteTest {
     private TestRestTemplate caller;
     private static final UUID TEST_TENANT = UUID.fromString("1a6715d9-119f-48d1-9329-e8763273bbea");
 
-    private static Site buildSite(UUID id) {
+    private static Site buildSite(UUID id, UUID tenantSecret) {
         Site simple = new Site(
                 id,
-                TEST_TENANT, UUID.randomUUID(),
+                TEST_TENANT, tenantSecret,
                 "Cloud Solution", "Sitesearch is IntraFind's new SaaS solution.",
                 URI.create("https://sitesearch.cloud")
         );
@@ -65,7 +65,7 @@ public class SiteTest {
     @Test
     public void simpleIndexWithContentInside() throws Exception {
         UUID siteId = UUID.fromString("dd29d1ee-7912-11e7-96e0-025041000001");
-        Site simple = buildSite(siteId);
+        Site simple = buildSite(siteId, UUID.randomUUID());
         final ResponseEntity<Site> actual = caller.exchange(SiteController.ENDPOINT + "/" + siteId, HttpMethod.PUT, new HttpEntity<>(simple), Site.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
@@ -101,9 +101,9 @@ public class SiteTest {
     @Test
     public void fetchById() throws Exception {
         final UUID yingId = UUID.fromString("265fff4c-7912-11e7-8e0d-025041000001");
-        Site ying = buildSite(yingId);
+        Site ying = buildSite(yingId, UUID.randomUUID());
         final UUID yangId = UUID.fromString("25585162-7912-11e7-a8c6-025041000001");
-        Site yang = buildSite(yangId);
+        Site yang = buildSite(yangId, UUID.randomUUID());
 
         final ResponseEntity<Site> actualYing = caller.exchange(SiteController.ENDPOINT + "/" + yingId, HttpMethod.PUT, new HttpEntity<>(ying), Site.class);
         assertEquals(HttpStatus.OK, actualYing.getStatusCode());
@@ -126,17 +126,27 @@ public class SiteTest {
     @Test
     public void updatedSite() throws Exception {
         UUID siteId = UUID.fromString("2c269452-7914-11e7-a634-025041000001");
-        Site updatable = buildSite(siteId);
+        Site updatable = buildSite(siteId, UUID.randomUUID());
         final ResponseEntity<Site> create = caller.exchange(SiteController.ENDPOINT + "/" + siteId, HttpMethod.PUT, new HttpEntity<>(updatable), Site.class);
         assertEquals(HttpStatus.OK, create.getStatusCode());
         assertEquals(updatable, create.getBody());
 
-        Site updatedSite = buildSite(siteId);
+        Site updatedSite = buildSite(siteId, UUID.randomUUID());
         updatedSite.setBody("updated");
         final ResponseEntity<Site> updated = caller.exchange(SiteController.ENDPOINT + "/" + siteId, HttpMethod.PUT, new HttpEntity<>(updatedSite), Site.class);
         assertEquals(HttpStatus.OK, updated.getStatusCode());
         assertNotEquals(updatable, updated.getBody());
         assertEquals(updatedSite, updated.getBody());
+
+        updatedSite.setBody("no tenant secret provided");
+//        final ResponseEntity<Site> updated = caller.exchange(SiteController.ENDPOINT + "/" + siteId, HttpMethod.PUT, new HttpEntity<>(updatedSite), Site.class);
+//        assertEquals(HttpStatus.OK, updated.getStatusCode());
+//        assertNotEquals(updatable, updated.getBody());
+//        assertEquals(updatedSite, updated.getBody());
+
+        // TODO do not update site when tenantSecret is not correct
+        // TODO do not update site when tenantSecret is not provided
+        // TODO do not update site when tenantSecret is provided in payload
     }
 
     @Test
