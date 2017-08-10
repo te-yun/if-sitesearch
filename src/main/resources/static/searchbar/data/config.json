@@ -1,7 +1,7 @@
 {
   "ajax": {
-    "baseUrl": "http://ml-if-monster:8080/ifinder5/",
-    "endpointSearch": "api/search",
+    "baseUrl": "http://sitesearch.cloud",
+    "endpointSearch": "/search",
     "start": 0,
     "limit": 20
   },
