@@ -25,18 +25,18 @@ import java.util.UUID;
 public class Tenant implements Serializable {
     private UUID tenantId;
     private UUID tenantSecret;
-    // TODO remove successfullyIndexed as it's an implicit part of documents(.size)
-    private int successfullyIndexed;
+    // TODO remove successCount as it's an implicit part of documents(.size)
+    private int successCount;
     private List<UUID> documents = Collections.emptyList();
     private List<URI> failed = Collections.emptyList();
 
     private Tenant() {
     }
 
-    public Tenant(UUID tenantId, UUID tenantSecret, int successfullyIndexed, List<UUID> documents, List<URI> failed) {
+    public Tenant(UUID tenantId, UUID tenantSecret, int successCount, List<UUID> documents, List<URI> failed) {
         this.tenantId = tenantId;
         this.tenantSecret = tenantSecret;
-        this.successfullyIndexed = successfullyIndexed;
+        this.successCount = successCount;
         this.documents = documents;
         this.failed = failed;
     }
@@ -57,12 +57,12 @@ public class Tenant implements Serializable {
         this.failed = failed;
     }
 
-    public int getSuccessfullyIndexed() {
-        return successfullyIndexed;
+    public int getSuccessCount() {
+        return successCount;
     }
 
-    public void setSuccessfullyIndexed(int successfullyIndexed) {
-        this.successfullyIndexed = successfullyIndexed;
+    public void setSuccessCount(int successCount) {
+        this.successCount = successCount;
     }
 
     public UUID getTenantId() {

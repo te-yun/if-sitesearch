@@ -225,7 +225,7 @@ public class SiteTest {
         final Tenant tenantUpdate = anotherFeedReplacement.getBody();
         assertTrue(tenantUpdate.getTenantId() != null);
         assertTrue(tenantUpdate.getTenantSecret() != null);
-        assertEquals(indexEntriesCount, tenantUpdate.getSuccessfullyIndexed());
+        assertEquals(indexEntriesCount, tenantUpdate.getSuccessCount());
         assertEquals(indexEntriesCount, tenantUpdate.getDocuments().size());
         assertTrue(tenantUpdate.getFailed().isEmpty());
         return tenantUpdate;

@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-./gradlew clean build
+./gradlew clean build --info
 
 DOCKER_IMAGE_NAME=`ls build/libs/*.jar | sed "s/.*\/\(.\+\).*\.jar/\1/"`
 DOCKER_TAG=latest
