@@ -45,10 +45,10 @@ public class StaticContentTest {
 
     @Test
     public void searchbarPage() throws Exception {
-        final ResponseEntity<String> staticContent = caller.getForEntity("/searchbar/searchbar.html", String.class);
+        final ResponseEntity<String> staticContent = caller.getForEntity("/searchbar/js/app.js", String.class);
 
         assertEquals(HttpStatus.OK, staticContent.getStatusCode());
-        assertTrue(staticContent.getBody().contains("js/app.js"));
+        assertTrue(staticContent.getBody().contains("sitesearch"));
     }
 
     /**
@@ -56,7 +56,7 @@ public class StaticContentTest {
      */
     @Test
     public void searchbarConfiguration() throws Exception {
-        final ResponseEntity<String> staticContent = caller.getForEntity("/searchbar/data/config.json", String.class);
+        final ResponseEntity<String> staticContent = caller.getForEntity("/searchbar/data/sitesearch-config.json", String.class);
 
         assertEquals(HttpStatus.OK, staticContent.getStatusCode());
         if (System.getenv("PWD") != null) { // assume, it runs on Windows and is not a CI server
@@ -73,5 +73,3 @@ public class StaticContentTest {
         assertTrue(staticContent.getBody().contains("if-app-searchbar"));
     }
 }
-
-
