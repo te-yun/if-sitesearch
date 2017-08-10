@@ -84,10 +84,11 @@ public class SiteController {
     @RequestMapping(path = "{id}", method = RequestMethod.PUT)
     ResponseEntity<Site> index(
             @PathVariable("id") UUID id,
+//            @PathVariable("tenantId") UUID tenantId,
+//            @PathVariable(value = "tenantSecret", required = false) UUID tenantSecret,
             @RequestBody Site site
     ) {
         // TODO make sure that an existing site is actually updated
-//        return service.index(id, site);
         Optional<Site> indexed = service.index(id, site);
         if (indexed.isPresent()) {
             return ResponseEntity.ok(indexed.get());
@@ -122,7 +123,7 @@ public class SiteController {
             @PathVariable(name = "id") UUID id
     ) {
         LOG.info("delete-event" + id);
-
+        // TODO assure that only owner can delete a site
         service.delete(id);
         return ResponseEntity.noContent().build();
     }

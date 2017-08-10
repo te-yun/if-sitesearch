@@ -53,7 +53,7 @@ public class SiteService {
         indexable.set(Fields.BODY, site.getBody());
         indexable.set(Fields.TITLE, site.getTitle());
         indexable.set(Fields.URL, site.getUrl());
-        indexable.set(Fields.TENANT, site.getTenant());
+        indexable.set(Fields.TENANT, site.getTenantId());
         indexable.set(TENANT_SECRET_FIELD, site.getTenantSecret());
         indexService.index(indexable);
 
@@ -98,7 +98,6 @@ public class SiteService {
                     foundDocument.get(Fields.TITLE), foundDocument.get(Fields.BODY),
                     URI.create(foundDocument.get(Fields.URL))
             );
-//            representationOfFoundDocument.setId(UUID.fromString(foundDocument.getId()));
 
             return Optional.of(representationOfFoundDocument);
         } else {

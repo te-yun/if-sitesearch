@@ -54,7 +54,7 @@ public class SiteTest {
                 URI.create("https://sitesearch.cloud")
         );
 //        simple.setUrl(URI.create("https://www.intrafind.de/cloud"));
-//        simple.setTenant(TEST_TENANT);
+//        simple.setTenantId(TEST_TENANT);
 //        simple.setTenantSecret(UUID.randomUUID());
 //        simple.setBody("Sitesearch is IntraFind's new SaaS solution.");
 //        simple.setTitle("Cloud Solution");
@@ -85,7 +85,7 @@ public class SiteTest {
         );
 //        Site simple = new Site();
 //        simple.setUrl(URI.create("https://www.intrafind.de/saas"));
-//        simple.setTenant(TEST_TENANT);
+//        simple.setTenantId(TEST_TENANT);
 //        simple.setBody("Sitesearch is IntraFind's new SaaS solution.");
 //        simple.setTitle("SaaS Solution");
 //        simple.setId(irrelevantSiteId);
@@ -170,7 +170,7 @@ public class SiteTest {
         tenant.getDocuments().forEach(documentId -> {
             final ResponseEntity<Site> fetchedById = caller.exchange(SiteController.ENDPOINT + "/" + documentId, HttpMethod.GET, HttpEntity.EMPTY, Site.class);
             assertTrue(HttpStatus.OK.equals(fetchedById.getStatusCode()));
-            assertTrue(tenant.getTenantId().equals(fetchedById.getBody().getTenant()));
+            assertTrue(tenant.getTenantId().equals(fetchedById.getBody().getTenantId()));
             assertTrue(!fetchedById.getBody().getBody().isEmpty());
             assertTrue(fetchedById.getBody().getUrl().isAbsolute());
             assertNull(fetchedById.getBody().getTenantSecret());
