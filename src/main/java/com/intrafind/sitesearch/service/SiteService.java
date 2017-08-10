@@ -57,7 +57,7 @@ public class SiteService {
         indexable.set(TENANT_SECRET_FIELD, site.getTenantSecret());
         indexService.index(indexable);
 
-        return fetchById(id.toString());
+        return fetchById(id);
     }
 
     public Optional<List<UUID>> fetchAllDocuments(UUID tenantId) {
@@ -87,8 +87,8 @@ public class SiteService {
         }
     }
 
-    public Optional<Site> fetchById(String id) {
-        Optional<Document> found = indexService.fetch(Index.ALL, id).stream().findAny();
+    public Optional<Site> fetchById(UUID id) {
+        Optional<Document> found = indexService.fetch(Index.ALL, id.toString()).stream().findAny();
 
         if (found.isPresent()) {
             Document foundDocument = found.get();

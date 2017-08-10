@@ -54,7 +54,7 @@ public class SiteController {
      */
     @RequestMapping(method = RequestMethod.GET, path = "{id}")
     ResponseEntity<Site> fetchById(
-            @PathVariable("id") String id
+            @PathVariable("id") UUID id
     ) {
         Optional<Site> fetched = service.fetchById(id);
         if (fetched.isPresent()) {
@@ -84,7 +84,7 @@ public class SiteController {
     @RequestMapping(path = "{id}", method = RequestMethod.PUT)
     ResponseEntity<Site> index(
             @PathVariable("id") UUID id,
-//            @PathVariable("tenantId") UUID tenantId,
+//            @PathVariable("tenantId", required = false) UUID tenantId,
 //            @PathVariable(value = "tenantSecret", required = false) UUID tenantSecret,
             @RequestBody Site site
     ) {
@@ -99,8 +99,8 @@ public class SiteController {
 
     @RequestMapping(path = "rss", method = RequestMethod.PUT)
     ResponseEntity<Tenant> indexFeed(
-            @RequestParam(value = "tenantId", required = false, defaultValue = "") UUID tenantId,
-            @RequestParam(value = "tenantSecret", required = false, defaultValue = "") UUID tenantSecret,
+            @RequestParam(value = "tenantId", required = false) UUID tenantId,
+            @RequestParam(value = "tenantSecret", required = false) UUID tenantSecret,
             @RequestParam(value = "feedUrl") URI feedUrl
     ) {
         Optional<Tenant> tenantCreatedInfo = service.indexFeed(feedUrl, tenantId, tenantSecret);
