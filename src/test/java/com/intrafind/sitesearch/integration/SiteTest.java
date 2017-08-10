@@ -53,12 +53,6 @@ public class SiteTest {
                 "Cloud Solution", "Sitesearch is IntraFind's new SaaS solution.",
                 URI.create("https://sitesearch.cloud")
         );
-//        simple.setUrl(URI.create("https://www.intrafind.de/cloud"));
-//        simple.setTenantId(TEST_TENANT);
-//        simple.setTenantSecret(UUID.randomUUID());
-//        simple.setBody("Sitesearch is IntraFind's new SaaS solution.");
-//        simple.setTitle("Cloud Solution");
-//        simple.setId(UUID.randomUUID()); // is ignored when persisted
         return simple;
     }
 
@@ -83,12 +77,6 @@ public class SiteTest {
                 "SaaS Solution", "Sitesearch is IntraFind's new SaaS solution.",
                 URI.create("https://sitesearch.cloud/tos.html")
         );
-//        Site simple = new Site();
-//        simple.setUrl(URI.create("https://www.intrafind.de/saas"));
-//        simple.setTenantId(TEST_TENANT);
-//        simple.setBody("Sitesearch is IntraFind's new SaaS solution.");
-//        simple.setTitle("SaaS Solution");
-//        simple.setId(irrelevantSiteId);
 
         ResponseEntity<Site> actual = caller.exchange(SiteController.ENDPOINT + "/" + relevantSiteId, HttpMethod.PUT, new HttpEntity<>(simple), Site.class);
 
@@ -192,15 +180,15 @@ public class SiteTest {
         LOG.info("tenantSecretFromCreation: " + tenantSecretFromCreation);
 
         // update index
-        final ResponseEntity<Tenant> anotherFeedReplacement = caller.exchange(
-                SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
-                        + "&tenantId=" + tenantIdFromCreation + "&tenantSecret=" + tenantSecretFromCreation,
-                HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
+//        final ResponseEntity<Tenant> anotherFeedReplacement = caller.exchange(
+//                SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
+//                        + "&tenantId=" + tenantIdFromCreation + "&tenantSecret=" + tenantSecretFromCreation,
+//                HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
 //        final Tenant tenantUpdate = validateTenantSummary(anotherFeedReplacement, 25);
 //
 //        validateUpdatedSites(tenantUpdate);
-
-        tryDeletionOfSites(tenantIdFromCreation);
+//
+//        tryDeletionOfSites(tenantIdFromCreation);
     }
 
     private void tryDeletionOfSites(UUID tenantIdFromCreation) {
@@ -231,7 +219,6 @@ public class SiteTest {
     }
 
     // TODO single page update
-
     // TODO https for feeds does not work yet, do not use URL class
     // TODO check if a tenant has the total number of sites that Tenant reports
     // TODO provoke 400 responses
