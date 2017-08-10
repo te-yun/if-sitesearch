@@ -52,7 +52,7 @@
         "templates": {
           "resultlistWrapper": "app/templates/default/resultlist/resultlist-wrapper.hbs",
           "resultlistContainer": "app/templates/default/resultlist/resultlist-container.hbs",
-          "resultlistHeader": "app/templates/default/resultlist/resultlist-header.hbs",
+          "resultlistHeader": "app/templates/sitesearch/resultlist/resultlist-header.hbs",
           "didyoumean": "app/templates/default/resultlist/didyoumean.hbs",
           "noresults": "app/templates/default/resultlist/noresults.hbs",
           "filterbar": "app/templates/default/filterbar.hbs",
