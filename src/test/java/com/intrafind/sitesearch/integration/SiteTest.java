@@ -196,7 +196,7 @@ public class SiteTest {
                 SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
                         + "&tenantId=" + tenantIdFromCreation + "&tenantSecret=" + tenantSecretFromCreation,
                 HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
-        Thread.sleep(55000);
+        Thread.sleep(155000);
         final Tenant tenantUpdate = validateTenantSummary(anotherFeedReplacement, 25);
 
         validateUpdatedSites(tenantUpdate);
