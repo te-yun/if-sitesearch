@@ -24,7 +24,6 @@ import com.intrafind.sitesearch.dto.Site;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -34,11 +33,10 @@ import java.util.UUID;
 @Service
 public class SearchService {
     private static final Logger LOG = LoggerFactory.getLogger(SearchService.class);
-    private final RestTemplate call = new RestTemplate();
 
     private Search searchService = IfinderCoreClient.newHessianClient(Search.class, Application.I_FINDER_CORE + "/search");
 
-    public Hits search(String query, String tenantId) {
+    public Hits search(String query, UUID tenantId) {
         com.intrafind.api.search.Hits hits = searchService.search(
                 query + " AND " + Fields.TENANT + ":" + tenantId,
 
@@ -53,11 +51,7 @@ public class SearchService {
 
         LOG.info("query: " + query);
         List<Site> siteDocuments = new ArrayList<>();
-        hits.getDocuments()
-//                .stream()
-                // TODO introduce the tenant filter much earlier, at 9605 service level
-//                .filter(document -> tenantId.equals(document.get(Fields.TENANT)))
-                .forEach(document -> {
+        hits.getDocuments().forEach(document -> {
                     Site site = new Site(
                             UUID.fromString(document.getId()),
                             UUID.fromString(document.get(Fields.TENANT)), null,
@@ -65,13 +59,7 @@ public class SearchService {
                             document.get(Fields.BODY),
                             URI.create(document.get(Fields.URL))
                     );
-//                    site.setId(document.getId());
-//                    site.setUrl(URI.create(document.get(Fields.URL)));
                     // TODO remove tenant INFO as it is not relevant here, consider separate DTO
-//                    site.setTenantId(UUID.fromString(document.get(Fields.TENANT)));
-//                    site.setBody(document.get(Fields.BODY));
-//                    site.setTitle(document.get(Fields.TITLE));
-
                     siteDocuments.add(site);
                 });
 

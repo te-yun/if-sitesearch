@@ -23,6 +23,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @CrossOrigin
 @RestController
 @RequestMapping(SearchController.ENDPOINT)
@@ -38,17 +40,17 @@ public class SearchController {
 
     @RequestMapping(method = RequestMethod.GET)
     Hits search(
-            @CookieValue(value = "override-tenant", defaultValue = "") String cookieTenant,
+            @CookieValue(value = "override-tenant", required = false) UUID cookieTenant,
             @RequestParam(value = "sSearchTerm", required = false, defaultValue = "") String sSearchTerm, // legacy parameter
             @RequestParam(value = "query", required = false, defaultValue = "") String query,
-            @RequestParam(value = "tenantId", required = false, defaultValue = "5f2b9c2e-6071-4f30-8972-7781fac73726") String tenantId
+            @RequestParam(value = "tenantId", required = false) UUID tenantId
     ) {
 
         // to stay compatible with the legacy API for now
         if (!sSearchTerm.isEmpty()) query = sSearchTerm;
 
         // override tenantId with cookie value for debugging & speed up the getting started experience 
-        if (!cookieTenant.isEmpty()) tenantId = cookieTenant;
+        if (cookieTenant != null) tenantId = cookieTenant;
 
         LOG.info("cookieTenant: " + cookieTenant);
         LOG.info("query: " + query);

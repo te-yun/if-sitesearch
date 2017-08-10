@@ -1,7 +1,7 @@
 {
   "ajax": {
-    "baseUrl": "http://sitesearch.cloud",
-    "endpointSearch": "/search",
+    "baseUrl": "http://ml-if-monster:8080/ifinder5/",
+    "endpointSearch": "api/search",
     "start": 0,
     "limit": 20
   },
@@ -18,7 +18,7 @@
         "hint": true,
         "highlight": false,
         "filter": false,
-        "searchOnFocus": true,
+        "searchOnFocus": false,
         "delay": 0,
         "minLength": 0,
         "maxItem": 0,
@@ -29,6 +29,7 @@
         }
       },
       "categories": [
+        "actionable",
         "autocomplete",
         "synonyms",
         "translations",
@@ -44,11 +45,6 @@
       "searchbar_template": "app/templates/default/searchbar.hbs",
       "group_template": "app/templates/default/groups.hbs",
       "roles": {
-        "handle": true,
-        "url": "searchbar/data/roles.json"
-      },
-      "sources": {
-        "url": "searchbar/data/sources.json"
       },
       "indexfields": {
         "template": "app/templates/default/indexfields.hbs"
@@ -152,8 +148,67 @@
         "resulttype": {
           "all": {
             "title": "ifs.category.all",
-            "hitTemplate": "app/templates/sitesearch/resultlist/crawler.hbs",
+            "hitTemplate": "app/templates/default/resultlist/default.hbs",
             "showMenu": false
+          },
+          "filesystem": {
+            "title": "ifs.category.documents",
+            "hitTemplate": "app/templates/default/resultlist/documents.hbs",
+            "showMenu": true,
+            "menuItems": [
+              "forward",
+              "favorite"
+            ]
+          },
+          "people": {
+            "title": "ifs.category.people",
+            "hitTemplate": "app/templates/default/resultlist/people.hbs",
+            "showMenu": true,
+            "menuItems": [
+              "forward",
+              "favorite"
+            ]
+          },
+          "crawler": {
+            "title": "ifs.category.websites",
+            "hitTemplate": "app/templates/default/resultlist/crawler.hbs",
+            "showMenu": true,
+            "menuItems": [
+              "forward",
+              "favorite"
+            ]
+          },
+          "sharepoint": {
+            "title": "ifs.category.websites",
+            "hitTemplate": "app/templates/default/resultlist/crawler.hbs",
+            "showMenu": true,
+            "menuItems": [
+              "forward",
+              "favorite"
+            ]
+          },
+          "images": {
+            "title": "ifs.category.images",
+            "hitTemplate": "app/templates/default/resultlist/images.hbs",
+            "showMenu": true,
+            "menuItems": [
+              "forward",
+              "favorite"
+            ]
+          },
+          "bestbets": {
+            "title": "ifs.category.bestbets",
+            "hitTemplate": "app/templates/default/resultlist/bestbets.hbs",
+            "showMenu": false
+          },
+          "confluence": {
+            "title": "ifs.category.confluence",
+            "hitTemplate": "app/templates/default/resultlist/confluence.hbs",
+            "showMenu": true,
+            "menuItems": [
+              "forward",
+              "favorite"
+            ]
           }
         }
       },
@@ -167,6 +222,7 @@
             "display": [
               "term"
             ],
+            "url": "/stub/default/lastsearches",
             "delay": 0,
             "maxLength": 0,
             "searchOnClick": true
@@ -181,32 +237,35 @@
             "delay": 50,
             "minLength": 3,
             "searchOnClick": true,
-            "searchByAutocompleteSuggestion": true,
             "type": "autocomplete"
           },
           "synonyms": {
             "name": "synonyms",
             "wrapperTemplate": "app/templates/default/swyt/synonyms-wrapper.hbs",
-            "itemTemplate": "app/templates/default/swyt/term.hbs",
+            "itemTemplate": "app/templates/default/swyt/checkableTerm.hbs",
             "display": [
               "term"
             ],
             "url": "/stub/default/synonyms",
             "delay": 300,
             "minLength": 3,
-            "searchOnClick": true,
+            "maxItems": 20,
+            "searchOnClick": false,
+            "cols": true,
             "type": "synonyms"
           },
           "translations": {
             "name": "translations",
             "wrapperTemplate": "app/templates/default/swyt/translations-wrapper.hbs",
-            "itemTemplate": "app/templates/default/swyt/term.hbs",
+            "itemTemplate": "app/templates/default/swyt/checkableTerm.hbs",
             "display": [
               "term"
             ],
             "delay": 300,
             "minLength": 3,
-            "searchOnClick": true,
+            "maxItems": 10,
+            "searchOnClick": false,
+            "cols": true,
             "type": "translations"
           },
           "documents": {
@@ -247,6 +306,30 @@
             "searchOnClick": false,
             "type": "swyt",
             "searchByAutocompleteSuggestion": false
+          },
+          "actionable": {
+            "name": "actionable",
+            "wrapperTemplate": "app/templates/default/swyt/actionable-wrapper.hbs",
+            "itemTemplate": "app/templates/default/swyt/actionable.hbs",
+            "display": [
+              "name"
+            ],
+            "delay": 400,
+            "minLength": 1,
+            "searchOnClick": false,
+            "actionUrls": [
+              {
+                "name": "@portal1"
+              },
+              {
+                "name": "@portal2"
+              },
+              {
+                "name": "@portal3"
+              }
+            ],
+            "type": "actionable",
+            "searchByAutocompleteSuggestion": false
           }
         }
       },
@@ -261,11 +344,11 @@
     "baseurl": "https://intrafind/myportal/deeplink/",
     "minLength": 2
   },
-  "langUrlPrefix": "searchbar/data/language/",
-  "iconPath": "searchbar/img/filetypes",
-  "lyncIconPath": "searchbar/img/shared/lync",
-  "defaultLang": "de",
+  "langUrlPrefix": "data/language/",
+  "iconPath": "img/filetypes",
+  "lyncIconPath": "img/shared/lync",
+  "defaultLang": "en",
   "appLang": "de",
   "rootDir": ".",
-  "debug": true
+  "debug": false
 }

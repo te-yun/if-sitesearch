@@ -15,6 +15,7 @@
   ~ limitations under the License.
   -->
 
+<html lang="en">
 <meta charset="utf-8"/>
 <title>Sitesearch</title>
 <link rel="stylesheet" type="text/css" href="searchbar/css/app.css"/>
@@ -28,9 +29,10 @@
         const xhr = new XMLHttpRequest();
         xhr.open("PUT", "http://sitesearch.cloud/sites/rss?feedUrl=" + feedUrl);
         xhr.onload = function () {
-            document.getElementById('tenantId').value = JSON.parse(this.response)['tenantId'];
-            document.cookie = "override-tenant = " + JSON.parse(this.response)['tenantId'];
-            document.getElementById('tenantSecret').value = JSON.parse(this.response)['tenantSecret'];
+            const tenantId = JSON.parse(this.response)["tenantId"];
+            document.getElementById("tenantId").value = tenantId;
+            document.cookie = "override-tenant = " + tenantId;
+            document.getElementById("tenantSecret").value = JSON.parse(this.response)["tenantSecret"];
         };
         xhr.send();
     }
@@ -70,9 +72,9 @@
     Create Index
 </button>
 
-<div class="container" style="margin-top:0; font-size: 3em;">
+<div class="container" style="margin-top:50px;">
     <div id="searchbar"></div>
-    <div id="resultlist" style="margin-top:20px;"></div>
+    <div id="resultlist"></div>
 </div>
 
 <script src="searchbar/js/app.js"></script>
@@ -81,13 +83,10 @@
     jQuery(document).ready(function ($) {
 
         IFS.initClient({
-            sbTarget: '#searchbar',
-            rlTarget: '#resultlist',
-            configurl: "searchbar/data/config.json",
-            sitesearch: false,
-            cors: true,
-            withCredentials: true,
-            multiple: false
+            sbTarget: "#searchbar",
+            configurl: "searchbar/data/sitesearch-config.json",
+            sitesearch: true,
+            tenantId: "248c9822-d5eb-45cb-bbab-fad1b1aad894"
         });
     });
 </script>
