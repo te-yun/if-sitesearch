@@ -196,11 +196,11 @@ public class SiteTest {
                 SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
                         + "&tenantId=" + tenantIdFromCreation + "&tenantSecret=" + tenantSecretFromCreation,
                 HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
-        final Tenant tenantUpdate = validateTenantSummary(anotherFeedReplacement, 25);
+//        final Tenant tenantUpdate = validateTenantSummary(anotherFeedReplacement, 25);
 //
 //        validateUpdatedSites(tenantUpdate);
-//
-//        tryDeletionOfSites(tenantIdFromCreation);
+
+        tryDeletionOfSites(tenantIdFromCreation);
     }
 
     private void tryDeletionOfSites(UUID tenantIdFromCreation) {
