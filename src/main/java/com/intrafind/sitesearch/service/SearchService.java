@@ -33,17 +33,19 @@ import java.util.UUID;
 @Service
 public class SearchService {
     private static final Logger LOG = LoggerFactory.getLogger(SearchService.class);
+    private static final String QUERY_SEPARATOR = ",";
 
     private Search searchService = IfinderCoreClient.newHessianClient(Search.class, Application.I_FINDER_CORE + "/search");
+
 
     public Hits search(String query, UUID tenantId) {
         com.intrafind.api.search.Hits hits = searchService.search(
                 query + " AND " + Fields.TENANT + ":" + tenantId,
 
-                Search.RETURN_FIELDS, Fields.BODY + "," + Fields.TITLE + "," + Fields.URL + "," + Fields.TENANT,
+                Search.RETURN_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL + QUERY_SEPARATOR + Fields.TENANT,
 
-                Search.RETURN_TEASER_FIELDS, Fields.BODY,
-                Search.RETURN_TEASER_COUNT, 1,
+                Search.RETURN_TEASER_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL,
+                Search.RETURN_TEASER_COUNT, 5,
                 Search.RETURN_TEASER_SIZE, 200,
 
                 Search.HITS_LIST_SIZE, 1_000
@@ -52,16 +54,16 @@ public class SearchService {
         LOG.info("query: " + query);
         List<Site> siteDocuments = new ArrayList<>();
         hits.getDocuments().forEach(document -> {
-                    Site site = new Site(
-                            UUID.fromString(document.getId()),
-                            UUID.fromString(document.get(Fields.TENANT)), null,
-                            document.get(Fields.TITLE),
-                            document.get(Fields.BODY),
-                            URI.create(document.get(Fields.URL))
-                    );
-                    // TODO remove tenant INFO as it is not relevant here, consider separate DTO
-                    siteDocuments.add(site);
-                });
+            Site site = new Site(
+                    UUID.fromString(document.getId()),
+                    UUID.fromString(document.get(Fields.TENANT)), null,
+                    document.get(Fields.TITLE),
+                    document.get(Fields.BODY),
+                    URI.create(document.get(Fields.URL))
+            );
+            // TODO remove tenant INFO as it is not relevant here, consider separate DTO
+            siteDocuments.add(site);
+        });
 
         return new Hits(query, siteDocuments);
     }
