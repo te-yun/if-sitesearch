@@ -9,6 +9,11 @@ security:
 
 server:
   port: 8001
+#  ssl:
+#    key-store: classpath:keystore.jks
+#    key-store-password: changeit
+#    key-password: changeit
+#    key-alias: alias
 
 spring:
   data:
