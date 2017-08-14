@@ -44,7 +44,6 @@ public class SearchTest {
 
     @Test
     public void simpleSearchLegacyApi() throws Exception {
-//        final ResponseEntity<Hits> actualLegacy = caller.getForEntity(SearchController.ENDPOINT + "?sSearchTerm=Knowledge", Hits.class);
         final ResponseEntity<Hits> actualLegacy = caller.getForEntity(SearchController.ENDPOINT + "?sSearchTerm=Knowledge&tenantId=" + SEARCH_TENANT_ID, Hits.class);
         assertEquals(HttpStatus.OK, actualLegacy.getStatusCode());
         assertNotNull(actualLegacy.getBody());
