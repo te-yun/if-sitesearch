@@ -22,14 +22,13 @@ import java.util.List;
 
 public class Hits implements Serializable {
     private List<Object> facets = Collections.emptyList();
-    //    private String title;
-    private List<Site> results = Collections.emptyList();
+    private List<FoundSite> results = Collections.emptyList();
     private String query = "";
 
     private Hits() {
     }
 
-    public Hits(String query, List<Site> results) {
+    public Hits(String query, List<FoundSite> results) {
         this.query = query;
         this.results = results;
     }
@@ -37,10 +36,6 @@ public class Hits implements Serializable {
     public void setFacets(List<Object> facets) {
         this.facets = facets;
     }
-
-//    public void setTitle(String title) {
-//        this.title = title;
-//    }
 
     public void setQuery(String query) {
         this.query = query;
@@ -50,19 +45,15 @@ public class Hits implements Serializable {
         return facets;
     }
 
-//    public String getTitle() {
-//        return title;
-//    }
-
     public String getQuery() {
         return query;
     }
 
-    public List<Site> getResults() {
+    public List<FoundSite> getResults() {
         return results;
     }
 
-    public void setResults(List<Site> sites) {
+    public void setResults(List<FoundSite> sites) {
         this.results = sites;
     }
 }

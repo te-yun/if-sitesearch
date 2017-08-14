@@ -17,8 +17,8 @@
 package com.intrafind.sitesearch.integration;
 
 import com.intrafind.sitesearch.controller.SearchController;
+import com.intrafind.sitesearch.dto.FoundSite;
 import com.intrafind.sitesearch.dto.Hits;
-import com.intrafind.sitesearch.dto.Site;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -43,7 +43,9 @@ public class SearchTest {
 
     @Test
     public void simpleSearchLegacyApi() throws Exception {
-        final ResponseEntity<Hits> actualLegacy = caller.getForEntity(SearchController.ENDPOINT + "?sSearchTerm=Autocomplete", Hits.class);
+        UUID tenantId = UUID.fromString("f0372e4f-e93a-42a0-8576-bf537bcf2021");
+//        final ResponseEntity<Hits> actualLegacy = caller.getForEntity(SearchController.ENDPOINT + "?sSearchTerm=Knowledge", Hits.class);
+        final ResponseEntity<Hits> actualLegacy = caller.getForEntity(SearchController.ENDPOINT + "?sSearchTerm=Knowledge&tenantId=" + tenantId.toString(), Hits.class);
         assertEquals(HttpStatus.OK, actualLegacy.getStatusCode());
         assertNotNull(actualLegacy.getBody());
         assertTrue(actualLegacy.getBody() instanceof Hits);
@@ -57,29 +59,26 @@ public class SearchTest {
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertNotNull(actual.getBody());
         assertEquals("Knowledge", actual.getBody().getQuery());
-        // TODO remove title attribute from Hits
-//        assertEquals(null, actual.getBody().getTitle());
         assertTrue(actual.getBody().getFacets().isEmpty());
         assertEquals(1, actual.getBody().getResults().size());
-        Site found = actual.getBody().getResults().get(0);
-        assertEquals(UUID.fromString("8b985664-4070-4d13-a8c4-5f79ecc58bde"), found.getId());
-        assertEquals(tenantId, found.getTenantId());
-        assertEquals("Wie die Semantische Suche vom Knowledge Graph profitiert", found.getTitle());
-        assertEquals("http://intrafind.de/blog/wie-die-semantische-suche-vom-knowledge-graph-profitiert", found.getUrl().toString());
-        assertTrue(found.getBody().startsWith("<p>Der Knowledge Graph ist vielen Nutzern bereits durch Google oder Facebook bekannt."));
+        FoundSite found = actual.getBody().getResults().get(0);
+//        assertEquals(UUID.fromString("8b985664-4070-4d13-a8c4-5f79ecc58bde"), found.getId());
+//        assertEquals(tenantId, found.getTenantId());
+        assertEquals("Wie die Semantische Suche vom <span class='if-teaser-highlight'>Knowledge</span> Graph profitiert", found.getTitle());
+        assertEquals("Wie die Semantische Suche vom Knowledge Graph profitiert", found.getTitlePlain());
+//        assertEquals("http://intrafind.de/blog/wie-die-semantische-suche-vom-<span class='if-teaser-highlight'>knowledge</span>-graph-profitiert", found.getUrl());
+        assertEquals("http:&#x2F;&#x2F;intrafind.de&#x2F;blog&#x2F;wie-die-semantische-suche-vom-<span class='if-teaser-highlight'>knowledge</span>-graph-profitiert", found.getUrl());
+        assertEquals("http://intrafind.de/blog/wie-die-semantische-suche-vom-knowledge-graph-profitiert", found.getUrlPlain().toString());
+        assertTrue(found.getBody().startsWith("&lt;p&gt;Der <span class='if-teaser-highlight'>Knowledge</span> Graph ist vielen Nutzern bereits durch Google oder Facebook bekannt. Aber auch"));
+        assertTrue(found.getBodyPlain().startsWith("<p>Der Knowledge Graph ist vielen Nutzern bereits durch Google oder Facebook bekannt."));
     }
 
-    /**
-     * TODO should return 404 instead of 200
-     */
     @Test
     public void simpleSearchNotFound() throws Exception {
         final ResponseEntity<Hits> actual = caller.getForEntity(SearchController.ENDPOINT + "?query=not_found", Hits.class);
 
-        assertEquals(HttpStatus.OK, actual.getStatusCode());
-        assertNotNull(actual.getBody());
-        assertEquals("not_found", actual.getBody().getQuery());
-        assertTrue(actual.getBody().getResults().isEmpty());
+        assertEquals(HttpStatus.NOT_FOUND, actual.getStatusCode());
+        assertNull(actual.getBody());
     }
 }
 

@@ -19,8 +19,8 @@ package com.intrafind.sitesearch.service;
 import com.intrafind.api.Fields;
 import com.intrafind.api.search.Search;
 import com.intrafind.sitesearch.Application;
+import com.intrafind.sitesearch.dto.FoundSite;
 import com.intrafind.sitesearch.dto.Hits;
-import com.intrafind.sitesearch.dto.Site;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -34,6 +34,7 @@ import java.util.UUID;
 public class SearchService {
     private static final Logger LOG = LoggerFactory.getLogger(SearchService.class);
     private static final String QUERY_SEPARATOR = ",";
+    private static final String HIT_TEASER_PREFIX = "hit.teaser.";
 
     private Search searchService = IfinderCoreClient.newHessianClient(Search.class, Application.I_FINDER_CORE + "/search");
 
@@ -45,20 +46,23 @@ public class SearchService {
                 Search.RETURN_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL + QUERY_SEPARATOR + Fields.TENANT,
 
                 Search.RETURN_TEASER_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL,
-                Search.RETURN_TEASER_COUNT, 5,
-                Search.RETURN_TEASER_SIZE, 200,
+                Search.RETURN_TEASER_COUNT, 3,
+                Search.RETURN_TEASER_SIZE, 100,
+                Search.RETURN_TEASER_TAG_PRE, "<span class='if-teaser-highlight'>",
+                Search.RETURN_TEASER_TAG_POST, "</span>",
 
                 Search.HITS_LIST_SIZE, 1_000
         );
 
         LOG.info("query: " + query);
-        List<Site> siteDocuments = new ArrayList<>();
+        List<FoundSite> siteDocuments = new ArrayList<>();
         hits.getDocuments().forEach(document -> {
-            Site site = new Site(
-                    UUID.fromString(document.getId()),
-                    UUID.fromString(document.get(Fields.TENANT)), null,
+            FoundSite site = new FoundSite(
+                    document.get(HIT_TEASER_PREFIX + Fields.TITLE),
                     document.get(Fields.TITLE),
+                    document.get(HIT_TEASER_PREFIX + Fields.BODY),
                     document.get(Fields.BODY),
+                    document.get(HIT_TEASER_PREFIX + Fields.URL),
                     URI.create(document.get(Fields.URL))
             );
             // TODO remove tenant INFO as it is not relevant here, consider separate DTO

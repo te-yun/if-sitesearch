@@ -21,6 +21,7 @@ import com.intrafind.sitesearch.service.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -39,7 +40,7 @@ public class SearchController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    Hits search(
+    ResponseEntity<Hits> search(
             @CookieValue(value = "override-tenant", required = false) UUID cookieTenant,
             @RequestParam(value = "sSearchTerm", required = false, defaultValue = "") String sSearchTerm, // legacy parameter
             @RequestParam(value = "query", required = false, defaultValue = "") String query,
@@ -54,25 +55,11 @@ public class SearchController {
 
         LOG.info("cookieTenant: " + cookieTenant);
         LOG.info("query: " + query);
-        return service.search(query, tenantId);
+        Hits searchResult = service.search(query, tenantId);
+        if (searchResult.getResults().isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(searchResult);
+        }
     }
-
-//    @RequestMapping(method = RequestMethod.GET)
-//    Hits iFinderLegacySearch(
-//            @RequestParam(value = "sSearchTerm") String sSearchTerm,
-//            @RequestParam(value = "action", defaultValue = "facetsandsearch") String action,
-//            @RequestParam(value = "iSearchIndex", defaultValue = "1") int iSearchIndex,
-//            @RequestParam(value = "limit", defaultValue = "20") int limit,
-//            @RequestParam(value = "limit", defaultValue = "0") int start
-//    ) {
-//        LOG.info("==========");
-//        LOG.info(sSearchTerm);
-//        LOG.info(action);
-//        LOG.info("" + iSearchIndex);
-//        LOG.info("" + limit);
-//        LOG.info("" + start);
-//        LOG.info("==========");
-//
-//        return search(sSearchTerm);
-//    }
 }

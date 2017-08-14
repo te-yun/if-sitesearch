@@ -54,9 +54,16 @@ public class SiteTest {
         return simple;
     }
 
+    private static UUID testSiteId;
+    private static UUID testSiteTenantId;
+    private static UUID testSiteTenantSecret;
     @Before
     public void init() throws Exception {
+        // TODO using this approach get rid of Thread.sleep
         Site testSite = indexNewSite();
+        testSiteId = testSite.getId();
+        testSiteTenantId = testSite.getTenantId();
+        testSiteTenantSecret = testSite.getTenantSecret();
     }
 
     //    @Test
