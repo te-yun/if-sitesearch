@@ -97,42 +97,42 @@
 </script>
 
 
-<!--///////////////////////////-->
+<!--&lt;!&ndash;///////////////////////////&ndash;&gt;-->
 
-<h1 style="font-size: 2em;"><span class="fa fa-search"></span> Life Style</h1>
-<div class="wrapper">
-    <label for="feedUrl1"><span class="fa fa-rss"></span> Feed URL</label>
-    <input id="feedUrl1" placeholder="Feed URL, e.g. http://intrafind.de/share/enterprise-search-blog.xml"
-           value="https://streemian.com/rss/life">
-    <label for="tenantId1"><span class="fa fa-key"></span> Tenant ID</label>
-    <input id="tenantId1" placeholder="Tenant ID">
-    <label for="tenantSecret1"><span class="fa fa-user-secret"></span> Tenant Secret</label>
-    <input id="tenantSecret1" placeholder="Tenant Secret">
-</div>
-<button id="index1" class="fa fa-cogs"
-        style="height: 1.5em; font-size: 2em;"
-        onclick="triggerFirstUsageOwnership(document.getElementById('feedUrl1').value)">
-    Enable Search
-</button>
+<!--<h1 style="font-size: 2em;"><span class="fa fa-search"></span> Life Style</h1>-->
+<!--<div class="wrapper">-->
+<!--<label for="feedUrl1"><span class="fa fa-rss"></span> Feed URL</label>-->
+<!--<input id="feedUrl1" placeholder="Feed URL, e.g. http://intrafind.de/share/enterprise-search-blog.xml"-->
+<!--value="https://streemian.com/rss/life">-->
+<!--<label for="tenantId1"><span class="fa fa-key"></span> Tenant ID</label>-->
+<!--<input id="tenantId1" placeholder="Tenant ID">-->
+<!--<label for="tenantSecret1"><span class="fa fa-user-secret"></span> Tenant Secret</label>-->
+<!--<input id="tenantSecret1" placeholder="Tenant Secret">-->
+<!--</div>-->
+<!--<button id="index1" class="fa fa-cogs"-->
+<!--style="height: 1.5em; font-size: 2em;"-->
+<!--onclick="triggerFirstUsageOwnership(document.getElementById('feedUrl1').value)">-->
+<!--Enable Search-->
+<!--</button>-->
 
-<div class="container1" style="margin-top:22px; width: 530px;">
-    <div id="searchbar1"></div>
-    <div id="resultlist1"></div>
-</div>
+<!--<div class="container1" style="margin-top:22px; width: 530px;">-->
+<!--<div id="searchbar1"></div>-->
+<!--<div id="resultlist1"></div>-->
+<!--</div>-->
 
-<script src="searchbar/js/app.js"></script>
-<script>
-    jQuery.noConflict();
-    jQuery(document).ready(function ($) {
+<!--<script src="searchbar/js/app.js"></script>-->
+<!--<script>-->
+<!--jQuery.noConflict();-->
+<!--jQuery(document).ready(function ($) {-->
 
-        IFS.initClient({
-            sbTarget: "#searchbar1",
-            configurl: "searchbar/data/sitesearch-config.json",
-            sitesearch: true,
-            tenantId: "248c9822-d5eb-45cb-bbab-fad1b1aad894"
-        });
-    });
-</script>
+<!--IFS.initClient({-->
+<!--sbTarget: "#searchbar1",-->
+<!--configurl: "searchbar/data/sitesearch-config.json",-->
+<!--sitesearch: true,-->
+<!--tenantId: "248c9822-d5eb-45cb-bbab-fad1b1aad894"-->
+<!--});-->
+<!--});-->
+<!--</script>-->
 
 <!--&lt;!&ndash;============================&ndash;&gt;-->
 

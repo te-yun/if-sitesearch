@@ -67,18 +67,6 @@ public class SiteTest {
     }
 
     //    @Test
-//    public void simpleIndexWithContentInside() throws Exception {
-//        UUID irrelevantId = UUID.fromString("dd29d1ee-7912-11e7-96e0-025041000001");
-//        Site simple = buildSite(irrelevantId, UUID.randomUUID());
-//        final ResponseEntity<Site> actual = caller.exchange(SiteController.ENDPOINT, HttpMethod.PUT, new HttpEntity<>(simple), Site.class);
-//
-//        assertEquals(HttpStatus.CREATED, actual.getStatusCode());
-//        assertEquals(simple, actual.getBody());
-//        assertNotEquals(irrelevantId, actual.getBody().getId());
-//        assertEquals("https://sitesearch.cloud/" + actual.getBody().getId(), actual.getHeaders().get(HttpHeaders.LOCATION).get(0));
-//    }
-
-    //    @Test
 //    public void indexNewSite() throws Exception {
     private Site indexNewSite() throws Exception {
         UUID irrelevantSiteId = UUID.fromString("f55d093a-7911-11e7-8fc8-025041000001");
@@ -96,20 +84,15 @@ public class SiteTest {
 
     @Test
     public void fetchUpdatedById() throws Exception {
-//        final UUID yingId = UUID.fromString("17f2d990-9c69-4ac2-9dd4-07355789391a");
-//        Site ying = buildSite(yingId, UUID.randomUUID());
         Site ying = indexNewSite();
-//        final UUID yangId = UUID.fromString("b52788f2-ae1d-4936-a71e-e92ec03c13fb");
         Site yang = indexNewSite();
         Thread.sleep(13000);
 
         final ResponseEntity<Site> actualYing = caller.exchange(SiteController.ENDPOINT + "/"
-//                + ying.getId() +"?tenantId=bc594127-3c59-41ea-9421-7d678aecce8a&tenantSecret=70ae2286-75c0-400e-ba08-4523ad5bb60b", HttpMethod.PUT, new HttpEntity<>(ying), Site.class);
                 + ying.getId() + "?tenantId=" + ying.getTenantId() + "&tenantSecret=" + ying.getTenantSecret(), HttpMethod.PUT, new HttpEntity<>(ying), Site.class);
         assertEquals(HttpStatus.OK, actualYing.getStatusCode());
         assertEquals(ying, actualYing.getBody());
         final ResponseEntity<Site> actualYang = caller.exchange(SiteController.ENDPOINT + "/"
-//                + ying.getId()+"?tenantId=33e705ca-bb9c-4c10-90a0-f7d16a6f241f&tenantSecret=6b47a8af-4cf7-47de-b462-8627f291d433", HttpMethod.PUT, new HttpEntity<>(yang), Site.class);
                 + yang.getId() + "?tenantId=" + yang.getTenantId() + "&tenantSecret=" + yang.getTenantSecret(), HttpMethod.PUT, new HttpEntity<>(yang), Site.class);
         assertEquals(HttpStatus.OK, actualYang.getStatusCode());
         assertEquals(yang, actualYang.getBody());
@@ -135,7 +118,6 @@ public class SiteTest {
     public void updatedSite() throws Exception {
         UUID siteId = UUID.fromString("2c269452-7914-11e7-a634-025041000001");
         Site updatable = buildSite(siteId, UUID.randomUUID());
-//        final ResponseEntity<Site> created = caller.exchange(SiteController.ENDPOINT + "/" + siteId, HttpMethod.PUT, new HttpEntity<>(updatable), Site.class);
         final ResponseEntity<Site> created = caller.exchange(SiteController.ENDPOINT, HttpMethod.PUT, new HttpEntity<>(updatable), Site.class);
         assertEquals(HttpStatus.CREATED, created.getStatusCode());
         assertEquals(updatable, created.getBody());
@@ -204,6 +186,7 @@ public class SiteTest {
         final ResponseEntity<Tenant> initialIndexCreation = caller.exchange(
                 SiteController.ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/meldungen/detail/rss.xml",
                 HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
+        Thread.sleep(5000);
         final Tenant tenantCreation = validateTenantSummary(initialIndexCreation, 10);
 
         UUID tenantIdFromCreation = tenantCreation.getTenantId();
@@ -212,17 +195,37 @@ public class SiteTest {
         LOG.info("tenantIdFromCreation: " + tenantIdFromCreation);
         LOG.info("tenantSecretFromCreation: " + tenantSecretFromCreation);
 
+        final ResponseEntity<Tenant> updateWithoutTenant = caller.exchange(
+                SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
+                        + "&tenantSecret=" + tenantSecretFromCreation,
+                HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
+        assertEquals(HttpStatus.BAD_REQUEST, updateWithoutTenant.getStatusCode());
+
+        final ResponseEntity<Tenant> updateWithoutSecret = caller.exchange(
+                SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
+                        + "&tenantId=" + tenantIdFromCreation,
+                HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
+        assertEquals(HttpStatus.BAD_REQUEST, updateWithoutSecret.getStatusCode());
+
+        final ResponseEntity<Tenant> updateWithInvalidSecret = caller.exchange(
+                SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
+                        + "&tenantId=" + tenantIdFromCreation + "&tenantSecret=" + UUID.randomUUID(),
+                HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
+        assertEquals(HttpStatus.BAD_REQUEST, updateWithInvalidSecret.getStatusCode());
+
+                
         // update index
-//        final ResponseEntity<Tenant> anotherFeedReplacement = caller.exchange(
-//                SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
-//                        + "&tenantId=" + tenantIdFromCreation + "&tenantSecret=" + tenantSecretFromCreation,
-//                HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
-//        final Tenant tenantUpdate = validateTenantSummary(anotherFeedReplacement, 25);
-//
-//        validateUpdatedSites(tenantUpdate);
-//
-//        tryDeletionOfSites(tenantIdFromCreation);
+        final ResponseEntity<Tenant> anotherFeedReplacement = caller.exchange(
+                SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
+                        + "&tenantId=" + tenantIdFromCreation + "&tenantSecret=" + tenantSecretFromCreation,
+                HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
+        final Tenant tenantUpdate = validateTenantSummary(anotherFeedReplacement, 25);
+
+        validateUpdatedSites(tenantUpdate);
+
+        tryDeletionOfSites(tenantIdFromCreation);
     }
+
 
     private void tryDeletionOfSites(UUID tenantIdFromCreation) {
         final ResponseEntity<List> fetchAll = caller.exchange(SiteController.ENDPOINT + "?tenantId=" + tenantIdFromCreation, HttpMethod.GET, HttpEntity.EMPTY, List.class);
