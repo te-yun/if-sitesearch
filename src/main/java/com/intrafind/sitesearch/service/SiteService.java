@@ -33,7 +33,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -188,11 +190,19 @@ public class SiteService {
                 LOG.info("link: " + entry.getLink());
                 LOG.info("description: " + entry.getDescription().getValue());
 
+                String encodedFeedUrl = "";
+                try {
+                    encodedFeedUrl = URLEncoder.encode(entry.getLink(), "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    LOG.warn(e.getMessage());
+                }
+
                 Site toIndex = new Site(
                         null,
                         tenantId, tenantSecret,
                         entry.getTitle(), entry.getDescription().getValue(),
-                        URI.create(entry.getLink())
+                        URI.create(encodedFeedUrl)
+//                        URI.create(entry.getLink())
                 );
                 final UUID siteId = UUID.randomUUID();
                 Optional<Site> indexed = indexDocument(siteId, tenantId, tenantSecret, toIndex);
