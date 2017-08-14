@@ -48,16 +48,47 @@ public class SiteService {
     private Search searchService = IfinderCoreClient.newHessianClient(Search.class, Application.I_FINDER_CORE + "/search");
     private Index indexService = IfinderCoreClient.newHessianClient(Index.class, Application.I_FINDER_CORE + "/index");
 
-    public Optional<Site> index(UUID id, Site site) {
+    public Optional<Site> indexExistingSite(UUID id, UUID tenantId, UUID tenantSecret, Site site) {
+        if (tenantId != null && tenantSecret != null) { // credentials are provided as a tuple only
+            final Optional<UUID> fetchedTenantSecret = fetchTenantSecret(tenantId);
+            if (!fetchedTenantSecret.isPresent()) { // tenant does not exist
+                return Optional.empty();
+            } else if (tenantSecret.equals(fetchedTenantSecret.get())) { // authorized
+                LOG.info("updating-feed: " + tenantId);
+                return indexDocument(id, tenantId, tenantSecret, site);
+            } else { // unauthorized
+                return Optional.empty();
+            }
+        } else if (tenantId == null ^ tenantSecret == null) { // it does not make any sense if only one of the parameters is set
+            return Optional.empty();
+        } else { // consider request as first-usage-ownership-granting request, create new index
+            return indexDocument(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), site);
+        }
+    }
+
+    private Optional<Site> indexDocument(UUID id, UUID tenantId, UUID tenantSecret, Site site) {
         Document indexable = new Document(id.toString());
         indexable.set(Fields.BODY, site.getBody());
         indexable.set(Fields.TITLE, site.getTitle());
         indexable.set(Fields.URL, site.getUrl());
-        indexable.set(Fields.TENANT, site.getTenantId());
-        indexable.set(TENANT_SECRET_FIELD, site.getTenantSecret());
+        indexable.set(Fields.TENANT, tenantId);
+        indexable.set(TENANT_SECRET_FIELD, tenantSecret);
         indexService.index(indexable);
 
         return fetchById(id);
+    }
+
+    public Optional<Site> indexNewTenantCreatingSite(Site site) {
+        UUID id = UUID.randomUUID();
+        Document indexable = new Document(id.toString());
+        indexable.set(Fields.BODY, site.getBody());
+        indexable.set(Fields.TITLE, site.getTitle());
+        indexable.set(Fields.URL, site.getUrl());
+        indexable.set(Fields.TENANT, UUID.randomUUID().toString());
+        indexable.set(TENANT_SECRET_FIELD, UUID.randomUUID().toString());
+        indexService.index(indexable);
+
+        return fetchNewTenantCreatingSiteById(id);
     }
 
     public Optional<List<UUID>> fetchAllDocuments(UUID tenantId) {
@@ -84,6 +115,26 @@ public class SiteService {
         } else {
             String tenantSecret = documentWithTenantSecret.getDocuments().get(0).get(TENANT_SECRET_FIELD);
             return Optional.of(UUID.fromString(tenantSecret));
+        }
+    }
+
+    private Optional<Site> fetchNewTenantCreatingSiteById(UUID id) {
+        Optional<Document> found = indexService.fetch(Index.ALL, id.toString()).stream().findAny();
+
+        if (found.isPresent()) {
+            Document foundDocument = found.get();
+            Site representationOfFoundDocument = new Site(
+                    UUID.fromString(foundDocument.getId()),
+                    UUID.fromString(foundDocument.get(Fields.TENANT)),
+                    UUID.fromString(foundDocument.get(TENANT_SECRET_FIELD)),
+                    foundDocument.get(Fields.TITLE),
+                    foundDocument.get(Fields.BODY),
+                    URI.create(foundDocument.get(Fields.URL))
+            );
+
+            return Optional.of(representationOfFoundDocument);
+        } else {
+            return Optional.empty();
         }
     }
 
@@ -144,7 +195,7 @@ public class SiteService {
                         URI.create(entry.getLink())
                 );
                 final UUID siteId = UUID.randomUUID();
-                Optional<Site> indexed = index(siteId, toIndex);
+                Optional<Site> indexed = indexDocument(siteId, tenantId, tenantSecret, toIndex);
                 if (indexed.isPresent()) {
                     successfullyIndexed.incrementAndGet();
                     documents.add(siteId);

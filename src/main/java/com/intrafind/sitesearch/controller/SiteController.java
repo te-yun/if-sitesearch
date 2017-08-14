@@ -82,14 +82,14 @@ public class SiteController {
      * @param site to be indexed
      */
     @RequestMapping(path = "{id}", method = RequestMethod.PUT)
-    ResponseEntity<Site> index(
+    ResponseEntity<Site> indexExistingSite(
             @PathVariable("id") UUID id,
-//            @PathVariable("tenantId", required = false) UUID tenantId,
-//            @PathVariable(value = "tenantSecret", required = false) UUID tenantSecret,
+            @PathVariable(name = "tenantId", required = false) UUID tenantId,
+            @PathVariable(name = "tenantSecret", required = false) UUID tenantSecret,
             @RequestBody Site site
     ) {
         // TODO make sure that an existing site is actually updated
-        Optional<Site> indexed = service.index(id, site);
+        Optional<Site> indexed = service.indexExistingSite(id, tenantId, tenantSecret, site);
         if (indexed.isPresent()) {
             return ResponseEntity.ok(indexed.get());
         } else {
@@ -97,8 +97,19 @@ public class SiteController {
         }
     }
 
+    @RequestMapping(method = RequestMethod.PUT)
+    ResponseEntity<Site> indexNewSite(@RequestBody Site site) {
+        Optional<Site> indexed = service.indexNewTenantCreatingSite(site);
+        if (indexed.isPresent()) {
+            Site created = indexed.get();
+            return ResponseEntity.created(URI.create("https://sitesearch.cloud/sites/" + created.getId())).body(created);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @RequestMapping(path = "rss", method = RequestMethod.PUT)
-    ResponseEntity<Tenant> indexFeed(
+    ResponseEntity<Tenant> indexRssFeed(
             @RequestParam(value = "tenantId", required = false) UUID tenantId,
             @RequestParam(value = "tenantSecret", required = false) UUID tenantSecret,
             @RequestParam(value = "feedUrl") URI feedUrl
@@ -118,7 +129,7 @@ public class SiteController {
      */
     @RequestMapping(method = RequestMethod.DELETE, path = "{id}")
     @ApiOperation(value = "Deletes a document from index", response = ApiResponses.class)
-    ResponseEntity deleteById(
+    ResponseEntity deleteSiteById(
             @ApiParam(value = "ID of a single document to delete", example = "5f2b9c2e-6071-4f30-8972-7781fac73726")
             @PathVariable(name = "id") UUID id
     ) {
@@ -127,24 +138,4 @@ public class SiteController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
-
-//    /**
-//     * Deletes sites from the index.
-//     *
-//     * @param documentId  of a single document to delete
-//     * @param documentIds a list of documents to delete
-//     * @return IDs of not deleted documents
-//     */
-//    @RequestMapping(method = RequestMethod.DELETE)
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 200, message = "IDs of not deleted documents", response = List.class, reference = "my-reference")}
-//    )
-//    @ApiOperation(value = "Deletes documents from index", response = ApiResponses.class)
-//    List<String> delete(
-//            @ApiParam(value = "ID of a single document to delete", example = "AV1kx0NCAsVjD7bV7B17")
-//            @RequestParam(name = "documentId", required = false) String documentId,
-//            @RequestBody(required = false) List<String> documentIds
-//    ) {
-//        return Collections.emptyList();
-//    }
 }

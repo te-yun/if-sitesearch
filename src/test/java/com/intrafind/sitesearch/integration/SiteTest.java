@@ -26,10 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.net.URI;
@@ -67,23 +64,24 @@ public class SiteTest {
     }
 
     @Test
-    public void assureIrrelevancyOfSiteIdInBody() throws Exception {
-        UUID relevantSiteId = UUID.fromString("f55d093a-7911-11e7-8fc8-025041000001");
-        UUID irrelevantSiteId = UUID.randomUUID();
+    public void assureIrrelevancyOfSiteIdDuringCreation() throws Exception {
+        UUID irrelevantSiteId = UUID.fromString("f55d093a-7911-11e7-8fc8-025041000001");
 
         Site simple = new Site(
                 irrelevantSiteId,
-                TEST_TENANT, UUID.randomUUID(),
-                "SaaS Solution", "Sitesearch is IntraFind's new SaaS solution.",
+                TEST_TENANT,
+                UUID.randomUUID(),
+                "SaaS Solution",
+                "Site Search is IntraFind's new SaaS solution.",
                 URI.create("https://sitesearch.cloud/tos.html")
         );
 
-        ResponseEntity<Site> actual = caller.exchange(SiteController.ENDPOINT + "/" + relevantSiteId, HttpMethod.PUT, new HttpEntity<>(simple), Site.class);
+        ResponseEntity<Site> actual = caller.exchange(SiteController.ENDPOINT, HttpMethod.PUT, new HttpEntity<>(simple), Site.class);
 
-        assertEquals(HttpStatus.OK, actual.getStatusCode());
-        assertNotEquals(simple, actual.getBody());
+        assertEquals(HttpStatus.CREATED, actual.getStatusCode());
+        assertEquals(simple, actual.getBody());
         assertNotEquals(irrelevantSiteId, actual.getBody().getId());
-        assertEquals(relevantSiteId, actual.getBody().getId());
+        assertTrue(actual.getHeaders().get(HttpHeaders.LOCATION).get(0).startsWith("https://sitesearch.cloud/"));
     }
 
     @Test
@@ -126,9 +124,9 @@ public class SiteTest {
         assertNotEquals(updatable, updated.getBody());
         assertEquals(updatedSite, updated.getBody());
 
-        updatedSite.setBody("no tenant secret provided");
-//        final ResponseEntity<Site> updated = caller.exchange(SiteController.ENDPOINT + "/" + siteId, HttpMethod.PUT, new HttpEntity<>(updatedSite), Site.class);
-//        assertEquals(HttpStatus.OK, updated.getStatusCode());
+//        updatedSite.setBody("no tenant secret provided");
+//        final ResponseEntity<Site> updateWithInvalidTenantSecret = caller.exchange(SiteController.ENDPOINT + "/" + siteId + "?tenantId=" + UUID.randomUUID(), HttpMethod.PUT, new HttpEntity<>(updatedSite), Site.class);
+//        assertEquals(HttpStatus.UNAUTHORIZED, updated.getStatusCode());
 //        assertNotEquals(updatable, updated.getBody());
 //        assertEquals(updatedSite, updated.getBody());
 

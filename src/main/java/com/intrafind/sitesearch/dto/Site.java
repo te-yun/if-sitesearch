@@ -95,15 +95,13 @@ public class Site implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Site site = (Site) o;
-        return Objects.equals(id, site.id) &&
-                Objects.equals(tenantId, site.tenantId) &&
-                Objects.equals(title, site.title) &&
+        return Objects.equals(title, site.title) &&
                 Objects.equals(body, site.body) &&
                 Objects.equals(url, site.url);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, tenantId, title, body, url);
+        return Objects.hash(title, body, url);
     }
 }

@@ -17,16 +17,12 @@
 
 <html lang="en">
 <meta charset="utf-8"/>
-<title>Site Search</title>
+<title>Simple Site Search</title>
 <link rel="stylesheet" type="text/css" href="searchbar/css/app.css"/>
 <link rel="stylesheet" type="text/css" href="theme/font/css/font-awesome.min.css"/>
 
 <script>
-    const setFeedUrl = function () {
-//        document.getElementById("feedUrl").setAttribute("value", window.location.href);
-    };
-
-    const triggerFirstUsageOwnership = function (feedUrl) {
+    const triggerFirstUsageOwnership = async function (feedUrl) {
         const xhr = new XMLHttpRequest();
         xhr.open("PUT", "http://sitesearch.cloud/sites/rss?feedUrl=" + feedUrl);
         xhr.onload = function () {
@@ -65,8 +61,7 @@
         width: 530px;
     }
 </style>
-<body onload="setFeedUrl();">
-<h1 style="font-size: 2em;"><span class="fa fa-search"></span> Simple Site Search</h1>
+<h1 style="font-size: 2em;"><span class="fa fa-search"></span> Blockchain</h1>
 <div class="wrapper">
     <label for="feedUrl"><span class="fa fa-rss"></span> Feed URL</label>
     <input id="feedUrl" placeholder="Feed URL, e.g. http://intrafind.de/share/enterprise-search-blog.xml"
@@ -104,7 +99,7 @@
 
 <!--///////////////////////////-->
 
-<h1 style="font-size: 2em;"><span class="fa fa-search"></span> Simple Site Search</h1>
+<h1 style="font-size: 2em;"><span class="fa fa-search"></span> Life Style</h1>
 <div class="wrapper">
     <label for="feedUrl1"><span class="fa fa-rss"></span> Feed URL</label>
     <input id="feedUrl1" placeholder="Feed URL, e.g. http://intrafind.de/share/enterprise-search-blog.xml"
@@ -141,7 +136,7 @@
 
 <!--============================-->
 
-<h1 style="font-size: 2em;"><span class="fa fa-search"></span> Simple Site Search</h1>
+<h1 style="font-size: 2em;"><span class="fa fa-search"></span> Art</h1>
 <div class="wrapper">
     <label for="feedUrl2"><span class="fa fa-rss"></span> Feed URL</label>
     <input id="feedUrl2" placeholder="Feed URL, e.g. http://intrafind.de/share/enterprise-search-blog.xml"
@@ -169,6 +164,42 @@
 
         IFS.initClient({
             sbTarget: "#searchbar2",
+            configurl: "searchbar/data/sitesearch-config.json",
+            sitesearch: true,
+            tenantId: "248c9822-d5eb-45cb-bbab-fad1b1aad894"
+        });
+    });
+</script>
+
+<!--============================-->
+
+<h1 style="font-size: 2em;"><span class="fa fa-search"></span> News</h1>
+<div class="wrapper">
+    <label for="feedUrl3"><span class="fa fa-rss"></span> Feed URL</label>
+    <input id="feedUrl3" placeholder="Feed URL, e.g. http://intrafind.de/share/enterprise-search-blog.xml"
+           value="https://streemian.com/rss/news">
+    <label for="tenantId3"><span class="fa fa-key"></span> Tenant ID</label>
+    <input id="tenantId3" placeholder="Tenant ID">
+    <label for="tenantSecret3"><span class="fa fa-user-secret"></span> Tenant Secret</label>
+    <input id="tenantSecret3" placeholder="Tenant Secret">
+</div>
+<button id="index3" class="fa fa-cogs"
+        style="height: 1.5em; font-size: 2em;"
+        onclick="triggerFirstUsageOwnership(document.getElementById('feedUrl3').value)">
+    Enable Search
+</button>
+
+<div class="container3" style="margin-top:22px; width: 530px;">
+    <div id="searchbar3"></div>
+    <div id="resultlist3"></div>
+</div>
+
+<script src="searchbar/js/app.js"></script>
+<script>
+    jQuery.noConflict();
+    jQuery(document).ready(async function ($) {
+        IFS.initClient({
+            sbTarget: "#searchbar3",
             configurl: "searchbar/data/sitesearch-config.json",
             sitesearch: true,
             tenantId: "248c9822-d5eb-45cb-bbab-fad1b1aad894"
