@@ -44,7 +44,8 @@ public class SearchController {
             @CookieValue(value = "override-tenant", required = false) UUID cookieTenant,
             @RequestParam(value = "sSearchTerm", required = false, defaultValue = "") String sSearchTerm, // legacy parameter
             @RequestParam(value = "query", required = false, defaultValue = "") String query,
-            @RequestParam(value = "tenantId", required = false) UUID tenantId
+//            @RequestParam(value = "tenantId", required = false) UUID tenantId
+            @RequestParam(value = "tenantId") UUID tenantId
     ) {
 
         // to stay compatible with the legacy API for now
