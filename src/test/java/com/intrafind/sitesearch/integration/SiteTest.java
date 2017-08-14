@@ -19,6 +19,7 @@ package com.intrafind.sitesearch.integration;
 import com.intrafind.sitesearch.controller.SiteController;
 import com.intrafind.sitesearch.dto.Site;
 import com.intrafind.sitesearch.dto.Tenant;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -53,86 +54,113 @@ public class SiteTest {
         return simple;
     }
 
-    @Test
-    public void simpleIndexWithContentInside() throws Exception {
-        UUID siteId = UUID.fromString("dd29d1ee-7912-11e7-96e0-025041000001");
-        Site simple = buildSite(siteId, UUID.randomUUID());
-        final ResponseEntity<Site> actual = caller.exchange(SiteController.ENDPOINT + "/" + siteId, HttpMethod.PUT, new HttpEntity<>(simple), Site.class);
-
-        assertEquals(HttpStatus.OK, actual.getStatusCode());
-        assertEquals(simple, actual.getBody());
+    @Before
+    public void init() throws Exception {
+        Site testSite = indexNewSite();
     }
 
-    @Test
-    public void assureIrrelevancyOfSiteIdDuringCreation() throws Exception {
-        UUID irrelevantSiteId = UUID.fromString("f55d093a-7911-11e7-8fc8-025041000001");
+    //    @Test
+//    public void simpleIndexWithContentInside() throws Exception {
+//        UUID irrelevantId = UUID.fromString("dd29d1ee-7912-11e7-96e0-025041000001");
+//        Site simple = buildSite(irrelevantId, UUID.randomUUID());
+//        final ResponseEntity<Site> actual = caller.exchange(SiteController.ENDPOINT, HttpMethod.PUT, new HttpEntity<>(simple), Site.class);
+//
+//        assertEquals(HttpStatus.CREATED, actual.getStatusCode());
+//        assertEquals(simple, actual.getBody());
+//        assertNotEquals(irrelevantId, actual.getBody().getId());
+//        assertEquals("https://sitesearch.cloud/" + actual.getBody().getId(), actual.getHeaders().get(HttpHeaders.LOCATION).get(0));
+//    }
 
-        Site simple = new Site(
-                irrelevantSiteId,
-                TEST_TENANT,
-                UUID.randomUUID(),
-                "SaaS Solution",
-                "Site Search is IntraFind's new SaaS solution.",
-                URI.create("https://sitesearch.cloud/tos.html")
-        );
+    //    @Test
+//    public void indexNewSite() throws Exception {
+    private Site indexNewSite() throws Exception {
+        UUID irrelevantSiteId = UUID.fromString("f55d093a-7911-11e7-8fc8-025041000001");
+        Site simple = buildSite(irrelevantSiteId, UUID.randomUUID());
 
         ResponseEntity<Site> actual = caller.exchange(SiteController.ENDPOINT, HttpMethod.PUT, new HttpEntity<>(simple), Site.class);
 
         assertEquals(HttpStatus.CREATED, actual.getStatusCode());
         assertEquals(simple, actual.getBody());
-        assertNotEquals(irrelevantSiteId, actual.getBody().getId());
-        assertTrue(actual.getHeaders().get(HttpHeaders.LOCATION).get(0).startsWith("https://sitesearch.cloud/"));
+        assertNotEquals("assure irrelevancy of siteId during creation", irrelevantSiteId, actual.getBody().getId());
+        assertEquals("https://sitesearch.cloud/sites/" + actual.getBody().getId(), actual.getHeaders().get(HttpHeaders.LOCATION).get(0));
+
+        return actual.getBody();
     }
 
     @Test
-    public void fetchById() throws Exception {
-        final UUID yingId = UUID.fromString("265fff4c-7912-11e7-8e0d-025041000001");
-        Site ying = buildSite(yingId, UUID.randomUUID());
-        final UUID yangId = UUID.fromString("25585162-7912-11e7-a8c6-025041000001");
-        Site yang = buildSite(yangId, UUID.randomUUID());
+    public void fetchUpdatedById() throws Exception {
+//        final UUID yingId = UUID.fromString("17f2d990-9c69-4ac2-9dd4-07355789391a");
+//        Site ying = buildSite(yingId, UUID.randomUUID());
+        Site ying = indexNewSite();
+//        final UUID yangId = UUID.fromString("b52788f2-ae1d-4936-a71e-e92ec03c13fb");
+        Site yang = indexNewSite();
+        Thread.sleep(13000);
 
-        final ResponseEntity<Site> actualYing = caller.exchange(SiteController.ENDPOINT + "/" + yingId, HttpMethod.PUT, new HttpEntity<>(ying), Site.class);
+        final ResponseEntity<Site> actualYing = caller.exchange(SiteController.ENDPOINT + "/"
+//                + ying.getId() +"?tenantId=bc594127-3c59-41ea-9421-7d678aecce8a&tenantSecret=70ae2286-75c0-400e-ba08-4523ad5bb60b", HttpMethod.PUT, new HttpEntity<>(ying), Site.class);
+                + ying.getId() + "?tenantId=" + ying.getTenantId() + "&tenantSecret=" + ying.getTenantSecret(), HttpMethod.PUT, new HttpEntity<>(ying), Site.class);
         assertEquals(HttpStatus.OK, actualYing.getStatusCode());
         assertEquals(ying, actualYing.getBody());
-        final ResponseEntity<Site> actualYang = caller.exchange(SiteController.ENDPOINT + "/" + yangId, HttpMethod.PUT, new HttpEntity<>(yang), Site.class);
+        final ResponseEntity<Site> actualYang = caller.exchange(SiteController.ENDPOINT + "/"
+//                + ying.getId()+"?tenantId=33e705ca-bb9c-4c10-90a0-f7d16a6f241f&tenantSecret=6b47a8af-4cf7-47de-b462-8627f291d433", HttpMethod.PUT, new HttpEntity<>(yang), Site.class);
+                + yang.getId() + "?tenantId=" + yang.getTenantId() + "&tenantSecret=" + yang.getTenantSecret(), HttpMethod.PUT, new HttpEntity<>(yang), Site.class);
         assertEquals(HttpStatus.OK, actualYang.getStatusCode());
         assertEquals(yang, actualYang.getBody());
 
-        final ResponseEntity<Site> actualYingFetched = caller.getForEntity(SiteController.ENDPOINT + "/" + yingId, Site.class);
+        final ResponseEntity<Site> actualYingFetched = caller.getForEntity(SiteController.ENDPOINT + "/" + ying.getId(), Site.class);
         assertEquals(HttpStatus.OK, actualYingFetched.getStatusCode());
         assertEquals(ying, actualYingFetched.getBody());
 
-        final ResponseEntity<Site> actualYangFetched = caller.getForEntity(SiteController.ENDPOINT + "/" + yangId, Site.class);
+        final ResponseEntity<Site> actualYangFetched = caller.getForEntity(SiteController.ENDPOINT + "/" + yang.getId(), Site.class);
         assertEquals(HttpStatus.OK, actualYangFetched.getStatusCode());
         assertEquals(yang, actualYangFetched.getBody());
 
-        assertNotEquals(actualYingFetched, actualYangFetched);
+        Site fetchedYing = actualYingFetched.getBody();
+        Site fetchedYang = actualYangFetched.getBody();
+        assertEquals(fetchedYing, fetchedYang);
+        assertNotEquals(fetchedYing.getId(), fetchedYang.getId());
+        assertNotEquals(fetchedYing.getTenantId(), fetchedYang.getTenantId());
+        assertNull(fetchedYing.getTenantSecret());
+        assertNull(fetchedYang.getTenantSecret());
     }
 
     @Test
     public void updatedSite() throws Exception {
         UUID siteId = UUID.fromString("2c269452-7914-11e7-a634-025041000001");
         Site updatable = buildSite(siteId, UUID.randomUUID());
-        final ResponseEntity<Site> create = caller.exchange(SiteController.ENDPOINT + "/" + siteId, HttpMethod.PUT, new HttpEntity<>(updatable), Site.class);
-        assertEquals(HttpStatus.OK, create.getStatusCode());
-        assertEquals(updatable, create.getBody());
+//        final ResponseEntity<Site> created = caller.exchange(SiteController.ENDPOINT + "/" + siteId, HttpMethod.PUT, new HttpEntity<>(updatable), Site.class);
+        final ResponseEntity<Site> created = caller.exchange(SiteController.ENDPOINT, HttpMethod.PUT, new HttpEntity<>(updatable), Site.class);
+        assertEquals(HttpStatus.CREATED, created.getStatusCode());
+        assertEquals(updatable, created.getBody());
+        Site createdSite = created.getBody();
 
-        Site updatedSite = buildSite(siteId, UUID.randomUUID());
-        updatedSite.setBody("updated");
-        final ResponseEntity<Site> updated = caller.exchange(SiteController.ENDPOINT + "/" + siteId, HttpMethod.PUT, new HttpEntity<>(updatedSite), Site.class);
+        Thread.sleep(8000);
+
+        final ResponseEntity<Site> updateWithTenantIdOnly = caller.exchange(SiteController.ENDPOINT + "/" + siteId
+                + "?tenantId=" + createdSite.getTenantId(), HttpMethod.PUT, new HttpEntity<>(createdSite), Site.class);
+        assertEquals("only valid tenantId is provided", HttpStatus.BAD_REQUEST, updateWithTenantIdOnly.getStatusCode());
+        assertEquals(29791, updateWithTenantIdOnly.getBody().hashCode());
+
+        final ResponseEntity<Site> updateWithTenantSecretOnly = caller.exchange(SiteController.ENDPOINT + "/" + siteId
+                + "?tenantSecret=" + createdSite.getTenantId(), HttpMethod.PUT, new HttpEntity<>(createdSite), Site.class);
+        assertEquals("only valid tenantSecret is provided", HttpStatus.BAD_REQUEST, updateWithTenantSecretOnly.getStatusCode());
+        assertEquals(29791, updateWithTenantSecretOnly.getBody().hashCode());
+
+        final ResponseEntity<Site> updateWithWrongTenantSecret = caller.exchange(SiteController.ENDPOINT + "/" + siteId
+                        + "?tenantId=" + createdSite.getTenantId() + "&tenantSecret=" + UUID.randomUUID(),
+                HttpMethod.PUT, new HttpEntity<>(createdSite), Site.class);
+        assertEquals("tenantSecret is invalid", HttpStatus.NOT_FOUND, updateWithWrongTenantSecret.getStatusCode());
+        assertNull(updateWithWrongTenantSecret.getBody());
+
+        createdSite.setTitle("updated title");
+        createdSite.setBody("updated body");
+        createdSite.setUrl(URI.create("https://example.com/updated"));
+        final ResponseEntity<Site> updated = caller.exchange(SiteController.ENDPOINT + "/" + siteId
+                        + "?tenantId=" + createdSite.getTenantId() + "&tenantSecret=" + createdSite.getTenantSecret(),
+                HttpMethod.PUT, new HttpEntity<>(createdSite), Site.class);
         assertEquals(HttpStatus.OK, updated.getStatusCode());
-        assertNotEquals(updatable, updated.getBody());
-        assertEquals(updatedSite, updated.getBody());
-
-//        updatedSite.setBody("no tenant secret provided");
-//        final ResponseEntity<Site> updateWithInvalidTenantSecret = caller.exchange(SiteController.ENDPOINT + "/" + siteId + "?tenantId=" + UUID.randomUUID(), HttpMethod.PUT, new HttpEntity<>(updatedSite), Site.class);
-//        assertEquals(HttpStatus.UNAUTHORIZED, updated.getStatusCode());
-//        assertNotEquals(updatable, updated.getBody());
-//        assertEquals(updatedSite, updated.getBody());
-
-        // TODO do not update site when tenantSecret is not correct
-        // TODO do not update site when tenantSecret is not provided
-        // TODO do not update site when tenantSecret is provided in payload
+        assertEquals(createdSite, updated.getBody());
+        assertEquals("updated body", updated.getBody().getBody());
     }
 
     @Test
