@@ -4,6 +4,8 @@ set -e
 SPRING_CONFIG_NAME=local
 ./gradlew clean build --info
 
+
+
 DOCKER_IMAGE_NAME=`ls build/libs/*.jar | sed "s/.*\/\(.\+\).*\.jar/\1/"`
 DOCKER_TAG=latest
 
@@ -22,4 +24,12 @@ then
 else
     docker rmi -f $danglingImages # cleanup, GC for dangling images
 fi
+
+
+cd docker-nginx-https-redirect
+docker build --tag intrafind/redirect-https:latest
+docker rm -f redirect-https
+docker run -d --name redirect-https \
+    -p 81:443 \
+    intrafind/redirect-https:latest
 
