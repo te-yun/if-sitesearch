@@ -20,6 +20,7 @@ import com.intrafind.sitesearch.controller.SiteController;
 import com.intrafind.sitesearch.dto.Site;
 import com.intrafind.sitesearch.dto.Tenant;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -36,6 +37,7 @@ import java.util.UUID;
 
 import static org.junit.Assert.*;
 
+@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SiteTest {
@@ -57,6 +59,7 @@ public class SiteTest {
     private static UUID testSiteId;
     private static UUID testSiteTenantId;
     private static UUID testSiteTenantSecret;
+
     @Before
     public void init() throws Exception {
         // TODO using this approach get rid of Thread.sleep
@@ -215,7 +218,7 @@ public class SiteTest {
                 HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
         assertEquals(HttpStatus.BAD_REQUEST, updateWithInvalidSecret.getStatusCode());
 
-                
+
         // update index
         final ResponseEntity<Tenant> anotherFeedReplacement = caller.exchange(
                 SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
