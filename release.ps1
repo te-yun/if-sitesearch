@@ -8,7 +8,7 @@ $DOCKER_TAG = "latest"
 
 docker build --tag intrafind/${DOCKER_IMAGE_NAME}:${DOCKER_TAG} .
 docker rm -f ${DOCKER_IMAGE_NAME}
-docker run -d --name ${DOCKER_IMAGE_NAME} -p 443:8001 --env SECURITY_USER_NAME=$env:SECURITY_USER_NAME -v ~/srv/${DOCKER_IMAGE_NAME}:/data intrafind/${DOCKER_IMAGE_NAME}:${DOCKER_TAG}
+docker run -d --name ${DOCKER_IMAGE_NAME} -p 443:8001 --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD -v ~/srv/${DOCKER_IMAGE_NAME}:/data intrafind/${DOCKER_IMAGE_NAME}:${DOCKER_TAG}
 
 $danglingImages = $(docker images -f "dangling=true" -q)
 
