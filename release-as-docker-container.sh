@@ -25,7 +25,7 @@ fi
 ### Redirect HTTP to HTTPS traffic
 cd docker-nginx-https-redirect
 docker build --tag intrafind/redirect-https:latest .
-docker rm -f redirect-https
+#docker rm -f redirect-https
 docker run -d --name redirect-https \
     -p 80:443 \
     intrafind/redirect-https:latest
