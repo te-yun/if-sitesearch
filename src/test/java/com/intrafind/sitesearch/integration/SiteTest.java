@@ -157,6 +157,7 @@ public class SiteTest {
         final ResponseEntity<Tenant> exchange = caller.exchange(SiteController.ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/fahrplanaenderungen/detail/rss.xml", HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
         final Tenant creation = validateTenantSummary(exchange, 10);
 
+        Thread.sleep(18_000);
         validateUpdatedSites(creation);
     }
 
@@ -165,6 +166,7 @@ public class SiteTest {
         final ResponseEntity<Tenant> exchange = caller.exchange(SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml", HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
         final Tenant creation = validateTenantSummary(exchange, 25);
 
+        Thread.sleep(18_000);
         LOG.info("tenantId: " + creation.getTenantId());
         validateUpdatedSites(creation);
     }
@@ -175,7 +177,7 @@ public class SiteTest {
             assertTrue(HttpStatus.OK.equals(fetchedById.getStatusCode()));
             assertTrue(tenant.getTenantId().equals(fetchedById.getBody().getTenantId()));
             assertTrue(!fetchedById.getBody().getBody().isEmpty());
-            assertTrue(fetchedById.getBody().getUrl().isAbsolute());
+            assertNotNull(fetchedById.getBody().getUrl());
             assertNull(fetchedById.getBody().getTenantSecret());
         });
     }
@@ -186,7 +188,7 @@ public class SiteTest {
         final ResponseEntity<Tenant> initialIndexCreation = caller.exchange(
                 SiteController.ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/meldungen/detail/rss.xml",
                 HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
-        Thread.sleep(5000);
+        Thread.sleep(18_000);
         final Tenant tenantCreation = validateTenantSummary(initialIndexCreation, 10);
 
         UUID tenantIdFromCreation = tenantCreation.getTenantId();
