@@ -163,7 +163,7 @@ public class SiteTest {
     }
 
     @Test
-    public void importFeedAndReadSingleSiteWithSSL() throws Exception {
+    public void importFeedAndReadSingleSiteWithSSL() throws Exception {  // TODO actually use SSL below >> httpS instead of http-sans-S
         final ResponseEntity<Tenant> exchange = caller.exchange(SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml", HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
         final Tenant creation = validateTenantSummary(exchange, 25);
 
@@ -199,7 +199,7 @@ public class SiteTest {
         LOG.info("tenantSecretFromCreation: " + tenantSecretFromCreation);
 
         final ResponseEntity<Tenant> updateWithoutTenant = caller.exchange(
-                SiteController.ENDPOINT + "/rss?feedUrl=https://intrafind.de/share/enterprise-search-blog.xml"
+                SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
                         + "&tenantSecret=" + tenantSecretFromCreation,
                 HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
         assertEquals(HttpStatus.BAD_REQUEST, updateWithoutTenant.getStatusCode());
