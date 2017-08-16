@@ -233,7 +233,7 @@ public class SiteTest {
         // TODO actually update steem feeds
 
         final ResponseEntity<Tenant> initialIndexCreation = caller.exchange(
-                SiteController.ENDPOINT + "/rss?feedUrl=http://sitesearch.cloud/dev/steem-blockchain-rss-feed-init.xml",
+                SiteController.ENDPOINT + "/rss?feedUrl=https://sitesearch.cloud/dev/steem-blockchain-rss-feed-init.xml",
                 HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
         Thread.sleep(15000);
         final Tenant tenantCreation = validateTenantSummary(initialIndexCreation, 10);
@@ -241,7 +241,7 @@ public class SiteTest {
 
 
         final ResponseEntity<Tenant> initialIndexCreation1 = caller.exchange(
-                SiteController.ENDPOINT + "/rss?feedUrl=http://sitesearch.cloud/dev/steem-blockchain-rss-feed-update.xml",
+                SiteController.ENDPOINT + "/rss?feedUrl=https://sitesearch.cloud/dev/steem-blockchain-rss-feed-update.xml",
                 HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
         Thread.sleep(15000);
         final Tenant tenantCreation1 = validateTenantSummary(initialIndexCreation1, 10);

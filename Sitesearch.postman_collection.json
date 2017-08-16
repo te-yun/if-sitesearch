@@ -24,7 +24,7 @@
         }
       ],
       "request": {
-        "url": "http://sitesearch.cloud/index.html",
+        "url": "https://sitesearch.cloud/index.html",
         "method": "GET",
         "header": [
           {
@@ -388,7 +388,7 @@
       "name": "index",
       "request": {
         "url": {
-          "raw": "http://sitesearch.cloud:9605/json/index?method=index",
+          "raw": "https://sitesearch.cloud:9605/json/index?method=index",
           "protocol": "http",
           "host": [
             "sitesearch",
@@ -436,7 +436,7 @@
       "name": "search",
       "request": {
         "url": {
-          "raw": "http://sitesearch.cloud:9605/json/search?method=search",
+          "raw": "https://sitesearch.cloud:9605/json/search?method=search",
           "protocol": "http",
           "host": [
             "sitesearch",

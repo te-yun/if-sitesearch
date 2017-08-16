@@ -29,7 +29,7 @@ import static org.junit.Assert.*;
 
 public class LoadTest {
     private final static Logger LOG = LoggerFactory.getLogger(LoadTest.class);
-    private static final String LOAD_TARGET = "http://sitesearch.cloud/index.html";
+    private static final String LOAD_TARGET = "https://sitesearch.cloud/index.html";
     private static final TestRestTemplate CALLER = new TestRestTemplate();
 
     @BenchmarkMode(Mode.SingleShotTime)
@@ -51,7 +51,7 @@ public class LoadTest {
     @OperationsPerInvocation(9)
     @Benchmark
     public void simpleSearch() throws Exception {
-        final ResponseEntity<Hits> actual = CALLER.getForEntity("http://sitesearch.cloud" + SearchController.ENDPOINT + "?query=Cloud", Hits.class);
+        final ResponseEntity<Hits> actual = CALLER.getForEntity("https://sitesearch.cloud" + SearchController.ENDPOINT + "?query=Cloud", Hits.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertNotNull(actual);

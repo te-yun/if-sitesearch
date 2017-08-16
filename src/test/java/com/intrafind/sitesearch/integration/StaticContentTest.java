@@ -60,7 +60,7 @@ public class StaticContentTest {
 
         assertEquals(HttpStatus.OK, staticContent.getStatusCode());
         if (System.getenv("PWD") != null) { // assume, it runs on Windows and is not a CI server
-            assertTrue(staticContent.getBody().contains("\"baseUrl\": \"http://sitesearch.cloud\","));
+            assertTrue(staticContent.getBody().contains("\"baseUrl\": \"https://sitesearch.cloud\","));
         }
         assertTrue(staticContent.getBody().contains("\"endpointSearch\": \"" + SearchController.ENDPOINT + "\","));
     }

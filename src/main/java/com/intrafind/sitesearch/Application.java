@@ -29,7 +29,7 @@ import java.net.URI;
 @RestController
 @EnableSwagger2
 public class Application {
-    public static final URI I_FINDER_CORE = URI.create("http://sitesearch.cloud:9605/hessian");
+    public static final URI I_FINDER_CORE = URI.create("https://sitesearch.cloud:9605/hessian");
 
     private final static Logger LOG = LoggerFactory.getLogger(Application.class);
 

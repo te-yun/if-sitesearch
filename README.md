@@ -9,7 +9,7 @@ Here you can find a *non-technical* business focused abstract about [Sitesearch]
 
 * [Product roadmap](http://if-wiki:8090/pages/viewpage.action?pageId=14714226)
 * [JIRA project](http://jira/projects/SITESEARCH)
-* [PROD release](http://sitesearch.cloud) / [DEV Release](http://dev.sitesearch.cloud)
+* [PROD release](https://sitesearch.cloud) / [DEV Release](http://dev.sitesearch.cloud)
 * [SCM repository](http://ml-if-git/sitesearch/if-sitesearch)
 * [Container](http://ml-if-git/sitesearch/docker-container)
     
