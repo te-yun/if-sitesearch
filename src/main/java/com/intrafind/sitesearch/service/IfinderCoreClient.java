@@ -94,8 +94,8 @@ public enum IfinderCoreClient {
 
 
     private static void initSSL() {
-//        setEnv("javax.net.ssl.trustStore", "client-truststore.ks");
-//        setEnv("javax.net.ssl.trustStorePassword", "changeit");
+        setEnv("javax.net.ssl.trustStore", "/home/alexander_orlov/buildAgent/work/e92715f0513d41ad/src/main/resources/keystore.jks");
+        setEnv("javax.net.ssl.trustStorePassword", "7zCMZiSN2X2k0lK6Abovg4C3uFkpRwaJLwX87jpFKmc=");
 
 //        setEnv("javax.net.ssl.keyStore", "classpath:keystore.jks"); // increased security with client authentication
         setEnv("javax.net.ssl.keyStore", "/home/alexander_orlov/buildAgent/work/e92715f0513d41ad/src/main/resources/keystore.jks"); // increased security with client authentication
