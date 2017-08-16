@@ -202,7 +202,6 @@ public class SiteService {
                         tenantId, tenantSecret,
                         entry.getTitle(), entry.getDescription().getValue(),
                         URI.create(encodedFeedUrl)
-//                        URI.create(entry.getLink())
                 );
                 final UUID siteId = UUID.randomUUID();
                 Optional<Site> indexed = indexDocument(siteId, tenantId, tenantSecret, toIndex);
