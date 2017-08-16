@@ -29,15 +29,12 @@ public class TrustAllX509TrustManager implements X509TrustManager {
     private static final Logger LOG = LoggerFactory.getLogger(TrustAllX509TrustManager.class);
 
     static {
+        LOG.info(">>>>>>>>>>>>>>>>>>>>>SERVER");
         try {
             SSLContext sc = SSLContext.getInstance("TLS");
             sc.init(null, new TrustManager[]{new TrustAllX509TrustManager()}, new SecureRandom());
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
-                public boolean verify(String string, SSLSession ssls) {
-                    return true;
-                }
-            });
+            HttpsURLConnection.setDefaultHostnameVerifier((string, sslSession) -> true);
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
             LOG.warn(e.getMessage());
         }
