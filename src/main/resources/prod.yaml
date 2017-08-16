@@ -1,7 +1,8 @@
 security:
   user:
     name: ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=
-    password: 7zCMZiSN2X2k0lK6Abovg4C3uFkpRwaJLwX87jpFKmc=
+    password: ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=
+#    password: 7zCMZiSN2X2k0lK6Abovg4C3uFkpRwaJLwX87jpFKmc=
 
 server:
   port: 8001
