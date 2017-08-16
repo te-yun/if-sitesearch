@@ -388,7 +388,7 @@
       "name": "index",
       "request": {
         "url": {
-          "raw": "https://sitesearch.cloud:9605/json/index?method=index",
+          "raw": "http://sitesearch.cloud:9605/json/index?method=index",
           "protocol": "http",
           "host": [
             "sitesearch",
@@ -436,7 +436,7 @@
       "name": "search",
       "request": {
         "url": {
-          "raw": "https://sitesearch.cloud:9605/json/search?method=search",
+          "raw": "http://sitesearch.cloud:9605/json/search?method=search",
           "protocol": "http",
           "host": [
             "sitesearch",
