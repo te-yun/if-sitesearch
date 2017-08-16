@@ -22,10 +22,6 @@
 <link rel="stylesheet" type="text/css" href="theme/font/css/font-awesome.min.css"/>
 
 <script>
-    const setFeedUrl = function () {
-//        document.getElementById("feedUrl").setAttribute("value", window.location.href);
-    };
-
     let serviceUrl;
     if (location.hostname === "localhost") {
         serviceUrl = "http://localhost:8001";
@@ -75,7 +71,6 @@
         font-weight: bold;
     }
 </style>
-<body onload="setFeedUrl();">
 <h1 style="font-size: 2em;"><span class="fa fa-search"></span> Simple Site Search</h1>
 <div class="wrapper">
     <label for="feedUrl"><span class="fa fa-rss"></span> Feed URL</label>
