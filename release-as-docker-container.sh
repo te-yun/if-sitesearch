@@ -1,7 +1,8 @@
 #!/usr/bin/env sh
 set -e
 
-./gradlew clean build -x test --info
+SPRING_CONFIG_NAME = "local"
+./gradlew clean build --info
 
 DOCKER_IMAGE_NAME=`ls build/libs/*.jar | sed "s/.*\/\(.\+\).*\.jar/\1/"`
 DOCKER_TAG=latest

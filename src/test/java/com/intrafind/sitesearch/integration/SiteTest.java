@@ -124,7 +124,7 @@ public class SiteTest {
         assertEquals(updatable, created.getBody());
         Site createdSite = created.getBody();
 
-        Thread.sleep(8000);
+        Thread.sleep(13_000);
 
         final ResponseEntity<Site> updateWithTenantIdOnly = caller.exchange(SiteController.ENDPOINT + "/" + siteId
                 + "?tenantId=" + createdSite.getTenantId(), HttpMethod.PUT, new HttpEntity<>(createdSite), Site.class);
@@ -236,7 +236,7 @@ public class SiteTest {
         final ResponseEntity<Tenant> initialIndexCreation = caller.exchange(
                 SiteController.ENDPOINT + "/rss?feedUrl=https://sitesearch.cloud/dev/steem-blockchain-rss-feed-init.xml",
                 HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
-        Thread.sleep(15000);
+        Thread.sleep(21_000);
         final Tenant tenantCreation = validateTenantSummary(initialIndexCreation, 10);
 //        validateUpdatedSites(tenantCreation);
 
@@ -244,7 +244,7 @@ public class SiteTest {
         final ResponseEntity<Tenant> initialIndexCreation1 = caller.exchange(
                 SiteController.ENDPOINT + "/rss?feedUrl=https://sitesearch.cloud/dev/steem-blockchain-rss-feed-update.xml",
                 HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
-        Thread.sleep(15000);
+        Thread.sleep(21_000);
         final Tenant tenantCreation1 = validateTenantSummary(initialIndexCreation1, 10);
 
     }
