@@ -19,43 +19,40 @@ package com.intrafind.sitesearch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.net.ssl.*;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
+import javax.net.ssl.X509TrustManager;
 import java.security.cert.X509Certificate;
 
 public class TrustAllX509TrustManager implements X509TrustManager {
     private static final Logger LOG = LoggerFactory.getLogger(TrustAllX509TrustManager.class);
 
-    static {
-        LOG.info(">>>>>>>>>>>>>>>>>>>>>SERVER");
-        try {
-            SSLContext sc = SSLContext.getInstance("TLS");
-            sc.init(null, new TrustManager[]{new TrustAllX509TrustManager()}, new SecureRandom());
-            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-            HttpsURLConnection.setDefaultHostnameVerifier((string, sslSession) -> true);
-        } catch (NoSuchAlgorithmException | KeyManagementException e) {
-            LOG.info(">>>>>>>>>>>>>>>>>>>>>SERVER1");
-            LOG.warn(e.getStackTrace().toString());
-            LOG.warn(e.getMessage());
-        }
-    }
+//    static {
+//        LOG.info(">>>>>>>>>>>>>>>>>>>>>SERVER");
+//        try {
+//            SSLContext sc = SSLContext.getInstance("TLS");
+//            sc.init(null, new TrustManager[]{new TrustAllX509TrustManager()}, new SecureRandom());
+//            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+//            HttpsURLConnection.setDefaultHostnameVerifier((string, sslSession) -> true);
+//        } catch (NoSuchAlgorithmException | KeyManagementException e) {
+//            LOG.info(">>>>>>>>>>>>>>>>>>>>>SERVER1");
+//            LOG.warn(e.getStackTrace().toString());
+//            LOG.warn(e.getMessage());
+//        }
+//    }
 
-    public static void configureUnsecureSSLConnections() {
-        try {
-            SSLContext sc = SSLContext.getInstance("TLS");
-            sc.init(null, new TrustManager[]{new TrustAllX509TrustManager()}, new java.security.SecureRandom());
-            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
-                public boolean verify(String string, SSLSession ssls) {
-                    return true;
-                }
-            });
-        } catch (NoSuchAlgorithmException | KeyManagementException e) {
-            LOG.warn(e.getMessage());
-        }
-    }
+//    public static void configureUnsecureSSLConnections() {
+//        try {
+//            SSLContext sc = SSLContext.getInstance("TLS");
+//            sc.init(null, new TrustManager[]{new TrustAllX509TrustManager()}, new java.security.SecureRandom());
+//            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+//            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+//                public boolean verify(String string, SSLSession ssls) {
+//                    return true;
+//                }
+//            });
+//        } catch (NoSuchAlgorithmException | KeyManagementException e) {
+//            LOG.warn(e.getMessage());
+//        }
+//    }
 
     public X509Certificate[] getAcceptedIssuers() {
         return new X509Certificate[0];
