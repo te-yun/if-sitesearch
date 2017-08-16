@@ -29,15 +29,11 @@ import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
-import com.sun.net.ssl.HostnameVerifier;
-import com.sun.net.ssl.HttpsURLConnection;
-import com.sun.net.ssl.SSLContext;
-import com.sun.net.ssl.TrustManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import javax.net.ssl.SSLSession;
+import javax.net.ssl.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -197,15 +193,13 @@ public class SiteService {
     }
 
     private static void configureUnsecureSSLConnections() throws NoSuchAlgorithmException, KeyManagementException {
+        LOG.info(">>>>>>>>>>>>>>>>>>>>>SERVER");
         SSLContext sc = SSLContext.getInstance("TLS");
+        LOG.info(">>>>>>>>>>>>>>>>>>>>>SERVER2");
         sc.init(null, new TrustManager[]{new TrustAllX509TrustManager()}, new java.security.SecureRandom());
+        LOG.info(">>>>>>>>>>>>>>>>>>>>>SERVER3");
         HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
         HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
-            @Override
-            public boolean verify(String urlHostname, String certHostname) {
-                return true;
-            }
-
             public boolean verify(String string, SSLSession ssls) {
                 return true;
             }

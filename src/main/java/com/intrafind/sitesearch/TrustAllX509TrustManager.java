@@ -16,10 +16,10 @@
 
 package com.intrafind.sitesearch;
 
-import com.sun.net.ssl.X509TrustManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.X509TrustManager;
 import java.security.cert.X509Certificate;
 
 public class TrustAllX509TrustManager implements X509TrustManager {
@@ -53,16 +53,6 @@ public class TrustAllX509TrustManager implements X509TrustManager {
 //            LOG.warn(e.getMessage());
 //        }
 //    }
-
-    @Override
-    public boolean isClientTrusted(X509Certificate[] chain) {
-        return true;
-    }
-
-    @Override
-    public boolean isServerTrusted(X509Certificate[] chain) {
-        return true;
-    }
 
     public X509Certificate[] getAcceptedIssuers() {
         return new X509Certificate[0];
