@@ -63,44 +63,18 @@ public enum IfinderCoreClient {
         }
     }
 
-
-//    /**
-//     * Returns a SOAP web client. Note that Hessian is the recommended remoting technology
-//     * <p/>
-//     * Example URL: <code>http://server:8090/soap/serviceID</code>
-//     * <p/>
-//     * If you need to add basic authentication: <code>http://username:password@server:8090/soap/serviceID</code>
-//     */
-//    public static <T> T getSoapClient(Class<T> aInterface, String aUrl) {
-//        try {
-//            WebService webService = aInterface.getAnnotation(WebService.class);
-//
-//            String nameSpace = webService.targetNamespace();
-//            String name = webService.serviceName();
-//            URL url = new URL(aUrl);
-//            QName qName = new QName(nameSpace, name);
-//
-//            return javax.xml.ws.Service.create(url, qName).getPort(aInterface);
-//
-//        } catch (Exception exception) {
-//            throw new RuntimeException(exception);
-//        }
-//    }
-
-
     private static void initHttp() {
         setEnv("http.maxConnections", "128"); // it might be necessary to change this during JVM startup!
     }
 
 
     private static void initSSL() {
-        setEnv("javax.net.ssl.trustStore", "/home/alexander_orlov/buildAgent/work/e92715f0513d41ad/src/main/resources/keystore.jks");
-        setEnv("javax.net.ssl.trustStorePassword", "7zCMZiSN2X2k0lK6Abovg4C3uFkpRwaJLwX87jpFKmc=");
+        setEnv("javax.net.ssl.trustStore", "classpath:keystore.jks");
+        setEnv("javax.net.ssl.trustStorePassword", "changeit");
 
-//        setEnv("javax.net.ssl.keyStore", "classpath:keystore.jks"); // increased security with client authentication
-        setEnv("javax.net.ssl.keyStore", "/home/alexander_orlov/buildAgent/work/e92715f0513d41ad/src/main/resources/keystore.jks"); // increased security with client authentication
-        setEnv("javax.net.ssl.keyStorePassword", "7zCMZiSN2X2k0lK6Abovg4C3uFkpRwaJLwX87jpFKmc=");
-        setEnv("com.sun.net.ssl.checkRevocation", "false");
+        setEnv("javax.net.ssl.keyStore", "classpath:keystore.jks"); // increased security with client authentication
+        setEnv("javax.net.ssl.keyStorePassword", "changeit");
+        setEnv("com.sun.net.ssl.checkRevocation", "false"); // TODO does it have any effect at all?
     }
 
     private static void initUrlAuthentication() {
