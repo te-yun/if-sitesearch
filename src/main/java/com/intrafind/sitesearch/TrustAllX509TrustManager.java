@@ -36,6 +36,8 @@ public class TrustAllX509TrustManager implements X509TrustManager {
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
             HttpsURLConnection.setDefaultHostnameVerifier((string, sslSession) -> true);
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
+            LOG.info(">>>>>>>>>>>>>>>>>>>>>SERVER1");
+            LOG.warn(e.getStackTrace().toString());
             LOG.warn(e.getMessage());
         }
     }
