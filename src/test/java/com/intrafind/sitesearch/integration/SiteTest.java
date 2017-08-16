@@ -20,7 +20,6 @@ import com.intrafind.sitesearch.controller.SiteController;
 import com.intrafind.sitesearch.dto.Site;
 import com.intrafind.sitesearch.dto.Tenant;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -37,7 +36,6 @@ import java.util.UUID;
 
 import static org.junit.Assert.*;
 
-@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SiteTest {

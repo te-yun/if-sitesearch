@@ -19,7 +19,6 @@ package com.intrafind.sitesearch.integration;
 import com.intrafind.sitesearch.controller.SearchController;
 import com.intrafind.sitesearch.dto.FoundSite;
 import com.intrafind.sitesearch.dto.Hits;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -35,7 +34,6 @@ import java.util.UUID;
 
 import static org.junit.Assert.*;
 
-@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SearchTest {
