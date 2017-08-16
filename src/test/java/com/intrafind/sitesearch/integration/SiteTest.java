@@ -164,7 +164,7 @@ public class SiteTest {
 
     @Test
     public void importFeedAndReadSingleSiteWithSSL() throws Exception {
-        final ResponseEntity<Tenant> exchange = caller.exchange(SiteController.ENDPOINT + "/rss?feedUrl=https://intrafind.de/share/enterprise-search-blog.xml", HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
+        final ResponseEntity<Tenant> exchange = caller.exchange(SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml", HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
         final Tenant creation = validateTenantSummary(exchange, 25);
 
         Thread.sleep(18_000);
