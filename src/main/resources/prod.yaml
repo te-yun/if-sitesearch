@@ -1,0 +1,12 @@
+security:
+  user:
+    name: ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=
+    password: 7zCMZiSN2X2k0lK6Abovg4C3uFkpRwaJLwX87jpFKmc=
+
+server:
+  port: 8001
+  ssl:
+    key-store: classpath:keystore.jks
+    key-store-password: ${security.user.password}
+    key-password: ${security.user.password}
+    key-alias: alias

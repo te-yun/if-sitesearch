@@ -26,9 +26,15 @@
 //        document.getElementById("feedUrl").setAttribute("value", window.location.href);
     };
 
+    let serviceUrl;
+    if (location.hostname === "localhost") {
+        serviceUrl = "http://localhost:8001";
+    } else {
+        serviceUrl = "https://sitesearch.cloud";
+    }
     const triggerFirstUsageOwnership = function (feedUrl) {
         const xhr = new XMLHttpRequest();
-        xhr.open("PUT", "https://sitesearch.cloud/sites/rss?feedUrl=" + feedUrl);
+        xhr.open("PUT", serviceUrl + "/sites/rss?feedUrl=" + feedUrl);
         xhr.onload = function () {
             const tenantId = JSON.parse(this.response)["tenantId"];
             document.getElementById("tenantId").value = tenantId;
@@ -66,7 +72,6 @@
     }
 
     .if-teaser-highlight {
-        color: #292;
         font-weight: bold;
     }
 </style>

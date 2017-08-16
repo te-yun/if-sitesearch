@@ -9,16 +9,16 @@ security:
 
 server:
   port: 8001
-  ssl:
-    key-store: classpath:keystore.jks
-    key-store-password: ${security.user.password}
-    key-password: ${security.user.password}
-    key-alias: alias
+#  ssl:
+#    key-store: classpath:keystore.jks
+#    key-store-password: ${security.user.password}
+#    key-password: ${security.user.password}
+#    key-alias: alias
 
 spring:
-  data:
-    elasticsearch:
-      cluster-name: elasticsearch
+#  data:
+#    elasticsearch:
+#      cluster-name: elasticsearch
   main:
     banner-mode: "off"
   output:

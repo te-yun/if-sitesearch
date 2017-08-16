@@ -22,6 +22,7 @@ import com.intrafind.api.index.Index;
 import com.intrafind.api.search.Hits;
 import com.intrafind.api.search.Search;
 import com.intrafind.sitesearch.Application;
+import com.intrafind.sitesearch.TrustAllX509TrustManager;
 import com.intrafind.sitesearch.dto.Site;
 import com.intrafind.sitesearch.dto.Tenant;
 import com.rometools.rome.feed.synd.SyndFeed;
@@ -175,6 +176,27 @@ public class SiteService {
         } else { // consider request as first-usage-ownership-granting request, create new index
             return updateIndex(feedUrl, UUID.randomUUID(), UUID.randomUUID());
         }
+    }
+
+
+//    private static void configureUnsecureSSLConnections() throws NoSuchAlgorithmException, KeyManagementException {
+//        SSLContext sc = SSLContext.getInstance("TLS");
+//        sc.init(null, new TrustManager[]{new TrustAllX509TrustManager()}, new java.security.SecureRandom());
+//        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+//        HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+//            public boolean verify(String string, SSLSession ssls) {
+//                return true;
+//            }
+//        });
+//    }
+
+    static {
+//        try {
+        new TrustAllX509TrustManager();
+//            TrustAllX509TrustManager.configureUnsecureSSLConnections();
+//        } catch (KeyManagementException | NoSuchAlgorithmException e) {
+//            LOG.warn(e.getMessage());
+//        }
     }
 
     private Optional<Tenant> updateIndex(URI feedUrl, UUID tenantId, UUID tenantSecret) {
