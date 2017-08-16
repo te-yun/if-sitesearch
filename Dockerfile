@@ -10,7 +10,7 @@ MAINTAINER Alexander Orlov <alexander.orlov@intrafind.de>
 ### /execute as non-root user
 
 ADD build/libs/*.jar svc/
-#ENV SPRING_CONFIG_NAME prod,local,config
+ENV SPRING_CONFIG_NAME application,prod
 
 VOLUME /home/svc_user/data
 EXPOSE 8001
