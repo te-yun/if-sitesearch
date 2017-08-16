@@ -9,7 +9,7 @@ DOCKER_TAG=latest
 docker build --tag intrafind/$DOCKER_IMAGE_NAME:$DOCKER_TAG .
 docker rm -f $DOCKER_IMAGE_NAME
 docker run -d --name $DOCKER_IMAGE_NAME \
-    -p 80:8001 \
+    -p 443:8001 \
     -v ~/srv/$DOCKER_IMAGE_NAME:/data \
     intrafind/$DOCKER_IMAGE_NAME:$DOCKER_TAG
 
