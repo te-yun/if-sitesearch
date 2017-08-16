@@ -178,30 +178,9 @@ public class SiteService {
         }
     }
 
-
     static {
-//        try {
-////            configureUnsecureSSLConnections();
         new TrustAllX509TrustManager();
-////            TrustAllX509TrustManager.configureUnsecureSSLConnections();
-//        } catch (KeyManagementException | NoSuchAlgorithmException e) {
-//            LOG.warn(e.getMessage());
-//        }
     }
-
-//    private static void configureUnsecureSSLConnections() throws NoSuchAlgorithmException, KeyManagementException {
-//        LOG.info(">>>>>>>>>>>>>>>>>>>>>SERVER");
-//        SSLContext sc = SSLContext.getInstance("TLS");
-//        LOG.info(">>>>>>>>>>>>>>>>>>>>>SERVER2");
-//        sc.init(null, new TrustManager[]{new TrustAllX509TrustManager()}, new java.security.SecureRandom());
-//        LOG.info(">>>>>>>>>>>>>>>>>>>>>SERVER3");
-//        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-//        HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
-//            public boolean verify(String string, SSLSession ssls) {
-//                return true;
-//            }
-//        });
-//    }
 
     private Optional<Tenant> updateIndex(URI feedUrl, UUID tenantId, UUID tenantSecret) {
         LOG.info("URL-received: " + feedUrl);
