@@ -16,12 +16,17 @@
 
 package com.intrafind.sitesearch.dto;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.Serializable;
 import java.net.URI;
 import java.util.Objects;
 import java.util.UUID;
 
 public class Site implements Serializable {
+    private static final Logger LOG = LoggerFactory.getLogger(Site.class);
+
     private UUID id;
     private UUID tenantId;
     private UUID tenantSecret;
@@ -86,6 +91,9 @@ public class Site implements Serializable {
     }
 
     public void setId(UUID id) {
+        LOG.info("Objects.hash(url): " + Objects.hash(url));
+        LOG.info("Objects.hash(tenantId): " + Objects.hash(tenantId));
+        LOG.info("tenantId: " + tenantId + "#" + Objects.hash(url));
         this.id = id;
     }
 

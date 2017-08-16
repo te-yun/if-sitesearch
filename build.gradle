@@ -42,6 +42,9 @@ configurations {
 }
 
 dependencies {
+    compile "org.jetbrains.xodus:xodus-openAPI:1.0.6"
+    compile "org.jetbrains.xodus:xodus-entity-store:1.0.6"
+    
     compile "com.rometools:rome:1.7.4"
 
     compile "com.caucho:hessian:4.0.38"

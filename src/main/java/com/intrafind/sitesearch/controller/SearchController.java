@@ -24,7 +24,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 
 @CrossOrigin
 @RestController
@@ -39,12 +42,13 @@ public class SearchController {
         this.service = service;
     }
 
+    private AtomicLong searchCount = new AtomicLong();
+    private Map<UUID, AtomicLong> searchCountPerTenant = new HashMap<>();
     @RequestMapping(method = RequestMethod.GET)
     ResponseEntity<Hits> search(
             @CookieValue(value = "override-tenant", required = false) UUID cookieTenant,
             @RequestParam(value = "sSearchTerm", required = false, defaultValue = "") String sSearchTerm, // legacy parameter
             @RequestParam(value = "query", required = false, defaultValue = "") String query,
-//            @RequestParam(value = "tenantId", required = false) UUID tenantId
             @RequestParam(value = "tenantId") UUID tenantId
     ) {
 
@@ -60,6 +64,11 @@ public class SearchController {
         if (searchResult.getResults().isEmpty()) {
             return ResponseEntity.notFound().build();
         } else {
+            final UUID finalTenantId = tenantId;
+//            searchCountPerTenant.compute(tenantId, (uuid, atomicLong) -> {
+//                LOG.info(finalTenantId +": " + atomicLong.get());
+//                return new AtomicLong(atomicLong.incrementAndGet());
+//            });
             return ResponseEntity.ok(searchResult);
         }
     }
