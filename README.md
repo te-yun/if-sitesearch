@@ -37,7 +37,7 @@ to the `config` folder inside this project.
     ./test-load.ps1
 
 ## Release
-    ./release.sh
+    ./release.ps1
     
 ## Postman Export
     ./*.postman_collection.json
