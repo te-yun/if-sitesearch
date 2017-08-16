@@ -12,7 +12,6 @@ DOCKER_TAG=latest
 docker build --tag intrafind/$DOCKER_IMAGE_NAME:$DOCKER_TAG .
 docker rm -f $DOCKER_IMAGE_NAME
 docker run -d --name $DOCKER_IMAGE_NAME \
-    -p 80:8001 \
     -p 443:8001 \
     -v ~/srv/$DOCKER_IMAGE_NAME:/data \
     intrafind/$DOCKER_IMAGE_NAME:$DOCKER_TAG
@@ -27,9 +26,9 @@ fi
 
 
 cd docker-nginx-https-redirect
-docker build --tag intrafind/redirect-https:latest
+docker build --tag intrafind/redirect-https:latest .
 docker rm -f redirect-https
 docker run -d --name redirect-https \
-    -p 81:443 \
+    -p 80:443 \
     intrafind/redirect-https:latest
 
