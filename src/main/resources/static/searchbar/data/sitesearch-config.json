@@ -140,7 +140,7 @@
     "css": [],
     "js": []
   },
-  "langUrlPrefix": "searchbar/data/language/",
+  "langUrlPrefix": "https://sitesearch.cloud/searchbar/data/language/",
   "iconPath": "searchbar/img/filetypes",
   "lyncIconPath": "searchbar/img/shared/lync",
   "defaultLang": "en",
