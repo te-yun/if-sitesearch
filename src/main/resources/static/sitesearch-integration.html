@@ -18,9 +18,9 @@
 <html lang="en">
 <meta charset="utf-8"/>
 <title>Simple Site Search Integration</title>
-<link rel="stylesheet" href="searchbar/css/app.css"/>
+<link rel="stylesheet" href="https://sitesearch.cloud/searchbar/css/app.css"/>
 
-<textarea name="integration" id="integration" cols="50" rows="90">
+<textarea name="integration" id="integration" cols="60" rows="30">
     <style>
         .if-teaser-highlight {
             font-weight: bold;
@@ -33,14 +33,14 @@
             <div id="resultlist1"></div>
         </div>
 
-        <script src="searchbar/js/app.js"></script>
+        <script src="https://sitesearch.cloud/searchbar/js/app.js"></script>
         <script>
             jQuery.noConflict();
             jQuery(document).ready(function ($) {
 
                 IFS.initClient({
                     sbTarget: "#searchbar",
-                    configurl: "searchbar/data/sitesearch-config.json",
+                    configurl: "https://sitesearch.cloud/searchbar/data/sitesearch-config.json",
                     sitesearch: true,
                     tenantId: "eefb005b-7c2d-471a-baf7-b10e7c18b65b"
                 });
@@ -61,17 +61,25 @@
         <div id="resultlist"></div>
     </div>
 
-    <script src="searchbar/js/app.js"></script>
+    <script src="https://sitesearch.cloud/searchbar/js/app.js"></script>
     <script>
         jQuery.noConflict();
         jQuery(document).ready(function ($) {
 
             IFS.initClient({
                 sbTarget: "#searchbar",
-                configurl: "searchbar/data/sitesearch-config.json",
+                configurl: "https://sitesearch.cloud/searchbar/data/sitesearch-config.json",
                 sitesearch: true,
                 tenantId: "eefb005b-7c2d-471a-baf7-b10e7c18b65b"
             });
         });
     </script>
 </div>
+
+<script>
+    console.warn(document.getElementById("searchbarContainer").innerHTML);
+    console.warn(document.getElementById("searchbarContainer").nodeValue);
+    console.warn(document.getElementById("searchbarContainer").textContent);
+    console.warn(document.getElementById("searchbarContainer").outerHTML);
+    console.warn(document.getElementById("searchbarContainer").value);
+</script>
