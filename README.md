@@ -41,3 +41,6 @@ to the `config` folder inside this project.
     
 ## Postman Export
     ./*.postman_collection.json
+    
+# Attribution
+* Made with ♥ in Munich
