@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.intrafind.sitesearch.controller;
+package com.intrafind.sitesearch.service;
 
-public class SuggestionController {
+public class AutocompleteService {
 }

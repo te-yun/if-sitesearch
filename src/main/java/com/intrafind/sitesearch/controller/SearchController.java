@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -49,6 +50,7 @@ public class SearchController {
             @CookieValue(value = "override-tenant", required = false) UUID cookieTenant,
             @RequestParam(value = "sSearchTerm", required = false, defaultValue = "") String sSearchTerm, // legacy parameter
             @RequestParam(value = "query", required = false, defaultValue = "") String query,
+            @RequestParam(value = "action", required = false, defaultValue = "") String action,
             @RequestParam(value = "tenantId") UUID tenantId
     ) {
 
@@ -58,17 +60,19 @@ public class SearchController {
         // override tenantId with cookie value for debugging & speed up the getting started experience 
         if (cookieTenant != null) tenantId = cookieTenant;
 
+        final boolean autocomplete = Objects.equals(action, "autocomplete");
+
+        LOG.info("autocomplete: " + autocomplete);
         LOG.info("cookieTenant: " + cookieTenant);
         LOG.info("query: " + query);
-        Hits searchResult = service.search(query, tenantId);
+        Hits searchResult = service.search(query, tenantId, autocomplete);
         if (searchResult.getResults().isEmpty()) {
             return ResponseEntity.notFound().build();
         } else {
-            final UUID finalTenantId = tenantId;
-//            searchCountPerTenant.compute(tenantId, (uuid, atomicLong) -> {
-//                LOG.info(finalTenantId +": " + atomicLong.get());
-//                return new AtomicLong(atomicLong.incrementAndGet());
-//            });
+//            final UUID finalTenantId = tenantId;
+            searchCountPerTenant.put(tenantId, new AtomicLong(searchCountPerTenant.getOrDefault(tenantId, new AtomicLong()).incrementAndGet()));
+            LOG.info(tenantId + ": " + searchCountPerTenant.get(tenantId));
+            // TODO save to xodus
             return ResponseEntity.ok(searchResult);
         }
     }

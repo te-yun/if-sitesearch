@@ -34,6 +34,7 @@ import java.util.UUID;
 @Service
 public class SearchService {
     static final Search SEARCH_SERVICE = IfinderCoreClient.newHessianClient(Search.class, Application.I_FINDER_CORE + "/search");
+    private static final Search SEARCH_AUTOCOMPLETE_SERVICE = IfinderCoreClient.newHessianClient(Search.class, Application.I_FINDER_CORE + "/autocomplete");
 
     private static final Logger LOG = LoggerFactory.getLogger(SearchService.class);
     private static final String QUERY_SEPARATOR = ",";
@@ -41,36 +42,69 @@ public class SearchService {
     @Value("${sitesearch.if-core-hostname}")
     private String ifCoreHostname;
 
-    public Hits search(String query, UUID tenantId) {
-        com.intrafind.api.search.Hits hits = SEARCH_SERVICE.search(
-                query + " AND " + Fields.TENANT + ":" + tenantId,
+    public Hits search(String query, UUID tenantId, boolean isAutocomplete) {
+        if (isAutocomplete) {
+            com.intrafind.api.search.Hits hits = SEARCH_AUTOCOMPLETE_SERVICE.search(
+                    query + " AND " + Fields.TENANT + ":" + tenantId,
 
-                Search.RETURN_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL + QUERY_SEPARATOR + Fields.TENANT,
+                    Search.RETURN_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL + QUERY_SEPARATOR + Fields.TENANT,
 
-                Search.RETURN_TEASER_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL,
-                Search.RETURN_TEASER_COUNT, 3,
-                Search.RETURN_TEASER_SIZE, 100,
-                Search.RETURN_TEASER_TAG_PRE, "<span class='if-teaser-highlight'>",
-                Search.RETURN_TEASER_TAG_POST, "</span>",
+                    Search.RETURN_TEASER_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL,
+                    Search.RETURN_TEASER_COUNT, 3,
+                    Search.RETURN_TEASER_SIZE, 100,
+                    Search.RETURN_TEASER_TAG_PRE, "<span class='if-teaser-highlight'>",
+                    Search.RETURN_TEASER_TAG_POST, "</span>",
 
-                Search.HITS_LIST_SIZE, 1_000
-        );
-
-        LOG.info("query: " + query);
-        List<FoundSite> siteDocuments = new ArrayList<>();
-        hits.getDocuments().forEach(document -> {
-            FoundSite site = new FoundSite(
-                    document.get(HIT_TEASER_PREFIX + Fields.TITLE),
-                    document.get(Fields.TITLE),
-                    document.get(HIT_TEASER_PREFIX + Fields.BODY),
-                    document.get(Fields.BODY),
-                    document.get(HIT_TEASER_PREFIX + Fields.URL),
-                    URI.create(document.get(Fields.URL))
+                    Search.HITS_LIST_SIZE, 1_000
             );
-            // TODO remove tenant INFO as it is not relevant here, consider separate DTO
-            siteDocuments.add(site);
-        });
 
-        return new Hits(query, siteDocuments);
+            LOG.info("query: " + query);
+            List<FoundSite> siteDocuments = new ArrayList<>();
+            hits.getDocuments().forEach(document -> {
+                FoundSite site = new FoundSite(
+                        document.get(HIT_TEASER_PREFIX + Fields.TITLE),
+                        document.get(Fields.TITLE),
+                        document.get(HIT_TEASER_PREFIX + Fields.BODY),
+                        document.get(Fields.BODY),
+                        document.get(HIT_TEASER_PREFIX + Fields.URL),
+                        URI.create(document.get(Fields.URL))
+                );
+                // TODO remove tenant INFO as it is not relevant here, consider separate DTO
+                siteDocuments.add(site);
+            });
+
+            return new Hits(query, siteDocuments);
+        } else {
+            com.intrafind.api.search.Hits hits = SEARCH_SERVICE.search(
+                    query + " AND " + Fields.TENANT + ":" + tenantId,
+
+                    Search.RETURN_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL + QUERY_SEPARATOR + Fields.TENANT,
+
+                    Search.RETURN_TEASER_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL,
+                    Search.RETURN_TEASER_COUNT, 3,
+                    Search.RETURN_TEASER_SIZE, 100,
+                    Search.RETURN_TEASER_TAG_PRE, "<span class='if-teaser-highlight'>",
+                    Search.RETURN_TEASER_TAG_POST, "</span>",
+
+                    Search.HITS_LIST_SIZE, 1_000
+            );
+
+            LOG.info("query: " + query);
+            List<FoundSite> siteDocuments = new ArrayList<>();
+            hits.getDocuments().forEach(document -> {
+                FoundSite site = new FoundSite(
+                        document.get(HIT_TEASER_PREFIX + Fields.TITLE),
+                        document.get(Fields.TITLE),
+                        document.get(HIT_TEASER_PREFIX + Fields.BODY),
+                        document.get(Fields.BODY),
+                        document.get(HIT_TEASER_PREFIX + Fields.URL),
+                        URI.create(document.get(Fields.URL))
+                );
+                // TODO remove tenant INFO as it is not relevant here, consider separate DTO
+                siteDocuments.add(site);
+            });
+
+            return new Hits(query, siteDocuments);
+        }
     }
 }
