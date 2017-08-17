@@ -26,12 +26,12 @@
             font-weight: bold;
         }
     </style>
-    <style type="text/css" srv></style>
     <div class="container" style="width: 530px;">
         <div id="searchbar"></div>
         <div id="resultlist"></div>
     </div>
 
+    <script src="https://sitesearch.cloud/searchbar/js/app.js"></script>
     <script>
         jQuery.noConflict();
         jQuery(document).ready(function ($) {
@@ -50,12 +50,5 @@
 </textarea>
 
 <script>
-    console.warn(document.getElementById("searchbarContainer").innerHTML);
-    console.warn(document.getElementById("searchbarContainer").nodeValue);
-    console.warn(document.getElementById("searchbarContainer").textContent);
-    console.warn(document.getElementById("searchbarContainer").outerHTML);
-    console.warn(document.getElementById("searchbarContainer").value);
-
-
     document.getElementById("integration").textContent = document.getElementById("searchbarContainer").outerHTML;
 </script>

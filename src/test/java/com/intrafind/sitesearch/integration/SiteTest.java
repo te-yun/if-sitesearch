@@ -158,7 +158,7 @@ public class SiteTest {
         final ResponseEntity<Tenant> exchange = caller.exchange(SiteController.ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/fahrplanaenderungen/detail/rss.xml", HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
         final Tenant creation = validateTenantSummary(exchange, 10);
 
-        Thread.sleep(18_000);
+        Thread.sleep(13_000);
         validateUpdatedSites(creation);
     }
 
@@ -167,7 +167,7 @@ public class SiteTest {
         final ResponseEntity<Tenant> exchange = caller.exchange(SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml", HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
         final Tenant creation = validateTenantSummary(exchange, 25);
 
-        Thread.sleep(18_000);
+        Thread.sleep(13_000);
         LOG.info("tenantId: " + creation.getTenantId());
         validateUpdatedSites(creation);
     }
@@ -189,7 +189,7 @@ public class SiteTest {
         final ResponseEntity<Tenant> initialIndexCreation = caller.exchange(
                 SiteController.ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/meldungen/detail/rss.xml",
                 HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
-        Thread.sleep(18_000);
+        Thread.sleep(13_000);
         final Tenant tenantCreation = validateTenantSummary(initialIndexCreation, 10);
 
         UUID tenantIdFromCreation = tenantCreation.getTenantId();
