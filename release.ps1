@@ -9,7 +9,6 @@ $DOCKER_TAG = "latest"
 docker build --tag intrafind/${DOCKER_IMAGE_NAME}:${DOCKER_TAG} .
 docker rm -f ${DOCKER_IMAGE_NAME}
 docker run -d --name ${DOCKER_IMAGE_NAME} -p 443:8001 --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD -v ~/srv/${DOCKER_IMAGE_NAME}:/data intrafind/${DOCKER_IMAGE_NAME}:${DOCKER_TAG}
-docker run -d --name ${DOCKER_IMAGE_NAME} -p 2443:8001 --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD -v ~/srv/${DOCKER_IMAGE_NAME}:/data intrafind/${DOCKER_IMAGE_NAME}:${DOCKER_TAG}
 
 $danglingImages = $(docker images -f "dangling=true" -q)
 
@@ -25,4 +24,4 @@ docker build --tag intrafind/redirect-https:latest .
 docker rm -f redirect-https
 docker run -d --name redirect-https -p 80:80 intrafind/redirect-https:latest
 
-powershell switch-release.ps1
+powershell -File switch-release.ps1

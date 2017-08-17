@@ -18,7 +18,7 @@
 <html lang="en">
 <meta charset="utf-8"/>
 <title>Simple Site Search Integration</title>
-<!--<link rel="stylesheet" href="https://sitesearch.cloud/searchbar/css/app.css"/>-->
+<link rel="stylesheet" href="https://sitesearch.cloud/searchbar/css/app.css"/>
 
 <div id="searchbarContainer">
     <style>
@@ -50,5 +50,7 @@
 </textarea>
 
 <script>
-    document.getElementById("integration").textContent = document.getElementById("searchbarContainer").outerHTML;
+    document.getElementById("integration").textContent =
+        "<link rel=\"stylesheet\" href=\"https://sitesearch.cloud/searchbar/css/app.css\"/>"
+        + document.getElementById("searchbarContainer").outerHTML;
 </script>

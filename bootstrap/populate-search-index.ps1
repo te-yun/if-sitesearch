@@ -2,6 +2,8 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 $PSDefaultParameterValues["*:ErrorAction"] = "Stop"
 
+#curl -s sitesearch:9605/json/autocomplete?method=search --data param0=int
+#
 #curl -s ml-if-monster:9605/json/search?method=search --data param0=intrafind --data param1='[return.fields, "", return.teaser.fields, "_str.title,_str.body,_str.url"]'
 #curl 172.18.0.1:9605/json/state?method=get --data param0='[system]'
 #
