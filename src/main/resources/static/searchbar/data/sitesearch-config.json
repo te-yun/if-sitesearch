@@ -41,7 +41,7 @@
       "searchbar_template": "app/templates/default/searchbar.hbs",
       "group_template": "app/templates/default/groups.hbs",
       "roles": {
-        "url": "searchbar/data/sitesearch-roles.json"
+        "url": "https://sitesearch.cloud/searchbar/data/sitesearch-roles.json"
       },
       "indexfields": {
         "template": "app/templates/default/indexfields.hbs"
