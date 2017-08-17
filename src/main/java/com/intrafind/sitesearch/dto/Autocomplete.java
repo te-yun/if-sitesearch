@@ -19,9 +19,7 @@ package com.intrafind.sitesearch.dto;
 import java.util.Collections;
 import java.util.List;
 
-//@Document(indexName = "suggestion")
-public class Suggestions {
-    //    @Id
+public class Autocomplete {
     private String id;
     private List<String> completions = Collections.emptyList();
     private List<String> images = Collections.emptyList();

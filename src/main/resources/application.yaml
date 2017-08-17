@@ -9,6 +9,9 @@ security:
     name: ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=
     password: ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=
 
+sitesearch:
+  ifinderCoreHostname: sitesearch.cloud
+
 server:
   port: 8001
 #  ssl:
