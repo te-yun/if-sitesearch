@@ -46,11 +46,16 @@
     </script>
 </div>
 
-<textarea name="integration" id="integration" cols="64" rows="20">
+<input id="tenantId" placeholder="Your Tenant ID" onchange="generateCode();">
+<textarea name="integration" id="integration" cols="64" rows="20" style="margin-bottom: 5em;">
 </textarea>
 
 <script>
-    document.getElementById("integration").textContent =
-        "<link rel=\"stylesheet\" href=\"https://sitesearch.cloud/searchbar/css/app.css\"/>"
-        + document.getElementById("searchbarContainer").outerHTML;
+    const generateCode = function () {
+        document.getElementById("integration").textContent =
+            "<link rel=\"stylesheet\" href=\"https://sitesearch.cloud/searchbar/css/app.css\"/>"
+            + document.getElementById("searchbarContainer").outerHTML
+                .replace("tenantId: \"eefb005b-7c2d-471a-baf7-b10e7c18b65b\"", document.getElementById("tenantId").value);
+    };
+    generateCode();
 </script>

@@ -3,7 +3,7 @@
 
 sitesearch-dispatcher
 =
-Here you can find a *non-technical* business focused abstract about [Sitesearch](http://if-wiki:8090/pages/viewpage.action?pageId=14714226).
+Here you can find a *non-technical* business focused abstract about [Site Search](http://if-wiki:8090/pages/viewpage.action?pageId=14714226).
 
 # About
 
@@ -13,7 +13,7 @@ Here you can find a *non-technical* business focused abstract about [Sitesearch]
 * [SCM repository](http://ml-if-git/sitesearch/if-sitesearch)
 * [Container](http://ml-if-git/sitesearch/docker-container)
     
-# Pre-requisite / Configuration
+# Configuration
 
 Add a [configuration profile](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config-profile-specific-properties) 
 to the `config` folder inside this project.
