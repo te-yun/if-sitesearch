@@ -44,6 +44,7 @@ public class SearchService {
 
     public Hits search(String query, UUID tenantId, boolean isAutocomplete) {
         if (isAutocomplete) {
+            LOG.info("AUTOCOMPLETE SEARCH >>>>>>>>>>>>>>>>>>>>>>>>>>> ");
             com.intrafind.api.search.Hits hits = SEARCH_AUTOCOMPLETE_SERVICE.search(
                     query + " AND " + Fields.TENANT + ":" + tenantId,
 

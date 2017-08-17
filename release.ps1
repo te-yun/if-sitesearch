@@ -24,4 +24,4 @@ docker build --tag intrafind/redirect-https:latest .
 docker rm -f redirect-https
 docker run -d --name redirect-https -p 80:80 intrafind/redirect-https:latest
 
-powershell ./switch-release.ps1
+& "./switch-release.ps1"

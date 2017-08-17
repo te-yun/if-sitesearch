@@ -57,6 +57,8 @@ public class SearchController {
         // to stay compatible with the legacy API for now
         if (!sSearchTerm.isEmpty()) query = sSearchTerm;
 
+        if (query.isEmpty()) return ResponseEntity.badRequest().build();
+
         // override tenantId with cookie value for debugging & speed up the getting started experience 
         if (cookieTenant != null) tenantId = cookieTenant;
 
