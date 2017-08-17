@@ -74,6 +74,7 @@ public class SearchService {
                 siteDocuments.add(site);
             });
 
+            // TODO look in the payload
             return new Hits(query, siteDocuments);
         } else {
             com.intrafind.api.search.Hits hits = SEARCH_SERVICE.search(
