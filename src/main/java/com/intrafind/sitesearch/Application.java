@@ -18,7 +18,6 @@ package com.intrafind.sitesearch;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -36,14 +35,6 @@ import java.net.URI;
 @RestController
 @EnableSwagger2
 public class Application {
-    @Value("${sitesearch.ifinderCoreHostname}")
-    private String ifinderCoreHostname;
-
-    {
-        System.out.println("ifinderCoreHostname: " + ifinderCoreHostname);
-        System.err.println("ifinderCoreHostname: " + ifinderCoreHostname);
-    }
-
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -70,7 +61,7 @@ public class Application {
 //        return PathSelectors.regex("/basic-error-controller.*");
 //    }
 
-    public static final URI I_FINDER_CORE = URI.create("http://sitesearch.cloud:9605/hessian");
+    public static final URI I_FINDER_CORE = URI.create("http://dummyuser:dummypassword@sitesearch.cloud:9605/hessian");
 
     private final static Logger LOG = LoggerFactory.getLogger(Application.class);
 

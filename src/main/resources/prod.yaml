@@ -1,6 +1,6 @@
 security:
   user:
-    name: ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=
+    name: ${security.user.password}
     password: ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=
 
 server:

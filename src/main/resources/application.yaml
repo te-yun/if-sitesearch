@@ -6,11 +6,11 @@
 
 security:
   user:
-    name: ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=
+    name: ${security.user.password}
     password: ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=
 
 sitesearch:
-  ifinderCoreHostname: "http://sitesearch.cloud:9605/hessian"
+  if-core-hostname: http://sitesearch.cloud:9605/hessian
 
 server:
   port: 8001

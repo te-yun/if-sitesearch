@@ -31,7 +31,6 @@ import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -46,16 +45,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class SiteService {
-    @Value("${sitesearch.ifinderCoreHostname}")
-    private String ifinderCoreHostname;
-    
     private static final Logger LOG = LoggerFactory.getLogger(SiteService.class);
     private static final String TENANT_SECRET_FIELD = "tenantSecret";
 
-    private Search searchService = IfinderCoreClient.newHessianClient(Search.class, Application.I_FINDER_CORE + "/search");
-    //    private Search searchService = IfinderCoreClient.newHessianClient(Search.class, ifinderCoreHostname + "/search");
-//    private Index indexService = IfinderCoreClient.newHessianClient(Index.class, ifinderCoreHostname + "/index");
-    private Index indexService = IfinderCoreClient.newHessianClient(Index.class, Application.I_FINDER_CORE + "/index");
+    private static final Index INDEX_SERVICE = IfinderCoreClient.newHessianClient(Index.class, Application.I_FINDER_CORE + "/index");
 
     public Optional<Site> indexExistingSite(UUID id, UUID tenantId, UUID tenantSecret, Site site) {
         if (tenantId != null && tenantSecret != null) { // credentials are provided as a tuple only
@@ -82,7 +75,7 @@ public class SiteService {
         indexable.set(Fields.URL, site.getUrl());
         indexable.set(Fields.TENANT, tenantId);
         indexable.set(TENANT_SECRET_FIELD, tenantSecret);
-        indexService.index(indexable);
+        INDEX_SERVICE.index(indexable);
 
         return fetchById(id);
     }
@@ -95,14 +88,14 @@ public class SiteService {
         indexable.set(Fields.URL, site.getUrl());
         indexable.set(Fields.TENANT, UUID.randomUUID().toString());
         indexable.set(TENANT_SECRET_FIELD, UUID.randomUUID().toString());
-        indexService.index(indexable);
+        INDEX_SERVICE.index(indexable);
 
         return fetchNewTenantCreatingSiteById(id);
     }
 
     public Optional<List<UUID>> fetchAllDocuments(UUID tenantId) {
         // TODO only fetch ID info
-        Hits documentWithTenantSecret = searchService.search(Fields.TENANT + ":" + tenantId.toString(), Search.HITS_LIST_SIZE, 1_000);
+        Hits documentWithTenantSecret = SearchService.SEARCH_SERVICE.search(Fields.TENANT + ":" + tenantId.toString(), Search.HITS_LIST_SIZE, 1_000);
 
         if (documentWithTenantSecret.getDocuments().isEmpty()) {
             return Optional.empty();
@@ -117,7 +110,7 @@ public class SiteService {
 
     private Optional<UUID> fetchTenantSecret(UUID tenantId) {
         // TODO only fetch SECRET info
-        Hits documentWithTenantSecret = searchService.search(Fields.TENANT + ":" + tenantId, Search.HITS_LIST_SIZE, 1);
+        Hits documentWithTenantSecret = SearchService.SEARCH_SERVICE.search(Fields.TENANT + ":" + tenantId, Search.HITS_LIST_SIZE, 1);
 
         if (documentWithTenantSecret.getDocuments().isEmpty()) {
             return Optional.empty();
@@ -128,7 +121,7 @@ public class SiteService {
     }
 
     private Optional<Site> fetchNewTenantCreatingSiteById(UUID id) {
-        Optional<Document> found = indexService.fetch(Index.ALL, id.toString()).stream().findAny();
+        Optional<Document> found = INDEX_SERVICE.fetch(Index.ALL, id.toString()).stream().findAny();
 
         if (found.isPresent()) {
             Document foundDocument = found.get();
@@ -148,7 +141,7 @@ public class SiteService {
     }
 
     public Optional<Site> fetchById(UUID id) {
-        Optional<Document> found = indexService.fetch(Index.ALL, id.toString()).stream().findAny();
+        Optional<Document> found = INDEX_SERVICE.fetch(Index.ALL, id.toString()).stream().findAny();
 
         if (found.isPresent()) {
             Document foundDocument = found.get();
@@ -241,6 +234,6 @@ public class SiteService {
 
     public void delete(UUID documentId) {
         // just assume everything works... right?
-        indexService.delete(documentId.toString());
+        INDEX_SERVICE.delete(documentId.toString());
     }
 }

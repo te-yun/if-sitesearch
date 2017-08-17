@@ -18,6 +18,7 @@ package com.intrafind.sitesearch.service;
 
 import com.intrafind.api.Fields;
 import com.intrafind.api.search.Search;
+import com.intrafind.sitesearch.Application;
 import com.intrafind.sitesearch.dto.FoundSite;
 import com.intrafind.sitesearch.dto.Hits;
 import org.slf4j.Logger;
@@ -32,24 +33,16 @@ import java.util.UUID;
 
 @Service
 public class SearchService {
-    @Value("${sitesearch.ifinderCoreHostname}")
-    private String ifinderCoreHostname;
-
-    {
-        System.out.println("ifinderCoreHostname: " + ifinderCoreHostname);
-        System.err.println("ifinderCoreHostname: " + ifinderCoreHostname);
-    }
+    static final Search SEARCH_SERVICE = IfinderCoreClient.newHessianClient(Search.class, Application.I_FINDER_CORE + "/search");
 
     private static final Logger LOG = LoggerFactory.getLogger(SearchService.class);
     private static final String QUERY_SEPARATOR = ",";
     private static final String HIT_TEASER_PREFIX = "hit.teaser.";
-
-    private Search searchService = IfinderCoreClient.newHessianClient(Search.class, ifinderCoreHostname + "/search");
-
+    @Value("${sitesearch.if-core-hostname}")
+    private String ifCoreHostname;
 
     public Hits search(String query, UUID tenantId) {
-        LOG.info("ifinderCoreHostname: " + ifinderCoreHostname);
-        com.intrafind.api.search.Hits hits = searchService.search(
+        com.intrafind.api.search.Hits hits = SEARCH_SERVICE.search(
                 query + " AND " + Fields.TENANT + ":" + tenantId,
 
                 Search.RETURN_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL + QUERY_SEPARATOR + Fields.TENANT,
