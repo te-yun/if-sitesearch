@@ -50,8 +50,10 @@
     </script>
 </div>
 
-<input id="tenantId" placeholder="Your Tenant ID" onchange="generateCode();">
-<textarea name="integration" id="integration" cols="64" rows="20" style="margin-bottom: 5em;">
+<input id="tenantId" value="930bd2f4-22b6-4046-b118-9a02b5281ceb" placeholder="Your Tenant ID"
+       onchange="generateCode();">
+<br>
+<textarea name="integration" id="integration" cols="64" rows="20" style="margin: 3em;">
 </textarea>
 
 <script>
@@ -59,7 +61,7 @@
         document.getElementById("integration").textContent =
             "<link rel=\"stylesheet\" href=\"https://sitesearch.cloud/searchbar/css/app.css\"/>"
             + document.getElementById("searchbarContainer").outerHTML
-                .replace("tenantId: \"930bd2f4-22b6-4046-b118-9a02b5281ceb\"", document.getElementById("tenantId").value);
+                .replace("930bd2f4-22b6-4046-b118-9a02b5281ceb", document.getElementById("tenantId").value);
     };
     generateCode();
 </script>
