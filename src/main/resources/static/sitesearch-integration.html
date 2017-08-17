@@ -20,42 +20,15 @@
 <title>Simple Site Search Integration</title>
 <link rel="stylesheet" href="https://sitesearch.cloud/searchbar/css/app.css"/>
 
-<textarea name="integration" id="integration" cols="60" rows="30">
+<textarea name="integration" id="integration" cols="70" rows="20">
+</textarea>
+
+<div id="searchbarContainer">
     <style>
         .if-teaser-highlight {
             font-weight: bold;
         }
     </style>
-
-    <div id="searchbarContainer1">
-        <div class="container" style="margin-top:22px; width: 530px;">
-            <div id="searchbar1"></div>
-            <div id="resultlist1"></div>
-        </div>
-
-        <script src="https://sitesearch.cloud/searchbar/js/app.js"></script>
-        <script>
-            jQuery.noConflict();
-            jQuery(document).ready(function ($) {
-
-                IFS.initClient({
-                    sbTarget: "#searchbar",
-                    configurl: "https://sitesearch.cloud/searchbar/data/sitesearch-config.json",
-                    sitesearch: true,
-                    tenantId: "eefb005b-7c2d-471a-baf7-b10e7c18b65b"
-                });
-            });
-        </script>
-    </div>
-</textarea>
-
-<style>
-    .if-teaser-highlight {
-        font-weight: bold;
-    }
-</style>
-
-<div id="searchbarContainer">
     <div class="container" style="margin-top:22px; width: 530px;">
         <div id="searchbar"></div>
         <div id="resultlist"></div>
@@ -82,4 +55,7 @@
     console.warn(document.getElementById("searchbarContainer").textContent);
     console.warn(document.getElementById("searchbarContainer").outerHTML);
     console.warn(document.getElementById("searchbarContainer").value);
+
+
+    document.getElementById("integration").textContent = document.getElementById("searchbarContainer").outerHTML;
 </script>
