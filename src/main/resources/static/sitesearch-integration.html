@@ -18,10 +18,7 @@
 <html lang="en">
 <meta charset="utf-8"/>
 <title>Simple Site Search Integration</title>
-<link rel="stylesheet" href="https://sitesearch.cloud/searchbar/css/app.css"/>
-
-<textarea name="integration" id="integration" cols="70" rows="20">
-</textarea>
+<!--<link rel="stylesheet" href="https://sitesearch.cloud/searchbar/css/app.css"/>-->
 
 <div id="searchbarContainer">
     <style>
@@ -29,12 +26,12 @@
             font-weight: bold;
         }
     </style>
-    <div class="container" style="margin-top:22px; width: 530px;">
+    <style type="text/css" srv></style>
+    <div class="container" style="width: 530px;">
         <div id="searchbar"></div>
         <div id="resultlist"></div>
     </div>
 
-    <script src="https://sitesearch.cloud/searchbar/js/app.js"></script>
     <script>
         jQuery.noConflict();
         jQuery(document).ready(function ($) {
@@ -48,6 +45,9 @@
         });
     </script>
 </div>
+
+<textarea name="integration" id="integration" cols="64" rows="20">
+</textarea>
 
 <script>
     console.warn(document.getElementById("searchbarContainer").innerHTML);
