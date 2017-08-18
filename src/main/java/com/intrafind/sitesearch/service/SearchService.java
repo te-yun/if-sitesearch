@@ -59,6 +59,7 @@ public class SearchService {
                     Search.HITS_LIST_SIZE, 1_000
             );
 
+            LOG.info("hits: " + hits);
             LOG.info("query: " + query);
             List<FoundSite> siteDocuments = new ArrayList<>();
             hits.getDocuments().forEach(document -> {

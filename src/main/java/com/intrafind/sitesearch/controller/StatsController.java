@@ -47,6 +47,7 @@ public class StatsController {
             @Override
             public void execute(@NotNull final Transaction txn) {
                 final Store store = env.openStore(QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
+                LOG.info("RAW COUNT: " + store.get(txn, StringBinding.stringToEntry(tenantId.toString())));
                 long queryCountValue = Long.valueOf(StringBinding.entryToString(store.get(txn, StringBinding.stringToEntry(tenantId.toString()))));
                 queryCount.set(queryCountValue);
                 LOG.info(tenantId + ": " + queryCountValue);

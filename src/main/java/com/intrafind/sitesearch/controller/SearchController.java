@@ -77,6 +77,7 @@ public class SearchController {
 //                    store.put(txn, StringBinding.stringToEntry("Hello"), StringBinding.stringToEntry("World!"));
 //                    LOG.info("xodus-count: " + store.get(txn, StringBinding.stringToEntry(finalTenantId.toString())));
 //                    LOG.info("queryCount: " + StringBinding.entryToString(store.get(txn, StringBinding.stringToEntry(finalTenantId.toString()))));
+                    LOG.info("updated-queryCount: " + store.get(txn, StringBinding.stringToEntry(finalTenantId.toString())));
                 }
             });
             env.close();
