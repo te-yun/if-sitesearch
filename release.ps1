@@ -27,4 +27,4 @@ docker run -d --name redirect-https -p 80:80 intrafind/redirect-https:latest
 #& "./switch-release.ps1"
 #& ./switch-release.ps1
 #. ./switch-release.ps1
-powershell ./switch-release.ps1
+./switch-release.ps1
