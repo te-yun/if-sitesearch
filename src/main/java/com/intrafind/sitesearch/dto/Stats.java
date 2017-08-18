@@ -19,13 +19,23 @@ package com.intrafind.sitesearch.dto;
 public class Stats {
     private long queryCount;
     private String buildNumber;
+    private String scmHash;
 
     private Stats() {
     }
 
-    public Stats(String buildNumber, long queryCount) {
-        this.queryCount = queryCount;
+    public Stats(String buildNumber, String scmHash, long queryCount) {
         this.buildNumber = buildNumber;
+        this.scmHash = scmHash;
+        this.queryCount = queryCount;
+    }
+
+    public String getScmHash() {
+        return scmHash;
+    }
+
+    public void setScmHash(String scmHash) {
+        this.scmHash = scmHash;
     }
 
     public long getQueryCount() {

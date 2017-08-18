@@ -52,6 +52,6 @@ public class StatsController {
             }
         });
         env.close();
-        return ResponseEntity.ok(new Stats(System.getProperty("BUILD_NUMBER", ""), queryCount.get()));
+        return ResponseEntity.ok(new Stats(System.getenv("BUILD_NUMBER"), System.getenv("SCM_HASH"), queryCount.get()));
     }
 }
