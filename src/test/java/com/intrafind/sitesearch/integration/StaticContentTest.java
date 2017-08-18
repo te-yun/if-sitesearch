@@ -16,7 +16,6 @@
 
 package com.intrafind.sitesearch.integration;
 
-import com.intrafind.sitesearch.controller.SearchController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,9 +59,9 @@ public class StaticContentTest {
 
         assertEquals(HttpStatus.OK, staticContent.getStatusCode());
         if (System.getenv("PWD") != null) { // assume, it runs on Windows and is not a CI server
-            assertTrue(staticContent.getBody().contains("\"baseUrl\": \"https://sitesearch.cloud\","));
+            assertTrue(staticContent.getBody().contains("\"baseUrl\": \"https://sitesearch.cloud/\","));
         }
-        assertTrue(staticContent.getBody().contains("\"endpointSearch\": \"" + SearchController.ENDPOINT + "\","));
+        assertTrue(staticContent.getBody().contains("\"endpointSearch\": \"" + "search" + "\","));
     }
 
     @Test
