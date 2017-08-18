@@ -47,8 +47,9 @@ public class StatsController {
             @Override
             public void execute(@NotNull final Transaction txn) {
                 final Store store = env.openStore(QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
-                queryCount.set(Long.valueOf(StringBinding.entryToString(store.get(txn, StringBinding.stringToEntry(tenantId.toString())))));
-                LOG.info("QueryCount alt: " + StringBinding.entryToString(store.get(txn, StringBinding.stringToEntry(tenantId.toString()))));
+                long queryCountValue = Long.valueOf(StringBinding.entryToString(store.get(txn, StringBinding.stringToEntry(tenantId.toString()))));
+                queryCount.set(queryCountValue);
+                LOG.info(tenantId + ": " + queryCountValue);
             }
         });
         env.close();

@@ -1,6 +1,6 @@
 
 $Env:SPRING_CONFIG_NAME = "application,prod"
-./gradlew clean build --info
+./gradlew clean build --info -x test
 
 $DOCKER_IMAGE_NAME = (Get-ChildItem  build/libs/*.jar).BaseName
 $DOCKER_TAG = "latest"

@@ -27,10 +27,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicLong;
 
 @CrossOrigin
 @RestController
@@ -45,8 +42,8 @@ public class SearchController {
         this.service = service;
     }
 
-    private AtomicLong searchCount = new AtomicLong();
-    private Map<UUID, AtomicLong> queriesPerTenant = new HashMap<>();
+    //    private AtomicLong searchCount = new AtomicLong();
+//    private Map<UUID, AtomicLong> queriesPerTenant = new HashMap<>();
     @RequestMapping(method = RequestMethod.GET)
     ResponseEntity<Hits> search(
             @CookieValue(value = "override-tenant", required = false) UUID cookieTenant,
@@ -65,8 +62,8 @@ public class SearchController {
             return ResponseEntity.notFound().build();
         } else {
 //            final UUID finalTenantId = tenantId;
-            queriesPerTenant.put(tenantId, new AtomicLong(queriesPerTenant.getOrDefault(tenantId, new AtomicLong()).incrementAndGet()));
-            LOG.info(tenantId + ": " + queriesPerTenant.get(tenantId));
+//            queriesPerTenant.put(tenantId, new AtomicLong(queriesPerTenant.getOrDefault(tenantId, new AtomicLong()).incrementAndGet()));
+//            LOG.info(tenantId + ": " + queriesPerTenant.get(tenantId));
             // TODO save to xodus
             final Environment env = Environments.newInstance("data");
             UUID finalTenantId = tenantId;
@@ -74,11 +71,12 @@ public class SearchController {
                 @Override
                 public void execute(@NotNull final Transaction txn) {
                     final Store store = env.openStore(StatsController.QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
-                    store.put(txn, StringBinding.stringToEntry(finalTenantId.toString()), StringBinding.stringToEntry(queriesPerTenant.get(finalTenantId).toString()));
+                    long queryCount = Long.valueOf(StringBinding.entryToString(store.get(txn, StringBinding.stringToEntry(finalTenantId.toString()))));
+                    LOG.info("queryCount: " + queryCount);
+                    store.put(txn, StringBinding.stringToEntry(finalTenantId.toString()), StringBinding.stringToEntry(String.valueOf(queryCount)));
 //                    store.put(txn, StringBinding.stringToEntry("Hello"), StringBinding.stringToEntry("World!"));
-                    LOG.info("xodus-count: " + store.get(txn, StringBinding.stringToEntry(finalTenantId.toString())));
-                    LOG.info("queryCount: " + StringBinding.entryToString(store.get(txn, StringBinding.stringToEntry(finalTenantId.toString()))));
-                    LOG.info("xodus-count-not-found: " + store.get(txn, StringBinding.stringToEntry("test")));
+//                    LOG.info("xodus-count: " + store.get(txn, StringBinding.stringToEntry(finalTenantId.toString())));
+//                    LOG.info("queryCount: " + StringBinding.entryToString(store.get(txn, StringBinding.stringToEntry(finalTenantId.toString()))));
                 }
             });
             env.close();
