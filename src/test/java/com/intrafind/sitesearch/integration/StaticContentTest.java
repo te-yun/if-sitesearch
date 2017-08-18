@@ -55,7 +55,7 @@ public class StaticContentTest {
      */
     @Test
     public void searchbarConfiguration() throws Exception {
-        final ResponseEntity<String> staticContent = caller.getForEntity("/searchbar/data/sitesearch-config.json", String.class);
+        final ResponseEntity<String> staticContent = caller.getForEntity("/searchbar-config/sitesearch-config.json", String.class);
 
         assertEquals(HttpStatus.OK, staticContent.getStatusCode());
         if (System.getenv("PWD") != null) { // assume, it runs on Windows and is not a CI server
