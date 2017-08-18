@@ -1,7 +1,7 @@
 {
   "ajax": {
-    "baseUrl": "https://sitesearch.cloud",
-    "endpointSearch": "/search",
+    "baseUrl": "https://sitesearch.cloud/",
+    "endpointSearch": "search",
     "start": 0,
     "limit": 20
   },
@@ -10,7 +10,7 @@
   },
   "components": {
     "searchbar": {
-      "templatesUrl": "https://sitesearch.cloud/searchbar/data/quickfix.hbs",
+      "templatesUrl": "https://sitesearch.cloud/searchbar-config/quickfix.hbs",
       "inputMaxLength": 250,
       "typeaheadProps": {
         "maxItemPerGroup": 4,
@@ -41,7 +41,7 @@
       "searchbar_template": "app/templates/default/searchbar.hbs",
       "group_template": "app/templates/default/groups.hbs",
       "roles": {
-        "url": "https://sitesearch.cloud/searchbar/data/sitesearch-roles.json"
+        "url": "https://sitesearch.cloud/searchbar-config/sitesearch-roles.json"
       },
       "indexfields": {
         "template": "app/templates/default/indexfields.hbs"

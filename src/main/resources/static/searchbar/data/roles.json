@@ -1,0 +1,20 @@
+{
+  "results": [
+    {
+      "roles": [
+        "sb_queryfit",
+        "sb_querydistance",
+        "sb_settings",
+        "sb_synonyms",
+        "sb_translations",
+        "sb_searchExtend",
+        "sb_extendedAutocomplete"
+      ]
+    }
+  ],
+  "systemData": {
+    "version": "5.1.1.0-46458",
+    "timestamp": "1502975159931",
+    "username": "daniel.roeder@MUC.INTRAFIND.DE"
+  }
+}
