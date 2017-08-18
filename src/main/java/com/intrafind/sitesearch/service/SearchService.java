@@ -33,8 +33,8 @@ import java.util.UUID;
 
 @Service
 public class SearchService {
-    static final Search SEARCH_SERVICE = IfinderCoreClient.newHessianClient(Search.class, Application.I_FINDER_CORE + "/search");
-    private static final Search SEARCH_AUTOCOMPLETE_SERVICE = IfinderCoreClient.newHessianClient(Search.class, Application.I_FINDER_CORE + "/autocomplete");
+    static final Search SEARCH_SERVICE = IfinderCoreClient.newHessianClient(Search.class, Application.IFINDER_CORE + "/search");
+    private static final Search SEARCH_AUTOCOMPLETE_SERVICE = IfinderCoreClient.newHessianClient(Search.class, Application.IFINDER_CORE + "/autocomplete");
 
     private static final Logger LOG = LoggerFactory.getLogger(SearchService.class);
     private static final String QUERY_SEPARATOR = ",";

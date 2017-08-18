@@ -37,18 +37,7 @@ import java.net.URI;
 @RestController
 @EnableSwagger2
 public class Application {
-    @Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-//                .apiInfo(new ApiInfo())
-                .select()
-//                .apis(Predicates.not(RequestHandlerSelectors.basePackage("org.springframework.boot")))
-//                .apis(Predicates.not(RequestHandlerSelectors.basePackage("org.springframework.boot")))
-                .paths(Predicates.not(PathSelectors.regex("/error"))) // Exclude Spring error controllers
-                .paths(Predicates.not(PathSelectors.regex("/sites/rss"))) // Exclude Spring error controllers
-//                .paths(paths())
-                .build();
-    }
+    public static final URI IFINDER_CORE = URI.create("http://dummyuser:dummypassword@sitesearch.cloud:9605/hessian");
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
@@ -60,11 +49,18 @@ public class Application {
         };
     }
 
-//    private Predicate<String> paths() {
-//        return PathSelectors.regex("/basic-error-controller.*");
-//    }
-
-    public static final URI I_FINDER_CORE = URI.create("http://dummyuser:dummypassword@sitesearch.cloud:9605/hessian");
+    @Bean
+    public Docket api() {
+        return new Docket(DocumentationType.SWAGGER_2)
+//                .apiInfo(new ApiInfo())
+                .select()
+//                .apis(Predicates.not(RequestHandlerSelectors.basePackage("org.springframework.boot")))
+//                .apis(Predicates.not(RequestHandlerSelectors.basePackage("org.springframework.boot")))
+                .paths(Predicates.not(PathSelectors.regex("/error"))) // Exclude Spring error controllers
+//                .paths(Predicates.not(PathSelectors.regex("/sites/rss"))) // Exclude Spring error controllers
+                .paths(Predicates.not(PathSelectors.regex("/sites/rss"))) // Exclude Spring error controllers
+                .build();
+    }
 
     private final static Logger LOG = LoggerFactory.getLogger(Application.class);
 

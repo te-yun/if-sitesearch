@@ -48,7 +48,7 @@ public class SiteService {
     private static final Logger LOG = LoggerFactory.getLogger(SiteService.class);
     private static final String TENANT_SECRET_FIELD = "tenantSecret";
 
-    private static final Index INDEX_SERVICE = IfinderCoreClient.newHessianClient(Index.class, Application.I_FINDER_CORE + "/index");
+    private static final Index INDEX_SERVICE = IfinderCoreClient.newHessianClient(Index.class, Application.IFINDER_CORE + "/index");
 
     public Optional<Site> indexExistingSite(UUID id, UUID tenantId, UUID tenantSecret, Site site) {
         if (tenantId != null && tenantSecret != null) { // credentials are provided as a tuple only
