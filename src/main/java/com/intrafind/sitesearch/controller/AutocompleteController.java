@@ -34,25 +34,25 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @CrossOrigin
 @RestController
-@RequestMapping(SearchController.ENDPOINT)
-public class SearchController {
-    public static final String ENDPOINT = "/search";
-    private static final Logger LOG = LoggerFactory.getLogger(SearchController.class);
+@RequestMapping(AutocompleteController.ENDPOINT)
+public class AutocompleteController {
+    public static final String ENDPOINT = "/autocomplete";
+    private static final Logger LOG = LoggerFactory.getLogger(AutocompleteController.class);
     private final SearchService service;
+    private Map<UUID, AtomicLong> searchCountPerTenant = new HashMap<>();
 
     @Autowired
-    SearchController(SearchService service) {
+    AutocompleteController(SearchService service) {
         this.service = service;
     }
 
-    private AtomicLong searchCount = new AtomicLong();
-    private Map<UUID, AtomicLong> searchCountPerTenant = new HashMap<>();
     @RequestMapping(method = RequestMethod.GET)
     ResponseEntity<Hits> search(
             @CookieValue(value = "override-tenant", required = false) UUID cookieTenant,
             @RequestParam(value = "query", required = false, defaultValue = "") String query,
             @RequestParam(value = "tenantId") UUID tenantId
     ) {
+
         if (query.isEmpty()) return ResponseEntity.badRequest().build();
 
         // override tenantId with cookie value for debugging & speed up the getting started experience 
@@ -60,11 +60,10 @@ public class SearchController {
 
         LOG.info("cookieTenant: " + cookieTenant);
         LOG.info("query: " + query);
-        Hits searchResult = service.search(query, tenantId, false);
+        Hits searchResult = service.search(query, tenantId, true);
         if (searchResult.getResults().isEmpty()) {
             return ResponseEntity.notFound().build();
         } else {
-//            final UUID finalTenantId = tenantId;
             searchCountPerTenant.put(tenantId, new AtomicLong(searchCountPerTenant.getOrDefault(tenantId, new AtomicLong()).incrementAndGet()));
             LOG.info(tenantId + ": " + searchCountPerTenant.get(tenantId));
             // TODO save to xodus

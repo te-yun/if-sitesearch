@@ -16,6 +16,7 @@
 
 package com.intrafind.sitesearch;
 
+import com.google.common.base.Predicates;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -42,7 +44,7 @@ public class Application {
                 .select()
 //                .apis(Predicates.not(RequestHandlerSelectors.basePackage("org.springframework.boot")))
 //                .apis(Predicates.not(RequestHandlerSelectors.basePackage("org.springframework.boot")))
-//                .paths(Predicates.not(PathSelectors.regex("/error"))) // Exclude Spring error controllers
+                .paths(Predicates.not(PathSelectors.regex("/error"))) // Exclude Spring error controllers
 //                .paths(paths())
                 .build();
     }
