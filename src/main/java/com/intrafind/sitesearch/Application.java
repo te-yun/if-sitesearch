@@ -45,6 +45,7 @@ public class Application {
 //                .apis(Predicates.not(RequestHandlerSelectors.basePackage("org.springframework.boot")))
 //                .apis(Predicates.not(RequestHandlerSelectors.basePackage("org.springframework.boot")))
                 .paths(Predicates.not(PathSelectors.regex("/error"))) // Exclude Spring error controllers
+                .paths(Predicates.not(PathSelectors.regex("/sites/rss"))) // Exclude Spring error controllers
 //                .paths(paths())
                 .build();
     }

@@ -1,5 +1,3 @@
-#!/usr/bin/env powershell
-
 $docker_image_name = "if-sitesearch"
 $docker_tag = "latest"
 
