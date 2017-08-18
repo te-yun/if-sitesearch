@@ -34,21 +34,21 @@ import java.util.concurrent.atomic.AtomicLong;
 public class StatsController {
     static final String ENDPOINT = "/stats";
     private static final Logger LOG = LoggerFactory.getLogger(StatsController.class);
-    private AtomicLong queryCount = new AtomicLong();
+    static final String QUERIES_PER_TENANT_STORE = "queriesPerTenant";
 
     @RequestMapping(method = RequestMethod.GET)
     ResponseEntity stats(
             @RequestParam(value = "tenantId") UUID tenantId
     ) {
+        AtomicLong queryCount = new AtomicLong();
         final Environment env = Environments.newInstance("data");
 //        final ContextualEnvironment contextualEnvironment = Environments.newContextualInstance("data");
         env.executeInTransaction(new TransactionalExecutable() {
             @Override
             public void execute(@NotNull final Transaction txn) {
-                final Store store = env.openStore("QueryCount", StoreConfig.WITHOUT_DUPLICATES, txn);
-                store.put(txn, StringBinding.stringToEntry(tenantId.toString()), StringBinding.stringToEntry(String.valueOf(queryCount.incrementAndGet())));
-                LOG.info("QueryCount: " + store.get(txn, StringBinding.stringToEntry(tenantId.toString())));
-                LOG.info("xodus-count-not-found: " + store.get(txn, StringBinding.stringToEntry("test")));
+                final Store store = env.openStore(QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
+                queryCount.set(Long.valueOf(StringBinding.entryToString(store.get(txn, StringBinding.stringToEntry(tenantId.toString())))));
+                LOG.info("QueryCount alt: " + StringBinding.entryToString(store.get(txn, StringBinding.stringToEntry(tenantId.toString()))));
             }
         });
         env.close();
