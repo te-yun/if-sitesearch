@@ -36,7 +36,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @RestController
 @RequestMapping(AutocompleteController.ENDPOINT)
 public class AutocompleteController {
-    public static final String ENDPOINT = "/autocomplete";
+    public static final String ENDPOINT = "api/autocomplete";
     private static final Logger LOG = LoggerFactory.getLogger(AutocompleteController.class);
     private final SearchService service;
     private Map<UUID, AtomicLong> searchCountPerTenant = new HashMap<>();

@@ -44,17 +44,19 @@ public class SearchService {
 
     public Hits search(String query, UUID tenantId, boolean isAutocomplete) {
         if (isAutocomplete) {
-            LOG.info("AUTOCOMPLETE SEARCH >>>>>>>>>>>>>>>>>>>>>>>>>>> ");
+            LOG.info("Application.IFINDER_CORE: " + Application.IFINDER_CORE);
             com.intrafind.api.search.Hits hits = SEARCH_AUTOCOMPLETE_SERVICE.search(
-                    query + " AND " + Fields.TENANT + ":" + tenantId,
+                    query,
+                    Search.FILTER_QUERY, Fields.TENANT + ":" + tenantId,
+//                    query + " AND " + Fields.TENANT + ":" + tenantId,
 
                     Search.RETURN_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL + QUERY_SEPARATOR + Fields.TENANT,
-
-                    Search.RETURN_TEASER_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL,
-                    Search.RETURN_TEASER_COUNT, 3,
-                    Search.RETURN_TEASER_SIZE, 100,
-                    Search.RETURN_TEASER_TAG_PRE, "<span class='if-teaser-highlight'>",
-                    Search.RETURN_TEASER_TAG_POST, "</span>",
+//
+//                    Search.RETURN_TEASER_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL,
+//                    Search.RETURN_TEASER_COUNT, 3,
+//                    Search.RETURN_TEASER_SIZE, 100,
+//                    Search.RETURN_TEASER_TAG_PRE, "<span class='if-teaser-highlight'>",
+//                    Search.RETURN_TEASER_TAG_POST, "</span>",
 
                     Search.HITS_LIST_SIZE, 1_000
             );

@@ -37,7 +37,7 @@ import java.net.URI;
 @RestController
 @EnableSwagger2
 public class Application {
-    public static final URI IFINDER_CORE = URI.create("http://dummyuser:dummypassword@sitesearch.cloud:9605/hessian");
+    public static final URI IFINDER_CORE = URI.create("http://ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=:ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=@sitesearch.cloud:9605/hessian");
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
