@@ -7,6 +7,7 @@ Here you can find a *non-technical* business focused abstract about [Site Search
 
 # About
 
+* [OpenAPI 3.0 Specification](https://sitesearch.cloud/swagger-ui.html)
 * [Product roadmap](http://if-wiki:8090/pages/viewpage.action?pageId=14714226)
 * [JIRA project](http://jira/projects/SITESEARCH)
 * [Release](https://sitesearch.cloud) / [DEV Release](https://dev.sitesearch.cloud)
@@ -17,10 +18,6 @@ Here you can find a *non-technical* business focused abstract about [Site Search
 
 Add a [configuration profile](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config-profile-specific-properties) 
 to the `config` folder inside this project.
-
-# API Reference
-
-    http://localhost:8001/swagger-ui.html
 
 # Operations
 
