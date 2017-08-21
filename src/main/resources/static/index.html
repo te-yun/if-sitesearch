@@ -21,12 +21,6 @@
 <link rel="stylesheet" type="text/css" href="https://sitesearch.cloud/searchbar/css/app.css"/>
 <link rel="stylesheet" type="text/css" href="https://sitesearch.cloud/theme/font/css/font-awesome.min.css"/>
 
-<style>
-    .if-teaser-highlight {
-        font-weight: bold;
-    }
-</style>
-
 <h1 style="font-size: 2em;"><span class="fa fa-search"></span> Simple Site Search<sup>BETA</sup></h1>
 
 <ul style="list-style: none; font-size: 1.5em;">
@@ -41,6 +35,12 @@
         Integrate into your site</a></li>
 </ul>
 
+<style>
+    .if-teaser-highlight {
+        font-weight: bold;
+    }
+</style>
+
 <div class="container" style="margin-top:130px; font-size: 3em; width: 530px;">
     <div id="searchbar"></div>
     <div id="resultlist" style="margin-top:20px;"></div>
@@ -53,7 +53,7 @@
 
         IFS.initClient({
             sbTarget: "#searchbar",
-            configurl: "searchbar-config/sitesearch-config.json",
+            configurl: "https://sitesearch.cloud/searchbar-config/sitesearch-config.json",
             sitesearch: true,
             tenantId: "eefb005b-7c2d-471a-baf7-b10e7c18b65b"
         });

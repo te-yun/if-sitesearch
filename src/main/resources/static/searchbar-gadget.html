@@ -18,8 +18,8 @@
 <html lang="en">
 <meta charset="utf-8"/>
 <title>Site Search</title>
-<link rel="stylesheet" type="text/css" href="searchbar/css/app.css"/>
-<link rel="stylesheet" type="text/css" href="theme/font/css/font-awesome.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://sitesearch.cloud/searchbar/css/app.css"/>
+<link rel="stylesheet" type="text/css" href="https://sitesearch.cloud/theme/font/css/font-awesome.min.css"/>
 
 <script>
     let serviceUrl;
@@ -94,14 +94,14 @@
     <div id="resultlist"></div>
 </div>
 
-<script src="searchbar/js/app.js"></script>
+<script src="https://sitesearch.cloud/searchbar/js/app.js"></script>
 <script>
     jQuery.noConflict();
     jQuery(document).ready(function ($) {
 
         IFS.initClient({
             sbTarget: "#searchbar",
-            configurl: "searchbar-config/sitesearch-config.json",
+            configurl: "https://sitesearch.cloud/searchbar-config/sitesearch-config.json",
             sitesearch: true,
             tenantId: "eefb005b-7c2d-471a-baf7-b10e7c18b65b"
         });
