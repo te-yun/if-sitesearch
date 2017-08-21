@@ -75,7 +75,8 @@
 <div class="wrapper">
     <label for="feedUrl"><span class="fa fa-rss"></span> Feed URL</label>
     <input id="feedUrl" placeholder="Feed URL, e.g. https://intrafind.de/share/enterprise-search-blog.xml"
-           value="https://streemian.com/rss/blockchain">
+           value="http://intrafind.de/share/enterprise-search-blog.xml">
+    <!--value="https://streemian.com/rss/blockchain">-->
     <label for="email"><span class="fa fa-envelope-o"></span> E-mail</label>
     <input id="email" placeholder="E-mail" value="alexander.orlov@intrafind.de">
     <label for="tenantId"><span class="fa fa-key"></span> Tenant ID</label>
@@ -101,9 +102,9 @@
 
         IFS.initClient({
             sbTarget: "#searchbar",
-            configurl: "https://sitesearch.cloud/searchbar-config/sitesearch-config.json",
+            configurl: "searchbar-config/sitesearch-config.json",
             sitesearch: true,
-            tenantId: "eefb005b-7c2d-471a-baf7-b10e7c18b65b"
+            tenantId: "56fe206a-55bd-4223-bf4e-04652fa12e44"
         });
     });
 </script>

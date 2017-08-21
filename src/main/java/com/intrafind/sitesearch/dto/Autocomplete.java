@@ -20,7 +20,21 @@ import java.util.Collections;
 import java.util.List;
 
 public class Autocomplete {
-    private String id;
-    private List<String> completions = Collections.emptyList();
-    private List<String> images = Collections.emptyList();
+    private List<String> results = Collections.emptyList();
+
+    private Autocomplete() {
+    }
+
+    public Autocomplete(List<String> results) {
+
+        this.results = results;
+    }
+
+    public List<String> getResults() {
+        return results;
+    }
+
+    public void setResults(List<String> results) {
+        this.results = results;
+    }
 }
