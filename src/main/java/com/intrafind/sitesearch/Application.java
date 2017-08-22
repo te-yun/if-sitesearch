@@ -37,7 +37,9 @@ import java.net.URI;
 @RestController
 @EnableSwagger2
 public class Application {
-    public static final URI IFINDER_CORE = URI.create("http://ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=:ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=@sitesearch.cloud:9605/hessian");
+    //    public static final URI IFINDER_CORE = URI.create("http://ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=:ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=@sitesearch.cloud:9605/hessian");
+    public static final URI IFINDER_CORE = URI.create("http://" + System.getenv("SECURITY_USER_PASSWORD") + ":" + System.getenv("SECURITY_USER_PASSWORD") + "@sitesearch.cloud:9605/hessian");
+    private final static Logger LOG = LoggerFactory.getLogger(Application.class);
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
@@ -52,17 +54,11 @@ public class Application {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-//                .apiInfo(new ApiInfo())
                 .select()
-//                .apis(Predicates.not(RequestHandlerSelectors.basePackage("org.springframework.boot")))
-//                .apis(Predicates.not(RequestHandlerSelectors.basePackage("org.springframework.boot")))
                 .paths(Predicates.not(PathSelectors.regex("/error"))) // Exclude Spring error controllers
-//                .paths(Predicates.not(PathSelectors.regex("/sites/rss"))) // Exclude Spring error controllers
                 .paths(Predicates.not(PathSelectors.regex("/sites/rss"))) // Exclude Spring error controllers
                 .build();
     }
-
-    private final static Logger LOG = LoggerFactory.getLogger(Application.class);
 
     public static void main(final String... args) {
         SpringApplication.run(Application.class, args);
