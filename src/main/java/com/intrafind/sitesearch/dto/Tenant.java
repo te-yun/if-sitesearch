@@ -17,7 +17,6 @@
 package com.intrafind.sitesearch.dto;
 
 import java.io.Serializable;
-import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -28,12 +27,12 @@ public class Tenant implements Serializable {
     // TODO remove successCount as it's an implicit part of documents(.size)
     private int successCount;
     private List<UUID> documents = Collections.emptyList();
-    private List<URI> failed = Collections.emptyList();
+    private List<String> failed = Collections.emptyList();
 
     private Tenant() {
     }
 
-    public Tenant(UUID tenantId, UUID tenantSecret, int successCount, List<UUID> documents, List<URI> failed) {
+    public Tenant(UUID tenantId, UUID tenantSecret, int successCount, List<UUID> documents, List<String> failed) {
         this.tenantId = tenantId;
         this.tenantSecret = tenantSecret;
         this.successCount = successCount;
@@ -49,11 +48,11 @@ public class Tenant implements Serializable {
         this.documents = documents;
     }
 
-    public List<URI> getFailed() {
+    public List<String> getFailed() {
         return failed;
     }
 
-    public void setFailed(List<URI> failed) {
+    public void setFailed(List<String> failed) {
         this.failed = failed;
     }
 

@@ -30,7 +30,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping(AutocompleteController.ENDPOINT)
 public class AutocompleteController {
-    public static final String ENDPOINT = "api/autocomplete";
+    public static final String ENDPOINT = "/api/autocomplete";
     private static final Logger LOG = LoggerFactory.getLogger(AutocompleteController.class);
     private final SearchService service;
 

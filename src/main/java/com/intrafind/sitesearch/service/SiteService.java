@@ -34,9 +34,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -131,7 +129,7 @@ public class SiteService {
                     UUID.fromString(foundDocument.get(TENANT_SECRET_FIELD)),
                     foundDocument.get(Fields.TITLE),
                     foundDocument.get(Fields.BODY),
-                    URI.create(foundDocument.get(Fields.URL))
+                    foundDocument.get(Fields.URL)
             );
 
             return Optional.of(representationOfFoundDocument);
@@ -149,7 +147,7 @@ public class SiteService {
                     UUID.fromString(foundDocument.getId()),
                     UUID.fromString(foundDocument.get(Fields.TENANT)), null,
                     foundDocument.get(Fields.TITLE), foundDocument.get(Fields.BODY),
-                    URI.create(foundDocument.get(Fields.URL))
+                    foundDocument.get(Fields.URL)
             );
 
             return Optional.of(representationOfFoundDocument);
@@ -185,7 +183,7 @@ public class SiteService {
         LOG.info("URL-received: " + feedUrl);
         final AtomicInteger successfullyIndexed = new AtomicInteger(0);
         final List<UUID> documents = new ArrayList<>();
-        List<URI> failedToIndex = new ArrayList<>();
+        List<String> failedToIndex = new ArrayList<>();
         try {
             SyndFeed feed = new SyndFeedInput().build(new XmlReader(feedUrl.toURL()));
 
@@ -195,17 +193,18 @@ public class SiteService {
                 LOG.info("description: " + entry.getDescription().getValue());
 
                 String encodedFeedUrl = "";
-                try {
-                    encodedFeedUrl = URLEncoder.encode(entry.getLink(), "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    LOG.warn(e.getMessage());
-                }
+//                try {
+//                    encodedFeedUrl = URLEncoder.encode(entry.getLink(), "UTF-8");
+                encodedFeedUrl = entry.getLink();
+//                } catch (UnsupportedEncodingException e) {
+//                    LOG.warn(e.getMessage());
+//                }
 
                 Site toIndex = new Site(
                         null,
                         tenantId, tenantSecret,
                         entry.getTitle(), entry.getDescription().getValue(),
-                        URI.create(encodedFeedUrl)
+                        encodedFeedUrl
                 );
                 final UUID siteId = UUID.randomUUID();
                 Optional<Site> indexed = indexDocument(siteId, tenantId, tenantSecret, toIndex);
@@ -214,7 +213,7 @@ public class SiteService {
                     documents.add(siteId);
                     LOG.info("successfully-indexed: " + indexed.get().getId());
                 } else {
-                    failedToIndex.add(URI.create(entry.getLink()));
+                    failedToIndex.add(entry.getLink());
                     LOG.warn("unsuccessfully-indexed:" + entry.getLink());
                 }
             });

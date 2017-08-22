@@ -16,9 +16,10 @@
 
 package com.intrafind.sitesearch.integration;
 
-import com.intrafind.sitesearch.controller.SearchController;
+import com.intrafind.sitesearch.controller.AutocompleteController;
 import com.intrafind.sitesearch.dto.FoundSite;
 import com.intrafind.sitesearch.dto.Hits;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -30,28 +31,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.UUID;
-
 import static org.junit.Assert.*;
 
+@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class SearchTest {
-    static final UUID SEARCH_TENANT_ID = UUID.fromString("f0372e4f-e93a-42a0-8576-bf537bcf2021");
+public class AutocompleteTest {
+    private static final Logger LOG = LoggerFactory.getLogger(AutocompleteTest.class);
     @Autowired
     private TestRestTemplate caller;
-    private static final Logger LOG = LoggerFactory.getLogger(SearchTest.class);
 
     @Test
-    public void simpleSearchLegacyApi() throws Exception {
-        final ResponseEntity<Hits> actualLegacy = caller.getForEntity(SearchController.ENDPOINT + "?sSearchTerm=Knowledge&tenantId=" + SEARCH_TENANT_ID, Hits.class);
-        assertEquals(HttpStatus.BAD_REQUEST, actualLegacy.getStatusCode());
-        assertNull(actualLegacy.getBody());
-    }
-
-    @Test
-    public void simpleSearch() throws Exception {
-        final ResponseEntity<Hits> actual = caller.getForEntity(SearchController.ENDPOINT + "?query=Knowledge&tenantId=" + SEARCH_TENANT_ID, Hits.class);
+    public void simpleAutocomplete() throws Exception {
+        final ResponseEntity<Hits> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=Knowledge&tenantId=" + SearchTest.SEARCH_TENANT_ID, Hits.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertNotNull(actual.getBody());
@@ -68,16 +60,16 @@ public class SearchTest {
     }
 
     @Test
-    public void simpleSearchNotFound() throws Exception {
-        final ResponseEntity<Hits> actual = caller.getForEntity(SearchController.ENDPOINT + "?query=not_found&tenantId=" + SEARCH_TENANT_ID, Hits.class);
+    public void autocompleteNotFound() throws Exception {
+        final ResponseEntity<Hits> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=not_found&tenantId=" + SearchTest.SEARCH_TENANT_ID, Hits.class);
 
         assertEquals(HttpStatus.NOT_FOUND, actual.getStatusCode());
         assertNull(actual.getBody());
     }
 
     @Test
-    public void searchWithoutTenant() throws Exception {
-        final ResponseEntity<Hits> actual = caller.getForEntity(SearchController.ENDPOINT + "?query=not_found", Hits.class);
+    public void autocompleteWithoutTenant() throws Exception {
+        final ResponseEntity<Hits> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=not_found", Hits.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
         assertNotNull(actual.getBody());

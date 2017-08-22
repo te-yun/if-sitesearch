@@ -30,7 +30,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -49,7 +48,7 @@ public class SiteTest {
                 id,
                 TEST_TENANT, tenantSecret,
                 "Cloud Solution", "Sitesearch is IntraFind's new SaaS solution.",
-                URI.create("https://sitesearch.cloud")
+                "https://sitesearch.cloud"
         );
         return simple;
     }
@@ -144,7 +143,7 @@ public class SiteTest {
 
         createdSite.setTitle("updated title");
         createdSite.setBody("updated body");
-        createdSite.setUrl(URI.create("https://example.com/updated"));
+        createdSite.setUrl("https://example.com/updated");
         final ResponseEntity<Site> updated = caller.exchange(SiteController.ENDPOINT + "/" + siteId
                         + "?tenantId=" + createdSite.getTenantId() + "&tenantSecret=" + createdSite.getTenantSecret(),
                 HttpMethod.PUT, new HttpEntity<>(createdSite), Site.class);

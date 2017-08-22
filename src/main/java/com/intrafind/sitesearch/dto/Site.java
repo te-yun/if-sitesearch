@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
-import java.net.URI;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -32,12 +31,12 @@ public class Site implements Serializable {
     private UUID tenantSecret;
     private String title;
     private String body;
-    private URI url;
+    private String url;
 
     private Site() {
     }
 
-    public Site(UUID id, UUID tenantId, UUID tenantSecret, String title, String body, URI url) {
+    public Site(UUID id, UUID tenantId, UUID tenantSecret, String title, String body, String url) {
         this.id = id;
         this.tenantId = tenantId;
         this.tenantSecret = tenantSecret;
@@ -62,7 +61,7 @@ public class Site implements Serializable {
         this.title = title;
     }
 
-    public URI getUrl() {
+    public String getUrl() {
         return url;
     }
 
@@ -74,7 +73,7 @@ public class Site implements Serializable {
         this.tenantId = tenantId;
     }
 
-    public void setUrl(URI url) {
+    public void setUrl(String url) {
         this.url = url;
     }
 
