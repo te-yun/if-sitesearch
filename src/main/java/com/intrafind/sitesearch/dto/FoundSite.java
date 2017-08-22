@@ -21,8 +21,6 @@ import java.net.URI;
 import java.util.Objects;
 
 public class FoundSite implements Serializable {
-    // TODO rename *Plain to "raw"
-
     private String title;
     private String titleRaw;
     private String body;
