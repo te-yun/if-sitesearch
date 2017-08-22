@@ -60,11 +60,11 @@ public class SearchTest {
         assertEquals(1, actual.getBody().getResults().size());
         FoundSite found = actual.getBody().getResults().get(0);
         assertEquals("Wie die Semantische Suche vom <span class='if-teaser-highlight'>Knowledge</span> Graph profitiert", found.getTitle());
-        assertEquals("Wie die Semantische Suche vom Knowledge Graph profitiert", found.getTitlePlain());
+        assertEquals("Wie die Semantische Suche vom Knowledge Graph profitiert", found.getTitleRaw());
         assertEquals("http:&#x2F;&#x2F;intrafind.de&#x2F;blog&#x2F;wie-die-semantische-suche-vom-<span class='if-teaser-highlight'>knowledge</span>-graph-profitiert", found.getUrl());
-        assertEquals("http://intrafind.de/blog/wie-die-semantische-suche-vom-knowledge-graph-profitiert", found.getUrlPlain().toString());
+        assertEquals("http://intrafind.de/blog/wie-die-semantische-suche-vom-knowledge-graph-profitiert", found.getUrlRaw().toString());
         assertTrue(found.getBody().startsWith("&lt;p&gt;Der <span class='if-teaser-highlight'>Knowledge</span> Graph ist vielen Nutzern bereits durch Google oder Facebook bekannt. Aber auch"));
-        assertTrue(found.getBodyPlain().startsWith("<p>Der Knowledge Graph ist vielen Nutzern bereits durch Google oder Facebook bekannt."));
+        assertTrue(found.getBodyRaw().startsWith("<p>Der Knowledge Graph ist vielen Nutzern bereits durch Google oder Facebook bekannt."));
     }
 
     @Test

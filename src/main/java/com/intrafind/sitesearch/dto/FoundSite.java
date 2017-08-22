@@ -24,46 +24,46 @@ public class FoundSite implements Serializable {
     // TODO rename *Plain to "raw"
 
     private String title;
-    private String titlePlain;
+    private String titleRaw;
     private String body;
-    private String bodyPlain;
+    private String bodyRaw;
     private String url;
-    private URI urlPlain;
+    private URI urlRaw;
 
     private FoundSite() {
     }
 
-    public FoundSite(String title, String titlePlain, String body, String bodyPlain, String url, URI urlPlain) {
+    public FoundSite(String title, String titleRaw, String body, String bodyRaw, String url, URI urlRaw) {
         this.title = title;
-        this.titlePlain = titlePlain;
+        this.titleRaw = titleRaw;
         this.body = body;
-        this.bodyPlain = bodyPlain;
+        this.bodyRaw = bodyRaw;
         this.url = url;
-        this.urlPlain = urlPlain;
+        this.urlRaw = urlRaw;
     }
 
-    public String getTitlePlain() {
-        return titlePlain;
+    public String getTitleRaw() {
+        return titleRaw;
     }
 
-    public void setTitlePlain(String titlePlain) {
-        this.titlePlain = titlePlain;
+    public void setTitleRaw(String titleRaw) {
+        this.titleRaw = titleRaw;
     }
 
-    public String getBodyPlain() {
-        return bodyPlain;
+    public String getBodyRaw() {
+        return bodyRaw;
     }
 
-    public void setBodyPlain(String bodyPlain) {
-        this.bodyPlain = bodyPlain;
+    public void setBodyRaw(String bodyRaw) {
+        this.bodyRaw = bodyRaw;
     }
 
-    public URI getUrlPlain() {
-        return urlPlain;
+    public URI getUrlRaw() {
+        return urlRaw;
     }
 
-    public void setUrlPlain(URI urlPlain) {
-        this.urlPlain = urlPlain;
+    public void setUrlRaw(URI urlRaw) {
+        this.urlRaw = urlRaw;
     }
 
     public String getTitle() {
