@@ -10,7 +10,7 @@
   },
   "components": {
     "searchbar": {
-      "templatesUrl": "https://sitesearch.cloud/searchbar-config/quickfix.hbs",
+      "templatesUrl": "searchbar-config/sitesearch.hbs",
       "inputMaxLength": 250,
       "typeaheadProps": {
         "maxItemPerGroup": 4,
