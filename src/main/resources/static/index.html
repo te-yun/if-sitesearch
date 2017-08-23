@@ -61,8 +61,13 @@
             tenantId: "363d50f3-17cb-4756-aeca-7d3768092ae1"
         });
 
-        IFS.handlebars.registerHelper("myHelper", function (value) {
-            return (typeof value !== "undefined") ? value.toUpperCase() : "";
+        IFS.handlebars.registerHelper("formatHighlightedUrl", function (url) {
+            if (typeof url !== "undefined") {
+                console.warn(url);
+                return url.replace("</span>", "")
+            } else {
+                return "";
+            }
         });
     });
 </script>
