@@ -43,13 +43,6 @@ public class SearchTest {
     private static final Logger LOG = LoggerFactory.getLogger(SearchTest.class);
 
     @Test
-    public void simpleSearchLegacyApi() throws Exception {
-        final ResponseEntity<Hits> actualLegacy = caller.getForEntity(SearchController.ENDPOINT + "?sSearchTerm=Knowledge&tenantId=" + SEARCH_TENANT_ID, Hits.class);
-        assertEquals(HttpStatus.BAD_REQUEST, actualLegacy.getStatusCode());
-        assertNull(actualLegacy.getBody());
-    }
-
-    @Test
     public void simpleSearch() throws Exception {
         final ResponseEntity<Hits> actual = caller.getForEntity(SearchController.ENDPOINT + "?query=Knowledge&tenantId=" + SEARCH_TENANT_ID, Hits.class);
 
@@ -62,7 +55,7 @@ public class SearchTest {
         assertEquals("Wie die Semantische Suche vom <span class='if-teaser-highlight'>Knowledge</span> Graph profitiert", found.getTitle());
         assertEquals("Wie die Semantische Suche vom Knowledge Graph profitiert", found.getTitleRaw());
         assertEquals("http:&#x2F;&#x2F;intrafind.de&#x2F;blog&#x2F;wie-die-semantische-suche-vom-<span class='if-teaser-highlight'>knowledge</span>-graph-profitiert", found.getUrl());
-        assertEquals("http://intrafind.de/blog/wie-die-semantische-suche-vom-knowledge-graph-profitiert", found.getUrlRaw().toString());
+        assertEquals("http://intrafind.de/blog/wie-die-semantische-suche-vom-knowledge-graph-profitiert", found.getUrlRaw());
         assertTrue(found.getBody().startsWith("&lt;p&gt;Der <span class='if-teaser-highlight'>Knowledge</span> Graph ist vielen Nutzern bereits durch Google oder Facebook bekannt. Aber auch"));
         assertTrue(found.getBodyRaw().startsWith("<p>Der Knowledge Graph ist vielen Nutzern bereits durch Google oder Facebook bekannt."));
     }

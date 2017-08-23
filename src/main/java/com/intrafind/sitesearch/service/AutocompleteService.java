@@ -16,5 +16,66 @@
 
 package com.intrafind.sitesearch.service;
 
+import com.intrafind.api.Fields;
+import com.intrafind.api.search.Search;
+import com.intrafind.sitesearch.Application;
+import com.intrafind.sitesearch.dto.Autocomplete;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+@Service
 public class AutocompleteService {
+    private static final Search SEARCH_AUTOCOMPLETE_SERVICE = IfinderCoreClient.newHessianClient(Search.class, Application.IFINDER_CORE + "/autocomplete");
+
+    private static final Logger LOG = LoggerFactory.getLogger(SearchService.class);
+    private static final String QUERY_SEPARATOR = ",";
+    private static final String HIT_TEASER_PREFIX = "hit.teaser.";
+
+    public Optional<Autocomplete> autocomplete(String query, UUID tenantId) {
+        com.intrafind.api.search.Hits hits = SEARCH_AUTOCOMPLETE_SERVICE.search(
+                query,
+                Search.FILTER_QUERY, Fields.TENANT + ":" + tenantId,
+//                    query + " AND " + Fields.TENANT + ":" + tenantId,
+
+//                Search.RETURN_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL + QUERY_SEPARATOR + Fields.TENANT,
+//
+//                    Search.RETURN_TEASER_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL,
+//                    Search.RETURN_TEASER_COUNT, 3,
+//                    Search.RETURN_TEASER_SIZE, 100,
+//                    Search.RETURN_TEASER_TAG_PRE, "<span class='if-teaser-highlight'>",
+//                    Search.RETURN_TEASER_TAG_POST, "</span>",
+
+                Search.HITS_LIST_SIZE, 1_000
+        );
+
+        LOG.info("hits: " + hits);
+        LOG.info("query: " + query);
+//        List<FoundSite> siteDocuments = new ArrayList<>();
+//        hits.getDocuments().forEach(document -> {
+//            FoundSite site = new FoundSite(
+//                    document.get(HIT_TEASER_PREFIX + Fields.TITLE),
+//                    document.get(Fields.TITLE),
+//                    document.get(HIT_TEASER_PREFIX + Fields.BODY),
+//                    document.get(Fields.BODY),
+//                    document.get(HIT_TEASER_PREFIX + Fields.URL),
+//                    URI.create(document.get(Fields.URL))
+//            );
+//            // TODO remove tenant INFO as it is not relevant here, consider separate DTO
+//            siteDocuments.add(site);
+//        });
+
+        // TODO look in the payload
+        final List<String> terms = hits.getMetaData().getAll("autocomplete.terms");
+        if (terms == null || terms.isEmpty()) {
+            return Optional.empty();
+        } else {
+//            return Optional.of(new Autocomplete(Arrays.asList(terms)));
+            return Optional.of(new Autocomplete(terms));
+        }
+    }
 }

@@ -17,7 +17,6 @@
 package com.intrafind.sitesearch.dto;
 
 import java.io.Serializable;
-import java.net.URI;
 import java.util.Objects;
 
 public class FoundSite implements Serializable {
@@ -26,12 +25,12 @@ public class FoundSite implements Serializable {
     private String body;
     private String bodyRaw;
     private String url;
-    private URI urlRaw;
+    private String urlRaw;
 
     private FoundSite() {
     }
 
-    public FoundSite(String title, String titleRaw, String body, String bodyRaw, String url, URI urlRaw) {
+    public FoundSite(String title, String titleRaw, String body, String bodyRaw, String url, String urlRaw) {
         this.title = title;
         this.titleRaw = titleRaw;
         this.body = body;
@@ -56,11 +55,11 @@ public class FoundSite implements Serializable {
         this.bodyRaw = bodyRaw;
     }
 
-    public URI getUrlRaw() {
+    public String getUrlRaw() {
         return urlRaw;
     }
 
-    public void setUrlRaw(URI urlRaw) {
+    public void setUrlRaw(String urlRaw) {
         this.urlRaw = urlRaw;
     }
 

@@ -17,9 +17,7 @@
 package com.intrafind.sitesearch.integration;
 
 import com.intrafind.sitesearch.controller.AutocompleteController;
-import com.intrafind.sitesearch.dto.FoundSite;
-import com.intrafind.sitesearch.dto.Hits;
-import org.junit.Ignore;
+import com.intrafind.sitesearch.dto.Autocomplete;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -33,7 +31,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.*;
 
-@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AutocompleteTest {
@@ -42,34 +39,36 @@ public class AutocompleteTest {
     private TestRestTemplate caller;
 
     @Test
-    public void simpleAutocomplete() throws Exception {
-        final ResponseEntity<Hits> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=Knowledge&tenantId=" + SearchTest.SEARCH_TENANT_ID, Hits.class);
+    public void reference() throws Exception {
+        final ResponseEntity<Autocomplete> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=Knowledge&tenantId=" + SearchTest.SEARCH_TENANT_ID, Autocomplete.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertNotNull(actual.getBody());
-        assertEquals("Knowledge", actual.getBody().getQuery());
-        assertTrue(actual.getBody().getFacets().isEmpty());
         assertEquals(1, actual.getBody().getResults().size());
-        FoundSite found = actual.getBody().getResults().get(0);
-        assertEquals("Wie die Semantische Suche vom <span class='if-teaser-highlight'>Knowledge</span> Graph profitiert", found.getTitle());
-        assertEquals("Wie die Semantische Suche vom Knowledge Graph profitiert", found.getTitleRaw());
-        assertEquals("http:&#x2F;&#x2F;intrafind.de&#x2F;blog&#x2F;wie-die-semantische-suche-vom-<span class='if-teaser-highlight'>knowledge</span>-graph-profitiert", found.getUrl());
-        assertEquals("http://intrafind.de/blog/wie-die-semantische-suche-vom-knowledge-graph-profitiert", found.getUrlRaw().toString());
-        assertTrue(found.getBody().startsWith("&lt;p&gt;Der <span class='if-teaser-highlight'>Knowledge</span> Graph ist vielen Nutzern bereits durch Google oder Facebook bekannt. Aber auch"));
-        assertTrue(found.getBodyRaw().startsWith("<p>Der Knowledge Graph ist vielen Nutzern bereits durch Google oder Facebook bekannt."));
+        assertEquals("knowledge graph", actual.getBody().getResults().get(0));
     }
 
     @Test
-    public void autocompleteNotFound() throws Exception {
-        final ResponseEntity<Hits> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=not_found&tenantId=" + SearchTest.SEARCH_TENANT_ID, Hits.class);
+    public void complexPositive() throws Exception {
+        final ResponseEntity<Autocomplete> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=ifinder&tenantId=" + SearchTest.SEARCH_TENANT_ID, Autocomplete.class);
+
+        assertEquals(HttpStatus.OK, actual.getStatusCode());
+        assertNotNull(actual.getBody());
+        assertEquals(6, actual.getBody().getResults().size());
+        actual.getBody().getResults().forEach(s -> assertTrue(s.contains("ifinder")));
+    }
+
+    @Test
+    public void nonExisting() throws Exception {
+        final ResponseEntity<Autocomplete> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=not_found&tenantId=" + SearchTest.SEARCH_TENANT_ID, Autocomplete.class);
 
         assertEquals(HttpStatus.NOT_FOUND, actual.getStatusCode());
         assertNull(actual.getBody());
     }
 
     @Test
-    public void autocompleteWithoutTenant() throws Exception {
-        final ResponseEntity<Hits> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=not_found", Hits.class);
+    public void withoutTenant() throws Exception {
+        final ResponseEntity<Autocomplete> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=not_found", Autocomplete.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
         assertNotNull(actual.getBody());
