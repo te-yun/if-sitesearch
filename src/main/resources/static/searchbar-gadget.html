@@ -26,13 +26,15 @@
     }
 </style>
 
-<div class="container" style="width: 530px;">
+<div class="container">
     <div id="searchbar"></div>
     <div id="resultlist"></div>
 </div>
 
 <script src="https://sitesearch.cloud/searchbar/js/app.js"></script>
 <script>
+    console.warn(tenantId);
+    console.warn(new URLSearchParams(location.search.slice(1)).get("tenantId"));
     jQuery.noConflict();
     jQuery(document).ready(function ($) {
 
