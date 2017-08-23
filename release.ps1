@@ -15,8 +15,7 @@ $httpsRedirect = "http-to-https-redirect"
 cd $httpsRedirect
 docker build --tag intrafind/${httpsRedirect}:latest .
 docker rm -f $httpsRedirect
-docker rm -f redirect-https
-docker run -d --name $httpsRedirect -p 80:80 loxal/${httpsRedirect}:1.0.0 
+docker run -d --name $httpsRedirect -p 80:80 loxal/${httpsRedirect}:1.0.0
 
 cd ..
 ./switch-release.ps1
