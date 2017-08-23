@@ -22,12 +22,17 @@ docker build --tag intrafind/redirect-https:latest .
 docker rm -f redirect-https
 docker run -d --name redirect-https -p 80:80 intrafind/redirect-https:latest
 
+echo "++++++"
+ls ./switchrelease.ps1
+ls switchrelease.ps1
+echo "======"
+
 #& "./switchrelease.ps1"
 #& ./switchrelease.ps1
 #. ./switchrelease.ps1
 
-./switchrelease.ps1
-powershell ./switchrelease.ps1
-powershell -File ./switchrelease.ps1
-powershell -File switchrelease.ps1
-Invoke-Expression "./switchrelease.ps1"
+#./switchrelease.ps1
+#powershell ./switchrelease.ps1
+#powershell -File ./switchrelease.ps1
+#powershell -File switchrelease.ps1
+#Invoke-Expression "./switchrelease.ps1"
