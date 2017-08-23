@@ -23,6 +23,40 @@
         <Locale messages="ALL_ALL.xml"/>
     </ModulePrefs>
 
-    <Content href="https://sitesearch.cloud/searchbar-gadget.html?tenantId=0-0-0-0-0" type="url"/>
+    <!--<Content href="https://sitesearch.cloud/searchbar-gadget.html?tenantId=0-0-0-0-0" type="url"/>-->
+
+    <Content type="html">
+        <![CDATA[
+
+<link rel="stylesheet" type="text/css" href="https://sitesearch.cloud/searchbar/css/app.css"/>
+
+<style>
+    .if-teaser-highlight {
+        font-weight: bold;
+    }
+</style>
+
+<div class="container">
+    <div id="searchbar"></div>
+    <div id="resultlist"></div>
+</div>
+
+<script src="https://sitesearch.cloud/searchbar/js/app.js"></script>
+<script>
+    console.warn(new URLSearchParams(location.search.slice(1)).get("tenantId"));
+    jQuery.noConflict();
+    jQuery(document).ready(function ($) {
+
+        IFS.initClient({
+            sbTarget: "#searchbar",
+            configurl: "searchbar-config/sitesearch-config.json",
+            sitesearch: true,
+            tenantId: "363d50f3-17cb-4756-aeca-7d3768092ae1"
+        });
+    });
+</script>
+
+      ]]>
+    </Content>
 </Module>
         

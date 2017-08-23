@@ -9,7 +9,7 @@ function isBlueUp() {
 retturn true
 }
 
-isBlueUp()
+#isBlueUp()
 write-host isBlueUp
 
 #if ([string]::IsNullOrEmpty($danglingImages)){
