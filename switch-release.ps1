@@ -5,12 +5,11 @@ docker ps
 function isBlueUp() {
     $isBlueUp = docker ps | grep ${docker_image_name}-blue
     write-host $isBlueUp
-    write-host [string]::IsNullOrEmpty($isBlueUp)
-retturn true
+    write-host "$([string]::IsNullOrEmpty($isBlueUp))"
+return true
 }
 
 #isBlueUp()
-write-host isBlueUp
 isBlueUp
 
 #if ([string]::IsNullOrEmpty($danglingImages)){
