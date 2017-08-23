@@ -11,6 +11,7 @@ retturn true
 
 #isBlueUp()
 write-host isBlueUp
+isBlueUp
 
 #if ([string]::IsNullOrEmpty($danglingImages)){
 #    "There are no dangling Docker images"
