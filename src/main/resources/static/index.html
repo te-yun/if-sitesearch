@@ -64,7 +64,8 @@
         IFS.handlebars.registerHelper("formatHighlightedUrl", function (url) {
             if (typeof url !== "undefined") {
                 console.warn(url);
-                return url.replace("</span>", "")
+                console.warn(decodeURIComponent(url));
+                return decodeURIComponent(url.replace("</span>", ""));
             } else {
                 return "";
             }
