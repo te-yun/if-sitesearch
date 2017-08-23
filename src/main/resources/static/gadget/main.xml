@@ -19,8 +19,13 @@
     <ModulePrefs title="__MSG_gadget_title__" title_url="https://www.intrafind.de"
                  description="__MSG_gadget_description__" author_link="https://www.intrafind.de"
                  author="IntraFind Software AG" author_email="alexander.orlov@intrafind.de"
-                 thumbnail="__MSG_gadget_thumbnail__" screenshot="__MSG_gadget_screenshot__">
+                 thumbnail="__MSG_gadget_thumbnail__" screenshot="__MSG_gadget_screenshot__"
+                 height="400"
+                 preferred_height="400"
+                 preferred_width="400"
+    >
         <Locale messages="ALL_ALL.xml"/>
+        <Require feature="dynamic-height"/>
     </ModulePrefs>
 
     <!--<Content href="https://sitesearch.cloud/searchbar-gadget.html?tenantId=0-0-0-0-0" type="url"/>-->
