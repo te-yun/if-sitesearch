@@ -46,7 +46,6 @@ public class AutocompleteController {
             @RequestParam(value = "query", required = false, defaultValue = "") String query,
             @RequestParam(value = "tenantId") UUID tenantId
     ) {
-
         if (query.isEmpty()) return ResponseEntity.badRequest().build();
 
         // override tenantId with cookie value for debugging & speed up the getting started experience 

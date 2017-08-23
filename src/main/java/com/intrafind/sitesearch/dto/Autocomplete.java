@@ -16,17 +16,17 @@
 
 package com.intrafind.sitesearch.dto;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-public class Autocomplete {
+public class Autocomplete implements Serializable {
     private List<String> results = Collections.emptyList();
 
     private Autocomplete() {
     }
 
     public Autocomplete(List<String> results) {
-
         this.results = results;
     }
 

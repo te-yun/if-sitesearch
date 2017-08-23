@@ -16,7 +16,9 @@
 
 package com.intrafind.sitesearch.dto;
 
-public class Stats {
+import java.io.Serializable;
+
+public class Stats implements Serializable {
     private long queryCount;
     private String buildNumber;
     private String scmHash;
