@@ -65,7 +65,8 @@
             if (typeof url !== "undefined") {
                 console.warn(url);
                 console.warn(decodeURIComponent(url));
-                return decodeURIComponent(url.replace("</span>", ""));
+                console.warn(decodeURI(url));
+                return decodeURIComponent(url);
             } else {
                 return "";
             }
