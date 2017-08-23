@@ -16,8 +16,8 @@
   -->
 
 <messagebundle>
-    <msg name="gadget_title">Sitesearch</msg>
-    <msg name="gadget_description">Search throughout your website</msg>
+    <msg name="gadget_title">Site Search</msg>
+    <msg name="gadget_description">Search throughout your site</msg>
     <msg name="gadget_thumbnail">https://www.intrafind.de/system/themes/intrafind/_img/logo.png</msg>
     <msg name="gadget_screenshot">https://www.intrafind.de/system/themes/intrafind/_img/logo.png</msg>
 </messagebundle>

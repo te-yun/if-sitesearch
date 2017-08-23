@@ -16,9 +16,10 @@
 
 package com.intrafind.sitesearch.jmh;
 
-import com.intrafind.sitesearch.controller.SearchController;
-import com.intrafind.sitesearch.dto.Hits;
-import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.Threads;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -45,18 +46,18 @@ public class LoadTest {
     }
 
     //        @BenchmarkMode(Mode.SingleShotTime)
-    @BenchmarkMode(Mode.All)
-    @Threads(9)
-    @Fork(9)
-    @OperationsPerInvocation(9)
-    @Benchmark
-    public void simpleSearch() throws Exception {
-        final ResponseEntity<Hits> actual = CALLER.getForEntity("https://sitesearch.cloud" + SearchController.ENDPOINT + "?query=Cloud", Hits.class);
-
-        assertEquals(HttpStatus.OK, actual.getStatusCode());
-        assertNotNull(actual);
-        assertNotNull(actual.getBody());
-        assertEquals(5, actual.getBody().getResults().size());
-        LOG.info(actual.getBody().getResults().get(2).getBody());
-    }
+//    @BenchmarkMode(Mode.All)
+//    @Threads(9)
+//    @Fork(9)
+//    @OperationsPerInvocation(9)
+//    @Benchmark
+//    public void simpleSearch() throws Exception {
+//        final ResponseEntity<Hits> actual = CALLER.getForEntity("https://sitesearch.cloud" + SearchController.ENDPOINT + "?query=Cloud", Hits.class);
+//
+//        assertEquals(HttpStatus.OK, actual.getStatusCode());
+//        assertNotNull(actual);
+//        assertNotNull(actual.getBody());
+//        assertEquals(5, actual.getBody().getResults().size());
+//        LOG.info(actual.getBody().getResults().get(2).getBody());
+//    }
 }

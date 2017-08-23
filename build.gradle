@@ -70,13 +70,7 @@ test {
     }
 }
 
-//jmh {
-//    jvmArgs = ['-Djmh.ignoreLock=true']
-//    jmhVersion = '1.19'
-//}
-
 jmh {
-    jvmArgs = ['-D"jmh.ignoreLock"=true']
     fork = 0
     setDuplicateClassesStrategy(DuplicatesStrategy.INCLUDE)
 }
