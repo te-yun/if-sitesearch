@@ -35,7 +35,7 @@ public class SearchService {
     static final Search SEARCH_SERVICE = IfinderCoreClient.newHessianClient(Search.class, Application.IFINDER_CORE + "/search");
 
     private static final Logger LOG = LoggerFactory.getLogger(SearchService.class);
-    private static final String QUERY_SEPARATOR = ",";
+    static final String QUERY_SEPARATOR = ",";
     private static final String HIT_TEASER_PREFIX = "hit.teaser.";
 
     @Value("${sitesearch.if-core-hostname}")

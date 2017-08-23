@@ -55,7 +55,10 @@ public class AutocompleteTest {
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertNotNull(actual.getBody());
         assertEquals(6, actual.getBody().getResults().size());
-        actual.getBody().getResults().forEach(s -> assertTrue(s.contains("ifinder")));
+        actual.getBody().getResults().forEach(term -> {
+            LOG.info("term: " + term);
+            assertTrue(term.contains("ifinder"));
+        });
     }
 
     @Test
