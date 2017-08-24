@@ -17,14 +17,18 @@
 package com.intrafind.sitesearch.controller;
 
 import com.intrafind.sitesearch.dto.Stats;
+import jetbrains.exodus.ByteIterable;
+import jetbrains.exodus.bindings.LongBinding;
 import jetbrains.exodus.bindings.StringBinding;
-import jetbrains.exodus.env.*;
+import jetbrains.exodus.env.Environment;
+import jetbrains.exodus.env.Environments;
+import jetbrains.exodus.env.Store;
+import jetbrains.exodus.env.StoreConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotNull;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -35,25 +39,20 @@ public class StatsController {
     //    public static final Environment EXODUS_ENV = Environments.newInstance("data");
     public static final String ENDPOINT = "/stats";
     private static final Logger LOG = LoggerFactory.getLogger(StatsController.class);
-    static final String QUERIES_PER_TENANT_STORE = "queriesPerTenant";
+    static final String QUERIES_PER_TENANT_STORE = "tenantQueries";
 
     @RequestMapping(method = RequestMethod.GET)
-    ResponseEntity stats(
+    ResponseEntity<Stats> stats(
             @RequestParam(value = "tenantId") UUID tenantId
     ) {
         AtomicLong queryCount = new AtomicLong();
         Environment env = Environments.newInstance("data");
 //        final ContextualEnvironment contextualEnvironment = Environments.newContextualInstance("data");
-        env.executeInTransaction(new TransactionalExecutable() {
-            @Override
-            public void execute(@NotNull final Transaction txn) {
-                final Store store = env.openStore(QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
-                if (store.get(txn, StringBinding.stringToEntry(tenantId.toString())) != null) {
-                    LOG.info("RAW COUNT: " + store.get(txn, StringBinding.stringToEntry(tenantId.toString())));
-                    long queryCountValue = Long.valueOf(StringBinding.entryToString(store.get(txn, StringBinding.stringToEntry(tenantId.toString()))));
-                    queryCount.set(queryCountValue);
-                    LOG.info(tenantId + ": " + queryCountValue);
-                }
+        env.executeInTransaction(txn -> {
+            final Store store = env.openStore(QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
+            final ByteIterable queryCountValue = store.get(txn, StringBinding.stringToEntry(tenantId.toString()));
+            if (queryCountValue != null) {
+                queryCount.set(LongBinding.entryToLong(queryCountValue));
             }
         });
         env.close();

@@ -16,48 +16,59 @@
 
 package com.intrafind.sitesearch.jmh;
 
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Mode;
-import org.openjdk.jmh.annotations.Threads;
+import com.intrafind.sitesearch.controller.SearchController;
+import com.intrafind.sitesearch.dto.Hits;
+import com.intrafind.sitesearch.integration.SearchTest;
+import org.openjdk.jmh.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import static org.junit.Assert.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+
+import static org.junit.Assert.assertEquals;
 
 public class LoadTest {
     private final static Logger LOG = LoggerFactory.getLogger(LoadTest.class);
-    private static final String LOAD_TARGET = "https://sitesearch.cloud/index.html";
+    //    private static final String LOAD_TARGET = "https://sitesearch.cloud";
+    private static final String LOAD_TARGET = "http://localhost:8001";
     private static final TestRestTemplate CALLER = new TestRestTemplate();
 
-    @BenchmarkMode(Mode.SingleShotTime)
-    @Threads(22)
-    @Benchmark
-    public void staticLoad() throws Exception {
-
-        final ResponseEntity<String> actual = CALLER.getForEntity(LOAD_TARGET, String.class);
-
-        assertNotNull(actual);
-        assertFalse(actual.getBody().isEmpty());
-        assertEquals(HttpStatus.OK, actual.getStatusCode());
-    }
-
-    //        @BenchmarkMode(Mode.SingleShotTime)
-//    @BenchmarkMode(Mode.All)
-//    @Threads(9)
-//    @Fork(9)
-//    @OperationsPerInvocation(9)
+//    @BenchmarkMode(Mode.SingleShotTime)
+//    @Threads(22)
 //    @Benchmark
-//    public void simpleSearch() throws Exception {
-//        final ResponseEntity<Hits> actual = CALLER.getForEntity("https://sitesearch.cloud" + SearchController.ENDPOINT + "?query=Cloud", Hits.class);
+//    public void staticLoad() throws Exception {
 //
-//        assertEquals(HttpStatus.OK, actual.getStatusCode());
+//        final ResponseEntity<String> actual = CALLER.getForEntity(LOAD_TARGET, String.class);
+//
 //        assertNotNull(actual);
-//        assertNotNull(actual.getBody());
-//        assertEquals(5, actual.getBody().getResults().size());
-//        LOG.info(actual.getBody().getResults().get(2).getBody());
+//        assertFalse(actual.getBody().isEmpty());
+//        assertEquals(HttpStatus.OK, actual.getStatusCode());
 //    }
+
+    private static final List<UUID> tenants = Arrays.asList(
+            SearchTest.SEARCH_TENANT_ID, UUID.fromString("363d50f3-17cb-4756-aeca-7d3768092ae1"),
+            UUID.fromString("1a6715d9-119f-48d1-9329-e8763273bbea")
+    );
+    private static final List<String> queryPhrases = Arrays.asList("knowledge", "ifinder", "", " ", "\uD83E\uDD84");
+
+    @BenchmarkMode(Mode.Throughput)
+    @Threads(1)
+//    @Fork(9)
+    @OperationsPerInvocation(10)
+    @Benchmark
+    public void search() throws Exception {
+        final ResponseEntity<Hits> actual = CALLER.getForEntity(
+                LOAD_TARGET + SearchController.ENDPOINT
+                        + "?query=knowledge&tenantId=" + SearchTest.SEARCH_TENANT_ID,
+                Hits.class
+        );
+
+        assertEquals(HttpStatus.OK, actual.getStatusCode());
+        assertEquals(1, actual.getBody().getResults().size());
+    }
 }
