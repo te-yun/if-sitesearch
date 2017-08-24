@@ -32,7 +32,8 @@ import java.util.concurrent.atomic.AtomicLong;
 @RestController
 @RequestMapping(StatsController.ENDPOINT)
 public class StatsController {
-    static final String ENDPOINT = "/stats";
+    //    public static final Environment EXODUS_ENV = Environments.newInstance("data");
+    public static final String ENDPOINT = "/stats";
     private static final Logger LOG = LoggerFactory.getLogger(StatsController.class);
     static final String QUERIES_PER_TENANT_STORE = "queriesPerTenant";
 
@@ -41,16 +42,18 @@ public class StatsController {
             @RequestParam(value = "tenantId") UUID tenantId
     ) {
         AtomicLong queryCount = new AtomicLong();
-        final Environment env = Environments.newInstance("data");
+        Environment env = Environments.newInstance("data");
 //        final ContextualEnvironment contextualEnvironment = Environments.newContextualInstance("data");
         env.executeInTransaction(new TransactionalExecutable() {
             @Override
             public void execute(@NotNull final Transaction txn) {
                 final Store store = env.openStore(QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
-                LOG.info("RAW COUNT: " + store.get(txn, StringBinding.stringToEntry(tenantId.toString())));
-                long queryCountValue = Long.valueOf(StringBinding.entryToString(store.get(txn, StringBinding.stringToEntry(tenantId.toString()))));
-                queryCount.set(queryCountValue);
-                LOG.info(tenantId + ": " + queryCountValue);
+                if (store.get(txn, StringBinding.stringToEntry(tenantId.toString())) != null) {
+                    LOG.info("RAW COUNT: " + store.get(txn, StringBinding.stringToEntry(tenantId.toString())));
+                    long queryCountValue = Long.valueOf(StringBinding.entryToString(store.get(txn, StringBinding.stringToEntry(tenantId.toString()))));
+                    queryCount.set(queryCountValue);
+                    LOG.info(tenantId + ": " + queryCountValue);
+                }
             }
         });
         env.close();
