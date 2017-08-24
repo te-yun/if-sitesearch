@@ -28,40 +28,40 @@
         <Require feature="dynamic-height"/>
     </ModulePrefs>
 
-    <!--<Content href="https://sitesearch.cloud/searchbar-gadget.html?tenantId=0-0-0-0-0" type="url"/>-->
+    <Content href="https://sitesearch.cloud/searchbar-gadget.html?tenantId=0-0-0-0-0" type="url"/>
 
-    <Content type="html">
-        <![CDATA[
+    <!--<Content type="html">-->
+    <!--<![CDATA[-->
 
-<link rel="stylesheet" type="text/css" href="https://sitesearch.cloud/searchbar/css/app.css"/>
+    <!--<link rel="stylesheet" type="text/css" href="https://sitesearch.cloud/searchbar/css/app.css"/>-->
 
-<style>
-    .if-teaser-highlight {
-        font-weight: bold;
-    }
-</style>
+    <!--<style>-->
+    <!--.if-teaser-highlight {-->
+    <!--font-weight: bold;-->
+    <!--}-->
+    <!--</style>-->
 
-<div class="container">
-    <div id="searchbar"></div>
-    <div id="resultlist"></div>
-</div>
+    <!--<div class="container">-->
+    <!--<div id="searchbar"></div>-->
+    <!--<div id="resultlist"></div>-->
+    <!--</div>-->
 
-<script src="https://sitesearch.cloud/searchbar/js/app.js"></script>
-<script>
-    console.warn(new URLSearchParams(location.search.slice(1)).get("tenantId"));
-    jQuery.noConflict();
-    jQuery(document).ready(function ($) {
+    <!--<script src="https://sitesearch.cloud/searchbar/js/app.js"></script>-->
+    <!--<script>-->
+    <!--console.warn(new URLSearchParams(location.search.slice(1)).get("tenantId"));-->
+    <!--jQuery.noConflict();-->
+    <!--jQuery(document).ready(function ($) {-->
 
-        IFS.initClient({
-            sbTarget: "#searchbar",
-            configurl: "https://sitesearch.cloud/searchbar-config/sitesearch-config.json",
-            sitesearch: true,
-            tenantId: "363d50f3-17cb-4756-aeca-7d3768092ae1"
-        });
-    });
-</script>
+    <!--IFS.initClient({-->
+    <!--sbTarget: "#searchbar",-->
+    <!--configurl: "https://sitesearch.cloud/searchbar-config/sitesearch-config.json",-->
+    <!--sitesearch: true,-->
+    <!--tenantId: "363d50f3-17cb-4756-aeca-7d3768092ae1"-->
+    <!--});-->
+    <!--});-->
+    <!--</script>-->
 
-      ]]>
-    </Content>
+    <!--]]>-->
+    <!--</Content>-->
 </Module>
         
