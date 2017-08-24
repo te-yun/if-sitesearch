@@ -26,6 +26,7 @@ plugins {
     id "idea"
     id "org.springframework.boot" version "1.5.6.RELEASE"
     id "me.champeau.gradle.jmh" version "0.4.4"
+    id "io.morethan.jmhreport" version "0.5.0" // not tested yet
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8

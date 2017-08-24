@@ -1,3 +1,5 @@
+#!/usr/bin/env powershell
+
 try {
     # add "--debug-jvm" to attach debugger
     Write-Host "args: $args"

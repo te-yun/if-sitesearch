@@ -31,12 +31,12 @@ to the `config` folder inside this project.
     ./test.ps1
 
 ## Load Test
-    ./test-load.ps1
+    ./load-test.ps1
 
 ## Release
     ./release.ps1
     
-## Postman Export
+## Postman
     ./*.postman_collection.json
     
 # Attribution
