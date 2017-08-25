@@ -1,4 +1,4 @@
 Write-Host "args: $args"
 
-#./gradlew compileJmhJava classes testClasses jmhClasses jmh $args
-./gradlew clean jmh $args
+#./gradlew compileJmhJava classes testClasses jmhClasses jmh jmhReport $args
+./gradlew clean jmh jmhReport $args

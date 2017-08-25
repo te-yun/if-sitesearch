@@ -69,7 +69,7 @@ public class Load {
 //        assertEquals(1, actual.getBody().getResults().size());
 //    }
 
-    @BenchmarkMode(Mode.AverageTime)
+    @BenchmarkMode(Mode.Throughput)
     @Threads(10)
     @Benchmark
     public void staticFiles() throws Exception {
