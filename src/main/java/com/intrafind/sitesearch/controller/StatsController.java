@@ -17,11 +17,10 @@
 package com.intrafind.sitesearch.controller;
 
 import com.intrafind.sitesearch.dto.Stats;
+import jetbrains.exodus.ArrayByteIterable;
 import jetbrains.exodus.ByteIterable;
 import jetbrains.exodus.bindings.LongBinding;
 import jetbrains.exodus.bindings.StringBinding;
-import jetbrains.exodus.env.Environment;
-import jetbrains.exodus.env.Environments;
 import jetbrains.exodus.env.Store;
 import jetbrains.exodus.env.StoreConfig;
 import org.slf4j.Logger;
@@ -45,17 +44,19 @@ public class StatsController {
     ResponseEntity<Stats> stats(
             @RequestParam(value = "tenantId") UUID tenantId
     ) {
-        AtomicLong queryCount = new AtomicLong();
-        Environment env = Environments.newInstance("data");
+        final AtomicLong queryCount = new AtomicLong();
+//        Environment ACID_PERSISTENCE = Environments.newInstance("data");
 //        final ContextualEnvironment contextualEnvironment = Environments.newContextualInstance("data");
-        env.executeInTransaction(txn -> {
-            final Store store = env.openStore(QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
-            final ByteIterable queryCountValue = store.get(txn, StringBinding.stringToEntry(tenantId.toString()));
+//       SearchController. ACID_PERSISTENCE.executeInTransaction(txn -> {
+        final ArrayByteIterable readableTenantId = StringBinding.stringToEntry(tenantId.toString());
+        SearchController.ACID_PERSISTENCE.executeInReadonlyTransaction(txn -> {
+            final Store store = SearchController.ACID_PERSISTENCE.openStore(QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
+            final ByteIterable queryCountValue = store.get(txn, readableTenantId);
             if (queryCountValue != null) {
                 queryCount.set(LongBinding.entryToLong(queryCountValue));
             }
         });
-        env.close();
+//        SearchController.ACID_PERSISTENCE.close();
         return ResponseEntity.ok(new Stats(System.getenv("BUILD_NUMBER"), System.getenv("SCM_HASH"), queryCount.get()));
     }
 }

@@ -74,7 +74,8 @@ test {
 jmh {
     fork = 0
     failOnError = true
-//    timeout = 90000
+//    iterations = 1
+//    timeout = '90000ms'
     timeOnIteration = '1ms'
     setDuplicateClassesStrategy(DuplicatesStrategy.FAIL)
 }

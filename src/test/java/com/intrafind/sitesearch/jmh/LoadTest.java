@@ -19,7 +19,10 @@ package com.intrafind.sitesearch.jmh;
 import com.intrafind.sitesearch.controller.SearchController;
 import com.intrafind.sitesearch.dto.Hits;
 import com.intrafind.sitesearch.integration.SearchTest;
-import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.Threads;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -56,19 +59,33 @@ public class LoadTest {
     );
     private static final List<String> queryPhrases = Arrays.asList("knowledge", "ifinder", "", " ", "\uD83E\uDD84");
 
+//    @BenchmarkMode(Mode.Throughput)
+//    @Threads(1)
+////    @Fork(9)
+////    @OperationsPerInvocation(1000)
+//    @Benchmark
+//    public void search() throws Exception {
+//        final ResponseEntity<Hits> actual = CALLER.getForEntity(
+//                LOAD_TARGET + SearchController.ENDPOINT
+//                        + "?query=knowledge&tenantId=" + SearchTest.SEARCH_TENANT_ID,
+//                Hits.class
+//        );
+//
+//        assertEquals(HttpStatus.OK, actual.getStatusCode());
+//        assertEquals(1, actual.getBody().getResults().size());
+//    }
+
     @BenchmarkMode(Mode.Throughput)
-    @Threads(1)
-//    @Fork(9)
-    @OperationsPerInvocation(10)
+    @Threads(10)
     @Benchmark
-    public void search() throws Exception {
+    public void searchComplex() throws Exception {
         final ResponseEntity<Hits> actual = CALLER.getForEntity(
                 LOAD_TARGET + SearchController.ENDPOINT
-                        + "?query=knowledge&tenantId=" + SearchTest.SEARCH_TENANT_ID,
+                        + "?query=ifinder&tenantId=" + SearchTest.SEARCH_TENANT_ID,
                 Hits.class
         );
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
-        assertEquals(1, actual.getBody().getResults().size());
+        assertEquals(7, actual.getBody().getResults().size());
     }
 }

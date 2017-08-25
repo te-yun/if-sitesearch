@@ -18,6 +18,7 @@ package com.intrafind.sitesearch.controller;
 
 import com.intrafind.sitesearch.dto.Hits;
 import com.intrafind.sitesearch.service.SearchService;
+import jetbrains.exodus.ArrayByteIterable;
 import jetbrains.exodus.ByteIterable;
 import jetbrains.exodus.bindings.LongBinding;
 import jetbrains.exodus.bindings.StringBinding;
@@ -28,6 +29,7 @@ import jetbrains.exodus.env.StoreConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,9 +39,14 @@ import java.util.UUID;
 @RestController
 @RequestMapping(SearchController.ENDPOINT)
 public class SearchController {
+    //    static final Environment ACID_PERSISTENCE = Environments.newInstance("data");
+    static final Environment ACID_PERSISTENCE = Environments.newContextualInstance("data");
+
     public static final String ENDPOINT = "/search";
     private static final Logger LOG = LoggerFactory.getLogger(SearchController.class);
     private final SearchService service;
+    @Value("${sitesearch.queryCountEnabled}")
+    private Boolean queryCountEnabled;
 
     @Autowired
     SearchController(SearchService service) {
@@ -55,27 +62,30 @@ public class SearchController {
         if (query.isEmpty()) return ResponseEntity.badRequest().build();
 
         // override tenantId with cookie value for debugging & speed up the getting started experience 
-        if (cookieTenant != null) tenantId = cookieTenant;
+        if (cookieTenant != null) {
+            LOG.info("cookieTenant: " + cookieTenant);
+            tenantId = cookieTenant;
+        }
 
-        LOG.info("cookieTenant: " + cookieTenant);
         LOG.info("query: " + query);
         Hits searchResult = service.search(query, tenantId);
         if (searchResult.getResults().isEmpty()) {
             return ResponseEntity.notFound().build();
         } else {
-            final UUID finalTenantId = tenantId;
-            final Environment env = Environments.newInstance("data");
-            env.executeInTransaction(txn -> {
-                final Store store = env.openStore(StatsController.QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
-                long queryCount = 0;
-                final ByteIterable tenantQueryCount = store.get(txn, StringBinding.stringToEntry(finalTenantId.toString()));
-                if (tenantQueryCount != null) {
-                    queryCount = LongBinding.entryToLong(tenantQueryCount);
-                }
-
-                store.put(txn, StringBinding.stringToEntry(finalTenantId.toString()), LongBinding.longToEntry(++queryCount));
-            });
-            env.close();
+            if (queryCountEnabled) {
+                final ArrayByteIterable readableTenantId = StringBinding.stringToEntry(tenantId.toString());
+                ACID_PERSISTENCE.executeInTransaction(txn -> {
+                    final Store store = ACID_PERSISTENCE.openStore(StatsController.QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
+                    long queryCount = 0;
+                    final ByteIterable tenantQueryCount = store.get(txn, readableTenantId);
+                    if (tenantQueryCount != null) {
+                        queryCount = LongBinding.entryToLong(tenantQueryCount);
+                        LOG.info("queryCount: " + queryCount);
+                    }
+                    store.put(txn, readableTenantId, LongBinding.longToEntry(++queryCount));
+                });
+//            ACID_PERSISTENCE.close();
+            }
             return ResponseEntity.ok(searchResult);
         }
     }

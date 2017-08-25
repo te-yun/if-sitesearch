@@ -23,7 +23,6 @@ import com.intrafind.sitesearch.dto.FoundSite;
 import com.intrafind.sitesearch.dto.Hits;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -37,9 +36,6 @@ public class SearchService {
     private static final Logger LOG = LoggerFactory.getLogger(SearchService.class);
     static final String QUERY_SEPARATOR = ",";
     private static final String HIT_TEASER_PREFIX = "hit.teaser.";
-
-    @Value("${sitesearch.if-core-hostname}")
-    private String ifCoreHostname;
 
     public Hits search(String query, UUID tenantId) {
         com.intrafind.api.search.Hits hits = SEARCH_SERVICE.search(
