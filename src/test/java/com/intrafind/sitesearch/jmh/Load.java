@@ -31,25 +31,14 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
-public class LoadTest {
-    private final static Logger LOG = LoggerFactory.getLogger(LoadTest.class);
+public class Load {
+    private final static Logger LOG = LoggerFactory.getLogger(Load.class);
     private static final String LOAD_TARGET = "https://sitesearch.cloud";
     //    private static final String LOAD_TARGET = "http://localhost:8001";
     private static final TestRestTemplate CALLER = new TestRestTemplate();
-
-//    @BenchmarkMode(Mode.SingleShotTime)
-//    @Threads(22)
-//    @Benchmark
-//    public void staticLoad() throws Exception {
-//
-//        final ResponseEntity<String> actual = CALLER.getForEntity(LOAD_TARGET, String.class);
-//
-//        assertNotNull(actual);
-//        assertFalse(actual.getBody().isEmpty());
-//        assertEquals(HttpStatus.OK, actual.getStatusCode());
-//    }
+    private static Random RANDOM = new Random();
 
     private static final List<UUID> tenants = Arrays.asList(
             SearchTest.SEARCH_TENANT_ID,
@@ -80,17 +69,23 @@ public class LoadTest {
 //        assertEquals(1, actual.getBody().getResults().size());
 //    }
 
+    @BenchmarkMode(Mode.AverageTime)
+    @Threads(10)
+    @Benchmark
+    public void staticFiles() throws Exception {
+        final ResponseEntity<String> actual = CALLER.getForEntity(LOAD_TARGET, String.class);
+
+        assertEquals(HttpStatus.OK, actual.getStatusCode());
+        assertNotNull(actual);
+        assertFalse(actual.getBody().isEmpty());
+    }
+
     @BenchmarkMode(Mode.Throughput)
     @Threads(10)
     @Benchmark
     public void searchComplex() throws Exception {
-        Random random = new Random();
-//        final int queryIndex = random.nextInt(queries.size());
-        final int queryIndex = random.nextInt(queries.size());
-        LOG.info("queryIndex: " + queryIndex);
-        LOG.info("queryIndex: " + queries.keySet());
-        LOG.info("queryIndex: " + queries.keySet().toArray()[queryIndex]);
-        LOG.info("queryIndex: " + queries.keySet());
+        final int queryIndex = RANDOM.nextInt(queries.size());
+
         List<String> queryList = new ArrayList<>(queries.keySet());
 
         final String query = queryList.get(queryIndex);
