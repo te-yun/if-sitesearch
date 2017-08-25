@@ -39,5 +39,12 @@ to the `config` folder inside this project.
 ## Postman
     ./*.postman_collection.json
     
+## Configuration
+Required environment variables:
+
+    * BUILD_NUMBER
+    * SCM_HASH
+    * SECURITY_USER_PASSWORD    
+    
 # Attribution
 * Made with ♥ in Munich

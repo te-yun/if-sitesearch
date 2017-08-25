@@ -29,16 +29,14 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
 public class LoadTest {
     private final static Logger LOG = LoggerFactory.getLogger(LoadTest.class);
-    //    private static final String LOAD_TARGET = "https://sitesearch.cloud";
-    private static final String LOAD_TARGET = "http://localhost:8001";
+    private static final String LOAD_TARGET = "https://sitesearch.cloud";
+    //    private static final String LOAD_TARGET = "http://localhost:8001";
     private static final TestRestTemplate CALLER = new TestRestTemplate();
 
 //    @BenchmarkMode(Mode.SingleShotTime)
@@ -54,10 +52,17 @@ public class LoadTest {
 //    }
 
     private static final List<UUID> tenants = Arrays.asList(
-            SearchTest.SEARCH_TENANT_ID, UUID.fromString("363d50f3-17cb-4756-aeca-7d3768092ae1"),
+            SearchTest.SEARCH_TENANT_ID,
+            UUID.fromString("363d50f3-17cb-4756-aeca-7d3768092ae1"),
             UUID.fromString("1a6715d9-119f-48d1-9329-e8763273bbea")
     );
-    private static final List<String> queryPhrases = Arrays.asList("knowledge", "ifinder", "", " ", "\uD83E\uDD84");
+    private static final Map<String, Long> queries = new HashMap<>();
+
+    static {
+        queries.put("knowledge", 1L);
+        queries.put("ifinder", 7L);
+        queries.put("\uD83E\uDD84", 25L);
+    }
 
 //    @BenchmarkMode(Mode.Throughput)
 //    @Threads(1)
@@ -79,13 +84,27 @@ public class LoadTest {
     @Threads(10)
     @Benchmark
     public void searchComplex() throws Exception {
+        Random random = new Random();
+//        final int queryIndex = random.nextInt(queries.size());
+        final int queryIndex = random.nextInt(queries.size());
+        LOG.info("queryIndex: " + queryIndex);
+        LOG.info("queryIndex: " + queries.keySet());
+        LOG.info("queryIndex: " + queries.keySet().toArray()[queryIndex]);
+        LOG.info("queryIndex: " + queries.keySet());
+        List<String> queryList = new ArrayList<>(queries.keySet());
+
+        final String query = queryList.get(queryIndex);
         final ResponseEntity<Hits> actual = CALLER.getForEntity(
                 LOAD_TARGET + SearchController.ENDPOINT
-                        + "?query=ifinder&tenantId=" + SearchTest.SEARCH_TENANT_ID,
+                        + "?query=" + query + "&tenantId=" + SearchTest.SEARCH_TENANT_ID,
                 Hits.class
         );
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
-        assertEquals(7, actual.getBody().getResults().size());
+        LOG.info("queryIndex: " + queryIndex);
+        LOG.info("queryList.get(queryIndex): " + query);
+        final long queryResultCount = queries.get(query);
+        LOG.info("queries.get(queryList.get(queryIndex)): " + queryResultCount);
+        assertEquals(queryResultCount, actual.getBody().getResults().size());
     }
 }
