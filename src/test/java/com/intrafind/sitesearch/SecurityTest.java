@@ -24,11 +24,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.net.URI;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -40,7 +47,7 @@ public class SecurityTest {
     private static final Logger LOG = LoggerFactory.getLogger(SecurityTest.class);
 
     @Autowired
-    private TestRestTemplate testRestTemplate;
+    private TestRestTemplate caller;
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -58,5 +65,16 @@ public class SecurityTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.TEXT_HTML))
         ;
+    }
+
+    @Test
+    public void assureSiteSearchServiceBasicAuthProtection() throws Exception {
+        final ResponseEntity<String> secureEndpointJson = caller.postForEntity(URI.create("http://" + System.getenv("SECURITY_USER_PASSWORD") + ":" + System.getenv("SECURITY_USER_PASSWORD") + "@sitesearch.cloud:9605/json/index?method=index"), HttpEntity.EMPTY, String.class);
+        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJson.getStatusCode());
+        assertNull(secureEndpointJson.getBody());
+
+        final ResponseEntity<String> secureEndpointHessian = caller.postForEntity(URI.create("http://" + System.getenv("SECURITY_USER_PASSWORD") + ":" + System.getenv("SECURITY_USER_PASSWORD") + "@sitesearch.cloud:9605/hessian/index?method=index"), HttpEntity.EMPTY, String.class);
+        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointHessian.getStatusCode());
+        assertNull(secureEndpointHessian.getBody());
     }
 }
