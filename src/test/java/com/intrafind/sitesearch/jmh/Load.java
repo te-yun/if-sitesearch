@@ -39,7 +39,7 @@ public class Load {
     private static final String LOAD_TARGET = "https://sitesearch.cloud";
     //    private static final String LOAD_TARGET = "http://localhost:8001";
     private static final TestRestTemplate CALLER = new TestRestTemplate();
-    private static Random RANDOM = new Random();
+    private static Random PSEUDO_ENTROPY = new Random();
 
     private static final List<UUID> tenants = Arrays.asList(
             SearchTest.SEARCH_TENANT_ID,
@@ -83,7 +83,7 @@ public class Load {
     @Threads(10)
     @Benchmark
     public void searchComplex() throws Exception {
-        final int queryIndex = RANDOM.nextInt(queries.size());
+        final int queryIndex = PSEUDO_ENTROPY.nextInt(queries.size());
         final List<String> queryList = new ArrayList<>(queries.keySet());
         final String query = queryList.get(queryIndex);
 
