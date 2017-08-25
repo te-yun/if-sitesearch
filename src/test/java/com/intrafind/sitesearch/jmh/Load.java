@@ -31,7 +31,8 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class Load {
     private final static Logger LOG = LoggerFactory.getLogger(Load.class);
@@ -46,7 +47,6 @@ public class Load {
             UUID.fromString("1a6715d9-119f-48d1-9329-e8763273bbea")
     );
     private static final Map<String, Long> queries = new HashMap<>();
-
     static {
         queries.put("knowledge", 1L);
         queries.put("ifinder", 7L);
@@ -73,11 +73,10 @@ public class Load {
     @Threads(10)
     @Benchmark
     public void staticFiles() throws Exception {
-        final ResponseEntity<String> actual = CALLER.getForEntity(LOAD_TARGET, String.class);
+        final ResponseEntity<String> staticFile = CALLER.getForEntity(LOAD_TARGET, String.class);
 
-        assertEquals(HttpStatus.OK, actual.getStatusCode());
-        assertNotNull(actual);
-        assertFalse(actual.getBody().isEmpty());
+        assertEquals(HttpStatus.OK, staticFile.getStatusCode());
+        assertFalse(staticFile.getBody().isEmpty());
     }
 
     @BenchmarkMode(Mode.Throughput)
@@ -85,10 +84,9 @@ public class Load {
     @Benchmark
     public void searchComplex() throws Exception {
         final int queryIndex = RANDOM.nextInt(queries.size());
-
-        List<String> queryList = new ArrayList<>(queries.keySet());
-
+        final List<String> queryList = new ArrayList<>(queries.keySet());
         final String query = queryList.get(queryIndex);
+
         final ResponseEntity<Hits> actual = CALLER.getForEntity(
                 LOAD_TARGET + SearchController.ENDPOINT
                         + "?query=" + query + "&tenantId=" + SearchTest.SEARCH_TENANT_ID,
@@ -96,10 +94,7 @@ public class Load {
         );
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
-        LOG.info("queryIndex: " + queryIndex);
-        LOG.info("queryList.get(queryIndex): " + query);
         final long queryResultCount = queries.get(query);
-        LOG.info("queries.get(queryList.get(queryIndex)): " + queryResultCount);
         assertEquals(queryResultCount, actual.getBody().getResults().size());
     }
 }
