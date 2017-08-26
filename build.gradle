@@ -75,9 +75,7 @@ jmh {
     fork = 0
     failOnError = true
     resultFormat = "JSON"
-//    resultFormat = ResultFormatType.JSON
-//    iterations = 1
-//    timeout = '90000ms'
+    iterations = 20
     timeOnIteration = '1ms'
     setDuplicateClassesStrategy(DuplicatesStrategy.FAIL)
 }
