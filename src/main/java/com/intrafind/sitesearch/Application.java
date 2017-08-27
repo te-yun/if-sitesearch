@@ -37,7 +37,6 @@ import java.net.URI;
 @RestController
 @EnableSwagger2
 public class Application {
-    //    public static final URI IFINDER_CORE = URI.create("http://ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=:ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=@sitesearch.cloud:9605/hessian");
     public static final URI IFINDER_CORE = URI.create("http://" + System.getenv("SECURITY_USER_PASSWORD") + ":" + System.getenv("SECURITY_USER_PASSWORD") + "@sitesearch.cloud:9605/hessian");
     private final static Logger LOG = LoggerFactory.getLogger(Application.class);
 

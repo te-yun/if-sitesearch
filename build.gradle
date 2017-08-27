@@ -71,12 +71,15 @@ test {
     }
 }
 
+tasks.jmh.finalizedBy tasks.jmhReport 
+
 jmh {
+    operationsPerInvocation = 20
     fork = 0
     failOnError = true
     resultFormat = "JSON"
     iterations = 20
-    timeOnIteration = '1ms'
+    timeOnIteration = "1ms"
     setDuplicateClassesStrategy(DuplicatesStrategy.FAIL)
 }
 

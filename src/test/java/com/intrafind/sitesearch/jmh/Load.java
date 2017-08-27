@@ -36,7 +36,7 @@ import static org.junit.Assert.assertFalse;
 
 public class Load {
     private final static Logger LOG = LoggerFactory.getLogger(Load.class);
-    private static final String LOAD_TARGET = "https://sitesearch.cloud";
+    private static final String LOAD_TARGET = "https://dev.sitesearch.cloud";
     //    private static final String LOAD_TARGET = "http://localhost:8001";
     private static final TestRestTemplate CALLER = new TestRestTemplate();
     private static Random PSEUDO_ENTROPY = new Random();
@@ -69,6 +69,7 @@ public class Load {
 //        assertEquals(1, actual.getBody().getResults().size());
 //    }
 
+    // TODO set mode to *.ALL
     @BenchmarkMode(Mode.Throughput)
     @Threads(10)
     @Benchmark
