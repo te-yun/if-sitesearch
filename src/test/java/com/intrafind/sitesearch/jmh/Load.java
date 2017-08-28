@@ -76,6 +76,12 @@ public class Load {
         AUTOCOMPLETE_QUERIES.put("ifind", 6L);
         AUTOCOMPLETE_QUERIES.put("ifinde", 6L);
 
+        try {
+            Thread.sleep(3); // required just because of JMH plugin?
+        } catch (InterruptedException e) {
+            LOG.error(e.getMessage());
+        }
+
         QUERY_LIST_AUTOCOMPLETE = new ArrayList<>(AUTOCOMPLETE_QUERIES.keySet());
         try {
             Thread.sleep(3); // required just because of JMH plugin?
