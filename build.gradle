@@ -79,6 +79,7 @@ jmh {
     operationsPerInvocation = 20
     fork = 0
 //    threads = 1
+    warmupIterations = 1
     failOnError = true
     resultFormat = "JSON"
     iterations = 20
