@@ -78,7 +78,7 @@ public class Load {
 
         QUERY_LIST_AUTOCOMPLETE = new ArrayList<>(AUTOCOMPLETE_QUERIES.keySet());
         try {
-            Thread.sleep(1); // required because of JMH plugin?
+            Thread.sleep(3); // required just because of JMH plugin?
         } catch (InterruptedException e) {
             LOG.error(e.getMessage());
         }
