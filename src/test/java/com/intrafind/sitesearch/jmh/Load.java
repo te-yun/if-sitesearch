@@ -32,6 +32,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -63,31 +64,27 @@ public class Load {
 
     static final List<String> QUERY_LIST_SEARCH = new ArrayList<>(SEARCH_QUERIES.keySet());
 
-    static final Map<String, Long> AUTOCOMPLETE_QUERIES = new HashMap<>();
+    static final Map<String, Long> AUTOCOMPLETE_QUERIES = new ConcurrentHashMap<>();
     static List<String> QUERY_LIST_AUTOCOMPLETE;
 
-    static void initAutocomplete() {
+    //    static void initAutocomplete() {
+//    @State(Scope.Benchmark)
+    static {
         AUTOCOMPLETE_QUERIES.put("kno", 1L);
         AUTOCOMPLETE_QUERIES.put("know", 1L);
         AUTOCOMPLETE_QUERIES.put("knowl", 1L);
         AUTOCOMPLETE_QUERIES.put("knowle", 1L);
-        AUTOCOMPLETE_QUERIES.put("ifi", 6L);
-        AUTOCOMPLETE_QUERIES.put("ifin", 6L);
-        AUTOCOMPLETE_QUERIES.put("ifind", 6L);
-        AUTOCOMPLETE_QUERIES.put("ifinde", 6L);
+        AUTOCOMPLETE_QUERIES.put("ifi", 3L);
+        AUTOCOMPLETE_QUERIES.put("ifin", 3L);
+        AUTOCOMPLETE_QUERIES.put("ifind", 3L);
+        AUTOCOMPLETE_QUERIES.put("ifinde", 3L);
 
         try {
-            Thread.sleep(3); // required just because of JMH plugin?
+            Thread.sleep(100); // required just because of JMH plugin? // TODO this one is probably superfluous
         } catch (InterruptedException e) {
             LOG.error(e.getMessage());
         }
-
         QUERY_LIST_AUTOCOMPLETE = new ArrayList<>(AUTOCOMPLETE_QUERIES.keySet());
-        try {
-            Thread.sleep(3); // required just because of JMH plugin?
-        } catch (InterruptedException e) {
-            LOG.error(e.getMessage());
-        }
     }
 
     @Benchmark
@@ -116,10 +113,10 @@ public class Load {
 
     @Benchmark
     public void autocomplete() throws Exception {
-        initAutocomplete();
+//        initAutocomplete();
 
-        final int queryIndex = PSEUDO_ENTROPY.nextInt(Load.AUTOCOMPLETE_QUERIES.size());
-        final String query = QUERY_LIST_AUTOCOMPLETE.get(queryIndex);
+        final int queryIndex = Load.PSEUDO_ENTROPY.nextInt(Load.AUTOCOMPLETE_QUERIES.size());
+        final String query = Load.QUERY_LIST_AUTOCOMPLETE.get(queryIndex);
 
         final ResponseEntity<Autocomplete> actual = CALLER.getForEntity(
                 LOAD_TARGET + AutocompleteController.ENDPOINT
