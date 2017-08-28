@@ -18,10 +18,8 @@ package com.intrafind.sitesearch.jmh;
 
 import com.intrafind.sitesearch.controller.AutocompleteController;
 import com.intrafind.sitesearch.controller.SearchController;
-import com.intrafind.sitesearch.controller.SiteController;
 import com.intrafind.sitesearch.dto.Autocomplete;
 import com.intrafind.sitesearch.dto.Hits;
-import com.intrafind.sitesearch.dto.Site;
 import com.intrafind.sitesearch.integration.SearchTest;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -30,14 +28,13 @@ import org.openjdk.jmh.annotations.Threads;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 @Threads(10)
 @BenchmarkMode(Mode.Throughput)
@@ -69,7 +66,7 @@ public class Load {
     static final Map<String, Long> AUTOCOMPLETE_QUERIES = new HashMap<>();
     static List<String> QUERY_LIST_AUTOCOMPLETE;
 
-    private static void initAutocomplete() {
+    static void initAutocomplete() {
         AUTOCOMPLETE_QUERIES.put("kno", 1L);
         AUTOCOMPLETE_QUERIES.put("know", 1L);
         AUTOCOMPLETE_QUERIES.put("knowl", 1L);
@@ -80,6 +77,11 @@ public class Load {
         AUTOCOMPLETE_QUERIES.put("ifinde", 6L);
 
         QUERY_LIST_AUTOCOMPLETE = new ArrayList<>(AUTOCOMPLETE_QUERIES.keySet());
+        try {
+            Thread.sleep(1); // required because of JMH plugin?
+        } catch (InterruptedException e) {
+            LOG.error(e.getMessage());
+        }
     }
 
     @Benchmark
@@ -88,15 +90,6 @@ public class Load {
 
         assertEquals(HttpStatus.OK, staticFile.getStatusCode());
         assertFalse(staticFile.getBody().isEmpty());
-    }
-
-    static String generateLoremIpsum() {
-        final StringBuilder loremIpsumText = new StringBuilder();
-        for (String word : LOREM_IPSUM) {
-            final int wordIndex = PSEUDO_ENTROPY.nextInt(LOREM_IPSUM.length);
-            loremIpsumText.append(LOREM_IPSUM[wordIndex]).append(" ");
-        }
-        return loremIpsumText.toString();
     }
 
     @Benchmark
@@ -131,76 +124,5 @@ public class Load {
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         final long queryResultCount = AUTOCOMPLETE_QUERIES.get(query);
         assertEquals(queryResultCount, actual.getBody().getResults().size());
-    }
-
-    @Threads(2)
-    @Benchmark
-    public void indexNewSiteAsNewTenant() throws Exception {
-        final String loremIpsumText = generateLoremIpsum();
-        final Site siteToIndex = new Site(
-                null, null, null,
-                loremIpsumText.substring(0, 42),
-                loremIpsumText,
-                "https://example.com/" + UUID.randomUUID()
-        );
-
-        final ResponseEntity<Site> actual = CALLER.exchange(
-                LOAD_TARGET + SiteController.ENDPOINT,
-                HttpMethod.PUT,
-                new HttpEntity<>(siteToIndex),
-                Site.class
-        );
-
-        assertEquals(HttpStatus.CREATED, actual.getStatusCode());
-        assertNotNull(actual.getHeaders().getLocation());
-    }
-
-    @Threads(2)
-    @Benchmark
-    public void indexUpdateWithNewSites() throws Exception {
-        final String loremIpsumText = generateLoremIpsum();
-        final Site siteToIndex = new Site(
-                null, null, null,
-                loremIpsumText.substring(0, 42),
-                loremIpsumText,
-                "https://example.com/" + UUID.randomUUID()
-        );
-
-        final ResponseEntity<Site> actual = CALLER.exchange(
-                LOAD_TARGET + SiteController.ENDPOINT
-                        + "?tenantId=" + "e10011b2-7f95-49e4-a9cb-189f5f5a6654"
-                        + "&tenantSecret=c041b603-e5b7-4623-8fe9-4cd08e5b4558",
-                HttpMethod.PUT,
-                new HttpEntity<>(siteToIndex),
-                Site.class
-        );
-
-        assertEquals(HttpStatus.CREATED, actual.getStatusCode());
-        assertNotNull(actual.getHeaders().getLocation());
-    }
-
-    @Threads(2)
-    @Benchmark
-    public void updateIndexedSite() throws Exception {
-        final String loremIpsumText = generateLoremIpsum();
-        final Site siteToIndex = new Site(
-                null, null, null,
-                loremIpsumText.substring(0, 42),
-                loremIpsumText,
-                "https://example.com/" + UUID.randomUUID()
-        );
-
-        final ResponseEntity<Site> actual = CALLER.exchange(
-                LOAD_TARGET + SiteController.ENDPOINT
-                        + "/80147ae9-e5a1-4278-a647-3dc264bba0d4"
-                        + "?tenantId=" + "e10011b2-7f95-49e4-a9cb-189f5f5a6654"
-                        + "&tenantSecret=c041b603-e5b7-4623-8fe9-4cd08e5b4558",
-                HttpMethod.PUT,
-                new HttpEntity<>(siteToIndex),
-                Site.class
-        );
-
-        assertEquals(HttpStatus.OK, actual.getStatusCode());
-        assertNull(actual.getHeaders().getLocation());
     }
 }

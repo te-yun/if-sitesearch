@@ -1,3 +1,5 @@
+#!/usr/bin/env powershell
+
 Write-Host "args: $args"
 
 #./gradlew compileJmhJava classes testClasses jmhClasses jmh jmhReport $args

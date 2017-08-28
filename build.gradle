@@ -76,7 +76,10 @@ test {
 tasks.jmh.finalizedBy tasks.jmhReport 
 
 jmh {
-    operationsPerInvocation = 20
+    include = ['.*Load.*']
+//    include = ['some regular expression']
+//      exclude = ['some regular expression']
+//    operationsPerInvocation = 3000
     fork = 0
 //    threads = 1
     warmupIterations = 1

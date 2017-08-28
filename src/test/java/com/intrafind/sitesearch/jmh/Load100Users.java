@@ -56,6 +56,8 @@ public class Load100Users {
 
     @Benchmark
     public void autocomplete() throws Exception {
+        Load.initAutocomplete();            // TODO remove this?
+        
         final int queryIndex = Load.PSEUDO_ENTROPY.nextInt(Load.AUTOCOMPLETE_QUERIES.size());
         final String query = Load.QUERY_LIST_AUTOCOMPLETE.get(queryIndex);
 

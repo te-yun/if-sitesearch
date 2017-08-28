@@ -38,9 +38,18 @@ import static org.junit.Assert.*;
 public class LoadIndex {
     private final static Logger LOG = LoggerFactory.getLogger(LoadIndex.class);
 
+    private static String generateLoremIpsum() {
+        final StringBuilder loremIpsumText = new StringBuilder();
+        for (String word : Load.LOREM_IPSUM) {
+            final int wordIndex = Load.PSEUDO_ENTROPY.nextInt(Load.LOREM_IPSUM.length);
+            loremIpsumText.append(Load.LOREM_IPSUM[wordIndex]).append(" ");
+        }
+        return loremIpsumText.toString();
+    }
+
     @Benchmark
     public void indexNewSiteAsNewTenant() throws Exception {
-        final String loremIpsumText = Load.generateLoremIpsum();
+        final String loremIpsumText = generateLoremIpsum();
         final Site siteToIndex = new Site(
                 null, null, null,
                 loremIpsumText.substring(0, 42),
@@ -61,7 +70,7 @@ public class LoadIndex {
 
     @Benchmark
     public void indexUpdateWithNewSites() throws Exception {
-        final String loremIpsumText = Load.generateLoremIpsum();
+        final String loremIpsumText = generateLoremIpsum();
         final Site siteToIndex = new Site(
                 null, null, null,
                 loremIpsumText.substring(0, 42),
@@ -84,7 +93,7 @@ public class LoadIndex {
 
     @Benchmark
     public void updateIndexedSite() throws Exception {
-        final String loremIpsumText = Load.generateLoremIpsum();
+        final String loremIpsumText = generateLoremIpsum();
         final Site siteToIndex = new Site(
                 null, null, null,
                 loremIpsumText.substring(0, 42),
