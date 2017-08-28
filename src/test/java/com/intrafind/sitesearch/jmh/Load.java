@@ -70,14 +70,14 @@ public class Load {
     //    static void initAutocomplete() {
 //    @State(Scope.Benchmark)
     static {
-//        AUTOCOMPLETE_QUERIES.put("kno", 1L);
+        AUTOCOMPLETE_QUERIES.put("kno", 1L);
 //        AUTOCOMPLETE_QUERIES.put("know", 1L);
 //        AUTOCOMPLETE_QUERIES.put("knowl", 1L);
 //        AUTOCOMPLETE_QUERIES.put("knowle", 1L);
-        AUTOCOMPLETE_QUERIES.put("ifi", 1L);
-        AUTOCOMPLETE_QUERIES.put("ifin", 1L);
-        AUTOCOMPLETE_QUERIES.put("ifind", 1L);
-        AUTOCOMPLETE_QUERIES.put("ifinde", 1L);
+        AUTOCOMPLETE_QUERIES.put("ifi", 6L);
+        AUTOCOMPLETE_QUERIES.put("ifin", 6L);
+//        AUTOCOMPLETE_QUERIES.put("ifind", 6L);
+//        AUTOCOMPLETE_QUERIES.put("ifinde", 6L);
 
 //        try {
 //            Thread.sleep(100); // required just because of JMH plugin? // TODO this one is probably superfluous
