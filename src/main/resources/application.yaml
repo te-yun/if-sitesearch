@@ -26,6 +26,11 @@ server:
 #    key-alias: alias
 
 spring:
+  kafka:
+    consumer:
+      group-id: foo
+      auto-offset-reset: earliest
+
 #  data:
 #    elasticsearch:
 #      cluster-name: elasticsearch

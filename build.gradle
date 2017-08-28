@@ -43,6 +43,8 @@ configurations {
 }
 
 dependencies {
+    compile "org.springframework.kafka:spring-kafka:1.2.2.RELEASE"
+
     compile "org.jetbrains.xodus:xodus-openAPI:1.0.6"
     compile "org.jetbrains.xodus:xodus-entity-store:1.0.6"
     
@@ -76,6 +78,7 @@ tasks.jmh.finalizedBy tasks.jmhReport
 jmh {
     operationsPerInvocation = 20
     fork = 0
+//    threads = 1
     failOnError = true
     resultFormat = "JSON"
     iterations = 20
