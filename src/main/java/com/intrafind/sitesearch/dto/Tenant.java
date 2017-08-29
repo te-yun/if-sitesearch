@@ -26,13 +26,13 @@ public class Tenant implements Serializable {
     private UUID tenantSecret;
     // TODO remove successCount as it's an implicit part of documents(.size)
     private int successCount;
-    private List<UUID> documents = Collections.emptyList();
+    private List<String> documents = Collections.emptyList();
     private List<String> failed = Collections.emptyList();
 
     private Tenant() {
     }
 
-    public Tenant(UUID tenantId, UUID tenantSecret, int successCount, List<UUID> documents, List<String> failed) {
+    public Tenant(UUID tenantId, UUID tenantSecret, int successCount, List<String> documents, List<String> failed) {
         this.tenantId = tenantId;
         this.tenantSecret = tenantSecret;
         this.successCount = successCount;
@@ -40,11 +40,11 @@ public class Tenant implements Serializable {
         this.failed = failed;
     }
 
-    public List<UUID> getDocuments() {
+    public List<String> getDocuments() {
         return documents;
     }
 
-    public void setDocuments(List<UUID> documents) {
+    public void setDocuments(List<String> documents) {
         this.documents = documents;
     }
 

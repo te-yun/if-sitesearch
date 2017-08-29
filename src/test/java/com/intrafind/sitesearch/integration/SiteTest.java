@@ -20,6 +20,7 @@ import com.intrafind.sitesearch.controller.SiteController;
 import com.intrafind.sitesearch.dto.Site;
 import com.intrafind.sitesearch.dto.Tenant;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -43,17 +44,19 @@ public class SiteTest {
     private TestRestTemplate caller;
     private static final UUID TEST_TENANT = UUID.fromString("1a6715d9-119f-48d1-9329-e8763273bbea");
 
+    private static String testSiteId;
+
     private static Site buildSite(UUID id, UUID tenantSecret) {
+        final String url = "https://sitesearch.cloud";
         Site simple = new Site(
-                id,
+                Site.hashSiteId(TEST_TENANT, url),
+//                id,
                 TEST_TENANT, tenantSecret,
                 "Cloud Solution", "Sitesearch is IntraFind's new SaaS solution.",
-                "https://sitesearch.cloud"
+                url
         );
         return simple;
     }
-
-    private static UUID testSiteId;
     private static UUID testSiteTenantId;
     private static UUID testSiteTenantSecret;
 
@@ -66,8 +69,6 @@ public class SiteTest {
         testSiteTenantSecret = testSite.getTenantSecret();
     }
 
-    //    @Test
-//    public void indexNewSite() throws Exception {
     private Site indexNewSite() throws Exception {
         UUID irrelevantSiteId = UUID.fromString("f55d093a-7911-11e7-8fc8-025041000001");
         Site simple = buildSite(irrelevantSiteId, UUID.randomUUID());
@@ -182,6 +183,7 @@ public class SiteTest {
         });
     }
 
+    @Ignore
     @Test
     public void importFeedAndUpdate() throws Exception {
         // create index

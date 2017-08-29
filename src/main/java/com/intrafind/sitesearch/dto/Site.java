@@ -16,17 +16,19 @@
 
 package com.intrafind.sitesearch.dto;
 
+import com.google.common.hash.Hashing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.util.Objects;
 import java.util.UUID;
 
 public class Site implements Serializable {
     private static final Logger LOG = LoggerFactory.getLogger(Site.class);
 
-    private UUID id;
+    private String id;
     private UUID tenantId;
     private UUID tenantSecret;
     private String title;
@@ -36,7 +38,7 @@ public class Site implements Serializable {
     private Site() {
     }
 
-    public Site(UUID id, UUID tenantId, UUID tenantSecret, String title, String body, String url) {
+    public Site(String id, UUID tenantId, UUID tenantSecret, String title, String body, String url) {
         this.id = id;
         this.tenantId = tenantId;
         this.tenantSecret = tenantSecret;
@@ -85,15 +87,12 @@ public class Site implements Serializable {
         this.body = body;
     }
 
-    public UUID getId() {
-        return id;
+    public static String hashSiteId(UUID tenantId, String siteUrl) {
+        return Hashing.sha256().hashString(tenantId.toString() + siteUrl, Charset.forName("UTF-8")).toString();
     }
 
-    public void setId(UUID id) {
-        LOG.info("Objects.hash(url): " + Objects.hash(url));
-        LOG.info("Objects.hash(tenantId): " + Objects.hash(tenantId));
-        LOG.info("tenantId: " + tenantId + "#" + Objects.hash(url));
-        this.id = id;
+    public String getId() {
+        return id;
     }
 
 
@@ -110,5 +109,12 @@ public class Site implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(title, body, url);
+    }
+
+    public void setId(String id) {
+        LOG.info("Objects.hashSiteId(url): " + Objects.hash(url));
+        LOG.info("Objects.hashSiteId(tenantId): " + Objects.hash(tenantId));
+        LOG.info("tenantId: " + tenantId + "#" + Objects.hash(url));
+        this.id = id;
     }
 }

@@ -48,7 +48,7 @@ public class SiteService {
 
     private static final Index INDEX_SERVICE = IfinderCoreClient.newHessianClient(Index.class, Application.IFINDER_CORE + "/index");
 
-    public Optional<Site> indexExistingSite(UUID id, UUID tenantId, UUID tenantSecret, Site site) {
+    public Optional<Site> indexExistingSite(String id, UUID tenantId, UUID tenantSecret, Site site) {
         if (tenantId != null && tenantSecret != null) { // credentials are provided as a tuple only
             final Optional<UUID> fetchedTenantSecret = fetchTenantSecret(tenantId);
             if (!fetchedTenantSecret.isPresent()) { // tenant does not exist
@@ -62,12 +62,15 @@ public class SiteService {
         } else if (tenantId == null ^ tenantSecret == null) { // it does not make any sense if only one of the parameters is set
             return Optional.empty();
         } else { // consider request as first-usage-ownership-granting request, create new index
-            return indexDocument(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), site);
+//            return indexDocument(
+//                    Site.hashSiteId(tenantId, url),
+//                    UUID.randomUUID(), UUID.randomUUID(), site);
+            return indexDocument(Site.hashSiteId(UUID.randomUUID(), site.getUrl()), UUID.randomUUID(), UUID.randomUUID(), site);
         }
     }
 
-    private Optional<Site> indexDocument(UUID id, UUID tenantId, UUID tenantSecret, Site site) {
-        Document indexable = new Document(id.toString());
+    private Optional<Site> indexDocument(String id, UUID tenantId, UUID tenantSecret, Site site) {
+        Document indexable = new Document(id);
         indexable.set(Fields.BODY, site.getBody());
         indexable.set(Fields.TITLE, site.getTitle());
         indexable.set(Fields.URL, site.getUrl());
@@ -124,7 +127,8 @@ public class SiteService {
         if (found.isPresent()) {
             Document foundDocument = found.get();
             Site representationOfFoundDocument = new Site(
-                    UUID.fromString(foundDocument.getId()),
+                    Site.hashSiteId(UUID.fromString(foundDocument.get(Fields.TENANT)), foundDocument.get(Fields.URL)),
+//                    UUID.fromString(foundDocument.getId()).toString(),
                     UUID.fromString(foundDocument.get(Fields.TENANT)),
                     UUID.fromString(foundDocument.get(TENANT_SECRET_FIELD)),
                     foundDocument.get(Fields.TITLE),
@@ -138,15 +142,17 @@ public class SiteService {
         }
     }
 
-    public Optional<Site> fetchById(UUID id) {
-        Optional<Document> found = INDEX_SERVICE.fetch(Index.ALL, id.toString()).stream().findAny();
+    public Optional<Site> fetchById(String id) {
+        Optional<Document> found = INDEX_SERVICE.fetch(Index.ALL, id).stream().findAny();
 
         if (found.isPresent()) {
             Document foundDocument = found.get();
             Site representationOfFoundDocument = new Site(
-                    UUID.fromString(foundDocument.getId()),
+                    Site.hashSiteId(UUID.fromString(foundDocument.get(Fields.TENANT)), foundDocument.get(Fields.URL)),
+//                    UUID.fromString(foundDocument.getId()).toString(),
                     UUID.fromString(foundDocument.get(Fields.TENANT)), null,
-                    foundDocument.get(Fields.TITLE), foundDocument.get(Fields.BODY),
+                    foundDocument.get(Fields.TITLE),
+                    foundDocument.get(Fields.BODY),
                     foundDocument.get(Fields.URL)
             );
 
@@ -182,7 +188,7 @@ public class SiteService {
     private Optional<Tenant> updateIndex(URI feedUrl, UUID tenantId, UUID tenantSecret) {
         LOG.info("URL-received: " + feedUrl);
         final AtomicInteger successfullyIndexed = new AtomicInteger(0);
-        final List<UUID> documents = new ArrayList<>();
+        final List<String> documents = new ArrayList<>();
         List<String> failedToIndex = new ArrayList<>();
         try {
             SyndFeed feed = new SyndFeedInput().build(new XmlReader(feedUrl.toURL()));
@@ -192,10 +198,10 @@ public class SiteService {
                 LOG.info("link: " + entry.getLink());
                 LOG.info("description: " + entry.getDescription().getValue());
 
-                String encodedFeedUrl = "";
+//                String url = "";
 //                try {
-//                    encodedFeedUrl = URLEncoder.encode(entry.getLink(), "UTF-8");
-                encodedFeedUrl = entry.getLink();
+//                    url = URLEncoder.encode(entry.getLink(), "UTF-8");
+                String url = entry.getLink();
 //                } catch (UnsupportedEncodingException e) {
 //                    LOG.warn(e.getMessage());
 //                }
@@ -204,9 +210,9 @@ public class SiteService {
                         null,
                         tenantId, tenantSecret,
                         entry.getTitle(), entry.getDescription().getValue(),
-                        encodedFeedUrl
+                        url
                 );
-                final UUID siteId = UUID.randomUUID();
+                final String siteId = Site.hashSiteId(tenantId, url);
                 Optional<Site> indexed = indexDocument(siteId, tenantId, tenantSecret, toIndex);
                 if (indexed.isPresent()) {
                     successfullyIndexed.incrementAndGet();
@@ -231,8 +237,8 @@ public class SiteService {
 //        update existing sites based on their url, add new sites that are not part of the index
     }
 
-    public void delete(UUID documentId) {
+    public void delete(String documentId) {
         // just assume everything works... right?
-        INDEX_SERVICE.delete(documentId.toString());
+        INDEX_SERVICE.delete(documentId);
     }
 }

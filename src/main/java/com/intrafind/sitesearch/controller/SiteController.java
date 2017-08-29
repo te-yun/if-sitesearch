@@ -54,7 +54,7 @@ public class SiteController {
      */
     @RequestMapping(method = RequestMethod.GET, path = "{id}")
     ResponseEntity<Site> fetchById(
-            @PathVariable("id") UUID id
+            @PathVariable("id") String id
     ) {
         Optional<Site> fetched = service.fetchById(id);
         if (fetched.isPresent()) {
@@ -83,7 +83,7 @@ public class SiteController {
      */
     @RequestMapping(path = "{id}", method = RequestMethod.PUT)
     ResponseEntity<Site> indexExistingSite(
-            @PathVariable("id") UUID id,
+            @PathVariable("id") String id,
             @RequestParam(name = "tenantId") UUID tenantId,
             @RequestParam(name = "tenantSecret") UUID tenantSecret,
             @RequestBody Site site
@@ -134,7 +134,7 @@ public class SiteController {
     @ApiOperation(value = "Deletes a document from index", response = ApiResponses.class)
     ResponseEntity deleteSiteById(
             @ApiParam(value = "ID of a single document to delete", example = "5f2b9c2e-6071-4f30-8972-7781fac73726")
-            @PathVariable(name = "id") UUID id
+            @PathVariable(name = "id") String id
     ) {
         LOG.info("delete-event" + id);
         // TODO assure that only owner can delete a site
