@@ -26,18 +26,12 @@ import org.slf4j.LoggerFactory;
 @Threads(100)
 @BenchmarkMode(Mode.Throughput)
 public class Load100Users {
-    static Load load = new Load();
-//    @BeforeClass
-//    public void setUp() throws Exception {
-//
-//    }
-
-    private final static Logger LOG = LoggerFactory.getLogger(Load100Users.class);
-//    private static final TestRestTemplate CALLER = new TestRestTemplate();
+    private static final Load LOAD = new Load();
+    private static final Logger LOG = LoggerFactory.getLogger(Load100Users.class);
 
     @Benchmark
     public void searchComplex() throws Exception {
-        load.searchComplex();
+        LOAD.searchComplex();
 
 //        final int queryIndex = Load.PSEUDO_ENTROPY.nextInt(Load.SEARCH_QUERIES.size());
 //        final String query = Load.QUERY_LIST_SEARCH.get(queryIndex);
@@ -55,7 +49,7 @@ public class Load100Users {
 
     @Benchmark
     public void autocomplete() throws Exception {
-        load.autocomplete();
+        LOAD.autocomplete();
 
 //        Load.initAutocomplete();            // TODO remove this?
 //

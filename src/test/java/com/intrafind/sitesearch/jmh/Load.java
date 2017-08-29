@@ -43,7 +43,7 @@ public class Load {
     static final String[] LOREM_IPSUM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras viverra enim vitae malesuada placerat. Nam auctor pellentesque libero, et venenatis enim molestie vel. Duis est metus, congue quis orci id, tincidunt mattis turpis. In fringilla ultricies sapien ultrices accumsan. Sed mattis tellus lacus, quis scelerisque turpis hendrerit et. In iaculis malesuada ipsum, ac rhoncus mauris auctor quis. Proin varius, ex vestibulum condimentum lacinia, ligula est finibus ligula, id consectetur nisi enim ut velit. Sed aliquet gravida justo ac condimentum. In malesuada sed elit vitae vestibulum. Mauris vitae congue lacus. Quisque vitae tincidunt orci. Donec viverra enim a lacinia pulvinar. Sed vel ullamcorper est. Vestibulum vel urna at nisl tincidunt blandit. Donec purus leo, interdum in diam in, posuere varius tellus. Quisque eleifend nulla at nulla vestibulum ullamcorper. Praesent interdum vehicula cursus. Morbi vitae nunc et urna rhoncus semper aliquam nec velit. Quisque aliquet et velit ut mollis. Sed mattis eleifend tristique. Praesent pharetra, eros eget viverra tempus, nisi turpis molestie metus, nec tristique nulla dolor a mauris. Nullam cursus finibus erat, in pretium urna fermentum ac. In hac habitasse platea dictumst. Cras id velit id nisi euismod eleifend. Duis vehicula gravida bibendum. Cras rhoncus, massa et accumsan euismod, metus arcu rutrum orci, eu porttitor lacus tellus sed quam. Morbi tincidunt est sit amet sem convallis porta in nec nisi. Sed ex enim, fringilla nec diam in, luctus pulvinar enim. Suspendisse potenti. Quisque ut pellentesque erat. In tincidunt metus id sem fringilla sagittis. Interdum et malesuada fames ac ante ipsum primis in faucibus. Proin erat nunc, pharetra sit amet iaculis nec, malesuada eu dui. Nullam sagittis ut arcu vitae convallis. Mauris molestie gravida lectus, eu commodo quam bibendum aliquam. Donec laoreet sed dolor eu consectetur."
             .split("\\s");
 
-    private final static Logger LOG = LoggerFactory.getLogger(Load.class);
+    static final List<String> QUERY_LIST_AUTOCOMPLETE;
     static final String LOAD_TARGET = "https://dev.sitesearch.cloud";
     //    private static final String LOAD_TARGET = "http://localhost:8001";
     static final TestRestTemplate CALLER = new TestRestTemplate();
@@ -65,25 +65,12 @@ public class Load {
     static final List<String> QUERY_LIST_SEARCH = new ArrayList<>(SEARCH_QUERIES.keySet());
 
     static final Map<String, Long> AUTOCOMPLETE_QUERIES = new ConcurrentHashMap<>();
-    static List<String> QUERY_LIST_AUTOCOMPLETE;
+    private static final Logger LOG = LoggerFactory.getLogger(Load.class);
 
-    //    static void initAutocomplete() {
-//    @State(Scope.Benchmark)
     static {
         AUTOCOMPLETE_QUERIES.put("kno", 1L);
-//        AUTOCOMPLETE_QUERIES.put("know", 1L);
-//        AUTOCOMPLETE_QUERIES.put("knowl", 1L);
-//        AUTOCOMPLETE_QUERIES.put("knowle", 1L);
         AUTOCOMPLETE_QUERIES.put("ifi", 6L);
         AUTOCOMPLETE_QUERIES.put("ifin", 6L);
-//        AUTOCOMPLETE_QUERIES.put("ifind", 6L);
-//        AUTOCOMPLETE_QUERIES.put("ifinde", 6L);
-
-//        try {
-//            Thread.sleep(100); // required just because of JMH plugin? // TODO this one is probably superfluous
-//        } catch (InterruptedException e) {
-//            LOG.error(e.getMessage());
-//        }
         QUERY_LIST_AUTOCOMPLETE = new ArrayList<>(AUTOCOMPLETE_QUERIES.keySet());
     }
 
@@ -113,8 +100,6 @@ public class Load {
 
     @Benchmark
     public void autocomplete() throws Exception {
-//        initAutocomplete();
-
         final int queryIndex = Load.PSEUDO_ENTROPY.nextInt(Load.AUTOCOMPLETE_QUERIES.size());
         final String query = Load.QUERY_LIST_AUTOCOMPLETE.get(queryIndex);
 
