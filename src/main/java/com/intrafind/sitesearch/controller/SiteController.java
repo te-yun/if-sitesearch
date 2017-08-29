@@ -65,10 +65,10 @@ public class SiteController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    ResponseEntity<List<UUID>> fetchAll(
+    ResponseEntity<List<String>> fetchAll(
             @RequestParam(value = "tenantId") UUID tenantId
     ) {
-        Optional<List<UUID>> allDocumentsOfTenant = service.fetchAllDocuments(tenantId);
+        Optional<List<String>> allDocumentsOfTenant = service.fetchAllDocuments(tenantId);
         if (allDocumentsOfTenant.isPresent()) {
             return ResponseEntity.ok(allDocumentsOfTenant.get());
         } else {

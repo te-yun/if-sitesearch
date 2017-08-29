@@ -20,7 +20,6 @@ import com.intrafind.sitesearch.controller.SiteController;
 import com.intrafind.sitesearch.dto.Site;
 import com.intrafind.sitesearch.dto.Tenant;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -183,7 +182,6 @@ public class SiteTest {
         });
     }
 
-    @Ignore
     @Test
     public void importFeedAndUpdate() throws Exception {
         // create index
@@ -257,9 +255,9 @@ public class SiteTest {
         List<String> sites = fetchAll.getBody();
         assertTrue(1 < sites.size());
         int siteCountBeforeDeletion = sites.size();
-        sites.forEach(uuid -> {
-            LOG.info("uuid: " + uuid);
-            final ResponseEntity<ResponseEntity> deletion = caller.exchange(SiteController.ENDPOINT + "/" + uuid, HttpMethod.DELETE, HttpEntity.EMPTY, ResponseEntity.class);
+        sites.forEach(siteId -> {
+            LOG.info("siteId: " + siteId);
+            final ResponseEntity<ResponseEntity> deletion = caller.exchange(SiteController.ENDPOINT + "/" + siteId, HttpMethod.DELETE, HttpEntity.EMPTY, ResponseEntity.class);
             assertEquals(HttpStatus.NO_CONTENT, deletion.getStatusCode());
             assertNull(deletion.getBody());
         });

@@ -94,16 +94,17 @@ public class SiteService {
         return fetchNewTenantCreatingSiteById(id);
     }
 
-    public Optional<List<UUID>> fetchAllDocuments(UUID tenantId) {
+    public Optional<List<String>> fetchAllDocuments(UUID tenantId) {
         // TODO only fetch ID info
         Hits documentWithTenantSecret = SearchService.SEARCH_SERVICE.search(Fields.TENANT + ":" + tenantId.toString(), Search.HITS_LIST_SIZE, 1_000);
 
         if (documentWithTenantSecret.getDocuments().isEmpty()) {
             return Optional.empty();
         } else {
-            List<UUID> documents = new ArrayList<>();
+            List<String> documents = new ArrayList<>();
             documentWithTenantSecret.getDocuments().forEach(document -> {
-                documents.add(UUID.fromString(document.getId()));
+//                documents.add(UUID.fromString(document.getId()));
+                documents.add(document.getId());
             });
             return Optional.of(documents);
         }
