@@ -71,7 +71,7 @@ public class StatsController {
 //        final ContextualEnvironment contextualEnvironment = Environments.newContextualInstance("data");
 //       SearchController. ACID_PERSISTENCE.executeInTransaction(txn -> {
         final ArrayByteIterable readableTenantId = StringBinding.stringToEntry(tenantId.toString());
-        SearchController.ACID_PERSISTENCE.executeInReadonlyTransaction(txn -> {
+        SearchController.ACID_PERSISTENCE.executeInTransaction(txn -> {
             final Store store = SearchController.ACID_PERSISTENCE.openStore(QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
             final ByteIterable queryCountValue = store.get(txn, readableTenantId);
             if (queryCountValue != null) {

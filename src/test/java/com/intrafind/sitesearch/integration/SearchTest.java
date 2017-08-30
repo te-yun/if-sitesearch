@@ -39,7 +39,6 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SearchTest {
-    //    public static final UUID SEARCH_TENANT_ID = UUID.fromString("f0372e4f-e93a-42a0-8576-bf537bcf2021");
     public static final UUID SEARCH_TENANT_ID = UUID.fromString("18e1cb09-b3ec-40e0-8279-dd005771f172");
     @Autowired
     private TestRestTemplate caller;
