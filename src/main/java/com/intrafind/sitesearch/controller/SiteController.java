@@ -100,6 +100,24 @@ public class SiteController {
     }
 
     @RequestMapping(method = RequestMethod.PUT)
+    ResponseEntity<Site> updateExistingSiteViaUrl(
+            @RequestParam(name = "tenantId") UUID tenantId,
+            @RequestParam(name = "tenantSecret") UUID tenantSecret,
+            @RequestBody Site site
+    ) {
+        String siteId = Site.hashSiteId(tenantId, site.getUrl());
+        // TODO use SiteUpdate DTO with NO tenantId & NO tenantSecret provided
+
+        // TODO make sure that an existing site is actually updated
+        Optional<Site> indexed = service.indexExistingSite(siteId, tenantId, tenantSecret, site);
+        if (indexed.isPresent()) {
+            return ResponseEntity.ok(indexed.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
     ResponseEntity<Site> indexNewSite(@RequestBody Site site) {
         // TODO use SiteCreation DTO with tenantId & tenantSecret
         Optional<Site> indexed = service.indexNewTenantCreatingSite(site);
