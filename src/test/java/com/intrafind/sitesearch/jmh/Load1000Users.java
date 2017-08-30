@@ -24,15 +24,15 @@ import org.openjdk.jmh.annotations.Threads;
 @Threads(1000)
 @BenchmarkMode(Mode.Throughput)
 public class Load1000Users {
-    private static final Load LOAD = new Load();
+    private static final Load10Users LOAD_10_USERS = new Load10Users();
 
     @Benchmark
     public void searchComplex() throws Exception {
-        LOAD.searchComplex();
+        LOAD_10_USERS.searchComplex();
     }
 
     @Benchmark
     public void autocomplete() throws Exception {
-        LOAD.autocomplete();
+        LOAD_10_USERS.autocomplete();
     }
 }

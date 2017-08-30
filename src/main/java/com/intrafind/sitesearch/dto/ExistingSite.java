@@ -16,43 +16,28 @@
 
 package com.intrafind.sitesearch.dto;
 
-import com.google.common.hash.Hashing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
-import java.nio.charset.Charset;
 import java.util.Objects;
-import java.util.UUID;
 
-public class Site implements Serializable {
+public class ExistingSite implements Serializable {
     private static final Logger LOG = LoggerFactory.getLogger(Site.class);
 
     private String id;
-    private UUID tenantId;
-    private UUID tenantSecret;
     private String title;
     private String body;
     private String url;
 
-    private Site() {
+    private ExistingSite() {
     }
 
-    public Site(String id, UUID tenantId, UUID tenantSecret, String title, String body, String url) {
+    public ExistingSite(String id, String title, String body, String url) {
         this.id = id;
-        this.tenantId = tenantId;
-        this.tenantSecret = tenantSecret;
         this.title = title;
         this.body = body;
         this.url = url;
-    }
-
-    public UUID getTenantSecret() {
-        return tenantSecret;
-    }
-
-    public void setTenantSecret(UUID tenantSecret) {
-        this.tenantSecret = tenantSecret;
     }
 
     public String getTitle() {
@@ -67,14 +52,6 @@ public class Site implements Serializable {
         return url;
     }
 
-    public UUID getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(UUID tenantId) {
-        this.tenantId = tenantId;
-    }
-
     public void setUrl(String url) {
         this.url = url;
     }
@@ -87,20 +64,19 @@ public class Site implements Serializable {
         this.body = body;
     }
 
-    public static String hashSiteId(UUID tenantId, String siteUrl) {
-        return Hashing.sha256().hashString(tenantId.toString() + siteUrl, Charset.forName("UTF-8")).toString();
-    }
-
     public String getId() {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Site site = (Site) o;
+        ExistingSite site = (ExistingSite) o;
         return Objects.equals(title, site.title) &&
                 Objects.equals(body, site.body) &&
                 Objects.equals(url, site.url);
@@ -109,9 +85,5 @@ public class Site implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(title, body, url);
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 }

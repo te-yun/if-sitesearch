@@ -49,7 +49,6 @@ public class SiteTest {
         final String url = "https://sitesearch.cloud";
         Site simple = new Site(
                 Site.hashSiteId(TEST_TENANT, url),
-//                id,
                 TEST_TENANT, tenantSecret,
                 "Cloud Solution", "Sitesearch is IntraFind's new SaaS solution.",
                 url
@@ -78,6 +77,10 @@ public class SiteTest {
         assertEquals(simple, actual.getBody());
         assertNotEquals("assure irrelevancy of siteId during creation", irrelevantSiteId, actual.getBody().getId());
         assertEquals("https://sitesearch.cloud/sites/" + actual.getBody().getId(), actual.getHeaders().get(HttpHeaders.LOCATION).get(0));
+
+        ResponseEntity<Site> newlyCreatedSite = caller.exchange(SiteController.ENDPOINT + "/" + actual.getBody().getId(), HttpMethod.GET, new HttpEntity<>(simple), Site.class);
+        assertEquals(HttpStatus.OK, newlyCreatedSite.getStatusCode());
+        assertEquals(actual.getBody().getId(), newlyCreatedSite.getBody().getId());
 
         return actual.getBody();
     }

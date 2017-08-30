@@ -82,12 +82,14 @@ public class SiteService {
     }
 
     public Optional<Site> indexNewTenantCreatingSite(Site site) {
-        UUID id = UUID.randomUUID();
-        Document indexable = new Document(id.toString());
+//        UUID id = UUID.randomUUID();
+        UUID tenantId = UUID.randomUUID();
+        String id = Site.hashSiteId(tenantId, site.getUrl());
+        Document indexable = new Document(id);
         indexable.set(Fields.BODY, site.getBody());
         indexable.set(Fields.TITLE, site.getTitle());
         indexable.set(Fields.URL, site.getUrl());
-        indexable.set(Fields.TENANT, UUID.randomUUID().toString());
+        indexable.set(Fields.TENANT, tenantId);
         indexable.set(TENANT_SECRET_FIELD, UUID.randomUUID().toString());
         INDEX_SERVICE.index(indexable);
 
@@ -122,13 +124,14 @@ public class SiteService {
         }
     }
 
-    private Optional<Site> fetchNewTenantCreatingSiteById(UUID id) {
-        Optional<Document> found = INDEX_SERVICE.fetch(Index.ALL, id.toString()).stream().findAny();
+    private Optional<Site> fetchNewTenantCreatingSiteById(String id) {
+        Optional<Document> found = INDEX_SERVICE.fetch(Index.ALL, id).stream().findAny();
 
         if (found.isPresent()) {
             Document foundDocument = found.get();
             Site representationOfFoundDocument = new Site(
-                    Site.hashSiteId(UUID.fromString(foundDocument.get(Fields.TENANT)), foundDocument.get(Fields.URL)),
+                    foundDocument.getId(),
+//                    Site.hashSiteId(UUID.fromString(foundDocument.get(Fields.TENANT)), foundDocument.get(Fields.URL)),
 //                    UUID.fromString(foundDocument.getId()).toString(),
                     UUID.fromString(foundDocument.get(Fields.TENANT)),
                     UUID.fromString(foundDocument.get(TENANT_SECRET_FIELD)),
@@ -149,8 +152,8 @@ public class SiteService {
         if (found.isPresent()) {
             Document foundDocument = found.get();
             Site representationOfFoundDocument = new Site(
-                    Site.hashSiteId(UUID.fromString(foundDocument.get(Fields.TENANT)), foundDocument.get(Fields.URL)),
-//                    UUID.fromString(foundDocument.getId()).toString(),
+//                    Site.hashSiteId(UUID.fromString(foundDocument.get(Fields.TENANT)), foundDocument.get(Fields.URL)), // TODO access id directly
+                    foundDocument.getId(),
                     UUID.fromString(foundDocument.get(Fields.TENANT)), null,
                     foundDocument.get(Fields.TITLE),
                     foundDocument.get(Fields.BODY),
@@ -169,7 +172,6 @@ public class SiteService {
             if (!fetchedTenantSecret.isPresent()) { // tenant does not exist
                 return Optional.empty();
             } else if (tenantSecret.equals(fetchedTenantSecret.get())) { // authorized
-//                updateIndex(tenantIdToUse); // TODO implement updateIndex(tenantIdToUse)
                 LOG.info("updating-feed: " + tenantId);
                 return updateIndex(feedUrl, tenantId, tenantSecret);
             } else { // unauthorized
@@ -199,14 +201,7 @@ public class SiteService {
                 LOG.info("link: " + entry.getLink());
                 LOG.info("description: " + entry.getDescription().getValue());
 
-//                String url = "";
-//                try {
-//                    url = URLEncoder.encode(entry.getLink(), "UTF-8");
                 String url = entry.getLink();
-//                } catch (UnsupportedEncodingException e) {
-//                    LOG.warn(e.getMessage());
-//                }
-
                 Site toIndex = new Site(
                         null,
                         tenantId, tenantSecret,
@@ -230,12 +225,6 @@ public class SiteService {
             LOG.warn(e.getMessage());
             return Optional.empty();
         }
-    }
-
-    private void updateIndex(UUID tenantId) {
-//        delete complete index & create a new index under the same tenantId
-//        vs
-//        update existing sites based on their url, add new sites that are not part of the index
     }
 
     public void delete(String documentId) {

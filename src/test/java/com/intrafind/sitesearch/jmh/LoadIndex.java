@@ -40,9 +40,9 @@ public class LoadIndex {
 
     private static String generateLoremIpsum() {
         final StringBuilder loremIpsumText = new StringBuilder();
-        for (String word : Load.LOREM_IPSUM) {
-            final int wordIndex = Load.PSEUDO_ENTROPY.nextInt(Load.LOREM_IPSUM.length);
-            loremIpsumText.append(Load.LOREM_IPSUM[wordIndex]).append(" ");
+        for (String word : Load10Users.LOREM_IPSUM) {
+            final int wordIndex = Load10Users.PSEUDO_ENTROPY.nextInt(Load10Users.LOREM_IPSUM.length);
+            loremIpsumText.append(Load10Users.LOREM_IPSUM[wordIndex]).append(" ");
         }
         return loremIpsumText.toString();
     }
@@ -57,8 +57,8 @@ public class LoadIndex {
                 "https://example.com/" + UUID.randomUUID()
         );
 
-        final ResponseEntity<Site> actual = Load.CALLER.exchange(
-                Load.LOAD_TARGET + SiteController.ENDPOINT,
+        final ResponseEntity<Site> actual = Load10Users.CALLER.exchange(
+                Load10Users.LOAD_TARGET + SiteController.ENDPOINT,
                 HttpMethod.PUT,
                 new HttpEntity<>(siteToIndex),
                 Site.class
@@ -78,8 +78,8 @@ public class LoadIndex {
                 "https://example.com/" + UUID.randomUUID()
         );
 
-        final ResponseEntity<Site> actual = Load.CALLER.exchange(
-                Load.LOAD_TARGET + SiteController.ENDPOINT
+        final ResponseEntity<Site> actual = Load10Users.CALLER.exchange(
+                Load10Users.LOAD_TARGET + SiteController.ENDPOINT
                         + "?tenantId=" + "e10011b2-7f95-49e4-a9cb-189f5f5a6654"
                         + "&tenantSecret=c041b603-e5b7-4623-8fe9-4cd08e5b4558",
                 HttpMethod.PUT,
@@ -101,8 +101,8 @@ public class LoadIndex {
                 "https://example.com/" + UUID.randomUUID()
         );
 
-        final ResponseEntity<Site> actual = Load.CALLER.exchange(
-                Load.LOAD_TARGET + SiteController.ENDPOINT
+        final ResponseEntity<Site> actual = Load10Users.CALLER.exchange(
+                Load10Users.LOAD_TARGET + SiteController.ENDPOINT
                         + "/80147ae9-e5a1-4278-a647-3dc264bba0d4"
                         + "?tenantId=" + "e10011b2-7f95-49e4-a9cb-189f5f5a6654"
                         + "&tenantSecret=c041b603-e5b7-4623-8fe9-4cd08e5b4558",

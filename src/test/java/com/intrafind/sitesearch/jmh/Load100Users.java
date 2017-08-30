@@ -26,45 +26,45 @@ import org.slf4j.LoggerFactory;
 @Threads(100)
 @BenchmarkMode(Mode.Throughput)
 public class Load100Users {
-    private static final Load LOAD = new Load();
+    private static final Load10Users LOAD_10_USERS = new Load10Users();
     private static final Logger LOG = LoggerFactory.getLogger(Load100Users.class);
 
     @Benchmark
     public void searchComplex() throws Exception {
-        LOAD.searchComplex();
+        LOAD_10_USERS.searchComplex();
 
-//        final int queryIndex = Load.PSEUDO_ENTROPY.nextInt(Load.SEARCH_QUERIES.size());
-//        final String query = Load.QUERY_LIST_SEARCH.get(queryIndex);
+//        final int queryIndex = Load10Users.PSEUDO_ENTROPY.nextInt(Load10Users.SEARCH_QUERIES.size());
+//        final String query = Load10Users.QUERY_LIST_SEARCH.get(queryIndex);
 //
-//        final ResponseEntity<Hits> actual = Load.CALLER.getForEntity(
-//                Load.LOAD_TARGET + SearchController.ENDPOINT
+//        final ResponseEntity<Hits> actual = Load10Users.CALLER.getForEntity(
+//                Load10Users.LOAD_TARGET + SearchController.ENDPOINT
 //                        + "?query=" + query + "&tenantId=" + SearchTest.SEARCH_TENANT_ID,
 //                Hits.class
 //        );
 //
 //        assertEquals(HttpStatus.OK, actual.getStatusCode());
-//        final long queryResultCount = Load.SEARCH_QUERIES.get(query);
+//        final long queryResultCount = Load10Users.SEARCH_QUERIES.get(query);
 //        assertEquals(queryResultCount, actual.getBody().getResults().size());
     }
 
     @Benchmark
     public void autocomplete() throws Exception {
-        LOAD.autocomplete();
+        LOAD_10_USERS.autocomplete();
 
-//        Load.initAutocomplete();            // TODO remove this?
+//        Load10Users.initAutocomplete();            // TODO remove this?
 //
-//        final int queryIndex = Load.PSEUDO_ENTROPY.nextInt(Load.AUTOCOMPLETE_QUERIES.size());
-//        final String query = Load.QUERY_LIST_AUTOCOMPLETE.get(queryIndex);
+//        final int queryIndex = Load10Users.PSEUDO_ENTROPY.nextInt(Load10Users.AUTOCOMPLETE_QUERIES.size());
+//        final String query = Load10Users.QUERY_LIST_AUTOCOMPLETE.get(queryIndex);
 //
-//        final ResponseEntity<Autocomplete> actual = Load.CALLER.getForEntity(
-//                Load.LOAD_TARGET + AutocompleteController.ENDPOINT
+//        final ResponseEntity<Autocomplete> actual = Load10Users.CALLER.getForEntity(
+//                Load10Users.LOAD_TARGET + AutocompleteController.ENDPOINT
 //                        + "?query=" + query + "&tenantId=" + SearchTest.SEARCH_TENANT_ID,
 //                Autocomplete.class
 //        );
 
 //        Autocomplete decay bug prevents assertions
 //        assertEquals(HttpStatus.OK, actual.getStatusCode());
-//        final long queryResultCount = Load.AUTOCOMPLETE_QUERIES.get(query);
+//        final long queryResultCount = Load10Users.AUTOCOMPLETE_QUERIES.get(query);
 //        assertEquals(queryResultCount, actual.getBody().getResults().size());
     }
 }
