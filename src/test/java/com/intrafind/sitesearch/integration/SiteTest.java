@@ -55,6 +55,7 @@ public class SiteTest {
         );
         return simple;
     }
+
     private static UUID testSiteTenantId;
     private static UUID testSiteTenantSecret;
 
@@ -91,8 +92,9 @@ public class SiteTest {
         final String updatedBodyContent = "Updated via Hash(tenantId, URL)";
         newSite.setBody(updatedBodyContent);
 
-        Thread.sleep(8000);
+        Thread.sleep(13_000);
 
+        // update
         final ResponseEntity<Site> updatedSite = caller.exchange(SiteController.ENDPOINT
                         + "?tenantId=" + newSite.getTenantId() + "&tenantSecret=" + newSite.getTenantSecret(),
                 HttpMethod.PUT, new HttpEntity<>(newSite), Site.class);
@@ -100,6 +102,7 @@ public class SiteTest {
         assertEquals(newSite.getId(), updatedSite.getBody().getId());
         assertEquals(updatedBodyContent, updatedSite.getBody().getBody());
 
+        // fetch & check updated site
         assertEquals(Site.hashSiteId(newSite.getTenantId(), newSite.getUrl()), newSite.getId());
         final ResponseEntity<Site> fetchedUpdatedSite = caller.exchange(SiteController.ENDPOINT
                         + "/" + Site.hashSiteId(newSite.getTenantId(), newSite.getUrl()),
@@ -108,6 +111,15 @@ public class SiteTest {
         assertEquals(HttpStatus.OK, fetchedUpdatedSite.getStatusCode());
         assertEquals(newSite.getId(), fetchedUpdatedSite.getBody().getId());
         assertEquals(updatedBodyContent, fetchedUpdatedSite.getBody().getBody());
+
+        // fetch via URL
+        final ResponseEntity<Site> fetchViaUrl = caller.exchange(SiteController.ENDPOINT
+                        + "/url?tenantId=" + newSite.getTenantId() + "&url=" + newSite.getUrl(),
+                HttpMethod.GET, HttpEntity.EMPTY, Site.class);
+        assertEquals(HttpStatus.OK, fetchViaUrl.getStatusCode());
+        assertEquals(newSite.getId(), fetchViaUrl.getBody().getId());
+        assertEquals(updatedBodyContent, fetchViaUrl.getBody().getBody());
+        assertEquals(newSite.getUrl(), fetchViaUrl.getBody().getUrl());
     }
 
     @Test
