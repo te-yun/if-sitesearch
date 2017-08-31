@@ -81,7 +81,6 @@ public class SiteController {
 
     @RequestMapping(method = RequestMethod.GET)
     ResponseEntity<List<String>> fetchAll(
-            @RequestParam(value = "url", required = false, defaultValue = "") String url,
             @RequestParam(value = "tenantId") UUID tenantId
     ) {
         Optional<List<String>> allDocumentsOfTenant = service.fetchAllDocuments(tenantId);
