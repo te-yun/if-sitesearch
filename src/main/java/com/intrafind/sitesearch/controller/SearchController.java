@@ -39,7 +39,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping(SearchController.ENDPOINT)
 public class SearchController {
-    //    static final Environment ACID_PERSISTENCE = Environments.newInstance("data");
     static final Environment ACID_PERSISTENCE = Environments.newContextualInstance("data");
 
     public static final String ENDPOINT = "/search";
@@ -84,7 +83,6 @@ public class SearchController {
                     }
                     store.put(txn, readableTenantId, LongBinding.longToEntry(++queryCount));
                 });
-//            ACID_PERSISTENCE.close();
             }
             return ResponseEntity.ok(searchResult);
         }

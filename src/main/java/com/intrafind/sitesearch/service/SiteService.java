@@ -62,9 +62,6 @@ public class SiteService {
         } else if (tenantId == null ^ tenantSecret == null) { // it does not make any sense if only one of the parameters is set
             return Optional.empty();
         } else { // consider request as first-usage-ownership-granting request, create new index
-//            return indexDocument(
-//                    Site.hashSiteId(tenantId, url),
-//                    UUID.randomUUID(), UUID.randomUUID(), site);
             return indexDocument(Site.hashSiteId(UUID.randomUUID(), site.getUrl()), UUID.randomUUID(), UUID.randomUUID(), site);
         }
     }
@@ -82,7 +79,6 @@ public class SiteService {
     }
 
     public Optional<Site> indexNewTenantCreatingSite(Site site) {
-//        UUID id = UUID.randomUUID();
         UUID tenantId = UUID.randomUUID();
         String id = Site.hashSiteId(tenantId, site.getUrl());
         Document indexable = new Document(id);
@@ -105,7 +101,6 @@ public class SiteService {
         } else {
             List<String> documents = new ArrayList<>();
             documentWithTenantSecret.getDocuments().forEach(document -> {
-//                documents.add(UUID.fromString(document.getId()));
                 documents.add(document.getId());
             });
             return Optional.of(documents);
@@ -131,8 +126,6 @@ public class SiteService {
             Document foundDocument = found.get();
             Site representationOfFoundDocument = new Site(
                     foundDocument.getId(),
-//                    Site.hashSiteId(UUID.fromString(foundDocument.get(Fields.TENANT)), foundDocument.get(Fields.URL)),
-//                    UUID.fromString(foundDocument.getId()).toString(),
                     UUID.fromString(foundDocument.get(Fields.TENANT)),
                     UUID.fromString(foundDocument.get(TENANT_SECRET_FIELD)),
                     foundDocument.get(Fields.TITLE),
@@ -152,7 +145,6 @@ public class SiteService {
         if (found.isPresent()) {
             Document foundDocument = found.get();
             Site representationOfFoundDocument = new Site(
-//                    Site.hashSiteId(UUID.fromString(foundDocument.get(Fields.TENANT)), foundDocument.get(Fields.URL)), // TODO access id directly
                     foundDocument.getId(),
                     UUID.fromString(foundDocument.get(Fields.TENANT)), null,
                     foundDocument.get(Fields.TITLE),

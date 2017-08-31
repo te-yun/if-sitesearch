@@ -39,11 +39,11 @@ public class AutocompleteService {
                 query,
                 Search.FILTER_QUERY, Fields.TENANT + ":" + tenantId,
 
-                Search.RETURN_TEASER_FIELDS, Fields.BODY + SearchService.QUERY_SEPARATOR + Fields.TITLE + SearchService.QUERY_SEPARATOR + Fields.URL,
-                Search.RETURN_TEASER_COUNT, 3,
-                Search.RETURN_TEASER_SIZE, 100,
-                Search.RETURN_TEASER_TAG_PRE, "<span class='if-teaser-highlight'>",
-                Search.RETURN_TEASER_TAG_POST, "</span>",
+//                Search.RETURN_TEASER_FIELDS, Fields.BODY + SearchService.QUERY_SEPARATOR + Fields.TITLE + SearchService.QUERY_SEPARATOR + Fields.URL,
+//                Search.RETURN_TEASER_COUNT, 3,
+//                Search.RETURN_TEASER_SIZE, 100,
+//                Search.RETURN_TEASER_TAG_PRE, "<span class='if-teaser-highlight'>",
+//                Search.RETURN_TEASER_TAG_POST, "</span>",
 
                 Search.HITS_LIST_SIZE, 1_000
         );
