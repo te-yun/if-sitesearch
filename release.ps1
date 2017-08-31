@@ -1,6 +1,6 @@
 #!/usr/bin/env powershell
 
-$Env:SPRING_CONFIG_NAME = "application,prod"
+$Env:SPRING_CONFIG_NAME = "application, prod"
 ./gradlew clean build --info -x test
 
 $DOCKER_IMAGE_NAME = (Get-ChildItem  build/libs/*.jar).BaseName
@@ -15,7 +15,7 @@ $httpsRedirect = "http-to-https-redirect"
 cd $httpsRedirect
 docker build --tag intrafind/${httpsRedirect}:latest .
 docker rm -f $httpsRedirect
-docker run -d --name $httpsRedirect -p 80:80 -p 4443:4443 intrafind/${httpsRedirect}:latest
+docker run -d --name $httpsRedirect -p 80:80 intrafind/${httpsRedirect}:latest
 
 cd ..
 ./switch-release.ps1
