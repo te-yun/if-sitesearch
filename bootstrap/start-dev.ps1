@@ -6,8 +6,8 @@ docker start teamcity-server
 docker start elasticsearch
 docker start sitesearch-search-service
 docker start if-sitesearch
+docker start http-to-https-redirect
 docker start if-sitesearch-green
 docker start if-sitesearch-blue
-docker start http-to-https-redirect
 
 
