@@ -76,7 +76,7 @@ test {
 tasks.jmh.finalizedBy tasks.jmhReport 
 
 jmh {
-//    include = ['Load.*']
+    include = ["LoadIndex", "Load10Users", "Load100Users", "Load1000Users"]
 //      exclude = ['some regular expression']
 //    operationsPerInvocation = 3000
     fork = 0

@@ -59,7 +59,7 @@ public class LoadIndex {
 
         final ResponseEntity<Site> actual = Load10Users.CALLER.exchange(
                 Load10Users.LOAD_TARGET + SiteController.ENDPOINT,
-                HttpMethod.PUT,
+                HttpMethod.POST,
                 new HttpEntity<>(siteToIndex),
                 Site.class
         );
@@ -87,8 +87,8 @@ public class LoadIndex {
                 Site.class
         );
 
-        assertEquals(HttpStatus.CREATED, actual.getStatusCode());
-        assertNotNull(actual.getHeaders().getLocation());
+        assertEquals(HttpStatus.OK, actual.getStatusCode());
+        assertNull(actual.getHeaders().getLocation());
     }
 
     @Benchmark
