@@ -39,7 +39,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping(SearchController.ENDPOINT)
 public class SearchController {
-    static final Environment ACID_PERSISTENCE = Environments.newContextualInstance("data");
+    public static final Environment ACID_PERSISTENCE = Environments.newContextualInstance("data");
 
     public static final String ENDPOINT = "/search";
     private static final Logger LOG = LoggerFactory.getLogger(SearchController.class);

@@ -23,12 +23,17 @@ import com.intrafind.api.search.Hits;
 import com.intrafind.api.search.Search;
 import com.intrafind.sitesearch.Application;
 import com.intrafind.sitesearch.TrustAllX509TrustManager;
+import com.intrafind.sitesearch.controller.SearchController;
 import com.intrafind.sitesearch.dto.Site;
 import com.intrafind.sitesearch.dto.Tenant;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
+import jetbrains.exodus.ArrayByteIterable;
+import jetbrains.exodus.bindings.StringBinding;
+import jetbrains.exodus.env.Store;
+import jetbrains.exodus.env.StoreConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -72,24 +77,41 @@ public class SiteService {
         indexable.set(Fields.TITLE, site.getTitle());
         indexable.set(Fields.URL, site.getUrl());
         indexable.set(Fields.TENANT, tenantId);
-        indexable.set(TENANT_SECRET_FIELD, tenantSecret);
+        indexable.set(TENANT_SECRET_FIELD, tenantSecret); // TODO will become superfluous once tenantSecret is stored in Exodus
         INDEX_SERVICE.index(indexable);
 
         return fetchById(id);
     }
 
     public Optional<Site> indexNewTenantCreatingSite(Site site) {
-        UUID tenantId = UUID.randomUUID();
-        String id = Site.hashSiteId(tenantId, site.getUrl());
-        Document indexable = new Document(id);
-        indexable.set(Fields.BODY, site.getBody());
-        indexable.set(Fields.TITLE, site.getTitle());
-        indexable.set(Fields.URL, site.getUrl());
-        indexable.set(Fields.TENANT, tenantId);
-        indexable.set(TENANT_SECRET_FIELD, UUID.randomUUID().toString());
-        INDEX_SERVICE.index(indexable);
+        String siteId = createTenant(site);
 
-        return fetchNewTenantCreatingSiteById(id);
+        return fetchNewTenantCreatingSiteById(siteId);
+    }
+
+    private String createTenant(Site site) {
+        UUID tenantId = UUID.randomUUID();
+        final ArrayByteIterable readableTenantId = StringBinding.stringToEntry(tenantId.toString());
+        String siteId = Site.hashSiteId(tenantId, site.getUrl());
+
+        SearchController.ACID_PERSISTENCE.executeInTransaction(txn -> {
+            Document indexable = new Document(siteId);
+            indexable.set(Fields.BODY, site.getBody());
+            indexable.set(Fields.TITLE, site.getTitle());
+            indexable.set(Fields.URL, site.getUrl());
+            indexable.set(Fields.TENANT, tenantId);
+            UUID tenantSecret = UUID.randomUUID();
+
+            { // persist in data store
+                Store store = SearchController.ACID_PERSISTENCE.openStore(TENANT_SECRET_FIELD, StoreConfig.WITHOUT_DUPLICATES, txn);
+                store.put(txn, readableTenantId, StringBinding.stringToEntry(tenantSecret.toString()));
+            }
+
+            indexable.set(TENANT_SECRET_FIELD, tenantSecret);
+            INDEX_SERVICE.index(indexable);
+        });
+
+        return siteId;
     }
 
     public Optional<List<String>> fetchAllDocuments(UUID tenantId) {
@@ -171,9 +193,21 @@ public class SiteService {
             }
         } else if (tenantId == null ^ tenantSecret == null) { // it does not make any sense if only one of the parameters is set
             return Optional.empty();
-        } else { // consider request as first-usage-ownership-granting request, create new index
-            return updateIndex(feedUrl, UUID.randomUUID(), UUID.randomUUID());
+        } else { // consider request as first-usage-ownership-granting request (early binding), create new index
+            UUID newTenantId = UUID.randomUUID();
+            UUID newTenantSecret = UUID.randomUUID();
+            createTenantForFeedIndex(newTenantId, newTenantSecret);
+            return updateIndex(feedUrl, newTenantId, newTenantSecret);
         }
+    }
+
+    private void createTenantForFeedIndex(UUID tenantId, UUID tenantSecret) {
+        final ArrayByteIterable readableTenantId = StringBinding.stringToEntry(tenantId.toString());
+
+        SearchController.ACID_PERSISTENCE.executeInTransaction(txn -> {
+            Store store = SearchController.ACID_PERSISTENCE.openStore(TENANT_SECRET_FIELD, StoreConfig.WITHOUT_DUPLICATES, txn);
+            store.put(txn, readableTenantId, StringBinding.stringToEntry(tenantSecret.toString()));
+        });
     }
 
     static {
@@ -196,7 +230,8 @@ public class SiteService {
                 String url = entry.getLink();
                 Site toIndex = new Site(
                         null,
-                        tenantId, tenantSecret,
+                        tenantId,
+                        tenantSecret, // TODO this will become superfluous once tenantSecret is stored in Exodus
                         entry.getTitle(), entry.getDescription().getValue(),
                         url
                 );

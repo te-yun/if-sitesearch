@@ -24,10 +24,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Threads(100)
-@BenchmarkMode(Mode.Throughput)
-public class Load100Users {
+@BenchmarkMode(Mode.AverageTime)
+public class Load100UsersAvgTime {
     private static final Load10Users LOAD_10_USERS = new Load10Users();
-    private static final Logger LOG = LoggerFactory.getLogger(Load100Users.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Load100UsersAvgTime.class);
 
     @Benchmark
     public void searchComplex() throws Exception {

@@ -35,8 +35,8 @@ import static org.junit.Assert.*;
 
 @Threads(2)
 @BenchmarkMode(Mode.Throughput)
-public class LoadIndex {
-    private final static Logger LOG = LoggerFactory.getLogger(LoadIndex.class);
+public class LoadIndex2Users {
+    private final static Logger LOG = LoggerFactory.getLogger(LoadIndex2Users.class);
 
     private static String generateLoremIpsum() {
         final StringBuilder loremIpsumText = new StringBuilder();
