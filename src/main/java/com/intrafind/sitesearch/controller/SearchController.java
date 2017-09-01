@@ -41,11 +41,11 @@ import java.util.UUID;
 public class SearchController {
     public static final Environment ACID_PERSISTENCE = Environments.newContextualInstance("data");
 
-    static { // to initialize the store, required for virgin CI runs
-        ACID_PERSISTENCE.executeInTransaction(txn -> {
-            ACID_PERSISTENCE.openStore(StatsController.QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
-        });
-    }
+//    static { // to initialize the store, required for virgin CI runs
+//        ACID_PERSISTENCE.executeInTransaction(txn -> {
+//            ACID_PERSISTENCE.openStore(StatsController.QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
+//        });
+//    }
 
     public static final String ENDPOINT = "/search";
     private static final Logger LOG = LoggerFactory.getLogger(SearchController.class);
