@@ -12,7 +12,7 @@ WORKDIR /home/$SVC_USR
 ADD build/libs/*.jar svc/
 ENV SPRING_CONFIG_NAME application,prod
 
-VOLUME ~/data
+VOLUME /home/svc_usr/data
 EXPOSE 8001
 
 CMD java -jar -Xmx64m svc/*.jar
