@@ -23,7 +23,7 @@ import org.openjdk.jmh.annotations.Threads;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Threads(100)
+@Threads(10)
 @BenchmarkMode(Mode.AverageTime)
 public class Load100UsersAvgTime {
     private static final Load10Users LOAD_10_USERS = new Load10Users();
