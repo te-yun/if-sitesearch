@@ -32,6 +32,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
 
@@ -92,7 +93,8 @@ public class SiteTest {
         final String updatedBodyContent = "Updated via Hash(tenantId, URL)";
         newSite.setBody(updatedBodyContent);
 
-        Thread.sleep(13_000);
+//        Thread.sleep(13_000);
+        TimeUnit.MILLISECONDS.sleep(13_000);
 
         // update
         final ResponseEntity<Site> updatedSite = caller.exchange(SiteController.ENDPOINT
@@ -126,7 +128,8 @@ public class SiteTest {
     public void fetchUpdatedById() throws Exception {
         Site ying = indexNewSite();
         Site yang = indexNewSite();
-        Thread.sleep(13000);
+//        Thread.sleep(13000);
+        TimeUnit.MILLISECONDS.sleep(13_000);
 
         final ResponseEntity<Site> actualYing = caller.exchange(SiteController.ENDPOINT + "/"
                 + ying.getId() + "?tenantId=" + ying.getTenantId() + "&tenantSecret=" + ying.getTenantSecret(), HttpMethod.PUT, new HttpEntity<>(ying), Site.class);
@@ -163,7 +166,8 @@ public class SiteTest {
         assertEquals(updatable, created.getBody());
         Site createdSite = created.getBody();
 
-        Thread.sleep(13_000);
+//        Thread.sleep(13_000);
+        TimeUnit.MILLISECONDS.sleep(13_000);
 
         final ResponseEntity<Site> updateWithTenantIdOnly = caller.exchange(SiteController.ENDPOINT + "/" + siteId
                 + "?tenantId=" + createdSite.getTenantId(), HttpMethod.PUT, new HttpEntity<>(createdSite), Site.class);
@@ -197,7 +201,8 @@ public class SiteTest {
         final ResponseEntity<Tenant> exchange = caller.exchange(SiteController.ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/fahrplanaenderungen/detail/rss.xml", HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
         final Tenant creation = validateTenantSummary(exchange, 10);
 
-        Thread.sleep(13_000);
+//        Thread.sleep(13_000);
+        TimeUnit.MILLISECONDS.sleep(13_000);
         validateUpdatedSites(creation);
     }
 
@@ -206,7 +211,8 @@ public class SiteTest {
         final ResponseEntity<Tenant> exchange = caller.exchange(SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml", HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
         final Tenant creation = validateTenantSummary(exchange, 25);
 
-        Thread.sleep(13_000);
+//        Thread.sleep(13_000);
+        TimeUnit.MILLISECONDS.sleep(13_000);
         LOG.info("tenantId: " + creation.getTenantId());
         validateUpdatedSites(creation);
     }
@@ -228,7 +234,8 @@ public class SiteTest {
         final ResponseEntity<Tenant> initialIndexCreation = caller.exchange(
                 SiteController.ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/meldungen/detail/rss.xml",
                 HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
-        Thread.sleep(13_000);
+//        Thread.sleep(13_000);
+        TimeUnit.MILLISECONDS.sleep(13_000);
         final Tenant tenantCreation = validateTenantSummary(initialIndexCreation, 10);
 
         UUID tenantIdFromCreation = tenantCreation.getTenantId();

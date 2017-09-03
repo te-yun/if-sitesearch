@@ -31,6 +31,7 @@ import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 import jetbrains.exodus.ArrayByteIterable;
+import jetbrains.exodus.ByteIterable;
 import jetbrains.exodus.bindings.StringBinding;
 import jetbrains.exodus.env.Store;
 import jetbrains.exodus.env.StoreConfig;
@@ -130,14 +131,28 @@ public class SiteService {
     }
 
     private Optional<UUID> fetchTenantSecret(UUID tenantId) {
-        // TODO only fetch SECRET info
-        Hits documentWithTenantSecret = SearchService.SEARCH_SERVICE.search(Fields.TENANT + ":" + tenantId, Search.HITS_LIST_SIZE, 1);
+        final ArrayByteIterable readableTenantId = StringBinding.stringToEntry(tenantId.toString());
+        final ByteIterable[] tenantSecret = new ByteIterable[1];
+        SearchController.ACID_PERSISTENCE.executeInReadonlyTransaction(txn -> {
+            Store store = SearchController.ACID_PERSISTENCE.openStore(TENANT_SECRET_FIELD, StoreConfig.WITHOUT_DUPLICATES, txn);
+            tenantSecret[0] = store.get(txn, readableTenantId);
+        });
+        if (tenantSecret[0] != null) {
+            return Optional.of(
+                    UUID.fromString(StringBinding.entryToString(tenantSecret[0]))
+            );
+        }
 
-        if (documentWithTenantSecret.getDocuments().isEmpty()) {
-            return Optional.empty();
-        } else {
-            String tenantSecret = documentWithTenantSecret.getDocuments().get(0).get(TENANT_SECRET_FIELD);
-            return Optional.of(UUID.fromString(tenantSecret));
+        { // TODO remove this once the Exodus persistence the leading way to store tenant secrets
+            Hits documentWithTenantSecret = SearchService.SEARCH_SERVICE.search(Fields.TENANT + ":" + tenantId, Search.HITS_LIST_SIZE, 1);
+
+            if (documentWithTenantSecret.getDocuments().isEmpty()) {
+                return Optional.empty();
+            } else {
+                return Optional.of(UUID.fromString(
+                        documentWithTenantSecret.getDocuments().get(0).get(TENANT_SECRET_FIELD)
+                ));
+            }
         }
     }
 

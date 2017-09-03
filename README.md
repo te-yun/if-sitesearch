@@ -1,3 +1,5 @@
+<img src="https://sitesearch.cloud/theme/logo.png" alt="Site Search" width="600" style="max-width:100%;">
+
 [![Build Status](https://travis-ci.org/intrafind/if-sitesearch.svg)](https://travis-ci.org/intrafind/if-sitesearch)
 
 
@@ -13,6 +15,8 @@ Here you can find a *non-technical* business focused abstract about [Site Search
 * [Release](https://sitesearch.cloud) / [DEV Release](https://dev.sitesearch.cloud)
 * [SCM repository](http://ml-if-git/sitesearch/if-sitesearch)
 * [Container](http://ml-if-git/sitesearch/docker-container)
+    
+***> > > [DEMO](https://sitesearch.cloud) < < <***    
     
 # Configuration
 

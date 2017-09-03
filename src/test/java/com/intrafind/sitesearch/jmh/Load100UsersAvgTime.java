@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Threads(10)
-@BenchmarkMode(Mode.All)
+@BenchmarkMode(Mode.AverageTime)
 public class Load100UsersAvgTime {
     private static final Load10Users LOAD_10_USERS = new Load10Users();
     private static final Logger LOG = LoggerFactory.getLogger(Load100UsersAvgTime.class);
