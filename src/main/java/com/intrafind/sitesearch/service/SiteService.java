@@ -35,6 +35,8 @@ import jetbrains.exodus.ByteIterable;
 import jetbrains.exodus.bindings.StringBinding;
 import jetbrains.exodus.env.Store;
 import jetbrains.exodus.env.StoreConfig;
+import jetbrains.exodus.env.Transaction;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -103,10 +105,7 @@ public class SiteService {
             indexable.set(Fields.TENANT, tenantId);
             UUID tenantSecret = UUID.randomUUID();
 
-            { // persist in data store
-                Store store = SearchController.ACID_PERSISTENCE.openStore(TENANT_SECRET_FIELD, StoreConfig.WITHOUT_DUPLICATES, txn);
-                store.put(txn, readableTenantId, StringBinding.stringToEntry(tenantSecret.toString()));
-            }
+            storeTenantSecret(readableTenantId, txn, tenantSecret);
 
             indexable.set(TENANT_SECRET_FIELD, tenantSecret);
             INDEX_SERVICE.index(indexable);
@@ -211,18 +210,22 @@ public class SiteService {
         } else { // consider request as first-usage-ownership-granting request (early binding), create new index
             UUID newTenantId = UUID.randomUUID();
             UUID newTenantSecret = UUID.randomUUID();
-            createTenantForFeedIndex(newTenantId, newTenantSecret);
+            storeTenantSecret(newTenantId, newTenantSecret);
             return updateIndex(feedUrl, newTenantId, newTenantSecret);
         }
     }
 
-    private void createTenantForFeedIndex(UUID tenantId, UUID tenantSecret) {
-        final ArrayByteIterable readableTenantId = StringBinding.stringToEntry(tenantId.toString());
+    private void storeTenantSecret(UUID tenantId, UUID tenantSecret) {
+        final ArrayByteIterable iterableTenantId = StringBinding.stringToEntry(tenantId.toString());
 
         SearchController.ACID_PERSISTENCE.executeInTransaction(txn -> {
-            Store store = SearchController.ACID_PERSISTENCE.openStore(TENANT_SECRET_FIELD, StoreConfig.WITHOUT_DUPLICATES, txn);
-            store.put(txn, readableTenantId, StringBinding.stringToEntry(tenantSecret.toString()));
+            storeTenantSecret(iterableTenantId, txn, tenantSecret);
         });
+    }
+
+    private void storeTenantSecret(ArrayByteIterable readableTenantId, @NotNull Transaction txn, UUID tenantSecret) {
+        Store store = SearchController.ACID_PERSISTENCE.openStore(TENANT_SECRET_FIELD, StoreConfig.WITHOUT_DUPLICATES, txn);
+        store.put(txn, readableTenantId, StringBinding.stringToEntry(tenantSecret.toString()));
     }
 
     static {
