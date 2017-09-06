@@ -1,6 +1,7 @@
 <img src="https://sitesearch.cloud/theme/logo.png" alt="Site Search" width="600" style="max-width:100%;">
 
-[![Build Status](https://travis-ci.org/intrafind/if-sitesearch.svg)](https://travis-ci.org/intrafind/if-sitesearch)
+[![Travis CI Build Status](https://travis-ci.org/intrafind/if-sitesearch.svg)](https://travis-ci.org/intrafind/if-sitesearch)
+[![TeamCity CI Build Status](http://ci.sitesearch.cloud/app/rest/builds/buildType(id:IntraFind_Oss_Build)/statusIcon)](http://ci.sitesearch.cloud/viewType.html?buildTypeId=IntraFind_Oss_Build)
 
 
 sitesearch-dispatcher

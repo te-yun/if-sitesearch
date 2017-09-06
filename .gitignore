@@ -2,6 +2,7 @@ generated_tests/
 config.json
 
 /data
+/*.log
 
 # Spring Boot
 /config
