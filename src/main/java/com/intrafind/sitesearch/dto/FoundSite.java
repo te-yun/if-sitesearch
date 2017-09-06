@@ -20,48 +20,55 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class FoundSite implements Serializable {
+    // TODO remove raw fields
     private String title;
-    private String titleRaw;
+    //    private String titleRaw;
     private String body;
-    private String bodyRaw;
+    //    private String bodyRaw;
     private String url;
-    private String urlRaw;
+//    private String urlRaw;
 
     private FoundSite() {
     }
 
-    public FoundSite(String title, String titleRaw, String body, String bodyRaw, String url, String urlRaw) {
+//    public FoundSite(String title, String titleRaw, String body, String bodyRaw, String url, String urlRaw) {
+//        this.title = title;
+//        this.titleRaw = titleRaw;
+//        this.body = body;
+//        this.bodyRaw = bodyRaw;
+//        this.url = url;
+//        this.urlRaw = urlRaw;
+//    }
+
+    public FoundSite(String title, String body, String url) {
         this.title = title;
-        this.titleRaw = titleRaw;
         this.body = body;
-        this.bodyRaw = bodyRaw;
         this.url = url;
-        this.urlRaw = urlRaw;
     }
 
-    public String getTitleRaw() {
-        return titleRaw;
-    }
+//    public String getTitleRaw() {
+//        return titleRaw;
+//    }
+//
+//    public void setTitleRaw(String titleRaw) {
+//        this.titleRaw = titleRaw;
+//    }
 
-    public void setTitleRaw(String titleRaw) {
-        this.titleRaw = titleRaw;
-    }
-
-    public String getBodyRaw() {
-        return bodyRaw;
-    }
-
-    public void setBodyRaw(String bodyRaw) {
-        this.bodyRaw = bodyRaw;
-    }
-
-    public String getUrlRaw() {
-        return urlRaw;
-    }
-
-    public void setUrlRaw(String urlRaw) {
-        this.urlRaw = urlRaw;
-    }
+//    public String getBodyRaw() {
+//        return bodyRaw;
+//    }
+//
+//    public void setBodyRaw(String bodyRaw) {
+//        this.bodyRaw = bodyRaw;
+//    }
+//
+//    public String getUrlRaw() {
+//        return urlRaw;
+//    }
+//
+//    public void setUrlRaw(String urlRaw) {
+//        this.urlRaw = urlRaw;
+//    }
 
     public String getTitle() {
         return title;

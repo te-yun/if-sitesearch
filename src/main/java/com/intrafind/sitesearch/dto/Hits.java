@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class Hits implements Serializable {
-    //    private List<Object> facets = Collections.emptyList();
     private List<FoundSite> results = Collections.emptyList();
     private String query = "";
 
@@ -33,17 +32,9 @@ public class Hits implements Serializable {
         this.results = results;
     }
 
-//    public void setFacets(List<Object> facets) {
-//        this.facets = facets;
-//    }
-
     public void setQuery(String query) {
         this.query = query;
     }
-
-//    public List<Object> getFacets() {
-//        return facets;
-//    }
 
     public String getQuery() {
         return query;

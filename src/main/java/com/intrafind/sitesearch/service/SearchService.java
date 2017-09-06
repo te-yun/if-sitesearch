@@ -39,17 +39,20 @@ public class SearchService {
 
     public Hits search(String query, UUID tenantId) {
         com.intrafind.api.search.Hits hits = SEARCH_SERVICE.search(
-                query + " AND " + Fields.TENANT + ":" + tenantId,
-
-                Search.RETURN_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL + QUERY_SEPARATOR + Fields.TENANT,
+//                query + " AND " + Fields.TENANT + ":" + tenantId,
+                query,
+                Search.FILTER_QUERY, Fields.TENANT + ":" + tenantId,
+// TODO introduce filter on tenant
+//                Search.RETURN_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL + QUERY_SEPARATOR + Fields.TENANT,
 
                 Search.RETURN_TEASER_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL,
-                Search.RETURN_TEASER_COUNT, 3,
+                Search.RETURN_TEASER_COUNT, 1,
                 Search.RETURN_TEASER_SIZE, 100,
                 Search.RETURN_TEASER_TAG_PRE, "<span class='if-teaser-highlight'>",
                 Search.RETURN_TEASER_TAG_POST, "</span>",
 
-                Search.HITS_LIST_SIZE, 1_000
+//                Search.HITS_LIST_SIZE, 1_000 // page size
+                Search.HITS_LIST_SIZE, 100 // page size
         );
 
         LOG.info("query: " + query);
@@ -57,11 +60,11 @@ public class SearchService {
         hits.getDocuments().forEach(document -> {
             FoundSite site = new FoundSite(
                     document.get(HIT_TEASER_PREFIX + Fields.TITLE),
-                    document.get(Fields.TITLE),
+//                    document.get(Fields.TITLE),
                     document.get(HIT_TEASER_PREFIX + Fields.BODY),
-                    document.get(Fields.BODY),
-                    document.get(HIT_TEASER_PREFIX + Fields.URL),
-                    document.get(Fields.URL)
+//                    document.get(Fields.BODY),
+                    document.get(HIT_TEASER_PREFIX + Fields.URL)
+//                    document.get(Fields.URL)
             );
             // TODO remove tenant INFO as it is not relevant here, consider separate DTO
             siteDocuments.add(site);

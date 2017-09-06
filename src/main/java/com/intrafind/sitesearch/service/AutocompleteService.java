@@ -31,21 +31,13 @@ import java.util.UUID;
 @Service
 public class AutocompleteService {
     private static final Search SEARCH_AUTOCOMPLETE_SERVICE = IfinderCoreClient.newHessianClient(Search.class, Application.IFINDER_CORE + "/autocomplete");
-
     private static final Logger LOG = LoggerFactory.getLogger(AutocompleteService.class);
 
     public Optional<Autocomplete> autocomplete(String query, UUID tenantId) {
         com.intrafind.api.search.Hits hits = SEARCH_AUTOCOMPLETE_SERVICE.search(
                 query,
                 Search.FILTER_QUERY, Fields.TENANT + ":" + tenantId,
-
-//                Search.RETURN_TEASER_FIELDS, Fields.BODY + SearchService.QUERY_SEPARATOR + Fields.TITLE + SearchService.QUERY_SEPARATOR + Fields.URL,
-//                Search.RETURN_TEASER_COUNT, 3,
-//                Search.RETURN_TEASER_SIZE, 100,
-//                Search.RETURN_TEASER_TAG_PRE, "<span class='if-teaser-highlight'>",
-//                Search.RETURN_TEASER_TAG_POST, "</span>",
-
-                Search.HITS_LIST_SIZE, 1_000
+                Search.HITS_LIST_SIZE, 10
         );
 
         LOG.info("query: " + query);

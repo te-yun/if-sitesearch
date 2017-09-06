@@ -23,6 +23,10 @@ Here you can find a *non-technical* business focused abstract about [Site Search
 Add a [configuration profile](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config-profile-specific-properties) 
 to the `config` folder inside this project.
 
+Required environment variables:
+
+    * SECURITY_USER_PASSWORD # for iFinder Core access     
+
 # Operations
 
 * [PowerShell required](https://github.com/PowerShell/PowerShell)
@@ -43,12 +47,12 @@ to the `config` folder inside this project.
 ## Postman
     ./*.postman_collection.json
     
-## Configuration
+## CI configuration
 Required environment variables:
 
     * BUILD_NUMBER
     * SCM_HASH
-    * SECURITY_USER_PASSWORD    
+    * SECURITY_USER_PASSWORD # for iFinder Core access   
     
 # Attribution
 * Made with ♥ in Munich
