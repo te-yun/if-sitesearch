@@ -16,6 +16,8 @@
 
 package com.intrafind.sitesearch.controller;
 
+import jetbrains.exodus.core.crypto.MessageDigestUtil;
+import jetbrains.exodus.entitystore.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -36,29 +38,30 @@ public class ClientController {
             @RequestParam(value = "tenantSecret") UUID tenantSecret
     ) {
 
-        LOG.info("this: " + this);
+//        LOG.info("this: " + this);
 
         //////////////////// store e-mail  move to /client endpoint
-//        final PersistentEntityStore entityStore = PersistentEntityStores.newInstance("data");
-//        LOG.info("entityStore: " + entityStore);
-//        final StoreTransaction entityTxn = entityStore.beginTransaction();
-//        final Entity client = entityTxn.newEntity("Client");
-//        final String type = client.getType();
-//        LOG.info("type: " + type);
-//        final EntityId id = client.getId();
-//        LOG.info("id: " + id);
-//        final String salt = MessageDigestUtil.sha256(Double.valueOf(Math.random()).toString());
-//        LOG.info("salt: " + salt);
-//        client.setProperty("name", "IntraFind Software AG");
-//        client.setProperty("salt", salt);
-//        client.setProperty("password", MessageDigestUtil.sha256(salt + tenantSecret));
-//        client.setProperty("email", "alexander.orlov@intrafind.de");
-//        final Entity clientFetched = entityTxn.getEntity(id);
-//        clientFetched.getPropertyNames().forEach(property -> {
-//            LOG.info("property: " + property);
-//            LOG.info("property value: " + clientFetched.getProperty(property));
-//        });
-//        entityTxn.commit();
+        final PersistentEntityStore entityStore = PersistentEntityStores.newInstance("data-entity");
+        LOG.info("entityStore: " + entityStore);
+        final StoreTransaction entityTxn = entityStore.beginTransaction();
+        final Entity client = entityTxn.newEntity("Client");
+        final String type = client.getType();
+        LOG.info("type: " + type);
+        final EntityId id = client.getId();
+        LOG.info("id: " + id);
+        final String salt = MessageDigestUtil.sha256(Double.valueOf(Math.random()).toString());
+        LOG.info("salt: " + salt);
+        client.setProperty("name", "IntraFind Software AG");
+        client.setProperty("salt", salt);
+        client.setProperty("password", MessageDigestUtil.sha256(salt + tenantSecret));
+        client.setProperty("email", "alexander.orlov@intrafind.de");
+        final Entity clientFetched = entityTxn.getEntity(id);
+        clientFetched.getPropertyNames().forEach(property -> {
+            LOG.info("property: " + property);
+            LOG.info("property value: " + clientFetched.getProperty(property));
+        });
+        entityTxn.commit();
+        entityStore.close();
         ////////////////////
         return ResponseEntity.ok(null);
     }

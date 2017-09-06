@@ -24,6 +24,7 @@ import com.intrafind.api.search.Search;
 import com.intrafind.sitesearch.Application;
 import com.intrafind.sitesearch.TrustAllX509TrustManager;
 import com.intrafind.sitesearch.controller.SearchController;
+import com.intrafind.sitesearch.dto.FetchedSite;
 import com.intrafind.sitesearch.dto.Site;
 import com.intrafind.sitesearch.dto.Tenant;
 import com.rometools.rome.feed.synd.SyndFeed;
@@ -56,7 +57,7 @@ public class SiteService {
 
     private static final Index INDEX_SERVICE = IfinderCoreClient.newHessianClient(Index.class, Application.IFINDER_CORE + "/index");
 
-    public Optional<Site> indexExistingSite(String id, UUID tenantId, UUID tenantSecret, Site site) {
+    public Optional<FetchedSite> indexExistingSite(String id, UUID tenantId, UUID tenantSecret, Site site) {
         if (tenantId != null && tenantSecret != null) { // credentials are provided as a tuple only
             final Optional<UUID> fetchedTenantSecret = fetchTenantSecret(tenantId);
             if (!fetchedTenantSecret.isPresent()) { // tenant does not exist
@@ -74,7 +75,7 @@ public class SiteService {
         }
     }
 
-    private Optional<Site> indexDocument(String id, UUID tenantId, UUID tenantSecret, Site site) {
+    private Optional<FetchedSite> indexDocument(String id, UUID tenantId, UUID tenantSecret, Site site) {
         Document indexable = new Document(id);
         indexable.set(Fields.BODY, site.getBody());
         indexable.set(Fields.TITLE, site.getTitle());
@@ -175,14 +176,14 @@ public class SiteService {
         }
     }
 
-    public Optional<Site> fetchById(String id) {
+    public Optional<FetchedSite> fetchById(String id) {
         Optional<Document> found = INDEX_SERVICE.fetch(Index.ALL, id).stream().findAny();
 
         if (found.isPresent()) {
             Document foundDocument = found.get();
-            Site representationOfFoundDocument = new Site(
+            FetchedSite representationOfFoundDocument = new FetchedSite(
+                    UUID.fromString(foundDocument.get(Fields.TENANT)),
                     foundDocument.getId(),
-                    UUID.fromString(foundDocument.get(Fields.TENANT)), null,
                     foundDocument.get(Fields.TITLE),
                     foundDocument.get(Fields.BODY),
                     foundDocument.get(Fields.URL)
@@ -254,7 +255,7 @@ public class SiteService {
                         url
                 );
                 final String siteId = Site.hashSiteId(tenantId, url);
-                Optional<Site> indexed = indexDocument(siteId, tenantId, tenantSecret, toIndex);
+                Optional<FetchedSite> indexed = indexDocument(siteId, tenantId, tenantSecret, toIndex);
                 if (indexed.isPresent()) {
                     successfullyIndexed.incrementAndGet();
                     documents.add(siteId);
