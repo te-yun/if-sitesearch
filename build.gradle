@@ -84,7 +84,7 @@ jmh {
 //      exclude = ['some regular expression']
 //    operationsPerInvocation = 3000
     fork = 0
-    threads = 2
+//    threads = 2
     warmupIterations = 1
     failOnError = true
     resultFormat = "JSON"

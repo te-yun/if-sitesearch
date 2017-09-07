@@ -16,14 +16,12 @@ server {
   server_name main.sitesearch.cloud;
 
   location / {
-    # used for client & user management that should go to a single instance only
-    proxy_pass https://example.com;
-  }
-
-  location /clientss {
-    # used for client & user management that should go to a single instance only
     proxy_pass http://sitesearch.online;
   }
+
+    location /api {
+        proxy_pass https://sitesearch.cloud;
+    }
 }
 
 server {
