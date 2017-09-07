@@ -1,80 +1,80 @@
 server {
-  listen 80;
-  listen [::]:80;
+    listen 80;
+    listen [::]:80;
 
-  return 301 https://$host$request_uri;
+    return 301 https://$host$request_uri;
 
     location /clients {
-      # used for client & user management that should go to a single instance only
-      proxy_pass http://sitesearch.online;
+        # used for client & user management that should go to a single instance only
+        proxy_pass http://sitesearch.online;
     }
 }
 
 server {
-  listen 80;
-  listen [::]:80;
-  server_name main.sitesearch.cloud;
+    listen 80;
+    listen [::]:80;
+    server_name main.sitesearch.cloud;
 
-  location / {
-    proxy_pass http://sitesearch.online;
-  }
+    location / {
+        proxy_pass http://sitesearch.online;
+    }
 
     location /api {
-        proxy_pass https://sitesearch.cloud;
+        proxy_pass https://sitesearch.cloud/;
     }
 }
 
 server {
-  listen 80;
-  listen [::]:80;
-  server_name dev.sitesearch.cloud;
+    listen 80;
+    listen [::]:80;
+    server_name dev.sitesearch.cloud;
 
-  location / {
-    proxy_pass https://dev.sitesearch.cloud:4442;
-  }
+    location / {
+        proxy_pass https://dev.sitesearch.cloud:4442;
+    }
 
-  # TODO move this to top server configuration
-  location /status {
-    stub_status on;
-    access_log off;
-    #    allow 127.0.0.1;
-    #    deny all;
-  }
+    # TODO move this to top server configuration
+    location /status {
+        stub_status on;
+        access_log off;
+        #    allow 127.0.0.1;
+        #    deny all;
+    }
 
-  #location /healthcheck {
+    #location /healthcheck {
     #proxy_pass  http://backend;
     #proxy_cache cache_backend;
 
-  # health_check;
-  #}
+    # health_check;
+    #}
 
-  #location /status1 {
+    #location /status1 {
     # status_format json;
-  #status;
-  #}
+    #status;
+    #}
 
-  #location /upstream_conf {
-  # upstream_conf;
-  #}
+    #location /upstream_conf {
+    # upstream_conf;
+    #}
 }
 
 server {
-  listen 80;
-  listen [::]:80;
-  server_name test.sitesearch.cloud;
+    listen 80;
+    listen [::]:80;
+    server_name test.sitesearch.cloud;
 
-  location / {
-    proxy_pass https://test.sitesearch.cloud:3442;
-  }
+    location / {
+        proxy_pass https://test.sitesearch.cloud:3442;
+    }
 }
 
 server {
-  listen 80;
-  listen [::]:80;
-  server_name ci.sitesearch.cloud;
+    listen 80;
+    listen [::]:80;
+    server_name ci.sitesearch.cloud;
 
-  location / {
-    #proxy_pass http://$host:8111$request_uri;
-    proxy_pass http://ci.sitesearch.cloud:8111;
-  }
+    location / {
+        #proxy_pass http://$host:8111$request_uri;
+        proxy_pass http://ci.sitesearch.cloud:8111;
+    }
 }
