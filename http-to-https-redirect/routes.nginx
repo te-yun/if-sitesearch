@@ -13,6 +13,20 @@ server {
 server {
     listen 80;
     listen [::]:80;
+    server_name api.sitesearch.cloud;
+
+    location / {
+        proxy_pass http://sitesearch.online;
+    }
+
+    location /api {
+        proxy_pass https://api.sitesearch.cloud/;
+    }
+}
+
+server {
+    listen 80;
+    listen [::]:80;
     server_name main.sitesearch.cloud;
 
     location / {
@@ -20,7 +34,7 @@ server {
     }
 
     location /api {
-        proxy_pass https://sitesearch.cloud/;
+        proxy_pass https://api.sitesearch.cloud;
     }
 }
 
