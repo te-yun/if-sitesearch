@@ -2,6 +2,7 @@ generated_tests/
 config.json
 
 /data
+/data-entity
 /*.log
 
 # Spring Boot
