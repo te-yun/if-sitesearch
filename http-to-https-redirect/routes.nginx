@@ -6,8 +6,10 @@ server {
 
     location /clients {
         # used for client & user management that should go to a single instance only
-        proxy_pass http://sitesearch.online;
+        proxy_pass https://example.com;
     }
+
+    #    return 301 https://$host$request_uri;
 }
 
 server {
