@@ -1,3 +1,5 @@
 FROM nginx:alpine
 
-COPY default.conf /etc/nginx/conf.d/
+MAINTAINER Alexander Orlov <alexander.orlov@intrafind.de>
+
+COPY routes.nginx /etc/nginx/conf.d/default.conf
