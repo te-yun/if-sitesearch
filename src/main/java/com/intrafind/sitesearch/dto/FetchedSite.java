@@ -21,8 +21,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class FetchedSite implements Serializable {
-    private UUID tenantId;
     private String id;
+    private UUID tenantId;
     private String title;
     //    private String titleRaw;
     private String body;

@@ -27,6 +27,7 @@ plugins {
     id "org.springframework.boot" version "1.5.6.RELEASE"
     id "me.champeau.gradle.jmh" version "0.4.4"
     id "io.morethan.jmhreport" version "0.5.0" // not tested yet
+//    id "io.morethan.jmhreport" version "0.6.1"
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -76,7 +77,8 @@ test {
 tasks.jmh.finalizedBy tasks.jmhReport 
 
 jmh {
-    include = ["Load10Users", "Load100Users", "Load1000Users", "LoadIndex2Users"]
+//    include = ["Load10Users", "Load100Users", "Load1000Users", "LoadIndex2Users"]
+    include = ["Load10Users"]
 //      exclude = ['some regular expression']
 //    operationsPerInvocation = 3000
     fork = 0

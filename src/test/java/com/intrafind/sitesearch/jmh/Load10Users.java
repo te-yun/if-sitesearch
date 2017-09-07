@@ -59,7 +59,7 @@ public class Load10Users {
     static {
         SEARCH_QUERIES.put("knowledge", 1L);
         SEARCH_QUERIES.put("ifinder", 7L);
-        SEARCH_QUERIES.put("\uD83E\uDD84", 25L);
+        SEARCH_QUERIES.put("\uD83E\uDD84", 0L);
     }
 
     static final List<String> QUERY_LIST_SEARCH = new ArrayList<>(SEARCH_QUERIES.keySet());
@@ -93,9 +93,14 @@ public class Load10Users {
                 Hits.class
         );
 
-        assertEquals(HttpStatus.OK, actual.getStatusCode());
+        LOG.info("query: " + query);
         final long queryResultCount = Load10Users.SEARCH_QUERIES.get(query);
-        assertEquals(queryResultCount, actual.getBody().getResults().size());
+        if (queryResultCount == 0) {
+            assertEquals(HttpStatus.NOT_FOUND, actual.getStatusCode());
+        } else {
+            assertEquals(HttpStatus.OK, actual.getStatusCode());
+            assertEquals(queryResultCount, actual.getBody().getResults().size());
+        }
     }
 
     @Benchmark
