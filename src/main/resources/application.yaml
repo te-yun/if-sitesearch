@@ -4,6 +4,16 @@
 
 #server.error.whitelabel.enabled=false # to fix Swagger issue
 
+#facebook:
+#  client:
+#    clientId: 277335132728142
+#    clientSecret: 1f10244d39f6231e15a1fef8148b02cf
+#
+#github:
+#  client:
+#    clientId: 51ddf3aea6097a04b03c
+#    clientSecret: 23a073815a370e20fb6f1d786fc68ad9948d6af4
+
 logging:
   level:
     org.springframework.web: INFO
@@ -13,6 +23,25 @@ security:
   user:
     name: ${security.user.password}
     password: ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=
+#  oauth2:   # used TO WORK TODO ENABLE
+#    client:
+#      clientId: 51ddf3aea6097a04b03c
+#      clientSecret: 23a073815a370e20fb6f1d786fc68ad9948d6af4
+#      accessTokenUri: https://github.com/login/oauth/access_token
+#      userAuthorizationUri: https://github.com/login/oauth/authorize
+#      clientAuthenticationScheme: form
+#    resource:
+#      userInfoUri: https://api.github.com/user
+
+#github:
+#  client:
+#    clientId: 51ddf3aea6097a04b03c
+#    clientSecret: 23a073815a370e20fb6f1d786fc68ad9948d6af4
+#    accessTokenUri: https://github.com/login/oauth/access_token
+#    userAuthorizationUri: https://github.com/login/oauth/authorize
+#    clientAuthenticationScheme: form
+#  resource:
+#    userInfoUri: https://api.github.com/user
 
 sitesearch:
   queryCountEnabled: true

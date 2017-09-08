@@ -9,7 +9,7 @@ server {
         proxy_pass https://example.com; # TODO test this, does not work, yields 404, WHEN AFTER above NginxReturn statement
     }
 
-    return 301 https://$host$request_uri;  # TODO test this
+    return 301 https://$host$request_uri;  # TODO test this, very generally it works, or at least does not break anything
 }
 
 server {
@@ -22,8 +22,7 @@ server {
     }
 
     location /api {
-        #        proxy_pass https://api.sitesearch.cloud; # TODO test this, yields 404
-        proxy_pass https://api.sitesearch.cloud/; # TODO test this
+        proxy_pass https://api.sitesearch.cloud/;
     }
 }
 

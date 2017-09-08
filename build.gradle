@@ -61,7 +61,7 @@ dependencies {
 
     compile "io.springfox:springfox-swagger2:$swagger_version"
     compile "io.springfox:springfox-swagger-ui:$swagger_version"
-//    compile "org.springframework.security.oauth:spring-security-oauth2:2.1.1.RELEASE"
+    compile "org.springframework.security.oauth:spring-security-oauth2:2.1.1.RELEASE"
 //    compile "org.springframework.boot:spring-boot-starter-security:$spring_boot_version"
 
     runtime "net.java.dev.jna:jna:4.4.0"
@@ -77,11 +77,10 @@ test {
 }
 
 tasks.jmh.finalizedBy tasks.jmhReport 
-
 jmh {
     include = ["Load10Users", "Load100Users", "Load1000Users", "LoadIndex2Users"]
 //    include = ["Load10Users"] // for local tests
-//      exclude = ['some regular expression']
+//      exclude = ["Load100Users", "Load1000Users", "LoadIndex2Users"] // for local tests
 //    operationsPerInvocation = 3000
     fork = 0
 //    threads = 2
@@ -89,7 +88,7 @@ jmh {
     failOnError = true
     resultFormat = "JSON"
     iterations = 20
-    timeOnIteration = "1ms"
+//    timeOnIteration = "1ms"
     setDuplicateClassesStrategy(DuplicatesStrategy.FAIL)
 }
 

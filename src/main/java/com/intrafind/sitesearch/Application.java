@@ -41,7 +41,7 @@ public class Application {
     public static final URI IFINDER_CORE = URI.create("http://" + System.getenv("SECURITY_USER_PASSWORD") + ":" + System.getenv("SECURITY_USER_PASSWORD") + "@sitesearch.cloud:9605/hessian");
 
     @Bean
-    public WebMvcConfigurer corsConfigurer() {
+    public WebMvcConfigurer corsConfigurer() {   // TODO check if this can be enabled in WebSecurityConfigurer class only
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
@@ -51,7 +51,7 @@ public class Application {
     }
 
     @Bean
-    public Docket api() {
+    public Docket hideApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .paths(Predicates.not(PathSelectors.regex("/error"))) // Exclude Spring error controllers
