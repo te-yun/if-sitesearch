@@ -4,12 +4,12 @@ server {
 
     return 301 https://$host$request_uri;
 
-    location /clients {
+    location /my {
         # used for client & user management that should go to a single instance only
-        proxy_pass https://example.com;
+        proxy_pass https://example.com; # TODO test this
     }
 
-    #    return 301 https://$host$request_uri;
+    #    return 301 https://$host$request_uri;  # TODO test this
 }
 
 server {
@@ -22,7 +22,8 @@ server {
     }
 
     location /api {
-        proxy_pass https://api.sitesearch.cloud/;
+        proxy_pass https://api.sitesearch.cloud; # TODO test this
+        #        proxy_pass https://api.sitesearch.cloud/; # TODO test this
     }
 }
 
