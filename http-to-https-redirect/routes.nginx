@@ -2,14 +2,14 @@ server {
     listen 80;
     listen [::]:80;
 
-    #    return 301 https://$host$request_uri;
+    return 301 https://$host$request_uri;
 
-    location /my {
-        # used for client & user management that should go to a single instance only
-        proxy_pass https://example.com/; # TODO test this, does not work, yields 404, WHEN AFTER above NginxReturn statement
-    }
+    #location /my {
+    #    # used for client & user management that should go to a single instance only
+    #    proxy_pass https://example.com/; # TODO test this, does not work, yields 404, WHEN AFTER above NginxReturn statement
+    #}
 
-    return 301 https://$host$request_uri;  # TODO test this
+    #return 301 https://$host$request_uri;
 }
 
 server {
