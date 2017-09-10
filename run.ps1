@@ -2,7 +2,7 @@
 
 try {
     # add "--debug-jvm" to attach debugger
-#    $Env:SPRING_CONFIG_NAME = "application"
+    $Env:SPRING_CONFIG_NAME = "application, local"
 #    Write-Host "SPRING_CONFIG_NAME $Env:SPRING_CONFIG_NAME"
     ./gradlew bootRun --no-scan --parallel --no-rebuild --continuous --build-cache $args --continue
 } Finally {
