@@ -1,20 +1,30 @@
 server {
     listen 80;
-    #    listen [::]:80;
+    listen [::]:80;
 
     return 301 https://$host$request_uri;
+
+    #    listen       443 ssl;
+    #    server_name  localhost;
+
+    #    ssl_certificate      cert.pem;
+    #    ssl_certificate_key  cert.key;
+
+    #    ssl_session_cache    shared:SSL:1m;
+    #    ssl_session_timeout  5m;
+
+    #    ssl_ciphers  HIGH:!aNULL:!MD5;
+    #    ssl_prefer_server_ciphers  on;
 }
 
 server {
-    listen 443;
-    #    listen 80;
-    #    listen [::]:443;
-    #    listen [::]:80;
+    listen 80;
+    listen [::]:80;
     server_name dev.sitesearch.cloud;
 
-    #    location / {
-    #        proxy_pass https://sitesearch.cloud;
-    #    }
+    location / {
+        proxy_pass https://sitesearch.cloud;
+    }
 
     location /dev {
         proxy_pass https://sitesearch.cloud/;
@@ -29,23 +39,23 @@ server {
     }
 }
 
-#server {
-#    listen 80;
-#    listen [::]:80;
-#    server_name api.sitesearch.cloud;
-#
-#    location / {
-#        proxy_pass http://sitesearch.online/;
-#    }
-#
-#    location /api {
-#        proxy_pass https://api.sitesearch.cloud;
-#    }
-#
-#    location /info {
-#        proxy_pass https://sitesearch.cloud;
-#    }
-#}
+server {
+    listen 80;
+    listen [::]:80;
+    server_name api.sitesearch.cloud;
+
+    location / {
+        proxy_pass http://sitesearch.online/;
+    }
+
+    location /api {
+        proxy_pass https://api.sitesearch.cloud;
+    }
+
+    location /info {
+        proxy_pass https://sitesearch.cloud;
+    }
+}
 
 server {
     listen 80;
@@ -57,30 +67,30 @@ server {
     }
 }
 
-#server {
-#    listen 80;
-#    listen [::]:80;
-#    server_name main.sitesearch.cloud;
-#
-#    location / {
-#        proxy_pass http://sitesearch.online;
-#    }
-#
-#    location /api {
-#        proxy_pass https://api.sitesearch.cloud;
-#    }
-#}
+server {
+    listen 80;
+    listen [::]:80;
+    server_name main.sitesearch.cloud;
 
-#server {
-#    listen 80;
-#    listen [::]:80;
-#    server_name dev.sitesearch.cloud;
-#
-#    location /status {
-#        stub_status on;
-#        access_log off;
-#    }
-#}
+    location / {
+        proxy_pass http://sitesearch.online;
+    }
+
+    location /api {
+        proxy_pass https://api.sitesearch.cloud;
+    }
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name dev.sitesearch.cloud;
+
+    location /status {
+        stub_status on;
+        access_log off;
+    }
+}
 
 server {
     listen 80;
