@@ -2,14 +2,14 @@ server {
     listen 80;
     listen [::]:80;
 
-    return 301 https://$host$request_uri;
+    #    return 301 https://$host$request_uri;
 
-    #    location /my {
-    #        # used for client & user management that should go to a single instance only
-    #        proxy_pass https://example.com; # TODO test this, does not work, yields 404, WHEN AFTER above NginxReturn statement
-    #    }
+    location /my {
+        # used for client & user management that should go to a single instance only
+        proxy_pass https://example.com; # TODO test this, does not work, yields 404, WHEN AFTER above NginxReturn statement
+    }
 
-    #    return 301 https://$host$request_uri;  # TODO test this, very generally it works, or at least does not break anything
+    return 301 https://$host$request_uri;  # TODO test this
 }
 
 server {
@@ -22,7 +22,8 @@ server {
     }
 
     location /api {
-        proxy_pass https://api.sitesearch.cloud/;
+        #        proxy_pass https://api.sitesearch.cloud; # TODO test this, yields 404
+        proxy_pass https://api.sitesearch.cloud/; # TODO test this
     }
 }
 
@@ -45,9 +46,9 @@ server {
     listen [::]:80;
     server_name dev.sitesearch.cloud;
 
-    #    location / {
-    #        proxy_pass https://dev.sitesearch.cloud:4442;
-    #    }
+    location / {
+        proxy_pass https://dev.sitesearch.cloud:4442;
+    }
 
     # TODO move this to top server configuration
     location /status {
@@ -90,8 +91,8 @@ server {
     server_name ci.sitesearch.cloud;
 
     location / {
-        proxy_pass http://$host:8111$request_uri;
-        #                proxy_pass http://ci.sitesearch.cloud:8111/;
+        #proxy_pass http://$host:8111$request_uri;
         #        proxy_pass http://ci.sitesearch.cloud:8111;
+        proxy_pass http://35.198.71.123:8111;
     }
 }
