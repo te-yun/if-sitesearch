@@ -1,20 +1,6 @@
 server {
     listen 80;
     listen [::]:80;
-
-    return 301 https://$host$request_uri;
-
-    #location /my {
-    #    # used for client & user management that should go to a single instance only
-    #    proxy_pass https://example.com/; # TODO test this, does not work, yields 404, WHEN AFTER above NginxReturn statement
-    #}
-
-    #return 301 https://$host$request_uri;
-}
-
-server {
-    listen 80;
-    listen [::]:80;
     server_name api.sitesearch.cloud;
 
     location / {
@@ -25,6 +11,20 @@ server {
         #        proxy_pass https://api.sitesearch.cloud; # TODO test this, yields 404
         proxy_pass https://api.sitesearch.cloud/; # TODO test this
     }
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+
+    return 301 https://$host$request_uri;
+
+    #location /my {
+    #    # used for client & user management that should go to a single instance only
+    #    proxy_pass https://example.com/; # TODO test this, does not work, yields 404, WHEN AFTER above NginxReturn statement
+    #}
+
+    #return 301 https://$host$request_uri;
 }
 
 server {
