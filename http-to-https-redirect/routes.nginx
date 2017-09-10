@@ -73,33 +73,14 @@ server {
     listen [::]:80;
     server_name dev.sitesearch.cloud;
 
-    #    location / {
-    #        proxy_pass https://dev.sitesearch.cloud:4442;
-    #    }
+    location /api {
+        proxy_pass https://sitesearch.cloud;
+    }
 
-    # TODO move this to top server configuration
     location /status {
         stub_status on;
         access_log off;
-        #    allow 127.0.0.1;
-        #    deny all;
     }
-
-    location /healthcheck {
-    #proxy_pass  http://backend;
-    #proxy_cache cache_backend;
-
-        health_check;
-    }
-
-    #    location /status1 {
-    #     status_format json;
-    #    status;
-    #    }
-
-    #    location /upstream_conf {
-    #     upstream_conf;
-    #    }
 }
 
 server {
