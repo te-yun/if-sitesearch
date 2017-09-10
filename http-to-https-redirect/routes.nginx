@@ -1,21 +1,6 @@
 server {
     listen 80;
     listen [::]:80;
-    server_name api.sitesearch.cloud;
-
-    location /info {
-        proxy_pass https://example.com/;
-        #        proxy_pass http://sitesearch.online/;
-    }
-
-    location /api {
-        proxy_pass https://sitesearch.cloud/;
-    }
-}
-
-server {
-    listen 80;
-    listen [::]:80;
 
     return 301 https://$host$request_uri;
 
