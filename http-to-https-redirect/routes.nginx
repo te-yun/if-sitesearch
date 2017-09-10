@@ -13,6 +13,18 @@ server {
     #return 301 https://$host$request_uri;
 }
 
+server {
+    listen 80;
+    listen [::]:80;
+    server_name ci.sitesearch.cloud;
+
+    location / {
+        #proxy_pass http://$host:8111$request_uri;
+        #        proxy_pass http://ci.sitesearch.cloud:8111;
+        proxy_pass http://35.198.71.123:8111;
+    }
+}
+
 #server {
 #    listen 80;
 #    listen [::]:80;
@@ -70,15 +82,3 @@ server {
 #        proxy_pass https://test.sitesearch.cloud:3442;
 #    }
 #}
-
-server {
-    listen 80;
-    listen [::]:80;
-    server_name ci.sitesearch.cloud;
-
-    location / {
-        #proxy_pass http://$host:8111$request_uri;
-        #        proxy_pass http://ci.sitesearch.cloud:8111;
-        proxy_pass http://35.198.71.123:8111;
-    }
-}
