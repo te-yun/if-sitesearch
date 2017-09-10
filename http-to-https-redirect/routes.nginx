@@ -5,8 +5,7 @@ server {
 
     #    return 301 https://$host$request_uri;
 
-    location /my {
-        # used for client & user management that should go to a single instance only
+    location / {
         proxy_pass https://sitesearch.cloud;
     }
 
@@ -14,8 +13,8 @@ server {
         proxy_pass https://sitesearch.cloud/;
     }
 
-    location /info {
-        proxy_pass http://sitesearch.online;
+    location /api {
+        proxy_pass https://sitesearch.cloud;
     }
 
     location /about {
@@ -31,10 +30,10 @@ server {
     server_name api.sitesearch.cloud;
 
     location / {
-        proxy_pass http://sitesearch.online;
+        proxy_pass https://sitesearch.online;
     }
 
-    location /api {
+    location /info {
         proxy_pass https://sitesearch.cloud;
     }
 }
@@ -45,9 +44,7 @@ server {
     server_name ci.sitesearch.cloud;
 
     location / {
-        #proxy_pass http://$host:8111$request_uri;
         proxy_pass http://ci.sitesearch.cloud:8111;
-        #        proxy_pass http://35.198.71.123:8111;
     }
 }
 
