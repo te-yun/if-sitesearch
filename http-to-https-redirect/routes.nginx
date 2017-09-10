@@ -1,15 +1,15 @@
 server {
-    listen 80;
     listen 443;
-    listen [::]:80;
+    listen 80;
     listen [::]:443;
+    listen [::]:80;
     server_name sitesearch.cloud;
 
     #    return 301 https://$host$request_uri;
 
-    location / {
-        proxy_pass https://sitesearch.cloud;
-    }
+    #    location / {
+    #        proxy_pass https://sitesearch.cloud;
+    #    }
 
     location /dev {
         proxy_pass https://sitesearch.cloud/;
@@ -85,21 +85,21 @@ server {
         #    deny all;
     }
 
-    #location /healthcheck {
+    location /healthcheck {
     #proxy_pass  http://backend;
     #proxy_cache cache_backend;
 
-    # health_check;
-    #}
+        health_check;
+    }
 
-    #location /status1 {
-    # status_format json;
-    #status;
-    #}
+    #    location /status1 {
+    #     status_format json;
+    #    status;
+    #    }
 
-    #location /upstream_conf {
-    # upstream_conf;
-    #}
+    #    location /upstream_conf {
+    #     upstream_conf;
+    #    }
 }
 
 server {
