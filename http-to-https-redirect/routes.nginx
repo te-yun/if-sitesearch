@@ -4,12 +4,12 @@ server {
     server_name api.sitesearch.cloud;
 
     location / {
-        proxy_pass http://sitesearch.online/;
+        proxy_pass https://example.com/;
+        #        proxy_pass http://sitesearch.online/;
     }
 
     location /api {
-        #        proxy_pass https://api.sitesearch.cloud; # TODO test this, yields 404
-        proxy_pass https://api.sitesearch.cloud/; # TODO test this
+        proxy_pass https://sitesearch.cloud/; 
     }
 }
 
