@@ -6,20 +6,20 @@ server {
     #    return 301 https://$host$request_uri;
 
     location /my {
-    #    # used for client & user management that should go to a single instance only
-        proxy_pass https://example.com/;
-    }
-
-    location /faq {
-        proxy_pass https://example.com;
-    }
-
-    location /help {
-        proxy_pass http://api.sitesearch.cloud;
+        # used for client & user management that should go to a single instance only
+        proxy_pass https://sitesearch.cloud;
     }
 
     location /dev {
-        proxy_pass http://api.sitesearch.cloud/;
+        proxy_pass https://sitesearch.cloud/;
+    }
+
+    location /info {
+        proxy_pass http://sitesearch.online;
+    }
+
+    location /about {
+        proxy_pass http://sitesearch.online/;
     }
 
     #    return 301 https://$host$request_uri;
@@ -35,14 +35,7 @@ server {
     }
 
     location /api {
-        proxy_pass https://api.sitesearch.cloud;
-    }
-
-    location /info {
-        proxy_pass https://example.com;
-    }
-    location /about {
-        proxy_pass https://example.com/;
+        proxy_pass https://sitesearch.cloud;
     }
 }
 
