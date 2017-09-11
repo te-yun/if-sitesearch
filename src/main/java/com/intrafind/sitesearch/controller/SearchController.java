@@ -39,7 +39,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping(SearchController.ENDPOINT)
 public class SearchController {
-    public static final Environment ACID_PERSISTENCE = Environments.newContextualInstance("data");
+    public static final Environment ACID_PERSISTENCE = Environments.newContextualInstance("data/environment");
 
     static { // to initialize the store, required for virgin CI runs
         ACID_PERSISTENCE.executeInTransaction(txn -> {

@@ -5,6 +5,7 @@ security:
   oauth2:
     client:
       clientId: a4d43021fa657695d4a7
+    clientSecret: 8859eab3a4a620928be285fc6582a2628f23be09
 #    clientSecret: ${random.uuid} # add valid token to your local configuration
 
 server:

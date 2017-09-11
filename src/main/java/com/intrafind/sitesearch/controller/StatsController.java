@@ -63,7 +63,6 @@ public class StatsController {
         latch.countDown();
     }
 
-    //    public static final Environment EXODUS_ENV = Environments.newInstance("data");
     public static final String ENDPOINT = "/stats";
     private static final Logger LOG = LoggerFactory.getLogger(StatsController.class);
     static final String QUERIES_PER_TENANT_STORE = "tenantQueries";

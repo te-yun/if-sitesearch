@@ -43,50 +43,21 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         return principal;
     }
 
-    @RequestMapping("api")
-    public String redirect() {
-        return "redirect:https://sitesearch.online";
-    }
-
-    @RequestMapping("api1")
-    public ModelAndView redirect1() {
+    @RequestMapping("frontpage")
+    public ModelAndView redirectToFrontpage() {
         return new ModelAndView("redirect:https://sitesearch.online");
     }
 
-    @RequestMapping("api2")
-    public ResponseEntity<Object> redirectToExternalUrl() throws URISyntaxException {
-        URI uri = new URI("https://sitesearch.online");
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(uri);
-        return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
-    }
-
-    @RequestMapping("api22")
-    public ResponseEntity<Object> redirectToExternalUrl2() throws URISyntaxException {
+    @RequestMapping("frontpage1")
+    public ResponseEntity<Object> respondWithFrontpage() throws URISyntaxException {
         URI uri = new URI("https://sitesearch.online");
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uri);
         return new ResponseEntity<>(httpHeaders, HttpStatus.MOVED_PERMANENTLY);
     }
 
-    @RequestMapping("api222")
-    public ResponseEntity<Object> redirectToExternalUrl22() throws URISyntaxException {
-        URI uri = new URI("https://sitesearch.online");
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(uri);
-        return new ResponseEntity<>(httpHeaders, HttpStatus.FOUND);
-    }
-
-    @RequestMapping("api2222")
-    public ResponseEntity<Object> redirectToExternalUrl223() throws URISyntaxException {
-        URI uri = new URI("https://sitesearch.online");
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(uri);
-        return new ResponseEntity<>(httpHeaders, HttpStatus.MOVED_TEMPORARILY);
-    }
-
-    @RequestMapping("api3")
-    public void redirectToTwitter(HttpServletResponse httpServletResponse) throws IOException {
+    @RequestMapping("frontpage2")
+    public void rootRedirect(HttpServletResponse httpServletResponse) throws IOException {
         httpServletResponse.sendRedirect("https://sitesearch.online");
     }
 
