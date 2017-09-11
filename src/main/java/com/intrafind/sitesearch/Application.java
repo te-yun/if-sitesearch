@@ -47,7 +47,7 @@ public class Application {
             @RequestParam(value = "client_secret", required = false) String secret,
             @RequestParam(value = "state", required = false) String state,
             @RequestParam(value = "redirect_uri", required = false) String redirect_uri,
-            @RequestBody Object o
+            @RequestBody(required = false) Object o
     ) {
 
         LOG.info("code: " + code);
@@ -68,7 +68,7 @@ public class Application {
             @RequestParam(value = "client_secret", required = false) String secret,
             @RequestParam(value = "state", required = false) String state,
             @RequestParam(value = "redirect_uri", required = false) String redirect_uri,
-            @RequestBody Object o
+            @RequestBody(required = false) Object o
     ) {
         LOG.info("code: " + code);
         LOG.info("token: " + token);
