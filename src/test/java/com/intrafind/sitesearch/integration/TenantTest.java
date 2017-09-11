@@ -32,8 +32,8 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ClientTest {
-    private static final Logger LOG = LoggerFactory.getLogger(ClientTest.class);
+public class TenantTest {
+    private static final Logger LOG = LoggerFactory.getLogger(TenantTest.class);
     @Autowired
     private TestRestTemplate caller;
 
