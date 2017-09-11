@@ -36,26 +36,32 @@ public class TenantController {
     private static final Logger LOG = LoggerFactory.getLogger(TenantController.class);
     private static final PersistentEntityStore ACID_PERSISTENCE_ENTITY = PersistentEntityStores.newInstance("data/entity");
 
-    @RequestMapping(path = "/{siteId}/assign", method = RequestMethod.POST)
+    @RequestMapping(path = "/{tenantId}/{siteId}/assign", method = RequestMethod.POST)
     ResponseEntity<TenantSiteAssignment> assignSite(
-            @RequestParam(value = "siteId") UUID siteId,
+            @PathVariable(value = "tenantId") long tenantId,
+            @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "siteSecret") UUID siteSecret,
             @RequestBody TenantSiteAssignment tenantSiteAssignment
     ) {
         final StoreTransaction entityTxn = ACID_PERSISTENCE_ENTITY.beginTransaction();
-        final Entity client = entityTxn.newEntity("Client");
-        final EntityId id = client.getId();
+        final Entity tenant = entityTxn.newEntity("Tenant");
+        final EntityId id = tenant.getId();
         final String salt = MessageDigestUtil.sha256(Double.valueOf(Math.random()).toString());
-        client.setProperty("company", tenantSiteAssignment.getCompany());
-        client.setProperty("salt", salt);
+        tenant.setProperty("company", tenantSiteAssignment.getCompany());
+        tenant.setProperty("salt", salt);
 
         final Entity authentication = entityTxn.newEntity("Authentication");
         authentication.setProperty("provider", "github");
-        client.addLink("authentication", authentication);
-        authentication.setLink("client", client);
+        authentication.setProperty("email", "userAuthentication.details.email alexander.orlov@loxal.net");
+        authentication.setProperty("name", "userAuthentication.details.name Alexander Orlov");
+        authentication.setProperty("company", "userAuthentication.details.company loxal");
+        authentication.setProperty("id", "userAuthentication.details.id 87507");
+        authentication.setProperty("login", "userAuthentication.details.login loxal");
+        tenant.addLink("authentication", authentication);
+        authentication.setLink("tenant", tenant);
 
-        client.setProperty("password", MessageDigestUtil.sha256(salt + siteSecret));
-        client.setProperty("email", tenantSiteAssignment.getEmail());
+        tenant.setProperty("password", MessageDigestUtil.sha256(salt + siteSecret));
+        tenant.setProperty("email", tenantSiteAssignment.getEmail());
 //        final Entity clientFetched = entityTxn.getEntity(id);
 //        clientFetched.getPropertyNames().forEach(property -> {
 //            LOG.info("property.............: " + property);

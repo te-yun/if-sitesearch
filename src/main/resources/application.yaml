@@ -30,6 +30,8 @@ security:
       accessTokenUri: https://github.com/login/oauth/access_token
       userAuthorizationUri: https://github.com/login/oauth/authorize
       clientAuthenticationScheme: form
+      pre-established-redirect-uri: https://sitesearch.cloud/login/test1
+      registered-redirect-uri: https://sitesearch.cloud/login/test1
     resource:
       userInfoUri: https://api.github.com/user
 
