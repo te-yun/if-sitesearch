@@ -23,15 +23,15 @@ security:
   user:
     name: ${security.user.password}
     password: ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=
-#  oauth2:   # used TO WORK TODO ENABLE
-#    client:
-#      clientId: 51ddf3aea6097a04b03c
-#      clientSecret: 23a073815a370e20fb6f1d786fc68ad9948d6af4
-#      accessTokenUri: https://github.com/login/oauth/access_token
-#      userAuthorizationUri: https://github.com/login/oauth/authorize
-#      clientAuthenticationScheme: form
-#    resource:
-#      userInfoUri: https://api.github.com/user
+  oauth2:
+    client:
+      clientId: a4d43021fa657695d4a7
+#    clientSecret: ${random.uuid} # add valid token to your local configuration
+      accessTokenUri: https://github.com/login/oauth/access_token
+      userAuthorizationUri: https://github.com/login/oauth/authorize
+      clientAuthenticationScheme: form
+    resource:
+      userInfoUri: https://api.github.com/user
 
 #github:
 #  client:

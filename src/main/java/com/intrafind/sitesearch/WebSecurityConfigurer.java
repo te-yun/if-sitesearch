@@ -21,14 +21,16 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 
 @EnableOAuth2Sso
 @EnableWebSecurity
+@RestController
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
-    @RequestMapping("/user")
+    @RequestMapping("user")
     public Principal user(Principal principal) {
         return principal;
     }
