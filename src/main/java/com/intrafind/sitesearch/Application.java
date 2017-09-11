@@ -26,7 +26,8 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.ContextClosedEvent;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.net.URI;
@@ -37,6 +38,47 @@ import java.net.URI;
 public class Application {
     private final static Logger LOG = LoggerFactory.getLogger(Application.class);
     public static final URI IFINDER_CORE = URI.create("http://" + System.getenv("SECURITY_USER_PASSWORD") + ":" + System.getenv("SECURITY_USER_PASSWORD") + "@sitesearch.cloud:9605/hessian");
+
+    @RequestMapping(path = "/login/test", method = RequestMethod.POST)
+    ResponseEntity<Object> login(
+            @RequestParam(value = "code", required = false) String code,
+            @RequestParam(value = "access_token", required = false) String token,
+            @RequestParam(value = "client_id", required = false) String id,
+            @RequestParam(value = "client_secret", required = false) String secret,
+            @RequestParam(value = "state", required = false) String state,
+            @RequestParam(value = "redirect_uri", required = false) String redirect_uri,
+            @RequestBody Object o
+    ) {
+
+        LOG.info("code: " + code);
+        LOG.info("token: " + token);
+        LOG.info("id: " + id);
+        LOG.info("secret: " + secret);
+        LOG.info("state: " + state);
+        LOG.info("redirect_uri: " + redirect_uri);
+        LOG.info("o: " + o);
+        return ResponseEntity.ok(o);
+    }
+
+    @RequestMapping(path = "/login/test1", method = RequestMethod.GET)
+    ResponseEntity<Object> login1(
+            @RequestParam(value = "code", required = false) String code,
+            @RequestParam(value = "access_token", required = false) String token,
+            @RequestParam(value = "client_id", required = false) String id,
+            @RequestParam(value = "client_secret", required = false) String secret,
+            @RequestParam(value = "state", required = false) String state,
+            @RequestParam(value = "redirect_uri", required = false) String redirect_uri,
+            @RequestBody Object o
+    ) {
+        LOG.info("code: " + code);
+        LOG.info("token: " + token);
+        LOG.info("id: " + id);
+        LOG.info("secret: " + secret);
+        LOG.info("state: " + state);
+        LOG.info("redirect_uri: " + redirect_uri);
+        LOG.info("o: " + o);
+        return ResponseEntity.ok(o);
+    }
 
     @Bean
     public ExitCodeGenerator exitCodeGenerator() {
