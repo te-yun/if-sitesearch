@@ -4,6 +4,10 @@ server {
 
     return 301 https://$host$request_uri;
 
+    location / {
+        proxy_pass https://sitesearch.info/;
+    }
+
     #    listen       443 ssl;
     #    server_name  localhost;
 
@@ -23,7 +27,7 @@ server {
     server_name dev.sitesearch.cloud;
 
     location / {
-        proxy_pass https://sitesearch.cloud;
+        proxy_pass https://sitesearch.info;
     }
 
     location /dev {
