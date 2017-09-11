@@ -17,12 +17,20 @@
 package com.intrafind.sitesearch;
 
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.Principal;
 
 @EnableOAuth2Sso
@@ -35,9 +43,57 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         return principal;
     }
 
+    @RequestMapping("api")
+    public String redirect() {
+        return "redirect:https://sitesearch.online";
+    }
+
+    @RequestMapping("api1")
+    public ModelAndView redirect1() {
+        return new ModelAndView("redirect:https://sitesearch.online");
+    }
+
+    @RequestMapping("api2")
+    public ResponseEntity<Object> redirectToExternalUrl() throws URISyntaxException {
+        URI uri = new URI("https://sitesearch.online");
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(uri);
+        return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
+    }
+
+    @RequestMapping("api22")
+    public ResponseEntity<Object> redirectToExternalUrl2() throws URISyntaxException {
+        URI uri = new URI("https://sitesearch.online");
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(uri);
+        return new ResponseEntity<>(httpHeaders, HttpStatus.MOVED_PERMANENTLY);
+    }
+
+    @RequestMapping("api222")
+    public ResponseEntity<Object> redirectToExternalUrl22() throws URISyntaxException {
+        URI uri = new URI("https://sitesearch.online");
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(uri);
+        return new ResponseEntity<>(httpHeaders, HttpStatus.FOUND);
+    }
+
+    @RequestMapping("api2222")
+    public ResponseEntity<Object> redirectToExternalUrl223() throws URISyntaxException {
+        URI uri = new URI("https://sitesearch.online");
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(uri);
+        return new ResponseEntity<>(httpHeaders, HttpStatus.MOVED_TEMPORARILY);
+    }
+
+    @RequestMapping("api3")
+    public void redirectToTwitter(HttpServletResponse httpServletResponse) throws IOException {
+        httpServletResponse.sendRedirect("https://sitesearch.online");
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .antMatcher("/**")
                 .csrf().disable()
                 .cors().and() // TODO check if this is the only required CORS enabler, and if the CORS enabler bean in the Application class can be removed
                 //                .antMatcher("/**")
