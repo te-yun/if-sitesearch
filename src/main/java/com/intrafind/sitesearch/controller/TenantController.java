@@ -59,19 +59,21 @@ public class TenantController {
         tenant.setProperty("company", tenantSiteAssignment.getCompany());
         tenant.setProperty("contactEmail", tenantSiteAssignment.getContactEmail());
 
-        final Entity authProvider = entityTxn.newEntity("AuthProvider");
-        authProvider.setProperty("id", tenantSiteAssignment.getAuthProviderId());
-        if (!entityTxn.find("AuthProvider", "id", tenantSiteAssignment.getAuthProviderId()).contains(authProvider)) {
+        LOG.info(entityTxn.find("AuthProvider", "id", tenantSiteAssignment.getAuthProviderId()).size() + " AUTH");
+        if (entityTxn.find("AuthProvider", "id", tenantSiteAssignment.getAuthProviderId()).isEmpty()) {
             LOG.info("DONE1");
+            final Entity authProvider = entityTxn.newEntity("AuthProvider");
+            authProvider.setProperty("id", tenantSiteAssignment.getAuthProviderId());
             tenant.addLink("authProvider", authProvider);   // TODO avoid duplicates // TODO add tests
             authProvider.addLink("tenant", tenant);
         }
 
-        final Entity site = entityTxn.newEntity("Site");
-        site.setProperty("id", siteId.toString());
-        site.setProperty("secret", siteSecret.toString());
-        if (!entityTxn.find("Site", "id", siteId.toString()).contains(site)) {
+        LOG.info(entityTxn.find("Site", "id", siteId.toString()).size() + " SITE");
+        if (entityTxn.find("Site", "id", siteId.toString()).isEmpty()) {
             LOG.info("DONE");
+            final Entity site = entityTxn.newEntity("Site");
+            site.setProperty("id", siteId.toString());
+            site.setProperty("secret", siteSecret.toString());
             tenant.addLink("site", site);   // TODO avoid duplicates // TODO add tests
             site.addLink("tenant", tenant);
         }
@@ -80,8 +82,6 @@ public class TenantController {
 
         final Entity assignedTenant = getTenant(id);
         LOG.info("tenantId: " + id.getLocalId());
-        LOG.info("authProviderId: " + authProvider.getId().getLocalId());
-        LOG.info("siteId: " + site.getId().getLocalId());
 
         return ResponseEntity
                 .created(URI.create("https://sitesearch.cloud/").resolve(String.valueOf(id.getLocalId())))
