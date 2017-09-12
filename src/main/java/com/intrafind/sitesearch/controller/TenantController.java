@@ -49,7 +49,9 @@ public class TenantController {
         // TODO introduce tenantSecret check
         // TODO prevent duplicate Assignments 204, or better NO_MODIFICATION
         final StoreTransaction entityTxn = ACID_PERSISTENCE_ENTITY.beginTransaction();
-        final Entity tenant = entityTxn.newEntity("Tenant");
+        final Entity tenant = entityTxn.find("Tenant", "id", tenantId.toString()).getFirst();
+//        final Entity tenant = entityTxn.newEntity("Tenant");
+
         final EntityId id = tenant.getId();
         tenant.setProperty("id", tenantId.toString());
         tenant.setProperty("company", tenantSiteAssignment.getCompany());
@@ -57,14 +59,41 @@ public class TenantController {
 
         final Entity authProvider = entityTxn.newEntity("AuthProvider");
         authProvider.setProperty("id", tenantSiteAssignment.getAuthProviderId());
-        tenant.addLink("authProvider", authProvider);
-        authProvider.addLink("tenant", tenant);
+
+//        LOG.info(">>>>>>>>>>>CONTAINS "+tenant.getLinks("authProvider").contains(authProvider));
+//        LOG.info(">>>>>>>>>>>CONTAINS- "+authProvider.getLinks("tenant").contains(tenant));
+
+//        tenant.getLinks("authProvider").forEach(entity -> {
+//        LOG.info(entityTxn.findLinks("Tenant", authProvider, "authProvider").size() + "1");
+//        LOG.info(entityTxn.findLinks("Tenant", authProvider, "tenant").size() + "2");
+        LOG.info(entityTxn.findLinks("AuthProvider", tenant, "tenant").size() + "|||||3");
+//        LOG.info(entityTxn.findLinks("AuthProvider", tenant, "authProvider").size() + "4");
+
+//        tenant.getLinks("authProvider").forEach(entity -> {
+//            if(entity.getProperty("id").equals(authProvider.getProperty("id"))){
+//                LOG.info("EQUALS: "+entity.getProperty("id").equals(authProvider.getProperty("id")));
+//
+//            }
+////            LOG.info("EQUALS1: "+entity.getProperty("id").toString().equals(authProvider.getProperty("id").toString()));
+//        });
+
+        if (!entityTxn.find("AuthProvider", "id", tenantSiteAssignment.getAuthProviderId()).contains(authProvider)) {
+            tenant.addLink("authProvider", authProvider);   // TODO avoid duplicates // TODO add tests
+            authProvider.addLink("tenant", tenant);
+        }
+
 
         final Entity site = entityTxn.newEntity("Site");
         site.setProperty("id", siteId.toString());
         site.setProperty("secret", siteSecret.toString());
-        tenant.addLink("site", site);
-        site.addLink("tenant", tenant);
+
+        LOG.info(entityTxn.findLinks("Site", tenant, "tenant").size() + "|||||4");
+        if (!entityTxn.find("Site", "id", siteId.toString()).contains(site)) {
+            tenant.addLink("site", site);   // TODO avoid duplicates // TODO add tests
+            site.addLink("tenant", tenant);
+        }
+//        LOG.info(">>>>>>>>>>>CONTAINS2 "+tenant.getLinks("site").contains(site));
+//        LOG.info(">>>>>>>>>>>CONTAINS2- "+site.getLinks("tenant").contains(tenant));
 
         entityTxn.commit();
 
