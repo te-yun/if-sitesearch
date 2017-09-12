@@ -74,14 +74,15 @@ public class TenantController {
         site.setProperty("id", siteId.toString());
         site.setProperty("secret", siteSecret.toString());
         tenant.addLink("site", site);
-        site.setLink("tenant", site);
+        site.addLink("tenant", tenant);
 
         entityTxn.commit();
+
         final Entity assignedTenant = getTenant(id);
         LOG.info("tenantId: " + id.getLocalId());
         LOG.info("authProviderId: " + authProvider.getId().getLocalId());
         LOG.info("siteId: " + site.getId().getLocalId());
-//        ACID_PERSISTENCE_ENTITY.close();
+
         return ResponseEntity
                 .created(URI.create("https://sitesearch.cloud/").resolve(String.valueOf(id.getLocalId())))
                 .build();
@@ -112,43 +113,19 @@ public class TenantController {
         LOG.info("accessToken: " + accessToken);
 
         final StoreTransaction findTxn = ACID_PERSISTENCE_ENTITY.beginReadonlyTransaction();
-        findTxn.getAll("AuthProvider").forEach(entity -> {
-            LOG.info("localId:" + entity.getId().getLocalId());
-            LOG.info("typeId:" + entity.getId().getTypeId());
-            LOG.info("id:" + entity.getProperty("id"));
-        });
         final EntityIterable authProviders = findTxn.find("AuthProvider", "id", provider + "." + providerId);
-        LOG.info("user.count(): " + authProviders.count());
-        LOG.info("user.size(): " + authProviders.size());
-        LOG.info("user.size(): " + authProviders.getRoughCount());
-        LOG.info("user.size(): " + authProviders.getRoughSize());
         authProviders.forEach(authProvider -> {
-            LOG.info("providerTechId: " + authProvider.getId().getLocalId());
-            LOG.info("providerTechId: " + authProvider.getId().getTypeId());
-            LOG.info("providerId: " + authProvider.getProperty("id"));
             tenantOverview.getAuthProviders().add(authProvider.getProperty("id").toString());
             authProvider.getLinks("tenant").forEach(tenant -> {
-                LOG.info("tenantTechId: " + tenant.getId().getLocalId());
-                LOG.info("tenantId: " + tenant.getProperty("id"));
-                LOG.info("company: " + tenant.getProperty("company"));
-                LOG.info("contactEmail: " + tenant.getProperty("contactEmail"));
                 TenantOverview.TenantInfo tenantInfo = new TenantOverview.TenantInfo(tenant.getProperty("company").toString(), tenant.getProperty("contactEmail").toString());
                 tenantOverview.getTenants().put(UUID.fromString(tenant.getProperty("id").toString()), tenantInfo);
-                tenant.getLinks("Site").forEach(site -> {
-                    LOG.info("siteTechId: " + site.getId().getLocalId());
-                    LOG.info("siteId: " + site.getProperty("id"));
-                    LOG.info("secret: " + site.getProperty("secret"));
+                tenant.getLinks("site").forEach(site -> {
                     tenantOverview.getSites().put(UUID.fromString(site.getProperty("id").toString()), UUID.fromString(site.getProperty("secret").toString()));
                 });
             });
         });
-//        findTxn.find("Tenant", )
-//        final Entity clientFetched = findTxn.getEntity(id);
+        findTxn.commit();
 
-//        final Entity assignedTenant = getTenant("");
-//        LOG.info("tenantId: " + id.getLocalId());
-//        LOG.info("authenticationId: " + authProvider.getId().getLocalId());
-//        LOG.info("siteId: " + site.getId().getLocalId());
         return ResponseEntity.ok(tenantOverview);
     }
 
