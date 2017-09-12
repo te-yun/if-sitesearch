@@ -19,7 +19,6 @@ package com.intrafind.sitesearch.dto;
 public class TenantSiteAssignment {
     private String company;
     private String contactEmail;
-
     private String authProviderId;
 
     private TenantSiteAssignment() {
