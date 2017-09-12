@@ -53,7 +53,6 @@
                 document.getElementById("authentication").textContent = "Sign-in";
             } else {
                 const user = JSON.parse(this.responseText);
-                console.warn("sign-out");
                 console.dirxml(user);
                 document.getElementById("user").textContent = user.userAuthentication.details.name;
                 document.getElementById("authentication").textContent = "Sign-out";
@@ -70,6 +69,9 @@
 <br>
 <br>
 <button id="authentication" onclick="authenticate()">Logout</button>
+
+<a href="/login">Login</a>
+<a href="/logout">Logout</a>
 
 <div style="float: right">
     <a href="privacy.html">Privacy</a> | <a href="tos.html">Terms</a>

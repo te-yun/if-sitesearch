@@ -39,11 +39,11 @@ import java.util.UUID;
 @RestController
 @RequestMapping(SearchController.ENDPOINT)
 public class SearchController {
-    public static final Environment ACID_PERSISTENCE = Environments.newContextualInstance("data/environment");
+    public static final Environment ACID_PERSISTENCE_ENVIRONMENT = Environments.newContextualInstance("data/environment");
 
     static { // to initialize the store, required for virgin CI runs
-        ACID_PERSISTENCE.executeInTransaction(txn -> {
-            ACID_PERSISTENCE.openStore(StatsController.QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
+        ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
+            ACID_PERSISTENCE_ENVIRONMENT.openStore(StatsController.QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
         });
     }
 
@@ -79,8 +79,8 @@ public class SearchController {
         } else {
             if (queryCountEnabled) {
                 final ArrayByteIterable readableTenantId = StringBinding.stringToEntry(tenantId.toString());
-                ACID_PERSISTENCE.executeInTransaction(txn -> {
-                    final Store store = ACID_PERSISTENCE.openStore(StatsController.QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
+                ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
+                    final Store store = ACID_PERSISTENCE_ENVIRONMENT.openStore(StatsController.QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
                     long queryCount = 0;
                     final ByteIterable tenantQueryCount = store.get(txn, readableTenantId);
                     if (tenantQueryCount != null) {

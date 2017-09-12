@@ -17,75 +17,73 @@
 package com.intrafind.sitesearch.controller;
 
 import com.intrafind.sitesearch.dto.TenantSiteAssignment;
-import jetbrains.exodus.core.crypto.MessageDigestUtil;
 import jetbrains.exodus.entitystore.*;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
-import java.util.Collections;
 import java.util.UUID;
 
-@CrossOrigin
 @RestController
 @RequestMapping(TenantController.ENDPOINT)
 public class TenantController {
     public static final String ENDPOINT = "/tenants";
     private static final Logger LOG = LoggerFactory.getLogger(TenantController.class);
-    private static final PersistentEntityStore ACID_PERSISTENCE_ENTITY = PersistentEntityStores.newInstance("data/entity");
+    public static final PersistentEntityStore ACID_PERSISTENCE_ENTITY = PersistentEntityStores.newInstance("data/entity");
+    RestTemplate caller = new RestTemplate();
 
-    @RequestMapping(path = "/{tenantId}/{siteId}/assign", method = RequestMethod.POST)
+    @RequestMapping(path = "{tenantId}/{siteId}/assign", method = RequestMethod.POST)
     ResponseEntity<TenantSiteAssignment> assignSite(
-            @PathVariable(value = "tenantId") long tenantId,
+            @PathVariable(value = "tenantId") UUID tenantId,
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "siteSecret") UUID siteSecret,
             @RequestBody TenantSiteAssignment tenantSiteAssignment
     ) {
         final StoreTransaction entityTxn = ACID_PERSISTENCE_ENTITY.beginTransaction();
         final Entity tenant = entityTxn.newEntity("Tenant");
+//        final String passwordSalt = MessageDigestUtil.sha256(Double.valueOf(Math.random()).toString());
         final EntityId id = tenant.getId();
-        final String salt = MessageDigestUtil.sha256(Double.valueOf(Math.random()).toString());
+        tenant.setProperty("id", tenantId.toString());
         tenant.setProperty("company", tenantSiteAssignment.getCompany());
-        tenant.setProperty("salt", salt);
+//        tenant.setProperty("passwordSalt", passwordSalt);
+//        tenant.setProperty("password", MessageDigestUtil.sha256(passwordSalt + siteSecret));
+        tenant.setProperty("contactEmail", tenantSiteAssignment.getContactEmail());
 
-        final Entity authentication = entityTxn.newEntity("Authentication");
-        authentication.setProperty("provider", "github");
-        authentication.setProperty("email", "userAuthentication.details.email alexander.orlov@loxal.net");
-        authentication.setProperty("name", "userAuthentication.details.name Alexander Orlov");
-        authentication.setProperty("company", "userAuthentication.details.company loxal");
-        authentication.setProperty("id", "userAuthentication.details.id 87507");
-        authentication.setProperty("login", "userAuthentication.details.login loxal");
-        tenant.addLink("authentication", authentication);
-        authentication.setLink("tenant", tenant);
+        final Entity authProvider = entityTxn.newEntity("AuthProvider");
+        authProvider.setProperty("provider", "github");
+//        authProvider.setProperty("email", "userAuthentication.details.email alexander.orlov@loxal.net");
+//        authProvider.setProperty("name", "userAuthentication.details.name Alexander Orlov");
+//        authProvider.setProperty("company", "userAuthentication.details.company loxal");
+//        authProvider.setProperty("id", "userAuthentication.details.id 87507");
+        authProvider.setProperty("id", tenantSiteAssignment.getAuthProviderId());
+//        authProvider.setProperty("login", "userAuthentication.details.login loxal");
+        tenant.addLink("authProvider", authProvider);
+        authProvider.setLink("tenant", tenant);
 
-        tenant.setProperty("password", MessageDigestUtil.sha256(salt + siteSecret));
-        tenant.setProperty("email", tenantSiteAssignment.getEmail());
-//        final Entity clientFetched = entityTxn.getEntity(id);
-//        clientFetched.getPropertyNames().forEach(property -> {
-//            LOG.info("property.............: " + property);
-//            LOG.info("property value..............: " + clientFetched.getProperty(property));
-//        });
-//
-//        clientFetched.getLinkNames().forEach(
-//                s -> {
-//                    LOG.info("s: " + s);
-//                    LOG.info("clientFetched.getLink(s): " + clientFetched.getLink(s));
-//                }
-//                );
+        final Entity site = entityTxn.newEntity("Site");
+        site.setProperty("id", siteId.toString());
+        site.setProperty("secret", siteSecret.toString());
+        tenant.addLink("site", site);
+        site.setLink("tenant", site);
 
         entityTxn.commit();
-        ACID_PERSISTENCE_ENTITY.close();
+        final Entity assignedTenant = getTenant(id);
+        LOG.info("tenantId: " + id.getLocalId());
+        LOG.info("authenticationId: " + authProvider.getId().getLocalId());
+        LOG.info("siteId: " + site.getId().getLocalId());
+//        ACID_PERSISTENCE_ENTITY.close();
+        return ResponseEntity
+                .created(URI.create("https://sitesearch.cloud/").resolve(String.valueOf(id.getLocalId())))
+                .build();
+    }
 
-        return ResponseEntity.created(URI.create("https://sitesearch.cloud/").resolve(String.valueOf(id.getLocalId())))
-                .body(new TenantSiteAssignment(
-                        Collections.emptyList(),
-                        id.getLocalId(),
-                        "salt",
-                        "company",
-                        "password",
-                        "alexandder.orlov@intrafind.de"
-                ));
+    private Entity getTenant(@NotNull EntityId id) {
+        final StoreTransaction readTxn = ACID_PERSISTENCE_ENTITY.beginReadonlyTransaction();
+        final Entity clientFetched = readTxn.getEntity(id);
+        return clientFetched;
     }
 }

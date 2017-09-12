@@ -72,18 +72,18 @@ public class StatsController {
             @RequestParam(value = "tenantId") UUID tenantId
     ) {
         final AtomicLong queryCount = new AtomicLong();
-//        Environment ACID_PERSISTENCE = Environments.newInstance("data");
+//        Environment ACID_PERSISTENCE_ENVIRONMENT = Environments.newInstance("data");
 //        final ContextualEnvironment contextualEnvironment = Environments.newContextualInstance("data");
-//       SearchController. ACID_PERSISTENCE.executeInTransaction(txn -> {
+//       SearchController. ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
         final ArrayByteIterable readableTenantId = StringBinding.stringToEntry(tenantId.toString());
-        SearchController.ACID_PERSISTENCE.executeInReadonlyTransaction(txn -> {  // TODO make this a readonly tx
-            final Store store = SearchController.ACID_PERSISTENCE.openStore(QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
+        SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInReadonlyTransaction(txn -> {  // TODO make this a readonly tx
+            final Store store = SearchController.ACID_PERSISTENCE_ENVIRONMENT.openStore(QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
             final ByteIterable queryCountValue = store.get(txn, readableTenantId);
             if (queryCountValue != null) {
                 queryCount.set(LongBinding.entryToLong(queryCountValue));
             }
         });
-//        SearchController.ACID_PERSISTENCE.close();
+//        SearchController.ACID_PERSISTENCE_ENVIRONMENT.close();
         return ResponseEntity.ok(new Stats(System.getenv("BUILD_NUMBER"), System.getenv("SCM_HASH"), queryCount.get()));
     }
 }

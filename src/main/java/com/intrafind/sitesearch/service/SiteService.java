@@ -98,7 +98,7 @@ public class SiteService {
         final ArrayByteIterable readableTenantId = StringBinding.stringToEntry(tenantId.toString());
         String siteId = Site.hashSiteId(tenantId, site.getUrl());
 
-        SearchController.ACID_PERSISTENCE.executeInTransaction(txn -> {
+        SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
             Document indexable = new Document(siteId);
             indexable.set(Fields.BODY, site.getBody());
             indexable.set(Fields.TITLE, site.getTitle());
@@ -133,8 +133,8 @@ public class SiteService {
     private Optional<UUID> fetchTenantSecret(UUID tenantId) {
         final ArrayByteIterable readableTenantId = StringBinding.stringToEntry(tenantId.toString());
         final ByteIterable[] tenantSecret = new ByteIterable[1];
-        SearchController.ACID_PERSISTENCE.executeInReadonlyTransaction(txn -> {
-            Store store = SearchController.ACID_PERSISTENCE.openStore(TENANT_SECRET_FIELD, StoreConfig.WITHOUT_DUPLICATES, txn);
+        SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInReadonlyTransaction(txn -> {
+            Store store = SearchController.ACID_PERSISTENCE_ENVIRONMENT.openStore(TENANT_SECRET_FIELD, StoreConfig.WITHOUT_DUPLICATES, txn);
             tenantSecret[0] = store.get(txn, readableTenantId);
         });
         if (tenantSecret[0] != null) {
@@ -219,13 +219,13 @@ public class SiteService {
     private void storeTenantSecret(UUID tenantId, UUID tenantSecret) {
         final ArrayByteIterable iterableTenantId = StringBinding.stringToEntry(tenantId.toString());
 
-        SearchController.ACID_PERSISTENCE.executeInTransaction(txn -> {
+        SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
             storeTenantSecret(iterableTenantId, txn, tenantSecret);
         });
     }
 
     private void storeTenantSecret(ArrayByteIterable readableTenantId, @NotNull Transaction txn, UUID tenantSecret) {
-        Store store = SearchController.ACID_PERSISTENCE.openStore(TENANT_SECRET_FIELD, StoreConfig.WITHOUT_DUPLICATES, txn);
+        Store store = SearchController.ACID_PERSISTENCE_ENVIRONMENT.openStore(TENANT_SECRET_FIELD, StoreConfig.WITHOUT_DUPLICATES, txn);
         store.put(txn, readableTenantId, StringBinding.stringToEntry(tenantSecret.toString()));
     }
 

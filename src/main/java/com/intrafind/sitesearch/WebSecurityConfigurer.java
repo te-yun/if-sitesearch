@@ -23,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -36,6 +37,7 @@ import java.security.Principal;
 @EnableOAuth2Sso
 @EnableWebSecurity
 @RestController
+@CrossOrigin
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @RequestMapping("user")
@@ -66,66 +68,15 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         http
                 .antMatcher("/**")
                 .csrf().disable()
-                .cors().and() // TODO check if this is the only required CORS enabler, and if the CORS enabler bean in the Application class can be removed
+//                .cors().and() // TODO check if this is the only required CORS enabler, and if the CORS enabler bean in the Application class can be removed
                 //                .antMatcher("/**")
                 .authorizeRequests()
                 .antMatchers(
                         "/**",
-                        //                        "/",
-                        //                        "/login**",
-                        //                        "/webjars/**",
-                        //                        "/sites/**",
-                        //                        "/sites/*",
-                        //                        "/sites",
-                        //                        "/si*",
-                        ////                        "/sites/rss/**",
-                        //                        "/search/**",
-                        //                        "/search/*",
-                        //                        "/search/",
-                        //                        "/sea**",
-                        ////                        "/stats/**",
-                        ////                        "/searchbar/**",
-                        ////                        "/admin/**",
-                        ////                        "/dev/**",
-                        ////                        "/gadget/**",
-                        ////                        "/img/**",
-                        ////                        "/searchbar-config/**",
-                        ////                        "/theme/**",
                         "/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs"
                 )
                 .permitAll()
-
-        //                .anyRequest()
-        //                .authenticated();
-
-
-        //                .httpBasic()
-        //                .and()
-        //                .antMatcher("/**")
-        //                .authorizeRequests()
-        //                .antMatchers(
-        //                        "/**", "/login**", "/webjars/**",
-        //                        "/sites/**",
-        //                        "/sites/rss/**",
-        //                        "/search/**",
-        //                        "/stats/**",
-        //                        "/searchbar/**",
-        //                        "/admin/**",
-        //                        "/dev/**",
-        //                        "/gadget/**",
-        //                        "/img/**",
-        //                        "/searchbar-config/**",
-        //                        "/theme/**",
-        //                        "/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs"
-        //                )
-        //                .permitAll()
-        //                .anyRequest().authenticated()
-        //                .and().exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/"))
-        //                .and().logout().logoutSuccessUrl("/start.html").permitAll()
-        //                .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-        //                .ignoringAntMatchers("/clients/**", "/otherprotectedclients/**")
-        //                .and().addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class)
-        //                .and().addFilterAfter(ssoFilter())
+                .and().logout().logoutSuccessUrl("/")
         ;
     }
 }

@@ -16,51 +16,27 @@
 
 package com.intrafind.sitesearch.dto;
 
-import java.util.List;
-import java.util.UUID;
-
 public class TenantSiteAssignment {
-    private List<UUID> sites;
-    private long id;
-    private String salt;
     private String company;
-    private String password;
-    private String email;
+    private String contactEmail;
+
+    private String authProviderId;
 
     private TenantSiteAssignment() {
     }
 
-    public TenantSiteAssignment(List<UUID> sites, long id, String salt, String company, String password, String email) {
-        this.sites = sites;
-        this.id = id;
-        this.salt = salt;
+    public TenantSiteAssignment(String company, String contactEmail, String authProviderId) {
         this.company = company;
-        this.password = password;
-        this.email = email;
+        this.contactEmail = contactEmail;
+        this.authProviderId = authProviderId;
     }
 
-    public List<UUID> getSites() {
-        return sites;
+    public String getAuthProviderId() {
+        return authProviderId;
     }
 
-    public void setSites(List<UUID> sites) {
-        this.sites = sites;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
+    public void setAuthProviderId(String authProviderId) {
+        this.authProviderId = authProviderId;
     }
 
     public String getCompany() {
@@ -71,19 +47,11 @@ public class TenantSiteAssignment {
         this.company = company;
     }
 
-    public String getPassword() {
-        return password;
+    public String getContactEmail() {
+        return contactEmail;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setContactEmail(String contactEmail) {
+        this.contactEmail = contactEmail;
     }
 }
