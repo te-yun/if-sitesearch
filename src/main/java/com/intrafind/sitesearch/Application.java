@@ -23,15 +23,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.web.DefaultErrorAttributes;
+import org.springframework.boot.autoconfigure.web.ErrorAttributes;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.ContextClosedEvent;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestAttributes;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import javax.servlet.RequestDispatcher;
 import java.net.URI;
+import java.util.Map;
 
 @SpringBootApplication
 @RestController
@@ -39,6 +45,34 @@ import java.net.URI;
 public class Application {
     private final static Logger LOG = LoggerFactory.getLogger(Application.class);
     public static final URI IFINDER_CORE = URI.create("http://" + System.getenv("SECURITY_USER_PASSWORD") + ":" + System.getenv("SECURITY_USER_PASSWORD") + "@sitesearch.cloud:9605/hessian");
+
+    @Bean
+    public ErrorAttributes overrideDefaultErrorReporting() {
+        return new DefaultErrorAttributes() {
+            @Override
+            public Map<String, Object> getErrorAttributes(RequestAttributes requestAttributes, boolean includeStackTrace) {
+                Map<String, Object> errorAttributes = super.getErrorAttributes(requestAttributes, includeStackTrace);
+                Object errorMessage = requestAttributes.getAttribute(RequestDispatcher.ERROR_MESSAGE, RequestAttributes.SCOPE_REQUEST);
+                if (errorMessage != null) {
+                    switch (errorAttributes.get("status").toString()) {
+                        case "400":
+                            errorAttributes.put("code", "SS-400-CLIENT_ERROR-RECOVERABLE");
+                            break;
+                        case "404":
+                            errorAttributes.put("code", "SS-404-CLIENT_ERROR-NOT_FOUND");
+                            break;
+                        case "500":
+                            errorAttributes.put("code", "SS-500-SERVER_ERROR-NON_RECOVERABLE");
+                            break;
+                        default:
+                            errorAttributes.put("code", "SS-UNKNOWN");
+                    }
+                    LOG.info(errorAttributes.get("status").toString());
+                }
+                return errorAttributes;
+            }
+        };
+    }
 
     @RequestMapping(path = "/login/test", method = RequestMethod.POST)
     ResponseEntity<Object> login(
@@ -58,7 +92,9 @@ public class Application {
         LOG.info("state: " + state);
         LOG.info("redirect_uri: " + redirect_uri);
         LOG.info("o: " + o);
-        return ResponseEntity.ok(o);
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body("Error Message");
     }
 
     @RequestMapping(path = "/login/test1", method = RequestMethod.GET)
