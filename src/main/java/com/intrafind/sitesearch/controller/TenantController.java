@@ -50,23 +50,13 @@ public class TenantController {
         // TODO prevent duplicate Assignments 204, or better NO_MODIFICATION
         final StoreTransaction entityTxn = ACID_PERSISTENCE_ENTITY.beginTransaction();
         final Entity tenant = entityTxn.newEntity("Tenant");
-//        final String passwordSalt = MessageDigestUtil.sha256(Double.valueOf(Math.random()).toString());
         final EntityId id = tenant.getId();
         tenant.setProperty("id", tenantId.toString());
         tenant.setProperty("company", tenantSiteAssignment.getCompany());
-//        tenant.setProperty("passwordSalt", passwordSalt);
-//        tenant.setProperty("password", MessageDigestUtil.sha256(passwordSalt + siteSecret));
         tenant.setProperty("contactEmail", tenantSiteAssignment.getContactEmail());
 
         final Entity authProvider = entityTxn.newEntity("AuthProvider");
         authProvider.setProperty("id", tenantSiteAssignment.getAuthProviderId());
-//        authProvider.setProperty("provider", "github");
-//        authProvider.setProperty("email", "userAuthentication.details.email alexander.orlov@loxal.net");
-//        authProvider.setProperty("name", "userAuthentication.details.name Alexander Orlov");
-//        authProvider.setProperty("company", "userAuthentication.details.company loxal");
-//        authProvider.setProperty("id", "userAuthentication.details.id 87507");
-//        authProvider.setProperty("id", tenantSiteAssignment.getAuthProviderId());
-//        authProvider.setProperty("login", "userAuthentication.details.login loxal");
         tenant.addLink("authProvider", authProvider);
         authProvider.addLink("tenant", tenant);
 
