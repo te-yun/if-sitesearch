@@ -21,7 +21,6 @@ import com.google.common.collect.Maps;
 import com.intrafind.sitesearch.dto.TenantOverview;
 import com.intrafind.sitesearch.dto.TenantSiteAssignment;
 import jetbrains.exodus.entitystore.*;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -32,73 +31,66 @@ import java.net.URI;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(TenantController.ENDPOINT)
 public class TenantController {
-    public static final String ENDPOINT = "/tenants";
+    public static final String ENDPOINT = "/assignments";
     private static final Logger LOG = LoggerFactory.getLogger(TenantController.class);
-    public static final PersistentEntityStore ACID_PERSISTENCE_ENTITY = PersistentEntityStores.newInstance("data/entity");
+    //    public static final PersistentEntityStore ACID_PERSISTENCE_ENTITY = PersistentEntityStores.newInstance("data/entity");
+//    public static final PersistentEntityStore ACID_PERSISTENCE_ENTITY = PersistentEntityStores.newInstance(SearchController.ACID_PERSISTENCE_ENVIRONMENT);
+    public static final PersistentEntityStore ACID_PERSISTENCE_ENTITY = PersistentEntityStores.newInstance(SearchController.ACID_PERSISTENCE_ENVIRONMENT, "administration");
     RestTemplate caller = new RestTemplate();
 
-    @RequestMapping(path = "{tenantId}/sites/{siteId}/assign", method = RequestMethod.POST)
+    // TODO add /tenant endpoint infix
+    @RequestMapping(path = ENDPOINT + "/{tenantId}/sites/{siteId}", method = RequestMethod.POST)
     ResponseEntity<TenantSiteAssignment> assignSite(
-            @PathVariable(value = "tenantId") UUID tenantId,
+            @PathVariable(value = "tenantId", required = false) UUID tenantId,
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "siteSecret") UUID siteSecret,
             @RequestBody TenantSiteAssignment tenantSiteAssignment
     ) {
+        if (tenantId == null) {
+            tenantId = UUID.randomUUID(); // TODO temporary, take the actual value once a way is implemented to verify that a tenant belongs to a user
+        }
         // TODO introduce tenantSecret check
         // TODO prevent duplicate Assignments 204, or better NO_MODIFICATION
         final StoreTransaction entityTxn = ACID_PERSISTENCE_ENTITY.beginTransaction();
         Entity tenant = entityTxn.find("Tenant", "id", tenantId.toString()).getFirst();
         if (tenant == null) {
             tenant = entityTxn.newEntity("Tenant");
+            tenant.setProperty("id", tenantId.toString());
         }
         // TODO create tenant when it does not exist
-        final EntityId id = tenant.getId();
-        tenant.setProperty("id", tenantId.toString());
         tenant.setProperty("company", tenantSiteAssignment.getCompany());
         tenant.setProperty("contactEmail", tenantSiteAssignment.getContactEmail());
 
-        LOG.info(entityTxn.find("AuthProvider", "id", tenantSiteAssignment.getAuthProviderId()).size() + " AUTH");
-        if (entityTxn.find("AuthProvider", "id", tenantSiteAssignment.getAuthProviderId()).isEmpty()) {
-            LOG.info("DONE1");
-            final Entity authProvider = entityTxn.newEntity("AuthProvider");
+        LOG.warn(entityTxn.find("AuthProvider", "id", tenantSiteAssignment.getAuthProviderId()).size() + " AUTHS");
+        Entity authProvider = entityTxn.find("AuthProvider", "id", tenantSiteAssignment.getAuthProviderId()).getFirst();
+        if (authProvider == null) {
+            authProvider = entityTxn.newEntity("AuthProvider");
             authProvider.setProperty("id", tenantSiteAssignment.getAuthProviderId());
-            tenant.addLink("authProvider", authProvider);   // TODO avoid duplicates // TODO add tests
-            authProvider.addLink("tenant", tenant);
         }
+        tenant.addLink("authProvider", authProvider);   // TODO avoid duplicates // TODO add tests
+        authProvider.addLink("tenant", tenant);
 
-        LOG.info(entityTxn.find("Site", "id", siteId.toString()).size() + " SITE");
-        if (entityTxn.find("Site", "id", siteId.toString()).isEmpty()) {
-            LOG.info("DONE");
-            final Entity site = entityTxn.newEntity("Site");
+        LOG.warn(entityTxn.find("Site", "id", siteId.toString()).size() + " SITES");
+        Entity site = entityTxn.find("Site", "id", siteId.toString()).getFirst();
+        if (site == null) {
+            site = entityTxn.newEntity("Site");
             site.setProperty("id", siteId.toString());
             site.setProperty("secret", siteSecret.toString());
-            tenant.addLink("site", site);   // TODO avoid duplicates // TODO add tests
-            site.addLink("tenant", tenant);
         }
+        tenant.addLink("site", site);   // TODO avoid duplicates // TODO add tests
+        site.addLink("tenant", tenant);
 
         entityTxn.commit();
 
-        final Entity assignedTenant = getTenant(id);
-        LOG.info("tenantId: " + id.getLocalId());
-
         return ResponseEntity
-                .created(URI.create("https://sitesearch.cloud/").resolve(String.valueOf(id.getLocalId())))
+                .created(URI.create("https://sitesearch.cloud/authentication-providers/").resolve(tenantSiteAssignment.getAuthProviderId()))
                 .build();
     }
 
-    private Entity getTenant(@NotNull EntityId id) {
-        final StoreTransaction readTxn = ACID_PERSISTENCE_ENTITY.beginReadonlyTransaction();
-        final Entity clientFetched = readTxn.getEntity(id);
-        return clientFetched;
-    }
-
-    @RequestMapping(path = "{tenantId}/auth-providers/{provider}/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "/authentication-providers/{providerId}", method = RequestMethod.GET)
     ResponseEntity<TenantOverview> obtainTenantOverview(
-            @PathVariable(value = "tenantId") UUID tenantId,
-            @PathVariable(value = "provider") String provider,
-            @PathVariable(value = "id") String providerId,
+            @PathVariable(value = "providerId") String providerId,
             @RequestParam(value = "accessToken") String accessToken
     ) {
         // TODO introduce check against oAuth endpoint
@@ -107,13 +99,12 @@ public class TenantController {
                 Maps.newHashMap(),
                 Lists.newArrayList()
         );
-        LOG.info("tenantId: " + tenantId);
-        LOG.info("provider: " + provider);
         LOG.info("providerId: " + providerId);
         LOG.info("accessToken: " + accessToken);
 
         final StoreTransaction findTxn = ACID_PERSISTENCE_ENTITY.beginReadonlyTransaction();
-        final EntityIterable authProviders = findTxn.find("AuthProvider", "id", provider + "." + providerId);
+        final EntityIterable authProviders = findTxn.find("AuthProvider", "id", providerId);
+        LOG.info(authProviders.size() + "SIZE");
         authProviders.forEach(authProvider -> {
             tenantOverview.getAuthProviders().add(authProvider.getProperty("id").toString());
             authProvider.getLinks("tenant").forEach(tenant -> {

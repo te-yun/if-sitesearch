@@ -67,7 +67,6 @@ public class Application {
                         default:
                             errorAttributes.put("code", "SS-UNKNOWN");
                     }
-                    LOG.info(errorAttributes.get("status").toString());
                 }
                 return errorAttributes;
             }
