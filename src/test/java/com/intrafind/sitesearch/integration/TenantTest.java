@@ -133,9 +133,10 @@ public class TenantTest {
     }
 
     private ResponseEntity assignTenantAndSiteToAuthProvider(UUID tenantId, UUID siteId, UUID siteSecret, String authProvider) {
-        return caller.postForEntity(
-                TenantController.ENDPOINT + "/" + tenantId + "/sites/" + siteId + "?siteSecret=" + siteSecret,
-                new TenantSiteAssignment("IntraFind Software AG", "alexander.orlov@intrafind.de", authProvider),
+        return caller.exchange(
+                TenantController.ENDPOINT + "/tenants/" + tenantId + "/sites/" + siteId + "?siteSecret=" + siteSecret,
+                HttpMethod.PUT,
+                new HttpEntity<>(new TenantSiteAssignment("IntraFind Software AG", "alexander.orlov@intrafind.de", authProvider)),
                 TenantSiteAssignment.class
         );
     }

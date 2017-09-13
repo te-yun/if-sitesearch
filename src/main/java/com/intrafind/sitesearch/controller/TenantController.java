@@ -23,8 +23,10 @@ import com.intrafind.sitesearch.dto.TenantSiteAssignment;
 import jetbrains.exodus.entitystore.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
@@ -40,16 +42,16 @@ public class TenantController {
     RestTemplate caller = new RestTemplate();
 
     // TODO add /tenant endpoint infix
-    @RequestMapping(path = ENDPOINT + "/{tenantId}/sites/{siteId}", method = RequestMethod.POST)
+    @RequestMapping(path = ENDPOINT + "/tenants/{tenantId}/sites/{siteId}", method = RequestMethod.PUT)
     ResponseEntity<TenantSiteAssignment> assignSite(
-            @PathVariable(value = "tenantId", required = false) UUID tenantId,
+            @PathVariable(value = "tenantId") UUID tenantId, // TODO temporary, take the passed value... once a way is implemented to verify that a tenant belongs to a user
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "siteSecret") UUID siteSecret,
             @RequestBody TenantSiteAssignment tenantSiteAssignment
     ) {
-        if (tenantId == null) {
-            tenantId = UUID.randomUUID(); // TODO temporary, take the actual value once a way is implemented to verify that a tenant belongs to a user
-        }
+//        if (tenantId == null) {
+//            tenantId = UUID.randomUUID();
+//        }
         // TODO introduce tenantSecret check
         // TODO prevent duplicate Assignments 204, or better NO_MODIFICATION
         final StoreTransaction entityTxn = ACID_PERSISTENCE_ENTITY.beginTransaction();
@@ -62,7 +64,9 @@ public class TenantController {
         tenant.setProperty("company", tenantSiteAssignment.getCompany());
         tenant.setProperty("contactEmail", tenantSiteAssignment.getContactEmail());
 
-        LOG.warn(entityTxn.find("AuthProvider", "id", tenantSiteAssignment.getAuthProviderId()).size() + " AUTHS");
+        if (entityTxn.find("AuthProvider", "id", tenantSiteAssignment.getAuthProviderId()).size() > 1) {
+            throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Duplicate AuthProvider ID found: " + tenantSiteAssignment.getAuthProviderId());
+        }
         Entity authProvider = entityTxn.find("AuthProvider", "id", tenantSiteAssignment.getAuthProviderId()).getFirst();
         if (authProvider == null) {
             authProvider = entityTxn.newEntity("AuthProvider");
@@ -71,7 +75,9 @@ public class TenantController {
         tenant.addLink("authProvider", authProvider);   // TODO avoid duplicates // TODO add tests
         authProvider.addLink("tenant", tenant);
 
-        LOG.warn(entityTxn.find("Site", "id", siteId.toString()).size() + " SITES");
+        if (entityTxn.find("Site", "id", siteId.toString()).size() > 1) {
+            throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Duplicate Site ID found: " + siteId.toString());
+        }
         Entity site = entityTxn.find("Site", "id", siteId.toString()).getFirst();
         if (site == null) {
             site = entityTxn.newEntity("Site");
@@ -84,7 +90,7 @@ public class TenantController {
         entityTxn.commit();
 
         return ResponseEntity
-                .created(URI.create("https://sitesearch.cloud/authentication-providers/").resolve(tenantSiteAssignment.getAuthProviderId()))
+                .created(URI.create("https://sitesearch.cloud/assignments/authentication-providers/").resolve(tenantSiteAssignment.getAuthProviderId()))
                 .build();
     }
 
@@ -104,7 +110,6 @@ public class TenantController {
 
         final StoreTransaction findTxn = ACID_PERSISTENCE_ENTITY.beginReadonlyTransaction();
         final EntityIterable authProviders = findTxn.find("AuthProvider", "id", providerId);
-        LOG.info(authProviders.size() + "SIZE");
         authProviders.forEach(authProvider -> {
             tenantOverview.getAuthProviders().add(authProvider.getProperty("id").toString());
             authProvider.getLinks("tenant").forEach(tenant -> {
