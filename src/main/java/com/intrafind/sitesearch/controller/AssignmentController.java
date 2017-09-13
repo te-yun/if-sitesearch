@@ -20,7 +20,11 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.intrafind.sitesearch.dto.TenantOverview;
 import com.intrafind.sitesearch.dto.TenantSiteAssignment;
+import com.intrafind.sitesearch.service.SiteService;
+import jetbrains.exodus.bindings.StringBinding;
 import jetbrains.exodus.entitystore.*;
+import jetbrains.exodus.env.Store;
+import jetbrains.exodus.env.StoreConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -33,11 +37,9 @@ import java.net.URI;
 import java.util.UUID;
 
 @RestController
-public class TenantController {
+public class AssignmentController {
     public static final String ENDPOINT = "/assignments";
-    private static final Logger LOG = LoggerFactory.getLogger(TenantController.class);
-    //    public static final PersistentEntityStore ACID_PERSISTENCE_ENTITY = PersistentEntityStores.newInstance("data/entity");
-//    public static final PersistentEntityStore ACID_PERSISTENCE_ENTITY = PersistentEntityStores.newInstance(SearchController.ACID_PERSISTENCE_ENVIRONMENT);
+    private static final Logger LOG = LoggerFactory.getLogger(AssignmentController.class);
     public static final PersistentEntityStore ACID_PERSISTENCE_ENTITY = PersistentEntityStores.newInstance(SearchController.ACID_PERSISTENCE_ENVIRONMENT, "administration");
     RestTemplate caller = new RestTemplate();
 
@@ -49,9 +51,13 @@ public class TenantController {
             @RequestParam(value = "siteSecret") UUID siteSecret,
             @RequestBody TenantSiteAssignment tenantSiteAssignment
     ) {
-//        if (tenantId == null) {
-//            tenantId = UUID.randomUUID();
-//        }
+        final UUID obtainedSiteSecret = obtainSiteSecret(siteId);
+        LOG.info(obtainedSiteSecret.toString());
+
+        if (!obtainedSiteSecret.equals(siteSecret)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
         // TODO introduce tenantSecret check
         // TODO prevent duplicate Assignments 204, or better NO_MODIFICATION
         final StoreTransaction entityTxn = ACID_PERSISTENCE_ENTITY.beginTransaction();
@@ -92,6 +98,13 @@ public class TenantController {
         return ResponseEntity
                 .created(URI.create("https://sitesearch.cloud/assignments/authentication-providers/").resolve(tenantSiteAssignment.getAuthProviderId()))
                 .build();
+    }
+
+    private UUID obtainSiteSecret(UUID siteId) {
+        return UUID.fromString(SearchController.ACID_PERSISTENCE_ENVIRONMENT.computeInReadonlyTransaction(txn -> {
+            Store store = SearchController.ACID_PERSISTENCE_ENVIRONMENT.openStore(SiteService.TENANT_SECRET_FIELD, StoreConfig.WITHOUT_DUPLICATES, txn);
+            return StringBinding.entryToString(store.get(txn, StringBinding.stringToEntry(siteId.toString())));
+        }));
     }
 
     @RequestMapping(path = "/authentication-providers/{providerId}", method = RequestMethod.GET)

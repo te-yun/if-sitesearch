@@ -16,8 +16,8 @@
 
 package com.intrafind.sitesearch.integration;
 
+import com.intrafind.sitesearch.controller.AssignmentController;
 import com.intrafind.sitesearch.controller.SiteController;
-import com.intrafind.sitesearch.controller.TenantController;
 import com.intrafind.sitesearch.dto.Site;
 import com.intrafind.sitesearch.dto.TenantOverview;
 import com.intrafind.sitesearch.dto.TenantSiteAssignment;
@@ -40,8 +40,8 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class TenantTest {
-    private static final Logger LOG = LoggerFactory.getLogger(TenantTest.class);
+public class AssignmentIntegration {
+    private static final Logger LOG = LoggerFactory.getLogger(AssignmentIntegration.class);
     @Autowired
     private TestRestTemplate caller;
 
@@ -105,6 +105,12 @@ public class TenantTest {
         assertEquals(HttpStatus.CREATED, additionalTenantAdditionWithAdditionalSite.getStatusCode());
         final ResponseEntity<TenantOverview> additionalTenantAddedWithAdditionalSite = obtainAuthProvidersAssignments(authProvider);
         assureSingleSimpleAssignment(additionalTenantAddedWithAdditionalSite, 3, 3);
+
+        // siteSecret does not match siteId's secret
+        UUID invalidSiteSecret = UUID.randomUUID();
+        final ResponseEntity invalidSiteSecretSubmission = assignTenantAndSiteToAuthProvider(tenantId, anotherAdditionalSiteViaPageCreation.getTenantId(), invalidSiteSecret, authProvider);
+        assertEquals(HttpStatus.FORBIDDEN, invalidSiteSecretSubmission.getStatusCode());
+        assertNull(invalidSiteSecretSubmission.getBody());
     }
 
     private ResponseEntity<TenantOverview> obtainAuthProvidersAssignments(String authProvider) {
@@ -134,7 +140,7 @@ public class TenantTest {
 
     private ResponseEntity assignTenantAndSiteToAuthProvider(UUID tenantId, UUID siteId, UUID siteSecret, String authProvider) {
         return caller.exchange(
-                TenantController.ENDPOINT + "/tenants/" + tenantId + "/sites/" + siteId + "?siteSecret=" + siteSecret,
+                AssignmentController.ENDPOINT + "/tenants/" + tenantId + "/sites/" + siteId + "?siteSecret=" + siteSecret,
                 HttpMethod.PUT,
                 new HttpEntity<>(new TenantSiteAssignment("IntraFind Software AG", "alexander.orlov@intrafind.de", authProvider)),
                 TenantSiteAssignment.class

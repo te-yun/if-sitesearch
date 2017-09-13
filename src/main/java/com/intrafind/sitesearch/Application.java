@@ -16,8 +16,8 @@
 
 package com.intrafind.sitesearch;
 
+import com.intrafind.sitesearch.controller.AssignmentController;
 import com.intrafind.sitesearch.controller.SearchController;
-import com.intrafind.sitesearch.controller.TenantController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ExitCodeGenerator;
@@ -130,7 +130,7 @@ public class Application {
             public void onApplicationEvent(ContextClosedEvent event) {
                 LOG.info(">>>>>>>>>>>>>>>>>>>>>>> Close Event triggered");
                 SearchController.ACID_PERSISTENCE_ENVIRONMENT.close();
-                TenantController.ACID_PERSISTENCE_ENTITY.close();
+                AssignmentController.ACID_PERSISTENCE_ENTITY.close();
             }
         });
     }

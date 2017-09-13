@@ -53,7 +53,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 public class SiteService {
     private static final Logger LOG = LoggerFactory.getLogger(SiteService.class);
-    private static final String TENANT_SECRET_FIELD = "tenantSecret";
+    /**
+     * @deprecated should be renamed to siteSecret; represents conceptually a siteSecret
+     */
+    public static final String TENANT_SECRET_FIELD = "tenantSecret";
 
     private static final Index INDEX_SERVICE = IfinderCoreClient.newHessianClient(Index.class, Application.IFINDER_CORE + "/index");
 
