@@ -16,6 +16,8 @@
 
 package com.intrafind.sitesearch.integration;
 
+import com.intrafind.sitesearch.controller.TenantController;
+import com.intrafind.sitesearch.dto.TenantOverview;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -23,7 +25,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -34,12 +40,12 @@ public class TenantTest {
 
     @Test
     public void assignSiteToTenant() throws Exception {
-//        final ResponseEntity<Object> actual = caller.postForEntity(
-//                TenantController.ENDPOINT + "?tenantId=e10011b2-7f95-49e4-a9cb-189f5f5a6654&tenantSecret=c041b603-e5b7-4623-8fe9-4cd08e5b4558",
-//                HttpEntity.EMPTY, Object.class
-//        );
-//        assertEquals(HttpStatus.OK, actual.getStatusCode());
-//        LOG.info("actual.getBody(): " + actual.getBody());
+        final ResponseEntity<TenantOverview> actual = caller.getForEntity(
+                TenantController.ENDPOINT + "/910011b2-7f95-49e4-a9cb-189f5f5a6654/auth-providers/github/87507?accessToken=651bc4ff5792706965a6c37a0fab5b29d50bcc91",
+                TenantOverview.class
+        );
+        assertEquals(HttpStatus.OK, actual.getStatusCode());
+        LOG.info("actual.getBody(): " + actual.getBody());
     }
 }
 

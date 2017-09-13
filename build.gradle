@@ -16,7 +16,7 @@
 
 buildscript {
     ext {
-        spring_boot_version = "1.5.6.RELEASE"
+        spring_boot_version = "1.5.7.RELEASE"
         swagger_version = "2.7.0"
     }
 }
@@ -24,10 +24,9 @@ buildscript {
 plugins {
     id "java"
     id "idea"
-    id "org.springframework.boot" version "1.5.6.RELEASE"
+    id "org.springframework.boot" version "1.5.7.RELEASE"
     id "me.champeau.gradle.jmh" version "0.4.4"
-    id "io.morethan.jmhreport" version "0.5.0" // not tested yet
-//    id "io.morethan.jmhreport" version "0.6.1"
+    id "io.morethan.jmhreport" version "0.6.2.1"
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
