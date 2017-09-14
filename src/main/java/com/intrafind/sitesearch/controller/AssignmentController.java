@@ -114,8 +114,9 @@ public class AssignmentController {
         }));
     }
 
-    @RequestMapping(path = "/authentication-providers/{providerId}", method = RequestMethod.GET)
+    @RequestMapping(path = "/authentication-providers/{provider}/{providerId}", method = RequestMethod.GET)
     ResponseEntity<TenantOverview> obtainTenantOverview(
+            @PathVariable(value = "provider") String provider,
             @PathVariable(value = "providerId") String providerId,
             @RequestParam(value = "accessToken") String accessToken
     ) {
@@ -127,6 +128,16 @@ public class AssignmentController {
         );
         LOG.info("providerId: " + providerId);
         LOG.info("accessToken: " + accessToken);
+
+        // TODO make this a helper method that is reused above
+        final ResponseEntity<GitHubUser> githubUser = caller.getForEntity(URI.create("https://api.github.com/user?access_token=" + accessToken), GitHubUser.class);
+        if (System.getenv("DEV_SKIP_FLAG") == null) { // skip accessToken checks when running locally
+            if (!HttpStatus.OK.equals(githubUser.getStatusCode())
+                    || !providerId.equals(githubUser.getBody().getId())) {
+                LOG.warn("Invalid oAuth2 accessToken {} for given authProvider {} & authProviderId {}", accessToken, provider, providerId);
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+        }
 
         final StoreTransaction findTxn = ACID_PERSISTENCE_ENTITY.beginReadonlyTransaction();
         final EntityIterable authProviders = findTxn.find("AuthProvider", "id", providerId);
