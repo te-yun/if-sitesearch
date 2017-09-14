@@ -18,6 +18,7 @@ package com.intrafind.sitesearch.controller;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.intrafind.sitesearch.dto.GitHubUser;
 import com.intrafind.sitesearch.dto.TenantOverview;
 import com.intrafind.sitesearch.dto.TenantSiteAssignment;
 import com.intrafind.sitesearch.service.SiteService;
@@ -43,7 +44,6 @@ public class AssignmentController {
     public static final PersistentEntityStore ACID_PERSISTENCE_ENTITY = PersistentEntityStores.newInstance(SearchController.ACID_PERSISTENCE_ENVIRONMENT, "administration");
     RestTemplate caller = new RestTemplate();
 
-    // TODO add /tenant endpoint infix
     @RequestMapping(path = ENDPOINT + "/tenants/{tenantId}/sites/{siteId}", method = RequestMethod.PUT)
     ResponseEntity<TenantSiteAssignment> assignSite(
             @PathVariable(value = "tenantId") UUID tenantId, // TODO temporary, take the passed value... once a way is implemented to verify that a tenant belongs to a user
@@ -52,13 +52,20 @@ public class AssignmentController {
             @RequestBody TenantSiteAssignment tenantSiteAssignment
     ) {
         final UUID obtainedSiteSecret = obtainSiteSecret(siteId);
-        LOG.info(obtainedSiteSecret.toString());
-
         if (!obtainedSiteSecret.equals(siteSecret)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        // TODO introduce tenantSecret check
+        final ResponseEntity<GitHubUser> githubUser = caller.getForEntity(URI.create("https://api.github.com/user?access_token=" + tenantSiteAssignment.getAuthProviderToken()), GitHubUser.class);
+        // TODO disable during integration tests only, on CI & locally
+        if (System.getenv("DEV_SKIP_FLAG") == null) { // skip accessToken checks when running locally
+            if (!HttpStatus.OK.equals(githubUser.getStatusCode())
+                    || !tenantSiteAssignment.getAuthProviderId().equals(githubUser.getBody().getId())) {
+                LOG.warn("Invalid oAuth2 accessToken {} for given authProvider {} & authProviderId {}", tenantSiteAssignment.getAuthProviderToken(), tenantSiteAssignment.getAuthProvider(), tenantSiteAssignment.getAuthProviderId());
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+        }
+
         // TODO prevent duplicate Assignments 204, or better NO_MODIFICATION
         final StoreTransaction entityTxn = ACID_PERSISTENCE_ENTITY.beginTransaction();
         Entity tenant = entityTxn.find("Tenant", "id", tenantId.toString()).getFirst();

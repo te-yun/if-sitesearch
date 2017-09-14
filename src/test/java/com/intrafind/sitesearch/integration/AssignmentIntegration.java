@@ -93,7 +93,6 @@ public class AssignmentIntegration {
         assureSingleSimpleAssignment(additionalSiteAdded, 2, 1);
 
         // add additional tenant
-//        final Site anotherAdditionalSiteViaPageCreation = createSiteViaPageCreation();
         final ResponseEntity additionalTenantAddition = assignTenantAndSiteToAuthProvider(UUID.randomUUID(), additionalSiteViaPageCreation.getTenantId(), additionalSiteViaPageCreation.getTenantSecret(), authProvider);
         assertEquals(HttpStatus.CREATED, additionalTenantAddition.getStatusCode());
         final ResponseEntity<TenantOverview> additionalTenantAdded = obtainAuthProvidersAssignments(authProvider);
@@ -115,7 +114,7 @@ public class AssignmentIntegration {
 
     private ResponseEntity<TenantOverview> obtainAuthProvidersAssignments(String authProvider) {
         return caller.getForEntity(
-                "/authentication-providers/" + authProvider + "?accessToken=651bc4ff5792706965a6c37a0fab5b29d50bcc91",
+                "/authentication-providers/" + authProvider + "?accessToken=951bcaff5792706965a6c37a0fab5b29d50bcc81",
                 TenantOverview.class
         );
     }
@@ -142,7 +141,7 @@ public class AssignmentIntegration {
         return caller.exchange(
                 AssignmentController.ENDPOINT + "/tenants/" + tenantId + "/sites/" + siteId + "?siteSecret=" + siteSecret,
                 HttpMethod.PUT,
-                new HttpEntity<>(new TenantSiteAssignment("IntraFind Software AG", "alexander.orlov@intrafind.de", authProvider)),
+                new HttpEntity<>(new TenantSiteAssignment("IntraFind Software AG", "alexander.orlov@intrafind.de", authProvider, "testProvider", System.getenv("GITHUB_PUBLIC_ACCESS_TOKEN"))),
                 TenantSiteAssignment.class
         );
     }

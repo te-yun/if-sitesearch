@@ -19,15 +19,35 @@ package com.intrafind.sitesearch.dto;
 public class TenantSiteAssignment {
     private String company;
     private String contactEmail;
+    private String authProvider;
     private String authProviderId;
+    private String authProviderToken;
 
     private TenantSiteAssignment() {
     }
 
-    public TenantSiteAssignment(String company, String contactEmail, String authProviderId) {
+    public TenantSiteAssignment(String company, String contactEmail, String authProviderId, String authProvider, String authProviderToken) {
         this.company = company;
         this.contactEmail = contactEmail;
         this.authProviderId = authProviderId;
+        this.authProvider = authProvider;
+        this.authProviderToken = authProviderToken;
+    }
+
+    public String getAuthProvider() {
+        return authProvider;
+    }
+
+    public void setAuthProvider(String authProvider) {
+        this.authProvider = authProvider;
+    }
+
+    public String getAuthProviderToken() {
+        return authProviderToken;
+    }
+
+    public void setAuthProviderToken(String authProviderToken) {
+        this.authProviderToken = authProviderToken;
     }
 
     public String getAuthProviderId() {
