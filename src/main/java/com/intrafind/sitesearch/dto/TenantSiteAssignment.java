@@ -26,11 +26,11 @@ public class TenantSiteAssignment {
     private TenantSiteAssignment() {
     }
 
-    public TenantSiteAssignment(String company, String contactEmail, String authProviderId, String authProvider, String authProviderToken) {
+    public TenantSiteAssignment(String company, String contactEmail, String authProvider, String authProviderId, String authProviderToken) {
         this.company = company;
         this.contactEmail = contactEmail;
-        this.authProviderId = authProviderId;
         this.authProvider = authProvider;
+        this.authProviderId = authProviderId;
         this.authProviderToken = authProviderToken;
     }
 

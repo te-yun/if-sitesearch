@@ -36,13 +36,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AssignmentIntegration {
-    private static final Logger LOG = LoggerFactory.getLogger(AssignmentIntegration.class);
+public class AssignmentTest {
+    private static final Logger LOG = LoggerFactory.getLogger(AssignmentTest.class);
     @Autowired
     private TestRestTemplate caller;
 
@@ -55,6 +54,11 @@ public class AssignmentIntegration {
         assertEquals(actual.getBody().getId(), newlyCreatedPageWithSiteId.getBody().getId());
 
         return actual.getBody();
+    }
+
+    @Test
+    public void name() throws Exception {
+
     }
 
     @Test
@@ -71,9 +75,9 @@ public class AssignmentIntegration {
         LOG.info("siteId: " + siteId);
         LOG.info("siteSecret: " + siteSecret);
 
-        final ResponseEntity createTenantAssignmentInitially = assignTenantAndSiteToAuthProvider(tenantId, siteId, siteSecret, authProvider);
+        final ResponseEntity createTenantAssignmentInitially = assignTenantAndSiteToAuthProvider(tenantId, siteId, siteSecret, authProvider, authProviderId);
         // execute the above call again which should not change the resource state
-        final ResponseEntity createdTenantAssignmentSubsequently = assignTenantAndSiteToAuthProvider(tenantId, siteId, siteSecret, authProvider);
+        final ResponseEntity createdTenantAssignmentSubsequently = assignTenantAndSiteToAuthProvider(tenantId, siteId, siteSecret, authProvider, authProviderId);
         assertEquals(HttpStatus.CREATED, createdTenantAssignmentSubsequently.getStatusCode());
         assertNull(createdTenantAssignmentSubsequently.getBody());
 
@@ -82,34 +86,34 @@ public class AssignmentIntegration {
 
         // add additional auth provider
         final String additionalAuthProvider = "testProvider-" + UUID.randomUUID();
-        final ResponseEntity addAuthProvider = assignTenantAndSiteToAuthProvider(tenantId, siteId, siteSecret, additionalAuthProvider);
+        final ResponseEntity addAuthProvider = assignTenantAndSiteToAuthProvider(tenantId, siteId, siteSecret, additionalAuthProvider, authProviderId);
         assertEquals(HttpStatus.CREATED, addAuthProvider.getStatusCode());
         final ResponseEntity<TenantOverview> addedAuthProvider = obtainAuthProvidersAssignments(authProvider, authProviderId);
         assureSingleSimpleAssignment(addedAuthProvider, 1, 1);
 
         // add additional site
         final Site additionalSiteViaPageCreation = createSiteViaPageCreation();
-        final ResponseEntity additionalSiteAddition = assignTenantAndSiteToAuthProvider(tenantId, additionalSiteViaPageCreation.getTenantId(), additionalSiteViaPageCreation.getTenantSecret(), authProvider);
+        final ResponseEntity additionalSiteAddition = assignTenantAndSiteToAuthProvider(tenantId, additionalSiteViaPageCreation.getTenantId(), additionalSiteViaPageCreation.getTenantSecret(), authProvider, authProviderId);
         assertEquals(HttpStatus.CREATED, additionalSiteAddition.getStatusCode());
         final ResponseEntity<TenantOverview> additionalSiteAdded = obtainAuthProvidersAssignments(authProvider, authProviderId);
         assureSingleSimpleAssignment(additionalSiteAdded, 2, 1);
 
         // add additional tenant
-        final ResponseEntity additionalTenantAddition = assignTenantAndSiteToAuthProvider(UUID.randomUUID(), additionalSiteViaPageCreation.getTenantId(), additionalSiteViaPageCreation.getTenantSecret(), authProvider);
+        final ResponseEntity additionalTenantAddition = assignTenantAndSiteToAuthProvider(UUID.randomUUID(), additionalSiteViaPageCreation.getTenantId(), additionalSiteViaPageCreation.getTenantSecret(), authProvider, authProviderId);
         assertEquals(HttpStatus.CREATED, additionalTenantAddition.getStatusCode());
         final ResponseEntity<TenantOverview> additionalTenantAdded = obtainAuthProvidersAssignments(authProvider, authProviderId);
         assureSingleSimpleAssignment(additionalTenantAdded, 2, 2);
 
         // add additional tenant based on new site
         final Site anotherAdditionalSiteViaPageCreation = createSiteViaPageCreation();
-        final ResponseEntity additionalTenantAdditionWithAdditionalSite = assignTenantAndSiteToAuthProvider(UUID.randomUUID(), anotherAdditionalSiteViaPageCreation.getTenantId(), anotherAdditionalSiteViaPageCreation.getTenantSecret(), authProvider);
+        final ResponseEntity additionalTenantAdditionWithAdditionalSite = assignTenantAndSiteToAuthProvider(UUID.randomUUID(), anotherAdditionalSiteViaPageCreation.getTenantId(), anotherAdditionalSiteViaPageCreation.getTenantSecret(), authProvider, authProviderId);
         assertEquals(HttpStatus.CREATED, additionalTenantAdditionWithAdditionalSite.getStatusCode());
         final ResponseEntity<TenantOverview> additionalTenantAddedWithAdditionalSite = obtainAuthProvidersAssignments(authProvider, authProviderId);
         assureSingleSimpleAssignment(additionalTenantAddedWithAdditionalSite, 3, 3);
 
         // siteSecret does not match siteId's secret
         UUID invalidSiteSecret = UUID.randomUUID();
-        final ResponseEntity invalidSiteSecretSubmission = assignTenantAndSiteToAuthProvider(tenantId, anotherAdditionalSiteViaPageCreation.getTenantId(), invalidSiteSecret, authProvider);
+        final ResponseEntity invalidSiteSecretSubmission = assignTenantAndSiteToAuthProvider(tenantId, anotherAdditionalSiteViaPageCreation.getTenantId(), invalidSiteSecret, authProvider, authProviderId);
         assertEquals(HttpStatus.FORBIDDEN, invalidSiteSecretSubmission.getStatusCode());
         assertNull(invalidSiteSecretSubmission.getBody());
     }
@@ -124,30 +128,34 @@ public class AssignmentIntegration {
         return tenantOverview;
     }
 
-    // TODO activate THIS >>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     private void assureSingleSimpleAssignment(ResponseEntity<TenantOverview> fetchedTenantOverview, int siteSize, int tenantSize) {
-//        assertEquals(HttpStatus.OK, fetchedTenantOverview.getStatusCode());
-//        assertEquals(siteSize, fetchedTenantOverview.getBody().getSites().size());
-//        fetchedTenantOverview.getBody().getSites().forEach((id, secret) -> {
-//            assertNotNull(id);
-//            assertNotNull(secret);
-//        });
-//        assertEquals(tenantSize, fetchedTenantOverview.getBody().getTenants().size());
-//        fetchedTenantOverview.getBody().getTenants().forEach((uuid, tenantInfo) -> {
-//            assertNotNull(uuid);
-//            assertFalse(tenantInfo.getCompany().isEmpty());
-//            assertFalse(tenantInfo.getCompany().contains("@"));
-//            assertFalse(tenantInfo.getContactEmail().isEmpty());
-//            assertTrue(tenantInfo.getContactEmail().contains("@"));
-//        });
-//        assertEquals(1, fetchedTenantOverview.getBody().getAuthProviders().size());
+        assertEquals(HttpStatus.OK, fetchedTenantOverview.getStatusCode());
+        assertEquals(siteSize, fetchedTenantOverview.getBody().getSites().size());
+        fetchedTenantOverview.getBody().getSites().forEach((id, secret) -> {
+            assertNotNull(id);
+            assertNotNull(secret);
+        });
+        assertEquals(tenantSize, fetchedTenantOverview.getBody().getTenants().size());
+        fetchedTenantOverview.getBody().getTenants().forEach((uuid, tenantInfo) -> {
+            assertNotNull(uuid);
+            assertFalse(tenantInfo.getCompany().isEmpty());
+            assertFalse(tenantInfo.getCompany().contains("@"));
+            assertFalse(tenantInfo.getContactEmail().isEmpty());
+            assertTrue(tenantInfo.getContactEmail().contains("@"));
+        });
+        assertEquals(1, fetchedTenantOverview.getBody().getAuthProviders().size());
     }
 
-    private ResponseEntity assignTenantAndSiteToAuthProvider(UUID tenantId, UUID siteId, UUID siteSecret, String authProvider) {
+    private ResponseEntity assignTenantAndSiteToAuthProvider(UUID tenantId, UUID siteId, UUID siteSecret, String authProvider, String authProviderId) {
         return caller.exchange(
                 AssignmentController.ENDPOINT + "/tenants/" + tenantId + "/sites/" + siteId + "?siteSecret=" + siteSecret,
                 HttpMethod.PUT,
-                new HttpEntity<>(new TenantSiteAssignment("IntraFind Software AG", "alexander.orlov@intrafind.de", authProvider, "testProvider", System.getenv("GITHUB_PUBLIC_ACCESS_TOKEN"))),
+                new HttpEntity<>(new TenantSiteAssignment(
+                        "IntraFind Software AG",
+                        "alexander.orlov@intrafind.de",
+                        authProvider,
+                        authProviderId,
+                        System.getenv("GITHUB_PUBLIC_ACCESS_TOKEN"))),
                 TenantSiteAssignment.class
         );
     }

@@ -50,11 +50,13 @@
                 document.getElementById("user").display = "inline";
                 console.dirxml(user);
                 const xhr = new XMLHttpRequest();
-                xhr.open("POST", "/tenants/e10011b2-7f95-49e4-a9cb-189f5f5a6654/e10011b2-7f95-49e4-a9cb-189f5f5a6654/assign?siteSecret=c041b603-e5b7-4623-8fe9-4cd08e5b4558");
+                xhr.open("PUT", "/assignments/tenants/e10011b2-7f95-49e4-a9cb-189f5f5a6654/sites/e10011b2-7f95-49e4-a9cb-189f5f5a6654?siteSecret=c041b603-e5b7-4623-8fe9-4cd08e5b4558");
                 xhr.setRequestHeader("Content-type", "application/json");
                 xhr.onload = async function () {
                     document.getElementById("assignment").textContent = "{\n" +
                         "                \t\"authProviderId\": \"87507\",\n" +
+                        "                \t\"authProvider\": \"github\",\n" +
+                        "                \t\"authProviderToken\": \"github\",\n" +
                         "                \t\"contactEmail\": \"alexander.orlov@intrafind.de\",\n" +
                         "                \t\"company\": \"IntraFind Software AG\"\n" +
                         "                }";
@@ -62,6 +64,8 @@
 
                 xhr.send(JSON.stringify({
                     authProviderId: "87507",
+                    authProvider: "github",
+                    authProviderToken: "token",
                     contactEmail: "alexander.orlov@intrafind.de",
                     company: "IntraFind Software AG"
                 }));
@@ -76,18 +80,25 @@
 
 <span id="user" class="fa fa-user"></span>
 <a href="/login">Login</a>
+<br>
 <a href="/logout">Logout</a>
-
+<br>
+<label for="tenantId">Tenant ID</label>
 <input id="tenantId" type="text" value="e10011b2-7f95-49e4-a9cb-189f5f5a6654" placeholder="tenantId"/>
 <br>
+<label for="siteId">Site ID</label>
 <input id="siteId" type="text" value="a10011b2-7f95-49e4-a9cb-189f5f5a6655" placeholder="siteId"/>
 <br>
+<label for="siteSecret">Site Secret</label>
 <input id="siteSecret" type="text" value="b10011b2-7f95-49e4-a9cb-189f5f5a6655" placeholder="siteSecret"/>
 <br>
+<label for="contactEmail">Contact E-mail</label>
 <input id="contactEmail" type="email" value="alexander.orlov@intrafind.de" placeholder="Contact E-mail"/>
 <br>
+<label for="company">Company</label>
 <input id="company" type="text" value="IntraFind Software AG" placeholder="Company Name"/>
 <br>
+<label for="authProviderId">oAuth2 Provider</label>
 <input id="authProviderId" type="text" value="87507" placeholder="oAuth2 Provider ID"/>
 <br>
 

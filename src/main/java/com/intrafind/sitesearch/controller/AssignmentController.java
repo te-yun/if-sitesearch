@@ -51,6 +51,8 @@ public class AssignmentController {
             @RequestParam(value = "siteSecret") UUID siteSecret,
             @RequestBody TenantSiteAssignment tenantSiteAssignment
     ) {
+        final String providerId = tenantSiteAssignment.getAuthProvider() + "-" + tenantSiteAssignment.getAuthProviderId();
+
         final UUID obtainedSiteSecret = obtainSiteSecret(siteId);
         if (!obtainedSiteSecret.equals(siteSecret)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -77,13 +79,13 @@ public class AssignmentController {
         tenant.setProperty("company", tenantSiteAssignment.getCompany());
         tenant.setProperty("contactEmail", tenantSiteAssignment.getContactEmail());
 
-        if (entityTxn.find("AuthProvider", "id", tenantSiteAssignment.getAuthProviderId()).size() > 1) {
-            throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Duplicate AuthProvider ID found: " + tenantSiteAssignment.getAuthProviderId());
+        if (entityTxn.find("AuthProvider", "id", providerId).size() > 1) {
+            throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Duplicate AuthProvider ID found: " + providerId);
         }
-        Entity authProvider = entityTxn.find("AuthProvider", "id", tenantSiteAssignment.getAuthProviderId()).getFirst();
+        Entity authProvider = entityTxn.find("AuthProvider", "id", providerId).getFirst();
         if (authProvider == null) {
             authProvider = entityTxn.newEntity("AuthProvider");
-            authProvider.setProperty("id", tenantSiteAssignment.getAuthProviderId());
+            authProvider.setProperty("id", providerId);
         }
         tenant.addLink("authProvider", authProvider);   // TODO avoid duplicates // TODO add tests
         authProvider.addLink("tenant", tenant);
@@ -103,7 +105,7 @@ public class AssignmentController {
         entityTxn.commit();
 
         return ResponseEntity
-                .created(URI.create("https://sitesearch.cloud/assignments/authentication-providers/").resolve(tenantSiteAssignment.getAuthProviderId()))
+                .created(URI.create("https://sitesearch.cloud/assignments/authentication-providers/").resolve(tenantSiteAssignment.getAuthProvider()).resolve(tenantSiteAssignment.getAuthProviderId()))
                 .build();
     }
 
@@ -126,10 +128,11 @@ public class AssignmentController {
                 Maps.newHashMap(),
                 Lists.newArrayList()
         );
+        LOG.info("provider: " + provider);
         LOG.info("providerId: " + providerId);
         LOG.info("accessToken: " + accessToken);
 
-        // TODO make this a helper method that is reused above
+        // TODO make this a helper method that is reused above 
         final ResponseEntity<GitHubUser> githubUser = caller.getForEntity(URI.create("https://api.github.com/user?access_token=" + accessToken), GitHubUser.class);
         if (System.getenv("DEV_SKIP_FLAG") == null) { // skip accessToken checks when running locally
             if (!HttpStatus.OK.equals(githubUser.getStatusCode())
@@ -140,7 +143,7 @@ public class AssignmentController {
         }
 
         final StoreTransaction findTxn = ACID_PERSISTENCE_ENTITY.beginReadonlyTransaction();
-        final EntityIterable authProviders = findTxn.find("AuthProvider", "id", providerId);
+        final EntityIterable authProviders = findTxn.find("AuthProvider", "id", provider + "-" + providerId);
         authProviders.forEach(authProvider -> {
             tenantOverview.getAuthProviders().add(authProvider.getProperty("id").toString());
             authProvider.getLinks("tenant").forEach(tenant -> {
