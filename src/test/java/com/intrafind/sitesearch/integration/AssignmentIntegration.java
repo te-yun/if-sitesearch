@@ -40,8 +40,8 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AssignmentTest {
-    private static final Logger LOG = LoggerFactory.getLogger(AssignmentTest.class);
+public class AssignmentIntegration {
+    private static final Logger LOG = LoggerFactory.getLogger(AssignmentIntegration.class);
     @Autowired
     private TestRestTemplate caller;
 
@@ -54,11 +54,6 @@ public class AssignmentTest {
         assertEquals(actual.getBody().getId(), newlyCreatedPageWithSiteId.getBody().getId());
 
         return actual.getBody();
-    }
-
-    @Test
-    public void name() throws Exception {
-
     }
 
     @Test

@@ -41,8 +41,8 @@ import java.util.UUID;
 public class AssignmentController {
     public static final String ENDPOINT = "/assignments";
     private static final Logger LOG = LoggerFactory.getLogger(AssignmentController.class);
-    public static final PersistentEntityStore ACID_PERSISTENCE_ENTITY = PersistentEntityStores.newInstance(SearchController.ACID_PERSISTENCE_ENVIRONMENT, "administration");
-    RestTemplate caller = new RestTemplate();
+    private static final PersistentEntityStore ACID_PERSISTENCE_ENTITY = PersistentEntityStores.newInstance(SearchController.ACID_PERSISTENCE_ENVIRONMENT, "administration");
+    private static final RestTemplate CALLER = new RestTemplate();
 
     @RequestMapping(path = ENDPOINT + "/tenants/{tenantId}/sites/{siteId}", method = RequestMethod.PUT)
     ResponseEntity<TenantSiteAssignment> assignSite(
@@ -58,7 +58,7 @@ public class AssignmentController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        final ResponseEntity<GitHubUser> githubUser = caller.getForEntity(URI.create("https://api.github.com/user?access_token=" + tenantSiteAssignment.getAuthProviderToken()), GitHubUser.class);
+        final ResponseEntity<GitHubUser> githubUser = CALLER.getForEntity(URI.create("https://api.github.com/user?access_token=" + tenantSiteAssignment.getAuthProviderToken()), GitHubUser.class);
         // TODO disable during integration tests only, on CI & locally
         if (System.getenv("DEV_SKIP_FLAG") == null) { // skip accessToken checks when running locally
             if (!HttpStatus.OK.equals(githubUser.getStatusCode())
@@ -69,7 +69,8 @@ public class AssignmentController {
         }
 
         // TODO prevent duplicate Assignments 204, or better NO_MODIFICATION
-        final StoreTransaction entityTxn = ACID_PERSISTENCE_ENTITY.beginTransaction();
+//        final StoreTransaction entityTxn = ACID_PERSISTENCE_ENTITY.beginTransaction();
+        ACID_PERSISTENCE_ENTITY.executeInTransaction(entityTxn -> {
         Entity tenant = entityTxn.find("Tenant", "id", tenantId.toString()).getFirst();
         if (tenant == null) {
             tenant = entityTxn.newEntity("Tenant");
@@ -102,7 +103,8 @@ public class AssignmentController {
         tenant.addLink("site", site);   // TODO avoid duplicates // TODO add tests
         site.addLink("tenant", tenant);
 
-        entityTxn.commit();
+//        entityTxn.commit();
+        });
 
         return ResponseEntity
                 .created(URI.create("https://sitesearch.cloud/assignments/authentication-providers/").resolve(tenantSiteAssignment.getAuthProvider()).resolve(tenantSiteAssignment.getAuthProviderId()))
@@ -133,7 +135,7 @@ public class AssignmentController {
         LOG.info("accessToken: " + accessToken);
 
         // TODO make this a helper method that is reused above 
-        final ResponseEntity<GitHubUser> githubUser = caller.getForEntity(URI.create("https://api.github.com/user?access_token=" + accessToken), GitHubUser.class);
+        final ResponseEntity<GitHubUser> githubUser = CALLER.getForEntity(URI.create("https://api.github.com/user?access_token=" + accessToken), GitHubUser.class);
         if (System.getenv("DEV_SKIP_FLAG") == null) { // skip accessToken checks when running locally
             if (!HttpStatus.OK.equals(githubUser.getStatusCode())
                     || !providerId.equals(githubUser.getBody().getId())) {

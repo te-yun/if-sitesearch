@@ -48,6 +48,8 @@
                 document.getElementById("user").textContent = user.userAuthentication.details.name;
                 document.getElementById("user").title = user.userAuthentication.details.id;
                 document.getElementById("user").display = "inline";
+                document.getElementById("contactEmail").textContent = user.userAuthentication.details.email;
+                document.getElementById("company").textContent = user.userAuthentication.details.company;
                 console.dirxml(user);
                 const xhr = new XMLHttpRequest();
                 xhr.open("PUT", "/assignments/tenants/e10011b2-7f95-49e4-a9cb-189f5f5a6654/sites/e10011b2-7f95-49e4-a9cb-189f5f5a6654?siteSecret=c041b603-e5b7-4623-8fe9-4cd08e5b4558");
@@ -74,37 +76,43 @@
         xhr.send();
     }
 </script>
-<body onload="showAuthentication()">
+<!--<body onload="showAuthentication()">-->
 <h1 style="font-size: 2em;"><span class="fa fa-search"></span> Simple Site Search<sup>BETA</sup></h1>
 <img src="theme/logo.png" width="361" height="105" style="float: right;">
 
-<span id="user" class="fa fa-user"></span>
-<a href="/login">Login</a>
-<br>
-<a href="/logout">Logout</a>
-<br>
-<label for="tenantId">Tenant ID</label>
-<input id="tenantId" type="text" value="e10011b2-7f95-49e4-a9cb-189f5f5a6654" placeholder="tenantId"/>
-<br>
-<label for="siteId">Site ID</label>
-<input id="siteId" type="text" value="a10011b2-7f95-49e4-a9cb-189f5f5a6655" placeholder="siteId"/>
-<br>
-<label for="siteSecret">Site Secret</label>
-<input id="siteSecret" type="text" value="b10011b2-7f95-49e4-a9cb-189f5f5a6655" placeholder="siteSecret"/>
-<br>
-<label for="contactEmail">Contact E-mail</label>
-<input id="contactEmail" type="email" value="alexander.orlov@intrafind.de" placeholder="Contact E-mail"/>
-<br>
-<label for="company">Company</label>
-<input id="company" type="text" value="IntraFind Software AG" placeholder="Company Name"/>
-<br>
-<label for="authProviderId">oAuth2 Provider</label>
-<input id="authProviderId" type="text" value="87507" placeholder="oAuth2 Provider ID"/>
-<br>
+<!--<span id="user" class="fa fa-user"></span>-->
+<!--<a href="/login">Login</a>-->
+<!--<br>-->
+<!--<a href="/logout">Logout</a>-->
+<!--<br>-->
+<!--<label for="tenantId">Tenant ID</label>-->
+<!--<br>-->
+<!--<input id="tenantId" type="text" value="e10011b2-7f95-49e4-a9cb-189f5f5a6654" placeholder="tenantId"/>-->
+<!--<br>-->
+<!--<label for="siteId">Site ID</label>-->
+<!--<br>-->
+<!--<input id="siteId" type="text" value="a10011b2-7f95-49e4-a9cb-189f5f5a6655" placeholder="siteId"/>-->
+<!--<br>-->
+<!--<label for="siteSecret">Site Secret</label>-->
+<!--<br>-->
+<!--<input id="siteSecret" type="text" value="b10011b2-7f95-49e4-a9cb-189f5f5a6655" placeholder="siteSecret"/>-->
+<!--<br>-->
+<!--<label for="contactEmail">Contact E-mail</label>-->
+<!--<br>-->
+<!--<input id="contactEmail" type="email" value="alexander.orlov@intrafind.de" placeholder="Contact E-mail"/>-->
+<!--<br>-->
+<!--<label for="company">Company</label>-->
+<!--<br>-->
+<!--<input id="company" type="text" value="IntraFind Software AG" placeholder="Company Name"/>-->
+<!--<br>-->
+<!--<label for="authProviderId">oAuth2 Provider</label>-->
+<!--<br>-->
+<!--<input id="authProviderId" type="text" value="87507" placeholder="oAuth2 Provider ID"/>-->
+<!--<br>-->
 
-<button id="assignSite" onclick="assignSiteToTenant()">Assign Site to Tenant</button>
-<h2>Assignment Created</h2>
-<span id="assignment"></span>
+<!--<button id="assignSite" onclick="assignSiteToTenant()">Assign SITE to TENANT using an oAuth PROVIDER</button>-->
+<!--<h2>Assignment Created</h2>-->
+<!--<span id="assignment"></span>-->
 
 <ul style="list-style: none; font-size: 1.5em;">
     <li><a class="fa fa-book" href="/swagger-ui.html" style="text-decoration: none;">

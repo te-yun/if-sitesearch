@@ -30,14 +30,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-@CrossOrigin
 @RestController
 @RequestMapping(StatsController.ENDPOINT)
 public class StatsController {
@@ -72,9 +74,6 @@ public class StatsController {
             @RequestParam(value = "tenantId") UUID tenantId
     ) {
         final AtomicLong queryCount = new AtomicLong();
-//        Environment ACID_PERSISTENCE_ENVIRONMENT = Environments.newInstance("data");
-//        final ContextualEnvironment contextualEnvironment = Environments.newContextualInstance("data");
-//       SearchController. ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
         final ArrayByteIterable readableTenantId = StringBinding.stringToEntry(tenantId.toString());
         SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInReadonlyTransaction(txn -> {  // TODO make this a readonly tx
             final Store store = SearchController.ACID_PERSISTENCE_ENVIRONMENT.openStore(QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
@@ -83,7 +82,6 @@ public class StatsController {
                 queryCount.set(LongBinding.entryToLong(queryCountValue));
             }
         });
-//        SearchController.ACID_PERSISTENCE_ENVIRONMENT.close();
         return ResponseEntity.ok(new Stats(System.getenv("BUILD_NUMBER"), System.getenv("SCM_HASH"), queryCount.get()));
     }
 }

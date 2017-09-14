@@ -22,10 +22,7 @@ import jetbrains.exodus.ArrayByteIterable;
 import jetbrains.exodus.ByteIterable;
 import jetbrains.exodus.bindings.LongBinding;
 import jetbrains.exodus.bindings.StringBinding;
-import jetbrains.exodus.env.Environment;
-import jetbrains.exodus.env.Environments;
-import jetbrains.exodus.env.Store;
-import jetbrains.exodus.env.StoreConfig;
+import jetbrains.exodus.env.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +32,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@CrossOrigin
 @RestController
 @RequestMapping(SearchController.ENDPOINT)
 public class SearchController {
-    public static final Environment ACID_PERSISTENCE_ENVIRONMENT = Environments.newContextualInstance("data/environment");
+    //    public static final Environment ACID_PERSISTENCE_ENVIRONMENT = Environments.newContextualInstance("data/environment");
+//    public static final Environment ACID_PERSISTENCE_ENVIRONMENT = Environments.newInstance("data/environment");
+    public static final Environment ACID_PERSISTENCE_ENVIRONMENT = Environments.newInstance("data");
+    Object o = new EnvironmentConfig();
 
     static { // to initialize the store, required for virgin CI runs
         ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
