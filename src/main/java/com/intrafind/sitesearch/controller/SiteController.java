@@ -62,52 +62,57 @@ public class SiteController {
         }
     }
 
-    //  /sites/{siteId}
-    @RequestMapping(method = RequestMethod.GET)
-    ResponseEntity<List<String>> fetchAll(
-            @RequestParam(value = "siteId") UUID siteId
-    ) {
-        Optional<List<String>> allDocumentsOfTenant = service.fetchAllDocuments(siteId);
-        if (allDocumentsOfTenant.isPresent()) {
-            return ResponseEntity.ok(allDocumentsOfTenant.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    //  /sites/{siteId}/pages/{id}?siteSecret
-    @RequestMapping(path = "{id}", method = RequestMethod.PUT)
-    ResponseEntity<FetchedPage> updateExistingPage(
-            @PathVariable("id") String id,
-            @RequestParam(name = "siteId") UUID siteId,
-            @RequestParam(name = "siteSecret") UUID siteSecret,
-            @RequestBody Page page
-    ) {
-        // TODO use SiteUpdate DTO with NO siteId & NO siteSecret provided
-
-        // TODO make sure that an existing page is actually updated
-        Optional<FetchedPage> indexed = service.indexExistingPage(id, siteId, siteSecret, page);
-        if (indexed.isPresent()) {
-            return ResponseEntity.ok(indexed.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
     //  /sites/{siteId}/pages?siteSecret
-    @RequestMapping(method = RequestMethod.PUT)
-    ResponseEntity<FetchedPage> updateExistingSiteViaUrl(
-            @RequestParam(name = "siteId") UUID siteId,
+    @RequestMapping(path = "{siteId}/pages/url/{url:.+}", method = RequestMethod.PUT)
+    ResponseEntity<FetchedPage> updateExistingPageViaUrl(
+            @PathVariable(name = "siteId") UUID siteId,
+            @PathVariable(name = "url") URI url,
             @RequestParam(name = "siteSecret") UUID siteSecret,
             @RequestBody Page page
-    ) {
-        String pageId = Page.hashPageId(siteId, page.getUrl());
+    ) throws UnsupportedEncodingException {
+        final String decodedUrl = URLDecoder.decode(url.toString(), "UTF-8");
+        page.setUrl(decodedUrl); // make sure both URLs are aligned, TODO use a separate DTO sans-url later on
+
+//        String pageId = Page.hashPageId(siteId, page.getUrl());
+        String pageId = Page.hashPageId(siteId, decodedUrl);
         // TODO use SiteUpdate DTO with NO siteId & NO siteSecret provided
 
         // TODO make sure that an existing page is actually updated
         Optional<FetchedPage> indexed = service.indexExistingPage(pageId, siteId, siteSecret, page);
         if (indexed.isPresent()) {
             return ResponseEntity.ok(indexed.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    //  /sites/{siteId}/pages/{id}?siteSecret
+    @RequestMapping(path = "{siteId}/pages/{pageId}", method = RequestMethod.PUT)
+    ResponseEntity<FetchedPage> updateExistingPage(
+            @PathVariable(name = "siteId") UUID siteId,
+            @PathVariable("pageId") String pageId,
+            @RequestParam(name = "siteSecret") UUID siteSecret,
+            @RequestBody Page page
+    ) {
+        // TODO use SiteUpdate DTO with NO siteId & NO siteSecret provided
+
+        // TODO make sure that an existing page is actually updated
+        Optional<FetchedPage> indexed = service.indexExistingPage(pageId, siteId, siteSecret, page);
+        if (indexed.isPresent()) {
+            return ResponseEntity.ok(indexed.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    //  /sites/{siteId}
+    @RequestMapping(path = "{siteId}", method = RequestMethod.GET)
+    ResponseEntity<List<String>> fetchAll(
+            @PathVariable(value = "siteId") UUID siteId
+    ) {
+        Optional<List<String>> allDocumentsOfTenant = service.fetchAllDocuments(siteId);
+        if (allDocumentsOfTenant.isPresent()) {
+            return ResponseEntity.ok(allDocumentsOfTenant.get());
         } else {
             return ResponseEntity.notFound().build();
         }

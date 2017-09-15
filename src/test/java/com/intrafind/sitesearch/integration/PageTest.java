@@ -63,13 +63,13 @@ public class PageTest {
 
     @Before
     public void init() throws Exception {
-        Page testPage = indexPageSite();
+        Page testPage = createNewSiteViaPageCreation();
         testPageId = testPage.getId();
         testSiteId = testPage.getSiteId();
         testSiteSiteSecret = testPage.getSiteSecret();
     }
 
-    private Page indexPageSite() throws Exception {
+    private Page createNewSiteViaPageCreation() throws Exception {
         UUID irrelevantPageId = UUID.fromString("f55d093a-7911-11e7-8fc8-025041000001");
         Page simple = buildSite(UUID.randomUUID());
 
@@ -89,7 +89,7 @@ public class PageTest {
 
     @Test
     public void updateSiteViaUrl() throws Exception {
-        final Page newPage = indexPageSite();
+        final Page newPage = createNewSiteViaPageCreation();
         final String updatedBodyContent = "Updated via Hash(siteId, URL)";
         newPage.setBody(updatedBodyContent);
 
@@ -97,7 +97,7 @@ public class PageTest {
 
         // update
         final ResponseEntity<Page> updatedSite = caller.exchange(SiteController.ENDPOINT
-                        + "?siteId=" + newPage.getSiteId() + "&siteSecret=" + newPage.getSiteSecret(),
+                        + "/" + newPage.getSiteId() + "/pages/url/" + URLEncoder.encode(newPage.getUrl(), "UTF-8") + "?siteSecret=" + newPage.getSiteSecret(),
                 HttpMethod.PUT, new HttpEntity<>(newPage), Page.class);
         assertEquals(HttpStatus.OK, updatedSite.getStatusCode());
         assertEquals(newPage.getId(), updatedSite.getBody().getId());
@@ -125,16 +125,16 @@ public class PageTest {
 
     @Test
     public void fetchUpdatedById() throws Exception {
-        Page ying = indexPageSite();
-        Page yang = indexPageSite();
+        Page ying = createNewSiteViaPageCreation();
+        Page yang = createNewSiteViaPageCreation();
         TimeUnit.MILLISECONDS.sleep(13_000);
 
         final ResponseEntity<Page> actualYing = caller.exchange(SiteController.ENDPOINT + "/"
-                + ying.getId() + "?siteId=" + ying.getSiteId() + "&siteSecret=" + ying.getSiteSecret(), HttpMethod.PUT, new HttpEntity<>(ying), Page.class);
+                + ying.getSiteId() + "/pages/" + ying.getId() + "?siteSecret=" + ying.getSiteSecret(), HttpMethod.PUT, new HttpEntity<>(ying), Page.class);
         assertEquals(HttpStatus.OK, actualYing.getStatusCode());
         assertEquals(ying, actualYing.getBody());
         final ResponseEntity<Page> actualYang = caller.exchange(SiteController.ENDPOINT + "/"
-                + yang.getId() + "?siteId=" + yang.getSiteId() + "&siteSecret=" + yang.getSiteSecret(), HttpMethod.PUT, new HttpEntity<>(yang), Page.class);
+                + yang.getSiteId() + "/pages/" + yang.getId() + "?siteSecret=" + yang.getSiteSecret(), HttpMethod.PUT, new HttpEntity<>(yang), Page.class);
         assertEquals(HttpStatus.OK, actualYang.getStatusCode());
         assertEquals(yang, actualYang.getBody());
 
@@ -157,27 +157,22 @@ public class PageTest {
 
     @Test
     public void updatedSite() throws Exception {
-        UUID siteId = UUID.fromString("2c269452-7914-11e7-a634-025041000001");
-        Page updatable = buildSite(UUID.randomUUID());
-        final ResponseEntity<Page> created = caller.exchange(PageController.ENDPOINT, HttpMethod.POST, new HttpEntity<>(updatable), Page.class);
-        assertEquals(HttpStatus.CREATED, created.getStatusCode());
-        assertEquals(updatable, created.getBody());
-        Page createdPage = created.getBody();
+        Page createdPage = createNewSiteViaPageCreation();
 
         TimeUnit.MILLISECONDS.sleep(13_000);
 
-        final ResponseEntity<Page> updateWithSiteIdOnly = caller.exchange(SiteController.ENDPOINT + "/" + siteId
-                + "?siteId=" + createdPage.getSiteId(), HttpMethod.PUT, new HttpEntity<>(createdPage), Page.class);
+        final ResponseEntity<Page> updateWithSiteIdOnly = caller.exchange(SiteController.ENDPOINT + "/" + createdPage.getSiteId()
+                + "/pages/" + createdPage.getId(), HttpMethod.PUT, new HttpEntity<>(createdPage), Page.class);
         assertEquals("only valid siteId is provided", HttpStatus.BAD_REQUEST, updateWithSiteIdOnly.getStatusCode());
         assertEquals(29791, updateWithSiteIdOnly.getBody().hashCode());
 
-        final ResponseEntity<Page> updateWithSiteSecretOnly = caller.exchange(SiteController.ENDPOINT + "/" + siteId
-                + "?siteSecret=" + createdPage.getSiteId(), HttpMethod.PUT, new HttpEntity<>(createdPage), Page.class);
+        final ResponseEntity<Page> updateWithSiteSecretOnly = caller.exchange(SiteController.ENDPOINT + "/" + createdPage.getSiteId()
+                + "/pages/" + createdPage.getId(), HttpMethod.PUT, new HttpEntity<>(createdPage), Page.class);
         assertEquals("only valid siteSecret is provided", HttpStatus.BAD_REQUEST, updateWithSiteSecretOnly.getStatusCode());
         assertEquals(29791, updateWithSiteSecretOnly.getBody().hashCode());
 
-        final ResponseEntity<Page> updateWithWrongSiteSecret = caller.exchange(SiteController.ENDPOINT + "/" + siteId
-                        + "?siteId=" + createdPage.getSiteId() + "&siteSecret=" + UUID.randomUUID(),
+        final ResponseEntity<Page> updateWithWrongSiteSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdPage.getSiteId()
+                        + "/pages/" + createdPage.getId() + "?siteSecret=" + UUID.randomUUID(),
                 HttpMethod.PUT, new HttpEntity<>(createdPage), Page.class);
         assertEquals("siteSecret is invalid", HttpStatus.NOT_FOUND, updateWithWrongSiteSecret.getStatusCode());
         assertNull(updateWithWrongSiteSecret.getBody());
@@ -185,8 +180,8 @@ public class PageTest {
         createdPage.setTitle("updated title");
         createdPage.setBody("updated body");
         createdPage.setUrl("https://example.com/updated");
-        final ResponseEntity<Page> updated = caller.exchange(SiteController.ENDPOINT + "/" + siteId
-                        + "?siteId=" + createdPage.getSiteId() + "&siteSecret=" + createdPage.getSiteSecret(),
+        final ResponseEntity<Page> updated = caller.exchange(SiteController.ENDPOINT + "/" + createdPage.getSiteId()
+                        + "/pages/" + createdPage.getId() + "?siteSecret=" + createdPage.getSiteSecret(),
                 HttpMethod.PUT, new HttpEntity<>(createdPage), Page.class);
         assertEquals(HttpStatus.OK, updated.getStatusCode());
         assertEquals(createdPage, updated.getBody());
@@ -273,7 +268,7 @@ public class PageTest {
     }
 
     private void tryDeletionOfSites(UUID siteIdFromCreation) {
-        final ResponseEntity<List> fetchAll = caller.exchange(SiteController.ENDPOINT + "?siteId=" + siteIdFromCreation, HttpMethod.GET, HttpEntity.EMPTY, List.class);
+        final ResponseEntity<List> fetchAll = caller.exchange(SiteController.ENDPOINT + "/" + siteIdFromCreation, HttpMethod.GET, HttpEntity.EMPTY, List.class);
         assertTrue(HttpStatus.OK.equals(fetchAll.getStatusCode()));
         @SuppressWarnings("unchecked")
         List<String> sites = fetchAll.getBody();
