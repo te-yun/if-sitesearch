@@ -21,7 +21,7 @@ import com.google.common.collect.Maps;
 import com.intrafind.sitesearch.dto.GitHubUser;
 import com.intrafind.sitesearch.dto.TenantOverview;
 import com.intrafind.sitesearch.dto.TenantSiteAssignment;
-import com.intrafind.sitesearch.service.SiteService;
+import com.intrafind.sitesearch.service.PageService;
 import jetbrains.exodus.bindings.StringBinding;
 import jetbrains.exodus.entitystore.*;
 import jetbrains.exodus.env.Store;
@@ -113,7 +113,7 @@ public class AssignmentController {
 
     private UUID obtainSiteSecret(UUID siteId) {
         return UUID.fromString(SearchController.ACID_PERSISTENCE_ENVIRONMENT.computeInReadonlyTransaction(txn -> {
-            Store store = SearchController.ACID_PERSISTENCE_ENVIRONMENT.openStore(SiteService.TENANT_SECRET_FIELD, StoreConfig.WITHOUT_DUPLICATES, txn);
+            Store store = SearchController.ACID_PERSISTENCE_ENVIRONMENT.openStore(PageService.TENANT_SECRET_FIELD, StoreConfig.WITHOUT_DUPLICATES, txn);
             return StringBinding.entryToString(store.get(txn, StringBinding.stringToEntry(siteId.toString())));
         }));
     }

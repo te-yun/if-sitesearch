@@ -19,7 +19,7 @@ package com.intrafind.sitesearch.controller;
 import com.intrafind.sitesearch.dto.FetchedSite;
 import com.intrafind.sitesearch.dto.Page;
 import com.intrafind.sitesearch.dto.Tenant;
-import com.intrafind.sitesearch.service.SiteService;
+import com.intrafind.sitesearch.service.PageService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponses;
@@ -39,10 +39,10 @@ import java.util.UUID;
 public class PageController {
     public static final String ENDPOINT = "/pages";
     private static final Logger LOG = LoggerFactory.getLogger(PageController.class);
-    private final SiteService service;
+    private final PageService service;
 
     @Autowired
-    PageController(SiteService service) {
+    PageController(PageService service) {
         this.service = service;
     }
 

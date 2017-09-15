@@ -51,8 +51,8 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
-public class SiteService {
-    private static final Logger LOG = LoggerFactory.getLogger(SiteService.class);
+public class PageService {
+    private static final Logger LOG = LoggerFactory.getLogger(PageService.class);
     /**
      * @deprecated should be renamed to siteSecret; represents conceptually a siteSecret
      */
