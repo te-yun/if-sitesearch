@@ -16,11 +16,12 @@
 
 package com.intrafind.sitesearch.dto;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class TenantOverview {
+public class TenantOverview implements Serializable {
     private Map<UUID, TenantInfo> tenants;
     private Map<UUID, UUID> sites;
     private List<String> authProviders;

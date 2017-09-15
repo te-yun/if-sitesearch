@@ -16,7 +16,9 @@
 
 package com.intrafind.sitesearch.dto;
 
-public class TenantSiteAssignment {
+import java.io.Serializable;
+
+public class TenantSiteAssignment implements Serializable {
     private String company;
     private String contactEmail;
     private String authProvider;

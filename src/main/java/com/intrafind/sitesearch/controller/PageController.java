@@ -18,11 +18,7 @@ package com.intrafind.sitesearch.controller;
 
 import com.intrafind.sitesearch.dto.FetchedPage;
 import com.intrafind.sitesearch.dto.Page;
-import com.intrafind.sitesearch.dto.Tenant;
 import com.intrafind.sitesearch.service.PageService;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @RequestMapping(PageController.ENDPOINT)
@@ -46,86 +40,7 @@ public class PageController {
         this.service = service;
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "{id}")
-    ResponseEntity<FetchedPage> fetchById(
-            @PathVariable("id") String id
-    ) {
-        Optional<FetchedPage> fetched = service.fetchById(id);
-        if (fetched.isPresent()) {
-            return ResponseEntity.ok(fetched.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @RequestMapping(path = "url", method = RequestMethod.GET)
-    ResponseEntity<FetchedPage> fetchViaUrl(
-            @RequestParam(value = "url") String url,
-            @RequestParam(value = "siteId") UUID siteId
-    ) {
-        String pageId = Page.hashSiteId(siteId, url);
-
-        Optional<FetchedPage> fetched = service.fetchById(pageId);
-        if (fetched.isPresent()) {
-            return ResponseEntity.ok(fetched.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @RequestMapping(method = RequestMethod.GET)
-    ResponseEntity<List<String>> fetchAll(
-            @RequestParam(value = "siteId") UUID siteId
-    ) {
-        Optional<List<String>> allDocumentsOfTenant = service.fetchAllDocuments(siteId);
-        if (allDocumentsOfTenant.isPresent()) {
-            return ResponseEntity.ok(allDocumentsOfTenant.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    /**
-     * Inserts a page into index.
-     *
-     * @param page to be indexed
-     */
-    @RequestMapping(path = "{id}", method = RequestMethod.PUT)
-    ResponseEntity<FetchedPage> indexExistingSite(
-            @PathVariable("id") String id,
-            @RequestParam(name = "siteId") UUID siteId,
-            @RequestParam(name = "siteSecret") UUID siteSecret,
-            @RequestBody Page page
-    ) {
-        // TODO use SiteUpdate DTO with NO siteId & NO siteSecret provided
-
-        // TODO make sure that an existing page is actually updated
-        Optional<FetchedPage> indexed = service.indexExistingPage(id, siteId, siteSecret, page);
-        if (indexed.isPresent()) {
-            return ResponseEntity.ok(indexed.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @RequestMapping(method = RequestMethod.PUT)
-    ResponseEntity<FetchedPage> updateExistingSiteViaUrl(
-            @RequestParam(name = "siteId") UUID siteId,
-            @RequestParam(name = "siteSecret") UUID siteSecret,
-            @RequestBody Page page
-    ) {
-        String pageId = Page.hashSiteId(siteId, page.getUrl());
-        // TODO use SiteUpdate DTO with NO siteId & NO siteSecret provided
-
-        // TODO make sure that an existing page is actually updated
-        Optional<FetchedPage> indexed = service.indexExistingPage(pageId, siteId, siteSecret, page);
-        if (indexed.isPresent()) {
-            return ResponseEntity.ok(indexed.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
+    //  /pages
     @RequestMapping(method = RequestMethod.POST)
     ResponseEntity<Page> indexNewSite(@RequestBody Page page) {
         // TODO use SiteCreation DTO with siteId & siteSecret
@@ -138,34 +53,16 @@ public class PageController {
         }
     }
 
-    @RequestMapping(path = "rss", method = RequestMethod.PUT)
-    ResponseEntity<Tenant> indexRssFeed(
-            @RequestParam(value = "siteId", required = false) UUID siteId,
-            @RequestParam(value = "siteSecret", required = false) UUID siteSecret,
-            @RequestParam(value = "feedUrl") URI feedUrl
+    //  /pages/{pageId}
+    @RequestMapping(method = RequestMethod.GET, path = "{id}")
+    ResponseEntity<FetchedPage> fetchById(
+            @PathVariable("id") String id
     ) {
-        Optional<Tenant> tenantCreatedInfo = service.indexFeed(feedUrl, siteId, siteSecret);
-        if (tenantCreatedInfo.isPresent()) {
-            return ResponseEntity.ok(tenantCreatedInfo.get());
+        Optional<FetchedPage> fetched = service.fetchById(id);
+        if (fetched.isPresent()) {
+            return ResponseEntity.ok(fetched.get());
         } else {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
-    }
-
-    /**
-     * Deletes site from the index.
-     *
-     * @param id of a single document to delete
-     */
-    @RequestMapping(method = RequestMethod.DELETE, path = "{id}")
-    @ApiOperation(value = "Deletes a document from index", response = ApiResponses.class)
-    ResponseEntity deleteSiteById(
-            @ApiParam(value = "ID of a single document to delete", example = "5f2b9c2e-6071-4f30-8972-7781fac73726")
-            @PathVariable(name = "id") String id
-    ) {
-        LOG.info("delete-event" + id);
-        // TODO assure that only owner can delete a site
-        service.delete(id);
-        return ResponseEntity.noContent().build();
     }
 }

@@ -16,7 +16,9 @@
 
 package com.intrafind.sitesearch.dto;
 
-public class GitHubUser {
+import java.io.Serializable;
+
+public class GitHubUser implements Serializable {
     private String id;
     private String email;
     private String name;
