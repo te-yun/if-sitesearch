@@ -17,21 +17,13 @@
 package com.intrafind.sitesearch;
 
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.security.Principal;
 
 @EnableOAuth2Sso
@@ -45,31 +37,12 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         return principal;
     }
 
-    @RequestMapping("frontpage")
-    public ModelAndView redirectToFrontpage() {
-        return new ModelAndView("redirect:https://sitesearch.online");
-    }
-
-    @RequestMapping("frontpage1")
-    public ResponseEntity<Object> respondWithFrontpage() throws URISyntaxException {
-        URI uri = new URI("https://sitesearch.online");
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(uri);
-        return new ResponseEntity<>(httpHeaders, HttpStatus.MOVED_PERMANENTLY);
-    }
-
-    @RequestMapping("frontpage2")
-    public void rootRedirect(HttpServletResponse httpServletResponse) throws IOException {
-        httpServletResponse.sendRedirect("https://sitesearch.online");
-    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .antMatcher("/**")
                 .csrf().disable()
 //                .cors().and() // TODO check if this is the only required CORS enabler, and if the CORS enabler bean in the Application class can be removed
-                //                .antMatcher("/**")
                 .authorizeRequests()
                 .antMatchers(
                         "/**",

@@ -37,7 +37,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping(SiteController.ENDPOINT)
 public class SiteController {
-    public static final String ENDPOINT = "/sites";
+    public static final String ENDPOINT = "/pages";
     private static final Logger LOG = LoggerFactory.getLogger(SiteController.class);
     private final SiteService service;
 
