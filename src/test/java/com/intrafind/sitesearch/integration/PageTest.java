@@ -192,7 +192,7 @@ public class PageTest {
     public void importFeed() throws Exception {
         final ResponseEntity<Tenant> exchange = caller.exchange(
                 SiteController.ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/fahrplanaenderungen/detail/rss.xml",
-                HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
+                HttpMethod.POST, HttpEntity.EMPTY, Tenant.class);
         final Tenant creation = validateTenantSummary(exchange, 10);
 
         TimeUnit.MILLISECONDS.sleep(13_000);
@@ -201,7 +201,8 @@ public class PageTest {
 
     @Test
     public void importFeedAndReadSingleSiteWithSSL() throws Exception {  // TODO actually use SSL below >> httpS instead of http-sans-S
-        final ResponseEntity<Tenant> exchange = caller.exchange(SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml", HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
+        final ResponseEntity<Tenant> exchange = caller.exchange(SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml",
+                HttpMethod.POST, HttpEntity.EMPTY, Tenant.class);
         final Tenant creation = validateTenantSummary(exchange, 25);
 
         TimeUnit.MILLISECONDS.sleep(13_000);
@@ -226,7 +227,7 @@ public class PageTest {
         // create index
         final ResponseEntity<Tenant> initialIndexCreation = caller.exchange(
                 SiteController.ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/meldungen/detail/rss.xml",
-                HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
+                HttpMethod.POST, HttpEntity.EMPTY, Tenant.class);
         TimeUnit.MILLISECONDS.sleep(13_000);
         final Tenant tenantCreation = validateTenantSummary(initialIndexCreation, 10);
 
@@ -236,29 +237,28 @@ public class PageTest {
         LOG.info("siteIdFromCreation: " + siteIdFromCreation);
         LOG.info("siteSecretFromCreation: " + siteSecretFromCreation);
 
-        final ResponseEntity<Tenant> updateWithoutTenant = caller.exchange(
-                SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
-                        + "&siteSecret=" + siteSecretFromCreation,
-                HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
-        assertEquals(HttpStatus.BAD_REQUEST, updateWithoutTenant.getStatusCode());
+//        final ResponseEntity<Tenant> updateWithoutTenant = caller.exchange(
+//                SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
+//                        + "&siteSecret=" + siteSecretFromCreation,
+//                HttpMethod.POST, HttpEntity.EMPTY, Tenant.class);
+//        assertEquals(HttpStatus.BAD_REQUEST, updateWithoutTenant.getStatusCode());
 
         final ResponseEntity<Tenant> updateWithoutSecret = caller.exchange(
-                SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
-                        + "&siteId=" + siteIdFromCreation,
+                SiteController.ENDPOINT + "/" + siteIdFromCreation + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml",
                 HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
         assertEquals(HttpStatus.BAD_REQUEST, updateWithoutSecret.getStatusCode());
 
         final ResponseEntity<Tenant> updateWithInvalidSecret = caller.exchange(
-                SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
-                        + "&siteId=" + siteIdFromCreation + "&siteSecret=" + UUID.randomUUID(),
+                SiteController.ENDPOINT + "/" + siteIdFromCreation + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
+                        + "&siteSecret=" + UUID.randomUUID(),
                 HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
         assertEquals(HttpStatus.BAD_REQUEST, updateWithInvalidSecret.getStatusCode());
 
 
         // update index
         final ResponseEntity<Tenant> anotherFeedReplacement = caller.exchange(
-                SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
-                        + "&siteId=" + siteIdFromCreation + "&siteSecret=" + siteSecretFromCreation,
+                SiteController.ENDPOINT + "/" + siteIdFromCreation + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
+                        + "&siteSecret=" + siteSecretFromCreation,
                 HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
         final Tenant tenantUpdate = validateTenantSummary(anotherFeedReplacement, 25);
 

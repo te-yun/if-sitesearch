@@ -119,12 +119,24 @@ public class SiteController {
     }
 
     //  /sites/{siteId}/rss?feedUrl&siteSecret
-    @RequestMapping(path = "rss", method = RequestMethod.PUT)
+    @RequestMapping(path = "{siteId}/rss", method = RequestMethod.PUT)
     ResponseEntity<Tenant> indexRssFeed(
-            @RequestParam(value = "siteId", required = false) UUID siteId,
-            @RequestParam(value = "siteSecret", required = false) UUID siteSecret,
+            @PathVariable(value = "siteId") UUID siteId,
+            @RequestParam(value = "siteSecret") UUID siteSecret,
             @RequestParam(value = "feedUrl") URI feedUrl
     ) {
+        return indexAsRssFeed(siteId, siteSecret, feedUrl);
+    }
+
+    //  /sites/{siteId}/rss?feedUrl&siteSecret
+    @RequestMapping(path = "rss", method = RequestMethod.POST)
+    ResponseEntity<Tenant> indexNewRssFeed(
+            @RequestParam(value = "feedUrl") URI feedUrl
+    ) {
+        return indexAsRssFeed(null, null, feedUrl);
+    }
+
+    private ResponseEntity<Tenant> indexAsRssFeed(UUID siteId, UUID siteSecret, URI feedUrl) {
         Optional<Tenant> tenantCreatedInfo = service.indexFeed(feedUrl, siteId, siteSecret);
         if (tenantCreatedInfo.isPresent()) {
             return ResponseEntity.ok(tenantCreatedInfo.get());
