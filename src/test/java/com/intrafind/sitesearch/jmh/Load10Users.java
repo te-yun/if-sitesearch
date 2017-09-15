@@ -89,7 +89,7 @@ public class Load10Users {
 
         final ResponseEntity<Hits> actual = CALLER.getForEntity(
                 Load10Users.LOAD_TARGET + SearchController.ENDPOINT
-                        + "?query=" + query + "&tenantId=" + SearchTest.SEARCH_TENANT_ID,
+                        + "?query=" + query + "&siteId=" + SearchTest.SEARCH_TENANT_ID,
                 Hits.class
         );
 
@@ -110,7 +110,7 @@ public class Load10Users {
 
         final ResponseEntity<Autocomplete> actual = CALLER.getForEntity(
                 LOAD_TARGET + AutocompleteController.ENDPOINT
-                        + "?query=" + query + "&tenantId=" + SearchTest.SEARCH_TENANT_ID,
+                        + "?query=" + query + "&siteId=" + SearchTest.SEARCH_TENANT_ID,
                 Autocomplete.class
         );
 

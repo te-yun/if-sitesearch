@@ -29,7 +29,7 @@ public class Page implements Serializable {
     private static final Logger LOG = LoggerFactory.getLogger(Page.class);
 
     private String id;
-    private UUID tenantId;
+    private UUID siteId;
     private UUID siteSecret;
     private String title;
     private String body;
@@ -38,9 +38,9 @@ public class Page implements Serializable {
     private Page() {
     }
 
-    public Page(String id, UUID tenantId, UUID siteSecret, String title, String body, String url) {
+    public Page(String id, UUID siteId, UUID siteSecret, String title, String body, String url) {
         this.id = id;
-        this.tenantId = tenantId;
+        this.siteId = siteId;
         this.siteSecret = siteSecret;
         this.title = title;
         this.body = body;
@@ -67,12 +67,12 @@ public class Page implements Serializable {
         return url;
     }
 
-    public UUID getTenantId() {
-        return tenantId;
+    public static String hashSiteId(UUID siteId, String siteUrl) {
+        return Hashing.sha256().hashString(siteId.toString() + siteUrl, Charset.forName("UTF-8")).toString();
     }
 
-    public void setTenantId(UUID tenantId) {
-        this.tenantId = tenantId;
+    public UUID getSiteId() {
+        return siteId;
     }
 
     public void setUrl(String url) {
@@ -87,8 +87,8 @@ public class Page implements Serializable {
         this.body = body;
     }
 
-    public static String hashSiteId(UUID tenantId, String siteUrl) {
-        return Hashing.sha256().hashString(tenantId.toString() + siteUrl, Charset.forName("UTF-8")).toString();
+    public void setSiteId(UUID siteId) {
+        this.siteId = siteId;
     }
 
     public String getId() {

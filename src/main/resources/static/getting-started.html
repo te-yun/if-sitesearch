@@ -30,9 +30,9 @@
         const xhr = new XMLHttpRequest();
         xhr.open("PUT", "https://sitesearch.cloud/sites/rss?feedUrl=" + feedUrl);
         xhr.onload = function () {
-            const tenantId = JSON.parse(this.response)["tenantId"];
-            document.getElementById("tenantId").value = tenantId;
-            document.cookie = "override-tenant = " + tenantId;
+            const siteId = JSON.parse(this.response)["siteId"];
+            document.getElementById("siteId").value = siteId;
+            document.cookie = "override-tenant = " + siteId;
             document.getElementById("siteSecret").value = JSON.parse(this.response)["siteSecret"];
         };
         xhr.send();
@@ -71,8 +71,8 @@
     <label for="feedUrl"><span class="fa fa-rss"></span> Feed URL</label>
     <input id="feedUrl" placeholder="Feed URL, e.g. http://intrafind.de/share/enterprise-search-blog.xml"
            value="http://intrafind.de/share/enterprise-search-blog.xml">
-    <label for="tenantId"><span class="fa fa-key"></span> Tenant ID</label>
-    <input id="tenantId" placeholder="Tenant ID">
+    <label for="siteId"><span class="fa fa-key"></span> Site ID</label>
+    <input id="siteId" placeholder="Site ID">
     <label for="siteSecret"><span class="fa fa-user-secret"></span> Site Secret</label>
     <input id="siteSecret" placeholder="Site Secret">
 </div>
@@ -96,7 +96,7 @@
             sbTarget: "#searchbar",
             configurl: "searchbar-config/sitesearch-config.json",
             sitesearch: true,
-            tenantId: "248c9822-d5eb-45cb-bbab-fad1b1aad894"
+            siteId: "248c9822-d5eb-45cb-bbab-fad1b1aad894"
         });
     });
 </script>

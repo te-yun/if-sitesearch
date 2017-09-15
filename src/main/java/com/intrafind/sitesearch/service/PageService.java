@@ -24,7 +24,7 @@ import com.intrafind.api.search.Search;
 import com.intrafind.sitesearch.Application;
 import com.intrafind.sitesearch.TrustAllX509TrustManager;
 import com.intrafind.sitesearch.controller.SearchController;
-import com.intrafind.sitesearch.dto.FetchedSite;
+import com.intrafind.sitesearch.dto.FetchedPage;
 import com.intrafind.sitesearch.dto.Page;
 import com.intrafind.sitesearch.dto.Tenant;
 import com.rometools.rome.feed.synd.SyndFeed;
@@ -57,30 +57,30 @@ public class PageService {
 
     private static final Index INDEX_SERVICE = IfinderCoreClient.newHessianClient(Index.class, Application.IFINDER_CORE + "/index");
 
-    public Optional<FetchedSite> indexExistingSite(String id, UUID tenantId, UUID siteSecret, Page page) {
-        if (tenantId != null && siteSecret != null) { // credentials are provided as a tuple only
-            final Optional<UUID> fetchedSiteSecret = fetchSiteSecret(tenantId);
-            if (!fetchedSiteSecret.isPresent()) { // tenant does not exist
+    public Optional<FetchedPage> indexExistingPage(String id, UUID siteId, UUID siteSecret, Page page) {
+        if (siteId != null && siteSecret != null) { // credentials are provided as a tuple only
+            final Optional<UUID> fetchedSiteSecret = fetchSiteSecret(siteId);
+            if (!fetchedSiteSecret.isPresent()) { // site does not exist
                 return Optional.empty();
             } else if (siteSecret.equals(fetchedSiteSecret.get())) { // authorized
-                LOG.info("updating-feed: " + tenantId);
-                return indexDocument(id, tenantId, siteSecret, page);
+                LOG.info("updating-feed: " + siteId);
+                return indexDocument(id, siteId, siteSecret, page);
             } else { // unauthorized
                 return Optional.empty();
             }
-        } else if (tenantId == null ^ siteSecret == null) { // it does not make any sense if only one of the parameters is set
+        } else if (siteId == null ^ siteSecret == null) { // it does not make any sense if only one of the parameters is set
             return Optional.empty();
         } else { // consider request as first-usage-ownership-granting request, create new index
             return indexDocument(Page.hashSiteId(UUID.randomUUID(), page.getUrl()), UUID.randomUUID(), UUID.randomUUID(), page);
         }
     }
 
-    private Optional<FetchedSite> indexDocument(String id, UUID tenantId, UUID siteSecret, Page page) {
+    private Optional<FetchedPage> indexDocument(String id, UUID siteId, UUID siteSecret, Page page) {
         Document indexable = new Document(id);
         indexable.set(Fields.BODY, page.getBody());
         indexable.set(Fields.TITLE, page.getTitle());
         indexable.set(Fields.URL, page.getUrl());
-        indexable.set(Fields.TENANT, tenantId);
+        indexable.set(Fields.TENANT, siteId);
         indexable.set(SITE_SECRET_FIELD, siteSecret); // TODO will become superfluous once siteSecret is stored in Exodus
         INDEX_SERVICE.index(indexable);
 
@@ -88,36 +88,36 @@ public class PageService {
     }
 
     public Optional<Page> indexNewTenantCreatingSite(Page page) {
-        String siteId = createTenant(page);
+        String pageId = createTenant(page);
 
-        return fetchNewTenantCreatingSiteById(siteId);
+        return fetchNewTenantCreatingSiteById(pageId);
     }
 
     private String createTenant(Page page) {
-        UUID tenantId = UUID.randomUUID();
-        final ArrayByteIterable readableTenantId = StringBinding.stringToEntry(tenantId.toString());
-        String siteId = Page.hashSiteId(tenantId, page.getUrl());
+        UUID siteId = UUID.randomUUID();
+        final ArrayByteIterable readableSiteId = StringBinding.stringToEntry(siteId.toString());
+        String pageId = Page.hashSiteId(siteId, page.getUrl());
 
         SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
-            Document indexable = new Document(siteId);
+            Document indexable = new Document(pageId);
             indexable.set(Fields.BODY, page.getBody());
             indexable.set(Fields.TITLE, page.getTitle());
             indexable.set(Fields.URL, page.getUrl());
-            indexable.set(Fields.TENANT, tenantId);
+            indexable.set(Fields.TENANT, siteId);
             UUID siteSecret = UUID.randomUUID();
 
-            storeSiteSecret(readableTenantId, txn, siteSecret);
+            storeSiteSecret(readableSiteId, txn, siteSecret);
 
             indexable.set(SITE_SECRET_FIELD, siteSecret);
             INDEX_SERVICE.index(indexable);
         });
 
-        return siteId;
+        return pageId;
     }
 
-    public Optional<List<String>> fetchAllDocuments(UUID tenantId) {
+    public Optional<List<String>> fetchAllDocuments(UUID siteId) {
         // TODO only fetch ID info
-        Hits documentWithSiteSecret = SearchService.SEARCH_SERVICE.search(Fields.TENANT + ":" + tenantId.toString(), Search.HITS_LIST_SIZE, 1_000);
+        Hits documentWithSiteSecret = SearchService.SEARCH_SERVICE.search(Fields.TENANT + ":" + siteId.toString(), Search.HITS_LIST_SIZE, 1_000);
 
         if (documentWithSiteSecret.getDocuments().isEmpty()) {
             return Optional.empty();
@@ -130,12 +130,12 @@ public class PageService {
         }
     }
 
-    private Optional<UUID> fetchSiteSecret(UUID tenantId) {
-        final ArrayByteIterable readableTenantId = StringBinding.stringToEntry(tenantId.toString());
+    private Optional<UUID> fetchSiteSecret(UUID siteId) {
+        final ArrayByteIterable readableSiteId = StringBinding.stringToEntry(siteId.toString());
         final ByteIterable[] siteSecret = new ByteIterable[1];
         SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInReadonlyTransaction(txn -> {
             Store store = SearchController.ACID_PERSISTENCE_ENVIRONMENT.openStore(SITE_SECRET_FIELD, StoreConfig.WITHOUT_DUPLICATES, txn);
-            siteSecret[0] = store.get(txn, readableTenantId);
+            siteSecret[0] = store.get(txn, readableSiteId);
         });
         if (siteSecret[0] != null) {
             return Optional.of(
@@ -144,7 +144,7 @@ public class PageService {
         }
 
         { // TODO remove this once the Exodus persistence the leading way to store site secrets
-            Hits documentWithSiteSecret = SearchService.SEARCH_SERVICE.search(Fields.TENANT + ":" + tenantId, Search.HITS_LIST_SIZE, 1);
+            Hits documentWithSiteSecret = SearchService.SEARCH_SERVICE.search(Fields.TENANT + ":" + siteId, Search.HITS_LIST_SIZE, 1);
 
             if (documentWithSiteSecret.getDocuments().isEmpty()) {
                 return Optional.empty();
@@ -176,12 +176,12 @@ public class PageService {
         }
     }
 
-    public Optional<FetchedSite> fetchById(String id) {
+    public Optional<FetchedPage> fetchById(String id) {
         Optional<Document> found = INDEX_SERVICE.fetch(Index.ALL, id).stream().findAny();
 
         if (found.isPresent()) {
             Document foundDocument = found.get();
-            FetchedSite representationOfFoundDocument = new FetchedSite(
+            FetchedPage representationOfFoundDocument = new FetchedPage(
                     UUID.fromString(foundDocument.get(Fields.TENANT)),
                     foundDocument.getId(),
                     foundDocument.get(Fields.TITLE),
@@ -195,45 +195,45 @@ public class PageService {
         }
     }
 
-    public Optional<Tenant> indexFeed(URI feedUrl, UUID tenantId, UUID siteSecret) {
-        if (tenantId != null && siteSecret != null) { // credentials are provided as a tuple only
-            final Optional<UUID> fetchedSiteSecret = fetchSiteSecret(tenantId);
+    public Optional<Tenant> indexFeed(URI feedUrl, UUID siteId, UUID siteSecret) {
+        if (siteId != null && siteSecret != null) { // credentials are provided as a tuple only
+            final Optional<UUID> fetchedSiteSecret = fetchSiteSecret(siteId);
             if (!fetchedSiteSecret.isPresent()) { // tenant does not exist
                 return Optional.empty();
             } else if (siteSecret.equals(fetchedSiteSecret.get())) { // authorized
-                LOG.info("updating-feed: " + tenantId);
-                return updateIndex(feedUrl, tenantId, siteSecret);
+                LOG.info("updating-feed: " + siteId);
+                return updateIndex(feedUrl, siteId, siteSecret);
             } else { // unauthorized
                 return Optional.empty();
             }
-        } else if (tenantId == null ^ siteSecret == null) { // it does not make any sense if only one of the parameters is set
+        } else if (siteId == null ^ siteSecret == null) { // it does not make any sense if only one of the parameters is set
             return Optional.empty();
         } else { // consider request as first-usage-ownership-granting request (early binding), create new index
-            UUID newTenantId = UUID.randomUUID();
+            UUID newSiteId = UUID.randomUUID();
             UUID newSiteSecret = UUID.randomUUID();
-            storeSiteSecret(newTenantId, newSiteSecret);
-            return updateIndex(feedUrl, newTenantId, newSiteSecret);
+            storeSiteSecret(newSiteId, newSiteSecret);
+            return updateIndex(feedUrl, newSiteId, newSiteSecret);
         }
     }
 
-    private void storeSiteSecret(UUID tenantId, UUID siteSecret) {
-        final ArrayByteIterable iterableTenantId = StringBinding.stringToEntry(tenantId.toString());
+    private void storeSiteSecret(UUID siteId, UUID siteSecret) {
+        final ArrayByteIterable iterableSiteId = StringBinding.stringToEntry(siteId.toString());
 
         SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
-            storeSiteSecret(iterableTenantId, txn, siteSecret);
+            storeSiteSecret(iterableSiteId, txn, siteSecret);
         });
     }
 
-    private void storeSiteSecret(ArrayByteIterable readableTenantId, @NotNull Transaction txn, UUID siteSecret) {
+    private void storeSiteSecret(ArrayByteIterable readableSiteId, @NotNull Transaction txn, UUID siteSecret) {
         Store store = SearchController.ACID_PERSISTENCE_ENVIRONMENT.openStore(SITE_SECRET_FIELD, StoreConfig.WITHOUT_DUPLICATES, txn);
-        store.put(txn, readableTenantId, StringBinding.stringToEntry(siteSecret.toString()));
+        store.put(txn, readableSiteId, StringBinding.stringToEntry(siteSecret.toString()));
     }
 
     static {
         new TrustAllX509TrustManager();
     }
 
-    private Optional<Tenant> updateIndex(URI feedUrl, UUID tenantId, UUID siteSecret) {
+    private Optional<Tenant> updateIndex(URI feedUrl, UUID siteId, UUID siteSecret) {
         LOG.info("URL-received: " + feedUrl);
         final AtomicInteger successfullyIndexed = new AtomicInteger(0);
         final List<String> documents = new ArrayList<>();
@@ -249,16 +249,16 @@ public class PageService {
                 String url = entry.getLink();
                 Page toIndex = new Page(
                         null,
-                        tenantId,
+                        siteId,
                         siteSecret, // TODO this will become superfluous once siteSecret is stored in Exodus
                         entry.getTitle(), entry.getDescription().getValue(),
                         url
                 );
-                final String siteId = Page.hashSiteId(tenantId, url);
-                Optional<FetchedSite> indexed = indexDocument(siteId, tenantId, siteSecret, toIndex);
+                final String pageId = Page.hashSiteId(siteId, url);
+                Optional<FetchedPage> indexed = indexDocument(pageId, siteId, siteSecret, toIndex);
                 if (indexed.isPresent()) {
                     successfullyIndexed.incrementAndGet();
-                    documents.add(siteId);
+                    documents.add(pageId);
                     LOG.info("successfully-indexed: " + indexed.get().getId());
                 } else {
                     failedToIndex.add(entry.getLink());
@@ -266,7 +266,7 @@ public class PageService {
                 }
             });
 
-            return Optional.of(new Tenant(tenantId, siteSecret, successfullyIndexed.get(), documents, failedToIndex));
+            return Optional.of(new Tenant(siteId, siteSecret, successfullyIndexed.get(), documents, failedToIndex));
         } catch (FeedException | IOException e) {
             LOG.warn(e.getMessage());
             return Optional.empty();

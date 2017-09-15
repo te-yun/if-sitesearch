@@ -21,13 +21,13 @@ import java.util.Collections;
 import java.util.List;
 
 public class Hits implements Serializable {
-    private List<FoundSite> results = Collections.emptyList();
+    private List<FoundPage> results = Collections.emptyList();
     private String query = "";
 
     private Hits() {
     }
 
-    public Hits(String query, List<FoundSite> results) {
+    public Hits(String query, List<FoundPage> results) {
         this.query = query;
         this.results = results;
     }
@@ -40,11 +40,11 @@ public class Hits implements Serializable {
         return query;
     }
 
-    public List<FoundSite> getResults() {
+    public List<FoundPage> getResults() {
         return results;
     }
 
-    public void setResults(List<FoundSite> sites) {
+    public void setResults(List<FoundPage> sites) {
         this.results = sites;
     }
 }

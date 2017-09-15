@@ -33,10 +33,10 @@ public class AutocompleteService {
     private static final Search SEARCH_AUTOCOMPLETE_SERVICE = IfinderCoreClient.newHessianClient(Search.class, Application.IFINDER_CORE + "/autocomplete");
     private static final Logger LOG = LoggerFactory.getLogger(AutocompleteService.class);
 
-    public Optional<Autocomplete> autocomplete(String query, UUID tenantId) {
+    public Optional<Autocomplete> autocomplete(String query, UUID siteId) {
         com.intrafind.api.search.Hits hits = SEARCH_AUTOCOMPLETE_SERVICE.search(
                 query,
-                Search.FILTER_QUERY, Fields.TENANT + ":" + tenantId,
+                Search.FILTER_QUERY, Fields.TENANT + ":" + siteId,
                 Search.HITS_LIST_SIZE, 10
         );
 

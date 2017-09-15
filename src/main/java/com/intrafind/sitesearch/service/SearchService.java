@@ -19,7 +19,7 @@ package com.intrafind.sitesearch.service;
 import com.intrafind.api.Fields;
 import com.intrafind.api.search.Search;
 import com.intrafind.sitesearch.Application;
-import com.intrafind.sitesearch.dto.FoundSite;
+import com.intrafind.sitesearch.dto.FoundPage;
 import com.intrafind.sitesearch.dto.Hits;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,11 +37,11 @@ public class SearchService {
     static final String QUERY_SEPARATOR = ",";
     private static final String HIT_TEASER_PREFIX = "hit.teaser.";
 
-    public Hits search(String query, UUID tenantId) {
+    public Hits search(String query, UUID siteId) {
         com.intrafind.api.search.Hits hits = SEARCH_SERVICE.search(
-//                query + " AND " + Fields.TENANT + ":" + tenantId,
+//                query + " AND " + Fields.TENANT + ":" + siteId,
                 query,
-                Search.FILTER_QUERY, Fields.TENANT + ":" + tenantId,
+                Search.FILTER_QUERY, Fields.TENANT + ":" + siteId,
 // TODO introduce filter on tenant
 //                Search.RETURN_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL + QUERY_SEPARATOR + Fields.TENANT,
 
@@ -56,9 +56,9 @@ public class SearchService {
         );
 
         LOG.info("query: " + query);
-        List<FoundSite> siteDocuments = new ArrayList<>();
+        List<FoundPage> siteDocuments = new ArrayList<>();
         hits.getDocuments().forEach(document -> {
-            FoundSite site = new FoundSite(
+            FoundPage site = new FoundPage(
                     document.get(HIT_TEASER_PREFIX + Fields.TITLE),
 //                    document.get(Fields.TITLE),
                     document.get(HIT_TEASER_PREFIX + Fields.BODY),

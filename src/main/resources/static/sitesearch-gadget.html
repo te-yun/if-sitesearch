@@ -32,9 +32,9 @@
         const xhr = new XMLHttpRequest();
         xhr.open("PUT", serviceUrl + "/sites/rss?feedUrl=" + feedUrl);
         xhr.onload = function () {
-            const tenantId = JSON.parse(this.response)["tenantId"];
-            document.getElementById("tenantId").value = tenantId;
-            document.cookie = "override-tenant = " + tenantId;
+            const siteId = JSON.parse(this.response)["siteId"];
+            document.getElementById("siteId").value = siteId;
+            document.cookie = "override-tenant = " + siteId;
             document.getElementById("siteSecret").value = JSON.parse(this.response)["siteSecret"];
         };
         xhr.send();
@@ -79,8 +79,8 @@
     <!--value="https://streemian.com/rss/blockchain">-->
     <label for="email"><span class="fa fa-envelope-o"></span> E-mail</label>
     <input id="email" placeholder="E-mail" value="alexander.orlov@intrafind.de">
-    <label for="tenantId"><span class="fa fa-key"></span> Tenant ID</label>
-    <input id="tenantId" placeholder="Tenant ID">
+    <label for="siteId"><span class="fa fa-key"></span> Site ID</label>
+    <input id="siteId" placeholder="Site ID">
     <label for="siteSecret"><span class="fa fa-user-secret"></span> Site Secret</label>
     <input id="siteSecret" placeholder="Site Secret">
 </div>
@@ -104,7 +104,7 @@
             sbTarget: "#searchbar",
             configurl: "searchbar-config/sitesearch-config.json",
             sitesearch: true,
-            tenantId: "363d50f3-17cb-4756-aeca-7d3768092ae1"
+            siteId: "363d50f3-17cb-4756-aeca-7d3768092ae1"
         });
     });
 </script>

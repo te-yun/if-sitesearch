@@ -16,7 +16,7 @@
 
 package com.intrafind.sitesearch.controller;
 
-import com.intrafind.sitesearch.dto.FetchedSite;
+import com.intrafind.sitesearch.dto.FetchedPage;
 import com.intrafind.sitesearch.dto.Page;
 import com.intrafind.sitesearch.dto.Tenant;
 import com.intrafind.sitesearch.service.PageService;
@@ -46,17 +46,11 @@ public class PageController {
         this.service = service;
     }
 
-    /**
-     * Fetches a specific site from index.
-     *
-     * @param id of the site to be fetched
-     * @return site as it is present in index
-     */
     @RequestMapping(method = RequestMethod.GET, path = "{id}")
-    ResponseEntity<FetchedSite> fetchById(
+    ResponseEntity<FetchedPage> fetchById(
             @PathVariable("id") String id
     ) {
-        Optional<FetchedSite> fetched = service.fetchById(id);
+        Optional<FetchedPage> fetched = service.fetchById(id);
         if (fetched.isPresent()) {
             return ResponseEntity.ok(fetched.get());
         } else {
@@ -65,13 +59,13 @@ public class PageController {
     }
 
     @RequestMapping(path = "url", method = RequestMethod.GET)
-    ResponseEntity<FetchedSite> fetchViaUrl(
+    ResponseEntity<FetchedPage> fetchViaUrl(
             @RequestParam(value = "url") String url,
-            @RequestParam(value = "tenantId") UUID tenantId
+            @RequestParam(value = "siteId") UUID siteId
     ) {
-        String siteId = Page.hashSiteId(tenantId, url);
+        String pageId = Page.hashSiteId(siteId, url);
 
-        Optional<FetchedSite> fetched = service.fetchById(siteId);
+        Optional<FetchedPage> fetched = service.fetchById(pageId);
         if (fetched.isPresent()) {
             return ResponseEntity.ok(fetched.get());
         } else {
@@ -81,9 +75,9 @@ public class PageController {
 
     @RequestMapping(method = RequestMethod.GET)
     ResponseEntity<List<String>> fetchAll(
-            @RequestParam(value = "tenantId") UUID tenantId
+            @RequestParam(value = "siteId") UUID siteId
     ) {
-        Optional<List<String>> allDocumentsOfTenant = service.fetchAllDocuments(tenantId);
+        Optional<List<String>> allDocumentsOfTenant = service.fetchAllDocuments(siteId);
         if (allDocumentsOfTenant.isPresent()) {
             return ResponseEntity.ok(allDocumentsOfTenant.get());
         } else {
@@ -97,16 +91,16 @@ public class PageController {
      * @param page to be indexed
      */
     @RequestMapping(path = "{id}", method = RequestMethod.PUT)
-    ResponseEntity<FetchedSite> indexExistingSite(
+    ResponseEntity<FetchedPage> indexExistingSite(
             @PathVariable("id") String id,
-            @RequestParam(name = "tenantId") UUID tenantId,
+            @RequestParam(name = "siteId") UUID siteId,
             @RequestParam(name = "siteSecret") UUID siteSecret,
             @RequestBody Page page
     ) {
-        // TODO use SiteUpdate DTO with NO tenantId & NO siteSecret provided
+        // TODO use SiteUpdate DTO with NO siteId & NO siteSecret provided
 
         // TODO make sure that an existing page is actually updated
-        Optional<FetchedSite> indexed = service.indexExistingSite(id, tenantId, siteSecret, page);
+        Optional<FetchedPage> indexed = service.indexExistingPage(id, siteId, siteSecret, page);
         if (indexed.isPresent()) {
             return ResponseEntity.ok(indexed.get());
         } else {
@@ -115,16 +109,16 @@ public class PageController {
     }
 
     @RequestMapping(method = RequestMethod.PUT)
-    ResponseEntity<FetchedSite> updateExistingSiteViaUrl(
-            @RequestParam(name = "tenantId") UUID tenantId,
+    ResponseEntity<FetchedPage> updateExistingSiteViaUrl(
+            @RequestParam(name = "siteId") UUID siteId,
             @RequestParam(name = "siteSecret") UUID siteSecret,
             @RequestBody Page page
     ) {
-        String siteId = Page.hashSiteId(tenantId, page.getUrl());
-        // TODO use SiteUpdate DTO with NO tenantId & NO siteSecret provided
+        String pageId = Page.hashSiteId(siteId, page.getUrl());
+        // TODO use SiteUpdate DTO with NO siteId & NO siteSecret provided
 
         // TODO make sure that an existing page is actually updated
-        Optional<FetchedSite> indexed = service.indexExistingSite(siteId, tenantId, siteSecret, page);
+        Optional<FetchedPage> indexed = service.indexExistingPage(pageId, siteId, siteSecret, page);
         if (indexed.isPresent()) {
             return ResponseEntity.ok(indexed.get());
         } else {
@@ -134,7 +128,7 @@ public class PageController {
 
     @RequestMapping(method = RequestMethod.POST)
     ResponseEntity<Page> indexNewSite(@RequestBody Page page) {
-        // TODO use SiteCreation DTO with tenantId & siteSecret
+        // TODO use SiteCreation DTO with siteId & siteSecret
         Optional<Page> indexed = service.indexNewTenantCreatingSite(page);
         if (indexed.isPresent()) {
             Page created = indexed.get();
@@ -146,11 +140,11 @@ public class PageController {
 
     @RequestMapping(path = "rss", method = RequestMethod.PUT)
     ResponseEntity<Tenant> indexRssFeed(
-            @RequestParam(value = "tenantId", required = false) UUID tenantId,
+            @RequestParam(value = "siteId", required = false) UUID siteId,
             @RequestParam(value = "siteSecret", required = false) UUID siteSecret,
             @RequestParam(value = "feedUrl") URI feedUrl
     ) {
-        Optional<Tenant> tenantCreatedInfo = service.indexFeed(feedUrl, tenantId, siteSecret);
+        Optional<Tenant> tenantCreatedInfo = service.indexFeed(feedUrl, siteId, siteSecret);
         if (tenantCreatedInfo.isPresent()) {
             return ResponseEntity.ok(tenantCreatedInfo.get());
         } else {

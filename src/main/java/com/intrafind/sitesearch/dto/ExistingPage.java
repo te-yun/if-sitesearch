@@ -22,18 +22,18 @@ import org.slf4j.LoggerFactory;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class ExistingSite implements Serializable {
-    private static final Logger LOG = LoggerFactory.getLogger(Page.class);
+public class ExistingPage implements Serializable {
+    private static final Logger LOG = LoggerFactory.getLogger(ExistingPage.class);
 
     private String id;
     private String title;
     private String body;
     private String url;
 
-    private ExistingSite() {
+    private ExistingPage() {
     }
 
-    public ExistingSite(String id, String title, String body, String url) {
+    public ExistingPage(String id, String title, String body, String url) {
         this.id = id;
         this.title = title;
         this.body = body;
@@ -76,7 +76,7 @@ public class ExistingSite implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ExistingSite site = (ExistingSite) o;
+        ExistingPage site = (ExistingPage) o;
         return Objects.equals(title, site.title) &&
                 Objects.equals(body, site.body) &&
                 Objects.equals(url, site.url);

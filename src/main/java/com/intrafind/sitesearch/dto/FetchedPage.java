@@ -18,57 +18,41 @@ package com.intrafind.sitesearch.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
-public class FoundSite implements Serializable {
-    // TODO remove raw fields
+public class FetchedPage implements Serializable {
+    private String id;
+    private UUID siteId;
     private String title;
-    //    private String titleRaw;
     private String body;
-    //    private String bodyRaw;
     private String url;
-//    private String urlRaw;
 
-    private FoundSite() {
+    private FetchedPage() {
     }
 
-//    public FoundSite(String title, String titleRaw, String body, String bodyRaw, String url, String urlRaw) {
-//        this.title = title;
-//        this.titleRaw = titleRaw;
-//        this.body = body;
-//        this.bodyRaw = bodyRaw;
-//        this.url = url;
-//        this.urlRaw = urlRaw;
-//    }
-
-    public FoundSite(String title, String body, String url) {
+    public FetchedPage(UUID siteId, String id, String title, String body, String url) {
         this.title = title;
         this.body = body;
         this.url = url;
+        this.siteId = siteId;
+        this.id = id;
     }
 
-//    public String getTitleRaw() {
-//        return titleRaw;
-//    }
-//
-//    public void setTitleRaw(String titleRaw) {
-//        this.titleRaw = titleRaw;
-//    }
+    public UUID getSiteId() {
+        return siteId;
+    }
 
-//    public String getBodyRaw() {
-//        return bodyRaw;
-//    }
-//
-//    public void setBodyRaw(String bodyRaw) {
-//        this.bodyRaw = bodyRaw;
-//    }
-//
-//    public String getUrlRaw() {
-//        return urlRaw;
-//    }
-//
-//    public void setUrlRaw(String urlRaw) {
-//        this.urlRaw = urlRaw;
-//    }
+    public void setSiteId(UUID siteId) {
+        this.siteId = siteId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -98,7 +82,7 @@ public class FoundSite implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        FoundSite site = (FoundSite) o;
+        FetchedPage site = (FetchedPage) o;
         return Objects.equals(title, site.title) &&
                 Objects.equals(body, site.body) &&
                 Objects.equals(url, site.url);

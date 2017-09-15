@@ -58,52 +58,41 @@ public class AssignmentController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        final ResponseEntity<GitHubUser> githubUser = CALLER.getForEntity(URI.create("https://api.github.com/user?access_token=" + tenantSiteAssignment.getAuthProviderToken()), GitHubUser.class);
-        // TODO disable during integration tests only, on CI & locally
-        if (System.getenv("DEV_SKIP_FLAG") == null) { // skip accessToken checks when running locally
-            if (!HttpStatus.OK.equals(githubUser.getStatusCode())
-                    || !tenantSiteAssignment.getAuthProviderId().equals(githubUser.getBody().getId())) {
-                LOG.warn("Invalid oAuth2 accessToken {} for given authProvider {} & authProviderId {}", tenantSiteAssignment.getAuthProviderToken(), tenantSiteAssignment.getAuthProvider(), tenantSiteAssignment.getAuthProviderId());
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-            }
+        if (isAuthenticated(tenantSiteAssignment.getAuthProvider(), tenantSiteAssignment.getAuthProviderId(), tenantSiteAssignment.getAuthProviderToken())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        // TODO prevent duplicate Assignments 204, or better NO_MODIFICATION
-//        final StoreTransaction entityTxn = ACID_PERSISTENCE_ENTITY.beginTransaction();
         ACID_PERSISTENCE_ENTITY.executeInTransaction(entityTxn -> {
-        Entity tenant = entityTxn.find("Tenant", "id", tenantId.toString()).getFirst();
-        if (tenant == null) {
-            tenant = entityTxn.newEntity("Tenant");
-            tenant.setProperty("id", tenantId.toString());
-        }
-        // TODO create tenant when it does not exist
-        tenant.setProperty("company", tenantSiteAssignment.getCompany());
-        tenant.setProperty("contactEmail", tenantSiteAssignment.getContactEmail());
+            Entity tenant = entityTxn.find("Tenant", "id", tenantId.toString()).getFirst();
+            if (tenant == null) {
+                tenant = entityTxn.newEntity("Tenant");
+                tenant.setProperty("id", tenantId.toString());
+            }
+            tenant.setProperty("company", tenantSiteAssignment.getCompany());
+            tenant.setProperty("contactEmail", tenantSiteAssignment.getContactEmail());
 
-        if (entityTxn.find("AuthProvider", "id", providerId).size() > 1) {
-            throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Duplicate AuthProvider ID found: " + providerId);
-        }
-        Entity authProvider = entityTxn.find("AuthProvider", "id", providerId).getFirst();
-        if (authProvider == null) {
-            authProvider = entityTxn.newEntity("AuthProvider");
-            authProvider.setProperty("id", providerId);
-        }
-        tenant.addLink("authProvider", authProvider);   // TODO avoid duplicates // TODO add tests
-        authProvider.addLink("tenant", tenant);
+            if (entityTxn.find("AuthProvider", "id", providerId).size() > 1) {
+                throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Duplicate AuthProvider ID found: " + providerId);
+            }
+            Entity authProvider = entityTxn.find("AuthProvider", "id", providerId).getFirst();
+            if (authProvider == null) {
+                authProvider = entityTxn.newEntity("AuthProvider");
+                authProvider.setProperty("id", providerId);
+            }
+            tenant.addLink("authProvider", authProvider);   // TODO avoid duplicates // TODO add tests
+            authProvider.addLink("tenant", tenant);
 
-        if (entityTxn.find("Site", "id", siteId.toString()).size() > 1) {
-            throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Duplicate Site ID found: " + siteId.toString());
-        }
-        Entity site = entityTxn.find("Site", "id", siteId.toString()).getFirst();
-        if (site == null) {
-            site = entityTxn.newEntity("Site");
-            site.setProperty("id", siteId.toString());
-            site.setProperty("secret", siteSecret.toString());
-        }
-        tenant.addLink("site", site);   // TODO avoid duplicates // TODO add tests
-        site.addLink("tenant", tenant);
-
-//        entityTxn.commit();
+            if (entityTxn.find("Site", "id", siteId.toString()).size() > 1) {
+                throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Duplicate Site ID found: " + siteId.toString());
+            }
+            Entity site = entityTxn.find("Site", "id", siteId.toString()).getFirst();
+            if (site == null) {
+                site = entityTxn.newEntity("Site");
+                site.setProperty("id", siteId.toString());
+                site.setProperty("secret", siteSecret.toString());
+            }
+            tenant.addLink("site", site);   // TODO avoid duplicates // TODO add tests
+            site.addLink("tenant", tenant);
         });
 
         return ResponseEntity
@@ -134,14 +123,8 @@ public class AssignmentController {
         LOG.info("providerId: " + providerId);
         LOG.info("accessToken: " + accessToken);
 
-        // TODO make this a helper method that is reused above 
-        final ResponseEntity<GitHubUser> githubUser = CALLER.getForEntity(URI.create("https://api.github.com/user?access_token=" + accessToken), GitHubUser.class);
-        if (System.getenv("DEV_SKIP_FLAG") == null) { // skip accessToken checks when running locally
-            if (!HttpStatus.OK.equals(githubUser.getStatusCode())
-                    || !providerId.equals(githubUser.getBody().getId())) {
-                LOG.warn("Invalid oAuth2 accessToken {} for given authProvider {} & authProviderId {}", accessToken, provider, providerId);
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-            }
+        if (isAuthenticated(provider, providerId, accessToken)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
         final StoreTransaction findTxn = ACID_PERSISTENCE_ENTITY.beginReadonlyTransaction();
@@ -159,6 +142,18 @@ public class AssignmentController {
         findTxn.commit();
 
         return ResponseEntity.ok(tenantOverview);
+    }
+
+    private boolean isAuthenticated(String provider, String providerId, String accessToken) {
+        final ResponseEntity<GitHubUser> githubUser = CALLER.getForEntity(URI.create("https://api.github.com/user?access_token=" + accessToken), GitHubUser.class);
+        if (System.getenv("DEV_SKIP_FLAG") == null) { // skip accessToken checks when running locally or on CI
+            if (!HttpStatus.OK.equals(githubUser.getStatusCode())
+                    || !providerId.equals(githubUser.getBody().getId())) {
+                LOG.warn("Invalid oAuth2 accessToken {} for given authProvider {} & authProviderId {}", accessToken, provider, providerId);
+                return true;
+            }
+        }
+        return false;
     }
 
 }

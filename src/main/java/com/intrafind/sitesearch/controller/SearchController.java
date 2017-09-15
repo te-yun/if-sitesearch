@@ -61,32 +61,32 @@ public class SearchController {
     ResponseEntity<Hits> search(
             @CookieValue(value = "override-tenant", required = false) UUID cookieTenant,
             @RequestParam(value = "query", required = false, defaultValue = "") String query,
-            @RequestParam(value = "tenantId") UUID tenantId
+            @RequestParam(value = "siteId") UUID siteId
     ) {
         if (query.isEmpty()) return ResponseEntity.badRequest().build();
 
-        // override tenantId with cookie value for debugging & speed up the getting started experience 
+        // override siteId with cookie value for debugging & speed up the getting started experience
         if (cookieTenant != null) {
             LOG.info("cookieTenant: " + cookieTenant);
-            tenantId = cookieTenant;
+            siteId = cookieTenant;
         }
 
         LOG.info("query: " + query);
-        Hits searchResult = service.search(query, tenantId);
+        Hits searchResult = service.search(query, siteId);
         if (searchResult.getResults().isEmpty()) {
             return ResponseEntity.notFound().build();
         } else {
             if (queryCountEnabled) {
-                final ArrayByteIterable readableTenantId = StringBinding.stringToEntry(tenantId.toString());
+                final ArrayByteIterable readableSiteId = StringBinding.stringToEntry(siteId.toString());
                 ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
                     final Store store = ACID_PERSISTENCE_ENVIRONMENT.openStore(StatsController.QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
                     long queryCount = 0;
-                    final ByteIterable tenantQueryCount = store.get(txn, readableTenantId);
+                    final ByteIterable tenantQueryCount = store.get(txn, readableSiteId);
                     if (tenantQueryCount != null) {
                         queryCount = LongBinding.entryToLong(tenantQueryCount);
                         LOG.info("queryCount: " + queryCount);
                     }
-                    store.put(txn, readableTenantId, LongBinding.longToEntry(++queryCount));
+                    store.put(txn, readableSiteId, LongBinding.longToEntry(++queryCount));
                 });
             }
             return ResponseEntity.ok(searchResult);

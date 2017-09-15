@@ -44,16 +44,16 @@ public class AutocompleteController {
     ResponseEntity<Autocomplete> search(
             @CookieValue(value = "override-tenant", required = false) UUID cookieTenant,
             @RequestParam(value = "query", required = false, defaultValue = "") String query,
-            @RequestParam(value = "tenantId") UUID tenantId
+            @RequestParam(value = "siteId") UUID siteId
     ) {
         if (query.isEmpty()) return ResponseEntity.badRequest().build();
 
-        // override tenantId with cookie value for debugging & speed up the getting started experience 
-        if (cookieTenant != null) tenantId = cookieTenant;
+        // override siteId with cookie value for debugging & speed up the getting started experience
+        if (cookieTenant != null) siteId = cookieTenant;
 
         LOG.info("cookieTenant: " + cookieTenant);
         LOG.info("query: " + query);
-        Optional<Autocomplete> result = service.autocomplete(query, tenantId);
+        Optional<Autocomplete> result = service.autocomplete(query, siteId);
         if (result.isPresent()) {
             return ResponseEntity.ok(result.get());
         } else {

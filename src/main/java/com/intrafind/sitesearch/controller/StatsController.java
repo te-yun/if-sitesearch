@@ -71,13 +71,13 @@ public class StatsController {
 
     @RequestMapping(method = RequestMethod.GET)
     ResponseEntity<Stats> stats(
-            @RequestParam(value = "tenantId") UUID tenantId
+            @RequestParam(value = "siteId") UUID siteId
     ) {
         final AtomicLong queryCount = new AtomicLong();
-        final ArrayByteIterable readableTenantId = StringBinding.stringToEntry(tenantId.toString());
+        final ArrayByteIterable readableSiteId = StringBinding.stringToEntry(siteId.toString());
         SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInReadonlyTransaction(txn -> {  // TODO make this a readonly tx
             final Store store = SearchController.ACID_PERSISTENCE_ENVIRONMENT.openStore(QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
-            final ByteIterable queryCountValue = store.get(txn, readableTenantId);
+            final ByteIterable queryCountValue = store.get(txn, readableSiteId);
             if (queryCountValue != null) {
                 queryCount.set(LongBinding.entryToLong(queryCountValue));
             }
