@@ -20,9 +20,6 @@ import com.intrafind.sitesearch.dto.FetchedPage;
 import com.intrafind.sitesearch.dto.Page;
 import com.intrafind.sitesearch.dto.Tenant;
 import com.intrafind.sitesearch.service.PageService;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +34,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping(SiteController.ENDPOINT)
 public class SiteController {
-    public static final String ENDPOINT = "/pages";
+    public static final String ENDPOINT = "/sites";
     private static final Logger LOG = LoggerFactory.getLogger(SiteController.class);
     private final PageService service;
 
@@ -126,18 +123,5 @@ public class SiteController {
         } else {
             return ResponseEntity.badRequest().build();
         }
-    }
-
-    //  /sites/{siteId}/pages/{id}?siteSecret
-    @RequestMapping(method = RequestMethod.DELETE, path = "{id}")
-    @ApiOperation(value = "Deletes a document from index", response = ApiResponses.class)
-    ResponseEntity deleteSiteById(
-            @ApiParam(value = "ID of a single document to delete", example = "5f2b9c2e-6071-4f30-8972-7781fac73726")
-            @PathVariable(name = "id") String id,
-            @RequestParam(name = "siteSecret", required = false) UUID siteSecret // TODO SECURITY_ISSUE implement a corresponding check
-    ) {
-        LOG.info("delete-event" + id);
-        service.delete(id);
-        return ResponseEntity.noContent().build();
     }
 }
