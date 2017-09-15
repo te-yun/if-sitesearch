@@ -5,6 +5,6 @@ Backlog
 
 # next
 * Marketing website
-* save tenantSecret in persistent store, not in the ElasticSearch document
+* save siteSecret in persistent store, not in the ElasticSearch document
 
 # future

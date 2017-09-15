@@ -23,7 +23,7 @@ import java.util.UUID;
 
 public class Tenant implements Serializable {
     private UUID tenantId;
-    private UUID tenantSecret;
+    private UUID siteSecret;
     // TODO remove successCount as it's an implicit part of documents(.size)
     private int successCount;
     private List<String> documents = Collections.emptyList();
@@ -32,9 +32,9 @@ public class Tenant implements Serializable {
     private Tenant() {
     }
 
-    public Tenant(UUID tenantId, UUID tenantSecret, int successCount, List<String> documents, List<String> failed) {
+    public Tenant(UUID tenantId, UUID siteSecret, int successCount, List<String> documents, List<String> failed) {
         this.tenantId = tenantId;
-        this.tenantSecret = tenantSecret;
+        this.siteSecret = siteSecret;
         this.successCount = successCount;
         this.documents = documents;
         this.failed = failed;
@@ -72,11 +72,11 @@ public class Tenant implements Serializable {
         this.tenantId = tenantId;
     }
 
-    public UUID getTenantSecret() {
-        return tenantSecret;
+    public UUID getSiteSecret() {
+        return siteSecret;
     }
 
-    public void setTenantSecret(UUID tenantSecret) {
-        this.tenantSecret = tenantSecret;
+    public void setSiteSecret(UUID siteSecret) {
+        this.siteSecret = siteSecret;
     }
 }

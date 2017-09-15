@@ -81,7 +81,7 @@ public class LoadIndex2Users {
         final ResponseEntity<Page> actual = Load10Users.CALLER.exchange(
                 Load10Users.LOAD_TARGET + PageController.ENDPOINT
                         + "?tenantId=" + "e10011b2-7f95-49e4-a9cb-189f5f5a6654"
-                        + "&tenantSecret=c041b603-e5b7-4623-8fe9-4cd08e5b4558",
+                        + "&siteSecret=c041b603-e5b7-4623-8fe9-4cd08e5b4558",
                 HttpMethod.PUT,
                 new HttpEntity<>(pageToIndex),
                 Page.class
@@ -105,7 +105,7 @@ public class LoadIndex2Users {
                 Load10Users.LOAD_TARGET + PageController.ENDPOINT
                         + "/80147ae9-e5a1-4278-a647-3dc264bba0d4"
                         + "?tenantId=" + "e10011b2-7f95-49e4-a9cb-189f5f5a6654"
-                        + "&tenantSecret=c041b603-e5b7-4623-8fe9-4cd08e5b4558",
+                        + "&siteSecret=c041b603-e5b7-4623-8fe9-4cd08e5b4558",
                 HttpMethod.PUT,
                 new HttpEntity<>(pageToIndex),
                 Page.class

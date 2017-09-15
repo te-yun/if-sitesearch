@@ -30,7 +30,7 @@ public class Page implements Serializable {
 
     private String id;
     private UUID tenantId;
-    private UUID tenantSecret;
+    private UUID siteSecret;
     private String title;
     private String body;
     private String url;
@@ -38,21 +38,21 @@ public class Page implements Serializable {
     private Page() {
     }
 
-    public Page(String id, UUID tenantId, UUID tenantSecret, String title, String body, String url) {
+    public Page(String id, UUID tenantId, UUID siteSecret, String title, String body, String url) {
         this.id = id;
         this.tenantId = tenantId;
-        this.tenantSecret = tenantSecret;
+        this.siteSecret = siteSecret;
         this.title = title;
         this.body = body;
         this.url = url;
     }
 
-    public UUID getTenantSecret() {
-        return tenantSecret;
+    public UUID getSiteSecret() {
+        return siteSecret;
     }
 
-    public void setTenantSecret(UUID tenantSecret) {
-        this.tenantSecret = tenantSecret;
+    public void setSiteSecret(UUID siteSecret) {
+        this.siteSecret = siteSecret;
     }
 
     public String getTitle() {

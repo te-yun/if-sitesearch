@@ -33,7 +33,7 @@
             const tenantId = JSON.parse(this.response)["tenantId"];
             document.getElementById("tenantId").value = tenantId;
             document.cookie = "override-tenant = " + tenantId;
-            document.getElementById("tenantSecret").value = JSON.parse(this.response)["tenantSecret"];
+            document.getElementById("siteSecret").value = JSON.parse(this.response)["siteSecret"];
         };
         xhr.send();
     }
@@ -73,8 +73,8 @@
            value="http://intrafind.de/share/enterprise-search-blog.xml">
     <label for="tenantId"><span class="fa fa-key"></span> Tenant ID</label>
     <input id="tenantId" placeholder="Tenant ID">
-    <label for="tenantSecret"><span class="fa fa-user-secret"></span> Tenant Secret</label>
-    <input id="tenantSecret" placeholder="Tenant Secret">
+    <label for="siteSecret"><span class="fa fa-user-secret"></span> Site Secret</label>
+    <input id="siteSecret" placeholder="Site Secret">
 </div>
 <button id="index" class="fa fa-cogs"
         style="height: 1.5em; font-size: 2em;"

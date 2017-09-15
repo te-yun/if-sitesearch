@@ -100,13 +100,13 @@ public class PageController {
     ResponseEntity<FetchedSite> indexExistingSite(
             @PathVariable("id") String id,
             @RequestParam(name = "tenantId") UUID tenantId,
-            @RequestParam(name = "tenantSecret") UUID tenantSecret,
+            @RequestParam(name = "siteSecret") UUID siteSecret,
             @RequestBody Page page
     ) {
-        // TODO use SiteUpdate DTO with NO tenantId & NO tenantSecret provided
+        // TODO use SiteUpdate DTO with NO tenantId & NO siteSecret provided
 
         // TODO make sure that an existing page is actually updated
-        Optional<FetchedSite> indexed = service.indexExistingSite(id, tenantId, tenantSecret, page);
+        Optional<FetchedSite> indexed = service.indexExistingSite(id, tenantId, siteSecret, page);
         if (indexed.isPresent()) {
             return ResponseEntity.ok(indexed.get());
         } else {
@@ -117,14 +117,14 @@ public class PageController {
     @RequestMapping(method = RequestMethod.PUT)
     ResponseEntity<FetchedSite> updateExistingSiteViaUrl(
             @RequestParam(name = "tenantId") UUID tenantId,
-            @RequestParam(name = "tenantSecret") UUID tenantSecret,
+            @RequestParam(name = "siteSecret") UUID siteSecret,
             @RequestBody Page page
     ) {
         String siteId = Page.hashSiteId(tenantId, page.getUrl());
-        // TODO use SiteUpdate DTO with NO tenantId & NO tenantSecret provided
+        // TODO use SiteUpdate DTO with NO tenantId & NO siteSecret provided
 
         // TODO make sure that an existing page is actually updated
-        Optional<FetchedSite> indexed = service.indexExistingSite(siteId, tenantId, tenantSecret, page);
+        Optional<FetchedSite> indexed = service.indexExistingSite(siteId, tenantId, siteSecret, page);
         if (indexed.isPresent()) {
             return ResponseEntity.ok(indexed.get());
         } else {
@@ -134,7 +134,7 @@ public class PageController {
 
     @RequestMapping(method = RequestMethod.POST)
     ResponseEntity<Page> indexNewSite(@RequestBody Page page) {
-        // TODO use SiteCreation DTO with tenantId & tenantSecret
+        // TODO use SiteCreation DTO with tenantId & siteSecret
         Optional<Page> indexed = service.indexNewTenantCreatingSite(page);
         if (indexed.isPresent()) {
             Page created = indexed.get();
@@ -147,10 +147,10 @@ public class PageController {
     @RequestMapping(path = "rss", method = RequestMethod.PUT)
     ResponseEntity<Tenant> indexRssFeed(
             @RequestParam(value = "tenantId", required = false) UUID tenantId,
-            @RequestParam(value = "tenantSecret", required = false) UUID tenantSecret,
+            @RequestParam(value = "siteSecret", required = false) UUID siteSecret,
             @RequestParam(value = "feedUrl") URI feedUrl
     ) {
-        Optional<Tenant> tenantCreatedInfo = service.indexFeed(feedUrl, tenantId, tenantSecret);
+        Optional<Tenant> tenantCreatedInfo = service.indexFeed(feedUrl, tenantId, siteSecret);
         if (tenantCreatedInfo.isPresent()) {
             return ResponseEntity.ok(tenantCreatedInfo.get());
         } else {

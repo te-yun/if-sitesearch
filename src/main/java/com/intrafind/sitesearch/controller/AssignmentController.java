@@ -113,7 +113,7 @@ public class AssignmentController {
 
     private UUID obtainSiteSecret(UUID siteId) {
         return UUID.fromString(SearchController.ACID_PERSISTENCE_ENVIRONMENT.computeInReadonlyTransaction(txn -> {
-            Store store = SearchController.ACID_PERSISTENCE_ENVIRONMENT.openStore(PageService.TENANT_SECRET_FIELD, StoreConfig.WITHOUT_DUPLICATES, txn);
+            Store store = SearchController.ACID_PERSISTENCE_ENVIRONMENT.openStore(PageService.SITE_SECRET_FIELD, StoreConfig.WITHOUT_DUPLICATES, txn);
             return StringBinding.entryToString(store.get(txn, StringBinding.stringToEntry(siteId.toString())));
         }));
     }
