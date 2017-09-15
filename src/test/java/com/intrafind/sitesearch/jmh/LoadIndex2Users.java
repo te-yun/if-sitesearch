@@ -17,7 +17,7 @@
 package com.intrafind.sitesearch.jmh;
 
 import com.intrafind.sitesearch.controller.SiteController;
-import com.intrafind.sitesearch.dto.Site;
+import com.intrafind.sitesearch.dto.Page;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Mode;
@@ -50,18 +50,18 @@ public class LoadIndex2Users {
     @Benchmark
     public void indexNewSiteAsNewTenant() throws Exception {
         final String loremIpsumText = generateLoremIpsum();
-        final Site siteToIndex = new Site(
+        final Page pageToIndex = new Page(
                 null, null, null,
                 loremIpsumText.substring(0, 42),
                 loremIpsumText,
                 "https://example.com/" + UUID.randomUUID()
         );
 
-        final ResponseEntity<Site> actual = Load10Users.CALLER.exchange(
+        final ResponseEntity<Page> actual = Load10Users.CALLER.exchange(
                 Load10Users.LOAD_TARGET + SiteController.ENDPOINT,
                 HttpMethod.POST,
-                new HttpEntity<>(siteToIndex),
-                Site.class
+                new HttpEntity<>(pageToIndex),
+                Page.class
         );
 
         assertEquals(HttpStatus.CREATED, actual.getStatusCode());
@@ -71,20 +71,20 @@ public class LoadIndex2Users {
     @Benchmark
     public void indexUpdateWithNewSites() throws Exception {
         final String loremIpsumText = generateLoremIpsum();
-        final Site siteToIndex = new Site(
+        final Page pageToIndex = new Page(
                 null, null, null,
                 loremIpsumText.substring(0, 42),
                 loremIpsumText,
                 "https://example.com/" + UUID.randomUUID()
         );
 
-        final ResponseEntity<Site> actual = Load10Users.CALLER.exchange(
+        final ResponseEntity<Page> actual = Load10Users.CALLER.exchange(
                 Load10Users.LOAD_TARGET + SiteController.ENDPOINT
                         + "?tenantId=" + "e10011b2-7f95-49e4-a9cb-189f5f5a6654"
                         + "&tenantSecret=c041b603-e5b7-4623-8fe9-4cd08e5b4558",
                 HttpMethod.PUT,
-                new HttpEntity<>(siteToIndex),
-                Site.class
+                new HttpEntity<>(pageToIndex),
+                Page.class
         );
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
@@ -94,21 +94,21 @@ public class LoadIndex2Users {
     @Benchmark
     public void updateIndexedSite() throws Exception {
         final String loremIpsumText = generateLoremIpsum();
-        final Site siteToIndex = new Site(
+        final Page pageToIndex = new Page(
                 null, null, null,
                 loremIpsumText.substring(0, 42),
                 loremIpsumText,
                 "https://example.com/" + UUID.randomUUID()
         );
 
-        final ResponseEntity<Site> actual = Load10Users.CALLER.exchange(
+        final ResponseEntity<Page> actual = Load10Users.CALLER.exchange(
                 Load10Users.LOAD_TARGET + SiteController.ENDPOINT
                         + "/80147ae9-e5a1-4278-a647-3dc264bba0d4"
                         + "?tenantId=" + "e10011b2-7f95-49e4-a9cb-189f5f5a6654"
                         + "&tenantSecret=c041b603-e5b7-4623-8fe9-4cd08e5b4558",
                 HttpMethod.PUT,
-                new HttpEntity<>(siteToIndex),
-                Site.class
+                new HttpEntity<>(pageToIndex),
+                Page.class
         );
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());

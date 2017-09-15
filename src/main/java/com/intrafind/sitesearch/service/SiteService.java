@@ -25,7 +25,7 @@ import com.intrafind.sitesearch.Application;
 import com.intrafind.sitesearch.TrustAllX509TrustManager;
 import com.intrafind.sitesearch.controller.SearchController;
 import com.intrafind.sitesearch.dto.FetchedSite;
-import com.intrafind.sitesearch.dto.Site;
+import com.intrafind.sitesearch.dto.Page;
 import com.intrafind.sitesearch.dto.Tenant;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
@@ -60,29 +60,29 @@ public class SiteService {
 
     private static final Index INDEX_SERVICE = IfinderCoreClient.newHessianClient(Index.class, Application.IFINDER_CORE + "/index");
 
-    public Optional<FetchedSite> indexExistingSite(String id, UUID tenantId, UUID tenantSecret, Site site) {
+    public Optional<FetchedSite> indexExistingSite(String id, UUID tenantId, UUID tenantSecret, Page page) {
         if (tenantId != null && tenantSecret != null) { // credentials are provided as a tuple only
             final Optional<UUID> fetchedTenantSecret = fetchTenantSecret(tenantId);
             if (!fetchedTenantSecret.isPresent()) { // tenant does not exist
                 return Optional.empty();
             } else if (tenantSecret.equals(fetchedTenantSecret.get())) { // authorized
                 LOG.info("updating-feed: " + tenantId);
-                return indexDocument(id, tenantId, tenantSecret, site);
+                return indexDocument(id, tenantId, tenantSecret, page);
             } else { // unauthorized
                 return Optional.empty();
             }
         } else if (tenantId == null ^ tenantSecret == null) { // it does not make any sense if only one of the parameters is set
             return Optional.empty();
         } else { // consider request as first-usage-ownership-granting request, create new index
-            return indexDocument(Site.hashSiteId(UUID.randomUUID(), site.getUrl()), UUID.randomUUID(), UUID.randomUUID(), site);
+            return indexDocument(Page.hashSiteId(UUID.randomUUID(), page.getUrl()), UUID.randomUUID(), UUID.randomUUID(), page);
         }
     }
 
-    private Optional<FetchedSite> indexDocument(String id, UUID tenantId, UUID tenantSecret, Site site) {
+    private Optional<FetchedSite> indexDocument(String id, UUID tenantId, UUID tenantSecret, Page page) {
         Document indexable = new Document(id);
-        indexable.set(Fields.BODY, site.getBody());
-        indexable.set(Fields.TITLE, site.getTitle());
-        indexable.set(Fields.URL, site.getUrl());
+        indexable.set(Fields.BODY, page.getBody());
+        indexable.set(Fields.TITLE, page.getTitle());
+        indexable.set(Fields.URL, page.getUrl());
         indexable.set(Fields.TENANT, tenantId);
         indexable.set(TENANT_SECRET_FIELD, tenantSecret); // TODO will become superfluous once tenantSecret is stored in Exodus
         INDEX_SERVICE.index(indexable);
@@ -90,22 +90,22 @@ public class SiteService {
         return fetchById(id);
     }
 
-    public Optional<Site> indexNewTenantCreatingSite(Site site) {
-        String siteId = createTenant(site);
+    public Optional<Page> indexNewTenantCreatingSite(Page page) {
+        String siteId = createTenant(page);
 
         return fetchNewTenantCreatingSiteById(siteId);
     }
 
-    private String createTenant(Site site) {
+    private String createTenant(Page page) {
         UUID tenantId = UUID.randomUUID();
         final ArrayByteIterable readableTenantId = StringBinding.stringToEntry(tenantId.toString());
-        String siteId = Site.hashSiteId(tenantId, site.getUrl());
+        String siteId = Page.hashSiteId(tenantId, page.getUrl());
 
         SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
             Document indexable = new Document(siteId);
-            indexable.set(Fields.BODY, site.getBody());
-            indexable.set(Fields.TITLE, site.getTitle());
-            indexable.set(Fields.URL, site.getUrl());
+            indexable.set(Fields.BODY, page.getBody());
+            indexable.set(Fields.TITLE, page.getTitle());
+            indexable.set(Fields.URL, page.getUrl());
             indexable.set(Fields.TENANT, tenantId);
             UUID tenantSecret = UUID.randomUUID();
 
@@ -159,12 +159,12 @@ public class SiteService {
         }
     }
 
-    private Optional<Site> fetchNewTenantCreatingSiteById(String id) {
+    private Optional<Page> fetchNewTenantCreatingSiteById(String id) {
         Optional<Document> found = INDEX_SERVICE.fetch(Index.ALL, id).stream().findAny();
 
         if (found.isPresent()) {
             Document foundDocument = found.get();
-            Site representationOfFoundDocument = new Site(
+            Page representationOfFoundDocument = new Page(
                     foundDocument.getId(),
                     UUID.fromString(foundDocument.get(Fields.TENANT)),
                     UUID.fromString(foundDocument.get(TENANT_SECRET_FIELD)),
@@ -250,14 +250,14 @@ public class SiteService {
                 LOG.info("description: " + entry.getDescription().getValue());
 
                 String url = entry.getLink();
-                Site toIndex = new Site(
+                Page toIndex = new Page(
                         null,
                         tenantId,
                         tenantSecret, // TODO this will become superfluous once tenantSecret is stored in Exodus
                         entry.getTitle(), entry.getDescription().getValue(),
                         url
                 );
-                final String siteId = Site.hashSiteId(tenantId, url);
+                final String siteId = Page.hashSiteId(tenantId, url);
                 Optional<FetchedSite> indexed = indexDocument(siteId, tenantId, tenantSecret, toIndex);
                 if (indexed.isPresent()) {
                     successfullyIndexed.incrementAndGet();

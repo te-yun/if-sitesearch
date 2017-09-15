@@ -23,7 +23,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class ExistingSite implements Serializable {
-    private static final Logger LOG = LoggerFactory.getLogger(Site.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Page.class);
 
     private String id;
     private String title;

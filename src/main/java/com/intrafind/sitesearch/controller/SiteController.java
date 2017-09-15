@@ -17,7 +17,7 @@
 package com.intrafind.sitesearch.controller;
 
 import com.intrafind.sitesearch.dto.FetchedSite;
-import com.intrafind.sitesearch.dto.Site;
+import com.intrafind.sitesearch.dto.Page;
 import com.intrafind.sitesearch.dto.Tenant;
 import com.intrafind.sitesearch.service.SiteService;
 import io.swagger.annotations.ApiOperation;
@@ -69,7 +69,7 @@ public class SiteController {
             @RequestParam(value = "url") String url,
             @RequestParam(value = "tenantId") UUID tenantId
     ) {
-        String siteId = Site.hashSiteId(tenantId, url);
+        String siteId = Page.hashSiteId(tenantId, url);
 
         Optional<FetchedSite> fetched = service.fetchById(siteId);
         if (fetched.isPresent()) {
@@ -92,21 +92,21 @@ public class SiteController {
     }
 
     /**
-     * Inserts a site into index.
+     * Inserts a page into index.
      *
-     * @param site to be indexed
+     * @param page to be indexed
      */
     @RequestMapping(path = "{id}", method = RequestMethod.PUT)
     ResponseEntity<FetchedSite> indexExistingSite(
             @PathVariable("id") String id,
             @RequestParam(name = "tenantId") UUID tenantId,
             @RequestParam(name = "tenantSecret") UUID tenantSecret,
-            @RequestBody Site site
+            @RequestBody Page page
     ) {
         // TODO use SiteUpdate DTO with NO tenantId & NO tenantSecret provided
 
-        // TODO make sure that an existing site is actually updated
-        Optional<FetchedSite> indexed = service.indexExistingSite(id, tenantId, tenantSecret, site);
+        // TODO make sure that an existing page is actually updated
+        Optional<FetchedSite> indexed = service.indexExistingSite(id, tenantId, tenantSecret, page);
         if (indexed.isPresent()) {
             return ResponseEntity.ok(indexed.get());
         } else {
@@ -118,13 +118,13 @@ public class SiteController {
     ResponseEntity<FetchedSite> updateExistingSiteViaUrl(
             @RequestParam(name = "tenantId") UUID tenantId,
             @RequestParam(name = "tenantSecret") UUID tenantSecret,
-            @RequestBody Site site
+            @RequestBody Page page
     ) {
-        String siteId = Site.hashSiteId(tenantId, site.getUrl());
+        String siteId = Page.hashSiteId(tenantId, page.getUrl());
         // TODO use SiteUpdate DTO with NO tenantId & NO tenantSecret provided
 
-        // TODO make sure that an existing site is actually updated
-        Optional<FetchedSite> indexed = service.indexExistingSite(siteId, tenantId, tenantSecret, site);
+        // TODO make sure that an existing page is actually updated
+        Optional<FetchedSite> indexed = service.indexExistingSite(siteId, tenantId, tenantSecret, page);
         if (indexed.isPresent()) {
             return ResponseEntity.ok(indexed.get());
         } else {
@@ -133,11 +133,11 @@ public class SiteController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity<Site> indexNewSite(@RequestBody Site site) {
+    ResponseEntity<Page> indexNewSite(@RequestBody Page page) {
         // TODO use SiteCreation DTO with tenantId & tenantSecret
-        Optional<Site> indexed = service.indexNewTenantCreatingSite(site);
+        Optional<Page> indexed = service.indexNewTenantCreatingSite(page);
         if (indexed.isPresent()) {
-            Site created = indexed.get();
+            Page created = indexed.get();
             return ResponseEntity.created(URI.create("https://sitesearch.cloud/sites/" + created.getId())).body(created);
         } else {
             return ResponseEntity.badRequest().build();

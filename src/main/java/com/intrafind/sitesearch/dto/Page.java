@@ -25,8 +25,8 @@ import java.nio.charset.Charset;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Site implements Serializable {
-    private static final Logger LOG = LoggerFactory.getLogger(Site.class);
+public class Page implements Serializable {
+    private static final Logger LOG = LoggerFactory.getLogger(Page.class);
 
     private String id;
     private UUID tenantId;
@@ -35,10 +35,10 @@ public class Site implements Serializable {
     private String body;
     private String url;
 
-    private Site() {
+    private Page() {
     }
 
-    public Site(String id, UUID tenantId, UUID tenantSecret, String title, String body, String url) {
+    public Page(String id, UUID tenantId, UUID tenantSecret, String title, String body, String url) {
         this.id = id;
         this.tenantId = tenantId;
         this.tenantSecret = tenantSecret;
@@ -100,10 +100,10 @@ public class Site implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Site site = (Site) o;
-        return Objects.equals(title, site.title) &&
-                Objects.equals(body, site.body) &&
-                Objects.equals(url, site.url);
+        Page page = (Page) o;
+        return Objects.equals(title, page.title) &&
+                Objects.equals(body, page.body) &&
+                Objects.equals(url, page.url);
     }
 
     @Override

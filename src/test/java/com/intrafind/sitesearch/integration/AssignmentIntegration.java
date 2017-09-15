@@ -18,7 +18,7 @@ package com.intrafind.sitesearch.integration;
 
 import com.intrafind.sitesearch.controller.AssignmentController;
 import com.intrafind.sitesearch.controller.SiteController;
-import com.intrafind.sitesearch.dto.Site;
+import com.intrafind.sitesearch.dto.Page;
 import com.intrafind.sitesearch.dto.TenantOverview;
 import com.intrafind.sitesearch.dto.TenantSiteAssignment;
 import org.junit.Test;
@@ -45,11 +45,11 @@ public class AssignmentIntegration {
     @Autowired
     private TestRestTemplate caller;
 
-    private Site createSiteViaPageCreation() throws Exception {
-        Site simple = SiteTest.buildSite(UUID.randomUUID());
-        ResponseEntity<Site> actual = caller.exchange(SiteController.ENDPOINT, HttpMethod.POST, new HttpEntity<>(simple), Site.class);
+    private Page createSiteViaPageCreation() throws Exception {
+        Page simple = PageTest.buildSite(UUID.randomUUID());
+        ResponseEntity<Page> actual = caller.exchange(SiteController.ENDPOINT, HttpMethod.POST, new HttpEntity<>(simple), Page.class);
         assertEquals(HttpStatus.CREATED, actual.getStatusCode());
-        ResponseEntity<Site> newlyCreatedPageWithSiteId = caller.exchange(SiteController.ENDPOINT + "/" + actual.getBody().getId(), HttpMethod.GET, HttpEntity.EMPTY, Site.class);
+        ResponseEntity<Page> newlyCreatedPageWithSiteId = caller.exchange(SiteController.ENDPOINT + "/" + actual.getBody().getId(), HttpMethod.GET, HttpEntity.EMPTY, Page.class);
         assertEquals(HttpStatus.OK, newlyCreatedPageWithSiteId.getStatusCode());
         assertEquals(actual.getBody().getId(), newlyCreatedPageWithSiteId.getBody().getId());
 
@@ -58,7 +58,7 @@ public class AssignmentIntegration {
 
     @Test
     public void assignSiteToTenant() throws Exception {
-        final Site siteViaPageCreation = createSiteViaPageCreation();
+        final Page siteViaPageCreation = createSiteViaPageCreation();
 
         final UUID tenantId = UUID.randomUUID();
         final UUID siteId = siteViaPageCreation.getTenantId();
@@ -86,8 +86,8 @@ public class AssignmentIntegration {
         final ResponseEntity<TenantOverview> addedAuthProvider = obtainAuthProvidersAssignments(authProvider, authProviderId);
         assureSingleSimpleAssignment(addedAuthProvider, 1, 1);
 
-        // add additional site
-        final Site additionalSiteViaPageCreation = createSiteViaPageCreation();
+        // add additional Page
+        final Page additionalSiteViaPageCreation = createSiteViaPageCreation();
         final ResponseEntity additionalSiteAddition = assignTenantAndSiteToAuthProvider(tenantId, additionalSiteViaPageCreation.getTenantId(), additionalSiteViaPageCreation.getTenantSecret(), authProvider, authProviderId);
         assertEquals(HttpStatus.CREATED, additionalSiteAddition.getStatusCode());
         final ResponseEntity<TenantOverview> additionalSiteAdded = obtainAuthProvidersAssignments(authProvider, authProviderId);
@@ -99,8 +99,8 @@ public class AssignmentIntegration {
         final ResponseEntity<TenantOverview> additionalTenantAdded = obtainAuthProvidersAssignments(authProvider, authProviderId);
         assureSingleSimpleAssignment(additionalTenantAdded, 2, 2);
 
-        // add additional tenant based on new site
-        final Site anotherAdditionalSiteViaPageCreation = createSiteViaPageCreation();
+        // add additional tenant based on new Page
+        final Page anotherAdditionalSiteViaPageCreation = createSiteViaPageCreation();
         final ResponseEntity additionalTenantAdditionWithAdditionalSite = assignTenantAndSiteToAuthProvider(UUID.randomUUID(), anotherAdditionalSiteViaPageCreation.getTenantId(), anotherAdditionalSiteViaPageCreation.getTenantSecret(), authProvider, authProviderId);
         assertEquals(HttpStatus.CREATED, additionalTenantAdditionWithAdditionalSite.getStatusCode());
         final ResponseEntity<TenantOverview> additionalTenantAddedWithAdditionalSite = obtainAuthProvidersAssignments(authProvider, authProviderId);
