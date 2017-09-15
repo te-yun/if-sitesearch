@@ -16,7 +16,7 @@
 
 package com.intrafind.sitesearch.integration;
 
-import com.intrafind.sitesearch.controller.SiteController;
+import com.intrafind.sitesearch.controller.PageController;
 import com.intrafind.sitesearch.dto.Page;
 import com.intrafind.sitesearch.dto.Tenant;
 import org.junit.Before;
@@ -73,14 +73,14 @@ public class PageTest {
         UUID irrelevantSiteId = UUID.fromString("f55d093a-7911-11e7-8fc8-025041000001");
         Page simple = buildSite(UUID.randomUUID());
 
-        ResponseEntity<Page> actual = caller.exchange(SiteController.ENDPOINT, HttpMethod.POST, new HttpEntity<>(simple), Page.class);
+        ResponseEntity<Page> actual = caller.exchange(PageController.ENDPOINT, HttpMethod.POST, new HttpEntity<>(simple), Page.class);
 
         assertEquals(HttpStatus.CREATED, actual.getStatusCode());
         assertEquals(simple, actual.getBody());
         assertNotEquals("assure irrelevancy of siteId during creation", irrelevantSiteId, actual.getBody().getId());
         assertEquals("https://sitesearch.cloud/sites/" + actual.getBody().getId(), actual.getHeaders().get(HttpHeaders.LOCATION).get(0));
 
-        ResponseEntity<Page> newlyCreatedSite = caller.exchange(SiteController.ENDPOINT + "/" + actual.getBody().getId(), HttpMethod.GET, new HttpEntity<>(simple), Page.class);
+        ResponseEntity<Page> newlyCreatedSite = caller.exchange(PageController.ENDPOINT + "/" + actual.getBody().getId(), HttpMethod.GET, new HttpEntity<>(simple), Page.class);
         assertEquals(HttpStatus.OK, newlyCreatedSite.getStatusCode());
         assertEquals(actual.getBody().getId(), newlyCreatedSite.getBody().getId());
 
@@ -96,7 +96,7 @@ public class PageTest {
         TimeUnit.MILLISECONDS.sleep(13_000);
 
         // update
-        final ResponseEntity<Page> updatedSite = caller.exchange(SiteController.ENDPOINT
+        final ResponseEntity<Page> updatedSite = caller.exchange(PageController.ENDPOINT
                         + "?tenantId=" + newPage.getTenantId() + "&tenantSecret=" + newPage.getTenantSecret(),
                 HttpMethod.PUT, new HttpEntity<>(newPage), Page.class);
         assertEquals(HttpStatus.OK, updatedSite.getStatusCode());
@@ -105,7 +105,7 @@ public class PageTest {
 
         // fetch & check updated site
         assertEquals(Page.hashSiteId(newPage.getTenantId(), newPage.getUrl()), newPage.getId());
-        final ResponseEntity<Page> fetchedUpdatedSite = caller.exchange(SiteController.ENDPOINT
+        final ResponseEntity<Page> fetchedUpdatedSite = caller.exchange(PageController.ENDPOINT
                         + "/" + Page.hashSiteId(newPage.getTenantId(), newPage.getUrl()),
                 HttpMethod.GET, HttpEntity.EMPTY, Page.class);
 
@@ -114,7 +114,7 @@ public class PageTest {
         assertEquals(updatedBodyContent, fetchedUpdatedSite.getBody().getBody());
 
         // fetch via URL
-        final ResponseEntity<Page> fetchViaUrl = caller.exchange(SiteController.ENDPOINT
+        final ResponseEntity<Page> fetchViaUrl = caller.exchange(PageController.ENDPOINT
                         + "/url?tenantId=" + newPage.getTenantId() + "&url=" + newPage.getUrl(),
                 HttpMethod.GET, HttpEntity.EMPTY, Page.class);
         assertEquals(HttpStatus.OK, fetchViaUrl.getStatusCode());
@@ -129,20 +129,20 @@ public class PageTest {
         Page yang = indexNewSite();
         TimeUnit.MILLISECONDS.sleep(13_000);
 
-        final ResponseEntity<Page> actualYing = caller.exchange(SiteController.ENDPOINT + "/"
+        final ResponseEntity<Page> actualYing = caller.exchange(PageController.ENDPOINT + "/"
                 + ying.getId() + "?tenantId=" + ying.getTenantId() + "&tenantSecret=" + ying.getTenantSecret(), HttpMethod.PUT, new HttpEntity<>(ying), Page.class);
         assertEquals(HttpStatus.OK, actualYing.getStatusCode());
         assertEquals(ying, actualYing.getBody());
-        final ResponseEntity<Page> actualYang = caller.exchange(SiteController.ENDPOINT + "/"
+        final ResponseEntity<Page> actualYang = caller.exchange(PageController.ENDPOINT + "/"
                 + yang.getId() + "?tenantId=" + yang.getTenantId() + "&tenantSecret=" + yang.getTenantSecret(), HttpMethod.PUT, new HttpEntity<>(yang), Page.class);
         assertEquals(HttpStatus.OK, actualYang.getStatusCode());
         assertEquals(yang, actualYang.getBody());
 
-        final ResponseEntity<Page> actualYingFetched = caller.getForEntity(SiteController.ENDPOINT + "/" + ying.getId(), Page.class);
+        final ResponseEntity<Page> actualYingFetched = caller.getForEntity(PageController.ENDPOINT + "/" + ying.getId(), Page.class);
         assertEquals(HttpStatus.OK, actualYingFetched.getStatusCode());
         assertEquals(ying, actualYingFetched.getBody());
 
-        final ResponseEntity<Page> actualYangFetched = caller.getForEntity(SiteController.ENDPOINT + "/" + yang.getId(), Page.class);
+        final ResponseEntity<Page> actualYangFetched = caller.getForEntity(PageController.ENDPOINT + "/" + yang.getId(), Page.class);
         assertEquals(HttpStatus.OK, actualYangFetched.getStatusCode());
         assertEquals(yang, actualYangFetched.getBody());
 
@@ -159,24 +159,24 @@ public class PageTest {
     public void updatedSite() throws Exception {
         UUID siteId = UUID.fromString("2c269452-7914-11e7-a634-025041000001");
         Page updatable = buildSite(UUID.randomUUID());
-        final ResponseEntity<Page> created = caller.exchange(SiteController.ENDPOINT, HttpMethod.POST, new HttpEntity<>(updatable), Page.class);
+        final ResponseEntity<Page> created = caller.exchange(PageController.ENDPOINT, HttpMethod.POST, new HttpEntity<>(updatable), Page.class);
         assertEquals(HttpStatus.CREATED, created.getStatusCode());
         assertEquals(updatable, created.getBody());
         Page createdPage = created.getBody();
 
         TimeUnit.MILLISECONDS.sleep(13_000);
 
-        final ResponseEntity<Page> updateWithTenantIdOnly = caller.exchange(SiteController.ENDPOINT + "/" + siteId
+        final ResponseEntity<Page> updateWithTenantIdOnly = caller.exchange(PageController.ENDPOINT + "/" + siteId
                 + "?tenantId=" + createdPage.getTenantId(), HttpMethod.PUT, new HttpEntity<>(createdPage), Page.class);
         assertEquals("only valid tenantId is provided", HttpStatus.BAD_REQUEST, updateWithTenantIdOnly.getStatusCode());
         assertEquals(29791, updateWithTenantIdOnly.getBody().hashCode());
 
-        final ResponseEntity<Page> updateWithTenantSecretOnly = caller.exchange(SiteController.ENDPOINT + "/" + siteId
+        final ResponseEntity<Page> updateWithTenantSecretOnly = caller.exchange(PageController.ENDPOINT + "/" + siteId
                 + "?tenantSecret=" + createdPage.getTenantId(), HttpMethod.PUT, new HttpEntity<>(createdPage), Page.class);
         assertEquals("only valid tenantSecret is provided", HttpStatus.BAD_REQUEST, updateWithTenantSecretOnly.getStatusCode());
         assertEquals(29791, updateWithTenantSecretOnly.getBody().hashCode());
 
-        final ResponseEntity<Page> updateWithWrongTenantSecret = caller.exchange(SiteController.ENDPOINT + "/" + siteId
+        final ResponseEntity<Page> updateWithWrongTenantSecret = caller.exchange(PageController.ENDPOINT + "/" + siteId
                         + "?tenantId=" + createdPage.getTenantId() + "&tenantSecret=" + UUID.randomUUID(),
                 HttpMethod.PUT, new HttpEntity<>(createdPage), Page.class);
         assertEquals("tenantSecret is invalid", HttpStatus.NOT_FOUND, updateWithWrongTenantSecret.getStatusCode());
@@ -185,7 +185,7 @@ public class PageTest {
         createdPage.setTitle("updated title");
         createdPage.setBody("updated body");
         createdPage.setUrl("https://example.com/updated");
-        final ResponseEntity<Page> updated = caller.exchange(SiteController.ENDPOINT + "/" + siteId
+        final ResponseEntity<Page> updated = caller.exchange(PageController.ENDPOINT + "/" + siteId
                         + "?tenantId=" + createdPage.getTenantId() + "&tenantSecret=" + createdPage.getTenantSecret(),
                 HttpMethod.PUT, new HttpEntity<>(createdPage), Page.class);
         assertEquals(HttpStatus.OK, updated.getStatusCode());
@@ -195,7 +195,7 @@ public class PageTest {
 
     @Test
     public void importFeed() throws Exception {
-        final ResponseEntity<Tenant> exchange = caller.exchange(SiteController.ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/fahrplanaenderungen/detail/rss.xml", HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
+        final ResponseEntity<Tenant> exchange = caller.exchange(PageController.ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/fahrplanaenderungen/detail/rss.xml", HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
         final Tenant creation = validateTenantSummary(exchange, 10);
 
         TimeUnit.MILLISECONDS.sleep(13_000);
@@ -204,7 +204,7 @@ public class PageTest {
 
     @Test
     public void importFeedAndReadSingleSiteWithSSL() throws Exception {  // TODO actually use SSL below >> httpS instead of http-sans-S
-        final ResponseEntity<Tenant> exchange = caller.exchange(SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml", HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
+        final ResponseEntity<Tenant> exchange = caller.exchange(PageController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml", HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
         final Tenant creation = validateTenantSummary(exchange, 25);
 
         TimeUnit.MILLISECONDS.sleep(13_000);
@@ -214,7 +214,7 @@ public class PageTest {
 
     private void validateUpdatedSites(Tenant tenant) {
         tenant.getDocuments().forEach(documentId -> {
-            final ResponseEntity<Page> fetchedById = caller.exchange(SiteController.ENDPOINT + "/" + documentId, HttpMethod.GET, HttpEntity.EMPTY, Page.class);
+            final ResponseEntity<Page> fetchedById = caller.exchange(PageController.ENDPOINT + "/" + documentId, HttpMethod.GET, HttpEntity.EMPTY, Page.class);
             assertTrue(HttpStatus.OK.equals(fetchedById.getStatusCode()));
             assertTrue(tenant.getTenantId().equals(fetchedById.getBody().getTenantId()));
             assertTrue(!fetchedById.getBody().getBody().isEmpty());
@@ -227,7 +227,7 @@ public class PageTest {
     public void importFeedAndUpdate() throws Exception {
         // create index
         final ResponseEntity<Tenant> initialIndexCreation = caller.exchange(
-                SiteController.ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/meldungen/detail/rss.xml",
+                PageController.ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/meldungen/detail/rss.xml",
                 HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
         TimeUnit.MILLISECONDS.sleep(13_000);
         final Tenant tenantCreation = validateTenantSummary(initialIndexCreation, 10);
@@ -239,19 +239,19 @@ public class PageTest {
         LOG.info("tenantSecretFromCreation: " + tenantSecretFromCreation);
 
         final ResponseEntity<Tenant> updateWithoutTenant = caller.exchange(
-                SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
+                PageController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
                         + "&tenantSecret=" + tenantSecretFromCreation,
                 HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
         assertEquals(HttpStatus.BAD_REQUEST, updateWithoutTenant.getStatusCode());
 
         final ResponseEntity<Tenant> updateWithoutSecret = caller.exchange(
-                SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
+                PageController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
                         + "&tenantId=" + tenantIdFromCreation,
                 HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
         assertEquals(HttpStatus.BAD_REQUEST, updateWithoutSecret.getStatusCode());
 
         final ResponseEntity<Tenant> updateWithInvalidSecret = caller.exchange(
-                SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
+                PageController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
                         + "&tenantId=" + tenantIdFromCreation + "&tenantSecret=" + UUID.randomUUID(),
                 HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
         assertEquals(HttpStatus.BAD_REQUEST, updateWithInvalidSecret.getStatusCode());
@@ -259,7 +259,7 @@ public class PageTest {
 
         // update index
         final ResponseEntity<Tenant> anotherFeedReplacement = caller.exchange(
-                SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
+                PageController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
                         + "&tenantId=" + tenantIdFromCreation + "&tenantSecret=" + tenantSecretFromCreation,
                 HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
         final Tenant tenantUpdate = validateTenantSummary(anotherFeedReplacement, 25);
@@ -270,7 +270,7 @@ public class PageTest {
     }
 
     private void tryDeletionOfSites(UUID tenantIdFromCreation) {
-        final ResponseEntity<List> fetchAll = caller.exchange(SiteController.ENDPOINT + "?tenantId=" + tenantIdFromCreation, HttpMethod.GET, HttpEntity.EMPTY, List.class);
+        final ResponseEntity<List> fetchAll = caller.exchange(PageController.ENDPOINT + "?tenantId=" + tenantIdFromCreation, HttpMethod.GET, HttpEntity.EMPTY, List.class);
         assertTrue(HttpStatus.OK.equals(fetchAll.getStatusCode()));
         @SuppressWarnings("unchecked")
         List<String> sites = fetchAll.getBody();
@@ -278,7 +278,7 @@ public class PageTest {
         int siteCountBeforeDeletion = sites.size();
         sites.forEach(siteId -> {
             LOG.info("siteId: " + siteId);
-            final ResponseEntity<ResponseEntity> deletion = caller.exchange(SiteController.ENDPOINT + "/" + siteId, HttpMethod.DELETE, HttpEntity.EMPTY, ResponseEntity.class);
+            final ResponseEntity<ResponseEntity> deletion = caller.exchange(PageController.ENDPOINT + "/" + siteId, HttpMethod.DELETE, HttpEntity.EMPTY, ResponseEntity.class);
             assertEquals(HttpStatus.NO_CONTENT, deletion.getStatusCode());
             assertNull(deletion.getBody());
         });

@@ -17,7 +17,7 @@
 package com.intrafind.sitesearch.integration;
 
 import com.intrafind.sitesearch.controller.AssignmentController;
-import com.intrafind.sitesearch.controller.SiteController;
+import com.intrafind.sitesearch.controller.PageController;
 import com.intrafind.sitesearch.dto.Page;
 import com.intrafind.sitesearch.dto.TenantOverview;
 import com.intrafind.sitesearch.dto.TenantSiteAssignment;
@@ -47,9 +47,9 @@ public class AssignmentIntegration {
 
     private Page createSiteViaPageCreation() throws Exception {
         Page simple = PageTest.buildSite(UUID.randomUUID());
-        ResponseEntity<Page> actual = caller.exchange(SiteController.ENDPOINT, HttpMethod.POST, new HttpEntity<>(simple), Page.class);
+        ResponseEntity<Page> actual = caller.exchange(PageController.ENDPOINT, HttpMethod.POST, new HttpEntity<>(simple), Page.class);
         assertEquals(HttpStatus.CREATED, actual.getStatusCode());
-        ResponseEntity<Page> newlyCreatedPageWithSiteId = caller.exchange(SiteController.ENDPOINT + "/" + actual.getBody().getId(), HttpMethod.GET, HttpEntity.EMPTY, Page.class);
+        ResponseEntity<Page> newlyCreatedPageWithSiteId = caller.exchange(PageController.ENDPOINT + "/" + actual.getBody().getId(), HttpMethod.GET, HttpEntity.EMPTY, Page.class);
         assertEquals(HttpStatus.OK, newlyCreatedPageWithSiteId.getStatusCode());
         assertEquals(actual.getBody().getId(), newlyCreatedPageWithSiteId.getBody().getId());
 

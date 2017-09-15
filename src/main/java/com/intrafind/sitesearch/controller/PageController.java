@@ -35,14 +35,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(SiteController.ENDPOINT)
-public class SiteController {
+@RequestMapping(PageController.ENDPOINT)
+public class PageController {
     public static final String ENDPOINT = "/pages";
-    private static final Logger LOG = LoggerFactory.getLogger(SiteController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PageController.class);
     private final SiteService service;
 
     @Autowired
-    SiteController(SiteService service) {
+    PageController(SiteService service) {
         this.service = service;
     }
 

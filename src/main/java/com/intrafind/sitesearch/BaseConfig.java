@@ -17,7 +17,7 @@
 package com.intrafind.sitesearch;
 
 import com.google.common.base.Predicates;
-import com.intrafind.sitesearch.controller.SiteController;
+import com.intrafind.sitesearch.controller.PageController;
 import io.undertow.UndertowOptions;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.undertow.UndertowEmbeddedServletContainerFactory;
@@ -54,7 +54,7 @@ public class BaseConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .paths(Predicates.not(PathSelectors.regex("/error"))) // Exclude Spring error controllers
-                .paths(Predicates.not(PathSelectors.regex(SiteController.ENDPOINT + "/rss"))) // Exclude Spring error controllers
+                .paths(Predicates.not(PathSelectors.regex(PageController.ENDPOINT + "/rss"))) // Exclude Spring error controllers
                 .build();
     }
 }
