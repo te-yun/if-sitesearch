@@ -26,7 +26,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLDecoder;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -39,17 +41,18 @@ public class SiteController {
     private final PageService service;
 
     @Autowired
-    SiteController(PageService service) {
+    private SiteController(PageService service) {
         this.service = service;
     }
 
-    //  /sites/{siteId}/{url}
-    @RequestMapping(path = "url", method = RequestMethod.GET)
+    //  /sites/{siteId}/pages/url/{url}
+    @RequestMapping(path = "{siteId}/pages/url/{url:.+}", method = RequestMethod.GET)
     ResponseEntity<FetchedPage> fetchViaUrl(
-            @RequestParam(value = "url") String url,
-            @RequestParam(value = "siteId") UUID siteId
-    ) {
-        String pageId = Page.hashSiteId(siteId, url);
+            @PathVariable(value = "siteId") UUID siteId,
+            @PathVariable(value = "url") URI url
+    ) throws UnsupportedEncodingException {
+        String pageId = Page.hashPageId(siteId, URLDecoder.decode(url.toString(), "UTF-8"));
+//        String pageId = Page.hashPageId(siteId, url.toString());
 
         Optional<FetchedPage> fetched = service.fetchById(pageId);
         if (fetched.isPresent()) {
@@ -98,7 +101,7 @@ public class SiteController {
             @RequestParam(name = "siteSecret") UUID siteSecret,
             @RequestBody Page page
     ) {
-        String pageId = Page.hashSiteId(siteId, page.getUrl());
+        String pageId = Page.hashPageId(siteId, page.getUrl());
         // TODO use SiteUpdate DTO with NO siteId & NO siteSecret provided
 
         // TODO make sure that an existing page is actually updated

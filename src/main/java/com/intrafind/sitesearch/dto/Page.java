@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.Objects;
 import java.util.UUID;
@@ -67,7 +68,11 @@ public class Page implements Serializable {
         return url;
     }
 
-    public static String hashSiteId(UUID siteId, String siteUrl) {
+    public static String hashPageId(UUID siteId, String siteUrl) {
+        return Hashing.sha256().hashString(siteId.toString() + siteUrl, Charset.forName("UTF-8")).toString();
+    }
+
+    public static String hashPageId(UUID siteId, URI siteUrl) {
         return Hashing.sha256().hashString(siteId.toString() + siteUrl, Charset.forName("UTF-8")).toString();
     }
 

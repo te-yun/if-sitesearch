@@ -71,7 +71,7 @@ public class PageService {
         } else if (siteId == null ^ siteSecret == null) { // it does not make any sense if only one of the parameters is set
             return Optional.empty();
         } else { // consider request as first-usage-ownership-granting request, create new index
-            return indexDocument(Page.hashSiteId(UUID.randomUUID(), page.getUrl()), UUID.randomUUID(), UUID.randomUUID(), page);
+            return indexDocument(Page.hashPageId(UUID.randomUUID(), page.getUrl()), UUID.randomUUID(), UUID.randomUUID(), page);
         }
     }
 
@@ -96,7 +96,7 @@ public class PageService {
     private String createTenant(Page page) {
         UUID siteId = UUID.randomUUID();
         final ArrayByteIterable readableSiteId = StringBinding.stringToEntry(siteId.toString());
-        String pageId = Page.hashSiteId(siteId, page.getUrl());
+        String pageId = Page.hashPageId(siteId, page.getUrl());
 
         SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
             Document indexable = new Document(pageId);
@@ -254,7 +254,7 @@ public class PageService {
                         entry.getTitle(), entry.getDescription().getValue(),
                         url
                 );
-                final String pageId = Page.hashSiteId(siteId, url);
+                final String pageId = Page.hashPageId(siteId, url);
                 Optional<FetchedPage> indexed = indexDocument(pageId, siteId, siteSecret, toIndex);
                 if (indexed.isPresent()) {
                     successfullyIndexed.incrementAndGet();

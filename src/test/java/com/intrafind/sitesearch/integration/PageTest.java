@@ -31,6 +31,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -52,7 +53,7 @@ public class PageTest {
         final UUID testSiteId = UUID.fromString("1a6715d9-119f-48d1-9329-e8763273bbea");
         final String url = "https://sitesearch.cloud";
         return new Page(
-                Page.hashSiteId(testSiteId, url),
+                Page.hashPageId(testSiteId, url),
                 testSiteId, siteSecret,
                 "Cloud Solution",
                 "Site Search is IntraFind's on-demand solution for site search.",
@@ -103,9 +104,9 @@ public class PageTest {
         assertEquals(updatedBodyContent, updatedSite.getBody().getBody());
 
         // fetch & check updated site
-        assertEquals(Page.hashSiteId(newPage.getSiteId(), newPage.getUrl()), newPage.getId());
+        assertEquals(Page.hashPageId(newPage.getSiteId(), newPage.getUrl()), newPage.getId());
         final ResponseEntity<Page> fetchedUpdatedSite = caller.exchange(PageController.ENDPOINT
-                        + "/" + Page.hashSiteId(newPage.getSiteId(), newPage.getUrl()),
+                        + "/" + Page.hashPageId(newPage.getSiteId(), newPage.getUrl()),
                 HttpMethod.GET, HttpEntity.EMPTY, Page.class);
 
         assertEquals(HttpStatus.OK, fetchedUpdatedSite.getStatusCode());
@@ -114,7 +115,7 @@ public class PageTest {
 
         // fetch via URL
         final ResponseEntity<Page> fetchViaUrl = caller.exchange(SiteController.ENDPOINT
-                        + "/url?siteId=" + newPage.getSiteId() + "&url=" + newPage.getUrl(),
+                        + "/" + newPage.getSiteId() + "/pages/url/" + URLEncoder.encode(newPage.getUrl(), "UTF-8"),
                 HttpMethod.GET, HttpEntity.EMPTY, Page.class);
         assertEquals(HttpStatus.OK, fetchViaUrl.getStatusCode());
         assertEquals(newPage.getId(), fetchViaUrl.getBody().getId());
