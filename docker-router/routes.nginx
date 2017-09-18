@@ -17,7 +17,8 @@ server {
 
     include /etc/nginx/snippets/ssl.conf;
 
-    location /dev/ {
+    location /dev {
+        root dev;
         proxy_pass https://sitesearch.cloud:2443;
     }
 
@@ -25,20 +26,27 @@ server {
         proxy_pass https://sitesearch.cloud:2443/;
     }
 
-    location /api {
-        proxy_pass https://sitesearch.cloud:2443$request_uri;
-    }
+    #    location /api {
+    #        proxy_pass https://sitesearch.cloud:2443;
+    #    }
 
     location /app {
         proxy_pass https://sitesearch.cloud:2443$request_uri;
     }
 
-    location /info {
+    location /online-https {
+        root online-https;
+        proxy_pass https://sitesearch.online;
+    }
+
+    location /online-http {
+        root online-http;
         proxy_pass http://sitesearch.online;
     }
 
     location /example {
-        proxy_pass https://example.com/;
+        root example;
+        proxy_pass https://example.com;
     }
 
     location / {
