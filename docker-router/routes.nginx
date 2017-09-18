@@ -18,20 +18,20 @@ server {
     include /etc/nginx/snippets/ssl.conf;
 
     location /dev {
-        proxy_pass https://sitesearch.cloud:2443/;
+        proxy_pass https://sitesearch.online;
     }
 
     location /api {
-        proxy_pass https://sitesearch.cloud:2443/;
+        proxy_pass https://sitesearch.cloud:2443;
     }
 
     location /about {
-        proxy_pass https://sitesearch.online/;
+        proxy_pass https://sitesearch.online;
     }
 
     location / {
-        proxy_pass https://sitesearch.cloud:2443;
-        #        proxy_pass https://sitesearch.info;
+        #        proxy_pass https://sitesearch.cloud:2443;
+        proxy_pass https://sitesearch.info;
     }
 }
 
@@ -45,18 +45,6 @@ server {
     location /status {
         stub_status on;
         access_log off;
-    }
-
-    location /dev {
-        proxy_pass https://sitesearch.cloud:2443/;
-    }
-
-    location /api {
-        proxy_pass https://sitesearch.cloud:2443/;
-    }
-
-    location /about {
-        proxy_pass https://sitesearch.online/;
     }
 
     location / {
