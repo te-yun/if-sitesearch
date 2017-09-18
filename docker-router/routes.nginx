@@ -67,7 +67,7 @@ server {
     include /etc/nginx/snippets/ssl.conf;
 
     location / {
-        proxy_pass https://ci.sitesearch.cloud:8111;
+        proxy_pass http://ci.sitesearch.cloud:8111;
     }
 }
 
