@@ -26,12 +26,41 @@ server {
         proxy_pass https://sitesearch.cloud:2443/;
     }
 
+    location /test1/ {
+        proxy_pass https://sitesearch.cloud:2443;
+    }
+
+    location /test2 {
+        proxy_pass https://sitesearch.cloud:2443/;
+    }
+
+    location /test3 {
+        root test3;
+        proxy_pass https://sitesearch.cloud:2443;
+    }
+
+    location /test33 {
+        root test33;
+        proxy_pass https://sitesearch.cloud:2443/;
+    }
+
+    location /test333/ {
+        root test333;
+        proxy_pass https://sitesearch.cloud:2443/;
+    }
+
+    location /test3333/ {
+        root test3333;
+        proxy_pass https://sitesearch.cloud:2443;
+    }
+
     #    location /api {
     #        proxy_pass https://sitesearch.cloud:2443;
     #    }
 
     location /app {
-        proxy_pass https://sitesearch.cloud:2443$request_uri;
+        root app;
+        proxy_pass https://sitesearch.cloud:2443;
     }
 
     location /online-https {
@@ -114,17 +143,6 @@ server {
         proxy_pass http://sitesearch.online;
     }
 }
-
-#server {
-#    listen 80;
-#    listen [::]:80;
-#    server_name dev.sitesearch.cloud;
-#
-#    location /status {
-#        stub_status on;
-#        access_log off;
-#    }
-#}
 
 server {
     listen 80;
