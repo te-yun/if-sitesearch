@@ -27,11 +27,11 @@ server {
     }
 
     location /dev {
-        proxy_pass https://sitesearch.cloud/;
+        proxy_pass https://sitesearch.cloud:2443/;
     }
 
     location /api {
-        proxy_pass https://sitesearch.cloud/;
+        proxy_pass https://sitesearch.cloud:2443/;
     }
 
     location /about {
@@ -49,11 +49,11 @@ server {
     }
 
     location /api {
-        proxy_pass https://api.sitesearch.cloud;
+        proxy_pass https://api.sitesearch.cloud:2443;
     }
 
     location /info {
-        proxy_pass https://sitesearch.cloud;
+        proxy_pass https://sitesearch.cloud:2443;
     }
 }
 
@@ -81,7 +81,7 @@ server {
     }
 
     location /api {
-        proxy_pass https://api.sitesearch.cloud;
+        proxy_pass https://api.sitesearch.cloud:2443;
     }
 }
 
