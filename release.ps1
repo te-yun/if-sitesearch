@@ -15,13 +15,13 @@ docker build --tag intrafind/${DOCKER_IMAGE_NAME}:${DOCKER_TAG} .
 docker rm -f ${DOCKER_IMAGE_NAME}
 docker run -d --name ${DOCKER_IMAGE_NAME} -p 443:8001 --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD --env BUILD_NUMBER=$env:BUILD_NUMBER --env SCM_HASH=$env:SCM_HASH  -v ~/srv/${DOCKER_IMAGE_NAME}:/home/svc_usr/data intrafind/${DOCKER_IMAGE_NAME}:${DOCKER_TAG}
 
-# Redirect HTTP to HTTPS traffic
-$httpsRedirect = "http-to-https-redirect"
-cd $httpsRedirect
-docker build --tag intrafind/${httpsRedirect}:latest .
-docker rm -f $httpsRedirect
-#docker run -d --name $httpsRedirect -p 80:80 -p 443:443 intrafind/${httpsRedirect}:latest
-docker run -d --name $httpsRedirect -p 80:80 intrafind/${httpsRedirect}:latest
+# Redirect container
+$docker_redirect_image = "router"
+$docker_redirect_image_tag = "latest"
+cd docker-$docker_redirect_image
+docker build --tag intrafind/${docker_redirect_image}:$docker_redirect_image_tag .
+docker rm -f $docker_redirect_image
+docker run -d --name $docker_redirect_image -p 80:80 -p 443:443 -v /etc/letsencrypt:/etc/letsencrypt --network $docker_network intrafind/${docker_redirect_image}:$docker_redirect_image_tag
 
 cd ..
 ./switch-release.ps1
