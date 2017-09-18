@@ -35,17 +35,17 @@ server {
     }
 
     location /about {
-        proxy_pass http://sitesearch.online/;
+        proxy_pass https://sitesearch.online/;
     }
 }
 
 server {
-    listen 80;
-    listen [::]:80;
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
     server_name api.sitesearch.cloud;
 
     location / {
-        proxy_pass http://sitesearch.online/;
+        proxy_pass https://sitesearch.online/;
     }
 
     location /api {
