@@ -79,15 +79,13 @@ tasks.jmh.finalizedBy tasks.jmhReport
 jmh {
     include = ["Load10Users", "Load100Users", "Load1000Users", "LoadIndex2Users"]
 //    include = ["Load10Users"] // for local tests
-//      exclude = ["Load100Users", "Load1000Users", "LoadIndex2Users"] // for local tests
-//    operationsPerInvocation = 3000
+//    include = ["LoadIndex2Users"] // for local tests
     fork = 0
 //    threads = 2
     warmupIterations = 1
     failOnError = true
     resultFormat = "JSON"
     iterations = 20
-//    timeOnIteration = "1ms"
     setDuplicateClassesStrategy(DuplicatesStrategy.FAIL)
 }
 

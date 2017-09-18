@@ -17,7 +17,9 @@
 package com.intrafind.sitesearch.jmh;
 
 import com.intrafind.sitesearch.controller.PageController;
+import com.intrafind.sitesearch.controller.SiteController;
 import com.intrafind.sitesearch.dto.Page;
+import org.jetbrains.annotations.NotNull;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Mode;
@@ -29,6 +31,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.net.URLEncoder;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
@@ -48,14 +51,9 @@ public class LoadIndex2Users {
     }
 
     @Benchmark
-    public void indexNewSiteAsNewTenant() throws Exception {
+    public void createNewSiteViaNewPage() throws Exception {
         final String loremIpsumText = generateLoremIpsum();
-        final Page pageToIndex = new Page(
-                null, null, null,
-                loremIpsumText.substring(0, 42),
-                loremIpsumText,
-                "https://example.com/" + UUID.randomUUID()
-        );
+        final Page pageToIndex = buildPage(loremIpsumText);
 
         final ResponseEntity<Page> actual = Load10Users.CALLER.exchange(
                 Load10Users.LOAD_TARGET + PageController.ENDPOINT,
@@ -66,22 +64,20 @@ public class LoadIndex2Users {
 
         assertEquals(HttpStatus.CREATED, actual.getStatusCode());
         assertNotNull(actual.getHeaders().getLocation());
+        assertNotNull(actual.getBody().getSiteId());
+        assertNotNull(actual.getBody().getSiteSecret());
     }
 
     @Benchmark
-    public void indexUpdateWithNewSites() throws Exception {
+    public void updatePageViaUrl() throws Exception {
         final String loremIpsumText = generateLoremIpsum();
-        final Page pageToIndex = new Page(
-                null, null, null,
-                loremIpsumText.substring(0, 42),
-                loremIpsumText,
-                "https://example.com/" + UUID.randomUUID()
-        );
+        final Page pageToIndex = buildPage(loremIpsumText);
+        pageToIndex.setUrl("https://example.com/0fe5463c-a134-495d-bee1-8e2e0044e57e");
 
         final ResponseEntity<Page> actual = Load10Users.CALLER.exchange(
-                Load10Users.LOAD_TARGET + PageController.ENDPOINT
-                        + "?siteId=" + "e10011b2-7f95-49e4-a9cb-189f5f5a6654"
-                        + "&siteSecret=c041b603-e5b7-4623-8fe9-4cd08e5b4558",
+                Load10Users.LOAD_TARGET + SiteController.ENDPOINT
+                        + "/c281b015-09af-4868-8185-3fd8db41d6cb/pages/url/" + URLEncoder.encode(pageToIndex.getUrl(), "UTF-8")
+                        + "?siteSecret=92d957f6-956e-4ee9-8f48-de434a728ab3",
                 HttpMethod.PUT,
                 new HttpEntity<>(pageToIndex),
                 Page.class
@@ -91,21 +87,25 @@ public class LoadIndex2Users {
         assertNull(actual.getHeaders().getLocation());
     }
 
-    @Benchmark
-    public void updateIndexedSite() throws Exception {
-        final String loremIpsumText = generateLoremIpsum();
-        final Page pageToIndex = new Page(
+    @NotNull
+    private Page buildPage(String loremIpsumText) {
+        return new Page(
                 null, null, null,
                 loremIpsumText.substring(0, 42),
                 loremIpsumText,
                 "https://example.com/" + UUID.randomUUID()
         );
+    }
+
+    @Benchmark
+    public void updatePageViaId() throws Exception {
+        final String loremIpsumText = generateLoremIpsum();
+        final Page pageToIndex = buildPage(loremIpsumText);
 
         final ResponseEntity<Page> actual = Load10Users.CALLER.exchange(
-                Load10Users.LOAD_TARGET + PageController.ENDPOINT
-                        + "/80147ae9-e5a1-4278-a647-3dc264bba0d4"
-                        + "?siteId=" + "e10011b2-7f95-49e4-a9cb-189f5f5a6654"
-                        + "&siteSecret=c041b603-e5b7-4623-8fe9-4cd08e5b4558",
+                Load10Users.LOAD_TARGET + SiteController.ENDPOINT
+                        + "/cdcfdeef-86a2-4672-890f-e952e465fe01/pages/7ca861451227886cd575cda73ae4f1255a3039ee2cef5868444144e5be4bd32a"
+                        + "?siteSecret=4e8afa49-490f-4b0a-a7b7-958405b30c73",
                 HttpMethod.PUT,
                 new HttpEntity<>(pageToIndex),
                 Page.class

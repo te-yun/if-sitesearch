@@ -54,22 +54,47 @@ public class Application {
                 if (errorMessage != null) {
                     switch (errorAttributes.get("status").toString()) {
                         case "400":
-                            errorAttributes.put("code", "SS-400-CLIENT_ERROR-RECOVERABLE");
+                            errorAttributes.put("code", "SiS-400-CLIENT_ERROR-RECOVERABLE");
                             break;
                         case "404":
-                            errorAttributes.put("code", "SS-404-CLIENT_ERROR-NOT_FOUND");
+                            errorAttributes.put("code", "SiS-404-CLIENT_ERROR-NOT_FOUND");
                             break;
                         case "500":
-                            errorAttributes.put("code", "SS-500-SERVER_ERROR-NON_RECOVERABLE");
+                            errorAttributes.put("code", "SiS-500-SERVER_ERROR-NON_RECOVERABLE");
                             break;
                         default:
-                            errorAttributes.put("code", "SS-UNKNOWN");
+                            errorAttributes.put("code", "SiS-UNKNOWN");
                     }
                 }
                 return errorAttributes;
             }
         };
     }
+
+    @RequestMapping(path = "/subscriptions", method = RequestMethod.POST)
+    ResponseEntity<Object> subscriptions(
+            @RequestParam(value = "code", required = false) String code,
+            @RequestParam(value = "access_token", required = false) String token,
+            @RequestParam(value = "client_id", required = false) String id,
+            @RequestParam(value = "client_secret", required = false) String secret,
+            @RequestParam(value = "state", required = false) String state,
+            @RequestParam(value = "redirect_uri", required = false) String redirect_uri,
+            @RequestBody(required = false) Object o
+    ) {
+
+        LOG.info("code: " + code);
+        LOG.info("token: " + token);
+        LOG.info("id: " + id);
+        LOG.info("secret: " + secret);
+        LOG.info("state: " + state);
+        LOG.info("redirect_uri: " + redirect_uri);
+        LOG.info("o: " + o);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(o);
+    }
+
+
 
     @RequestMapping(path = "/login/test", method = RequestMethod.POST)
     ResponseEntity<Object> login(
