@@ -39,13 +39,13 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SearchTest {
-    public static final UUID SEARCH_TENANT_ID = UUID.fromString("18e1cb09-b3ec-40e0-8279-dd005771f172");
+    public static final UUID SEARCH_SITE_ID = UUID.fromString("18e1cb09-b3ec-40e0-8279-dd005771f172");
+    private static final Logger LOG = LoggerFactory.getLogger(SearchTest.class);
     @Autowired
     private TestRestTemplate caller;
-    private static final Logger LOG = LoggerFactory.getLogger(SearchTest.class);
 
     private long fetchQueryCountForDefaultTenant() {
-        final ResponseEntity<Stats> response = caller.getForEntity(StatsController.ENDPOINT + "?siteId=" + SEARCH_TENANT_ID, Stats.class);
+        final ResponseEntity<Stats> response = caller.getForEntity(StatsController.ENDPOINT + "?siteId=" + SEARCH_SITE_ID, Stats.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
         return response.getBody().getQueryCount();
@@ -54,20 +54,16 @@ public class SearchTest {
     @Test
     public void simpleSearch() throws Exception {
         long beforeCount = fetchQueryCountForDefaultTenant();
+        final ResponseEntity<Hits> searchResults = caller.getForEntity(SearchController.ENDPOINT + "?query=Knowledge&siteId=" + SEARCH_SITE_ID, Hits.class);
 
-        final ResponseEntity<Hits> actual = caller.getForEntity(SearchController.ENDPOINT + "?query=Knowledge&siteId=" + SEARCH_TENANT_ID, Hits.class);
-
-        assertEquals(HttpStatus.OK, actual.getStatusCode());
-        assertNotNull(actual.getBody());
-        assertEquals("Knowledge", actual.getBody().getQuery());
-        assertEquals(1, actual.getBody().getResults().size());
-        FoundPage found = actual.getBody().getResults().get(0);
+        assertEquals(HttpStatus.OK, searchResults.getStatusCode());
+        assertNotNull(searchResults.getBody());
+        assertEquals("Knowledge", searchResults.getBody().getQuery());
+        assertEquals(1, searchResults.getBody().getResults().size());
+        FoundPage found = searchResults.getBody().getResults().get(0);
         assertEquals("Wie die Semantische Suche vom <span class='if-teaser-highlight'>Knowledge</span> Graph profitiert", found.getTitle());
-//        assertEquals("Wie die Semantische Suche vom Knowledge Graph profitiert", found.getTitleRaw());
         assertEquals("http:&#x2F;&#x2F;intrafind.de&#x2F;blog&#x2F;wie-die-semantische-suche-vom-<span class='if-teaser-highlight'>knowledge</span>-graph-profitiert", found.getUrl());
-//        assertEquals("http://intrafind.de/blog/wie-die-semantische-suche-vom-knowledge-graph-profitiert", found.getUrlRaw());
         assertTrue(found.getBody().startsWith("&lt;p&gt;Der <span class='if-teaser-highlight'>Knowledge</span> Graph ist vielen Nutzern bereits durch Google oder Facebook bekannt. Aber auch"));
-//        assertTrue(found.getBodyRaw().startsWith("<p>Der Knowledge Graph ist vielen Nutzern bereits durch Google oder Facebook bekannt."));
 
         assertEquals(++beforeCount, fetchQueryCountForDefaultTenant());
     }
@@ -76,7 +72,7 @@ public class SearchTest {
     public void simpleSearchNotFound() throws Exception {
         long beforeCount = fetchQueryCountForDefaultTenant();
 
-        final ResponseEntity<Hits> actual = caller.getForEntity(SearchController.ENDPOINT + "?query=not_found&siteId=" + SEARCH_TENANT_ID, Hits.class);
+        final ResponseEntity<Hits> actual = caller.getForEntity(SearchController.ENDPOINT + "?query=not_found&siteId=" + SEARCH_SITE_ID, Hits.class);
 
         assertEquals(HttpStatus.NOT_FOUND, actual.getStatusCode());
         assertNull(actual.getBody());
@@ -87,7 +83,7 @@ public class SearchTest {
     @Test
     public void searchWithoutTenant() throws Exception {
         long beforeCount = fetchQueryCountForDefaultTenant();
-        
+
         final ResponseEntity<Hits> actual = caller.getForEntity(SearchController.ENDPOINT + "?query=not_found", Hits.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());

@@ -50,7 +50,7 @@ public class Load10Users {
     static final Random PSEUDO_ENTROPY = new Random();
 
     private static final List<UUID> TENANTS = Arrays.asList(
-            SearchTest.SEARCH_TENANT_ID,
+            SearchTest.SEARCH_SITE_ID,
             UUID.fromString("363d50f3-17cb-4756-aeca-7d3768092ae1"),
             UUID.fromString("1a6715d9-119f-48d1-9329-e8763273bbea")
     );
@@ -89,7 +89,7 @@ public class Load10Users {
 
         final ResponseEntity<Hits> actual = CALLER.getForEntity(
                 Load10Users.LOAD_TARGET + SearchController.ENDPOINT
-                        + "?query=" + query + "&siteId=" + SearchTest.SEARCH_TENANT_ID,
+                        + "?query=" + query + "&siteId=" + SearchTest.SEARCH_SITE_ID,
                 Hits.class
         );
 
@@ -110,7 +110,7 @@ public class Load10Users {
 
         final ResponseEntity<Autocomplete> actual = CALLER.getForEntity(
                 LOAD_TARGET + AutocompleteController.ENDPOINT
-                        + "?query=" + query + "&siteId=" + SearchTest.SEARCH_TENANT_ID,
+                        + "?query=" + query + "&siteId=" + SearchTest.SEARCH_SITE_ID,
                 Autocomplete.class
         );
 

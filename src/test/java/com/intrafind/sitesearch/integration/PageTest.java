@@ -237,12 +237,6 @@ public class PageTest {
         LOG.info("siteIdFromCreation: " + siteIdFromCreation);
         LOG.info("siteSecretFromCreation: " + siteSecretFromCreation);
 
-//        final ResponseEntity<Tenant> updateWithoutTenant = caller.exchange(
-//                SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
-//                        + "&siteSecret=" + siteSecretFromCreation,
-//                HttpMethod.POST, HttpEntity.EMPTY, Tenant.class);
-//        assertEquals(HttpStatus.BAD_REQUEST, updateWithoutTenant.getStatusCode());
-
         final ResponseEntity<Tenant> updateWithoutSecret = caller.exchange(
                 SiteController.ENDPOINT + "/" + siteIdFromCreation + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml",
                 HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);

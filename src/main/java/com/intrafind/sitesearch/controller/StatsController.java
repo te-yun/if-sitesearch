@@ -47,7 +47,7 @@ public class StatsController {
     private final CountDownLatch latch = new CountDownLatch(3);
 
     @Autowired
-    StatsController(KafkaTemplate<String, String> template) {
+    private StatsController(KafkaTemplate<String, String> template) {
         this.template = template;
     }
 

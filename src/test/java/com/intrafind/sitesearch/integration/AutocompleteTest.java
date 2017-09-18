@@ -40,7 +40,7 @@ public class AutocompleteTest {
 
     @Test
     public void reference() throws Exception {
-        final ResponseEntity<Autocomplete> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=Knowledge&siteId=" + SearchTest.SEARCH_TENANT_ID, Autocomplete.class);
+        final ResponseEntity<Autocomplete> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=Knowledge&siteId=" + SearchTest.SEARCH_SITE_ID, Autocomplete.class);
 
 //        assertEquals(HttpStatus.OK, actual.getStatusCode());
 //        assertNotNull(actual.getBody());
@@ -50,7 +50,7 @@ public class AutocompleteTest {
 
     @Test
     public void complexPositive() throws Exception {
-        final ResponseEntity<Autocomplete> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=ifinder&siteId=" + SearchTest.SEARCH_TENANT_ID, Autocomplete.class);
+        final ResponseEntity<Autocomplete> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=ifinder&siteId=" + SearchTest.SEARCH_SITE_ID, Autocomplete.class);
 
 //        assertEquals(HttpStatus.OK, actual.getStatusCode());
 //        assertNotNull(actual.getBody());
@@ -63,7 +63,7 @@ public class AutocompleteTest {
 
     @Test
     public void nonExisting() throws Exception {
-        final ResponseEntity<Autocomplete> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=not_found&siteId=" + SearchTest.SEARCH_TENANT_ID, Autocomplete.class);
+        final ResponseEntity<Autocomplete> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=not_found&siteId=" + SearchTest.SEARCH_SITE_ID, Autocomplete.class);
 
         assertEquals(HttpStatus.NOT_FOUND, actual.getStatusCode());
         assertNull(actual.getBody());

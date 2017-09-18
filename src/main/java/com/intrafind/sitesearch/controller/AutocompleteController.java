@@ -36,14 +36,15 @@ public class AutocompleteController {
     private final AutocompleteService service;
 
     @Autowired
-    AutocompleteController(AutocompleteService service) {
+    private AutocompleteController(AutocompleteService service) {
         this.service = service;
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    ResponseEntity<Autocomplete> search(
+    ResponseEntity<Autocomplete> suggestion(
             @CookieValue(value = "override-tenant", required = false) UUID cookieTenant,
-            @RequestParam(value = "query", required = false, defaultValue = "") String query,
+//            @RequestParam(value = "query", required = false, defaultValue = "") String query,
+            @RequestParam(value = "query", defaultValue = "") String query,
             @RequestParam(value = "siteId") UUID siteId
     ) {
         if (query.isEmpty()) return ResponseEntity.badRequest().build();
