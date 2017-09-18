@@ -26,12 +26,20 @@ server {
     }
 
     location /about {
-        proxy_pass https://sitesearch.online;
+        proxy_pass http://sitesearch.online;
+    }
+
+    location /example {
+        proxy_pass http://example.com;
+    }
+
+    location /examples {
+        proxy_pass https://example.com;
     }
 
     location / {
         #        proxy_pass https://sitesearch.cloud:2443;
-        proxy_pass https://muctool.loxal.net;
+        proxy_pass http://example.com;
     }
 }
 
