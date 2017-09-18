@@ -1,5 +1,11 @@
 #!/usr/bin/env powershell
 
+Set-StrictMode -Version Latest
+$ErrorActionPreference = "Stop"
+$PSDefaultParameterValues["*:ErrorAction"] = "Stop"
+
+$docker_network = "sitesearch"
+
 $Env:SPRING_CONFIG_NAME = "application, prod"
 #./gradlew clean build --info -x test
 ./gradlew build --no-rebuild --build-cache --info -x test
