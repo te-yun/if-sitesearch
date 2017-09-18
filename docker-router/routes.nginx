@@ -17,6 +17,11 @@ server {
 
     include /etc/nginx/snippets/ssl.conf;
 
+    location /status {
+        stub_status on;
+        access_log off;
+    }
+
     location /dev {
         proxy_pass https://sitesearch.cloud:2443/;
     }
@@ -53,8 +58,6 @@ server {
 }
 
 server {
-    #    listen 80;
-    #    listen [::]:80;
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
     server_name ci.sitesearch.cloud;
@@ -71,25 +74,25 @@ server {
     listen [::]:80;
     server_name main.sitesearch.cloud;
 
-    location / {
-        proxy_pass http://sitesearch.online;
-    }
-
     location /api {
         proxy_pass https://api.sitesearch.cloud:2443;
     }
-}
 
-server {
-    listen 80;
-    listen [::]:80;
-    server_name dev.sitesearch.cloud;
-
-    location /status {
-        stub_status on;
-        access_log off;
+    location / {
+        proxy_pass http://sitesearch.online;
     }
 }
+
+#server {
+#    listen 80;
+#    listen [::]:80;
+#    server_name dev.sitesearch.cloud;
+#
+#    location /status {
+#        stub_status on;
+#        access_log off;
+#    }
+#}
 
 server {
     listen 80;
