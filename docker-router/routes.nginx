@@ -21,22 +21,7 @@ server {
         proxy_pass https://sitesearch.cloud:2443/;
     }
 
-    location /google/ {
-        proxy_pass https://google.com/;
-    }
-
-    location /google1/ {
-        root google1;
-        proxy_pass https://google.com/;
-    }
-
-    location /google2 {
-        root google2;
-        proxy_pass https://google.com/;
-    }
-
     location /online-https {
-        root online-https;
         proxy_pass https://sitesearch.online/;
     }
 
@@ -45,30 +30,8 @@ server {
         # Host
         proxy_set_header Host sitesearch.cloud;
         # Location
-        proxy_set_header Location https://sitesearch.cloud/online-http;
+        proxy_set_header Location https://sitesearch.cloud/;
         proxy_pass http://sitesearch.online/;
-    }
-
-    location /online-http1 {
-        root online-http;
-        proxy_redirect http://sitesearch.online/ /online-http;
-    }
-
-    location /online-http2 {
-        root online-http;
-        proxy_redirect http://sitesearch.online/ /;
-    }
-
-    location /online-http3 {
-        proxy_redirect http://sitesearch.online/ /;
-    }
-
-    location /online-http4 {
-        proxy_redirect http://sitesearch.online/ /online-http;
-    }
-
-    location /online-http5 {
-        proxy_redirect http://sitesearch.online/ /online-http/;
     }
 
     location / {
