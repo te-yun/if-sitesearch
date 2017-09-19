@@ -91,12 +91,42 @@ server {
     listen [::]:443 ssl http2;
     server_name api.sitesearch.cloud;
 
-    location /api {
-        proxy_pass https://api.sitesearch.cloud:2443;
+    include /etc/nginx/snippets/ssl.conf;
+
+    location /api/ {
+        proxy_pass https://sitesearch.cloud:2443/;
+    }
+
+    location /api1 {
+        proxy_pass https://sitesearch.cloud:2443/;
+    }
+
+    location /api2/ {
+        proxy_pass https://sitesearch.cloud:2443/;
     }
 
     location /info {
         proxy_pass https://sitesearch.cloud:2443;
+    }
+
+    location /online-https {
+        root online-https;
+        proxy_pass https://sitesearch.online/;
+    }
+
+    location /online-https1/ {
+        root online-https;
+        proxy_pass https://sitesearch.online/;
+    }
+
+    location /online-http {
+        root online-http;
+        proxy_pass http://sitesearch.online/;
+    }
+
+    location /online-http1/ {
+        root online-http;
+        proxy_pass http://sitesearch.online/;
     }
 
     location / {
