@@ -147,16 +147,12 @@ server {
 }
 
 server {
-    listen 80;
-    listen [::]:80;
+    listen 9605;
+    listen [::]:9605;
     server_name main.sitesearch.cloud;
 
-    location /api {
-        proxy_pass https://api.sitesearch.cloud:2443;
-    }
-
     location / {
-        proxy_pass http://sitesearch.online;
+        proxy_pass http://sitesearch.cloud:9605;
     }
 }
 
