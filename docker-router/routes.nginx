@@ -21,13 +21,17 @@ server {
         proxy_pass https://sitesearch.cloud:2443/;
     }
 
-    location /test333/ {
-        root test333;
-        proxy_pass https://sitesearch.cloud:2443/;
+    location /google/ {
+        proxy_pass https://google.com/;
     }
 
     location /google {
-        root app;
+        root google;
+        proxy_pass https://google.com/;
+    }
+
+    location /google/ {
+        root google;
         proxy_pass https://google.com/;
     }
 
@@ -39,11 +43,6 @@ server {
     location /online-http {
         root online-http;
         proxy_pass http://sitesearch.online/;
-    }
-
-    location /example {
-        root example;
-        proxy_pass https://example.com/;
     }
 
     location / {
