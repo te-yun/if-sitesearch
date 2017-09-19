@@ -41,9 +41,11 @@ server {
     }
 
     location /online-http {
-        root online-http;
+        #        root online-http;
         # Host
+        proxy_set_header Host sitesearch.cloud;
         # Location
+        proxy_set_header Location https://sitesearch.cloud/online-http;
         proxy_pass http://sitesearch.online/;
     }
 
