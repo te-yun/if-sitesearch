@@ -26,19 +26,19 @@ server {
         proxy_pass https://sitesearch.cloud:2443/;
     }
 
-    location /app {
+    location /google {
         root app;
-        proxy_pass https://sitesearch.cloud:2443;
+        proxy_pass https://google.com/;
     }
 
     location /online-https {
         root online-https;
-        proxy_pass https://sitesearch.online;
+        proxy_pass https://sitesearch.online/;
     }
 
     location /online-http {
         root online-http;
-        proxy_pass http://sitesearch.online;
+        proxy_pass http://sitesearch.online/;
     }
 
     location /example {
