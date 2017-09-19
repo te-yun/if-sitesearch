@@ -65,7 +65,12 @@ public class SearchController {
             @RequestParam(value = "siteId", required = false) UUID siteId,
             @RequestParam(value = "tenantId", required = false) UUID tenantId  // TODO remove, once searchbar supports new API
     ) {
-        if (siteId == null) siteId = tenantId;
+        if (siteId == null) { // TODO hack to support legacy searchbar API
+            if (tenantId == null)
+                return ResponseEntity.badRequest().build();
+            else
+                siteId = tenantId;
+        }
 
         if (query.isEmpty()) return ResponseEntity.badRequest().build();
 

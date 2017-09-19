@@ -48,14 +48,19 @@ public class AutocompleteController {
             @RequestParam(value = "siteId", required = false) UUID siteId,
             @RequestParam(value = "tenantId", required = false) UUID tenantId  // TODO remove, once searchbar supports new API
     ) {
-        if (siteId == null) siteId = tenantId;
-        
+        if (siteId == null) { // TODO hack to support legacy searchbar API
+            if (tenantId == null)
+                return ResponseEntity.badRequest().build();
+            else
+                siteId = tenantId;
+        }
+
         if (query.isEmpty()) return ResponseEntity.badRequest().build();
 
         // override siteId with cookie value for debugging & speed up the getting started experience
         if (cookieTenant != null) siteId = cookieTenant;
 
-        LOG.info("cookieTenant: " + cookieTenant);
+        LOG.info("cookieSiteId: " + cookieTenant);
         LOG.info("query: " + query);
         Optional<Autocomplete> result = service.autocomplete(query, siteId);
         if (result.isPresent()) {
