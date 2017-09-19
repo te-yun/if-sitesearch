@@ -21,10 +21,6 @@ server {
         proxy_pass https://sitesearch.cloud:2443/;
     }
 
-    location /api {
-        proxy_pass https://sitesearch.cloud:2443/;
-    }
-
     location /test333/ {
         root test333;
         proxy_pass https://sitesearch.cloud:2443/;
@@ -47,7 +43,7 @@ server {
 
     location /example {
         root example;
-        proxy_pass https://example.com;
+        proxy_pass https://example.com/;
     }
 
     location / {
@@ -81,18 +77,6 @@ server {
 
     location /api/ {
         proxy_pass https://sitesearch.cloud:2443/;
-    }
-
-    location /api1 {
-        proxy_pass https://sitesearch.cloud:2443/;
-    }
-
-    location /api2/ {
-        proxy_pass https://sitesearch.cloud:2443/;
-    }
-
-    location /info {
-        proxy_pass https://sitesearch.cloud:2443;
     }
 
     location /online-https {
