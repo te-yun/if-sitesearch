@@ -22,6 +22,8 @@ server {
     }
 
     location /online-https {
+        proxy_set_header Host sitesearch.cloud;
+        proxy_set_header Location https://sitesearch.cloud/;
         proxy_pass https://sitesearch.online/;
     }
 
@@ -31,6 +33,24 @@ server {
         proxy_set_header Host sitesearch.cloud;
         # Location
         proxy_set_header Location https://sitesearch.cloud/;
+        proxy_pass http://sitesearch.online/;
+    }
+
+    location /online-http1 {
+        proxy_set_header Host sitesearch.cloud;
+        proxy_set_header Location https://sitesearch.cloud;
+        proxy_pass http://sitesearch.online/;
+    }
+
+    location /online-http2 {
+        proxy_set_header Host sitesearch.cloud;
+        proxy_set_header Location https://sitesearch.online;
+        proxy_pass http://sitesearch.online/;
+    }
+
+    location /online-http3 {
+        proxy_set_header Host sitesearch.cloud;
+        proxy_set_header Location http://sitesearch.online/;
         proxy_pass http://sitesearch.online/;
     }
 
