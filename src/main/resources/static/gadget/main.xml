@@ -56,7 +56,7 @@
     <!--sbTarget: "#searchbar",-->
     <!--configurl: "https://sitesearch.cloud/searchbar-config/sitesearch-config.json",-->
     <!--sitesearch: true,-->
-    <!--tenantId: "363d50f3-17cb-4756-aeca-7d3768092ae1"-->
+    <!--siteId: "363d50f3-17cb-4756-aeca-7d3768092ae1"-->
     <!--});-->
     <!--});-->
     <!--</script>-->

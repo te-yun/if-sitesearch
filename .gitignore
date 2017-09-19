@@ -4,6 +4,7 @@ config.json
 /data
 /data-entity
 /*.log
+/*.hprof
 
 # Spring Boot
 /config

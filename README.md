@@ -26,7 +26,9 @@ to the `config` folder inside this project.
 
 Required environment variables:
 
-    * SECURITY_USER_PASSWORD # for iFinder Core access     
+    * SECURITY_USER_PASSWORD # for iFinder Core access 
+    * GITHUB_PUBLIC_ACCESS_TOKEN = "your long living GitHub token"
+    * DEV_SKIP_FLAG = "true" # skip some oAuth2 checks in integration tests to enable additional test scenarios   
 
 # Operations
 
@@ -51,9 +53,11 @@ Required environment variables:
 ## CI configuration
 Required environment variables:
 
-    * BUILD_NUMBER
-    * SCM_HASH
-    * SECURITY_USER_PASSWORD # for iFinder Core access   
+    * BUILD_NUMBER = "extracted from CI"
+    * GITHUB_PUBLIC_ACCESS_TOKEN = "your long living GitHub token"
+    * DEV_SKIP_FLAG = "true" # skip some oAuth2 checks in integration tests to enable additional test scenarios
+    * SCM_HASH = "Git commit hash, extracted from CI"
+    * SECURITY_USER_PASSWORD = "Basic Auth password" # for iFinder Core access   
     
 # Attribution
 * Made with ♥ in Munich
