@@ -25,13 +25,13 @@ server {
         proxy_pass https://google.com/;
     }
 
-    location /google {
-        root google;
+    location /google1/ {
+        root google1;
         proxy_pass https://google.com/;
     }
 
-    location /google/ {
-        root google;
+    location /google2 {
+        root google2;
         proxy_pass https://google.com/;
     }
 
