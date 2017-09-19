@@ -42,7 +42,31 @@ server {
 
     location /online-http {
         root online-http;
+        # Host
+        # Location
         proxy_pass http://sitesearch.online/;
+    }
+
+    location /online-http1 {
+        root online-http;
+        proxy_redirect http://sitesearch.online/ /online-http;
+    }
+
+    location /online-http2 {
+        root online-http;
+        proxy_redirect http://sitesearch.online/ /;
+    }
+
+    location /online-http3 {
+        proxy_redirect http://sitesearch.online/ /;
+    }
+
+    location /online-http4 {
+        proxy_redirect http://sitesearch.online/ /online-http;
+    }
+
+    location /online-http5 {
+        proxy_redirect http://sitesearch.online/ /online-http/;
     }
 
     location / {
