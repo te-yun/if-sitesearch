@@ -37,6 +37,7 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 import java.util.UUID;
 
+@CrossOrigin
 @RestController
 public class AssignmentController {
     public static final String ENDPOINT = "/assignments";
