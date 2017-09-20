@@ -81,10 +81,10 @@
         xhr.onload = async function () {
             if (this.status === 200 && this.responseText !== "") {
                 const user = JSON.parse(this.responseText);
-                const xhr1 = new XMLHttpRequest();
-                xhr1.open("GET", "/authentication-providers/github/" + user.userAuthentication.details.id + "?accessToken=" + user.details.tokenValue);
-                xhr1.setRequestHeader("content-type", "application/json");
-                xhr1.onload = async function () {
+                const xhr = new XMLHttpRequest();
+                xhr.open("GET", "/authentication-providers/github/" + user.userAuthentication.details.id + "?accessToken=" + user.details.tokenValue);
+                xhr.setRequestHeader("content-type", "application/json");
+                xhr.onload = async function () {
                     if (this.status === 200) {
                         document.getElementById("assignmentsDisplay").style.display = "block";
                         const assignments = JSON.parse(this.responseText);
@@ -116,7 +116,7 @@
                         }
                     }
                 };
-                xhr1.send();
+                xhr.send();
             }
         };
         xhr.send();
@@ -128,7 +128,7 @@
 
 <br>
 <span id="user" class="fa fa-user"></span>
-<a id="loginLink" href="/login">Sign-in / Sign-up with GitHub</a>
+<a id="loginLink" href="/login?redirect_uri=https://sitesearch.cloud/">Sign-in / Sign-up with GitHub</a>
 <br>
 <br>
 <a id="logoutLink" href="/logout" style="display: none;">Sign-out</a>
@@ -154,11 +154,11 @@
     <label for="company">Company</label>
     <br>
     <input id="company" type="text" value="" placeholder="Company Name"/>
+    <button id="assignSite" onclick="assignSiteToTenant()">Assign SITE to TENANT using GitHub</button>
 </div>
 
 <br>
 <br>
-<button id="assignSite" onclick="assignSiteToTenant()">Assign SITE to TENANT using GitHub</button>
 <div id="assignmentsDisplay" style="display: none">
     <h2>Tenants</h2>
     <ul id="tenantAssignments"></ul>
