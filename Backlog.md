@@ -2,6 +2,8 @@ Backlog
 =
 
 # now
+* ~~httpS all over: CI, 9605~~
+* ~~product frontpage routing~~
 
 # next
 * Marketing website
