@@ -34,7 +34,18 @@
                 const user = JSON.parse(this.responseText);
                 document.getElementById("user").textContent = user.userAuthentication.details.name;
                 document.getElementById("user").title = user.userAuthentication.details.id;
-                document.getElementById("user").display = "inline";
+                document.getElementById("user").style.display = "inline";
+                document.getElementById("assignmentContainer").style.display = "inline";
+                console.warn(user.userAuthentication.details.company);
+                console.warn(user.userAuthentication.details.name);
+                console.warn(user.userAuthentication.details.email);
+                console.warn(user.details.tokenValue);
+                console.warn(user.userAuthentication.details.id);
+
+                document.getElementById("loginLink").style.display = "none";
+                document.getElementById("logoutLink").style.display = "inline";
+                document.getElementById("company").value = user.userAuthentication.details.company;
+                document.getElementById("contactEmail").value = user.userAuthentication.details.email;
             }
         };
         xhr.send();
@@ -45,75 +56,119 @@
         xhr.onload = async function () {
             if (this.status === 200 && this.responseText !== "") {
                 const user = JSON.parse(this.responseText);
-                document.getElementById("user").textContent = user.userAuthentication.details.name;
-                document.getElementById("user").title = user.userAuthentication.details.id;
-                document.getElementById("user").display = "inline";
-                document.getElementById("contactEmail").textContent = user.userAuthentication.details.email;
-                document.getElementById("company").textContent = user.userAuthentication.details.company;
-                console.dirxml(user);
                 const xhr = new XMLHttpRequest();
-                xhr.open("PUT", "/assignments/tenants/e10011b2-7f95-49e4-a9cb-189f5f5a6654/sites/e10011b2-7f95-49e4-a9cb-189f5f5a6654?siteSecret=c041b603-e5b7-4623-8fe9-4cd08e5b4558");
-                xhr.setRequestHeader("Content-type", "application/json");
+                xhr.open("PUT", "/assignments/tenants/e10011b2-7f95-49e4-a9cb-189f5f5a6654/sites/" + document.getElementById("siteId").value + "?siteSecret=" + document.getElementById("siteSecret").value);
+                xhr.setRequestHeader("content-type", "application/json");
                 xhr.onload = async function () {
-                    document.getElementById("assignment").textContent = "{\n" +
-                        "                \t\"authProviderId\": \"87507\",\n" +
-                        "                \t\"authProvider\": \"github\",\n" +
-                        "                \t\"authProviderToken\": \"github\",\n" +
-                        "                \t\"contactEmail\": \"alexander.orlov@intrafind.de\",\n" +
-                        "                \t\"company\": \"IntraFind Software AG\"\n" +
-                        "                }";
                 };
 
                 xhr.send(JSON.stringify({
-                    authProviderId: "87507",
+                    authProviderId: user.userAuthentication.details.id,
                     authProvider: "github",
-                    authProviderToken: "token",
-                    contactEmail: "alexander.orlov@intrafind.de",
-                    company: "IntraFind Software AG"
+                    authProviderToken: user.details.tokenValue,
+                    contactEmail: document.getElementById("contactEmail").value,
+                    company: document.getElementById("company").value
                 }));
+                showAssignments();
             }
         };
         xhr.send();
-    }
+    };
+
+    const showAssignments = async function () {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "/user");
+        xhr.onload = async function () {
+            if (this.status === 200 && this.responseText !== "") {
+                const user = JSON.parse(this.responseText);
+                const xhr1 = new XMLHttpRequest();
+                xhr1.open("GET", "/authentication-providers/github/" + user.userAuthentication.details.id + "?accessToken=" + user.details.tokenValue);
+                xhr1.setRequestHeader("content-type", "application/json");
+                xhr1.onload = async function () {
+                    if (this.status === 200) {
+                        document.getElementById("assignmentsDisplay").style.display = "block";
+                        const assignments = JSON.parse(this.responseText);
+                        for (let tenant in assignments.tenants) {
+                            let tenantEntry = document.createElement("li");
+                            let tenantCompany = document.createElement("li");
+                            let tenantContactEmail = document.createElement("li");
+                            tenantEntry.textContent = "Tenant ID: " + tenant;
+                            tenantCompany.textContent = "Company: " + assignments.tenants[tenant].company;
+                            tenantContactEmail.textContent = "Contact e-mail: " + assignments.tenants[tenant].contactEmail;
+                            document.getElementById("tenantAssignments").appendChild(tenantEntry);
+                            document.getElementById("tenantAssignments").appendChild(tenantCompany);
+                            document.getElementById("tenantAssignments").appendChild(tenantContactEmail);
+                        }
+
+                        for (let site in assignments.sites) {
+                            let siteEntry = document.createElement("li");
+                            siteEntry.textContent = "Site ID: " + site;
+                            let siteSecret = document.createElement("li");
+                            siteSecret.textContent = "Site Secret: " + assignments.sites[site];
+                            document.getElementById("siteAssignments").appendChild(siteEntry);
+                            document.getElementById("siteAssignments").appendChild(siteSecret);
+                        }
+
+                        for (let authProvider in assignments.authProviders) {
+                            let authProviderEntry = document.createElement("li");
+                            authProviderEntry.textContent = "Identity: " + assignments.authProviders[authProvider];
+                            document.getElementById("identityAssignments").appendChild(authProviderEntry);
+                        }
+                    }
+                };
+                xhr1.send();
+            }
+        };
+        xhr.send();
+    };
 </script>
-<!--<body onload="showAuthentication()">-->
+<body onload="showAuthentication()">
 <h1 style="font-size: 2em;"><span class="fa fa-search"></span> Simple Site Search<sup>BETA</sup></h1>
 <img src="theme/logo.png" width="361" height="105" style="float: right;">
 
-<!--<span id="user" class="fa fa-user"></span>-->
-<!--<a href="/login">Login</a>-->
-<!--<br>-->
-<!--<a href="/logout">Logout</a>-->
-<!--<br>-->
-<!--<label for="siteId">Site ID</label>-->
-<!--<br>-->
-<!--<input id="siteId" type="text" value="e10011b2-7f95-49e4-a9cb-189f5f5a6654" placeholder="siteId"/>-->
-<!--<br>-->
-<!--<label for="siteId">Page ID</label>-->
-<!--<br>-->
-<!--<input id="siteId" type="text" value="a10011b2-7f95-49e4-a9cb-189f5f5a6655" placeholder="siteId"/>-->
-<!--<br>-->
-<!--<label for="siteSecret">Page Secret</label>-->
-<!--<br>-->
-<!--<input id="siteSecret" type="text" value="b10011b2-7f95-49e4-a9cb-189f5f5a6655" placeholder="siteSecret"/>-->
-<!--<br>-->
-<!--<label for="contactEmail">Contact E-mail</label>-->
-<!--<br>-->
-<!--<input id="contactEmail" type="email" value="alexander.orlov@intrafind.de" placeholder="Contact E-mail"/>-->
-<!--<br>-->
-<!--<label for="company">Company</label>-->
-<!--<br>-->
-<!--<input id="company" type="text" value="IntraFind Software AG" placeholder="Company Name"/>-->
-<!--<br>-->
-<!--<label for="authProviderId">oAuth2 Provider</label>-->
-<!--<br>-->
-<!--<input id="authProviderId" type="text" value="87507" placeholder="oAuth2 Provider ID"/>-->
-<!--<br>-->
+<br>
+<span id="user" class="fa fa-user"></span>
+<a id="loginLink" href="/login">Sign-in / Sign-up with GitHub</a>
+<br>
+<br>
+<a id="logoutLink" href="/logout" style="display: none;">Sign-out</a>
+<br>
+<br>
+<div id="assignmentContainer" style="display: none;">
+    <label for="siteId">Site ID</label>
+    <br>
+    <input id="siteId" type="text" value="8802ac86-b493-48fb-9938-68cbfc5acd63" placeholder="Site Id"/>
+    <!--<br>-->
+    <!--<label for="pageId">Page ID</label>-->
+    <!--<br>-->
+    <!--<input id="pageId" type="text" value="a10011b2-7f95-49e4-a9cb-189f5f5a6655" placeholder="siteId"/>-->
+    <br>
+    <label for="siteSecret">Site Secret</label>
+    <br>
+    <input id="siteSecret" type="text" value="57f3e6e4-dba7-4edf-9628-64682cc048b9" placeholder="Site Secret"/>
+    <br>
+    <label for="contactEmail">Contact E-mail</label>
+    <br>
+    <input id="contactEmail" type="email" value="" placeholder="Contact e-mail"/>
+    <br>
+    <label for="company">Company</label>
+    <br>
+    <input id="company" type="text" value="" placeholder="Company Name"/>
+</div>
 
-<!--<button id="assignSite" onclick="assignSiteToTenant()">Assign SITE to TENANT using an oAuth PROVIDER</button>-->
-<!--<h2>Assignment Created</h2>-->
-<!--<span id="assignment"></span>-->
+<br>
+<br>
+<button id="assignSite" onclick="assignSiteToTenant()">Assign SITE to TENANT using GitHub</button>
+<div id="assignmentsDisplay" style="display: none">
+    <h2>Tenants</h2>
+    <ul id="tenantAssignments"></ul>
+    <h2>Sites</h2>
+    <ul id="siteAssignments"></ul>
+    <h2>Identities</h2>
+    <ul id="identityAssignments"></ul>
+</div>
 
+<br>
 <ul style="list-style: none; font-size: 1.5em;">
     <li><a class="fa fa-book" href="/swagger-ui.html" style="text-decoration: none;">
         API specification &amp; playground</a></li>

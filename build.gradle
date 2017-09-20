@@ -77,8 +77,8 @@ test {
 
 tasks.jmh.finalizedBy tasks.jmhReport 
 jmh {
-    include = ["Load10Users", "LoadIndex2Users"]
-//    include = ["Load10Users", "Load100Users", "LoadIndex2Users"]
+//    include = ["Load10Users", "LoadIndex2Users"]
+    include = ["Load10Users", "Load100Users", "LoadIndex2Users"]
 //    include = ["Load10Users", "Load100Users", "Load1000Users", "LoadIndex2Users"]
 //    include = ["Load1000Users"]
 //    include = ["Load10Users"] // for local tests
