@@ -92,7 +92,7 @@
 //                            tenantCompany.textContent = "Company: " + assignments.tenants[tenant].company;
                             tenantCompany.textContent = "Company: " + tenant.company;
 //                            tenantContactEmail.textContent = "Contact e-mail: " + assignments.tenants[tenant].contactEmail;
-                            tenantContactEmail.textContent = "Contact e-mail: " + tenant.contactEmail;
+                            tenantContactEmail.textContent = "Contact e-mail: " + tenant["contactEmail"];
                             document.getElementById("tenantAssignments").appendChild(tenantEntry);
                             document.getElementById("tenantAssignments").appendChild(tenantCompany);
                             document.getElementById("tenantAssignments").appendChild(tenantContactEmail);
@@ -128,7 +128,7 @@
 
 <br>
 <span id="user" class="fa fa-user"></span>
-<a id="loginLink" href="/login">Sign-in / Sign-up with GitHub</a>
+<a id="loginLink" href="/login?redirect_uri=">Sign-in / Sign-up with GitHub</a>
 <br>
 <br>
 <a id="logoutLink" href="/logout" style="display: none;">Sign-out</a>
