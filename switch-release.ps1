@@ -19,7 +19,7 @@ if(isBlueUp){
         --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
         --env BUILD_NUMBER=$env:BUILD_NUMBER `
         --env SCM_HASH=$env:SCM_HASH `
-        -v ~/srv/${geen}:/data `
+        -v ~/srv/${geen}:/home/svc_usr/data `
         intrafind/${docker_image_name}:${docker_tag}
     docker rm -f ${docker_image_name}-blue
 } else {
@@ -31,7 +31,7 @@ if(isBlueUp){
         --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
         --env BUILD_NUMBER=$env:BUILD_NUMBER `
         --env SCM_HASH=$env:SCM_HASH `
-        -v ~/srv/${blue}:/data `
+        -v ~/srv/${blue}:/home/svc_usr/data `
         intrafind/${docker_image_name}:${docker_tag}
     docker rm -f ${docker_image_name}-green
 }
