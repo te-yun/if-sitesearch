@@ -83,7 +83,7 @@
                     if (this.status === 200) {
                         document.getElementById("assignmentsDisplay").style.display = "block";
                         const assignments = JSON.parse(this.responseText);
-                        for (let tenant in assignments.tenants) {
+                        assignments.tenants.forEach(function (tenant) {
                             let tenantEntry = document.createElement("li");
                             let tenantCompany = document.createElement("li");
                             let tenantContactEmail = document.createElement("li");
@@ -96,9 +96,10 @@
                             document.getElementById("tenantAssignments").appendChild(tenantEntry);
                             document.getElementById("tenantAssignments").appendChild(tenantCompany);
                             document.getElementById("tenantAssignments").appendChild(tenantContactEmail);
-                        }
+                        });
 
-                        for (let site in assignments.sites) {
+//                        for (let site in assignments.sites) {
+                        assignments.sites.forEach(function (site) {
                             let siteEntry = document.createElement("li");
                             siteEntry.textContent = "Site ID: " + site.id;
 //                            siteEntry.textContent = "Site ID: " + site;
@@ -107,7 +108,7 @@
                             siteSecret.textContent = "Site Secret: " + site["secret"];
                             document.getElementById("siteAssignments").appendChild(siteEntry);
                             document.getElementById("siteAssignments").appendChild(siteSecret);
-                        }
+                        });
 
                         for (let authProvider in assignments.authProviders) {
                             let authProviderEntry = document.createElement("li");
