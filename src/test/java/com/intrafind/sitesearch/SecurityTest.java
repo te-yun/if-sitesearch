@@ -24,7 +24,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
@@ -66,19 +69,19 @@ public class SecurityTest {
         ;
     }
 
-    @Test
-    public void assureSiteSearchServiceBasicAuthProtectionForHessianPost() throws Exception {
-        final ResponseEntity<String> secureEndpointHessian = caller.postForEntity(URI.create(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "hessian/index?method=index"), HttpEntity.EMPTY, String.class);
-        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointHessian.getStatusCode());
-        assertNull(secureEndpointHessian.getBody());
-    }
+//    @Test
+//    public void assureSiteSearchServiceBasicAuthProtectionForHessianPost() throws Exception {
+//        final ResponseEntity<String> secureEndpointHessian = caller.postForEntity(URI.create(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "hessian/index?method=index"), HttpEntity.EMPTY, String.class);
+//        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointHessian.getStatusCode());
+//        assertNull(secureEndpointHessian.getBody());
+//    }
 
-    @Test
-    public void assureSiteSearchServiceBasicAuthProtectionForHessianGet() throws Exception {
-        final ResponseEntity<String> secureEndpointHessianGet = caller.exchange(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "hessian/index?method=index", HttpMethod.GET, HttpEntity.EMPTY, String.class);
-        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointHessianGet.getStatusCode());
-        assertNull(secureEndpointHessianGet.getBody());
-    }
+//    @Test
+//    public void assureSiteSearchServiceBasicAuthProtectionForHessianGet() throws Exception {
+//        final ResponseEntity<String> secureEndpointHessianGet = caller.exchange(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "hessian/index?method=index", HttpMethod.GET, HttpEntity.EMPTY, String.class);
+//        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointHessianGet.getStatusCode());
+//        assertNull(secureEndpointHessianGet.getBody());
+//    }
 
     @Test
     public void assureSiteSearchServiceBasicAuthProtectionForJsonPost() throws Exception {
@@ -87,10 +90,10 @@ public class SecurityTest {
         assertNull(secureEndpointJson.getBody());
     }
 
-    @Test
-    public void assureSiteSearchServiceBasicAuthProtectionForJsonGet() throws Exception {
-        final ResponseEntity<String> secureEndpointJsonGet = caller.getForEntity(URI.create(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "json/index?method=index"), String.class);
-        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJsonGet.getStatusCode());
-        assertNull(secureEndpointJsonGet.getBody());
-    }
+//    @Test
+//    public void assureSiteSearchServiceBasicAuthProtectionForJsonGet() throws Exception {
+//        final ResponseEntity<String> secureEndpointJsonGet = caller.getForEntity(URI.create(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "json/index?method=index"), String.class);
+//        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJsonGet.getStatusCode());
+//        assertNull(secureEndpointJsonGet.getBody());
+//    }
 }

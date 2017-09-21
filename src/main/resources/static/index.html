@@ -36,11 +36,6 @@
                 document.getElementById("user").title = user.userAuthentication.details.id;
                 document.getElementById("user").style.display = "inline";
                 document.getElementById("assignmentContainer").style.display = "inline";
-                console.warn(user.userAuthentication.details.company);
-                console.warn(user.userAuthentication.details.name);
-                console.warn(user.userAuthentication.details.email);
-                console.warn(user.details.tokenValue);
-                console.warn(user.userAuthentication.details.id);
 
                 document.getElementById("loginLink").style.display = "none";
                 document.getElementById("logoutLink").style.display = "inline";
@@ -128,7 +123,7 @@
 
 <br>
 <span id="user" class="fa fa-user"></span>
-<a id="loginLink" href="/login?redirect_uri=https://sitesearch.cloud/login">Sign-in / Sign-up with GitHub</a>
+<a id="loginLink" href="/login">Sign-in / Sign-up with GitHub</a>
 <br>
 <br>
 <a id="logoutLink" href="/logout" style="display: none;">Sign-out</a>
@@ -138,10 +133,6 @@
     <label for="siteId">Site ID</label>
     <br>
     <input id="siteId" type="text" value="8802ac86-b493-48fb-9938-68cbfc5acd63" placeholder="Site Id"/>
-    <!--<br>-->
-    <!--<label for="pageId">Page ID</label>-->
-    <!--<br>-->
-    <!--<input id="pageId" type="text" value="a10011b2-7f95-49e4-a9cb-189f5f5a6655" placeholder="siteId"/>-->
     <br>
     <label for="siteSecret">Site Secret</label>
     <br>

@@ -29,7 +29,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework.kafka:spring-kafka:1.2.2.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework.kafka:spring-kafka:1.2.3.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jetbrains.xodus:xodus-entity-store:1.0.6" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jetbrains.xodus:xodus-vfs:1.0.6" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jetbrains.xodus:xodus-environment:1.0.6" level="project" />
@@ -44,7 +44,7 @@
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework.security.oauth:spring-security-oauth2:2.2.0.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework:spring-messaging:4.3.11.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework.retry:spring-retry:1.2.1.RELEASE" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.apache.kafka:kafka-clients:0.10.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.apache.kafka:kafka-clients:0.10.2.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jetbrains.xodus:xodus-utils:1.0.6" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: io.github.microutils:kotlin-logging:1.4.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.1.1" level="project" />
@@ -118,7 +118,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.kafka:spring-kafka:1.2.2.RELEASE" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.kafka:spring-kafka:1.2.3.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.xodus:xodus-entity-store:1.0.6" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.xodus:xodus-vfs:1.0.6" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.xodus:xodus-environment:1.0.6" level="project" />
@@ -134,7 +134,7 @@
     <orderEntry type="library" scope="RUNTIME" name="Gradle: net.java.dev.jna:jna:4.4.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework:spring-messaging:4.3.11.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.retry:spring-retry:1.2.1.RELEASE" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.kafka:kafka-clients:0.10.2.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.kafka:kafka-clients:0.10.2.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.xodus:xodus-utils:1.0.6" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.github.microutils:kotlin-logging:1.4.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.1.1" level="project" />
@@ -208,7 +208,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.kafka:spring-kafka:1.2.2.RELEASE" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.kafka:spring-kafka:1.2.3.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.xodus:xodus-entity-store:1.0.6" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.xodus:xodus-vfs:1.0.6" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.xodus:xodus-environment:1.0.6" level="project" />
@@ -225,7 +225,7 @@
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.boot:spring-boot-starter-test:1.5.7.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework:spring-messaging:4.3.11.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.retry:spring-retry:1.2.1.RELEASE" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.apache.kafka:kafka-clients:0.10.2.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.apache.kafka:kafka-clients:0.10.2.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.xodus:xodus-utils:1.0.6" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: io.github.microutils:kotlin-logging:1.4.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.1.1" level="project" />

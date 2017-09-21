@@ -18,6 +18,7 @@ buildscript {
     ext {
         spring_boot_version = "1.5.7.RELEASE"
         swagger_version = "2.7.0"
+        xodus_version = "1.0.6"
     }
 }
 
@@ -43,10 +44,10 @@ configurations {
 }
 
 dependencies {
-    compile "org.springframework.kafka:spring-kafka:1.2.2.RELEASE"
+    compile "org.springframework.kafka:spring-kafka:1.2.3.RELEASE"
 
-    compile "org.jetbrains.xodus:xodus-openAPI:1.0.6"
-    compile "org.jetbrains.xodus:xodus-entity-store:1.0.6"
+    compile "org.jetbrains.xodus:xodus-openAPI:$xodus_version"
+    compile "org.jetbrains.xodus:xodus-entity-store:$xodus_version"
     
     compile "com.rometools:rome:1.7.4"
 
@@ -77,8 +78,8 @@ test {
 
 tasks.jmh.finalizedBy tasks.jmhReport 
 jmh {
-//    include = ["Load10Users", "Load100Users", "LoadIndex2Users"]
-    include = ["Load10Users", "Load100Users", "Load1000Users", "LoadIndex2Users"]
+    include = ["Load10Users", "Load100Users", "LoadIndex2Users"]
+//    include = ["Load10Users", "Load100Users", "Load1000Users", "LoadIndex2Users"]
 //    include = ["Load10Users"] // for local tests
     fork = 0
     warmupIterations = 1

@@ -18,36 +18,35 @@ package com.intrafind.sitesearch.dto;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public class TenantOverview implements Serializable {
-    private Map<UUID, TenantInfo> tenants;
-    private Map<UUID, UUID> sites;
+    private List<TenantInfo> tenants;
+    private List<Site> sites;
     private List<String> authProviders;
 
     private TenantOverview() {
     }
 
-    public TenantOverview(Map<UUID, TenantInfo> tenants, Map<UUID, UUID> sites, List<String> authProviders) {
+    public TenantOverview(List<TenantInfo> tenants, List<Site> sites, List<String> authProviders) {
         this.tenants = tenants;
         this.sites = sites;
         this.authProviders = authProviders;
     }
 
-    public Map<UUID, TenantInfo> getTenants() {
+    public List<TenantInfo> getTenants() {
         return tenants;
     }
 
-    public void setTenants(Map<UUID, TenantInfo> tenants) {
+    public void setTenants(List<TenantInfo> tenants) {
         this.tenants = tenants;
     }
 
-    public Map<UUID, UUID> getSites() {
+    public List<Site> getSites() {
         return sites;
     }
 
-    public void setSites(Map<UUID, UUID> sites) {
+    public void setSites(List<Site> sites) {
         this.sites = sites;
     }
 
@@ -60,15 +59,25 @@ public class TenantOverview implements Serializable {
     }
 
     public static class TenantInfo {
+        private UUID id;
         private String company;
         private String contactEmail;
 
         private TenantInfo() {
         }
 
-        public TenantInfo(String company, String contactEmail) {
+        public TenantInfo(UUID id, String company, String contactEmail) {
+            this.id = id;
             this.company = company;
             this.contactEmail = contactEmail;
+        }
+
+        public UUID getId() {
+            return id;
+        }
+
+        public void setId(UUID id) {
+            this.id = id;
         }
 
         public String getCompany() {

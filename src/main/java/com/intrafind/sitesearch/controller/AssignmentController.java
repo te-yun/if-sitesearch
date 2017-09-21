@@ -17,8 +17,8 @@
 package com.intrafind.sitesearch.controller;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.intrafind.sitesearch.dto.GitHubUser;
+import com.intrafind.sitesearch.dto.Site;
 import com.intrafind.sitesearch.dto.TenantOverview;
 import com.intrafind.sitesearch.dto.TenantSiteAssignment;
 import com.intrafind.sitesearch.service.PageService;
@@ -81,7 +81,7 @@ public class AssignmentController {
                 authProvider = entityTxn.newEntity("AuthProvider");
                 authProvider.setProperty("id", providerId);
             }
-            tenant.addLink("authProvider", authProvider);   // TODO avoid duplicates // TODO add tests
+            tenant.addLink("authProvider", authProvider);
             authProvider.addLink("tenant", tenant);
 
             if (entityTxn.find("Site", "id", siteId.toString()).size() > 1) {
@@ -93,7 +93,7 @@ public class AssignmentController {
                 site.setProperty("id", siteId.toString());
                 site.setProperty("secret", siteSecret.toString());
             }
-            tenant.addLink("site", site);   // TODO avoid duplicates // TODO add tests
+            tenant.addLink("site", site);
             site.addLink("tenant", tenant);
         });
 
@@ -116,8 +116,8 @@ public class AssignmentController {
             @RequestParam(value = "accessToken") String accessToken
     ) {
         TenantOverview tenantOverview = new TenantOverview(
-                Maps.newHashMap(),
-                Maps.newHashMap(),
+                Lists.newArrayList(),
+                Lists.newArrayList(),
                 Lists.newArrayList()
         );
         LOG.info("provider: " + provider);
@@ -133,10 +133,10 @@ public class AssignmentController {
         authProviders.forEach(authProvider -> {
             tenantOverview.getAuthProviders().add(authProvider.getProperty("id").toString());
             authProvider.getLinks("tenant").forEach(tenant -> {
-                TenantOverview.TenantInfo tenantInfo = new TenantOverview.TenantInfo(tenant.getProperty("company").toString(), tenant.getProperty("contactEmail").toString());
-                tenantOverview.getTenants().put(UUID.fromString(tenant.getProperty("id").toString()), tenantInfo);
+                TenantOverview.TenantInfo tenantInfo = new TenantOverview.TenantInfo(UUID.fromString(tenant.getProperty("id").toString()), tenant.getProperty("company").toString(), tenant.getProperty("contactEmail").toString());
+                tenantOverview.getTenants().add(tenantInfo);
                 tenant.getLinks("site").forEach(site -> {
-                    tenantOverview.getSites().put(UUID.fromString(site.getProperty("id").toString()), UUID.fromString(site.getProperty("secret").toString()));
+                    tenantOverview.getSites().add(new Site(UUID.fromString(site.getProperty("id").toString()), UUID.fromString(site.getProperty("secret").toString())));
                 });
             });
         });
