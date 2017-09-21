@@ -87,9 +87,12 @@
                             let tenantEntry = document.createElement("li");
                             let tenantCompany = document.createElement("li");
                             let tenantContactEmail = document.createElement("li");
-                            tenantEntry.textContent = "Tenant ID: " + tenant;
-                            tenantCompany.textContent = "Company: " + assignments.tenants[tenant].company;
-                            tenantContactEmail.textContent = "Contact e-mail: " + assignments.tenants[tenant].contactEmail;
+                            tenantEntry.textContent = "Tenant ID: " + tenant.id;
+//                            tenantEntry.textContent = "Tenant ID: " + tenant;
+//                            tenantCompany.textContent = "Company: " + assignments.tenants[tenant].company;
+                            tenantCompany.textContent = "Company: " + tenant.company;
+//                            tenantContactEmail.textContent = "Contact e-mail: " + assignments.tenants[tenant].contactEmail;
+                            tenantContactEmail.textContent = "Contact e-mail: " + tenant.contactEmail;
                             document.getElementById("tenantAssignments").appendChild(tenantEntry);
                             document.getElementById("tenantAssignments").appendChild(tenantCompany);
                             document.getElementById("tenantAssignments").appendChild(tenantContactEmail);
@@ -97,9 +100,11 @@
 
                         for (let site in assignments.sites) {
                             let siteEntry = document.createElement("li");
-                            siteEntry.textContent = "Site ID: " + site;
+                            siteEntry.textContent = "Site ID: " + site.id;
+//                            siteEntry.textContent = "Site ID: " + site;
                             let siteSecret = document.createElement("li");
-                            siteSecret.textContent = "Site Secret: " + assignments.sites[site];
+//                            siteSecret.textContent = "Site Secret: " + assignments.sites[site];
+                            siteSecret.textContent = "Site Secret: " + site["secret"];
                             document.getElementById("siteAssignments").appendChild(siteEntry);
                             document.getElementById("siteAssignments").appendChild(siteSecret);
                         }
