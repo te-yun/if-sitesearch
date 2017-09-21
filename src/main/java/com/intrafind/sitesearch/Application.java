@@ -42,7 +42,7 @@ import java.util.Map;
 @EnableSwagger2
 public class Application {
     private final static Logger LOG = LoggerFactory.getLogger(Application.class);
-    public static final URI IFINDER_CORE = URI.create("http://" + System.getenv("SECURITY_USER_PASSWORD") + ":" + System.getenv("SECURITY_USER_PASSWORD") + "@sitesearch.cloud:9605/hessian");
+    public static final URI IFINDER_CORE = URI.create("https://" + System.getenv("SECURITY_USER_PASSWORD") + ":" + System.getenv("SECURITY_USER_PASSWORD") + "@main.sitesearch.cloud/hessian");
 
     @Bean
     public ErrorAttributes overrideDefaultErrorReporting() {

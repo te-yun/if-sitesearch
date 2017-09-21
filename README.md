@@ -47,9 +47,6 @@ Required environment variables:
 ## Release
     ./release.ps1
     
-## Postman
-    ./*.postman_collection.json
-    
 ## CI configuration
 Required environment variables:
 

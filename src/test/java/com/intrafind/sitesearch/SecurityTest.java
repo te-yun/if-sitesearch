@@ -69,35 +69,35 @@ public class SecurityTest {
 
     @Test
     public void assureSiteSearchServiceBasicAuthProtection() throws Exception {
-        final ResponseEntity<String> secureEndpointJson = caller.postForEntity(URI.create("http://" + System.getenv("SECURITY_USER_PASSWORD") + "invalid:" + System.getenv("SECURITY_USER_PASSWORD") + "@sitesearch.cloud:9605/json/index?method=index"), HttpEntity.EMPTY, String.class);
+        final ResponseEntity<String> secureEndpointJson = caller.postForEntity(URI.create("https://" + System.getenv("SECURITY_USER_PASSWORD") + "invalid:" + System.getenv("SECURITY_USER_PASSWORD") + "@main.sitesearch.cloud/json/index?method=index"), HttpEntity.EMPTY, String.class);
         assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJson.getStatusCode());
         assertNull(secureEndpointJson.getBody());
 
-//        final ResponseEntity<String> secureEndpointJsonGet = caller.getForEntity(URI.create("http://" + "invalid:" + "credentials" + "@sitesearch.cloud:9605/json/index?method=index"), String.class);
+//        final ResponseEntity<String> secureEndpointJsonGet = caller.getForEntity(URI.create("https://" + "invalid:" + "credentials" + "@main.sitesearch.cloud/json/index?method=index"), String.class);
 //        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJsonGet.getStatusCode());
 
-//        final ResponseEntity<String> secureEndpointHessian = caller.postForEntity(URI.create("http://" + System.getenv("SECURITY_USER_PASSWORD") + "invalid:" + System.getenv("SECURITY_USER_PASSWORD") + "@sitesearch.cloud:9605/hessian/index?method=index"), HttpEntity.EMPTY, String.class);
+//        final ResponseEntity<String> secureEndpointHessian = caller.postForEntity(URI.create("https://" + System.getenv("SECURITY_USER_PASSWORD") + "invalid:" + System.getenv("SECURITY_USER_PASSWORD") + "@main.sitesearch.cloud/hessian/index?method=index"), HttpEntity.EMPTY, String.class);
 //        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointHessian.getStatusCode());
 //        assertNull(secureEndpointHessian.getBody());
 
-//        final ResponseEntity<String> secureEndpointHessianGet = caller.exchange("http://invalid:credentials@sitesearch.cloud:9605/hessian/index?method=index", HttpMethod.GET, HttpEntity.EMPTY, String.class);
+//        final ResponseEntity<String> secureEndpointHessianGet = caller.exchange("https://invalid:credentials@main.sitesearch.cloud/hessian/index?method=index", HttpMethod.GET, HttpEntity.EMPTY, String.class);
 //        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointHessianGet.getStatusCode());
     }
 
 //    @Test
 //    public void assureSiteSearchServiceBasicAuthProtectionForGet() throws Exception {
-////        final ResponseEntity<String> secureEndpointJson = caller.postForEntity(URI.create("http://" + System.getenv("SECURITY_USER_PASSWORD") + "invalid:" + System.getenv("SECURITY_USER_PASSWORD") + "@sitesearch.cloud:9605/json/index?method=index"), HttpEntity.EMPTY, String.class);
+////        final ResponseEntity<String> secureEndpointJson = caller.postForEntity(URI.create("https://" + System.getenv("SECURITY_USER_PASSWORD") + "invalid:" + System.getenv("SECURITY_USER_PASSWORD") + "@main.sitesearch.cloud/json/index?method=index"), HttpEntity.EMPTY, String.class);
 ////        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJson.getStatusCode());
 ////        assertNull(secureEndpointJson.getBody());
 //
-////        final ResponseEntity<String> secureEndpointJsonGet = caller.getForEntity(URI.create("http://" + "invalid:" + "credentials" + "@sitesearch.cloud:9605/json/index?method=index"), String.class);
+////        final ResponseEntity<String> secureEndpointJsonGet = caller.getForEntity(URI.create("https://" + "invalid:" + "credentials" + "@main.sitesearch.cloud/json/index?method=index"), String.class);
 ////        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJsonGet.getStatusCode());
 //
-////        final ResponseEntity<String> secureEndpointHessian = caller.postForEntity(URI.create("http://" + System.getenv("SECURITY_USER_PASSWORD") + "invalid:" + System.getenv("SECURITY_USER_PASSWORD") + "@sitesearch.cloud:9605/hessian/index?method=index"), HttpEntity.EMPTY, String.class);
+////        final ResponseEntity<String> secureEndpointHessian = caller.postForEntity(URI.create("https://" + System.getenv("SECURITY_USER_PASSWORD") + "invalid:" + System.getenv("SECURITY_USER_PASSWORD") + "@main.sitesearch.cloud/hessian/index?method=index"), HttpEntity.EMPTY, String.class);
 ////        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointHessian.getStatusCode());
 ////        assertNull(secureEndpointHessian.getBody());
 //
-//        final ResponseEntity<String> secureEndpointHessianGet = caller.exchange("http://invalid:credentials@sitesearch.cloud:9605/hessian/index?method=index", HttpMethod.GET, HttpEntity.EMPTY, String.class);
+//        final ResponseEntity<String> secureEndpointHessianGet = caller.exchange("https://invalid:credentials@main.sitesearch.cloud/hessian/index?method=index", HttpMethod.GET, HttpEntity.EMPTY, String.class);
 //        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointHessianGet.getStatusCode());
 //    }
 }
