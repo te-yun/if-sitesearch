@@ -32,12 +32,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.util.UUID;
 
-@CrossOrigin
+@CrossOrigin("*")
 @RestController
 public class AssignmentController {
     public static final String ENDPOINT = "/assignments";
@@ -114,7 +115,6 @@ public class AssignmentController {
             @PathVariable(value = "providerId") String providerId,
             @RequestParam(value = "accessToken") String accessToken
     ) {
-        // TODO introduce check against oAuth endpoint
         TenantOverview tenantOverview = new TenantOverview(
                 Maps.newHashMap(),
                 Maps.newHashMap(),
@@ -146,14 +146,21 @@ public class AssignmentController {
     }
 
     private boolean isAuthenticated(String provider, String providerId, String accessToken) {
-        final ResponseEntity<GitHubUser> githubUser = CALLER.getForEntity(URI.create("https://api.github.com/user?access_token=" + accessToken), GitHubUser.class);
-        if (System.getenv("DEV_SKIP_FLAG") == null) { // skip accessToken checks when running locally or on CI
-            if (!HttpStatus.OK.equals(githubUser.getStatusCode())
-                    || !providerId.equals(githubUser.getBody().getId())) {
-                LOG.warn("Invalid oAuth2 accessToken {} for given authProvider {} & authProviderId {}", accessToken, provider, providerId);
-                return true;
+        try {
+            final ResponseEntity<GitHubUser> githubUser = CALLER
+                    .getForEntity(URI.create("https://api.github.com/user?access_token=" + accessToken), GitHubUser.class);
+
+            if (System.getenv("DEV_SKIP_FLAG") == null) { // skip accessToken checks when running locally or on CI
+                if (!HttpStatus.OK.equals(githubUser.getStatusCode())
+                        || !providerId.equals(githubUser.getBody().getId())) {
+                    LOG.warn("Invalid oAuth2 accessToken {} for given authProvider {} & authProviderId {}", accessToken, provider, providerId);
+                    return true;
+                }
             }
+            return false;
+        } catch (RestClientException e) {
+            LOG.warn(e.getMessage());
+            return false;
         }
-        return false;
     }
 }
