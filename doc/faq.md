@@ -28,7 +28,13 @@ FAQ
 * What does Site Search cost?
     * contact sales
     * Freemium 
-    
+
+* Who is using Site Search?
+    * intrafind.de
+    * intrafind.com
+    * analyzelaw.com
+        
     
 ===
+
 TODO What is 0-0-0-0-0 in curls - playground siteId
