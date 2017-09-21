@@ -33,5 +33,5 @@ if(isBlueUp){
         --env SCM_HASH=$env:SCM_HASH `
         -v ~/srv/${blue}:/home/svc_usr/data `
         intrafind/${docker_image_name}:${docker_tag}
-    docker rm -f ${docker_image_name}-green
+#    docker rm -f ${docker_image_name}-green
 }
