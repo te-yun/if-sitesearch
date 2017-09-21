@@ -19,7 +19,8 @@ if(isBlueUp){
         --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
         --env BUILD_NUMBER=$env:BUILD_NUMBER `
         --env SCM_HASH=$env:SCM_HASH `
-        -v ~/srv/${geen}:/data intrafind/${docker_image_name}:${docker_tag}
+        -v ~/srv/${geen}:/data `
+        intrafind/${docker_image_name}:${docker_tag}
     docker rm -f ${docker_image_name}-blue
 } else {
     write-host blue is down and will be removed
