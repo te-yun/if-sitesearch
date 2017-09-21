@@ -13,6 +13,10 @@ function isBlueUp() {
 if(isBlueUp){
     write-host blue is up and will be removed
     $green = "${docker_image_name}-green"
+
+    mkdir ~/srv/$green
+    sudo chown -R 1000:1000 ~/srv/$green # make it a svc_usr' directory
+
     docker rm -f $green
     docker run -d --name $green `
         -p 3442:8001 `
@@ -25,6 +29,10 @@ if(isBlueUp){
 } else {
     write-host blue is down and will be removed
     $blue = "${docker_image_name}-blue"
+
+    mkdir ~/srv/$blue
+    sudo chown -R 1000:1000 ~/srv/$blue # make it a svc_usr' directory
+
     docker rm -f $blue
     docker run -d --name $blue `
         -p 4442:8001 `
@@ -33,5 +41,5 @@ if(isBlueUp){
         --env SCM_HASH=$env:SCM_HASH `
         -v ~/srv/${blue}:/home/svc_usr/data `
         intrafind/${docker_image_name}:${docker_tag}
-#    docker rm -f ${docker_image_name}-green
+    docker rm -f ${docker_image_name}-green
 }
