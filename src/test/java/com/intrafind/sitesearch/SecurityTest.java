@@ -24,10 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
@@ -45,6 +42,8 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SecurityTest {
     private static final Logger LOG = LoggerFactory.getLogger(SecurityTest.class);
+    private static final String SEARCH_SERVICE_DOMAIN = "@main.sitesearch.cloud/";
+    private static final String INVALID_CREDENTIALS = "https://" + System.getenv("SECURITY_USER_PASSWORD") + "invalid:" + System.getenv("SECURITY_USER_PASSWORD");
 
     @Autowired
     private TestRestTemplate caller;
@@ -68,36 +67,30 @@ public class SecurityTest {
     }
 
     @Test
-    public void assureSiteSearchServiceBasicAuthProtection() throws Exception {
-        final ResponseEntity<String> secureEndpointJson = caller.postForEntity(URI.create("https://" + System.getenv("SECURITY_USER_PASSWORD") + "invalid:" + System.getenv("SECURITY_USER_PASSWORD") + "@main.sitesearch.cloud/json/index?method=index"), HttpEntity.EMPTY, String.class);
-        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJson.getStatusCode());
-        assertNull(secureEndpointJson.getBody());
-
-//        final ResponseEntity<String> secureEndpointJsonGet = caller.getForEntity(URI.create("https://" + "invalid:" + "credentials" + "@main.sitesearch.cloud/json/index?method=index"), String.class);
-//        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJsonGet.getStatusCode());
-
-//        final ResponseEntity<String> secureEndpointHessian = caller.postForEntity(URI.create("https://" + System.getenv("SECURITY_USER_PASSWORD") + "invalid:" + System.getenv("SECURITY_USER_PASSWORD") + "@main.sitesearch.cloud/hessian/index?method=index"), HttpEntity.EMPTY, String.class);
-//        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointHessian.getStatusCode());
-//        assertNull(secureEndpointHessian.getBody());
-
-//        final ResponseEntity<String> secureEndpointHessianGet = caller.exchange("https://invalid:credentials@main.sitesearch.cloud/hessian/index?method=index", HttpMethod.GET, HttpEntity.EMPTY, String.class);
-//        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointHessianGet.getStatusCode());
+    public void assureSiteSearchServiceBasicAuthProtectionForHessianPost() throws Exception {
+        final ResponseEntity<String> secureEndpointHessian = caller.postForEntity(URI.create(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "hessian/index?method=index"), HttpEntity.EMPTY, String.class);
+        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointHessian.getStatusCode());
+        assertNull(secureEndpointHessian.getBody());
     }
 
-//    @Test
-//    public void assureSiteSearchServiceBasicAuthProtectionForGet() throws Exception {
-////        final ResponseEntity<String> secureEndpointJson = caller.postForEntity(URI.create("https://" + System.getenv("SECURITY_USER_PASSWORD") + "invalid:" + System.getenv("SECURITY_USER_PASSWORD") + "@main.sitesearch.cloud/json/index?method=index"), HttpEntity.EMPTY, String.class);
-////        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJson.getStatusCode());
-////        assertNull(secureEndpointJson.getBody());
-//
-////        final ResponseEntity<String> secureEndpointJsonGet = caller.getForEntity(URI.create("https://" + "invalid:" + "credentials" + "@main.sitesearch.cloud/json/index?method=index"), String.class);
-////        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJsonGet.getStatusCode());
-//
-////        final ResponseEntity<String> secureEndpointHessian = caller.postForEntity(URI.create("https://" + System.getenv("SECURITY_USER_PASSWORD") + "invalid:" + System.getenv("SECURITY_USER_PASSWORD") + "@main.sitesearch.cloud/hessian/index?method=index"), HttpEntity.EMPTY, String.class);
-////        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointHessian.getStatusCode());
-////        assertNull(secureEndpointHessian.getBody());
-//
-//        final ResponseEntity<String> secureEndpointHessianGet = caller.exchange("https://invalid:credentials@main.sitesearch.cloud/hessian/index?method=index", HttpMethod.GET, HttpEntity.EMPTY, String.class);
-//        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointHessianGet.getStatusCode());
-//    }
+    @Test
+    public void assureSiteSearchServiceBasicAuthProtectionForHessianGet() throws Exception {
+        final ResponseEntity<String> secureEndpointHessianGet = caller.exchange(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "hessian/index?method=index", HttpMethod.GET, HttpEntity.EMPTY, String.class);
+        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointHessianGet.getStatusCode());
+        assertNull(secureEndpointHessianGet.getBody());
+    }
+
+    @Test
+    public void assureSiteSearchServiceBasicAuthProtectionForJsonPost() throws Exception {
+        final ResponseEntity<String> secureEndpointJson = caller.postForEntity(URI.create(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "json/index?method=index"), HttpEntity.EMPTY, String.class);
+        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJson.getStatusCode());
+        assertNull(secureEndpointJson.getBody());
+    }
+
+    @Test
+    public void assureSiteSearchServiceBasicAuthProtectionForJsonGet() throws Exception {
+        final ResponseEntity<String> secureEndpointJsonGet = caller.getForEntity(URI.create(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "json/index?method=index"), String.class);
+        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJsonGet.getStatusCode());
+        assertNull(secureEndpointJsonGet.getBody());
+    }
 }
