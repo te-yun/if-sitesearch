@@ -1,13 +1,11 @@
 FAQ
 =
 
-TODO What is 0-0-0-0-0 - playground siteId
-
 * What is the difference between **sites** and **pages**?
 
 * What is a **tenant**?
 
-* How can I index a website or page?
+* How can I index a website or page and make it searchable?
   * TODO add an example curl
 
 * How can I update an already indexed page?
@@ -30,3 +28,7 @@ TODO What is 0-0-0-0-0 - playground siteId
 * What does Site Search cost?
     * contact sales
     * Freemium 
+    
+    
+===
+TODO What is 0-0-0-0-0 in curls - playground siteId
