@@ -8,7 +8,10 @@ Backlog
     * let the crawler talk to Site Search API to feed its content
 
 # next
-* Marketing website
+* "Site Search in a minute" on YouTube 
+* Marketing website / product frontpage
 * save siteSecret in persistent store, not in the ElasticSearch document
 
 # future
+* automatic disaster failover
+* 

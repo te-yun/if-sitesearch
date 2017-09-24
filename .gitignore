@@ -2,6 +2,7 @@ generated_tests/
 config.json
 
 /data
+/service/data
 /data-entity
 /*.log
 /*.hprof
@@ -12,6 +13,8 @@ config.json
 /target
 
 /build
+/service/build
+/frontend/build
 /.gradle
 
 # IntelliJ
