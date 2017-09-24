@@ -1,6 +1,6 @@
 {
   "ajax": {
-    "baseUrl": "http://localhost:8001/",
+    "baseUrl": "https://sitesearch.cloud/",
     "endpointSearch": "search",
     "start": 0,
     "limit": 20
