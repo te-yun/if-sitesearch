@@ -18,7 +18,8 @@ mkdir ~/srv/${DOCKER_IMAGE_NAME}
 sudo chown -R 1000:1000 ~/srv/${DOCKER_IMAGE_NAME} # make it a svc_usr' directory
 
 # TODO enable b/g deployment, or at least, reduce probability of failure 
-docker build --file service/Dockerfile --tag intrafind/${DOCKER_IMAGE_NAME}:${DOCKER_TAG} .
+cd service
+docker build --tag intrafind/${DOCKER_IMAGE_NAME}:${DOCKER_TAG} .
 docker rm -f ${DOCKER_IMAGE_NAME}
 docker run -d --name ${DOCKER_IMAGE_NAME} `
     -p 2443:8001 `
@@ -27,6 +28,7 @@ docker run -d --name ${DOCKER_IMAGE_NAME} `
     --env SCM_HASH=$env:SCM_HASH  `
     -v ~/srv/${DOCKER_IMAGE_NAME}:/home/svc_usr/data `
     intrafind/${DOCKER_IMAGE_NAME}:${DOCKER_TAG}
+cd ..
 
 # Redirect container
 $docker_redirect_image = "router"
