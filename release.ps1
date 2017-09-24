@@ -10,14 +10,15 @@ $Env:SPRING_CONFIG_NAME = "application, prod"
 #./gradlew clean build --info -x test
 ./gradlew build --no-rebuild --build-cache --info -x test
 
-$DOCKER_IMAGE_NAME = (Get-ChildItem  service/build/libs/*.jar).BaseName
+#$DOCKER_IMAGE_NAME = (Get-ChildItem  service/build/libs/*.jar).BaseName
+$DOCKER_IMAGE_NAME = "if-sitesearch"
 $DOCKER_TAG = "latest"
 
 mkdir ~/srv/${DOCKER_IMAGE_NAME}
 sudo chown -R 1000:1000 ~/srv/${DOCKER_IMAGE_NAME} # make it a svc_usr' directory
 
 # TODO enable b/g deployment, or at least, reduce probability of failure 
-docker build --tag intrafind/${DOCKER_IMAGE_NAME}:${DOCKER_TAG} .
+docker build --file service/Dockerfile --tag intrafind/${DOCKER_IMAGE_NAME}:${DOCKER_TAG} .
 docker rm -f ${DOCKER_IMAGE_NAME}
 docker run -d --name ${DOCKER_IMAGE_NAME} `
     -p 2443:8001 `
