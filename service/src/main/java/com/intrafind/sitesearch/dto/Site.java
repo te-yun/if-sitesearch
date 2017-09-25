@@ -21,13 +21,23 @@ import java.util.UUID;
 public class Site {
     private UUID id;
     private UUID secret;
+    private String name;
 
     private Site() {
     }
 
-    public Site(UUID id, UUID secret) {
+    public Site(UUID id, UUID secret, String name) {
         this.id = id;
         this.secret = secret;
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public UUID getId() {

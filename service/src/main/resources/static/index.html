@@ -52,7 +52,9 @@
             if (this.status === 200 && this.responseText !== "") {
                 const user = JSON.parse(this.responseText);
                 const xhr = new XMLHttpRequest();
-                xhr.open("PUT", "/assignments/tenants/e10011b2-7f95-49e4-a9cb-189f5f5a6654/sites/" + document.getElementById("siteId").value + "?siteSecret=" + document.getElementById("siteSecret").value);
+                xhr.open("PUT", "/assignments/tenants/e10011b2-7f95-49e4-a9cb-189f5f5a6654/sites/"
+                    + document.getElementById("siteId").value + "?siteSecret=" + document.getElementById("siteSecret").value)
+                + "&siteName=" + document.getElementById("siteName");
                 xhr.setRequestHeader("content-type", "application/json");
                 xhr.onload = async function () {
                 };
@@ -143,6 +145,10 @@
     <label for="siteSecret">Site Secret</label>
     <br>
     <input id="siteSecret" type="text" value="57f3e6e4-dba7-4edf-9628-64682cc048b9" placeholder="Site Secret"/>
+    <br>
+    <label for="siteName">Site Name</label>
+    <br>
+    <input id="siteName" type="text" value="" placeholder="Site Name"/>
     <br>
     <label for="contactEmail">Contact E-mail</label>
     <br>

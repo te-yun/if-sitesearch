@@ -51,6 +51,7 @@ public class AssignmentController {
             @PathVariable(value = "tenantId") UUID tenantId, // TODO temporary, take the passed value... once a way is implemented to verify that a tenant belongs to a user
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "siteSecret") UUID siteSecret,
+            @RequestParam(value = "siteName") String siteName,
             @RequestBody TenantSiteAssignment tenantSiteAssignment
     ) {
         final String providerId = tenantSiteAssignment.getAuthProvider() + "-" + tenantSiteAssignment.getAuthProviderId();
@@ -92,6 +93,7 @@ public class AssignmentController {
                 site = entityTxn.newEntity("Site");
                 site.setProperty("id", siteId.toString());
                 site.setProperty("secret", siteSecret.toString());
+                site.setProperty("name", siteName);
             }
             tenant.addLink("site", site);
             site.addLink("tenant", tenant);
@@ -136,7 +138,7 @@ public class AssignmentController {
                 TenantOverview.TenantInfo tenantInfo = new TenantOverview.TenantInfo(UUID.fromString(tenant.getProperty("id").toString()), tenant.getProperty("company").toString(), tenant.getProperty("contactEmail").toString());
                 tenantOverview.getTenants().add(tenantInfo);
                 tenant.getLinks("site").forEach(site -> {
-                    tenantOverview.getSites().add(new Site(UUID.fromString(site.getProperty("id").toString()), UUID.fromString(site.getProperty("secret").toString())));
+                    tenantOverview.getSites().add(new Site(UUID.fromString(site.getProperty("id").toString()), UUID.fromString(site.getProperty("secret").toString()), site.getProperty("name").toString()));
                 });
             });
         });
