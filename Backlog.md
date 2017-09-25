@@ -14,4 +14,8 @@ Backlog
 
 # future
 * automatic disaster failover
-* 
+
+# Ideas from stake holders to be considered 
+
+* semantic page grouping 
+    1page + 2page +3page = OneArticle

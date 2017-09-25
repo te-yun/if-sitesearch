@@ -14,13 +14,3 @@
  * limitations under the License.
  */
 
-subprojects { project ->
-    project.buildscript {
-        repositories {
-            jcenter()
-        }
-
-        dependencies {
-        }
-    }
-}

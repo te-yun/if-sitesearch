@@ -38,6 +38,7 @@ public class BaseConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**");
+                registry.addMapping("/v2/api-docs");
             }
         };
     }

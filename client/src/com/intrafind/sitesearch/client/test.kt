@@ -14,13 +14,9 @@
  * limitations under the License.
  */
 
-subprojects { project ->
-    project.buildscript {
-        repositories {
-            jcenter()
-        }
+package com.intrafind.sitesearch.client
 
-        dependencies {
-        }
-    }
+fun main(args: Array<String>) {
+    println("frontend!")
+    js("console.warn('frontend');")
 }
