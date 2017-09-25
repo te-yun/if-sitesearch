@@ -54,8 +54,8 @@ public class BaseConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .paths(Predicates.not(PathSelectors.regex("/error"))) // Exclude Spring error controllers
-                .paths(Predicates.not(PathSelectors.regex("/application"))) // Exclude Spring error controllers
-                .paths(Predicates.not(PathSelectors.regex("/stats-controller"))) // Exclude Spring error controllers
+                .paths(Predicates.not(PathSelectors.regex("/login"))) // Exclude Spring error controllers
+                .paths(Predicates.not(PathSelectors.regex("/stats"))) // Exclude Spring error controllers
                 .paths(Predicates.not(PathSelectors.regex(PageController.ENDPOINT + "/rss"))) // Exclude Spring error controllers
                 .build();
     }
