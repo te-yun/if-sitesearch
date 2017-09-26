@@ -16,5 +16,5 @@
 
 rootProject.name = "if-sitesearch"
 
-//include "service", "frontend"
-include "service"
+include "service", "client"
+//include "service"
