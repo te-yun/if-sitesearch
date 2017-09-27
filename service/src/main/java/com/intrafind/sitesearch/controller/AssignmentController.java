@@ -132,13 +132,17 @@ public class AssignmentController {
 
         final StoreTransaction findTxn = ACID_PERSISTENCE_ENTITY.beginReadonlyTransaction();
         final EntityIterable authProviders = findTxn.find("AuthProvider", "id", provider + "-" + providerId);
+        if (authProviders.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // TODO add integration test
+        }
         authProviders.forEach(authProvider -> {
             tenantOverview.getAuthProviders().add(authProvider.getProperty("id").toString());
             authProvider.getLinks("tenant").forEach(tenant -> {
                 TenantOverview.TenantInfo tenantInfo = new TenantOverview.TenantInfo(UUID.fromString(tenant.getProperty("id").toString()), tenant.getProperty("company").toString(), tenant.getProperty("contactEmail").toString());
                 tenantOverview.getTenants().add(tenantInfo);
                 tenant.getLinks("site").forEach(site -> {
-                    tenantOverview.getSites().add(new Site(UUID.fromString(site.getProperty("id").toString()), UUID.fromString(site.getProperty("secret").toString()), site.getProperty("name").toString()));
+                    tenantOverview.getSites().add(new Site(UUID.fromString(site.getProperty("id").toString()), UUID.fromString(site.getProperty("secret").toString()),
+                            site.getProperty("name") == null ? "" : site.getProperty("name").toString()));
                 });
             });
         });

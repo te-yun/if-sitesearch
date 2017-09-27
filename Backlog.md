@@ -8,6 +8,7 @@ Backlog
     * let the crawler talk to Site Search API to feed its content
 
 # next
+* talk to Jochannes about Search Service / Elasticsearch tuning
 * "Site Search in a minute" on YouTube 
 * Marketing website / product frontpage
 * save siteSecret in persistent store, not in the ElasticSearch document
