@@ -11,10 +11,20 @@ FAQ
     and each may contain thousands of pages in the respective language.
 
 * What is a **tenant**?
-    * A tenant is an organizational entity** that can manage **dozens of independent sites**.
-    You may have a company that is assigned to a tenant ID.
+    * A tenant is an **organizational entity** that can manage **dozens of independent sites**.
+    You may have a company that is assigned to a tenant.
 
-* How can I index a website or page and make it searchable?
+* How can I index a website and make it searchable?
+  * Currently a website needs to expose an **RSS / Atom feed** to make it easily searchable.
+  This is the fastest & easiest way to get up and running. Use this ***curl command***
+  
+        curl -X POST https://api.sitesearch.cloud/sites/rss?feedUrl=https%3A%2F%2Fintrafind.de%2Fshare%2Fenterprise-search-blog.xml
+  
+  ...to [call our API accordingly](https://sitesearch.cloud/swagger-ui.html#!/site45controller/indexNewRssFeedUsingPOST). 
+  Still you can make a website searchable that does not expose any feeds by using our API and indexing a website page by page, 
+  cf. "How can I index a page and make it searchable?".  
+  
+* How can I index a page and make it searchable?
   * TODO add an example curl
 
 * How can I update an already indexed page?
