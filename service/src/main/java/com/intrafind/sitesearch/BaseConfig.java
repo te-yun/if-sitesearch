@@ -17,7 +17,6 @@
 package com.intrafind.sitesearch;
 
 import com.google.common.base.Predicates;
-import com.intrafind.sitesearch.controller.PageController;
 import io.undertow.UndertowOptions;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.undertow.UndertowEmbeddedServletContainerFactory;
@@ -60,13 +59,14 @@ public class BaseConfig {
                 .paths(Predicates.not(PathSelectors.regex("/login/test1"))) // Exclude Spring error controllers
                 .paths(Predicates.not(PathSelectors.regex("/subscriptions"))) // Exclude Spring error controllers
                 .paths(Predicates.not(PathSelectors.regex("/assignments"))) // Exclude Spring error controllers
-                .paths(Predicates.not(PathSelectors.regex("/assignments/**"))) // Exclude Spring error controllers
+                .paths(Predicates.not(PathSelectors.regex("/assignments/.*"))) // Exclude Spring error controllers
                 .paths(Predicates.not(PathSelectors.regex("/assignments/*"))) // Exclude Spring error controllers
                 .paths(Predicates.not(PathSelectors.regex("/assignments/tenants"))) // Exclude Spring error controllers
                 .paths(Predicates.not(PathSelectors.regex("/authentication-providers"))) // Exclude Spring error controllers
+                .paths(Predicates.not(PathSelectors.regex("/authentication-providers/"))) // Exclude Spring error controllers
+                .paths(Predicates.not(PathSelectors.regex("/authentication-providers/*"))) // Exclude Spring error controllers
                 .paths(Predicates.not(PathSelectors.regex("/user"))) // Exclude Spring error controllers
                 .paths(Predicates.not(PathSelectors.regex("/stats"))) // Exclude Spring error controllers
-                .paths(Predicates.not(PathSelectors.regex(PageController.ENDPOINT + "/rss"))) // Exclude Spring error controllers
                 .build();
     }
 }
