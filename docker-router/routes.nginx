@@ -12,12 +12,12 @@ server {
 server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2 ipv6only=on;
-    server_name sitesearch.cloud;
+    #    server_name sitesearch.cloud;
 
     include /etc/nginx/snippets/ssl.conf;
 
     location /technology/ {
-        proxy_pass https://sitesearch.cloud:2443/;
+        proxy_pass https://main.sitesearch.cloud:2443/;
     }
 
     location /product {
@@ -25,7 +25,7 @@ server {
     }
 
     location / {
-        proxy_pass https://sitesearch.cloud:2443;
+        proxy_pass https://main.sitesearch.cloud:2443;
     }
 }
 
@@ -42,7 +42,7 @@ server {
     }
 
     location / {
-        proxy_pass https://sitesearch.cloud:2443;
+        proxy_pass https://main.sitesearch.cloud:2443;
     }
 }
 
@@ -54,11 +54,11 @@ server {
     include /etc/nginx/snippets/ssl.conf;
 
     location /api/ {
-        proxy_pass https://sitesearch.cloud:2443/;
+        proxy_pass https://main.sitesearch.cloud:2443/;
     }
 
     location / {
-        proxy_pass https://sitesearch.cloud:2443;
+        proxy_pass https://main.sitesearch.cloud:2443;
     }
 }
 
@@ -70,7 +70,7 @@ server {
     include /etc/nginx/snippets/ssl.conf;
 
     location / {
-        proxy_pass http://ci.sitesearch.cloud:8111;
+        proxy_pass http://main.sitesearch.cloud:8111;
     }
 }
 
@@ -82,26 +82,26 @@ server {
     include /etc/nginx/snippets/ssl.conf;
 
     location / {
-        proxy_pass http://sitesearch.cloud:9605;
+        proxy_pass http://main.sitesearch.cloud:9605;
     }
 }
 
 server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
-    server_name test.sitesearch.cloud;
+    server_name green.sitesearch.cloud;
 
     location / {
-        proxy_pass https://test.sitesearch.cloud:3442;
+        proxy_pass https://main.sitesearch.cloud:3442;
     }
 }
 
 server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
-    server_name dev.sitesearch.cloud;
+    server_name blue.sitesearch.cloud;
 
     location / {
-        proxy_pass https://dev.sitesearch.cloud:3442;
+        proxy_pass https://main.sitesearch.cloud:4442;
     }
 }
