@@ -32,6 +32,7 @@ import java.net.URI;
 import java.util.Optional;
 import java.util.UUID;
 
+@CrossOrigin
 @RestController
 @RequestMapping(PageController.ENDPOINT)
 public class PageController {

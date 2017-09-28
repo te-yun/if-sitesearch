@@ -39,19 +39,10 @@ FAQ
 * How can I **index a page**, within an **already existing site**, and make it searchable?
     * TODO add an example curl
 
-curl -X POST \
-  https://api.sitesearch.cloud/pages \
-  -H 'content-type: application/json' \
-  -d '{ 
-	"url" : "https://example.com/page",
-	"title": "Test Page",
-	"body": "Test Content"
-}'
-
-* How can I update an already indexed page?
+* How can I **update** an already indexed page?
     * TODO
 
-* How can I delete an indexed page?
+* How can I **delete** an indexed page?
     * TODO
 
 * What is a **site secret**?
