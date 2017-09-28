@@ -27,7 +27,7 @@ FAQ
 * How can I **index a page**, automatically **creating a new site**, and make it searchable?
     * After executing this ***curl command***, you will also obtain the *siteId* and *siteSecret* of the newly created site. 
 
-            curl -X POST \
+            curl -v -X POST \
               https://api.sitesearch.cloud/pages \
               -H 'content-type: application/json' \
               -d '{ 
@@ -43,7 +43,11 @@ FAQ
     * TODO
 
 * How can I **delete** an indexed page?
-    * TODO
+    * You need to provide a **siteSecret** that corresponds to the provided **siteId**,
+    as well as a page's primary ID.
+    
+            curl -v -X DELETE \
+              https://api.sitesearch.cloud/sites/d87fdcef-a84d-462d-ba84-61df9805536a/pages/0c42f3ef01536bd29510d7b4d178fc7e6cbc1d26095ac3a759bf638f80bfa3c9?siteSecret=b554a1e7-3e87-44ab-b353-f1fd8a423bbe 
 
 * What is a **site secret**?
     * A site secret is a token that you should keep confidential and not publish it to any public repository. 
