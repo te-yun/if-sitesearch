@@ -1,6 +1,10 @@
 FAQ
 =
 
+* What is Site Search?
+    * Site Search is an on-demand SaaS offering from IntraFind Software AG to enable website operators 
+    to provide search functionality for their websites.
+
 * What is the difference between **sites** and **pages**?
     * A **site** is a *website* that can contain thousands of **pages**. 
     You may have two **sites**: *en.example.com* and *de.example.com* 
@@ -22,25 +26,28 @@ FAQ
     a search bar may look like and interact with our *Site Search service*.
     Still, our **search bar** is a production-grade implementation and ready for production deployments.
 
-* What is Site Search?
-
 * Can I use my own search bar with Site Search?
 
 * Can I *customize* the layout and/or design of the search bar?   
 
 * How can I make my website searchable?
-    * https://sitesearch.cloud/sitesearch-gadget.html
+    * The easiest & quickest way is to use the [Site Search Gadget](https://sitesearch.cloud/sitesearch-gadget.html)
+    to **create an index** from an RSS / Atom feed and make it **instantly searchable** without even embedding it into a website.
+    If your website does not expose any feeds, you need to use our open [API](https://sitesearch.cloud/swagger-ui.html#!/page45controller/indexNewSiteUsingPOST)
+    to **index your website page by page** calling the API.
     
 * Where can I find an API documentation and specification for Site Search?
 
 * What does Site Search cost?
-    * contact sales
-    * Freemium 
+    * Currently we have no fixed plans as Site Search is still in BETA. 
+    As soon as Site Search meets all our production requirements, we will offer a **free basic plan** 
+    and additional **enterprise offerings**.  
 
 * Who is using Site Search?
-    * intrafind.de
-    * intrafind.com
-    * analyzelaw.com
+    * Very soon, following website's search will be powered by Site Search
+        * intrafind.de 
+        * intrafind.com
+        * analyzelaw.com
         
     
 ===
