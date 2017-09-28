@@ -40,7 +40,16 @@ FAQ
     * TODO add an example curl
 
 * How can I **update** an already indexed page?
-    * TODO
+    * Execute this curl command with a *siteSecret* that corresponds to a *siteId*:
+    
+            curl -v -X PUT \
+              'https://api.sitesearch.cloud/sites/23858a12-5896-437f-8ce2-2c433d51b83d/pages/1349a7b98d2d1f4408f729696ce259d46a2242287e66fc2656edf31b41755529?siteSecret=6b9fcbad-ddc9-47cd-ad01-ea58da79bca4' \
+              -H 'content-type: application/json' \
+              -d '{ 
+                            "url" : "https://example.com/page",
+                            "title": "Test Page",
+                            "body": "Test Content"
+            }'
 
 * How can I **delete** an indexed page?
     * You need to provide a **siteSecret** that corresponds to the provided **siteId**,

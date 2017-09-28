@@ -2,6 +2,8 @@ Backlog
 =
 
 # now
+* fix: updating a page via its primary ID which should not be possible 
+    * currently one can also create a new ID this way
 * finish FAQ
 * update GitHub listing 
 * Admin page

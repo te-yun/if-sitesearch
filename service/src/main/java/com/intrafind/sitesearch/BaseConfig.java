@@ -64,7 +64,7 @@ public class BaseConfig {
                 .paths(Predicates.not(PathSelectors.regex("/assignments/tenants"))) // Exclude Spring error controllers
                 .paths(Predicates.not(PathSelectors.regex("/authentication-providers"))) // Exclude Spring error controllers
                 .paths(Predicates.not(PathSelectors.regex("/authentication-providers/"))) // Exclude Spring error controllers
-                .paths(Predicates.not(PathSelectors.regex("/authentication-providers/*"))) // Exclude Spring error controllers
+                .paths(Predicates.not(PathSelectors.regex("/authentication-providers/.*"))) // Exclude Spring error controllers
                 .paths(Predicates.not(PathSelectors.regex("/user"))) // Exclude Spring error controllers
                 .paths(Predicates.not(PathSelectors.regex("/stats"))) // Exclude Spring error controllers
                 .build();

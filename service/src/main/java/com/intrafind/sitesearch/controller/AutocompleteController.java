@@ -31,7 +31,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping(AutocompleteController.ENDPOINT)
 public class AutocompleteController {
-    public static final String ENDPOINT = "/api/autocomplete";
+    public static final String ENDPOINT = "/autocomplete";
     private static final Logger LOG = LoggerFactory.getLogger(AutocompleteController.class);
     private final AutocompleteService service;
 
@@ -43,7 +43,6 @@ public class AutocompleteController {
     @RequestMapping(method = RequestMethod.GET)
     ResponseEntity<Autocomplete> suggestion(
             @CookieValue(value = "override-tenant", required = false) UUID cookieTenant,
-//            @RequestParam(value = "query", required = false, defaultValue = "") String query,
             @RequestParam(value = "query", defaultValue = "") String query,
             @RequestParam(value = "siteId", required = false) UUID siteId,
             @RequestParam(value = "tenantId", required = false) UUID tenantId  // TODO remove, once searchbar supports new API
