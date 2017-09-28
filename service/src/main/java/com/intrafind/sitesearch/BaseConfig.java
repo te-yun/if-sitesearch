@@ -53,13 +53,13 @@ public class BaseConfig {
     public Docket hideApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .paths(Predicates.not(PathSelectors.regex("/error"))) // Exclude Spring error controllers
-                .paths(Predicates.not(PathSelectors.regex("/login.*"))) // Exclude Spring error controllers
-                .paths(Predicates.not(PathSelectors.regex("/subscriptions"))) // Exclude Spring error controllers
-                .paths(Predicates.not(PathSelectors.regex("/assignments/.*"))) // Exclude Spring error controllers
-                .paths(Predicates.not(PathSelectors.regex("/authentication-providers/.*"))) // Exclude Spring error controllers
-                .paths(Predicates.not(PathSelectors.regex("/user"))) // Exclude Spring error controllers
-                .paths(Predicates.not(PathSelectors.regex("/stats"))) // Exclude Spring error controllers
+                .paths(Predicates.not(PathSelectors.regex("/error")))
+                .paths(Predicates.not(PathSelectors.regex("/login.*")))
+                .paths(Predicates.not(PathSelectors.regex("/subscriptions")))
+                .paths(Predicates.not(PathSelectors.regex("/assignments.*")))
+                .paths(Predicates.not(PathSelectors.regex("/authentication-providers.*")))
+                .paths(Predicates.not(PathSelectors.regex("/user")))
+                .paths(Predicates.not(PathSelectors.regex("/stats")))
                 .build();
     }
 }
