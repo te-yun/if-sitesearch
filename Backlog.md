@@ -2,18 +2,27 @@ Backlog
 =
 
 # now
+* finish FAQ
+* update GitHub listing 
+* Admin page
 * ~~httpS all over: CI, 9605~~
 * ~~product frontpage routing~~
 * Sitemap XML support, coordinate with iFinder core team
     * let the crawler talk to Site Search API to feed its content
 
 # next
-* talk to Jochannes about Search Service / Elasticsearch tuning
+* Customer Feedback Channel: Slack vs Twak
+* Smoketest
+* try https://www.elastic.co/cloud/enterprise
+    * start as the first {if-lab} project
+        * introduce and sell the concept of **R&D**
+* talk to Johannes about Search Service / Elasticsearch tuning
 * "Site Search in a minute" on YouTube 
 * Marketing website / product frontpage
 * save siteSecret in persistent store, not in the ElasticSearch document
 
 # future
+* support for types / category-specific search
 * automatic disaster failover
 
 # Ideas from stake holders to be considered 
