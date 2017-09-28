@@ -24,17 +24,45 @@ FAQ
   Still you can make a website searchable that does not expose any feeds by using our API and indexing a website page by page, 
   cf. "How can I index a page and make it searchable?".  
   
-* How can I index a page and make it searchable?
-  * TODO add an example curl
+* How can I **index a page**, automatically **creating a new site**, and make it searchable?
+    * After executing this ***curl command***, you will also obtain the *siteId* and *siteSecret* of the newly created site. 
+
+            curl -X POST \
+              https://api.sitesearch.cloud/pages \
+              -H 'content-type: application/json' \
+              -d '{ 
+                "url" : "https://example.com/page",
+                "title": "Test Page",
+                "body": "Test Content"
+            }'
+
+* How can I **index a page**, within an **already existing site**, and make it searchable?
+    * TODO add an example curl
+
+curl -X POST \
+  https://api.sitesearch.cloud/pages \
+  -H 'content-type: application/json' \
+  -d '{ 
+	"url" : "https://example.com/page",
+	"title": "Test Page",
+	"body": "Test Content"
+}'
 
 * How can I update an already indexed page?
+    * TODO
 
 * How can I delete an indexed page?
+    * TODO
+
+* What is a **site secret**?
+    * A site secret is a token that you should keep confidential and not publish it to any public repository. 
+    The site secret enables you to **add new pages and update existing pages** within a site. 
+    You need to provide a *siteSecret* as a query parameter to authorize operations that modify the index of a site.
 
 * Do I need the **search bar** to use Site Search?
-    * No, not necessarily; our **search bar is a sample implementation** to quickly show you how 
-    a search bar may look like and interact with our *Site Search service*.
-    Still, our **search bar** is a production-grade implementation and ready for production deployments.
+    * No, not necessarily; the **search bar is a sample implementation** to quickly show you how 
+    a search bar may look like and interact with the *Site Search service*.
+    Still, the **search bar** is a production-grade implementation and ready for production deployments.
 
 * Can I use my own search bar with Site Search?
     * Yes, you can use any search bar, written in any language that also runs on native platforms as long as it follows
