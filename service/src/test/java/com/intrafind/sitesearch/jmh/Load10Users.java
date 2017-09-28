@@ -44,7 +44,7 @@ public class Load10Users {
             .split("\\s");
 
     static final List<String> QUERY_LIST_AUTOCOMPLETE;
-    static final String LOAD_TARGET = "https://dev.sitesearch.cloud";
+    static final String LOAD_TARGET = "https://api.sitesearch.cloud";
     //    private static final String LOAD_TARGET = "http://localhost:8001";
     static final TestRestTemplate CALLER = new TestRestTemplate();
     static final Random PSEUDO_ENTROPY = new Random();
