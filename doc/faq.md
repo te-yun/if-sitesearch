@@ -27,8 +27,12 @@ FAQ
     Still, our **search bar** is a production-grade implementation and ready for production deployments.
 
 * Can I use my own search bar with Site Search?
+    * Yes, you can use any search bar, written in any language that also runs on native platforms as long as it follows
+    [Site Search' API specification](https://sitesearch.cloud/swagger-ui.html).
 
 * Can I *customize* the layout and/or design of the search bar?   
+    * Yes, you can *fully customize the appearance of the search bar* using HBS templates.
+    * Alternative you can customize the search bar overriding its CSS classes which is appropriate for minor customizations only.
 
 * How can I make my website searchable?
     * The easiest & quickest way is to use the [Site Search Gadget](https://sitesearch.cloud/sitesearch-gadget.html)
@@ -37,6 +41,9 @@ FAQ
     to **index your website page by page** calling the API.
     
 * Where can I find an API documentation and specification for Site Search?
+    * [Site Search' API](https://sitesearch.cloud/swagger-ui.html) ist technically documented according 
+    to the OpenAPI 3.0 specification, using Swagger. Not only, you can lookup the required schemas 
+    but you can also, use the API right from your browser. 
 
 * What does Site Search cost?
     * Currently we have no fixed plans as Site Search is still in BETA. 
@@ -50,6 +57,4 @@ FAQ
         * analyzelaw.com
         
     
-===
 
-TODO What is 0-0-0-0-0 in curls - playground siteId
