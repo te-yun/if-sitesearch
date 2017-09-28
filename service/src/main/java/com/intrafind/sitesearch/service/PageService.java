@@ -75,6 +75,11 @@ public class PageService {
         }
     }
 
+    public boolean isAllowedToModify(UUID siteId, UUID siteSecret) {
+        final Optional<UUID> fetchedSiteSecret = fetchSiteSecret(siteId);
+        return fetchedSiteSecret.isPresent() && siteSecret.equals(fetchedSiteSecret.get());
+    }
+
     private Optional<FetchedPage> indexDocument(String id, UUID siteId, UUID siteSecret, Page page) {
         Document indexable = new Document(id);
         indexable.set(Fields.BODY, page.getBody());
@@ -273,8 +278,13 @@ public class PageService {
         }
     }
 
-    public void delete(String documentId) {
-        // just assume everything works... right?
-        INDEX_SERVICE.delete(documentId);
+    public boolean delete(UUID siteId, UUID siteSecret, String pageId) {
+        if (isAllowedToModify(siteId, siteSecret)) {
+            // just assume everything works... right?
+            INDEX_SERVICE.delete(pageId);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -258,22 +258,38 @@ public class PageTest {
 
         validateUpdatedSites(tenantUpdate);
 
-        tryDeletionOfSites(siteIdFromCreation);
+        tryDeletionOfSites(siteIdFromCreation, siteSecretFromCreation);
     }
 
-    private void tryDeletionOfSites(UUID siteIdFromCreation) {
+    private void tryDeletionOfSites(UUID siteIdFromCreation, UUID siteSecretFromCreation) {
         final ResponseEntity<List> fetchAll = caller.exchange(SiteController.ENDPOINT + "/" + siteIdFromCreation, HttpMethod.GET, HttpEntity.EMPTY, List.class);
         assertTrue(HttpStatus.OK.equals(fetchAll.getStatusCode()));
         @SuppressWarnings("unchecked")
-        List<String> sites = fetchAll.getBody();
-        assertTrue(1 < sites.size());
-        int siteCountBeforeDeletion = sites.size();
-        sites.forEach(siteId -> {
-            LOG.info("siteId: " + siteId);
-            final ResponseEntity<ResponseEntity> deletion = caller.exchange(PageController.ENDPOINT + "/" + siteId, HttpMethod.DELETE, HttpEntity.EMPTY, ResponseEntity.class);
+        List<String> pages = fetchAll.getBody();
+        assertTrue(1 < pages.size());
+        int siteCountBeforeDeletion = pages.size();
+
+        for (String pageId : pages) {
+            LOG.info("pageId: " + pageId);
+
+            // delete using an invalid siteSecret
+            UUID invalidSiteSecret = UUID.randomUUID();
+            final ResponseEntity<ResponseEntity> deletionWithInvalidSiteSecret = caller.exchange(SiteController.ENDPOINT + "/" + siteIdFromCreation + "/pages/" + pageId + "?siteSecret=" + invalidSiteSecret, HttpMethod.DELETE, HttpEntity.EMPTY, ResponseEntity.class);
+            assertEquals(HttpStatus.NOT_FOUND, deletionWithInvalidSiteSecret.getStatusCode());
+            assertNull(deletionWithInvalidSiteSecret.getBody());
+
+            // delete using a valid siteSecret
+            final ResponseEntity<ResponseEntity> deletion = caller.exchange(SiteController.ENDPOINT + "/" + siteIdFromCreation + "/pages/" + pageId + "?siteSecret=" + siteSecretFromCreation, HttpMethod.DELETE, HttpEntity.EMPTY, ResponseEntity.class);
             assertEquals(HttpStatus.NO_CONTENT, deletion.getStatusCode());
             assertNull(deletion.getBody());
-        });
+        }
+
+//        pages.stream().forEach(pageId -> {
+//            LOG.info("pageId: " + pageId);
+//            final ResponseEntity<ResponseEntity> deletion = caller.exchange(SiteController.ENDPOINT + "/" + siteIdFromCreation+"/pages/"+pageId +"?siteSecret="+siteSecretFromCreation, HttpMethod.DELETE, HttpEntity.EMPTY, ResponseEntity.class);
+//            assertEquals(HttpStatus.NO_CONTENT, deletion.getStatusCode());
+//            assertNull(deletion.getBody());
+//        });
         LOG.info("siteCountBeforeDeletion: " + siteCountBeforeDeletion);
     }
 

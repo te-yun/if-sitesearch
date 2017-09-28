@@ -145,4 +145,19 @@ public class SiteController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    //  /sites/{siteId}/pages/{id}?siteSecret
+    @RequestMapping(path = "{siteId}/pages/{pageId}", method = RequestMethod.DELETE)
+    ResponseEntity deleteSiteById(
+            @PathVariable(name = "siteId") UUID siteId,
+            @PathVariable(name = "pageId") String pageId,
+            @RequestParam(name = "siteSecret") UUID siteSecret // TODO SECURITY_ISSUE implement a corresponding check
+    ) {
+        LOG.info("delete-event" + pageId);
+        if (service.delete(siteId, siteSecret, pageId)) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build(); // do not return UNAUTHORIZED/FORBIDDEN as those could be miss-used for brute force attacks
+        }
+    }
 }
