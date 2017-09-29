@@ -46,7 +46,7 @@ function setupRedirectRouterContainer {
 
     cd ..
 }
-setupRedirectRouterContainer()
+setupRedirectRouterContainer
 
 ./switch-release.ps1
 
