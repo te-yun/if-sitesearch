@@ -47,7 +47,7 @@ public class PageController {
         Optional<Page> indexed = service.indexNewTenantCreatingSite(page);
         if (indexed.isPresent()) {
             Page created = indexed.get();
-            return ResponseEntity.created(URI.create("https://sitesearch.cloud/sites/" + created.getId())).body(created);
+            return ResponseEntity.created(URI.create("https://api.sitesearch.cloud/sites/" + created.getId())).body(created);
         } else {
             return ResponseEntity.badRequest().build();
         }

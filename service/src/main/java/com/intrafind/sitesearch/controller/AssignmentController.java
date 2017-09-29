@@ -100,7 +100,7 @@ public class AssignmentController {
         });
 
         return ResponseEntity
-                .created(URI.create("https://sitesearch.cloud/assignments/authentication-providers/").resolve(tenantSiteAssignment.getAuthProvider()).resolve(tenantSiteAssignment.getAuthProviderId()))
+                .created(URI.create("https://api.sitesearch.cloud/assignments/authentication-providers/").resolve(tenantSiteAssignment.getAuthProvider()).resolve(tenantSiteAssignment.getAuthProviderId()))
                 .build();
     }
 

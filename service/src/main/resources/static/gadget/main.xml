@@ -28,12 +28,12 @@
         <Require feature="dynamic-height"/>
     </ModulePrefs>
 
-    <Content href="https://sitesearch.cloud/searchbar-gadget.html?siteId=0-0-0-0-0" type="url"/>
+    <Content href="https://api.sitesearch.cloud/searchbar-gadget.html?siteId=0-0-0-0-0" type="url"/>
 
     <!--<Content type="html">-->
     <!--<![CDATA[-->
 
-    <!--<link rel="stylesheet" type="text/css" href="https://sitesearch.cloud/searchbar/css/app.css"/>-->
+    <!--<link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/searchbar/css/app.css"/>-->
 
     <!--<style>-->
     <!--.if-teaser-highlight {-->
@@ -46,7 +46,7 @@
     <!--<div id="resultlist"></div>-->
     <!--</div>-->
 
-    <!--<script src="https://sitesearch.cloud/searchbar/js/app.js"></script>-->
+    <!--<script src="https://api.sitesearch.cloud/searchbar/js/app.js"></script>-->
     <!--<script>-->
     <!--console.warn(new URLSearchParams(location.search.slice(1)).get("siteId"));-->
     <!--jQuery.noConflict();-->
@@ -54,7 +54,7 @@
 
     <!--IFS.initClient({-->
     <!--sbTarget: "#searchbar",-->
-    <!--configurl: "https://sitesearch.cloud/searchbar-config/sitesearch-config.json",-->
+    <!--configurl: "https://api.sitesearch.cloud/searchbar-config/sitesearch-config.json",-->
     <!--sitesearch: true,-->
     <!--siteId: "363d50f3-17cb-4756-aeca-7d3768092ae1"-->
     <!--});-->

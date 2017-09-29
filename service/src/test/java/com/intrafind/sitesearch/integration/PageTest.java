@@ -50,7 +50,7 @@ public class PageTest {
 
     static Page buildSite(UUID siteSecret) {
         final UUID testSiteId = UUID.fromString("1a6715d9-119f-48d1-9329-e8763273bbea");
-        final String url = "https://sitesearch.cloud";
+        final String url = "https://api.sitesearch.cloud";
         return new Page(
                 Page.hashPageId(testSiteId, url),
                 testSiteId, siteSecret,
@@ -77,7 +77,7 @@ public class PageTest {
         assertEquals(HttpStatus.CREATED, actual.getStatusCode());
         assertEquals(simple, actual.getBody());
         assertNotEquals("assure irrelevancy of siteId during creation", irrelevantPageId, actual.getBody().getId());
-        assertEquals("https://sitesearch.cloud/sites/" + actual.getBody().getId(), actual.getHeaders().get(HttpHeaders.LOCATION).get(0));
+        assertEquals("https://api.sitesearch.cloud/sites/" + actual.getBody().getId(), actual.getHeaders().get(HttpHeaders.LOCATION).get(0));
 
         ResponseEntity<Page> newlyCreatedSite = caller.exchange(PageController.ENDPOINT + "/" + actual.getBody().getId(), HttpMethod.GET, new HttpEntity<>(simple), Page.class);
         assertEquals(HttpStatus.OK, newlyCreatedSite.getStatusCode());

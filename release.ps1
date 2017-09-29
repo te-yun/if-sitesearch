@@ -38,6 +38,7 @@ function setupRedirectRouterContainer {
     docker build --tag intrafind/${docker_redirect_image}:$docker_redirect_image_tag .
     docker rm -f $docker_redirect_image
     mkdir ~/srv/${docker_redirect_image}
+#        -v ~/srv/${docker_redirect_image}:/etc/nginx `
     docker run -d --name $docker_redirect_image `
         -p 80:80 -p 443:443 `
         -v /etc/letsencrypt:/etc/letsencrypt `

@@ -1,4 +1,4 @@
-<img src="https://sitesearch.cloud/theme/logo.png" alt="Site Search" width="600" style="max-width:100%;">
+<img src="https://api.sitesearch.cloud/theme/logo.png" alt="Site Search" width="600" style="max-width:100%;">
 
 [![Travis CI Build Status](https://travis-ci.org/intrafind/if-sitesearch.svg)](https://travis-ci.org/intrafind/if-sitesearch)
 [![TeamCity CI Build Status](https://ci.sitesearch.cloud/app/rest/builds/buildType(id:IntraFind_Oss_Build)/statusIcon)](https://ci.sitesearch.cloud/viewType.html?buildTypeId=IntraFind_Oss_Build)
@@ -6,22 +6,22 @@
 
 sitesearch-dispatcher
 =
-Site Search Dispatcher is an upstream service of [Site Search](https://sitesearch.cloud), 
+Site Search Dispatcher is an upstream service of [Site Search](https://api.sitesearch.cloud), 
 an on-demand SaaS offering for providing websites with an externally managed search capability. 
 
 # About
 
-* [OpenAPI 3.0 Specification](https://sitesearch.cloud/swagger-ui.html)
+* [OpenAPI 3.0 Specification](https://api.sitesearch.cloud/swagger-ui.html)
 * [Product roadmap](http://if-wiki:8090/pages/viewpage.action?pageId=14714226)
 * [JIRA project](http://jira/projects/SITESEARCH)
-* [Release](https://sitesearch.cloud) / [DEV Release](https://dev.sitesearch.cloud)
+* [Release](https://api.sitesearch.cloud) / [DEV Release](https://dev.sitesearch.cloud)
 * [SCM repository](http://ml-if-git/sitesearch/if-sitesearch)
 * [Container](http://ml-if-git/sitesearch/docker-container)
 * [Documentation](https://github.com/intrafind/if-sitesearch/blob/master/doc/faq.md)
 * [Product Integration](https://github.com/intrafind/if-sitesearch/blob/master/doc/Site%20Search%20Product%20Overview.pdf)
 * [Product Abstract](http://if-wiki:8090/pages/viewpage.action?pageId=14714226).
     
-***> > > [DEMO](https://sitesearch.cloud) < < <***    
+***> > > [DEMO](https://api.sitesearch.cloud) < < <***    
     
 # Configuration
 

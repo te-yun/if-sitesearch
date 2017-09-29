@@ -20,7 +20,7 @@ FAQ
   
         curl -X POST https://api.sitesearch.cloud/sites/rss?feedUrl=https%3A%2F%2Fintrafind.de%2Fshare%2Fenterprise-search-blog.xml
   
-  ...to [call our API accordingly](https://sitesearch.cloud/swagger-ui.html#!/site45controller/indexNewRssFeedUsingPOST). 
+  ...to [call our API accordingly](https://api.sitesearch.cloud/swagger-ui.html#!/site45controller/indexNewRssFeedUsingPOST). 
   Still you can make a website searchable that does not expose any feeds by using our API and indexing a website page by page, 
   cf. "How can I index a page and make it searchable?".  
   
@@ -82,20 +82,20 @@ FAQ
 
 * Can I use my own search bar with Site Search?
     * Yes, you can use any search bar, written in any language that also runs on native platforms as long as it follows
-    [Site Search' API specification](https://sitesearch.cloud/swagger-ui.html).
+    [Site Search' API specification](https://api.sitesearch.cloud/swagger-ui.html).
 
 * Can I *customize* the layout and/or design of the search bar?   
     * Yes, you can *fully customize the appearance of the search bar* using HBS templates.
     * Alternative you can customize the search bar overriding its CSS classes which is appropriate for minor customizations only.
 
 * How can I make my website searchable?
-    * The easiest & quickest way is to use the [Site Search Gadget](https://sitesearch.cloud/sitesearch-gadget.html)
+    * The easiest & quickest way is to use the [Site Search Gadget](https://api.sitesearch.cloud/sitesearch-gadget.html)
     to **create an index** from an RSS / Atom feed and make it **instantly searchable** without even embedding it into a website.
-    If your website does not expose any feeds, you need to use our open [API](https://sitesearch.cloud/swagger-ui.html#!/page45controller/indexNewSiteUsingPOST)
+    If your website does not expose any feeds, you need to use our open [API](https://api.sitesearch.cloud/swagger-ui.html#!/page45controller/indexNewSiteUsingPOST)
     to **index your website page by page** calling the API.
     
 * Where can I find an API documentation and specification for Site Search?
-    * [Site Search' API](https://sitesearch.cloud/swagger-ui.html) ist technically documented according 
+    * [Site Search' API](https://api.sitesearch.cloud/swagger-ui.html) ist technically documented according 
     to the OpenAPI 3.0 specification, using Swagger. Not only, you can lookup the required schemas 
     but you can also, use the API right from your browser. 
 

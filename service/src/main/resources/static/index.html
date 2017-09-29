@@ -20,8 +20,8 @@
 <meta name="description"
       content="Simple Site Search from the makers of the enterprise search vendor IntraFind Software AG.">
 <title>Simple Site Search</title>
-<link rel="stylesheet" type="text/css" href="https://sitesearch.cloud/searchbar/css/app.css"/>
-<link rel="stylesheet" type="text/css" href="https://sitesearch.cloud/theme/font/css/font-awesome.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/searchbar/css/app.css"/>
+<link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/theme/font/css/font-awesome.min.css"/>
 <script>
     const showAuthentication = async function () {
         const xhr = new XMLHttpRequest();
@@ -131,7 +131,7 @@
 
 <br>
 <span id="user" class="fa fa-user"></span>
-<a id="loginLink" href="/login?redirect_uri=https://sitesearch.cloud/login">Sign-in / Sign-up with GitHub</a>
+<a id="loginLink" href="/login?redirect_uri=https://api.sitesearch.cloud/login">Sign-in / Sign-up with GitHub</a>
 <br>
 <br>
 <a id="logoutLink" href="/logout" style="display: none;">Sign-out</a>
@@ -196,7 +196,7 @@
     <div id="resultlist" style="margin-top:20px;"></div>
 </div>
 
-<script src="https://sitesearch.cloud/searchbar/js/app.js"></script>
+<script src="https://api.sitesearch.cloud/searchbar/js/app.js"></script>
 <script>
     jQuery.noConflict();
     jQuery(document).ready(function ($) {

@@ -28,7 +28,7 @@
 
     const triggerFirstUsageOwnership = function (feedUrl) {
         const xhr = new XMLHttpRequest();
-        xhr.open("PUT", "https://sitesearch.cloud/sites/rss?feedUrl=" + feedUrl);
+        xhr.open("PUT", "https://api.sitesearch.cloud/sites/rss?feedUrl=" + feedUrl);
         xhr.onload = function () {
             const siteId = JSON.parse(this.response)["siteId"];
             document.getElementById("siteId").value = siteId;

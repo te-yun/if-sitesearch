@@ -1,6 +1,6 @@
 {
   "ajax": {
-    "baseUrl": "https://sitesearch.cloud/",
+    "baseUrl": "https://api.sitesearch.cloud/",
     "endpointSearch": "search",
     "start": 0,
     "limit": 20
@@ -10,7 +10,7 @@
   },
   "components": {
     "searchbar": {
-      "templatesUrl": "https://sitesearch.cloud/searchbar-config/sitesearch.hbs",
+      "templatesUrl": "https://api.sitesearch.cloud/searchbar-config/sitesearch.hbs",
       "inputMaxLength": 250,
       "typeaheadProps": {
         "maxItemPerGroup": 4,
@@ -41,7 +41,7 @@
       "searchbar_template": "app/templates/default/searchbar.hbs",
       "group_template": "app/templates/default/groups.hbs",
       "roles": {
-        "url": "https://sitesearch.cloud/searchbar-config/sitesearch-roles.json"
+        "url": "https://api.sitesearch.cloud/searchbar-config/sitesearch-roles.json"
       },
       "indexfields": {
         "template": "app/templates/default/indexfields.hbs"
@@ -140,7 +140,7 @@
     "css": [],
     "js": []
   },
-  "langUrlPrefix": "https://sitesearch.cloud/searchbar/data/language/",
+  "langUrlPrefix": "https://api.sitesearch.cloud/searchbar/data/language/",
   "iconPath": "searchbar/img/filetypes",
   "lyncIconPath": "searchbar/img/shared/lync",
   "defaultLang": "en",
