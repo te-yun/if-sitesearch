@@ -19,20 +19,6 @@ server {
         proxy_pass https://main.sitesearch.cloud:2443/;
     }
 
-    location /product-info-https {
-        proxy_redirect off;
-        proxy_pass https://sitesearch.online;
-    }
-
-    location /product-info-https1 {
-        proxy_redirect off;
-        proxy_pass https://sitesearch.online/;
-    }
-
-    location /product-info-https2 {
-        proxy_pass https://sitesearch.online/;
-    }
-
     location /product-info {
         proxy_redirect off;
         proxy_pass http://sitesearch.online;

@@ -12,9 +12,7 @@ config.json
 
 /target
 
-/build
-/service/build
-/frontend/build
+build/
 /.gradle
 
 # IntelliJ
