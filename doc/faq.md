@@ -37,18 +37,30 @@ FAQ
             }'
 
 * How can I **index a page**, within an **already existing site**, and make it searchable?
-    * TODO add an example curl
-
-* How can I **update** an already indexed page?
-    * Execute this curl command with a *siteSecret* that corresponds to a *siteId*:
+    * When a page with the provided URL already exists, the page will be updated with the given title & body.
+    Execute this curl command with a *siteSecret* that corresponds to the provided *siteId*:
     
             curl -v -X PUT \
-              'https://api.sitesearch.cloud/sites/23858a12-5896-437f-8ce2-2c433d51b83d/pages/1349a7b98d2d1f4408f729696ce259d46a2242287e66fc2656edf31b41755529?siteSecret=6b9fcbad-ddc9-47cd-ad01-ea58da79bca4' \
+              'https://api.sitesearch.cloud/sites/22d7cbe6-78c3-4f54-ba40-79b881cbe568/pages?siteSecret=8a12c8db-7d49-4f03-b2e5-03870b4e1e48' \
               -H 'content-type: application/json' \
-              -d '{ 
-                            "url" : "https://example.com/page",
-                            "title": "Test Page",
-                            "body": "Test Content"
+              -d '{
+                "title": "Test Page",
+                "body": "Test Content",
+                "url": "https://example.com/page"
+            }'
+
+* How can I **update** an already indexed page?
+    * When updating a page the URL in the payload assures that only the page with the provided URL is updated with a new tile and content.
+    If the page with the provided URL does not exist in a site's index, the page is automatically added to the site index.
+    Execute this curl command with a *siteSecret* that corresponds to the provided *siteId*:
+    
+            curl -v -X PUT \
+              'https://api.sitesearch.cloud/sites/22d7cbe6-78c3-4f54-ba40-79b881cbe568/pages?siteSecret=8a12c8db-7d49-4f03-b2e5-03870b4e1e48' \
+              -H 'content-type: application/json' \
+              -d '{
+                "title": "Test Page",
+                "body": "Test Content",
+                "url": "https://example.com/page"
             }'
 
 * How can I **delete** an indexed page?
