@@ -5,8 +5,9 @@ $docker_tag = "latest"
 
 docker ps
 function isBlueUp() {
-    $isBlueUp = docker ps | grep ${docker_image_name}-blue
-    return -Not $([string]::IsNullOrEmpty($isBlueUp))
+#    $isBlueUp = docker ps | grep ${docker_image_name}-blue
+#    return -Not $([string]::IsNullOrEmpty($isBlueUp))
+    return $Env:SITESEARCH_VARIANT_RUNNING -eq "blue"
 }
 
 $data = "if-sitesearch-data"
@@ -29,7 +30,9 @@ if(isBlueUp){
         --env SCM_HASH=$env:SCM_HASH `
         -v ~/srv/${data}:/home/svc_usr/data `
         intrafind/${docker_image_name}:${docker_tag}
-    docker rm -f ${docker_image_name}-blue
+#    docker rm -f ${docker_image_name}-blue
+    $Env:SITESEARCH_VARIANT_RUNNING = "green"
+
 } else {
     write-host blue is down and will be removed
     $blue = "${docker_image_name}-blue"
@@ -45,5 +48,6 @@ if(isBlueUp){
         --env SCM_HASH=$env:SCM_HASH `
         -v ~/srv/${data}:/home/svc_usr/data `
         intrafind/${docker_image_name}:${docker_tag}
-    docker rm -f ${docker_image_name}-green
+#    docker rm -f ${docker_image_name}-green
+    $Env:SITESEARCH_VARIANT_RUNNING = "blue"
 }
