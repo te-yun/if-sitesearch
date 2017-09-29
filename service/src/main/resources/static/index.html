@@ -82,34 +82,28 @@
                 xhr.open("GET", "/authentication-providers/github/" + user.userAuthentication.details.id + "?accessToken=" + user.details.tokenValue);
                 xhr.setRequestHeader("content-type", "application/json");
                 xhr.onload = async function () {
-                    if (this.status === 200) {
+                    if (xhr.status === 200) {
                         document.getElementById("assignmentsDisplay").style.display = "block";
-                        const assignments = JSON.parse(this.responseText);
+                        const assignments = JSON.parse(xhr.responseText);
                         assignments.tenants.forEach(function (tenant) {
                             let tenantEntry = document.createElement("li");
                             let tenantCompany = document.createElement("li");
                             let tenantContactEmail = document.createElement("li");
                             tenantEntry.textContent = "Tenant ID: " + tenant.id;
-//                            tenantEntry.textContent = "Tenant ID: " + tenant;
-//                            tenantCompany.textContent = "Company: " + assignments.tenants[tenant].company;
                             tenantCompany.textContent = "Company: " + tenant.company;
-//                            tenantContactEmail.textContent = "Contact e-mail: " + assignments.tenants[tenant].contactEmail;
                             tenantContactEmail.textContent = "Contact e-mail: " + tenant["contactEmail"];
                             document.getElementById("tenantAssignments").appendChild(tenantEntry);
                             document.getElementById("tenantAssignments").appendChild(tenantCompany);
                             document.getElementById("tenantAssignments").appendChild(tenantContactEmail);
-                        });
 
-//                        for (let site in assignments.sites) {
-                        assignments.sites.forEach(function (site) {
-                            let siteEntry = document.createElement("li");
-                            siteEntry.textContent = "Site ID: " + site.id;
-//                            siteEntry.textContent = "Site ID: " + site;
-                            let siteSecret = document.createElement("li");
-//                            siteSecret.textContent = "Site Secret: " + assignments.sites[site];
-                            siteSecret.textContent = "Site Secret: " + site["secret"];
-                            document.getElementById("siteAssignments").appendChild(siteEntry);
-                            document.getElementById("siteAssignments").appendChild(siteSecret);
+                            tenant.sites.forEach(function (site) {
+                                let siteEntry = document.createElement("li");
+                                siteEntry.textContent = "Site ID: " + site.id;
+                                let siteSecret = document.createElement("li");
+                                siteSecret.textContent = "Site Secret: " + site["secret"];
+                                document.getElementById("siteAssignments").appendChild(siteEntry);
+                                document.getElementById("siteAssignments").appendChild(siteSecret);
+                            });
                         });
 
                         for (let authProvider in assignments.authProviders) {
