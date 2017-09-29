@@ -80,7 +80,7 @@ server {
     server_name test.sitesearch.cloud;
 
     location / {
-        proxy_pass https://main.sitesearch.cloud:3442;
+        proxy_pass https://if-sitesearch-green:3442;
     }
 }
 
@@ -90,6 +90,6 @@ server {
     server_name dev.sitesearch.cloud;
 
     location / {
-        proxy_pass https://main.sitesearch.cloud:4442;
+        proxy_pass https://if-sitesearch-blue:4442;
     }
 }
