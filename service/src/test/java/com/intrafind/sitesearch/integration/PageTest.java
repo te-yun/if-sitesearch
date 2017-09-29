@@ -31,7 +31,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -97,7 +96,8 @@ public class PageTest {
 
         // update
         final ResponseEntity<Page> updatedSite = caller.exchange(SiteController.ENDPOINT
-                        + "/" + newPage.getSiteId() + "/pages/url/" + URLEncoder.encode(newPage.getUrl(), "UTF-8") + "?siteSecret=" + newPage.getSiteSecret(),
+//                        + "/" + newPage.getSiteId() + "/pages/url/" + URLEncoder.encode(newPage.getUrl(), "UTF-8") + "?siteSecret=" + newPage.getSiteSecret(),
+                        + "/" + newPage.getSiteId() + "/pages?siteSecret=" + newPage.getSiteSecret(),
                 HttpMethod.PUT, new HttpEntity<>(newPage), Page.class);
         assertEquals(HttpStatus.OK, updatedSite.getStatusCode());
         assertEquals(newPage.getId(), updatedSite.getBody().getId());
@@ -115,7 +115,8 @@ public class PageTest {
 
         // fetch via URL
         final ResponseEntity<Page> fetchViaUrl = caller.exchange(SiteController.ENDPOINT
-                        + "/" + newPage.getSiteId() + "/pages/url/" + URLEncoder.encode(newPage.getUrl(), "UTF-8"),
+                        + "/" + newPage.getSiteId() + "/pages?url=" + newPage.getUrl(),
+//                        + "/" + newPage.getSiteId() + "/pages/url/" + URLEncoder.encode(newPage.getUrl(), "UTF-8"),
                 HttpMethod.GET, HttpEntity.EMPTY, Page.class);
         assertEquals(HttpStatus.OK, fetchViaUrl.getStatusCode());
         assertEquals(newPage.getId(), fetchViaUrl.getBody().getId());

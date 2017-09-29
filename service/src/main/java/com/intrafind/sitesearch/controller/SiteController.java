@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URLDecoder;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -46,14 +45,15 @@ public class SiteController {
         this.service = service;
     }
 
-    //  /sites/{siteId}/pages/url/{url}
 //    @RequestMapping(path = "{siteId}/pages/url/{url:.+}", method = RequestMethod.GET)
-    @RequestMapping(path = "{siteId}/pages/url/{url}", method = RequestMethod.GET)
+//    @RequestMapping(path = "{siteId}/pages/url/{url}", method = RequestMethod.GET)
+@RequestMapping(path = "{siteId}/pages", method = RequestMethod.GET)
     ResponseEntity<FetchedPage> fetchViaUrl(
-            @PathVariable(value = "siteId") UUID siteId,
-            @PathVariable(value = "url") URI url
+        @PathVariable(value = "siteId") UUID siteId,
+        @RequestParam(value = "url") URI url
     ) throws UnsupportedEncodingException {
-        String pageId = Page.hashPageId(siteId, URLDecoder.decode(url.toString(), "UTF-8"));
+//        String pageId = Page.hashPageId(siteId, URLDecoder.decode(url.toString(), "UTF-8"));
+    String pageId = Page.hashPageId(siteId, url);
 
         Optional<FetchedPage> fetched = service.fetchById(pageId);
         if (fetched.isPresent()) {
@@ -63,20 +63,21 @@ public class SiteController {
         }
     }
 
-    //  /sites/{siteId}/pages?siteSecret
+    //  /sites/{siteId}/pages?siteSecret             // TODO do not require URL for creating new pages
 //    @RequestMapping(path = "{siteId}/pages/url/{url:.+}", method = RequestMethod.PUT)
-    @RequestMapping(path = "{siteId}/pages/url/{url}", method = RequestMethod.PUT)
-    ResponseEntity<FetchedPage> updateExistingPageViaUrl(
+    @RequestMapping(path = "{siteId}/pages", method = RequestMethod.PUT)
+    ResponseEntity<FetchedPage> addPageToSiteIndex(
             @PathVariable(name = "siteId") UUID siteId,
-            @PathVariable(name = "url") URI url,
+//            @PathVariable(name = "url") URI url,
             @RequestParam(name = "siteSecret") UUID siteSecret,
             @RequestBody Page page
-    ) throws UnsupportedEncodingException {
-        final String decodedUrl = URLDecoder.decode(url.toString(), "UTF-8");
-        page.setUrl(decodedUrl); // make sure both URLs are aligned, TODO use a separate DTO sans-url later on
+//    ) throws UnsupportedEncodingException {
+    ) {
+//        final String decodedUrl = URLDecoder.decode(url.toString(), "UTF-8");
+//        page.setUrl(decodedUrl); // make sure both URLs are aligned, TODO use a separate DTO sans-url later on
 
-//        String pageId = Page.hashPageId(siteId, page.getUrl());
-        String pageId = Page.hashPageId(siteId, decodedUrl);
+        String pageId = Page.hashPageId(siteId, page.getUrl());
+//        String pageId = Page.hashPageId(siteId, decodedUrl);
         // TODO use SiteUpdate DTO with NO siteId & NO siteSecret provided
 
         // TODO make sure that an existing page is actually updated
@@ -90,7 +91,7 @@ public class SiteController {
 
     //  /sites/{siteId}/pages/{id}?siteSecret
     @RequestMapping(path = "{siteId}/pages/{pageId}", method = RequestMethod.PUT)
-    ResponseEntity<FetchedPage> updateExistingPage(
+    ResponseEntity<FetchedPage> updateExistingPageInSiteIndex(
             @PathVariable(name = "siteId") UUID siteId,
             @PathVariable("pageId") String pageId,
             @RequestParam(name = "siteSecret") UUID siteSecret,
