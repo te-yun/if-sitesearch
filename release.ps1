@@ -31,7 +31,7 @@ docker run -d --name ${DOCKER_IMAGE_NAME} `
     intrafind/${DOCKER_IMAGE_NAME}:${DOCKER_TAG}
 cd ..
 
-function setupRedirectRouterContainer() {
+function setupRedirectRouterContainer {
     $docker_redirect_image = "router"
     $docker_redirect_image_tag = "latest"
     cd docker-$docker_redirect_image
@@ -50,9 +50,12 @@ setupRedirectRouterContainer()
 
 ./switch-release.ps1
 
-$danglingImages = $(docker images -f "dangling=true" -q)
-if ([string]::IsNullOrEmpty($danglingImages)){
-    "There are no dangling Docker images"
-} else {
-    docker rmi -f $danglingImages # cleanup, GC for dangling images
+function cleanupDocker {
+    $danglingImages = $(docker images -f "dangling=true" -q)
+    if ([string]::IsNullOrEmpty($danglingImages)){
+        "There are no dangling Docker images"
+    } else {
+        docker rmi -f $danglingImages # cleanup, GC for dangling images
+    }
 }
+cleanupDocker
