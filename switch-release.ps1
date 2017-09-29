@@ -11,7 +11,7 @@ function isBlueUp() {
     return $Env:SITESEARCH_VARIANT_RUNNING -eq "blue"
 }
 
-$data = "${$docker_image_name}-data"
+$data = "${docker_image_name}-data"
 mkdir ~/srv/$data
 sudo chown -R 1000:1000 ~/srv/$data # make it a svc_usr' directory
 
