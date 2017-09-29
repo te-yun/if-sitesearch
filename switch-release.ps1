@@ -10,13 +10,16 @@ function isBlueUp() {
 }
 
 $data = "if-sitesearch-data"
+mkdir ~/srv/$data
+sudo chown -R 1000:1000 ~/srv/$data # make it a svc_usr' directory
+
 # TODO change mapped volumes to avoid collision with other running containers
 if(isBlueUp){
     write-host blue is up and will be removed
     $green = "${docker_image_name}-green"
 
-    mkdir ~/srv/$green
-    sudo chown -R 1000:1000 ~/srv/$green # make it a svc_usr' directory
+#    mkdir ~/srv/$green
+#    sudo chown -R 1000:1000 ~/srv/$green # make it a svc_usr' directory
 
     docker rm -f $green
     docker run -d --name $green `
@@ -31,8 +34,8 @@ if(isBlueUp){
     write-host blue is down and will be removed
     $blue = "${docker_image_name}-blue"
 
-    mkdir ~/srv/$blue
-    sudo chown -R 1000:1000 ~/srv/$blue # make it a svc_usr' directory
+#    mkdir ~/srv/$blue
+#    sudo chown -R 1000:1000 ~/srv/$blue # make it a svc_usr' directory
 
     docker rm -f $blue
     docker run -d --name $blue `
