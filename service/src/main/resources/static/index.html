@@ -101,8 +101,11 @@
                                 siteEntry.textContent = "Site ID: " + site.id;
                                 let siteSecret = document.createElement("li");
                                 siteSecret.textContent = "Site Secret: " + site["secret"];
+                                let siteName = document.createElement("li");
+                                siteName.textContent = "Site Name: " + site.name;
                                 document.getElementById("siteAssignments").appendChild(siteEntry);
                                 document.getElementById("siteAssignments").appendChild(siteSecret);
+                                document.getElementById("siteAssignments").appendChild(siteName);
                             });
                         });
 
