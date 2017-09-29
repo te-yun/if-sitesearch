@@ -27,6 +27,7 @@ docker run -d --name ${DOCKER_IMAGE_NAME} `
     --env BUILD_NUMBER=$env:BUILD_NUMBER `
     --env SCM_HASH=$env:SCM_HASH  `
     -v ~/srv/${DOCKER_IMAGE_NAME}:/home/svc_usr/data `
+    --network $docker_network `
     intrafind/${DOCKER_IMAGE_NAME}:${DOCKER_TAG}
 cd ..
 

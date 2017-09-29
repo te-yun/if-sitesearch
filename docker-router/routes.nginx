@@ -20,14 +20,9 @@ server {
         proxy_pass https://main.sitesearch.cloud:2443/;
     }
 
-    location /product {
+    location /product-info {
         proxy_redirect off;
-        proxy_pass http://sitesearch.online/;
-    }
-
-    location /product1 {
-        proxy_redirect off;
-        proxy_pass http://sitesearch.online;
+        proxy_pass https://sitesearch.online;
     }
 
     location / {

@@ -2,6 +2,7 @@
 
 $docker_image_name = "if-sitesearch"
 $docker_tag = "latest"
+$docker_network = "sitesearch"
 
 docker ps
 function isBlueUp() {
@@ -10,7 +11,7 @@ function isBlueUp() {
     return $Env:SITESEARCH_VARIANT_RUNNING -eq "blue"
 }
 
-$data = "if-sitesearch-data"
+$data = "${$docker_image_name}-data"
 mkdir ~/srv/$data
 sudo chown -R 1000:1000 ~/srv/$data # make it a svc_usr' directory
 
@@ -29,6 +30,7 @@ if(isBlueUp){
         --env BUILD_NUMBER=$env:BUILD_NUMBER `
         --env SCM_HASH=$env:SCM_HASH `
         -v ~/srv/${data}:/home/svc_usr/data `
+        --network $docker_network `
         intrafind/${docker_image_name}:${docker_tag}
 #    docker rm -f ${docker_image_name}-blue
     $Env:SITESEARCH_VARIANT_RUNNING = "green"
@@ -47,6 +49,7 @@ if(isBlueUp){
         --env BUILD_NUMBER=$env:BUILD_NUMBER `
         --env SCM_HASH=$env:SCM_HASH `
         -v ~/srv/${data}:/home/svc_usr/data `
+        --network $docker_network `
         intrafind/${docker_image_name}:${docker_tag}
 #    docker rm -f ${docker_image_name}-green
     $Env:SITESEARCH_VARIANT_RUNNING = "blue"
