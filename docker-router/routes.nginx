@@ -85,9 +85,9 @@ server {
     listen [::]:443 ssl http2;
     server_name test.sitesearch.cloud;
 
-    location / {
-        proxy_pass https://if-sitesearch-green:3442;
-    }
+    #    location / {
+    #        proxy_pass https://if-sitesearch-green:3442;
+    #    }
 }
 
 server {
