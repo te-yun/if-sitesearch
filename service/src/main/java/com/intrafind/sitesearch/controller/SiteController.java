@@ -47,13 +47,13 @@ public class SiteController {
     }
 
     //  /sites/{siteId}/pages/url/{url}
-    @RequestMapping(path = "{siteId}/pages/url/{url:.+}", method = RequestMethod.GET)
+//    @RequestMapping(path = "{siteId}/pages/url/{url:.+}", method = RequestMethod.GET)
+    @RequestMapping(path = "{siteId}/pages/url/{url}", method = RequestMethod.GET)
     ResponseEntity<FetchedPage> fetchViaUrl(
             @PathVariable(value = "siteId") UUID siteId,
             @PathVariable(value = "url") URI url
     ) throws UnsupportedEncodingException {
         String pageId = Page.hashPageId(siteId, URLDecoder.decode(url.toString(), "UTF-8"));
-//        String pageId = Page.hashPageId(siteId, url.toString());
 
         Optional<FetchedPage> fetched = service.fetchById(pageId);
         if (fetched.isPresent()) {
@@ -64,7 +64,8 @@ public class SiteController {
     }
 
     //  /sites/{siteId}/pages?siteSecret
-    @RequestMapping(path = "{siteId}/pages/url/{url:.+}", method = RequestMethod.PUT)
+//    @RequestMapping(path = "{siteId}/pages/url/{url:.+}", method = RequestMethod.PUT)
+    @RequestMapping(path = "{siteId}/pages/url/{url}", method = RequestMethod.PUT)
     ResponseEntity<FetchedPage> updateExistingPageViaUrl(
             @PathVariable(name = "siteId") UUID siteId,
             @PathVariable(name = "url") URI url,

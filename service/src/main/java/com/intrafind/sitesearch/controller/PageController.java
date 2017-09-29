@@ -41,10 +41,9 @@ public class PageController {
         this.service = service;
     }
 
-    //  /pages
     @RequestMapping(method = RequestMethod.POST)
     ResponseEntity<Page> indexNewSite(@RequestBody Page page) {
-        // TODO use SiteCreation DTO with siteId & siteSecret
+        // TODO use SiteCreation DTO with siteId & siteSecret onReturn
         Optional<Page> indexed = service.indexNewTenantCreatingSite(page);
         if (indexed.isPresent()) {
             Page created = indexed.get();
@@ -54,7 +53,6 @@ public class PageController {
         }
     }
 
-    //  /pages/{pageId}
     @RequestMapping(method = RequestMethod.GET, path = "{id}")
     ResponseEntity<FetchedPage> fetchById(@PathVariable("id") String id) {
         Optional<FetchedPage> fetched = service.fetchById(id);
