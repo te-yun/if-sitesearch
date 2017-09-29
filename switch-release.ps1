@@ -32,7 +32,8 @@ if(isBlueUp){
         -v ~/srv/${data}:/home/svc_usr/data `
         --network $docker_network `
         intrafind/${docker_image_name}:${docker_tag}
-    export SITESEARCH_VARIANT_RUNNING="green"
+
+    $Env:SITESEARCH_VARIANT_RUNNING = "green"
 
 } else {
     write-host blue is down and will be removed
@@ -50,5 +51,6 @@ if(isBlueUp){
         -v ~/srv/${data}:/home/svc_usr/data `
         --network $docker_network `
         intrafind/${docker_image_name}:${docker_tag}
-    export SITESEARCH_VARIANT_RUNNING="blue"
+
+    $Env:SITESEARCH_VARIANT_RUNNING = "blue"
 }
