@@ -36,6 +36,8 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @CrossOrigin("*")
@@ -119,7 +121,6 @@ public class AssignmentController {
     ) {
         TenantOverview tenantOverview = new TenantOverview(
                 Lists.newArrayList(),
-                Lists.newArrayList(),
                 Lists.newArrayList()
         );
         LOG.info("provider: " + provider);
@@ -138,15 +139,22 @@ public class AssignmentController {
         authProviders.forEach(authProvider -> {
             tenantOverview.getAuthProviders().add(authProvider.getProperty("id").toString());
             authProvider.getLinks("tenant").forEach(tenant -> {
-                TenantOverview.TenantInfo tenantInfo = new TenantOverview.TenantInfo(UUID.fromString(tenant.getProperty("id").toString()), tenant.getProperty("company").toString(), tenant.getProperty("contactEmail").toString());
-                tenantOverview.getTenants().add(tenantInfo);
+                List<Site> sites = new ArrayList<>();
                 tenant.getLinks("site").forEach(site -> {
-                    tenantOverview.getSites().add(new Site(
+                    sites.add(new Site(
+//                    tenantOverview.getSites().add(new Site(
                             UUID.fromString(site.getProperty("id").toString()),
                             UUID.fromString(site.getProperty("secret").toString()),
                             site.getProperty("name") == null ? "" : site.getProperty("name").toString())
                     );
                 });
+                TenantOverview.TenantInfo tenantInfo = new TenantOverview.TenantInfo(
+                        UUID.fromString(tenant.getProperty("id").toString()),
+                        tenant.getProperty("company").toString(),
+                        tenant.getProperty("contactEmail").toString(),
+                        sites
+                );
+                tenantOverview.getTenants().add(tenantInfo);
             });
         });
         findTxn.commit();

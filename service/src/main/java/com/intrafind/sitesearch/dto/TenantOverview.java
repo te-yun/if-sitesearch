@@ -22,15 +22,13 @@ import java.util.UUID;
 
 public class TenantOverview implements Serializable {
     private List<TenantInfo> tenants;
-    private List<Site> sites;
     private List<String> authProviders;
 
     private TenantOverview() {
     }
 
-    public TenantOverview(List<TenantInfo> tenants, List<Site> sites, List<String> authProviders) {
+    public TenantOverview(List<TenantInfo> tenants, List<String> authProviders) {
         this.tenants = tenants;
-        this.sites = sites;
         this.authProviders = authProviders;
     }
 
@@ -40,14 +38,6 @@ public class TenantOverview implements Serializable {
 
     public void setTenants(List<TenantInfo> tenants) {
         this.tenants = tenants;
-    }
-
-    public List<Site> getSites() {
-        return sites;
-    }
-
-    public void setSites(List<Site> sites) {
-        this.sites = sites;
     }
 
     public List<String> getAuthProviders() {
@@ -62,14 +52,24 @@ public class TenantOverview implements Serializable {
         private UUID id;
         private String company;
         private String contactEmail;
+        private List<Site> sites;
 
         private TenantInfo() {
         }
 
-        public TenantInfo(UUID id, String company, String contactEmail) {
+        public TenantInfo(UUID id, String company, String contactEmail, List<Site> sites) {
             this.id = id;
             this.company = company;
             this.contactEmail = contactEmail;
+            this.sites = sites;
+        }
+
+        public List<Site> getSites() {
+            return sites;
+        }
+
+        public void setSites(List<Site> sites) {
+            this.sites = sites;
         }
 
         public UUID getId() {

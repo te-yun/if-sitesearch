@@ -98,8 +98,8 @@ public class AssignmentIntegration {
         final ResponseEntity additionalTenantAddition = assignTenantAndSiteToAuthProvider(UUID.randomUUID(), additionalSiteViaPageCreation.getSiteId(), additionalSiteViaPageCreation.getSiteSecret(), "Site Name5", authProvider, authProviderId);
         assertEquals(HttpStatus.CREATED, additionalTenantAddition.getStatusCode());
         final ResponseEntity<TenantOverview> additionalTenantAdded = obtainAuthProvidersAssignments(authProvider, authProviderId);
-//        assureSingleSimpleAssignment(additionalTenantAdded, 2, 2);
-        assureSingleSimpleAssignment(additionalTenantAdded, 3, 2);
+        assureSingleSimpleAssignment(additionalTenantAdded, 2, 2);
+//        assureSingleSimpleAssignment(additionalTenantAdded, 3, 2);
 
         // add additional tenant based on new Page
         final Page anotherAdditionalSiteViaPageCreation = createSiteViaPageCreation();
@@ -107,7 +107,8 @@ public class AssignmentIntegration {
         assertEquals(HttpStatus.CREATED, additionalTenantAdditionWithAdditionalSite.getStatusCode());
         final ResponseEntity<TenantOverview> additionalTenantAddedWithAdditionalSite = obtainAuthProvidersAssignments(authProvider, authProviderId);
 //        assureSingleSimpleAssignment(additionalTenantAddedWithAdditionalSite, 3, 3);
-        assureSingleSimpleAssignment(additionalTenantAddedWithAdditionalSite, 4, 3);
+//        assureSingleSimpleAssignment(additionalTenantAddedWithAdditionalSite, 4, 3);
+        assureSingleSimpleAssignment(additionalTenantAddedWithAdditionalSite, 2, 3);
 
         // siteSecret does not match siteId's secret
         UUID invalidSiteSecret = UUID.randomUUID();
@@ -129,8 +130,9 @@ public class AssignmentIntegration {
 
     private void assureSingleSimpleAssignment(ResponseEntity<TenantOverview> fetchedTenantOverview, int siteSize, int tenantSize) {
         assertEquals(HttpStatus.OK, fetchedTenantOverview.getStatusCode());
-        assertEquals(siteSize, fetchedTenantOverview.getBody().getSites().size());
-        fetchedTenantOverview.getBody().getSites().forEach(site -> {
+        final TenantOverview.TenantInfo firstTenant = fetchedTenantOverview.getBody().getTenants().get(0);
+        assertEquals(siteSize, firstTenant.getSites().size());
+        firstTenant.getSites().forEach(site -> {
             assertNotNull(site.getId());
             assertNotNull(site.getSecret());
             assertTrue(site.getName().startsWith("Site Name"));
