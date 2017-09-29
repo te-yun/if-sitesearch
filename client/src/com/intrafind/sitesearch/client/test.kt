@@ -17,6 +17,5 @@
 package com.intrafind.sitesearch.client
 
 fun main(args: Array<String>) {
-    println("frontend!")
-    js("console.warn('frontend');")
+    println("Kotlin client")
 }

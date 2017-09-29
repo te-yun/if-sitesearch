@@ -9,6 +9,7 @@ function isBlueUp() {
     return -Not $([string]::IsNullOrEmpty($isBlueUp))
 }
 
+$data = "if-sitesearch-data"
 # TODO change mapped volumes to avoid collision with other running containers
 if(isBlueUp){
     write-host blue is up and will be removed
@@ -23,7 +24,7 @@ if(isBlueUp){
         --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
         --env BUILD_NUMBER=$env:BUILD_NUMBER `
         --env SCM_HASH=$env:SCM_HASH `
-        -v ~/srv/${green}:/home/svc_usr/data `
+        -v ~/srv/${data}:/home/svc_usr/data `
         intrafind/${docker_image_name}:${docker_tag}
     docker rm -f ${docker_image_name}-blue
 } else {
@@ -39,7 +40,7 @@ if(isBlueUp){
         --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
         --env BUILD_NUMBER=$env:BUILD_NUMBER `
         --env SCM_HASH=$env:SCM_HASH `
-        -v ~/srv/${blue}:/home/svc_usr/data `
+        -v ~/srv/${data}:/home/svc_usr/data `
         intrafind/${docker_image_name}:${docker_tag}
     docker rm -f ${docker_image_name}-green
 }
