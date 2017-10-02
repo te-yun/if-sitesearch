@@ -22,6 +22,7 @@ import com.intrafind.sitesearch.dto.Site;
 import com.intrafind.sitesearch.dto.TenantOverview;
 import com.intrafind.sitesearch.dto.TenantSiteAssignment;
 import com.intrafind.sitesearch.service.PageService;
+import jetbrains.exodus.ByteIterable;
 import jetbrains.exodus.bindings.StringBinding;
 import jetbrains.exodus.entitystore.*;
 import jetbrains.exodus.env.Store;
@@ -38,6 +39,7 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @CrossOrigin("*")
@@ -58,8 +60,11 @@ public class AssignmentController {
     ) {
         final String providerId = tenantSiteAssignment.getAuthProvider() + "-" + tenantSiteAssignment.getAuthProviderId();
 
-        final UUID obtainedSiteSecret = obtainSiteSecret(siteId);
-        if (!obtainedSiteSecret.equals(siteSecret)) {
+        if (obtainSiteSecret(siteId).isPresent()) {
+            if (!obtainSiteSecret(siteId).get().equals(siteSecret)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+        } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
@@ -106,11 +111,22 @@ public class AssignmentController {
                 .build();
     }
 
-    private UUID obtainSiteSecret(UUID siteId) {
-        return UUID.fromString(SearchController.ACID_PERSISTENCE_ENVIRONMENT.computeInReadonlyTransaction(txn -> {
+    private Optional<UUID> obtainSiteSecret(UUID siteId) {
+        final String siteSecretRaw = SearchController.ACID_PERSISTENCE_ENVIRONMENT.computeInReadonlyTransaction(txn -> {
             Store store = SearchController.ACID_PERSISTENCE_ENVIRONMENT.openStore(PageService.SITE_SECRET_FIELD, StoreConfig.WITHOUT_DUPLICATES, txn);
-            return StringBinding.entryToString(store.get(txn, StringBinding.stringToEntry(siteId.toString())));
-        }));
+            final ByteIterable siteSecret = store.get(txn, StringBinding.stringToEntry(siteId.toString()));
+            if (siteSecret == null) {
+                return null;
+            } else {
+                return StringBinding.entryToString(siteSecret);
+            }
+        });
+
+        if (siteSecretRaw == null) {
+            return Optional.empty();
+        } else {
+            return Optional.of(UUID.fromString(siteSecretRaw));
+        }
     }
 
     @RequestMapping(path = "/authentication-providers/{provider}/{providerId}", method = RequestMethod.GET)
