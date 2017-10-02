@@ -22,6 +22,8 @@
 <title>Simple Site Search</title>
 <link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/searchbar/css/app.css"/>
 <link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/theme/font/css/font-awesome.min.css"/>
+<script src="build/runtime/kotlin.js"></script>
+<script src="build/client.js"></script>
 <script>
     const showAuthentication = async function () {
         const xhr = new XMLHttpRequest();
@@ -127,8 +129,9 @@
 <img src="theme/logo.png" width="361" height="105" style="float: right;">
 
 <br>
-<span id="user" class="fa fa-user"></span>
-<a id="loginLink" href="/login?redirect_uri=https://api.sitesearch.cloud/login">Sign-in / Sign-up with GitHub</a>
+<span id="user" class="fa fa-sign-in"></span>
+<!--<a id="loginLink" href="/login?redirect_uri=https://api.sitesearch.cloud/login">Login</a>-->
+<a id="loginLink" href="/login">Login</a>
 <br>
 <br>
 <a id="logoutLink" href="/logout" style="display: none;">Sign-out</a>
