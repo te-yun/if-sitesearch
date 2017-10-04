@@ -26,10 +26,12 @@ Backlog
 * save siteSecret in persistent store, not in the ElasticSearch document
 
 # future
+* payment button
 * support for types / category-specific search
 * automatic disaster failover
 
 # Ideas from stake holders to be considered 
 
+* page types, e.g. marketing vs projects 
 * semantic page grouping 
     1page + 2page +3page = OneArticle
