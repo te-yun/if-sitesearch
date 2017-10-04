@@ -1,7 +1,6 @@
 generated_tests/
 config.json
 
-/data
 /service/data
 /*.log
 /*.hprof

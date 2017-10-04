@@ -98,7 +98,8 @@ public class AssignmentIntegration {
         final ResponseEntity additionalTenantAddition = assignTenantAndSiteToAuthProvider(UUID.randomUUID(), additionalSiteViaPageCreation.getSiteId(), additionalSiteViaPageCreation.getSiteSecret(), "Site Name5", authProvider, authProviderId);
         assertEquals(HttpStatus.CREATED, additionalTenantAddition.getStatusCode());
         final ResponseEntity<TenantOverview> additionalTenantAdded = obtainAuthProvidersAssignments(authProvider, authProviderId);
-        assureSingleSimpleAssignment(additionalTenantAdded, 2, 2);
+        assureSingleSimpleAssignment(additionalTenantAdded, 2, 1);
+//        assureSingleSimpleAssignment(additionalTenantAdded, 2, 2);
 //        assureSingleSimpleAssignment(additionalTenantAdded, 3, 2);
 
         // add additional tenant based on new Page
@@ -108,7 +109,8 @@ public class AssignmentIntegration {
         final ResponseEntity<TenantOverview> additionalTenantAddedWithAdditionalSite = obtainAuthProvidersAssignments(authProvider, authProviderId);
 //        assureSingleSimpleAssignment(additionalTenantAddedWithAdditionalSite, 3, 3);
 //        assureSingleSimpleAssignment(additionalTenantAddedWithAdditionalSite, 4, 3);
-        assureSingleSimpleAssignment(additionalTenantAddedWithAdditionalSite, 2, 3);
+//        assureSingleSimpleAssignment(additionalTenantAddedWithAdditionalSite, 2, 3);
+        assureSingleSimpleAssignment(additionalTenantAddedWithAdditionalSite, 3, 1);
 
         // siteSecret does not match siteId's secret
         UUID invalidSiteSecret = UUID.randomUUID();
@@ -150,7 +152,7 @@ public class AssignmentIntegration {
 
     private ResponseEntity assignTenantAndSiteToAuthProvider(UUID tenantId, UUID siteId, UUID siteSecret, String siteName, String authProvider, String authProviderId) {
         return caller.exchange(
-                AssignmentController.ENDPOINT + "/tenants/" + tenantId + "/sites/" + siteId
+                AssignmentController.ENDPOINT + "/sites/" + siteId
                         + "?siteSecret=" + siteSecret
                         + "&siteName=" + siteName,
                 HttpMethod.PUT,

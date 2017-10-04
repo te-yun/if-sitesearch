@@ -27,6 +27,7 @@ import jetbrains.exodus.bindings.StringBinding;
 import jetbrains.exodus.entitystore.*;
 import jetbrains.exodus.env.Store;
 import jetbrains.exodus.env.StoreConfig;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -50,9 +51,8 @@ public class AssignmentController {
     private static final PersistentEntityStore ACID_PERSISTENCE_ENTITY = PersistentEntityStores.newInstance(SearchController.ACID_PERSISTENCE_ENVIRONMENT, "administration");
     private static final RestTemplate CALLER = new RestTemplate();
 
-    @RequestMapping(path = ENDPOINT + "/tenants/{tenantId}/sites/{siteId}", method = RequestMethod.PUT)
+    @RequestMapping(path = ENDPOINT + "/sites/{siteId}", method = RequestMethod.PUT)
     ResponseEntity<TenantSiteAssignment> assignSite(
-            @PathVariable(value = "tenantId") UUID tenantId, // TODO temporary, take the passed value... once a way is implemented to verify that a tenant belongs to a user
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "siteSecret") UUID siteSecret,
             @RequestParam(value = "siteName") String siteName,
@@ -73,24 +73,22 @@ public class AssignmentController {
         }
 
         ACID_PERSISTENCE_ENTITY.executeInTransaction(entityTxn -> {
-            Entity tenant = entityTxn.find("Tenant", "id", tenantId.toString()).getFirst();
-            if (tenant == null) {
-                tenant = entityTxn.newEntity("Tenant");
-                tenant.setProperty("id", tenantId.toString());
-            }
-            tenant.setProperty("company", tenantSiteAssignment.getCompany());
-            tenant.setProperty("contactEmail", tenantSiteAssignment.getContactEmail());
-
             if (entityTxn.find("AuthProvider", "id", providerId).size() > 1) {
                 throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Duplicate AuthProvider ID found: " + providerId);
             }
             Entity authProvider = entityTxn.find("AuthProvider", "id", providerId).getFirst();
+            Entity tenant;
             if (authProvider == null) {
                 authProvider = entityTxn.newEntity("AuthProvider");
                 authProvider.setProperty("id", providerId);
+
+                tenant = assignTenantToUser(tenantSiteAssignment, entityTxn, authProvider);
+            } else {
+                tenant = authProvider.getLinks("tenant").getFirst();
+                if (tenant == null) {
+                    throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "User should have at least one tenant assigned: " + providerId);
+                }
             }
-            tenant.addLink("authProvider", authProvider);
-            authProvider.addLink("tenant", tenant);
 
             if (entityTxn.find("Site", "id", siteId.toString()).size() > 1) {
                 throw new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Duplicate Site ID found: " + siteId.toString());
@@ -109,6 +107,22 @@ public class AssignmentController {
         return ResponseEntity
                 .created(URI.create("https://api.sitesearch.cloud/assignments/authentication-providers/").resolve(tenantSiteAssignment.getAuthProvider()).resolve(tenantSiteAssignment.getAuthProviderId()))
                 .build();
+    }
+
+    private Entity assignTenantToUser(TenantSiteAssignment tenantSiteAssignment, @NotNull StoreTransaction entityTxn, Entity authProvider) {
+        UUID userTenant = UUID.randomUUID();
+        Entity tenant = entityTxn.find("Tenant", "id", userTenant.toString()).getFirst();
+        if (tenant == null) {
+            tenant = entityTxn.newEntity("Tenant");
+            tenant.setProperty("id", userTenant.toString());
+        }
+        tenant.setProperty("company", tenantSiteAssignment.getCompany());
+        tenant.setProperty("contactEmail", tenantSiteAssignment.getContactEmail());
+
+        tenant.addLink("authProvider", authProvider);
+        authProvider.addLink("tenant", tenant);
+
+        return tenant;
     }
 
     private Optional<UUID> obtainSiteSecret(UUID siteId) {
@@ -158,12 +172,13 @@ public class AssignmentController {
                 List<Site> sites = new ArrayList<>();
                 tenant.getLinks("site").forEach(site -> {
                     sites.add(new Site(
-//                    tenantOverview.getSites().add(new Site(
                             UUID.fromString(site.getProperty("id").toString()),
                             UUID.fromString(site.getProperty("secret").toString()),
                             site.getProperty("name") == null ? "" : site.getProperty("name").toString())
                     );
                 });
+                LOG.warn("tenant: " + tenant.getProperty("id"));
+
                 TenantOverview.TenantInfo tenantInfo = new TenantOverview.TenantInfo(
                         UUID.fromString(tenant.getProperty("id").toString()),
                         tenant.getProperty("company").toString(),
