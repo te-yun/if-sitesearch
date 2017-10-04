@@ -70,10 +70,6 @@ server {
     include /etc/nginx/snippets/ssl.conf;
 
     location / {
-        proxy_pass https://intrafind.github.io/if-sitesearch;
-    }
-
-    location /blub {
         proxy_pass https://intrafind.github.io/if-sitesearch/;
     }
 }

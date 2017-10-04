@@ -10,6 +10,9 @@ config.json
 # Spring Boot
 /config
 
+/client/build/*
+/client/build/
+/client/build
 client/build
 build/
 build/*
