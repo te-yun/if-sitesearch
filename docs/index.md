@@ -3,9 +3,8 @@
 [![Travis CI Build Status](https://travis-ci.org/intrafind/if-sitesearch.svg)](https://travis-ci.org/intrafind/if-sitesearch)
 [![TeamCity CI Build Status](https://ci.sitesearch.cloud/app/rest/builds/buildType(id:IntraFind_Oss_Build)/statusIcon)](https://ci.sitesearch.cloud/viewType.html?buildTypeId=IntraFind_Oss_Build)
 
-INDEX - INDEX
 
-sitesearch-dispatcher
+Site Search Dispatcher
 =
 Site Search Dispatcher is an upstream service of [Site Search](https://api.sitesearch.cloud), 
 an on-demand SaaS offering for providing websites with an externally managed search capability. 
@@ -18,8 +17,8 @@ an on-demand SaaS offering for providing websites with an externally managed sea
 * [Release](https://api.sitesearch.cloud) / [DEV Release](https://dev.sitesearch.cloud)
 * [SCM repository](http://ml-if-git/sitesearch/if-sitesearch)
 * [Container](http://ml-if-git/sitesearch/docker-container)
-* [Documentation](https://github.com/intrafind/if-sitesearch/blob/master/docs/faq.md)
-* [Product Integration](https://github.com/intrafind/if-sitesearch/blob/master/docs/Site%20Search%20Product%20Overview.pdf)
+* [Documentation](http://doc.sitesearch.cloud/faq.md)
+* [Product Integration](http://doc.sitesearch.cloud/Site%20Search%20Product%20Overview.pdf)
 * [Product Abstract](http://if-wiki:8090/pages/viewpage.action?pageId=14714226).
     
 ***> > > [DEMO](https://api.sitesearch.cloud) < < <***    
