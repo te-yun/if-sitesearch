@@ -17,7 +17,7 @@ an on-demand SaaS offering for providing websites with an externally managed sea
 * [Release](https://api.sitesearch.cloud) / [DEV Release](https://dev.sitesearch.cloud)
 * [SCM repository](http://ml-if-git/sitesearch/if-sitesearch)
 * [Container](http://ml-if-git/sitesearch/docker-container)
-* [Documentation](http://doc.sitesearch.cloud/faq.md)
+* [Documentation](http://doc.sitesearch.cloud/faq)
 * [Product Integration](http://doc.sitesearch.cloud/Site%20Search%20Product%20Overview.pdf)
 * [Product Abstract](http://if-wiki:8090/pages/viewpage.action?pageId=14714226).
     
