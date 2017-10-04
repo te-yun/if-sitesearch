@@ -10,8 +10,6 @@ config.json
 # Spring Boot
 /config
 
-/target
-
 build/
 /.gradle
 
