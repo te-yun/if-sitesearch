@@ -106,6 +106,7 @@ FAQ
 
 * How do I integrate Site Search' search bar into my website?
     * Embed the following HTML fragment into your website and **adjust the siteId** provided in the snippet:
+    
     <link rel="stylesheet" href="https://api.sitesearch.cloud/searchbar/css/app.css"/>
     <div id="searchbarContainer">
         <style>
