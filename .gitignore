@@ -3,14 +3,13 @@ config.json
 
 /data
 /service/data
-/data-entity
 /*.log
 /*.hprof
 
 # Spring Boot
 /config
 
-/client/build/*
+/client/build/**
 /client/build/
 /client/build
 client/build

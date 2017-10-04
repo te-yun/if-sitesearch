@@ -12,8 +12,8 @@ an on-demand SaaS offering for providing websites with an externally managed sea
 # About
 
 * [OpenAPI 3.0 Specification](https://api.sitesearch.cloud/swagger-ui.html)
-* [Product roadmap](http://if-wiki:8090/pages/viewpage.action?pageId=14714226)
-* [JIRA project](http://jira/projects/SITESEARCH)
+* [Roadmap](http://if-wiki:8090/pages/viewpage.action?pageId=14714226)
+* [JIRA](http://jira/projects/SITESEARCH)
 * [Release](https://api.sitesearch.cloud) / [DEV Release](https://dev.sitesearch.cloud)
 * [SCM repository](http://ml-if-git/sitesearch/if-sitesearch)
 * [Container](http://ml-if-git/sitesearch/docker-container)
