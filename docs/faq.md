@@ -1,4 +1,4 @@
-FAQ obsolete, has been moved to [its new location](https://github.com/intrafind/if-sitesearch/blob/master/docs/faq.md)
+FAQ
 =
 
 * What is Site Search?
