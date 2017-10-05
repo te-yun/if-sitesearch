@@ -7,10 +7,10 @@ security:
       clientId: a4d43021fa657695d4a7
       clientSecret: ${random.uuid} # add valid token to your local configuration
 
-server:
-  port: 8001
-  ssl:
-    key-store: classpath:keystore.jks
-    key-store-password: ${security.user.password}
-    key-password: ${security.user.password}
-    key-alias: alias
+#server:
+#  port: 8001
+#  ssl:
+#    key-store: classpath:keystore.jks
+#    key-store-password: ${security.user.password}
+#    key-password: ${security.user.password}
+#    key-alias: alias
