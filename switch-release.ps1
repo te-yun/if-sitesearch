@@ -12,7 +12,7 @@ function isBlueUp() {
     } else {
         touch ./blue-green-deployment.lock
     }
-    return isBlueGreenLockSet
+    return $isBlueGreenLockSet
 }
 
 $data = "${docker_image_name}-data"
