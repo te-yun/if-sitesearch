@@ -60,6 +60,7 @@ public class BaseConfig {
     public Docket hideApi(ServletContext servletContext) {
         System.out.println("servletContext>>>: " + servletContext);
         return new Docket(DocumentationType.SWAGGER_2)
+                .host("api.sitesearch.cloud")
                 .pathProvider(new RelativePathProvider(servletContext) {
                     @Override
                     public String getApplicationBasePath() {
