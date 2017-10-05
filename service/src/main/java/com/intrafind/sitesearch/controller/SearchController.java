@@ -39,11 +39,14 @@ import java.util.UUID;
 @RestController
 @RequestMapping(SearchController.ENDPOINT)
 public class SearchController {
-    public static final Environment ACID_PERSISTENCE_ENVIRONMENT = Environments.newInstance("data");
+    //    public static final Environment ACID_PERSISTENCE_ENVIRONMENT = Environments.newInstance("data");
+    public static final Environment ACID_PERSISTENCE_ENVIRONMENT = Environments.newContextualInstance("data");
 
     static { // to initialize the store, required for virgin CI runs
         ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
-            ACID_PERSISTENCE_ENVIRONMENT.openStore(StatsController.QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
+            if (!ACID_PERSISTENCE_ENVIRONMENT.isOpen()) {
+                ACID_PERSISTENCE_ENVIRONMENT.openStore(StatsController.QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
+            }
         });
     }
 
