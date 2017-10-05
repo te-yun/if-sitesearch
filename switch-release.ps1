@@ -4,6 +4,7 @@ $docker_image_name = "if-sitesearch"
 $docker_tag = "latest"
 $docker_network = "sitesearch"
 
+docker build --tag intrafind/${docker_image_name}:${docker_tag} .
 docker ps
 function isBlueUp() {
     $isBlueGreenLockSet = Test-Path ./blue-green-deployment.lock
