@@ -16,7 +16,7 @@ server {
     include /etc/nginx/snippets/ssl.conf;
 
     location /technology/ {
-        proxy_pass https://main.sitesearch.cloud:2443/;
+        proxy_pass http://main.sitesearch.cloud:2443/;
     }
 
     location /product-info {
