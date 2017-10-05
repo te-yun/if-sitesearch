@@ -6,9 +6,13 @@ $docker_network = "sitesearch"
 
 docker ps
 function isBlueUp() {
-#    $isBlueUp = docker ps | grep ${docker_image_name}-blue
-#    return -Not $([string]::IsNullOrEmpty($isBlueUp))
-    return $Env:SITESEARCH_VARIANT_RUNNING -eq "blue"
+    $isBlueGreenLockSet = Test-Path ./blue-green-deployment.lock
+    if($isBlueGreenLockSet){
+        rm ./blue-green-deployment.lock
+    } else {
+        touch ./blue-green-deployment.lock
+    }
+    return isBlueGreenLockSet
 }
 
 $data = "${docker_image_name}-data"

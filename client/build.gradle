@@ -45,26 +45,18 @@ dependencies {
 //    kotlinOptions.main = "call"
 //}
 
-//sourceSets {
-//    main.kotlin.srcDirs += "src"
-//    main.resources.srcDirs += "resources"
-//    main.output.resourcesDir = "build/js/resources"
-//    test.kotlin.srcDirs += "test"
-//    test.resources.srcDirs += "testResources"
-//}
-
 build.doLast {
     String buildPath = "../service/src/main/resources/static/build"
-    project.file(buildPath).deleteDir()
+    project.file("$buildPath/$project.name").deleteDir()
 
     copy {
         from compileKotlin2Js.destinationDir
-        into buildPath
+        into "$buildPath/$project.name"
     }
 
     copy {
         from sourceSets.main.output.resourcesDir
-        into "$buildPath/resources"
+        into "$buildPath/$project.name/resources"
     }
 
     configurations.compile.each { File file ->
@@ -74,12 +66,6 @@ build.doLast {
         }
     }
 }
-
-//task copyResources(type: Copy) {
-//    from sourceSets.main.resources.srcDirs
-////    into sourceSets.main.output.resourcesDir
-//    into file(buildDir.path + "/js")
-//}
 
 kotlin {
     experimental {
