@@ -41,9 +41,9 @@ public class LoadIndex2Users {
 
     private static String generateLoremIpsum() {
         final StringBuilder loremIpsumText = new StringBuilder();
-        for (String word : Load10Users.LOREM_IPSUM) {
-            final int wordIndex = Load10Users.PSEUDO_ENTROPY.nextInt(Load10Users.LOREM_IPSUM.length);
-            loremIpsumText.append(Load10Users.LOREM_IPSUM[wordIndex]).append(" ");
+        for (String word : LoadTest.LOREM_IPSUM) {
+            final int wordIndex = LoadTest.PSEUDO_ENTROPY.nextInt(LoadTest.LOREM_IPSUM.length);
+            loremIpsumText.append(LoadTest.LOREM_IPSUM[wordIndex]).append(" ");
         }
         return loremIpsumText.toString();
     }
@@ -53,8 +53,8 @@ public class LoadIndex2Users {
         final String loremIpsumText = generateLoremIpsum();
         final Page pageToIndex = buildPage(loremIpsumText);
 
-        final ResponseEntity<Page> actual = Load10Users.CALLER.exchange(
-                Load10Users.LOAD_TARGET + PageController.ENDPOINT,
+        final ResponseEntity<Page> actual = LoadTest.CALLER.exchange(
+                LoadTest.LOAD_TARGET + PageController.ENDPOINT,
                 HttpMethod.POST,
                 new HttpEntity<>(pageToIndex),
                 Page.class
@@ -72,8 +72,8 @@ public class LoadIndex2Users {
         final Page pageToIndex = buildPage(loremIpsumText);
         pageToIndex.setUrl("https://example.com/0fe5463c-a134-495d-bee1-8e2e0044e57e");
 
-        final ResponseEntity<Page> actual = Load10Users.CALLER.exchange(
-                Load10Users.LOAD_TARGET + SiteController.ENDPOINT
+        final ResponseEntity<Page> actual = LoadTest.CALLER.exchange(
+                LoadTest.LOAD_TARGET + SiteController.ENDPOINT
                         + "/c281b015-09af-4868-8185-3fd8db41d6cb/pages/url/" + URLEncoder.encode(pageToIndex.getUrl(), "UTF-8")
                         + "?siteSecret=92d957f6-956e-4ee9-8f48-de434a728ab3",
                 HttpMethod.PUT,
@@ -100,8 +100,8 @@ public class LoadIndex2Users {
         final String loremIpsumText = generateLoremIpsum();
         final Page pageToIndex = buildPage(loremIpsumText);
 
-        final ResponseEntity<Page> actual = Load10Users.CALLER.exchange(
-                Load10Users.LOAD_TARGET + SiteController.ENDPOINT
+        final ResponseEntity<Page> actual = LoadTest.CALLER.exchange(
+                LoadTest.LOAD_TARGET + SiteController.ENDPOINT
                         + "/cdcfdeef-86a2-4672-890f-e952e465fe01/pages/7ca861451227886cd575cda73ae4f1255a3039ee2cef5868444144e5be4bd32a"
                         + "?siteSecret=4e8afa49-490f-4b0a-a7b7-958405b30c73",
                 HttpMethod.PUT,

@@ -46,25 +46,8 @@ import static org.junit.Assert.assertFalse;
 //@Threads(10)
 //@BenchmarkMode(Mode.Throughput)
 @State(Scope.Benchmark)
-public class Load10Users {
-    public static void main(String... args) throws RunnerException {
-        Options options = new OptionsBuilder()
-                .timeout(TimeValue.seconds(21))
-//                .include(".*")
-//                .include(LoadIndex2Users.class.getSimpleName())
-                .include(Load10Users.class.getSimpleName())
-                .warmupIterations(1)
-                .measurementIterations(5)
-                .forks(1)
-                .threads(10)
-                .mode(Mode.Throughput)
-                .resultFormat(ResultFormatType.JSON)
-                .result("build/jmh-result.json")
-                .shouldFailOnError(true)
-                .build();
-
-        new Runner(options).run();
-    }
+public class LoadTest {
+    private static final Logger LOG = LoggerFactory.getLogger(LoadTest.class);
 
     static final String[] LOREM_IPSUM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras viverra enim vitae malesuada placerat. Nam auctor pellentesque libero, et venenatis enim molestie vel. Duis est metus, congue quis orci id, tincidunt mattis turpis. In fringilla ultricies sapien ultrices accumsan. Sed mattis tellus lacus, quis scelerisque turpis hendrerit et. In iaculis malesuada ipsum, ac rhoncus mauris auctor quis. Proin varius, ex vestibulum condimentum lacinia, ligula est finibus ligula, id consectetur nisi enim ut velit. Sed aliquet gravida justo ac condimentum. In malesuada sed elit vitae vestibulum. Mauris vitae congue lacus. Quisque vitae tincidunt orci. Donec viverra enim a lacinia pulvinar. Sed vel ullamcorper est. Vestibulum vel urna at nisl tincidunt blandit. Donec purus leo, interdum in diam in, posuere varius tellus. Quisque eleifend nulla at nulla vestibulum ullamcorper. Praesent interdum vehicula cursus. Morbi vitae nunc et urna rhoncus semper aliquam nec velit. Quisque aliquet et velit ut mollis. Sed mattis eleifend tristique. Praesent pharetra, eros eget viverra tempus, nisi turpis molestie metus, nec tristique nulla dolor a mauris. Nullam cursus finibus erat, in pretium urna fermentum ac. In hac habitasse platea dictumst. Cras id velit id nisi euismod eleifend. Duis vehicula gravida bibendum. Cras rhoncus, massa et accumsan euismod, metus arcu rutrum orci, eu porttitor lacus tellus sed quam. Morbi tincidunt est sit amet sem convallis porta in nec nisi. Sed ex enim, fringilla nec diam in, luctus pulvinar enim. Suspendisse potenti. Quisque ut pellentesque erat. In tincidunt metus id sem fringilla sagittis. Interdum et malesuada fames ac ante ipsum primis in faucibus. Proin erat nunc, pharetra sit amet iaculis nec, malesuada eu dui. Nullam sagittis ut arcu vitae convallis. Mauris molestie gravida lectus, eu commodo quam bibendum aliquam. Donec laoreet sed dolor eu consectetur."
             .split("\\s");
@@ -91,7 +74,25 @@ public class Load10Users {
     static final List<String> QUERY_LIST_SEARCH = new ArrayList<>(SEARCH_QUERIES.keySet());
 
     static final Map<String, Long> AUTOCOMPLETE_QUERIES = new ConcurrentHashMap<>();
-    private static final Logger LOG = LoggerFactory.getLogger(Load10Users.class);
+
+    public static void main(String... args) throws RunnerException {
+        Options options = new OptionsBuilder()
+                .timeout(TimeValue.seconds(21))
+//                .include(".*")
+//                .include(LoadIndex2Users.class.getSimpleName())
+                .include(LoadTest.class.getSimpleName())
+                .warmupIterations(1)
+                .measurementIterations(10)
+                .forks(1)
+                .threads(10)
+                .mode(Mode.Throughput)
+                .resultFormat(ResultFormatType.JSON)
+                .result("build/jmh-result.json")
+                .shouldFailOnError(true)
+                .build();
+
+        new Runner(options).run();
+    }
 
     static {
         AUTOCOMPLETE_QUERIES.put("kno", 1L);
@@ -110,17 +111,17 @@ public class Load10Users {
 
     @Benchmark
     public void searchComplex() throws Exception {
-        final int queryIndex = Load10Users.PSEUDO_ENTROPY.nextInt(Load10Users.SEARCH_QUERIES.size());
-        final String query = Load10Users.QUERY_LIST_SEARCH.get(queryIndex);
+        final int queryIndex = LoadTest.PSEUDO_ENTROPY.nextInt(LoadTest.SEARCH_QUERIES.size());
+        final String query = LoadTest.QUERY_LIST_SEARCH.get(queryIndex);
 
         final ResponseEntity<Hits> actual = CALLER.getForEntity(
-                Load10Users.LOAD_TARGET + SearchController.ENDPOINT
+                LoadTest.LOAD_TARGET + SearchController.ENDPOINT
                         + "?query=" + query + "&siteId=" + SearchTest.SEARCH_SITE_ID,
                 Hits.class
         );
 
         LOG.info("query: " + query);
-        final long queryResultCount = Load10Users.SEARCH_QUERIES.get(query);
+        final long queryResultCount = LoadTest.SEARCH_QUERIES.get(query);
         if (queryResultCount == 0) {
             assertEquals(HttpStatus.NOT_FOUND, actual.getStatusCode());
         } else {
@@ -131,8 +132,8 @@ public class Load10Users {
 
     @Benchmark
     public void autocomplete() throws Exception {
-        final int queryIndex = Load10Users.PSEUDO_ENTROPY.nextInt(Load10Users.AUTOCOMPLETE_QUERIES.size());
-        final String query = Load10Users.QUERY_LIST_AUTOCOMPLETE.get(queryIndex);
+        final int queryIndex = LoadTest.PSEUDO_ENTROPY.nextInt(LoadTest.AUTOCOMPLETE_QUERIES.size());
+        final String query = LoadTest.QUERY_LIST_AUTOCOMPLETE.get(queryIndex);
 
         final ResponseEntity<Autocomplete> actual = CALLER.getForEntity(
                 LOAD_TARGET + AutocompleteController.ENDPOINT

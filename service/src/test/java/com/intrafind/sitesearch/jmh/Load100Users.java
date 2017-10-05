@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 @Threads(100)
 @BenchmarkMode(Mode.Throughput)
 public class Load100Users {
-    private static final Load10Users LOAD_10_USERS = new Load10Users();
+    private static final LoadTest LOAD_10_USERS = new LoadTest();
     private static final Logger LOG = LoggerFactory.getLogger(Load100Users.class);
 
     @Benchmark

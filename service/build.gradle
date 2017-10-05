@@ -77,29 +77,12 @@ test {
     }
 }
 
-//tasks.jmh.finalizedBy tasks.jmhReport
-//jmh {
-////    include = ["Load10Users", "Load100Users", "LoadIndex2Users"]
-////    include = ["Load10Users", "Load100Users", "Load1000Users", "LoadIndex2Users"]
-//    include = ["Load10Users"] // for local tests
-//    fork = 0
-//    warmupIterations = 1
-//    failOnError = true
-//    resultFormat = "JSON"
-//    iterations = 20
-//    setDuplicateClassesStrategy(DuplicatesStrategy.FAIL)
-//}
-//jmhReport {
-//    jmhResultPath = project.file("build/reports/jmh/results.json")
-//    jmhReportOutput = project.file("build/reports/jmh")
-//}
-
 jmhReport {
     jmhResultPath = project.file("$buildDir/jmh-result.json")
     jmhReportOutput = project.file(buildDir)
 }
 task runJMH(type: JavaExec) {
-    main = "com.intrafind.sitesearch.jmh.Load10Users"
+    main = "com.intrafind.sitesearch.jmh.LoadTest"
     classpath sourceSets.test.runtimeClasspath
 }
 tasks.runJMH.finalizedBy tasks.jmhReport

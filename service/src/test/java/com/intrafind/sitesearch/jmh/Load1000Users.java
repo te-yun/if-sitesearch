@@ -24,7 +24,7 @@ import org.openjdk.jmh.annotations.Threads;
 @Threads(1000)
 @BenchmarkMode(Mode.Throughput)
 public class Load1000Users {
-    private static final Load10Users LOAD_10_USERS = new Load10Users();
+    private static final LoadTest LOAD_10_USERS = new LoadTest();
 
     @Benchmark
     public void searchComplex() throws Exception {
