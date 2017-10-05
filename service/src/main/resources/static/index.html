@@ -55,8 +55,8 @@
                 const user = JSON.parse(this.responseText);
                 const xhr = new XMLHttpRequest();
                 xhr.open("PUT", "/assignments/tenants/e10011b2-7f95-49e4-a9cb-189f5f5a6654/sites/"
-                    + document.getElementById("siteId").value + "?siteSecret=" + document.getElementById("siteSecret").value)
-                + "&siteName=" + document.getElementById("siteName");
+                    + document.getElementById("siteId").value + "?siteSecret=" + document.getElementById("siteSecret").value
+                    + "&siteName=" + document.getElementById("siteName"));
                 xhr.setRequestHeader("content-type", "application/json");
                 xhr.onload = async function () {
                 };

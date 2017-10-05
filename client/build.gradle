@@ -58,7 +58,7 @@ build.doLast {
     project.file(buildPath).deleteDir()
 
     copy {
-        from "$buildDir.path/classes/kotlin"
+        from compileKotlin2Js.destinationDir
         into buildPath
     }
 
@@ -75,11 +75,11 @@ build.doLast {
     }
 }
 
-task copyResources(type: Copy) {
-    from sourceSets.main.resources.srcDirs
-//    into sourceSets.main.output.resourcesDir
-    into file(buildDir.path + "/js")
-}
+//task copyResources(type: Copy) {
+//    from sourceSets.main.resources.srcDirs
+////    into sourceSets.main.output.resourcesDir
+//    into file(buildDir.path + "/js")
+//}
 
 kotlin {
     experimental {

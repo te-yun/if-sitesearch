@@ -20,10 +20,7 @@ import com.intrafind.sitesearch.controller.PageController;
 import com.intrafind.sitesearch.controller.SiteController;
 import com.intrafind.sitesearch.dto.Page;
 import org.jetbrains.annotations.NotNull;
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Mode;
-import org.openjdk.jmh.annotations.Threads;
+import org.openjdk.jmh.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -38,6 +35,7 @@ import static org.junit.Assert.*;
 
 @Threads(2)
 @BenchmarkMode(Mode.Throughput)
+@State(Scope.Benchmark)
 public class LoadIndex2Users {
     private final static Logger LOG = LoggerFactory.getLogger(LoadIndex2Users.class);
 
