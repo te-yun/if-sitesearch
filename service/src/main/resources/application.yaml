@@ -52,11 +52,6 @@ sitesearch:
 
 server:
   port: 8001
-#  ssl:
-#    key-store: classpath:keystore.jks
-#    key-store-password: ${security.user.password}
-#    key-password: ${security.user.password}
-#    key-alias: alias
 
 spring:
   kafka:
