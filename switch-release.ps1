@@ -21,7 +21,7 @@ sudo chown -R 1000:1000 ~/srv/$data # make it a svc_usr' directory
 
 # TODO change mapped volumes to avoid collision with other running containers
 if(isBlueUp){
-    write-host blue is up and will be removed
+    write-host blue is active
     $green = "${docker_image_name}-green"
 
 #    mkdir ~/srv/$green
@@ -37,10 +37,8 @@ if(isBlueUp){
         --network $docker_network `
         intrafind/${docker_image_name}:${docker_tag}
 
-    $Env:SITESEARCH_VARIANT_RUNNING = "green"
-
 } else {
-    write-host blue is down and will be removed
+    write-host blue is inactive
     $blue = "${docker_image_name}-blue"
 
 #    mkdir ~/srv/$blue
@@ -56,5 +54,4 @@ if(isBlueUp){
         --network $docker_network `
         intrafind/${docker_image_name}:${docker_tag}
 
-    $Env:SITESEARCH_VARIANT_RUNNING = "blue"
 }

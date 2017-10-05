@@ -9,6 +9,7 @@ config.json
 /config
 
 client/build/js
+service/src/main/resources/static/app
 build
 /.gradle
 
