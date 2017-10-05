@@ -93,7 +93,7 @@ server {
 
     location / {
         #            proxy_pass https://if-sitesearch-green:8001;
-        proxy_pass https://main.sitesearch.cloud:4442;
+        proxy_pass https://main.sitesearch.cloud:3442;
     }
 }
 
@@ -104,6 +104,6 @@ server {
 
     location / {
         #            proxy_pass https://if-sitesearch-blue:8001;
-        proxy_pass https://main.sitesearch.cloud:3442;
+        proxy_pass https://main.sitesearch.cloud:4442;
     }
 }
