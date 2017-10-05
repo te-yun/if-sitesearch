@@ -25,8 +25,8 @@ security:
     password: ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=
   oauth2:
     client:
-      clientId: a4d43021fa657695d4a7
-      clientSecret: 8859eab3a4a620928be285fc6582a2628f23be09
+      clientId: 61cf2f1798f16758a998
+      clientSecret: 65e0b85ddeda3b6499161f1cd78a5a6d7bf9cd55
 #    clientSecret: ${random.uuid} # add valid token to your local configuration
       accessTokenUri: https://github.com/login/oauth/access_token
       userAuthorizationUri: https://github.com/login/oauth/authorize
