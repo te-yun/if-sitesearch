@@ -14,6 +14,9 @@ FAQ obsolete, has been moved to [its new location](https://github.com/intrafind/
     * A tenant is an **organizational entity** that can manage **dozens of independent sites**.
     You may have a company that is assigned to a tenant.
 
+* What is Site Search' primary API endpoint URL?
+    * https://api.sitesearch.cloud should be used for all Site Search API calls.
+
 * How can I index a website and make it searchable?
   * Currently a website needs to expose an **RSS / Atom feed** to make it easily searchable.
   This is the fastest & easiest way to get up and running. Use this ***curl command***
