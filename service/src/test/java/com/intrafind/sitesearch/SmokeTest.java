@@ -16,6 +16,12 @@
 
 package com.intrafind.sitesearch;
 
+import com.intrafind.sitesearch.controller.AutocompleteController;
+import com.intrafind.sitesearch.controller.SearchController;
+import com.intrafind.sitesearch.dto.Autocomplete;
+import com.intrafind.sitesearch.dto.FoundPage;
+import com.intrafind.sitesearch.dto.Hits;
+import com.intrafind.sitesearch.integration.SearchTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -117,5 +123,30 @@ public class SmokeTest {
         assertTrue(response.getBody().contains("<title>Simple Site Search</title>"));
 
         assureCorsHeaders(response);
+    }
+
+    @Test
+    public void search() throws Exception {
+        final ResponseEntity<Hits> searchResults = caller.getForEntity(SearchController.ENDPOINT + "?query=Knowledge&siteId=" + SearchTest.SEARCH_SITE_ID, Hits.class);
+
+        assertEquals(HttpStatus.OK, searchResults.getStatusCode());
+        assertNotNull(searchResults.getBody());
+        assertEquals("Knowledge", searchResults.getBody().getQuery());
+        assertEquals(1, searchResults.getBody().getResults().size());
+        FoundPage found = searchResults.getBody().getResults().get(0);
+        assertEquals("Wie die Semantische Suche vom <span class='if-teaser-highlight'>Knowledge</span> Graph profitiert", found.getTitle());
+        assertEquals("http:&#x2F;&#x2F;intrafind.de&#x2F;blog&#x2F;wie-die-semantische-suche-vom-<span class='if-teaser-highlight'>knowledge</span>-graph-profitiert", found.getUrl());
+        assertTrue(found.getBody().startsWith("&lt;p&gt;Der <span class='if-teaser-highlight'>Knowledge</span> Graph ist vielen Nutzern bereits durch Google oder Facebook bekannt. Aber auch"));
+    }
+
+    @Test
+    public void autocomplete() throws Exception {
+        final ResponseEntity<Autocomplete> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=Knowledge&siteId=" + SearchTest.SEARCH_SITE_ID, Autocomplete.class);
+
+        assertEquals(HttpStatus.NOT_FOUND, actual.getStatusCode()); // actually 200, should be returned but due to a bug this is not the case yet
+        throw new RuntimeException();
+//        assertNotNull(actual.getBody());
+//        assertEquals(1, actual.getBody().getResults().size());
+//        assertEquals("knowledge graph", actual.getBody().getResults().get(0));
     }
 }
