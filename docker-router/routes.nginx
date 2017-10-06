@@ -15,15 +15,6 @@ server {
 
     include /etc/nginx/snippets/ssl.conf;
 
-    location /technology/ {
-        proxy_pass http://main.sitesearch.cloud:2443/;
-    }
-
-    location /product-info {
-        proxy_redirect off;
-        proxy_pass http://sitesearch.online;
-    }
-
     location / {
         proxy_pass http://main.sitesearch.cloud:2443;
     }
@@ -51,6 +42,27 @@ server {
     location /status {
         stub_status on;
         access_log off;
+    }
+
+    location /technology/ {
+        proxy_pass http://main.sitesearch.cloud:2443/;
+    }
+
+    location /product-info {
+        proxy_redirect off;
+        proxy_pass http://sitesearch.online;
+    }
+    location /product-info0 {
+        proxy_redirect off;
+        proxy_pass https://sitesearch.online;
+    }
+    location /product-info1 {
+        proxy_redirect off;
+        proxy_pass https://sitesearch.online/bootstrap;
+    }
+    location /product-info2 {
+        proxy_redirect off;
+        proxy_pass https://sitesearch.online/bootstrap/;
     }
 
     location /api/ {

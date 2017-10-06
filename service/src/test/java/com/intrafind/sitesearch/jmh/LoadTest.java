@@ -54,7 +54,6 @@ public class LoadTest {
 
     static final List<String> QUERY_LIST_AUTOCOMPLETE;
     static final String LOAD_TARGET = "https://api.sitesearch.cloud";
-    //    private static final String LOAD_TARGET = "http://localhost:8001";
     static final TestRestTemplate CALLER = new TestRestTemplate();
     static final Random PSEUDO_ENTROPY = new Random();
 
@@ -82,7 +81,7 @@ public class LoadTest {
 //                .include(LoadIndex2Users.class.getSimpleName())
                 .include(LoadTest.class.getSimpleName())
                 .warmupIterations(1)
-                .measurementIterations(10)
+                .measurementIterations(20)
                 .forks(1)
                 .threads(10)
                 .mode(Mode.Throughput)
