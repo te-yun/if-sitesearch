@@ -4,9 +4,11 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 $PSDefaultParameterValues["*:ErrorAction"] = "Stop"
 
-#./gradlew test `
+#    --no-scan --parallel --no-rebuild `
+#    --build-cache --continue `
 ./gradlew clean test `
-    --no-scan --parallel --no-rebuild `
-    --build-cache --continue `
+    --no-scan --parallel `
+    --continue `
     --tests *Smoke* `
+    --info `
     $args
