@@ -54,15 +54,15 @@ server {
     }
     location /product-info0 {
         proxy_redirect off;
-        proxy_pass https://sitesearch.online;
+        proxy_pass http://sitesearch.online;
     }
     location /product-info1 {
         proxy_redirect off;
-        proxy_pass https://sitesearch.online/bootstrap;
+        proxy_pass http://sitesearch.online/bootstrap;
     }
     location /product-info2 {
         proxy_redirect off;
-        proxy_pass https://sitesearch.online/bootstrap/;
+        proxy_pass http://sitesearch.online/bootstrap/;
     }
 
     location /api/ {
