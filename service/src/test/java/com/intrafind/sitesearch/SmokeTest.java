@@ -144,7 +144,6 @@ public class SmokeTest {
         final ResponseEntity<Autocomplete> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=Knowledge&siteId=" + SearchTest.SEARCH_SITE_ID, Autocomplete.class);
 
         assertEquals(HttpStatus.NOT_FOUND, actual.getStatusCode()); // actually 200, should be returned but due to a bug this is not the case yet
-        throw new RuntimeException();
 //        assertNotNull(actual.getBody());
 //        assertEquals(1, actual.getBody().getResults().size());
 //        assertEquals("knowledge graph", actual.getBody().getResults().get(0));
