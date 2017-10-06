@@ -16,8 +16,6 @@
 
 package com.intrafind.sitesearch;
 
-import com.intrafind.sitesearch.controller.AutocompleteController;
-import com.intrafind.sitesearch.controller.SearchController;
 import com.intrafind.sitesearch.dto.Autocomplete;
 import com.intrafind.sitesearch.dto.FoundPage;
 import com.intrafind.sitesearch.dto.Hits;
@@ -127,7 +125,7 @@ public class SmokeTest {
 
     @Test
     public void search() throws Exception {
-        final ResponseEntity<Hits> searchResults = caller.getForEntity(SearchController.ENDPOINT + "?query=Knowledge&siteId=" + SearchTest.SEARCH_SITE_ID, Hits.class);
+        final ResponseEntity<Hits> searchResults = caller.getForEntity("https://api.sitesearch.cloud/search?query=Knowledge&siteId=" + SearchTest.SEARCH_SITE_ID, Hits.class);
 
         assertEquals(HttpStatus.OK, searchResults.getStatusCode());
         assertNotNull(searchResults.getBody());
@@ -141,7 +139,7 @@ public class SmokeTest {
 
     @Test
     public void autocomplete() throws Exception {
-        final ResponseEntity<Autocomplete> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=Knowledge&siteId=" + SearchTest.SEARCH_SITE_ID, Autocomplete.class);
+        final ResponseEntity<Autocomplete> actual = caller.getForEntity("https://api.sitesearch.cloud/autocomplete?query=Knowledge&siteId=" + SearchTest.SEARCH_SITE_ID, Autocomplete.class);
 
         assertEquals(HttpStatus.NOT_FOUND, actual.getStatusCode()); // actually 200, should be returned but due to a bug this is not the case yet
 //        assertNotNull(actual.getBody());
