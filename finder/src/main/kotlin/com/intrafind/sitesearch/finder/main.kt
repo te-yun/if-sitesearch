@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
-rootProject.name = "if-sitesearch"
+package com.intrafind.sitesearch.finder
 
-include "service", "client", "finder"
+import org.w3c.dom.HTMLInputElement
+import kotlin.browser.document
+
+fun main(args: Array<String>) {
+    println("Finder")
+    val finder = document.getElementById("sitesearch-finder") as HTMLInputElement
+    println(finder.value)
+}

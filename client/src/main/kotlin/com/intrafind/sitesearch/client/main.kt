@@ -17,5 +17,5 @@
 package com.intrafind.sitesearch.client
 
 fun main(args: Array<String>) {
-    println("Kotlin client")
+    println("Client")
 }

@@ -36,7 +36,7 @@ public enum IfinderCoreClient {
 
     static {
         initHttp();
-        initSSL();
+//        initSSL();
 
         hessianProxyFactory = new HessianProxyFactory();
         hessianProxyFactory.setHessian2Reply(true);
@@ -68,14 +68,14 @@ public enum IfinderCoreClient {
     }
 
 
-    private static void initSSL() {
-        setEnv("javax.net.ssl.trustStore", "classpath:keystore.jks");
-        setEnv("javax.net.ssl.trustStorePassword", "changeit");
-
-        setEnv("javax.net.ssl.keyStore", "classpath:keystore.jks"); // increased security with client authentication
-        setEnv("javax.net.ssl.keyStorePassword", "changeit");
-        setEnv("com.sun.net.ssl.checkRevocation", "false"); // TODO does it have any effect at all?
-    }
+//    private static void initSSL() {
+//        setEnv("javax.net.ssl.trustStore", "classpath:keystore.jks");
+//        setEnv("javax.net.ssl.trustStorePassword", "changeit");
+//
+//        setEnv("javax.net.ssl.keyStore", "classpath:keystore.jks"); // increased security with client authentication
+//        setEnv("javax.net.ssl.keyStorePassword", "changeit");
+//        setEnv("com.sun.net.ssl.checkRevocation", "false"); // TODO does it have any effect at all?
+//    }
 
     private static void initUrlAuthentication() {
         Authenticator.setDefault(new Authenticator() {
