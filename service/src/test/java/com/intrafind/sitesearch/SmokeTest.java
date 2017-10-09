@@ -93,7 +93,7 @@ public class SmokeTest {
                 String.class
         );
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(response.getBody().contains("<title>Simple Site Search</title>"));
+        assertTrue(response.getBody().contains("<title>Site Search from IntraFind Software AG</title>"));
 
         assureCorsHeaders(response);
     }
