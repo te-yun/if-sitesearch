@@ -16,7 +16,10 @@
 
 package com.intrafind.sitesearch.client
 
+import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLInputElement
+import org.w3c.dom.HTMLTableCellElement
+import org.w3c.dom.HTMLTableRowElement
 import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
 
@@ -47,8 +50,8 @@ fun showAuthentication() {
     xhr.send()
 }
 
-@JsName("assignSiteToTenant")
-private fun assignSiteToTenant() {
+@JsName("assignSite")
+private fun assignSite() {
     val xhr = XMLHttpRequest()
     xhr.open("GET", "/user")
     xhr.onload = {
@@ -95,42 +98,29 @@ private fun showAssignments() {
                     + "?accessToken=" + user.details.tokenValue)
             xhr.setRequestHeader("content-type", "application/json")
             xhr.onload = {
-                if (xhr.status.equals(200)) {
-                    document.getElementById("assignmentsDisplay")?.setAttribute("style", "display: block;")
+                if (xhr.status.equals(200) && xhr.response != null) {
                     document.getElementById("assignmentsContainer")?.setAttribute("style", "display: block;")
                     val assignments = JSON.parse<dynamic>(xhr.responseText)
                     assignments.tenants.forEach({ tenant ->
-                        val tenantEntry = document.createElement("li")
-                        val tenantCompany = document.createElement("li")
-                        val tenantContactEmail = document.createElement("li")
-                        tenantEntry.textContent = "Tenant ID: " + tenant.id
+                        val tenantCompany = document.getElementById("companyName") as HTMLElement
+                        val tenantContactEmail = document.getElementById("companyContact") as HTMLElement
                         tenantCompany.textContent = "Company: " + tenant.company
                         tenantContactEmail.textContent = "Contact e-mail: " + tenant["contactEmail"]
-                        document.getElementById("tenantAssignments")?.appendChild(tenantEntry)
-                        document.getElementById("tenantAssignments")?.appendChild(tenantCompany)
-                        document.getElementById("tenantAssignments")?.appendChild(tenantContactEmail)
 
                         tenant.sites.forEach({ site ->
-                            val entry = document.createElement("tr")
-                            val siteId = document.createElement("td")
+                            val entry = document.createElement("tr") as HTMLTableRowElement
+                            val siteId = document.createElement("td") as HTMLTableCellElement
                             siteId.textContent = site.id
-                            val siteSecret = document.createElement("td")
+                            val siteSecret = document.createElement("td") as HTMLTableCellElement
                             siteSecret.textContent = site.secret
-                            val siteName = document.createElement("td")
+                            val siteName = document.createElement("td") as HTMLTableCellElement
                             siteName.textContent = site.name
                             entry.appendChild(siteId)
                             entry.appendChild(siteSecret)
                             entry.appendChild(siteName)
-                            console.warn(entry)
                             document.getElementById("assignments")?.appendChild(entry)
                         })
                     })
-
-                    for (authProvider in assignments.authProviders) {
-                        val authProviderEntry = document.createElement("li")
-                        authProviderEntry.textContent = "Identity: " + assignments.authProviders[0]
-                        document.getElementById("identityAssignments")?.appendChild(authProviderEntry)
-                    }
                 }
             }
             xhr.send()

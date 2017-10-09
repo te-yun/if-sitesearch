@@ -96,10 +96,10 @@ public class AssignmentController {
             Entity site = entityTxn.find("Site", "id", siteId.toString()).getFirst();
             if (site == null) {
                 site = entityTxn.newEntity("Site");
-                site.setProperty("id", siteId.toString());
-                site.setProperty("secret", siteSecret.toString());
-                site.setProperty("name", siteName);
             }
+            site.setProperty("id", siteId.toString());
+            site.setProperty("secret", siteSecret.toString());
+            site.setProperty("name", siteName);
             tenant.addLink("site", site);
             site.addLink("tenant", tenant);
         });

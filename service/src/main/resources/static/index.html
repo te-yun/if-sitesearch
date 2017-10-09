@@ -30,13 +30,17 @@
 <img src="/theme/logo.png" width="361" height="105" style="float: right;">
 
 <br>
-<span id="user" class="fa fa-sign-in"></span>
-<a id="loginLink" href="/login">Login</a>
+<a id="loginLink" href="/login" style="text-decoration: none;"><span id="user" class="fa fa-sign-in"></span> Login</a>
 <br>
 <br>
-<a id="logoutLink" href="/logout" style="display: none;">Sign-out</a>
+<a id="logoutLink" href="/logout" style="display: none; text-decoration: none;">Logout</a>
 <br>
 <br>
+<style>
+    input {
+        width: 300px;
+    }
+</style>
 <div id="assignmentContainer" style="display: none;">
     <label for="siteId">Site ID</label>
     <br>
@@ -58,40 +62,34 @@
     <br>
     <input id="company" type="text" value="" placeholder="Company Name"/>
     <br>
-    <button id="assignSite" onclick="client.com.intrafind.sitesearch.client.assignSiteToTenant()">Assign SITE to TENANT
-        using GitHub
+    <br>
+    <button style="text-align: center; width: 300px;" id="assignSite"
+            onclick="client.com.intrafind.sitesearch.client.assignSite()">
+        Assign Site
     </button>
 </div>
 
 <br>
 <br>
-<div id="assignmentsDisplay" style="display: none">
-    <h2>Tenants</h2>
-    <ul id="tenantAssignments"></ul>
-    <h2>Sites</h2>
-    <ul id="siteAssignments"></ul>
-    <h2>Identities</h2>
-    <ul id="identityAssignments"></ul>
-</div>
 
-<table id="assignmentsContainer" style="display: none;">
-    <thead>
-    <tr>
-        <td>Site Name</td>
-        <td>Site ID</td>
-        <td>Site Secret</td>
-    </tr>
-    </thead>
-    <tbody id="assignments">
-    </tbody>
-    <tfoot>
-    <tr>
-        <td>123</td>
-        <td>456</td>
-        <td>789</td>
-    </tr>
-    </tfoot>
-</table>
+<div id="assignmentsContainer" style="display: none;">
+    <dl>
+        <dt id="companyName"></dt>
+        <dd id="companyContact"></dd>
+    </dl>
+
+    <table>
+        <thead>
+        <tr>
+            <td>Site Name</td>
+            <td>Site ID</td>
+            <td>Site Secret</td>
+        </tr>
+        </thead>
+        <tbody id="assignments">
+        </tbody>
+    </table>
+</div>
 
 <br>
 <hr>
@@ -101,10 +99,8 @@
     <li><a class="fa fa-cog" href="sitesearch-gadget.html"
            style="text-decoration: none;">
         Getting started gadget</a></li>
-    <li><a class="fa fa-cogs" href="gadget/main.xml" style="text-decoration: none;">
-        Embeddable G**gle gadget</a></li>
-    <li><a class="fa fa-cogs" href="sitesearch-integration.html" style="text-decoration: none;">
-        Integrate into your page</a></li>
+    <li><a class="fa fa-cogs" href="https://doc.sitesearch.cloud/FAQ" style="text-decoration: none;">
+        FAQ</a></li>
 </ul>
 
 <style>
