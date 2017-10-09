@@ -24,107 +24,8 @@
 <link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/theme/font/css/font-awesome.min.css"/>
 <script src="/app/runtime/kotlin.js"></script>
 <script src="/app/client/client.js"></script>
-<script>
-    const showAuthentication = async function () {
-        const xhr = new XMLHttpRequest();
-        xhr.open("GET", "/user");
-        xhr.onload = async function () {
-            if (this.status === 200 && this.responseText === "") {
-                document.getElementById("user").textContent = "";
-                document.getElementById("user").display = "none";
-            } else {
-                const user = JSON.parse(this.responseText);
-                document.getElementById("user").textContent = user.userAuthentication.details.name;
-                document.getElementById("user").title = user.userAuthentication.details.id;
-                document.getElementById("user").style.display = "inline";
-                document.getElementById("assignmentContainer").style.display = "inline";
 
-                document.getElementById("loginLink").style.display = "none";
-                document.getElementById("logoutLink").style.display = "inline";
-                document.getElementById("company").value = user.userAuthentication.details.company;
-                document.getElementById("contactEmail").value = user.userAuthentication.details.email;
-            }
-        };
-        xhr.send();
-    };
-    const assignSiteToTenant = async function () {
-        const xhr = new XMLHttpRequest();
-        xhr.open("GET", "/user");
-        xhr.onload = async function () {
-            if (this.status === 200 && this.responseText !== "") {
-                const user = JSON.parse(this.responseText);
-                const xhr = new XMLHttpRequest();
-                xhr.open("PUT", "/assignments/tenants/e10011b2-7f95-49e4-a9cb-189f5f5a6654/sites/"
-                    + document.getElementById("siteId").value + "?siteSecret=" + document.getElementById("siteSecret").value
-                    + "&siteName=" + document.getElementById("siteName"));
-                xhr.setRequestHeader("content-type", "application/json");
-                xhr.onload = async function () {
-                };
-
-                xhr.send(JSON.stringify({
-                    authProviderId: user.userAuthentication.details.id,
-                    authProvider: "github",
-                    authProviderToken: user.details.tokenValue,
-                    contactEmail: document.getElementById("contactEmail").value,
-                    company: document.getElementById("company").value
-                }));
-                showAssignments();
-            }
-        };
-        xhr.send();
-    };
-
-    const showAssignments = async function () {
-        const xhr = new XMLHttpRequest();
-        xhr.open("GET", "/user");
-        xhr.onload = async function () {
-            if (this.status === 200 && this.responseText !== "") {
-                const user = JSON.parse(this.responseText);
-                const xhr = new XMLHttpRequest();
-                xhr.open("GET", "/authentication-providers/github/" + user.userAuthentication.details.id + "?accessToken=" + user.details.tokenValue);
-                xhr.setRequestHeader("content-type", "application/json");
-                xhr.onload = async function () {
-                    if (xhr.status === 200) {
-                        document.getElementById("assignmentsDisplay").style.display = "block";
-                        const assignments = JSON.parse(xhr.responseText);
-                        assignments.tenants.forEach(function (tenant) {
-                            let tenantEntry = document.createElement("li");
-                            let tenantCompany = document.createElement("li");
-                            let tenantContactEmail = document.createElement("li");
-                            tenantEntry.textContent = "Tenant ID: " + tenant.id;
-                            tenantCompany.textContent = "Company: " + tenant.company;
-                            tenantContactEmail.textContent = "Contact e-mail: " + tenant["contactEmail"];
-                            document.getElementById("tenantAssignments").appendChild(tenantEntry);
-                            document.getElementById("tenantAssignments").appendChild(tenantCompany);
-                            document.getElementById("tenantAssignments").appendChild(tenantContactEmail);
-
-                            tenant.sites.forEach(function (site) {
-                                let siteEntry = document.createElement("li");
-                                siteEntry.textContent = "Site ID: " + site.id;
-                                let siteSecret = document.createElement("li");
-                                siteSecret.textContent = "Site Secret: " + site["secret"];
-                                let siteName = document.createElement("li");
-                                siteName.textContent = "Site Name: " + site.name;
-                                document.getElementById("siteAssignments").appendChild(siteEntry);
-                                document.getElementById("siteAssignments").appendChild(siteSecret);
-                                document.getElementById("siteAssignments").appendChild(siteName);
-                            });
-                        });
-
-                        for (let authProvider in assignments.authProviders) {
-                            let authProviderEntry = document.createElement("li");
-                            authProviderEntry.textContent = "Identity: " + assignments.authProviders[authProvider];
-                            document.getElementById("identityAssignments").appendChild(authProviderEntry);
-                        }
-                    }
-                };
-                xhr.send();
-            }
-        };
-        xhr.send();
-    };
-</script>
-<body onload="showAuthentication()">
+<body onload="client.com.intrafind.sitesearch.client.showAuthentication()">
 <h1 style="font-size: 2em;"><span class="fa fa-search"></span> Simple Site Search<sup>BETA</sup></h1>
 <img src="/theme/logo.png" width="361" height="105" style="float: right;">
 
@@ -142,15 +43,15 @@
 <div id="assignmentContainer" style="display: none;">
     <label for="siteId">Site ID</label>
     <br>
-    <input id="siteId" type="text" value="8802ac86-b493-48fb-9938-68cbfc5acd63" placeholder="Site Id"/>
+    <input id="siteId" type="text" value="1f53b4af-33b4-4db5-afa1-cc9654057591" placeholder="Site Id"/>
     <br>
     <label for="siteSecret">Site Secret</label>
     <br>
-    <input id="siteSecret" type="text" value="57f3e6e4-dba7-4edf-9628-64682cc048b9" placeholder="Site Secret"/>
+    <input id="siteSecret" type="text" value="2b7baeba-f4d1-4ed0-bd6c-c8b5897c72c7" placeholder="Site Secret"/>
     <br>
     <label for="siteName">Site Name</label>
     <br>
-    <input id="siteName" type="text" value="" placeholder="Site Name"/>
+    <input id="siteName" type="text" value="Main" placeholder="Site Name"/>
     <br>
     <label for="contactEmail">Contact E-mail</label>
     <br>
@@ -160,7 +61,9 @@
     <br>
     <input id="company" type="text" value="" placeholder="Company Name"/>
     <br>
-    <button id="assignSite" onclick="assignSiteToTenant()">Assign SITE to TENANT using GitHub</button>
+    <button id="assignSite" onclick="client.com.intrafind.sitesearch.client.assignSiteToTenant()">Assign SITE to TENANT
+        using GitHub
+    </button>
 </div>
 
 <br>

@@ -46,17 +46,21 @@ dependencies {
 //}
 
 build.doLast {
+    String serviceBuildPath = "../service/build/resources/main/static/app"
     String buildPath = "../service/src/main/resources/static/app"
     project.file("$buildPath/$project.name").deleteDir()
+    project.file("$serviceBuildPath/$project.name").deleteDir()
 
     copy {
         from compileKotlin2Js.destinationDir
         into "$buildPath/$project.name"
+        into "$serviceBuildPath/$project.name" // TODO create rather a symlink to above directory?
     }
 
     copy {
         from sourceSets.main.output.resourcesDir
         into "$buildPath/$project.name/resources"
+        into "$serviceBuildPath/$project.name/resources" // TODO create rather a symlink to above directory?
     }
 
     configurations.compile.each { File file ->
