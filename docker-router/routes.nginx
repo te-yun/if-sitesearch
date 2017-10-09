@@ -28,8 +28,8 @@ server {
     include /etc/nginx/snippets/ssl.conf;
 
     location / {
-        root /usr/share/nginx/html/frontpage;
-        #        return 301 https://api.sitesearch.cloud;
+        #        root /usr/share/nginx/html/frontpage;
+        return 301 https://api.sitesearch.cloud;
     }
 }
 
