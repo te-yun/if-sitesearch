@@ -97,6 +97,7 @@ private fun showAssignments() {
             xhr.onload = {
                 if (xhr.status.equals(200)) {
                     document.getElementById("assignmentsDisplay")?.setAttribute("style", "display: block;")
+                    document.getElementById("assignmentsContainer")?.setAttribute("style", "display: block;")
                     val assignments = JSON.parse<dynamic>(xhr.responseText)
                     assignments.tenants.forEach({ tenant ->
                         val tenantEntry = document.createElement("li")
@@ -110,15 +111,18 @@ private fun showAssignments() {
                         document.getElementById("tenantAssignments")?.appendChild(tenantContactEmail)
 
                         tenant.sites.forEach({ site ->
-                            val siteEntry = document.createElement("li")
-                            siteEntry.textContent = "Site ID: " + site.id
-                            val siteSecret = document.createElement("li")
-                            siteSecret.textContent = "Site Secret: " + site.secret
-                            val siteName = document.createElement("li")
-                            siteName.textContent = "Site Name: " + site.name
-                            document.getElementById("siteAssignments")?.appendChild(siteEntry)
-                            document.getElementById("siteAssignments")?.appendChild(siteSecret)
-                            document.getElementById("siteAssignments")?.appendChild(siteName)
+                            val entry = document.createElement("tr")
+                            val siteId = document.createElement("td")
+                            siteId.textContent = site.id
+                            val siteSecret = document.createElement("td")
+                            siteSecret.textContent = site.secret
+                            val siteName = document.createElement("td")
+                            siteName.textContent = site.name
+                            entry.appendChild(siteId)
+                            entry.appendChild(siteSecret)
+                            entry.appendChild(siteName)
+                            console.warn(entry)
+                            document.getElementById("assignments")?.appendChild(entry)
                         })
                     })
 
