@@ -25,15 +25,14 @@ security:
     password: ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=
   oauth2:
     client:
-      clientId: 61cf2f1798f16758a998
-      clientSecret: 65e0b85ddeda3b6499161f1cd78a5a6d7bf9cd55
-#    clientSecret: ${random.uuid} # add valid token to your local configuration
+      clientId: ${random.uuid}
+      clientSecret: ${random.uuid} # add valid token to your local configuration
       accessTokenUri: https://github.com/login/oauth/access_token
       userAuthorizationUri: https://github.com/login/oauth/authorize
-      clientAuthenticationScheme: form
+      clientAuthenticationScheme: query
       pre-established-redirect-uri: https://api.sitesearch.cloud/admin.html
       registered-redirect-uri: https://api.sitesearch.cloud/admin.html
-      use-current-uri: true
+      use-current-uri: false
     resource:
       userInfoUri: https://api.github.com/user
 

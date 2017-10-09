@@ -6,7 +6,7 @@ config.json
 /*.hprof
 
 # Spring Boot
-/config
+service/config
 
 client/build/js
 service/src/main/resources/static/app

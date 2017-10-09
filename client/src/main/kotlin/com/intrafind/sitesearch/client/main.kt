@@ -28,18 +28,24 @@ fun main(args: Array<String>) {
 }
 
 fun showAuthentication() {
+    val userLabel = document.getElementById("user") as HTMLElement
     val xhr = XMLHttpRequest()
     xhr.open("GET", "/user")
     xhr.onload = {
         if (xhr.status.equals(200) && xhr.responseText.isEmpty()) {
-            document.getElementById("user")?.setAttribute("style", "display: none")
-            document.getElementById("user")?.textContent = ""
+            userLabel.setAttribute("style", "display: none;")
+//            document.getElementById("user")?.textContent = ""
+            userLabel.textContent = ""
         } else if (xhr.status.equals(200) && xhr.response != null) {
+            showAssignments()
             val user = JSON.parse<dynamic>(xhr.responseText)
-            document.getElementById("user")?.textContent = user.userAuthentication.details.name
-            document.getElementById("user")?.setAttribute("title", user.userAuthentication.details.id)
-            document.getElementById("user")?.setAttribute("style", "display: inline")
-            document.getElementById("assignmentContainer")?.setAttribute("style", "display: inline")
+//            document.getElementById("user")?.textContent = user.userAuthentication.details.name
+            userLabel.textContent = user.userAuthentication.details.name
+//            document.getElementById("user")?.setAttribute("title", user.userAuthentication.details.id)
+            userLabel.setAttribute("title", user.userAuthentication.details.id)
+//            document.getElementById("user")?.setAttribute("style", "display: inline")
+            userLabel.setAttribute("style", "display: inline")
+            document.getElementById("assignmentController")?.setAttribute("style", "display: inline")
 
             document.getElementById("loginLink")?.setAttribute("style", "display: none")
             document.getElementById("logoutLink")?.setAttribute("style", "display: inline")
@@ -105,7 +111,7 @@ private fun showAssignments() {
                         val tenantCompany = document.getElementById("companyName") as HTMLElement
                         val tenantContactEmail = document.getElementById("companyContact") as HTMLElement
                         tenantCompany.textContent = "Company: " + tenant.company
-                        tenantContactEmail.textContent = "Contact e-mail: " + tenant["contactEmail"]
+                        tenantContactEmail.textContent = "Contact: " + tenant.contactEmail
 
                         tenant.sites.forEach({ site ->
                             val entry = document.createElement("tr") as HTMLTableRowElement
@@ -115,9 +121,9 @@ private fun showAssignments() {
                             siteSecret.textContent = site.secret
                             val siteName = document.createElement("td") as HTMLTableCellElement
                             siteName.textContent = site.name
+                            entry.appendChild(siteName)
                             entry.appendChild(siteId)
                             entry.appendChild(siteSecret)
-                            entry.appendChild(siteName)
                             document.getElementById("assignments")?.appendChild(entry)
                         })
                     })
