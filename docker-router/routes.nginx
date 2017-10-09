@@ -29,7 +29,6 @@ server {
 
     location / {
         root /usr/share/nginx/html/frontpage;
-        #        return 301 https://api.sitesearch.cloud;
     }
 }
 
