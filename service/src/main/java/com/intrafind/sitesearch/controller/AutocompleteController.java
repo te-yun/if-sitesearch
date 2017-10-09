@@ -42,7 +42,7 @@ public class AutocompleteController {
 
     @RequestMapping(method = RequestMethod.GET)
     ResponseEntity<Autocomplete> suggestion(
-            @CookieValue(value = "override-tenant", required = false) UUID cookieTenant,
+            @CookieValue(value = "override-site", required = false) UUID cookieSite,
             @RequestParam(value = "query", defaultValue = "") String query,
             @RequestParam(value = "siteId", required = false) UUID siteId,
             @RequestParam(value = "tenantId", required = false) UUID tenantId  // TODO remove, once searchbar supports new API
@@ -57,9 +57,9 @@ public class AutocompleteController {
         if (query.isEmpty()) return ResponseEntity.badRequest().build();
 
         // override siteId with cookie value for debugging & speed up the getting started experience
-        if (cookieTenant != null) siteId = cookieTenant;
+        if (cookieSite != null) siteId = cookieSite;
 
-        LOG.info("cookieSiteId: " + cookieTenant);
+        LOG.info("cookieSiteId: " + cookieSite);
         LOG.info("query: " + query);
         Optional<Autocomplete> result = service.autocomplete(query, siteId);
         if (result.isPresent()) {

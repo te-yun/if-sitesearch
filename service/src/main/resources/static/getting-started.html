@@ -32,7 +32,7 @@
         xhr.onload = function () {
             const siteId = JSON.parse(this.response)["siteId"];
             document.getElementById("siteId").value = siteId;
-            document.cookie = "override-tenant = " + siteId;
+            document.cookie = "override-site = " + siteId;
             document.getElementById("siteSecret").value = JSON.parse(this.response)["siteSecret"];
         };
         xhr.send();

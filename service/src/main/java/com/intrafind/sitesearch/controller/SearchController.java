@@ -62,8 +62,7 @@ public class SearchController {
 
     @RequestMapping(method = RequestMethod.GET)
     ResponseEntity<Hits> search(
-            @CookieValue(value = "override-tenant", required = false) UUID cookieTenant,
-//            @RequestParam(value = "query", required = false, defaultValue = "") String query,
+            @CookieValue(value = "override-site", required = false) UUID cookieSite,
             @RequestParam(value = "query", defaultValue = "") String query,
             @RequestParam(value = "siteId", required = false) UUID siteId,
             @RequestParam(value = "tenantId", required = false) UUID tenantId  // TODO remove, once searchbar supports new API
@@ -78,9 +77,9 @@ public class SearchController {
         if (query.isEmpty()) return ResponseEntity.badRequest().build();
 
         // override siteId with cookie value for debugging & speed up the getting started experience
-        if (cookieTenant != null) {
-            LOG.info("cookieTenant: " + cookieTenant);
-            siteId = cookieTenant;
+        if (cookieSite != null) {
+            LOG.info("cookieSite: " + cookieSite);
+            siteId = cookieSite;
         }
 
         LOG.info("query: " + query);

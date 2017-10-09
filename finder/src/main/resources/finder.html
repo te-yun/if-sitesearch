@@ -19,10 +19,17 @@
 <meta charset="utf-8"/>
 <title>Finder</title>
 <script src="/app/runtime/kotlin.js"></script>
-<script src="/app/finder/finder.js"></script>
+<style>
+    .if-teaser-highlight {
+        font-weight: bold;
+    }
+</style>
 
+<body onload="finder.com.intrafind.sitesearch.finder.init()">
 <h1>Finder</h1>
 
-<input id="sitesearch-finder" type="search" title="Finder" placeholder="Find">
+<input id="sitesearch-finder" type="search" title="Finder" placeholder="Find"
+       value="iFinder"
+       style="width: 500px; font-size: 2em; border-radius: 0.5em 0.5em 0 0; text-indent: .5em;">
 
-<!--SLA 99.9%-->
+<script src="/app/finder/finder.js"></script>

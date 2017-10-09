@@ -16,6 +16,24 @@
 
 package com.intrafind.sitesearch.client
 
+import org.w3c.xhr.XMLHttpRequest
+import kotlin.browser.window
+
 fun main(args: Array<String>) {
     println("Client")
+
+    val xhr = XMLHttpRequest()
+    xhr.open("GET", "/user")
+    xhr.onload = {
+        if (xhr.status.equals(200) && !xhr.responseText.isEmpty() && window.location.pathname.equals("/admin.html")) {
+//            console.warn(window.location.pathname)
+//            console.warn(window.location.href)
+//            window.location.pathname = "/admin.html"
+//            console.warn(window.location.pathname)
+//            console.warn(window.location.href)
+        } else {
+            console.warn("something else")
+        }
+    }
+    xhr.send()
 }
