@@ -6,6 +6,6 @@ RUN mkdir -p /var/www/letsencrypt/.well-known/acme-challenge # enables Letsencry
 COPY ssl.nginx /etc/nginx/snippets/ssl.conf
 COPY letsencrypt.nginx /etc/nginx/snippets/letsencrypt.conf
 COPY routes.nginx /etc/nginx/conf.d/default.conf
-COPY frontpage /usr/share/nginx/html/
+COPY frontpage /usr/share/nginx/html/frontpage
 
 EXPOSE 80 443
