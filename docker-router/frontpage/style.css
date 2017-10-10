@@ -65,6 +65,13 @@ a:hover{text-decoration: none; cursor:pointer;}
 }
 
 
+/* Background Effects */
+
+.b-parallax{
+	background-attachment:fixed;
+}
+
+
 /* Dark theme */
 
 .d-bloc{
@@ -154,6 +161,9 @@ a:hover{text-decoration: none; cursor:pointer;}
 
 #bloc-4 h2{
 	font-family: 'Droid Sans';
+}
+#bloc-11 p{
+	font-size: 18px;
 }
 
 /* = NavBar
@@ -441,6 +451,14 @@ h1,h2,h3,h4,h5,h6,p,label,.btn,a{
 	display:;
 	float:none;
 	height:50px;
+}
+..faq{
+	font-size:40px;
+	font-family:"Droid Sans";
+}
+..link{
+	font-family:"Droid Sans";
+	font-size:30px;
 }
 
 /* = Colour
