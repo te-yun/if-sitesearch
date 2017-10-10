@@ -30,12 +30,9 @@ security:
       accessTokenUri: https://github.com/login/oauth/access_token
       userAuthorizationUri: https://github.com/login/oauth/authorize
       clientAuthenticationScheme: query
-      pre-established-redirect-uri: https://api.sitesearch.cloud/admin.html
-      registered-redirect-uri: https://api.sitesearch.cloud/admin.html
-      use-current-uri: false
     resource:
       userInfoUri: https://api.github.com/user
-
+                                                                          
 #github:
 #  client:
 #    clientId: 51ddf3aea6097a04b03c

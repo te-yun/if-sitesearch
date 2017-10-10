@@ -6,3 +6,6 @@ security:
     client:
       clientId: a4d43021fa657695d4a7
       clientSecret: ${random.uuid} # add valid token to your local configuration
+      pre-established-redirect-uri: https://api.sitesearch.cloud/admin.html
+      registered-redirect-uri: https://api.sitesearch.cloud/admin.html
+      use-current-uri: false

@@ -16,44 +16,35 @@
 
 package com.intrafind.sitesearch.client
 
-import org.w3c.dom.HTMLElement
-import org.w3c.dom.HTMLInputElement
-import org.w3c.dom.HTMLTableCellElement
-import org.w3c.dom.HTMLTableRowElement
+import org.w3c.dom.*
 import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
 
 fun main(args: Array<String>) {
-
 }
 
 fun showAuthentication() {
-    val userLabel = document.getElementById("user") as HTMLElement
     val xhr = XMLHttpRequest()
     xhr.open("GET", "/user")
     xhr.onload = {
-        if (xhr.status.equals(200) && xhr.responseText.isEmpty()) {
-            userLabel.setAttribute("style", "display: none;")
-//            document.getElementById("user")?.textContent = ""
-            userLabel.textContent = ""
-        } else if (xhr.status.equals(200) && xhr.response != null) {
-            showAssignments()
-            val user = JSON.parse<dynamic>(xhr.responseText)
-//            document.getElementById("user")?.textContent = user.userAuthentication.details.name
-            userLabel.textContent = user.userAuthentication.details.name
-//            document.getElementById("user")?.setAttribute("title", user.userAuthentication.details.id)
-            userLabel.setAttribute("title", user.userAuthentication.details.id)
-//            document.getElementById("user")?.setAttribute("style", "display: inline")
-            userLabel.setAttribute("style", "display: inline")
-            document.getElementById("assignmentController")?.setAttribute("style", "display: inline")
-
-            document.getElementById("loginLink")?.setAttribute("style", "display: none")
-            document.getElementById("logoutLink")?.setAttribute("style", "display: inline")
-            (document.getElementById("company") as HTMLInputElement).value = user.userAuthentication.details.company
-            (document.getElementById("contactEmail") as HTMLInputElement).value = user.userAuthentication.details.email
-        }
+        showUser(xhr)
     }
     xhr.send()
+}
+
+private fun showUser(xhr: XMLHttpRequest) {
+    if (xhr.status.equals(200) && xhr.responseText.isEmpty()) {
+        (document.getElementById("loginLink") as HTMLAnchorElement).text = "Login"
+    } else if (xhr.status.equals(200) && xhr.response != null) {
+        showAssignments()
+        val user = JSON.parse<dynamic>(xhr.responseText)
+        (document.getElementById("assignmentController") as HTMLDivElement).style.display = "block"
+        (document.getElementById("loginLink") as HTMLAnchorElement).textContent = "Logout: ${user.userAuthentication.details.name}"
+        (document.getElementById("loginLink") as HTMLAnchorElement).title = user.userAuthentication.details.id
+        (document.getElementById("loginLink") as HTMLAnchorElement).className = "fa fa-sign-out"
+        (document.getElementById("company") as HTMLInputElement).value = user.userAuthentication.details.company
+        (document.getElementById("contactEmail") as HTMLInputElement).value = user.userAuthentication.details.email
+    }
 }
 
 @JsName("assignSite")
@@ -134,3 +125,4 @@ private fun showAssignments() {
     }
     xhr.send()
 }
+

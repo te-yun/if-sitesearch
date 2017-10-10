@@ -22,10 +22,73 @@
 <script src="/app/client/client.js"></script>
 <title>Administration</title>
 
-<a href="http://localhost:8001/login?redirect_uri=http://localhost:8001/admin.html">Login</a>
+<body onload="client.com.intrafind.sitesearch.client.showAuthentication()">
+<h1 style="font-size: 2em;"><span class="fa fa-search"></span> Simple Site Search<sup>BETA</sup></h1>
+<img src="/theme/logo.png" width="361" height="105" style="float: right;">
+
 <br>
-<a href="http://localhost:8001/logout">Logout</a>
+<span id="user" class="fa fa-sign-in"></span><a id="loginLink" href="/login" style="text-decoration: none;">Login</a>
+<br>
+<br>
+<a id="logoutLink" href="/logout" style="display: none; text-decoration: none;">Logout</a>
+<br>
+<br>
+<style>
+    input {
+        width: 270px;
+    }
+</style>
+<div id="assignmentController" style="display: none;">
+    <label for="siteId">Site ID</label>
+    <br>
+    <input id="siteId" type="text" value="1f53b4af-33b4-4db5-afa1-cc9654057591" placeholder="Site Id"/>
+    <br>
+    <label for="siteSecret">Site Secret</label>
+    <br>
+    <input id="siteSecret" type="text" value="2b7baeba-f4d1-4ed0-bd6c-c8b5897c72c7" placeholder="Site Secret"/>
+    <br>
+    <label for="siteName">Site Name</label>
+    <br>
+    <input id="siteName" type="text" value="Main" placeholder="Site Name"/>
+    <br>
+    <label for="contactEmail">Contact E-mail</label>
+    <br>
+    <input id="contactEmail" type="email" value="" placeholder="Contact e-mail"/>
+    <br>
+    <label for="company">Company</label>
+    <br>
+    <input id="company" type="text" value="" placeholder="Company Name"/>
+    <br>
+    <br>
+    <button style="text-align: center; width: 300px;" id="assignSite"
+            onclick="client.com.intrafind.sitesearch.client.assignSite()">
+        Assign Site
+    </button>
+</div>
+
+<br>
+<br>
+
+<div id="assignmentsContainer" style="display: none;">
+    <dl>
+        <dt id="companyName"></dt>
+        <dd id="companyContact"></dd>
+    </dl>
+
+    <table>
+        <thead>
+        <tr>
+            <td>Site Name</td>
+            <td>Site ID</td>
+            <td>Site Secret</td>
+        </tr>
+        </thead>
+        <tbody id="assignments">
+        </tbody>
+    </table>
+</div>
 
 <div style="float: right">
-    <a href="privacy.html">Privacy</a> | <a href="terms.html">Terms</a>
+    <span class="fa fa-user-circle-o"></span> <a href="privacy.html">Privacy</a> | <span class="fa fa-gavel"></span>
+    <a href="terms.html">Terms</a> | <span class="fa fa-briefcase"></span> <a href="imprint.html">Imprint</a>
 </div>

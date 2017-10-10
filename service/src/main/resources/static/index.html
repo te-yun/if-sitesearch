@@ -30,10 +30,12 @@
 <img src="/theme/logo.png" width="361" height="105" style="float: right;">
 
 <br>
-<span id="user" class="fa fa-sign-in"></span><a id="loginLink" href="/login" style="text-decoration: none;">Login</a>
-<br>
-<br>
-<a id="logoutLink" href="/logout" style="display: none; text-decoration: none;">Logout</a>
+<!--<span id="user" class="fa fa-sign-in"></span>-->
+<a id="loginLink" href="/login" style="text-decoration: none;"
+   class="fa fa-sign-in" aria-hidden="true">Login</a>
+<!--<br>-->
+<!--<br>-->
+<!--<a id="logoutLink" href="/logout" style="display: none; text-decoration: none;">Logout</a>-->
 <br>
 <br>
 <style>
@@ -63,10 +65,11 @@
     <input id="company" type="text" value="" placeholder="Company Name"/>
     <br>
     <br>
-    <button style="text-align: center; width: 300px;" id="assignSite"
-            onclick="client.com.intrafind.sitesearch.client.assignSite()">
-        Assign Site
-    </button>
+    <input type="button"
+           id="assignSite"
+           style="text-align: center; width: 285px;"
+           onclick="client.com.intrafind.sitesearch.client.assignSite()"
+           value="Assign Site">
 </div>
 
 <br>

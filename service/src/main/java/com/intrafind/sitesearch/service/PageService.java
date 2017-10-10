@@ -86,7 +86,7 @@ public class PageService {
         indexable.set(Fields.TITLE, page.getTitle());
         indexable.set(Fields.URL, page.getUrl());
         indexable.set(Fields.TENANT, siteId);
-        indexable.set(SITE_SECRET_FIELD, siteSecret); // TODO will become superfluous once siteSecret is stored in Exodus
+//        indexable.set(SITE_SECRET_FIELD, siteSecret); // TODO will become superfluous once siteSecret is stored in Exodus
         INDEX_SERVICE.index(indexable);
 
         return fetchById(id);
