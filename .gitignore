@@ -1,6 +1,7 @@
 generated_tests/
 config.json
 
+\.DS_Store
 /service/data
 /*.log
 /*.hprof
