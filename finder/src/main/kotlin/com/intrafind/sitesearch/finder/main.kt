@@ -57,10 +57,8 @@ private fun validateServiceCall(apiEndpoint: String) {
         }
         dd.textContent = "Status: ${xhr.status} | Response Length: ${xhr.responseText.length}"
         debugView.appendChild(dd)
-        console.warn("CORS: ${xhr.getResponseHeader("Access-Control-Allow-Origin")}")
-        for (header in xhr.getAllResponseHeaders()) {
-            console.warn("header: $header")
-        }
+        log("CORS - Access-Control-Allow-Origin: ${xhr.getResponseHeader("Access-Control-Allow-Origin")}")
+        log("CORS - Origin: ${xhr.getResponseHeader("Origin")}")
     }
     xhr.send()
 }
