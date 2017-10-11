@@ -20,6 +20,7 @@ import org.w3c.dom.*
 import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
 import kotlin.browser.window
+import kotlin.dom.clear
 
 fun main(args: Array<String>) {
     window.addEventListener("DOMContentLoaded", {
@@ -78,6 +79,7 @@ private fun assignSite() {
                     + "&siteName=" + (document.getElementById("siteName") as HTMLInputElement).value)
             xhr.setRequestHeader("content-type", "application/json")
             xhr.onload = {
+                showAssignments()
             }
 
             val tenantSiteAssignment: dynamic = Any()
@@ -95,7 +97,6 @@ private fun assignSite() {
 //                "company": "${(document.getElementById("company") as HTMLInputElement).value}"
 //            """))
             xhr.send(JSON.stringify(tenantSiteAssignment))
-            showAssignments()
         }
     }
     xhr.send()
@@ -113,6 +114,7 @@ private fun showAssignments() {
             xhr.setRequestHeader("content-type", "application/json")
             xhr.onload = {
                 if (xhr.status.equals(200) && xhr.response != null) {
+                    document.getElementById("assignments")?.clear()
                     document.getElementById("assignmentsContainer")?.setAttribute("style", "display: block;")
                     val assignments = JSON.parse<dynamic>(xhr.responseText)
                     assignments.tenants.forEach({ tenant ->
