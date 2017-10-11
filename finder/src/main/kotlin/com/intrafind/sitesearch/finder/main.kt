@@ -17,7 +17,6 @@
 package com.intrafind.sitesearch.finder
 
 import org.w3c.dom.*
-import org.w3c.dom.css.CSSStyleDeclaration
 import org.w3c.dom.events.Event
 import org.w3c.dom.events.KeyboardEvent
 import org.w3c.xhr.XMLHttpRequest
@@ -43,30 +42,28 @@ private fun selfTest() {
 }
 
 private fun validateServiceCall(apiEndpoint: String) {
-    val search = XMLHttpRequest()
-    search.open("GET", "https://api.sitesearch.cloud/$apiEndpoint?query=ifinder&siteId=$siteId")
-    search.onload = {
+    val xhr = XMLHttpRequest()
+    xhr.open("GET", "https://api.sitesearch.cloud/$apiEndpoint?query=ifinder&siteId=$siteId")
+    xhr.onload = {
         val dt = document.createElement("dt") as HTMLElement
         debugView.appendChild(dt)
         val dd = document.createElement("dd")
-        if (search.status.equals(200) && 99 < search.responseText.length) {
+        if (xhr.status.equals(200) && 99 < xhr.responseText.length) {
             dt.style.color = "#191"
             dt.textContent = "PASSED: $apiEndpoint"
         } else {
             dt.style.color = "#911"
             dt.textContent = "FAILED: $apiEndpoint"
         }
-        dd.textContent = "Status: ${search.status} | Response Length: ${search.responseText.length}"
+        dd.textContent = "Status: ${xhr.status} | Response Length: ${xhr.responseText.length}"
         debugView.appendChild(dd)
+        console.warn("CORS: ${xhr.getResponseHeader("Access-Control-Allow-Origin")}")
+        for (header in xhr.getAllResponseHeaders()) {
+            console.warn("header: $header")
+        }
     }
-    search.send()
+    xhr.send()
 }
-
-
-class MyStyle : CSSStyleDeclaration() {
-    override var cssText: String = ""
-}
-
 fun init() {
     log("init")
 
@@ -109,9 +106,9 @@ private val finderEndpoint = "/search"
 private val autocompleteEndpoint = "/autocomplete"
 
 fun main(args: Array<String>) {
+    init()
     window.addEventListener("DOMContentLoaded", {
         log("DOMContentLoaded")
-        log(document.body)
     })
 
     log(finder.value)

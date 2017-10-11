@@ -23,14 +23,13 @@
 <link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/searchbar/css/app.css"/>
 <link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/theme/font/css/font-awesome.min.css"/>
 <script src="/app/runtime/kotlin.js"></script>
-<script src="/app/client/client.js"></script>
 
-<body onload="client.com.intrafind.sitesearch.client.showAuthentication()">
+<!--<body onload="client.com.intrafind.sitesearch.client.showAuthentication()">-->
 <h1 style="font-size: 2em;"><span class="fa fa-search"></span> Simple Site Search<sup>BETA</sup></h1>
 <img src="/theme/logo.png" width="361" height="105" style="float: right;">
 
 <br>
-<a id="loginLink" href="/login?redirect_uri=https://api.sitesearch.cloud/login" style="text-decoration: none;"
+<a id="loginLink" href="/login" style="text-decoration: none;"
    class="fa fa-sign-in" aria-hidden="true"> Login</a>
 <style>
     input {
@@ -41,35 +40,7 @@
 <br>
 <div id="assignmentController" style="display: none;">
     <a href="/admin.html">Site Assignments</a>
-    <a href="/sitesearch-gadget.html">Establish Site Assignment</a>
-    <br>
-    <br>
-    <label for="siteId">Site ID</label>
-    <br>
-    <input id="siteId" type="text" value="1f53b4af-33b4-4db5-afa1-cc9654057591" placeholder="Site Id"/>
-    <br>
-    <label for="siteSecret">Site Secret</label>
-    <br>
-    <input id="siteSecret" type="text" value="2b7baeba-f4d1-4ed0-bd6c-c8b5897c72c7" placeholder="Site Secret"/>
-    <br>
-    <label for="siteName">Site Name</label>
-    <br>
-    <input id="siteName" type="text" value="Main" placeholder="Site Name"/>
-    <br>
-    <label for="contactEmail">Contact E-mail</label>
-    <br>
-    <input id="contactEmail" type="email" value="" placeholder="Contact e-mail"/>
-    <br>
-    <label for="company">Company</label>
-    <br>
-    <input id="company" type="text" value="" placeholder="Company Name"/>
-    <br>
-    <br>
-    <input type="button"
-           id="assignSite"
-           style="text-align: center; width: 285px;"
-           onclick="client.com.intrafind.sitesearch.client.assignSite()"
-           value="Assign Site">
+    | <a href="/sitesearch-gadget.html">Establish Site Assignment</a>
 </div>
 
 <br>
@@ -162,3 +133,6 @@
     ga('create', 'UA-105737954-1', 'auto');
     ga('send', 'pageview');
 </script>
+
+<script src="/app/client/client.js"></script>
+

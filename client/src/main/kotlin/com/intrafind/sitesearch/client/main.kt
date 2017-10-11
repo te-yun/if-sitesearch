@@ -19,11 +19,24 @@ package com.intrafind.sitesearch.client
 import org.w3c.dom.*
 import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
+import kotlin.browser.window
 
 fun main(args: Array<String>) {
+    window.addEventListener("DOMContentLoaded", {
+        console.warn("DOMContentLoaded")
+        init()
+    })
 }
 
-fun showAuthentication() {
+private val loginLink = document.getElementById("loginLink") as HTMLAnchorElement
+fun init() {
+    loginLink.text = " Login"
+    if (window.location.hostname.equals("localhost")) {
+        loginLink.href = "http://${window.location.host}/login?redirect_uri=http://${window.location.host}/login"
+    } else {
+        loginLink.href = "https://api.sitesearch.cloud/login?redirect_uri=https://api.sitesearch.cloud/login"
+    }
+
     val xhr = XMLHttpRequest()
     xhr.open("GET", "/user")
     xhr.onload = {
@@ -33,20 +46,22 @@ fun showAuthentication() {
 }
 
 private fun showUser(xhr: XMLHttpRequest) {
-    val loginLink = document.getElementById("loginLink") as HTMLAnchorElement
     if (xhr.status.equals(200) && xhr.responseText.isEmpty()) {
         loginLink.text = " Login"
-    } else if (xhr.status.equals(200) && xhr.response != null) {
-        showAssignments()
-        val user = JSON.parse<dynamic>(xhr.responseText)
-        (document.getElementById("assignmentController") as HTMLDivElement).style.display = "block"
-        loginLink.textContent = " Logout: ${user.userAuthentication.details.name}"
-        loginLink.title = user.userAuthentication.details.id
-        loginLink.className = "fa fa-sign-out"
-        loginLink.href = "/logout"
-        (document.getElementById("company") as HTMLInputElement).value = user.userAuthentication.details.company
-        (document.getElementById("contactEmail") as HTMLInputElement).value = user.userAuthentication.details.email
-    }
+    } else
+        if (xhr.status.equals(200) && xhr.response != null) {
+            showAssignments()
+            val user = JSON.parse<dynamic>(xhr.responseText)
+            (document.getElementById("assignmentController") as HTMLDivElement).style.display = "block"
+            loginLink.textContent = " Logout: ${user.userAuthentication.details.name}"
+            loginLink.title = user.userAuthentication.details.id
+            loginLink.className = "fa fa-sign-out"
+            loginLink.href = "/logout"
+            if (document.getElementById("company") != null) {
+                (document.getElementById("company") as HTMLInputElement).value = user.userAuthentication.details.company
+                (document.getElementById("contactEmail") as HTMLInputElement).value = user.userAuthentication.details.email
+            }
+        }
 }
 
 @JsName("assignSite")
