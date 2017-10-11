@@ -1,5 +1,5 @@
 /*-----------------------------------------------------------------------------------
-	    sitesearch_v4
+	    sitesearch_v5
         Built with Blocs
 -----------------------------------------------------------------------------------*/
 
@@ -162,7 +162,7 @@ a:hover{text-decoration: none; cursor:pointer;}
 #bloc-4 h2{
 	font-family: 'Droid Sans';
 }
-#bloc-11 p{
+#bloc-9 p{
 	font-size: 18px;
 }
 
@@ -329,10 +329,6 @@ button{
 	outline: none!important;
 }
 
-.btn-xl{
-	padding: 16px 40px;
-	font-size: 28px;
-}
 .a-btn{
 	padding: 6px 10px 6px 0;
 	line-height: 1.42857143;
@@ -396,13 +392,6 @@ button{
 }
 
 
-/* = Forms
--------------------------------------------------------------- */
-
-.form-control{
-	border-color:rgba(0,0,0,.1);
-	box-shadow:none;
-}
 
 
 
@@ -479,17 +468,6 @@ h1,h2,h3,h4,h5,h6,p,label,.btn,a{
 	color:#47454B!important;
 	!important}.tc-white{
 	color:#ffffff!important;
-}
-
-/* Button colour styles */
-
-.btn-android-green{
-	background:#B3D234;
-	color:rgba(0,0,0,.5)!important;
-}
-.btn-android-green:hover{
-	background:#8fa82a!important;
-	color:rgba(0,0,0,.5)!important;
 }
 
 /* Icon colour styles */
