@@ -35,20 +35,15 @@ fun showAuthentication() {
 private fun showUser(xhr: XMLHttpRequest) {
     val loginLink = document.getElementById("loginLink") as HTMLAnchorElement
     if (xhr.status.equals(200) && xhr.responseText.isEmpty()) {
-//        (document.getElementById("loginLink") as HTMLAnchorElement).text = "Login"
-        loginLink.text = "Login"
+        loginLink.text = " Login"
     } else if (xhr.status.equals(200) && xhr.response != null) {
         showAssignments()
         val user = JSON.parse<dynamic>(xhr.responseText)
         (document.getElementById("assignmentController") as HTMLDivElement).style.display = "block"
-//        (document.getElementById("loginLink") as HTMLAnchorElement).textContent = "Logout: ${user.userAuthentication.details.name}"
         loginLink.textContent = " Logout: ${user.userAuthentication.details.name}"
         loginLink.title = user.userAuthentication.details.id
-//        (document.getElementById("loginLink") as HTMLAnchorElement).title = user.userAuthentication.details.id
-//        (document.getElementById("loginLink") as HTMLAnchorElement).className = "fa fa-sign-out"
         loginLink.className = "fa fa-sign-out"
         loginLink.href = "/logout"
-//        (document.getElementById("loginLink") as HTMLAnchorElement).href = "/logout"
         (document.getElementById("company") as HTMLInputElement).value = user.userAuthentication.details.company
         (document.getElementById("contactEmail") as HTMLInputElement).value = user.userAuthentication.details.email
     }

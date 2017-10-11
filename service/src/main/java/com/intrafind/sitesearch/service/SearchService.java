@@ -48,7 +48,7 @@ public class SearchService {
                 Search.RETURN_TEASER_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL,
                 Search.RETURN_TEASER_COUNT, 1,
                 Search.RETURN_TEASER_SIZE, 100,
-                Search.RETURN_TEASER_TAG_PRE, "<span class='if-teaser-highlight'>",
+                Search.RETURN_TEASER_TAG_PRE, "<span class=\"if-teaser-highlight\">",
                 Search.RETURN_TEASER_TAG_POST, "</span>",
 
 //                Search.HITS_LIST_SIZE, 1_000 // page size
@@ -58,6 +58,8 @@ public class SearchService {
         LOG.info("query: " + query);
         List<FoundPage> siteDocuments = new ArrayList<>();
         hits.getDocuments().forEach(document -> {
+            LOG.warn("MARKUP IS HTML-ESCAPED: " + document.get(HIT_TEASER_PREFIX + Fields.BODY));
+            LOG.warn("MARKUP IS UNTOUCHED, AS DESIRED: " + document.get(Fields.BODY));
             FoundPage site = new FoundPage(
                     document.get(HIT_TEASER_PREFIX + Fields.TITLE),
 //                    document.get(Fields.TITLE),

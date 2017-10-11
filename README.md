@@ -31,6 +31,7 @@ to the `config` folder inside this project.
 
 Required environment variables:
 
+    * SECURITY_OAUTH2_CLIENT_CLIENT_SECRET
     * SECURITY_USER_PASSWORD # for iFinder Core access 
     * GITHUB_PUBLIC_ACCESS_TOKEN = "your long living GitHub token"
     * DEV_SKIP_FLAG = "true" # skip some oAuth2 checks in integration tests to enable additional test scenarios   
@@ -55,6 +56,7 @@ Required environment variables:
 ## CI configuration
 Required environment variables:
 
+    * SECURITY_OAUTH2_CLIENT_CLIENT_SECRET
     * BUILD_NUMBER = "extracted from CI"
     * GITHUB_PUBLIC_ACCESS_TOKEN = "your long living GitHub token"
     * DEV_SKIP_FLAG = "true" # skip some oAuth2 checks in integration tests to enable additional test scenarios

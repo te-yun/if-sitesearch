@@ -75,7 +75,7 @@ public class PageService {
         }
     }
 
-    public boolean isAllowedToModify(UUID siteId, UUID siteSecret) {
+    private boolean isAllowedToModify(UUID siteId, UUID siteSecret) {
         final Optional<UUID> fetchedSiteSecret = fetchSiteSecret(siteId);
         return fetchedSiteSecret.isPresent() && siteSecret.equals(fetchedSiteSecret.get());
     }
@@ -193,7 +193,6 @@ public class PageService {
                     foundDocument.get(Fields.BODY),
                     foundDocument.get(Fields.URL)
             );
-
             return Optional.of(representationOfFoundDocument);
         } else {
             return Optional.empty();
@@ -256,7 +255,8 @@ public class PageService {
                         null,
                         siteId,
                         siteSecret, // TODO this will become superfluous once siteSecret is stored in Exodus
-                        entry.getTitle(), entry.getDescription().getValue(),
+                        entry.getTitle(),
+                        entry.getDescription().getValue(),
                         url
                 );
                 final String pageId = Page.hashPageId(siteId, url);
