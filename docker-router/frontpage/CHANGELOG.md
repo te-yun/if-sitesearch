@@ -1,0 +1,1 @@
+* set login link to: https://api.sitesearch.cloud/login?redirect_uri=https://api.sitesearch.cloud/login
