@@ -31,7 +31,7 @@
     }
     const triggerFirstUsageOwnership = function (feedUrl) {
         const xhr = new XMLHttpRequest();
-        xhr.open("POST", serviceUrl + "/sites/rss?feedUrl=" + feedUrl);
+        xhr.open("POST", serviceUrl + "/sites/rss?feedUrl=" + feedUrl + "&stripHtmlTags=true");
         xhr.onload = function () {
             const siteId = JSON.parse(this.response)["siteId"];
             document.getElementById("siteId").value = siteId;

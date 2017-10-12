@@ -224,10 +224,26 @@ public class PageTest {
     }
 
     @Test
+    public void importFeedStrippingHtml() throws Exception {
+        // create index with stripped HTML tags
+        final ResponseEntity<Tenant> initialIndexCreation = caller.exchange(
+                SiteController.ENDPOINT + "/rss?feedUrl=https://intrafind.de/share/enterprise-search-blog.xml&stripHtmlTags=true",
+                HttpMethod.POST, HttpEntity.EMPTY, Tenant.class);
+        TimeUnit.MILLISECONDS.sleep(13_000);
+        final Tenant tenantCreation = validateTenantSummary(initialIndexCreation, 25);
+
+        UUID siteIdFromCreation = tenantCreation.getSiteId();
+        UUID siteSecretFromCreation = tenantCreation.getSiteSecret();
+
+        LOG.info("siteIdFromCreation: " + siteIdFromCreation);
+        LOG.info("siteSecretFromCreation: " + siteSecretFromCreation);
+    }
+
+    @Test
     public void importFeedAndUpdate() throws Exception {
         // create index
         final ResponseEntity<Tenant> initialIndexCreation = caller.exchange(
-                SiteController.ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/meldungen/detail/rss.xml",
+                SiteController.ENDPOINT + "/rss?feedUrl=https://www.mvv-muenchen.de/de/aktuelles/meldungen/detail/rss.xml",
                 HttpMethod.POST, HttpEntity.EMPTY, Tenant.class);
         TimeUnit.MILLISECONDS.sleep(13_000);
         final Tenant tenantCreation = validateTenantSummary(initialIndexCreation, 10);
@@ -252,7 +268,7 @@ public class PageTest {
 
         // update index
         final ResponseEntity<Tenant> anotherFeedReplacement = caller.exchange(
-                SiteController.ENDPOINT + "/" + siteIdFromCreation + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
+                SiteController.ENDPOINT + "/" + siteIdFromCreation + "/rss?feedUrl=https://intrafind.de/share/enterprise-search-blog.xml"
                         + "&siteSecret=" + siteSecretFromCreation,
                 HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
         final Tenant tenantUpdate = validateTenantSummary(anotherFeedReplacement, 25);

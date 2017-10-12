@@ -199,14 +199,14 @@ public class PageService {
         }
     }
 
-    public Optional<Tenant> indexFeed(URI feedUrl, UUID siteId, UUID siteSecret) {
+    public Optional<Tenant> indexFeed(URI feedUrl, UUID siteId, UUID siteSecret, Boolean stripHtmlTags) {
         if (siteId != null && siteSecret != null) { // credentials are provided as a tuple only
             final Optional<UUID> fetchedSiteSecret = fetchSiteSecret(siteId);
             if (!fetchedSiteSecret.isPresent()) { // tenant does not exist
                 return Optional.empty();
             } else if (siteSecret.equals(fetchedSiteSecret.get())) { // authorized
                 LOG.info("updating-feed: " + siteId);
-                return updateIndex(feedUrl, siteId, siteSecret);
+                return updateIndex(feedUrl, siteId, siteSecret, stripHtmlTags);
             } else { // unauthorized
                 return Optional.empty();
             }
@@ -216,7 +216,7 @@ public class PageService {
             UUID newSiteId = UUID.randomUUID();
             UUID newSiteSecret = UUID.randomUUID();
             storeSiteSecret(newSiteId, newSiteSecret);
-            return updateIndex(feedUrl, newSiteId, newSiteSecret);
+            return updateIndex(feedUrl, newSiteId, newSiteSecret, stripHtmlTags);
         }
     }
 
@@ -237,19 +237,26 @@ public class PageService {
         new TrustAllX509TrustManager();
     }
 
-    private Optional<Tenant> updateIndex(URI feedUrl, UUID siteId, UUID siteSecret) {
+    private Optional<Tenant> updateIndex(URI feedUrl, UUID siteId, UUID siteSecret, Boolean stripHtmlTags) {
         LOG.info("URL-received: " + feedUrl);
         final AtomicInteger successfullyIndexed = new AtomicInteger(0);
         final List<String> documents = new ArrayList<>();
         List<String> failedToIndex = new ArrayList<>();
-//        if(isStripHtmlTags){} // TODO 
         try {
             SyndFeed feed = new SyndFeedInput().build(new XmlReader(feedUrl.toURL()));
 
             feed.getEntries().forEach(entry -> {
                 LOG.info("entry: " + entry.getTitle());
                 LOG.info("link: " + entry.getLink());
-                LOG.info("description: " + entry.getDescription().getValue());
+                final String body;
+                if (stripHtmlTags) {
+                    body = entry.getDescription().getValue()
+                            .replaceAll("\\<[^>]*>", "");
+                    LOG.info("body with striped HTML: " + body);
+                } else {
+                    body = entry.getDescription().getValue();
+                    LOG.info("raw body: " + body);
+                }
 
                 String url = entry.getLink();
                 Page toIndex = new Page(
@@ -257,7 +264,7 @@ public class PageService {
                         siteId,
                         siteSecret, // TODO this will become superfluous once siteSecret is stored in Exodus
                         entry.getTitle(),
-                        entry.getDescription().getValue(),
+                        body,
                         url
                 );
                 final String pageId = Page.hashPageId(siteId, url);

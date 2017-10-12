@@ -115,20 +115,22 @@ public class SiteController {
     ResponseEntity<Tenant> indexRssFeed(
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "siteSecret") UUID siteSecret,
-            @RequestParam(value = "feedUrl") URI feedUrl
+            @RequestParam(value = "feedUrl") URI feedUrl,
+            @RequestParam(value = "stripHtmlTags", required = false, defaultValue = "false") Boolean stripHtmlTags
     ) {
-        return indexAsRssFeed(siteId, siteSecret, feedUrl);
+        return indexAsRssFeed(siteId, siteSecret, feedUrl, stripHtmlTags);
     }
 
     @RequestMapping(path = "rss", method = RequestMethod.POST)
     ResponseEntity<Tenant> indexNewRssFeed(
-            @RequestParam(value = "feedUrl") URI feedUrl
+            @RequestParam(value = "feedUrl") URI feedUrl,
+            @RequestParam(value = "stripHtmlTags", required = false, defaultValue = "false") Boolean stripHtmlTags
     ) {
-        return indexAsRssFeed(null, null, feedUrl);
+        return indexAsRssFeed(null, null, feedUrl, stripHtmlTags);
     }
 
-    private ResponseEntity<Tenant> indexAsRssFeed(UUID siteId, UUID siteSecret, URI feedUrl) {
-        Optional<Tenant> tenantCreatedInfo = service.indexFeed(feedUrl, siteId, siteSecret);
+    private ResponseEntity<Tenant> indexAsRssFeed(UUID siteId, UUID siteSecret, URI feedUrl, Boolean stripHtmlTags) {
+        Optional<Tenant> tenantCreatedInfo = service.indexFeed(feedUrl, siteId, siteSecret, stripHtmlTags);
         if (tenantCreatedInfo.isPresent()) {
             return ResponseEntity.ok(tenantCreatedInfo.get());
         } else {
