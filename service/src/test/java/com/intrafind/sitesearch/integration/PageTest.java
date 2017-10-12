@@ -196,7 +196,7 @@ public class PageTest {
                 HttpMethod.POST, HttpEntity.EMPTY, Tenant.class);
         final Tenant creation = validateTenantSummary(exchange, 10);
 
-        TimeUnit.MILLISECONDS.sleep(13_000);
+        TimeUnit.MILLISECONDS.sleep(8_000);
         validateUpdatedSites(creation);
     }
 
@@ -206,7 +206,7 @@ public class PageTest {
                 HttpMethod.POST, HttpEntity.EMPTY, Tenant.class);
         final Tenant creation = validateTenantSummary(exchange, 25);
 
-        TimeUnit.MILLISECONDS.sleep(13_000);
+        TimeUnit.MILLISECONDS.sleep(8_000);
         LOG.info("siteId: " + creation.getSiteId());
         validateUpdatedSites(creation);
     }
@@ -229,7 +229,7 @@ public class PageTest {
         final ResponseEntity<Tenant> initialIndexCreation = caller.exchange(
                 SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml&stripHtmlTags=true",
                 HttpMethod.POST, HttpEntity.EMPTY, Tenant.class);
-        TimeUnit.MILLISECONDS.sleep(13_000);
+        TimeUnit.MILLISECONDS.sleep(8_000);
         final Tenant tenantCreation = validateTenantSummary(initialIndexCreation, 25);
 
         UUID siteIdFromCreation = tenantCreation.getSiteId();
