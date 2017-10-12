@@ -242,6 +242,7 @@ public class PageService {
         final AtomicInteger successfullyIndexed = new AtomicInteger(0);
         final List<String> documents = new ArrayList<>();
         List<String> failedToIndex = new ArrayList<>();
+//        if(isStripHtmlTags){} // TODO 
         try {
             SyndFeed feed = new SyndFeedInput().build(new XmlReader(feedUrl.toURL()));
 

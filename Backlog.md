@@ -12,7 +12,7 @@ Backlog
 * ~~httpS all over: CI, 9605~~
 * ~~product frontpage routing~~
 * Sitemap XML support, coordinate with iFinder core team
-    * let the crawler talk to Site Search API to feed its content
+    * let the *crawler* talk to Site Search API to feed its content
 
 # next
 * Customer Feedback Channel: Slack vs Twak

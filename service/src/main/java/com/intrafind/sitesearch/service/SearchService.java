@@ -42,7 +42,6 @@ public class SearchService {
 //                query + " AND " + Fields.TENANT + ":" + siteId,
                 query,
                 Search.FILTER_QUERY, Fields.TENANT + ":" + siteId,
-// TODO introduce filter on tenant
 //                Search.RETURN_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL + QUERY_SEPARATOR + Fields.TENANT,
 
                 Search.RETURN_TEASER_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL,
@@ -51,7 +50,6 @@ public class SearchService {
                 Search.RETURN_TEASER_TAG_PRE, "<span class=\"if-teaser-highlight\">",
                 Search.RETURN_TEASER_TAG_POST, "</span>",
 
-//                Search.HITS_LIST_SIZE, 1_000 // page size
                 Search.HITS_LIST_SIZE, 100 // page size
         );
 
@@ -62,11 +60,8 @@ public class SearchService {
             LOG.warn("MARKUP IS UNTOUCHED, AS DESIRED: " + document.get(Fields.BODY));
             FoundPage site = new FoundPage(
                     document.get(HIT_TEASER_PREFIX + Fields.TITLE),
-//                    document.get(Fields.TITLE),
                     document.get(HIT_TEASER_PREFIX + Fields.BODY),
-//                    document.get(Fields.BODY),
                     document.get(HIT_TEASER_PREFIX + Fields.URL)
-//                    document.get(Fields.URL)
             );
             // TODO remove tenant INFO as it is not relevant here, consider separate DTO
             siteDocuments.add(site);

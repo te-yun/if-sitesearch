@@ -45,14 +45,11 @@ public class SiteController {
         this.service = service;
     }
 
-//    @RequestMapping(path = "{siteId}/pages/url/{url:.+}", method = RequestMethod.GET)
-//    @RequestMapping(path = "{siteId}/pages/url/{url}", method = RequestMethod.GET)
 @RequestMapping(path = "{siteId}/pages", method = RequestMethod.GET)
     ResponseEntity<FetchedPage> fetchViaUrl(
         @PathVariable(value = "siteId") UUID siteId,
         @RequestParam(value = "url") URI url
     ) throws UnsupportedEncodingException {
-//        String pageId = Page.hashPageId(siteId, URLDecoder.decode(url.toString(), "UTF-8"));
     String pageId = Page.hashPageId(siteId, url);
 
         Optional<FetchedPage> fetched = service.fetchById(pageId);
@@ -63,17 +60,12 @@ public class SiteController {
         }
     }
 
-    //  /sites/{siteId}/pages?siteSecret             // TODO do not require URL for creating new pages
-//    @RequestMapping(path = "{siteId}/pages/url/{url:.+}", method = RequestMethod.PUT)
     @RequestMapping(path = "{siteId}/pages", method = RequestMethod.PUT)
     ResponseEntity<FetchedPage> addPageToSiteIndex(
             @PathVariable(name = "siteId") UUID siteId,
-//            @PathVariable(name = "url") URI url,
             @RequestParam(name = "siteSecret") UUID siteSecret,
             @RequestBody Page page
-//    ) throws UnsupportedEncodingException {
     ) {
-//        final String decodedUrl = URLDecoder.decode(url.toString(), "UTF-8");
 //        page.setUrl(decodedUrl); // make sure both URLs are aligned, TODO use a separate DTO sans-url later on
 
         String pageId = Page.hashPageId(siteId, page.getUrl());
@@ -89,7 +81,6 @@ public class SiteController {
         }
     }
 
-    //  /sites/{siteId}/pages/{id}?siteSecret
     @RequestMapping(path = "{siteId}/pages/{pageId}", method = RequestMethod.PUT)
     ResponseEntity<FetchedPage> updateExistingPageInSiteIndex(
             @PathVariable(name = "siteId") UUID siteId,
@@ -108,7 +99,6 @@ public class SiteController {
         }
     }
 
-    //  /sites/{siteId}
     @RequestMapping(path = "{siteId}", method = RequestMethod.GET)
     ResponseEntity<List<String>> fetchAll(
             @PathVariable(value = "siteId") UUID siteId
@@ -121,7 +111,6 @@ public class SiteController {
         }
     }
 
-    //  /sites/{siteId}/rss?feedUrl&siteSecret
     @RequestMapping(path = "{siteId}/rss", method = RequestMethod.PUT)
     ResponseEntity<Tenant> indexRssFeed(
             @PathVariable(value = "siteId") UUID siteId,
@@ -131,7 +120,6 @@ public class SiteController {
         return indexAsRssFeed(siteId, siteSecret, feedUrl);
     }
 
-    //  /sites/{siteId}/rss?feedUrl&siteSecret
     @RequestMapping(path = "rss", method = RequestMethod.POST)
     ResponseEntity<Tenant> indexNewRssFeed(
             @RequestParam(value = "feedUrl") URI feedUrl
@@ -148,7 +136,6 @@ public class SiteController {
         }
     }
 
-    //  /sites/{siteId}/pages/{id}?siteSecret
     @RequestMapping(path = "{siteId}/pages/{pageId}", method = RequestMethod.DELETE)
     ResponseEntity deleteSiteById(
             @PathVariable(name = "siteId") UUID siteId,
