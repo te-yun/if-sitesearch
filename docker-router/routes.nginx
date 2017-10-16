@@ -70,6 +70,7 @@ server {
     }
 
     location / {
+        #        CORS headers
         add_header access-control-allow-credentials true;
         add_header access-control-allow-origin $http_origin;
 
