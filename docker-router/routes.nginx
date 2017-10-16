@@ -71,6 +71,8 @@ server {
 
     location / {
         #        CORS headers
+        proxy_hide_header access-control-allow-credentials;
+        proxy_hide_header access-control-allow-origin;
         add_header access-control-allow-credentials true;
         add_header access-control-allow-origin $http_origin;
 
