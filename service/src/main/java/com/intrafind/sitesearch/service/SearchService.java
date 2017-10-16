@@ -56,12 +56,11 @@ public class SearchService {
         LOG.info("query: " + query);
         List<FoundPage> siteDocuments = new ArrayList<>();
         hits.getDocuments().forEach(document -> {
-            LOG.warn("MARKUP IS HTML-ESCAPED: " + document.get(HIT_TEASER_PREFIX + Fields.BODY));
-            LOG.warn("MARKUP IS UNTOUCHED, AS DESIRED: " + document.get(Fields.BODY));
             FoundPage site = new FoundPage(
                     document.get(HIT_TEASER_PREFIX + Fields.TITLE),
                     document.get(HIT_TEASER_PREFIX + Fields.BODY),
-                    document.get(HIT_TEASER_PREFIX + Fields.URL)
+                    document.get(HIT_TEASER_PREFIX + Fields.URL),
+                    document.get(Fields.URL)
             );
             // TODO remove tenant INFO as it is not relevant here, consider separate DTO
             siteDocuments.add(site);
