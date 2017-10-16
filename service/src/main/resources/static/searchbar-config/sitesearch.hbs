@@ -19,9 +19,9 @@
    <div class="media-body">
        <h4 class="media-heading ifs-dont-break">
            {{#if title}}
-               <a target="_blank" href="{{urlRaw}}">{{{title}}}</a>
+               <a target="_blank" href="{{url}}">{{{title}}}</a>
            {{else}}
-               <a target="_blank" href="{{urlRaw}}">{{filename}}</a>
+               <a target="_blank" href="{{url}}">{{filename}}</a>
            {{/if}}
        </h4>
        <div class="flex-truncate">
@@ -32,8 +32,8 @@
        {{#if body}}
            <p class="ifs-textbody">{{{body}}}</p>
        {{/if}}
-       <a target="_blank" href="{{urlRaw}}">
-           <p title="{{urlRaw}}">{{{url}}}</p>
+       <a target="_blank" href="{{url}}">
+           <p title="{{url}}">{{{url}}}</p>
        </a>
    </div>
 
