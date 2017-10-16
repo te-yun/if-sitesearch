@@ -27,7 +27,8 @@ import kotlin.dom.clear
 private data class Finding(
         val title: String = "",
         val body: String = "",
-        val url: String = ""
+        val url: String = "",
+        val urlRaw: String = ""
 )
 
 private data class Findings(val query: String, val results: Array<Finding> = arrayOf())
@@ -183,7 +184,7 @@ private fun search(finder: HTMLInputElement) {
                 ddBody.setAttribute("style", "margin-bottom: .5em")
                 findingsContainer.appendChild(ddBody)
                 val ddUrl = document.createElement("dd") as HTMLElement
-                ddUrl.innerHTML = "<a style=\"text-decoration:none\" href=\"${finding.url}\">${finding.url}</a>"
+                ddUrl.innerHTML = "<a style=\"text-decoration:none\" href=\"${finding.urlRaw}\">${finding.url}</a>"
                 ddUrl.setAttribute("style", "margin-bottom: 1em;")
                 findingsContainer.appendChild(ddUrl)
             }
