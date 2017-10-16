@@ -110,32 +110,33 @@ FAQ
 * How do I integrate Site Search' search bar into my website?
     * Embed the following HTML fragment into your website and **adjust the siteId** provided in the snippet:
     
-        <link rel="stylesheet" href="https://api.sitesearch.cloud/searchbar/css/app.css"/>
-        <div id="searchbarContainer">
-            <style>
-                .if-teaser-highlight {
-                    font-weight: bold;
-                }
-            </style>
-            <div class="container" style="width: 530px;">
-                <div id="searchbar"></div>
-                <div id="resultlist"></div>
-            </div>
         
-            <script src="https://api.sitesearch.cloud/searchbar/js/app.js"></script>
-            <script>
-                jQuery.noConflict();
-                jQuery(document).ready(function ($) {
-        
-                    IFS.initClient({
-                        sbTarget: "#searchbar",
-                        configurl: "https://api.sitesearch.cloud/searchbar-config/sitesearch-config.json",
-                        sitesearch: true,
-                        siteId: "930bd2f4-22b6-4046-b118-9a02b5281ceb"
+            <link rel="stylesheet" href="https://api.sitesearch.cloud/searchbar/css/app.css"/>
+            <div id="searchbarContainer">
+                <style>
+                    .if-teaser-highlight {
+                        font-weight: bold;
+                    }
+                </style>
+                <div class="container" style="width: 530px;">
+                    <div id="searchbar"></div>
+                    <div id="resultlist"></div>
+                </div>
+            
+                <script src="https://api.sitesearch.cloud/searchbar/js/app.js"></script>
+                <script>
+                    jQuery.noConflict();
+                    jQuery(document).ready(function ($) {
+            
+                        IFS.initClient({
+                            sbTarget: "#searchbar",
+                            configurl: "https://api.sitesearch.cloud/searchbar-config/sitesearch-config.json",
+                            sitesearch: true,
+                            siteId: "930bd2f4-22b6-4046-b118-9a02b5281ceb"
+                        });
                     });
-                });
-            </script>
-        </div>  
+                </script>
+            </div>  
  
 * Who is using Site Search?
     * Very soon, following website's search will be powered by Site Search
