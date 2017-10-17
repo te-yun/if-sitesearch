@@ -9,7 +9,8 @@ FAQ
     * Site Search removes Elasticsearch as your direct dependency when introducing a search to a website. 
     In fact Site Search does not only rely on Elasticsearch but on additional components 
     from *IntraFind AG* that **improve the quality of search results**. Also Site Search is a **managed service** that 
-    removes the burden of operations from your organization. 
+    removes the burden of operations from your organization. Site Search provides you with a simple API
+    that is **tailored** for the purpose to provide a website search with all its specifics. 
 
 * What is the difference between **sites** and **pages**?
     * A **site** is a *website* that can contain thousands of **pages**. 
