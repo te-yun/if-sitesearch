@@ -35,7 +35,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@CrossOrigin
+//@CrossOrigin
 @RestController
 @RequestMapping(SearchController.ENDPOINT)
 public class SearchController {

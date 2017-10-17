@@ -58,10 +58,13 @@ private fun validateServiceCall(apiEndpoint: String) {
         }
         dd.textContent = "Status: ${xhr.status} | Response Length: ${xhr.responseText.length}"
         debugView.appendChild(dd)
+        log("CORS - Access-Control-Allow-OrigiNN: ${xhr.getResponseHeader("Access-Control-Allow-Originn")}")
         log("CORS - Access-Control-Allow-Origin: ${xhr.getResponseHeader("Access-Control-Allow-Origin")}")
         log("CORS - access-control-allow-origin: ${xhr.getResponseHeader("access-control-allow-origin")}")
         log("CORS - access-control-allow-credentials: ${xhr.getResponseHeader("access-control-allow-credentials")}")
+        log("CORS - Access-Control-Allow-Credentials: ${xhr.getResponseHeader("Access-Control-Allow-Credentials")}")
         log("CORS - Origin: ${xhr.getResponseHeader("Origin")}")
+        log("CORS - Origin: ${xhr.getResponseHeader("origin")}")
     }
     xhr.send()
 }
@@ -103,8 +106,8 @@ private val finder = document.getElementById("sitesearch-finder") as HTMLInputEl
 
 private val finderService = "https://api.sitesearch.cloud"
 private val siteId = document.getElementById("sitesearch-finder-init")?.getAttribute("data-siteId")
-private val finderEndpoint = "/search"
-private val autocompleteEndpoint = "/autocomplete"
+private val finderEndpoint = "search"
+private val autocompleteEndpoint = "autocomplete"
 
 fun main(args: Array<String>) {
     init()
@@ -156,7 +159,7 @@ private fun autocomplete(finder: HTMLInputElement) { // TODO remove "finder: HTM
         findingsContainer.focus()
     }
     xhr.onerror = {
-        console.warn(xhr.response)
+        log("Error: ${xhr.response}")
     }
     xhr.send()
 }
@@ -201,7 +204,7 @@ private fun search(finder: HTMLInputElement) {
         finder.parentElement?.appendChild(findingsContainer)
     }
     xhr.onerror = {
-        console.warn(xhr.response)
+        log("Error: ${xhr.response}")
     }
     xhr.send()
 }

@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@CrossOrigin
+//@CrossOrigin
 @RestController
 @RequestMapping(SiteController.ENDPOINT)
 public class SiteController {
@@ -111,6 +111,16 @@ public class SiteController {
         }
     }
 
+    @RequestMapping(path = "{siteId}/xml", method = RequestMethod.PUT)
+    ResponseEntity<Tenant> indexXml(
+            @PathVariable(value = "siteId") UUID siteId,
+            @RequestParam(value = "siteSecret") UUID siteSecret,
+            @RequestParam(value = "xmlUrl") URI xmlUrl,
+            @RequestParam(value = "stripHtmlTags", required = false, defaultValue = "false") Boolean stripHtmlTags
+    ) {
+        return indexAsRssFeed(siteId, siteSecret, xmlUrl, stripHtmlTags, true);
+    }
+
     @RequestMapping(path = "{siteId}/rss", method = RequestMethod.PUT)
     ResponseEntity<Tenant> indexRssFeed(
             @PathVariable(value = "siteId") UUID siteId,
@@ -118,7 +128,7 @@ public class SiteController {
             @RequestParam(value = "feedUrl") URI feedUrl,
             @RequestParam(value = "stripHtmlTags", required = false, defaultValue = "false") Boolean stripHtmlTags
     ) {
-        return indexAsRssFeed(siteId, siteSecret, feedUrl, stripHtmlTags);
+        return indexAsRssFeed(siteId, siteSecret, feedUrl, stripHtmlTags, false);
     }
 
     @RequestMapping(path = "rss", method = RequestMethod.POST)
@@ -126,11 +136,11 @@ public class SiteController {
             @RequestParam(value = "feedUrl") URI feedUrl,
             @RequestParam(value = "stripHtmlTags", required = false, defaultValue = "false") Boolean stripHtmlTags
     ) {
-        return indexAsRssFeed(null, null, feedUrl, stripHtmlTags);
+        return indexAsRssFeed(null, null, feedUrl, stripHtmlTags, false);
     }
 
-    private ResponseEntity<Tenant> indexAsRssFeed(UUID siteId, UUID siteSecret, URI feedUrl, Boolean stripHtmlTags) {
-        Optional<Tenant> tenantCreatedInfo = service.indexFeed(feedUrl, siteId, siteSecret, stripHtmlTags);
+    private ResponseEntity<Tenant> indexAsRssFeed(UUID siteId, UUID siteSecret, URI feedUrl, Boolean stripHtmlTags, Boolean isGeneric) {
+        Optional<Tenant> tenantCreatedInfo = service.indexFeed(feedUrl, siteId, siteSecret, stripHtmlTags, isGeneric);
         if (tenantCreatedInfo.isPresent()) {
             return ResponseEntity.ok(tenantCreatedInfo.get());
         } else {

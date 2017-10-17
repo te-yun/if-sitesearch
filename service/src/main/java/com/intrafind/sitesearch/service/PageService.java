@@ -41,7 +41,13 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
@@ -199,14 +205,18 @@ public class PageService {
         }
     }
 
-    public Optional<Tenant> indexFeed(URI feedUrl, UUID siteId, UUID siteSecret, Boolean stripHtmlTags) {
+    public Optional<Tenant> indexFeed(URI feedUrl, UUID siteId, UUID siteSecret, Boolean stripHtmlTags, Boolean isGeneric) {
         if (siteId != null && siteSecret != null) { // credentials are provided as a tuple only
             final Optional<UUID> fetchedSiteSecret = fetchSiteSecret(siteId);
             if (!fetchedSiteSecret.isPresent()) { // tenant does not exist
                 return Optional.empty();
             } else if (siteSecret.equals(fetchedSiteSecret.get())) { // authorized
-                LOG.info("updating-feed: " + siteId);
-                return updateIndex(feedUrl, siteId, siteSecret, stripHtmlTags);
+                if (isGeneric) {
+                    return updateIndexGenerically(feedUrl, siteId, siteSecret, stripHtmlTags);
+                } else {
+                    LOG.info("updating-feed: " + siteId);
+                    return updateIndex(feedUrl, siteId, siteSecret, stripHtmlTags);
+                }
             } else { // unauthorized
                 return Optional.empty();
             }
@@ -216,7 +226,11 @@ public class PageService {
             UUID newSiteId = UUID.randomUUID();
             UUID newSiteSecret = UUID.randomUUID();
             storeSiteSecret(newSiteId, newSiteSecret);
-            return updateIndex(feedUrl, newSiteId, newSiteSecret, stripHtmlTags);
+            if (isGeneric) {
+                return Optional.empty();
+            } else {
+                return updateIndex(feedUrl, newSiteId, newSiteSecret, stripHtmlTags);
+            }
         }
     }
 
@@ -235,6 +249,87 @@ public class PageService {
 
     static {
         new TrustAllX509TrustManager();
+    }
+
+    private Optional<Tenant> readXml(NodeList nodeList, AtomicInteger successfullyIndexed, List<String> documents, List<String> failedToIndex, UUID siteId) {
+        String title = null;
+        String body = null;
+        String url = null;
+        Page toIndex = null;
+        for (int count = 0; count < nodeList.getLength(); count++) {
+            Node tempNode = nodeList.item(count);
+            if (tempNode.getNodeType() == Node.ELEMENT_NODE) {
+                switch (tempNode.getNodeName()) {
+                    case "title":
+                        title = tempNode.getTextContent();
+                        break;
+                    case "body":
+                        body = tempNode.getTextContent();
+                        break;
+                    case "url":
+                        url = tempNode.getTextContent();
+                        break;
+                    default:
+                        break;
+                }
+
+                if (tempNode.hasChildNodes()) {
+                    toIndex = new Page(
+                            null,
+                            siteId,
+                            null,
+                            title,
+                            body,
+                            url
+                    );
+
+                    if (toIndex.getTitle() != null && toIndex.getBody() != null && toIndex.getUrl() != null) {
+                        final String pageId = Page.hashPageId(siteId, url);
+
+                        Optional<FetchedPage> indexed = indexDocument(pageId, siteId, null, toIndex);
+                        if (indexed.isPresent()) {
+                            successfullyIndexed.incrementAndGet();
+                            documents.add(pageId);
+                            LOG.info("index-successful: " + indexed.get().getId());
+                        } else {
+                            failedToIndex.add(url);
+                            LOG.warn("index-failed:" + url);
+                        }
+                    }
+                    readXml(tempNode.getChildNodes(), successfullyIndexed, documents, failedToIndex, siteId);
+                }
+
+                if ("Document".equals(tempNode.getNodeName())) {
+                    title = null;
+                    body = null;
+                    url = null;
+                    toIndex = null;
+                }
+            }
+        }
+
+        return Optional.of(new Tenant(siteId, null, successfullyIndexed.get(), documents, failedToIndex));
+    }
+
+    private Optional<Tenant> updateIndexGenerically(URI feedUrl, UUID siteId, UUID siteSecret, Boolean stripHtmlTags) {
+        LOG.info("URL-received: " + feedUrl);
+        final AtomicInteger successfullyIndexed = new AtomicInteger(0);
+        final List<String> documents = new ArrayList<>();
+        List<String> failedToIndex = new ArrayList<>();
+
+        try {
+            DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            org.w3c.dom.Document doc = dBuilder.parse(feedUrl.toURL().openStream());
+
+            if (doc.hasChildNodes()) {
+                return readXml(doc.getChildNodes(), successfullyIndexed, documents, failedToIndex, siteId);
+            }
+
+            return Optional.empty();
+        } catch (ParserConfigurationException | IOException | SAXException e) {
+            LOG.warn(e.getMessage());
+            return Optional.empty();
+        }
     }
 
     private Optional<Tenant> updateIndex(URI feedUrl, UUID siteId, UUID siteSecret, Boolean stripHtmlTags) {

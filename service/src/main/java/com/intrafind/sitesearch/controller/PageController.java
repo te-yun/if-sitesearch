@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.Optional;
 
-@CrossOrigin
+//@CrossOrigin
 @RestController
 @RequestMapping(PageController.ENDPOINT)
 public class PageController {
