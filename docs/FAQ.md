@@ -5,6 +5,12 @@ FAQ
     * Site Search is an on-demand SaaS offering from IntraFind Software AG to enable website operators 
     to provide search functionality for their websites.
 
+* What ist the advantage of using Site Search vs using search backends like *Elasticsearch* directly?
+    * Site Search removes Elasticsearch as your direct dependency when introducing a search to a website. 
+    In fact Site Search does not only rely on Elasticsearch but on additional components 
+    from *IntraFind AG* that **improve the quality of search results**. Also Site Search is a **managed service** that 
+    removes the burden of operations from your organization. 
+
 * What is the difference between **sites** and **pages**?
     * A **site** is a *website* that can contain thousands of **pages**. 
     You may have two **sites**: *en.example.com* and *de.example.com* 
