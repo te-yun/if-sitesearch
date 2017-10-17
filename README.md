@@ -12,15 +12,10 @@ an on-demand SaaS offering for providing websites with an externally managed sea
 
 # About
 
-* [OpenAPI 3.0 Specification](https://api.sitesearch.cloud/swagger-ui.html)
-* [Roadmap](http://if-wiki:8090/pages/viewpage.action?pageId=14714226)
-* [JIRA](http://jira/projects/SITESEARCH)
+* [API](https://api.sitesearch.cloud/swagger-ui.html)
 * [Release](https://api.sitesearch.cloud) / [DEV Release](https://dev.sitesearch.cloud)
-* [SCM repository](http://ml-if-git/sitesearch/if-sitesearch)
-* [Container](http://ml-if-git/sitesearch/docker-container)
 * [Documentation](https://github.com/intrafind/if-sitesearch/blob/master/docs/faq.md)
-* [Product Integration](https://github.com/intrafind/if-sitesearch/blob/master/docs/Site%20Search%20Product%20Overview.pdf)
-* [Product Abstract](http://if-wiki:8090/pages/viewpage.action?pageId=14714226)
+* [Integration](https://github.com/intrafind/if-sitesearch/blob/master/docs/Site%20Search%20Product%20Overview.pdf)
     
 ***> > > [DEMO](https://api.sitesearch.cloud) < < <***    
     
@@ -31,6 +26,7 @@ to the `config` folder inside this project.
 
 Required environment variables:
 
+    * SECURITY_OAUTH2_CLIENT_CLIENT_SECRET
     * SECURITY_USER_PASSWORD # for iFinder Core access 
     * GITHUB_PUBLIC_ACCESS_TOKEN = "your long living GitHub token"
     * DEV_SKIP_FLAG = "true" # skip some oAuth2 checks in integration tests to enable additional test scenarios   
@@ -55,6 +51,7 @@ Required environment variables:
 ## CI configuration
 Required environment variables:
 
+    * SECURITY_OAUTH2_CLIENT_CLIENT_SECRET
     * BUILD_NUMBER = "extracted from CI"
     * GITHUB_PUBLIC_ACCESS_TOKEN = "your long living GitHub token"
     * DEV_SKIP_FLAG = "true" # skip some oAuth2 checks in integration tests to enable additional test scenarios

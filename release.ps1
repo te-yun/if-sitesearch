@@ -25,7 +25,8 @@ docker run -d --name ${DOCKER_IMAGE_NAME} `
     -p 2443:8001 `
     --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
     --env BUILD_NUMBER=$env:BUILD_NUMBER `
-    --env SCM_HASH=$env:SCM_HASH  `
+    --env SCM_HASH=$env:SCM_HASH `
+    --env SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=$env:SECURITY_OAUTH2_CLIENT_CLIENT_SECRET `
     -v ~/srv/${DOCKER_IMAGE_NAME}:/home/svc_usr/data `
     --network $docker_network `
     intrafind/${DOCKER_IMAGE_NAME}:${DOCKER_TAG}

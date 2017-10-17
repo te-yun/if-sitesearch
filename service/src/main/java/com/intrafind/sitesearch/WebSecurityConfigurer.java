@@ -20,7 +20,6 @@ import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,7 +28,7 @@ import java.security.Principal;
 @EnableOAuth2Sso
 @EnableWebSecurity
 @RestController
-@CrossOrigin
+//@CrossOrigin
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @RequestMapping("user")
@@ -42,7 +41,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         http
                 .antMatcher("/**")
                 .csrf().disable()
-                .cors().and() // TODO check if Swagger can be called in a local client // TODO check if this is the only required CORS enabler, and if the CORS enabler bean in the Application class can be removed
+//                .cors().and() // TODO check if Swagger can be called in a local client // TODO check if this is the only required CORS enabler, and if the CORS enabler bean in the Application class can be removed
                 .authorizeRequests()
                 .antMatchers(
                         "/**",

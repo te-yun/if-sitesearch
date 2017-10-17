@@ -20,6 +20,7 @@
 <title>Site Search</title>
 <link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/searchbar/css/app.css"/>
 <link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/theme/font/css/font-awesome.min.css"/>
+<script src="/app/runtime/kotlin.js"></script>
 
 <script>
     let serviceUrl;
@@ -30,7 +31,7 @@
     }
     const triggerFirstUsageOwnership = function (feedUrl) {
         const xhr = new XMLHttpRequest();
-        xhr.open("POST", serviceUrl + "/sites/rss?feedUrl=" + feedUrl);
+        xhr.open("POST", serviceUrl + "/sites/rss?feedUrl=" + feedUrl + "&stripHtmlTags=true");
         xhr.onload = function () {
             const siteId = JSON.parse(this.response)["siteId"];
             document.getElementById("siteId").value = siteId;
@@ -71,6 +72,10 @@
         font-weight: bold;
     }
 </style>
+
+<a id="loginLink" href="/login?redirect_uri=https://api.sitesearch.cloud/login" style="text-decoration: none;"
+   class="fa fa-sign-in" aria-hidden="true"> Login</a>
+<br>
 <h1 style="font-size: 2em;"><span class="fa fa-search"></span> Simple Site Search</h1>
 <div class="wrapper">
     <label for="feedUrl"><span class="fa fa-rss"></span> Feed URL</label>
@@ -104,7 +109,71 @@
             sbTarget: "#searchbar",
             configurl: "searchbar-config/sitesearch-config.json",
             sitesearch: true,
-            siteId: "363d50f3-17cb-4756-aeca-7d3768092ae1"
+            siteId: "bd24d87f-5264-4c28-bd54-4785ef1e2c32"
         });
     });
 </script>
+
+<br>
+<style>
+    input {
+        width: 280px;
+    }
+</style>
+<br>
+<br>
+<div id="assignmentController" style="display: none;">
+    <a href="/admin.html">Site Assignments</a>
+    | <a href="/sitesearch-gadget.html">Establish Site Assignment</a>
+    <br>
+    <br>
+    <label for="siteName">Site Name</label>
+    <br>
+    <input id="siteName" type="text" value="Main" placeholder="Site Name"/>
+    <br>
+    <label for="contactEmail">Contact E-mail</label>
+    <br>
+    <input id="contactEmail" type="email" value="" placeholder="Contact e-mail"/>
+    <br>
+    <label for="company">Company</label>
+    <br>
+    <input id="company" type="text" value="" placeholder="Company Name"/>
+    <br>
+    <br>
+    <input type="button"
+           id="assignSite"
+           style="text-align: center; width: 285px;"
+           onclick="client.com.intrafind.sitesearch.client.assignSite()"
+           value="Assign Site">
+</div>
+
+<br>
+<br>
+
+<div id="assignmentsContainer" style="display: none;">
+    <dl>
+        <dt id="companyName"></dt>
+        <dd id="companyContact"></dd>
+    </dl>
+
+    <table>
+        <thead>
+        <tr>
+            <td>Site Name</td>
+            <td>Site ID</td>
+            <td>Site Secret</td>
+        </tr>
+        </thead>
+        <tbody id="assignments">
+        </tbody>
+    </table>
+</div>
+
+<br>
+
+<div style="float: right">
+    <span class="fa fa-user-circle-o"></span> <a href="privacy.html">Privacy</a> | <span class="fa fa-gavel"></span>
+    <a href="terms.html">Terms</a> | <span class="fa fa-briefcase"></span> <a href="imprint.html">Imprint</a>
+</div>
+
+<script src="/app/client/client.js"></script>

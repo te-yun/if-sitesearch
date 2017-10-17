@@ -5,6 +5,13 @@ FAQ
     * Site Search is an on-demand SaaS offering from IntraFind Software AG to enable website operators 
     to provide search functionality for their websites.
 
+* What ist the **advantage of using Site Search** vs using search backends like *Elasticsearch* directly? -
+    * Site Search removes Elasticsearch as your direct dependency when introducing a search to a website. 
+    In fact Site Search does not only rely on Elasticsearch but on additional components 
+    from *IntraFind AG* that **improve the quality of search results**. Also Site Search is a **managed service** that 
+    removes the burden of operations from your organization. Site Search provides you with a simple API
+    that is **tailored** for the purpose to provide a website search with all its specifics. 
+
 * What is the difference between **sites** and **pages**?
     * A **site** is a *website* that can contain thousands of **pages**. 
     You may have two **sites**: *en.example.com* and *de.example.com* 
@@ -110,32 +117,33 @@ FAQ
 * How do I integrate Site Search' search bar into my website?
     * Embed the following HTML fragment into your website and **adjust the siteId** provided in the snippet:
     
-        <link rel="stylesheet" href="https://api.sitesearch.cloud/searchbar/css/app.css"/>
-        <div id="searchbarContainer">
-            <style>
-                .if-teaser-highlight {
-                    font-weight: bold;
-                }
-            </style>
-            <div class="container" style="width: 530px;">
-                <div id="searchbar"></div>
-                <div id="resultlist"></div>
-            </div>
         
-            <script src="https://api.sitesearch.cloud/searchbar/js/app.js"></script>
-            <script>
-                jQuery.noConflict();
-                jQuery(document).ready(function ($) {
-        
-                    IFS.initClient({
-                        sbTarget: "#searchbar",
-                        configurl: "https://api.sitesearch.cloud/searchbar-config/sitesearch-config.json",
-                        sitesearch: true,
-                        siteId: "930bd2f4-22b6-4046-b118-9a02b5281ceb"
+            <link rel="stylesheet" href="https://api.sitesearch.cloud/searchbar/css/app.css"/>
+            <div id="searchbarContainer">
+                <style>
+                    .if-teaser-highlight {
+                        font-weight: bold;
+                    }
+                </style>
+                <div class="container" style="width: 530px;">
+                    <div id="searchbar"></div>
+                    <div id="resultlist"></div>
+                </div>
+            
+                <script src="https://api.sitesearch.cloud/searchbar/js/app.js"></script>
+                <script>
+                    jQuery.noConflict();
+                    jQuery(document).ready(function ($) {
+            
+                        IFS.initClient({
+                            sbTarget: "#searchbar",
+                            configurl: "https://api.sitesearch.cloud/searchbar-config/sitesearch-config.json",
+                            sitesearch: true,
+                            siteId: "930bd2f4-22b6-4046-b118-9a02b5281ceb"
+                        });
                     });
-                });
-            </script>
-        </div>  
+                </script>
+            </div>  
  
 * Who is using Site Search?
     * Very soon, following website's search will be powered by Site Search

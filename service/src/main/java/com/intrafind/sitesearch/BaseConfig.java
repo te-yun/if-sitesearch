@@ -22,14 +22,8 @@ import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory
 import org.springframework.boot.context.embedded.undertow.UndertowEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.util.UriComponentsBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.paths.AbstractPathProvider;
-import springfox.documentation.spring.web.paths.Paths;
 import springfox.documentation.spring.web.paths.RelativePathProvider;
 import springfox.documentation.spring.web.plugins.Docket;
 
@@ -37,16 +31,16 @@ import javax.servlet.ServletContext;
 
 @Configuration
 public class BaseConfig {
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {   // TODO check if this can be enabled in WebSecurityConfigurer class only
-        return new WebMvcConfigurerAdapter() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**");
-                registry.addMapping("/v2/api-docs");
-            }
-        };
-    }
+//    @Bean
+//    public WebMvcConfigurer corsConfigurer() {   // TODO check if this can be enabled in WebSecurityConfigurer class only
+//        return new WebMvcConfigurerAdapter() {
+//            @Override
+//            public void addCorsMappings(CorsRegistry registry) {
+//                registry.addMapping("/**");
+//                registry.addMapping("/v2/api-docs");
+//            }
+//        };
+//    }
 
     @Bean
     public EmbeddedServletContainerFactory servletContainer() {
@@ -77,28 +71,28 @@ public class BaseConfig {
                 .build();
     }
 
-    class BasePathAwareRelativePathProvider extends AbstractPathProvider {
-        private String basePath;
-
-        public BasePathAwareRelativePathProvider(String basePath) {
-            this.basePath = basePath;
-        }
-
-        @Override
-        protected String applicationPath() {
-            return basePath;
-        }
-
-        @Override
-        protected String getDocumentationPath() {
-            return "/";
-        }
-
-        @Override
-        public String getOperationPath(String operationPath) {
-            UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromPath("/");
-            return Paths.removeAdjacentForwardSlashes(
-                    uriComponentsBuilder.path(operationPath.replaceFirst(basePath, "")).build().toString());
-        }
-    }
+//    class BasePathAwareRelativePathProvider extends AbstractPathProvider {
+//        private String basePath;
+//
+//        public BasePathAwareRelativePathProvider(String basePath) {
+//            this.basePath = basePath;
+//        }
+//
+//        @Override
+//        protected String applicationPath() {
+//            return basePath;
+//        }
+//
+//        @Override
+//        protected String getDocumentationPath() {
+//            return "/";
+//        }
+//
+//        @Override
+//        public String getOperationPath(String operationPath) {
+//            UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromPath("/");
+//            return Paths.removeAdjacentForwardSlashes(
+//                    uriComponentsBuilder.path(operationPath.replaceFirst(basePath, "")).build().toString());
+//        }
+//    }
 }

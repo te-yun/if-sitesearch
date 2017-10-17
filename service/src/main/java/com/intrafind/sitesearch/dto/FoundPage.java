@@ -23,14 +23,24 @@ public class FoundPage implements Serializable {
     private String title;
     private String body;
     private String url;
+    private String urlRaw;
 
     private FoundPage() {
     }
 
-    public FoundPage(String title, String body, String url) {
+    public FoundPage(String title, String body, String url, String urlRaw) {
         this.title = title;
         this.body = body;
         this.url = url;
+        this.urlRaw = urlRaw;
+    }
+
+    public String getUrlRaw() {
+        return urlRaw;
+    }
+
+    public void setUrlRaw(String urlRaw) {
+        this.urlRaw = urlRaw;
     }
 
     public String getTitle() {

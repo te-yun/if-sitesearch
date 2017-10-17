@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@CrossOrigin("*")
+//@CrossOrigin("*")
 @RestController
 public class AssignmentController {
     public static final String ENDPOINT = "/assignments";

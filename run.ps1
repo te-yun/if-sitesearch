@@ -3,7 +3,8 @@
 try {
     $Env:SPRING_CONFIG_NAME = "application, local"
     ./gradlew bootRun `
-        $args #--continue --continuous --no-scan --parallel --no-rebuild --build-cache `
+        --continue --continuous --no-scan --parallel --no-rebuild --build-cache `
+        $args #
 } Finally {
     $hangingJavaProcessToStop = [regex]::match((jps), "(\d+)\ Application").Groups[1].Value
     Stop-Process -Id $hangingJavaProcessToStop

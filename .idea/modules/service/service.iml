@@ -28,8 +28,8 @@
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jetbrains.xodus:xodus-environment:1.0.6" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jetbrains.xodus:xodus-compress:1.0.6" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jetbrains.xodus:xodus-openAPI:1.0.6" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.rometools:rome:1.7.4" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.caucho:hessian:4.0.38" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.rometools:rome:1.8.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.caucho:hessian:4.0.51" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework.boot:spring-boot-starter-hateoas:1.5.7.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework.boot:spring-boot-starter-undertow:1.5.7.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: io.springfox:springfox-swagger2:2.7.0" level="project" />
@@ -41,7 +41,7 @@
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jetbrains.xodus:xodus-utils:1.0.6" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: io.github.microutils:kotlin-logging:1.4.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.1.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.rometools:rome-utils:1.7.4" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.rometools:rome-utils:1.8.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.jdom:jdom2:2.0.6" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework.hateoas:spring-hateoas:0.23.0.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: io.springfox:springfox-swagger-common:2.7.0" level="project" />
@@ -117,8 +117,8 @@
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.xodus:xodus-environment:1.0.6" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.xodus:xodus-compress:1.0.6" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.xodus:xodus-openAPI:1.0.6" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.rometools:rome:1.7.4" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.caucho:hessian:4.0.38" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.rometools:rome:1.8.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.caucho:hessian:4.0.51" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.boot:spring-boot-starter-hateoas:1.5.7.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.boot:spring-boot-starter-undertow:1.5.7.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.springfox:springfox-swagger2:2.7.0" level="project" />
@@ -132,7 +132,7 @@
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.xodus:xodus-utils:1.0.6" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.github.microutils:kotlin-logging:1.4.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.1.1" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.rometools:rome-utils:1.7.4" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.rometools:rome-utils:1.8.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.jdom:jdom2:2.0.6" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.hateoas:spring-hateoas:0.23.0.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.springfox:springfox-swagger-common:2.7.0" level="project" />
@@ -208,8 +208,8 @@
     <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.xodus:xodus-environment:1.0.6" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.xodus:xodus-compress:1.0.6" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.xodus:xodus-openAPI:1.0.6" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: com.rometools:rome:1.7.4" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: com.caucho:hessian:4.0.38" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.rometools:rome:1.8.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.caucho:hessian:4.0.51" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.boot:spring-boot-starter-hateoas:1.5.7.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.boot:spring-boot-starter-undertow:1.5.7.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: io.springfox:springfox-swagger2:2.7.0" level="project" />
@@ -223,7 +223,7 @@
     <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.xodus:xodus-utils:1.0.6" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: io.github.microutils:kotlin-logging:1.4.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.1.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: com.rometools:rome-utils:1.7.4" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.rometools:rome-utils:1.8.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.jdom:jdom2:2.0.6" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.hateoas:spring-hateoas:0.23.0.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: io.springfox:springfox-swagger-common:2.7.0" level="project" />

@@ -37,26 +37,37 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-test-js:$kotlin_version"
 }
 
-//compileKotlin2Js {
-//    kotlinOptions.metaInfo = true
-//    kotlinOptions.outputFile = "$project.buildDir.path/js/${project.name}.js"
-//    kotlinOptions.sourceMap = true
-//    kotlinOptions.moduleKind = "commonjs"
-//    kotlinOptions.main = "call"
-//}
+compileKotlin2Js {
+    kotlinOptions.metaInfo = true
+    kotlinOptions.outputFile = "$project.buildDir.path/classes/kotlin/main/${project.name}.js"
+    kotlinOptions.sourceMap = true
+    kotlinOptions.moduleKind = "umd"
+    kotlinOptions.main = "call"
+    kotlinOptions.suppressWarnings = false
+    kotlinOptions.target = "v5"
+    kotlinOptions.noStdlib = true
+    kotlinOptions.friendModulesDisabled = false
+    kotlinOptions.sourceMapEmbedSources = "inlining"
+    kotlinOptions.typedArrays = false
+}
 
 build.doLast {
+    String serviceBuildPath = "../service/build/resources/main/static/app"
     String buildPath = "../service/src/main/resources/static/app"
     project.file("$buildPath/$project.name").deleteDir()
+    project.file("$buildPath/$project.name").deleteDir()
+    project.file("$serviceBuildPath/$project.name").deleteDir()
 
     copy {
         from compileKotlin2Js.destinationDir
         into "$buildPath/$project.name"
+        into "$serviceBuildPath/$project.name" // TODO create rather a symlink to above directory?
     }
 
     copy {
         from sourceSets.main.output.resourcesDir
         into "$buildPath/$project.name/resources"
+        into "$serviceBuildPath/$project.name/resources" // TODO create rather a symlink to above directory?
     }
 
     configurations.compile.each { File file ->

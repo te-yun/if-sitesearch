@@ -4,10 +4,10 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 $PSDefaultParameterValues["*:ErrorAction"] = "Stop"
 
-$version = "2017.1.4"
+$version = "2017.1.5"
 $docker_network = "dev"
 $service_name = "teamcity-server"
-$docker_image = "jetbrains/teamcity-server:2017.1.4"
+#$docker_image = "jetbrains/teamcity-server:${version}"
 
 docker rm -f $service_name
 docker run -d -t --name $service_name `
@@ -19,6 +19,7 @@ docker run -d -t --name $service_name `
 ~/buildAgent/bin/agent.sh stop
 ~/buildAgent/bin/agent.sh start # run agent on host machine
 
+docker rm -f teamcity-agent
 docker run -d -t --name teamcity-agent `
     -e SERVER_URL="https://ci.sitesearch.cloud" `
     -v ~/srv/teamcity-agent:/data/teamcity_agent/conf `
