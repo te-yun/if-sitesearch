@@ -19,6 +19,7 @@ docker run -d -t --name $service_name `
 ~/buildAgent/bin/agent.sh stop
 ~/buildAgent/bin/agent.sh start # run agent on host machine
 
+docker rm -f teamcity-agent
 docker run -d -t --name teamcity-agent `
     -e SERVER_URL="https://ci.sitesearch.cloud" `
     -v ~/srv/teamcity-agent:/data/teamcity_agent/conf `
