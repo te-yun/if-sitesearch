@@ -4,10 +4,10 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 $PSDefaultParameterValues["*:ErrorAction"] = "Stop"
 
-$version = "2017.1.4"
+$version = "2017.1.5"
 $docker_network = "dev"
 $service_name = "teamcity-server"
-$docker_image = "jetbrains/teamcity-server:2017.1.4"
+#$docker_image = "jetbrains/teamcity-server:${version}"
 
 docker rm -f $service_name
 docker run -d -t --name $service_name `

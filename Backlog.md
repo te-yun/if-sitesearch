@@ -26,9 +26,17 @@ Backlog
 * save siteSecret in persistent store, not in the ElasticSearch document
 
 # future
+* Results close to the actual appearance == preserve HTML in results (SB)
+* PDF converter support, Beni? (SB)
 * payment button
 * support for types / category-specific search
 * automatic disaster failover
+
+# Issues
+ * (SB)Die Autocomplete-Funktion ist wirklich toll, aber die eigentliche Suche arbeitet nach anderen Regeln und sucht nach exakten Begriffen?
+    z.B. auf die Suche nach "Kran" liefert mir Autocomplete die Vorschläge "Kranprojekt" und "Kranlösung".
+    Der SearchController findet für die Query "Kranlösung" aber nichts, nur für den exakten Begriff "Kranlösungen".
+
 
 # Ideas from stake holders to be considered 
 
