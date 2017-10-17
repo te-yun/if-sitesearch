@@ -43,8 +43,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-//@Threads(10)
-//@BenchmarkMode(Mode.Throughput)
 @State(Scope.Benchmark)
 public class LoadTest {
     private static final Logger LOG = LoggerFactory.getLogger(LoadTest.class);
@@ -59,7 +57,7 @@ public class LoadTest {
 
     private static final List<UUID> TENANTS = Arrays.asList(
             SearchTest.SEARCH_SITE_ID,
-            UUID.fromString("bd24d87f-5264-4c28-bd54-4785ef1e2c32"),
+            UUID.fromString("1585e8d8-c6cd-40b9-b53f-3afc5a590a3a"),
             UUID.fromString("1a6715d9-119f-48d1-9329-e8763273bbea")
     );
 

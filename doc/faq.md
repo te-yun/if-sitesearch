@@ -131,7 +131,7 @@ FAQ obsolete, has been moved to [its new location](https://github.com/intrafind/
                     sbTarget: "#searchbar",
                     configurl: "https://api.sitesearch.cloud/searchbar-config/sitesearch-config.json",
                     sitesearch: true,
-                    siteId: "930bd2f4-22b6-4046-b118-9a02b5281ceb"
+                    siteId: "1585e8d8-c6cd-40b9-b53f-3afc5a590a3a"
                 });
             });
         </script>
