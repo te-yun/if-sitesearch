@@ -44,3 +44,7 @@ Backlog
 * page types, e.g. marketing vs projects 
 * semantic page grouping 
     1page + 2page +3page = OneArticle
+    
+# USP
+* without ads
+* Frankfurt DC
