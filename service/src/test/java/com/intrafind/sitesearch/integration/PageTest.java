@@ -158,7 +158,7 @@ public class PageTest {
     public void updatedSite() throws Exception {
         Page createdPage = createNewSiteViaPageCreation();
 
-        TimeUnit.MILLISECONDS.sleep(13_000);
+        TimeUnit.MILLISECONDS.sleep(8_000);
 
         final ResponseEntity<Page> updateWithSiteIdOnly = caller.exchange(SiteController.ENDPOINT + "/" + createdPage.getSiteId()
                 + "/pages/" + createdPage.getId(), HttpMethod.PUT, new HttpEntity<>(createdPage), Page.class);
@@ -243,7 +243,7 @@ public class PageTest {
         final ResponseEntity<Tenant> initialIndexCreation = caller.exchange(
                 SiteController.ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/meldungen/detail/rss.xml",
                 HttpMethod.POST, HttpEntity.EMPTY, Tenant.class);
-        TimeUnit.MILLISECONDS.sleep(13_000);
+        TimeUnit.MILLISECONDS.sleep(8_000);
         final Tenant tenantCreation = validateTenantSummary(initialIndexCreation, 10);
 
         UUID siteIdFromCreation = tenantCreation.getSiteId();
