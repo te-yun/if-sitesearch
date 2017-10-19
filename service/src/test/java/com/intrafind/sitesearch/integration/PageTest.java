@@ -92,11 +92,10 @@ public class PageTest {
         final String updatedBodyContent = "Updated via Hash(siteId, URL)";
         newPage.setBody(updatedBodyContent);
 
-        TimeUnit.MILLISECONDS.sleep(13_000);
+        TimeUnit.MILLISECONDS.sleep(8_000);
 
         // update
         final ResponseEntity<Page> updatedSite = caller.exchange(SiteController.ENDPOINT
-//                        + "/" + newPage.getSiteId() + "/pages/url/" + URLEncoder.encode(newPage.getUrl(), "UTF-8") + "?siteSecret=" + newPage.getSiteSecret(),
                         + "/" + newPage.getSiteId() + "/pages?siteSecret=" + newPage.getSiteSecret(),
                 HttpMethod.PUT, new HttpEntity<>(newPage), Page.class);
         assertEquals(HttpStatus.OK, updatedSite.getStatusCode());
@@ -116,7 +115,6 @@ public class PageTest {
         // fetch via URL
         final ResponseEntity<Page> fetchViaUrl = caller.exchange(SiteController.ENDPOINT
                         + "/" + newPage.getSiteId() + "/pages?url=" + newPage.getUrl(),
-//                        + "/" + newPage.getSiteId() + "/pages/url/" + URLEncoder.encode(newPage.getUrl(), "UTF-8"),
                 HttpMethod.GET, HttpEntity.EMPTY, Page.class);
         assertEquals(HttpStatus.OK, fetchViaUrl.getStatusCode());
         assertEquals(newPage.getId(), fetchViaUrl.getBody().getId());
@@ -128,7 +126,7 @@ public class PageTest {
     public void fetchUpdatedById() throws Exception {
         Page ying = createNewSiteViaPageCreation();
         Page yang = createNewSiteViaPageCreation();
-        TimeUnit.MILLISECONDS.sleep(13_000);
+        TimeUnit.MILLISECONDS.sleep(8_000);
 
         final ResponseEntity<Page> actualYing = caller.exchange(SiteController.ENDPOINT + "/"
                 + ying.getSiteId() + "/pages/" + ying.getId() + "?siteSecret=" + ying.getSiteSecret(), HttpMethod.PUT, new HttpEntity<>(ying), Page.class);
