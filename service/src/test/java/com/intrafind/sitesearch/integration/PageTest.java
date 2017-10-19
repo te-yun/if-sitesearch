@@ -79,7 +79,7 @@ public class PageTest {
         assertNotEquals("assure irrelevancy of siteId during creation", irrelevantPageId, actual.getBody().getId());
         assertEquals("https://api.sitesearch.cloud/sites/" + actual.getBody().getId(), actual.getHeaders().get(HttpHeaders.LOCATION).get(0));
 
-        ResponseEntity<Page> newlyCreatedSite = caller.exchange(PageController.ENDPOINT + "/" + actual.getBody().getId(), HttpMethod.GET, new HttpEntity<>(simple), Page.class);
+        ResponseEntity<Page> newlyCreatedSite = caller.exchange(PageController.ENDPOINT + "/" + actual.getBody().getId(), HttpMethod.GET, HttpEntity.EMPTY, Page.class);
         assertEquals(HttpStatus.OK, newlyCreatedSite.getStatusCode());
         assertEquals(actual.getBody().getId(), newlyCreatedSite.getBody().getId());
 

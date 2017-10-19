@@ -105,7 +105,10 @@ public class SmokeTest {
     }
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    private static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder().build();
+    private static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
+            .followRedirects(false)
+            .followSslRedirects(false)
+            .build();
     private static final Map<String, String> CORS_TRIGGERING_REQUEST_HEADER = new HashMap<String, String>() {
         {
             put("origin", "https://example.com");
