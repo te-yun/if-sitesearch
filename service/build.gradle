@@ -50,7 +50,7 @@ dependencies {
 
     compile "org.jetbrains.xodus:xodus-openAPI:$xodus_version"
     compile "org.jetbrains.xodus:xodus-entity-store:$xodus_version"
-    
+
     compile "com.rometools:rome:1.8.0"
 
     compile "com.caucho:hessian:4.0.51"
@@ -70,6 +70,7 @@ dependencies {
 
     testCompile "org.openjdk.jmh:jmh-generator-annprocess:1.19"
     testCompile "org.springframework.boot:spring-boot-starter-test:$spring_boot_version"
+    testCompile "com.squareup.okhttp3:okhttp:3.9.0"
 }
 
 test {
