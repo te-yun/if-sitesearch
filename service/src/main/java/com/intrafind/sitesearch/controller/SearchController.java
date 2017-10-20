@@ -84,9 +84,9 @@ public class SearchController {
 
         LOG.info("query: " + query);
         Hits searchResult = service.search(query, siteId);
-        if (searchResult.getResults().isEmpty()) {
-            return ResponseEntity.notFound().build();
-        } else {
+//        if (searchResult.getResults().isEmpty()) {
+//            return ResponseEntity.notFound().build();
+//        } else {
             if (queryCountEnabled) {
                 final ArrayByteIterable readableSiteId = StringBinding.stringToEntry(siteId.toString());
                 ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
@@ -101,6 +101,6 @@ public class SearchController {
                 });
             }
             return ResponseEntity.ok(searchResult);
-        }
+//        }
     }
 }

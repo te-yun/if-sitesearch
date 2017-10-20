@@ -75,10 +75,12 @@ public class SearchTest {
 
         final ResponseEntity<Hits> actual = caller.getForEntity(SearchController.ENDPOINT + "?query=not_found&siteId=" + SEARCH_SITE_ID, Hits.class);
 
-        assertEquals(HttpStatus.NOT_FOUND, actual.getStatusCode());
-        assertNull(actual.getBody());
+        assertEquals(HttpStatus.OK, actual.getStatusCode());
+        assertNotNull(actual.getBody());
+        assertTrue(actual.getBody().getResults().isEmpty());
+        assertFalse(actual.getBody().getQuery().isEmpty());
 
-        assertEquals(beforeCount, fetchQueryCountForDefaultTenant());
+        assertEquals(beforeCount + 1, fetchQueryCountForDefaultTenant());
     }
 
     @Test
