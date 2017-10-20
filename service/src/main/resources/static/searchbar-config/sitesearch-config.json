@@ -35,6 +35,7 @@
       "facets": {
         "template": "app/templates/default/filters.hbs",
         "visible": false,
+        "enabled": false,
         "searchable": [
         ]
       },
