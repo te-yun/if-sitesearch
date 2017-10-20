@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -43,7 +44,7 @@ public class AutocompleteService {
         LOG.info("query: " + query);
         final List<String> terms = hits.getMetaData().getAll("autocomplete.terms");
         if (terms == null || terms.isEmpty()) {
-            return Optional.empty();
+            return Optional.of(new Autocomplete(Collections.emptyList()));
         } else {
             return Optional.of(new Autocomplete(terms));
         }

@@ -29,8 +29,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -66,8 +65,9 @@ public class AutocompleteTest {
     public void nonExisting() throws Exception {
         final ResponseEntity<Autocomplete> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=not_found&siteId=" + SearchTest.SEARCH_SITE_ID, Autocomplete.class);
 
-        assertEquals(HttpStatus.NOT_FOUND, actual.getStatusCode());
-        assertNull(actual.getBody());
+        assertEquals(HttpStatus.OK, actual.getStatusCode());
+        assertNotNull(actual.getBody());
+        assertTrue(actual.getBody().getResults().isEmpty());
     }
 
     @Test
