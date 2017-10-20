@@ -171,6 +171,6 @@ public class SmokeTest {
 //        assertNotNull(actual.getBody());
 //        assertEquals(1, actual.getBody().getResults().size());
 //        assertEquals("knowledge graph", actual.getBody().getResults().get(0));
-        assureCorsHeaders(response.headers(), 374);
+        assureCorsHeaders(response.headers(), 429);
     }
 }
