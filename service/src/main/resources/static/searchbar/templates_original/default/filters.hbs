@@ -1,5 +1,5 @@
 {{# each state.facetstate}}
-    <div class="ifs-filter {{#if open}}open{{/if}}" data-selection-type="multiple">
+    <div class="ifs-filter {{#if open}}open{{/if}}" data-selection-type="multiple" data-filter-category="{{label}}">
         <button
                 type="button"
                 class="btn btn-default ifs-filterbutton"
@@ -35,15 +35,18 @@
                     <ul class="ifs-fi-list" data-active-facets-container="{{facetname}}">
                         {{#each facets}}
                             {{#if enabled}}
-                                <li class="facet {{#if enabled}}active{{/if}}" data-filter-value="{{term}}">
-                                    <span class="ifs-fi-term">{{term}}</span> <i class="glyphicons glyphicons-ok-2 ifs-check-indicator"></i>
+                                <li class="row facet {{#if enabled}}active{{/if}}" data-filter-value="{{term}}">
+                                    <span class="col-xs-11 col-sm-11 col-md-11 col-lg-11  ifs-fi-term" data-toggle="tooltip" title="{{term}}">{{term}}</span>
+                                    <i class="pull-right col-xs-1 col-sm-1 col-md-1 col-lg-1  glyphicons glyphicons-ok-2 ifs-check-indicator"></i>
                                 </li>
                             {{/if}}
+                        
                         {{/each}}
                         {{#each facets}}
                             {{#unless enabled}}
-                                <li class="facet {{#if enabled}}active{{/if}}" data-filter-value="{{term}}">
-                                    <span class="ifs-fi-term">{{term}}</span> <i class="glyphicons glyphicons-ok-2 ifs-check-indicator"></i>
+                                <li class="row facet {{#if enabled}}active{{/if}}" data-filter-value="{{term}}">
+                                    <span class="col-xs-11 col-sm-11 col-md-11 col-lg-11  ifs-fi-term" data-toggle="tooltip" title="{{term}}">{{term}}</span>
+                                    <i class="col-xs-1 col-sm-1 col-md-1 col-lg-1  glyphicons glyphicons-ok-2 pull-right ifs-check-indicator"></i>
                                 </li>
                             {{/unless}}
                         {{/each}}
@@ -56,15 +59,17 @@
                     <ul class="ifs-fi-list">
                         {{#each facets}}
                             {{#if enabled}}
-                                <li class="facet {{#if enabled}}active{{/if}}" data-filter-value="{{term}}">
-                                    <span class="ifs-fi-term">{{term}}</span> <i class="glyphicons glyphicons-ok-2 ifs-check-indicator"></i>
+                                <li class="row facet {{#if enabled}}active{{/if}}" data-filter-value="{{term}}">
+                                    <span class="col-xs-11 col-sm-11 col-md-11 col-lg-11  ifs-fi-term" data-toggle="tooltip" title="{{term}}">{{term}}</span>
+                                    <i class="col-xs-1 col-sm-1 col-md-1 col-lg-1  glyphicons glyphicons-ok-2 pull-right ifs-check-indicator"></i>
                                 </li>
                             {{/if}}
                         {{/each}}
                         {{#each facets}}
                             {{#unless enabled}}
-                                <li class="facet {{#if enabled}}active{{/if}}" data-filter-value="{{term}}">
-                                    <span class="ifs-fi-term">{{term}}</span> <i class="glyphicons glyphicons-ok-2 ifs-check-indicator"></i>
+                                <li class="row facet {{#if enabled}}active{{/if}}" data-filter-value="{{term}}">
+                                    <span class="col-xs-11 col-sm-11 col-md-11 col-lg-11  ifs-fi-term" data-toggle="tooltip" title="{{term}}">{{term}}</span>
+                                    <i class="col-xs-1 col-sm-1 col-md-1 col-lg-1  glyphicons glyphicons-ok-2 pull-right ifs-check-indicator"></i>
                                 </li>
                             {{/unless}}
                         {{/each}}
@@ -84,7 +89,7 @@
 
 
 {{#if this.showDateRange}}
-    <div class="ifs-filter" data-selection-type="single">
+    <div class="ifs-filter" data-selection-type="single" data-filter-category="{{msg "ifs.filter.daterange"}} {{label}}">
         <button
                 type="button"
                 class="btn btn-default ifs-filterbutton"
@@ -99,7 +104,8 @@
                 <ul class="ifs-fi-list">
                     {{#each state.filterstate}}
                     <li class="facet {{#if enabled}}active{{/if}}" data-filter-value="{{@key}}">
-                        {{msg label}} <i class="glyphicons glyphicons-ok-2 ifs-check-indicator"></i>
+                        {{msg label}}
+                        <i class="glyphicons glyphicons-ok-2 pull-right ifs-check-indicator"></i>
                     </li>
                     {{/each}}
                 </ul>

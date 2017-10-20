@@ -39,6 +39,11 @@
 		"ifs.btn.copylink": "copy link",
 		"ifs.btn.favorite": "favor",
 		"ifs.btn.defavorite": "remove favorite",
+      "ifs.btn.zoom.reset": "Reset",
+      "ifs.btn.zoom.in": "Zoom in",
+      "ifs.btn.zoom.out": "Zoom out",
+      "ifs.btn.rotate.right": "Rotate right",
+      "ifs.btn.rotate.left": "Rotate left",
 
 		"ifs.label.date":"Date",
 		"ifs.label.size":"Size",
@@ -98,7 +103,7 @@
 		"ifs.category.images": "Images",
 
 		"ifs.no.fields.available": "No fields available for ",
-
-		"ifs.text.sbhelp": "How can I help you?"
+      "ifs.text.sbhelp": "How can I help you?",
+      "ifs.text.safemode.notice": "Safe Mode activated. Due to high load, the search dropdown is not available!"
 	}
 }

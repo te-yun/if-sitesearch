@@ -39,6 +39,11 @@
 		"ifs.btn.copylink": "Link kopieren",
 		"ifs.btn.favorite": "favorisieren",
 		"ifs.btn.defavorite": "Favorit entfernen",
+      "ifs.btn.zoom.reset": "Zurücksetzen",
+      "ifs.btn.zoom.in": "Vergrößern",
+      "ifs.btn.zoom.out": "Verkleinern",
+      "ifs.btn.rotate.right": "Nach rechts drehen",
+      "ifs.btn.rotate.left": "Nach links drehen",
 
 		"ifs.label.date":"Datum",
 		"ifs.label.size":"Größe",
@@ -99,7 +104,7 @@
 		"ifs.category.images": "Bilder",
 
 		"ifs.no.fields.available": "Es existieren keine Felder für ",
-
-		"ifs.text.sbhelp": "Wie kann ich Ihnen helfen?"
+      "ifs.text.sbhelp": "Wie kann ich Ihnen helfen?",
+      "ifs.text.safemode.notice": "Safe Mode aktiv! Wegen zu hoher Last steht das Search-Dropdown momentan nicht zur Verfügung."
 	}
 }

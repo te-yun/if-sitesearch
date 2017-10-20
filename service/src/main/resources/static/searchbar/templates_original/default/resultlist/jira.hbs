@@ -7,7 +7,7 @@
     {{/if}}
 
     <div class="media-left">
-        <a class="avatar" href="javascript:void(0);" data-action="preview" data-preview-id="{{urlbase64}}">
+        <a class="avatar" href="javascript:void(0);" {{#if shouldUseCustomPreview}}data-preview-custom="{{customPreviewUrl}}"{{/if}} data-preview-id="{{urlbase64}}">
             <div class="ifs-preview-mask"></div>
             <img class="ifs-avatar-img" src="{{authenticateIfJWTPresent thumbnail}}">
         </a>

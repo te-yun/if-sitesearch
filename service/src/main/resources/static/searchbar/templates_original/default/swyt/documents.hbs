@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-sm-10 nopadding">
-        <a href="javascript:void(0);" data-action="preview" data-preview-id="{{urlbase64}}" class="ifs-dw-link">
+        <a href="javascript:void(0);" data-action="preview" {{#if shouldUseCustomPreview}}data-preview-custom="{{customPreviewUrl}}"{{/if}} data-preview-id="{{urlbase64}}" class="ifs-dw-link">
             <img src="{{rootDir}}/{{iconPath}}/{{fileExtension}}.png"
                  class="ifs-ico-ft"
                  onerror="this.src='{{rootDir}}/{{iconPath}}/_blank.png'">
