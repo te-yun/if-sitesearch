@@ -147,9 +147,9 @@ FAQ
  
 * Who is using Site Search?
     * Very soon, following website's search will be powered by Site Search
-        * intrafind.de 
-        * intrafind.com
-        * analyzelaw.com
+        * intrafind.de [coming soon]
+        * intrafind.com [coming soon]
+        * analyzelaw.com [coming soon]
         
     
 
