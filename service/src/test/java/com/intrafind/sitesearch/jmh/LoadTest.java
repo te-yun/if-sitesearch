@@ -40,8 +40,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 @State(Scope.Benchmark)
 public class LoadTest {
@@ -120,7 +119,8 @@ public class LoadTest {
         LOG.info("query: " + query);
         final long queryResultCount = LoadTest.SEARCH_QUERIES.get(query);
         if (queryResultCount == 0) {
-            assertEquals(HttpStatus.NOT_FOUND, actual.getStatusCode());
+            assertEquals(HttpStatus.OK, actual.getStatusCode());
+            assertNotNull(actual.getBody());
         } else {
             assertEquals(HttpStatus.OK, actual.getStatusCode());
             assertEquals(queryResultCount, actual.getBody().getResults().size());
