@@ -172,6 +172,5 @@ public class SmokeTest {
 //        assertEquals(1, actual.getBody().getResults().size());
 //        assertEquals("knowledge graph", actual.getBody().getResults().get(0));
         assureCorsHeaders(response.headers(), 429);
-        throw new RuntimeException(); //fail build on purpose 
     }
 }
