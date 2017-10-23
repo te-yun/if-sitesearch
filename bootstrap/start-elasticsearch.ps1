@@ -3,7 +3,7 @@ $ErrorActionPreference = "Stop"
 $PSDefaultParameterValues["*:ErrorAction"] = "Stop"
 
 $docker_network = "sitesearch"
-$service_name = "elasticsearch"
+$service_name = "sitesearch-elasticsearch"
 $docker_image = "intrafind/$service_name"
 
 docker network create $docker_network
@@ -14,4 +14,8 @@ sudo chown -R 1000:1000 ~/srv/$service_name
 sudo chmod -R 744 ~/srv/$service_name
 
 docker rm -f $service_name
-docker run -d --name $service_name --network $docker_network -v $HOME/srv/$service_name/data:/home/app_user/data -v $HOME/srv/$service_name/logs:/home/app_user/logs:rw $docker_image
+docker run -d --name $service_name `
+    --network $docker_network `
+    -v $HOME/srv/$service_name/data:/home/app_user/data `
+    -v $HOME/srv/$service_name/logs:/home/app_user/logs:rw `
+    $docker_image
