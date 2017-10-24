@@ -99,7 +99,7 @@ private fun buildFinder() {
     val finderStyle = finderInit.getAttribute("data-search-style")
     finder.type = "search"
     finder.title = "Finder"
-    finder.placeholder = "Find"
+    finder.placeholder = "{if-lab} Finder"
     finder.style.cssText =
             if (finderStyle.isNullOrBlank())
                 "width: 500px; font-size: 2em; text-indent: .5em;"
@@ -141,8 +141,9 @@ fun main(args: Array<String>) {
         if (keyboardEvent.key.equals("Enter")) {
             if (finder.value.isBlank()) {
                 findingsContainer.style.display = "none"
+            } else {
+                search()
             }
-            search()
         } else {
             autocomplete()
         }

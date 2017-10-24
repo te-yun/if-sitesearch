@@ -75,9 +75,7 @@ fun showInitCode() {
     val searchbarVariant = document.getElementById("searchbar-variant") as HTMLInputElement
     val integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
     integrationCode.value = enterpriseSearchbarCode.outerHTML
-    enterpriseSearchbarCode.style.display = "none"
-    (document.getElementById("sitesearch-finder-init") as HTMLScriptElement).style.display = "none"
-    (document.getElementById("sitesearch-finder-init") as HTMLScriptElement).hidden = true
+    finderContainer.style.display = "none"
 
     searchbarVariant.addEventListener("click", {
         enterpriseSearchbarCode.style.display = "block"
