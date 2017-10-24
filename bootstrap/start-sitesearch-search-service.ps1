@@ -13,6 +13,7 @@ docker network create $docker_network
 
 docker load -i "~/tmp/$service_name.tar"
 
+mkdir -p $HOME/$persistence_dir/$service_name
 sudo chown -R 1000:1000 $HOME/$persistence_dir/$service_name
 sudo chmod -R 744 $HOME/$persistence_dir/$service_name
 
