@@ -22,26 +22,27 @@
 <link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/theme/font/css/font-awesome.min.css"/>
 <script src="/app/runtime/kotlin.js"></script>
 
-<script>
-    let serviceUrl;
-    if (location.hostname === "localhost") {
-        serviceUrl = "http://localhost:8001";
-    } else {
-        serviceUrl = "https://api.sitesearch.cloud";
-    }
-    const triggerFirstUsageOwnership = function (feedUrl) {
-        const xhr = new XMLHttpRequest();
-        xhr.open("POST", serviceUrl + "/sites/rss?feedUrl=" + feedUrl + "&stripHtmlTags=true");
-        xhr.onload = function () {
-            const siteId = JSON.parse(this.response)["siteId"];
-            document.getElementById("siteId").value = siteId;
-            document.cookie = "override-site = " + siteId;
-            document.getElementById("siteSecret").value = JSON.parse(this.response)["siteSecret"];
-        };
-        xhr.send();
-    }
-</script>
+<!--<script>-->
+<!--let serviceUrl;-->
+<!--if (location.hostname === "localhost") {-->
+<!--serviceUrl = "http://localhost:8001";-->
+<!--} else {-->
+<!--serviceUrl = "https://api.sitesearch.cloud";-->
+<!--}-->
+<!--const triggerFirstUsageOwnership = function (feedUrl) {-->
+<!--const xhr = new XMLHttpRequest();-->
+<!--xhr.open("POST", serviceUrl + "/sites/rss?feedUrl=" + feedUrl + "&stripHtmlTags=true");-->
+<!--xhr.onload = function () {-->
+<!--const siteId = JSON.parse(this.response)["siteId"];-->
+<!--document.getElementById("siteId").value = siteId;-->
+<!--document.cookie = "override-site = " + siteId;-->
+<!--document.getElementById("siteSecret").value = JSON.parse(this.response)["siteSecret"];-->
+<!--};-->
+<!--xhr.send();-->
+<!--}-->
+<!--</script>-->
 
+<body onload="client.com.intrafind.sitesearch.client.showInitCode()"></body>
 <style>
     label {
         font-weight: bold;
@@ -54,8 +55,8 @@
 
     label, input {
         font-weight: bold;
-        border-radius: .1em;
-        border: 2px;
+        /*border-radius: .1em;*/
+        /*border: 2px;*/
     }
 
     label {
@@ -68,9 +69,9 @@
         width: 530px;
     }
 
-    .if-teaser-highlight {
-        font-weight: bold;
-    }
+    /*.if-teaser-highlight {*/
+    /*font-weight: bold;*/
+    /*}*/
 </style>
 
 <a id="loginLink" href="/login?redirect_uri=https://api.sitesearch.cloud/login" style="text-decoration: none;"
@@ -91,27 +92,45 @@
 </div>
 <button id="index" class="fa fa-cogs"
         style="height: 1.5em; font-size: 2em;"
-        onclick="triggerFirstUsageOwnership(document.getElementById('feedUrl').value)">
+        onclick="client.com.intrafind.sitesearch.client.triggerFirstUsageOwnership()">
     Enable Search
 </button>
 
-<div class="container" style="margin-top:22px; width: 530px;">
-    <div id="searchbar"></div>
-    <div id="resultlist"></div>
-</div>
+<h2>Add this to your website</h2>
+<br>
+<input id="searchbar-variant" type="radio" style="width: 30px; height: 2em;" value="Enterprise search bar"
+       name="clientChoice" title="Enterprise" checked>Enterprise
+<input id="finder-variant" type="radio" style="width: 30px; height: 2em;" value="{if-lab} Finder (experimental)"
+       name="clientChoice" title="Experimental">Experimental
+<br>
+<br>
+<textarea id="integration-code" cols="69" rows="20" title="Integration Code"></textarea>
+<br>
 
-<script src="https://api.sitesearch.cloud/searchbar/js/app.js"></script>
-<script>
-    jQuery.noConflict();
-    jQuery(document).ready(function ($) {
-        IFS.initClient({
-            sbTarget: "#searchbar",
-            configurl: "searchbar-config/sitesearch-config.json",
-            sitesearch: true,
-            siteId: "1585e8d8-c6cd-40b9-b53f-3afc5a590a3a"
+<div id="sitesearch-searchbar">
+    <!--<style>-->
+    <!--.if-teaser-highlight {-->
+    <!--font-weight: bold;-->
+    <!--}-->
+    <!--</style>-->
+    <div class="container" style="margin-top:22px; width: 530px;">
+        <div id="searchbar"></div>
+        <div id="resultlist"></div>
+    </div>
+
+    <script src="https://api.sitesearch.cloud/searchbar/js/app.js"></script>
+    <script>
+        jQuery.noConflict();
+        jQuery(document).ready(function ($) {
+            IFS.initClient({
+                sbTarget: "#searchbar",
+                configurl: "searchbar-config/sitesearch-config.json",
+                sitesearch: true,
+                siteId: "1585e8d8-c6cd-40b9-b53f-3afc5a590a3a"
+            });
         });
-    });
-</script>
+    </script>
+</div>
 
 <br>
 <style>
@@ -169,6 +188,12 @@
 </div>
 
 <br>
+
+<script id="sitesearch-finder-init"
+        data-siteId="1585e8d8-c6cd-40b9-b53f-3afc5a590a3a"
+        src="/app/finder/finder.js"
+        data-search-style="width: 530px; font-size: 2em; text-indent: .5em;"
+></script>
 
 <div style="float: right">
     <span class="fa fa-user-circle-o"></span> <a href="privacy.html">Privacy</a> | <span class="fa fa-gavel"></span>

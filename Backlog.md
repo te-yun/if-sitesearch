@@ -26,6 +26,7 @@ Backlog
 * save siteSecret in persistent store, not in the ElasticSearch document
 
 # future
+* explore http://ktor.io/assets/js/jekyll-search.js as alternative to search bar & finder
 * Results close to the actual appearance == preserve HTML in results (SB)
 * PDF converter support, Beni? (SB)
 * payment button

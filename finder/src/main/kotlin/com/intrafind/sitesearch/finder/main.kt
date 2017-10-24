@@ -49,7 +49,7 @@ private fun validateServiceCall(apiEndpoint: String) {
         val dt = document.createElement("dt") as HTMLElement
         debugView.appendChild(dt)
         val dd = document.createElement("dd")
-        if (xhr.status.equals(200) && 99 < xhr.responseText.length) {
+        if (xhr.status.equals(200) && JSON.parse<dynamic>(xhr.responseText).results.length > 0) {
             dt.style.color = "#191"
             dt.textContent = "PASSED: $apiEndpoint"
         } else {
@@ -58,18 +58,13 @@ private fun validateServiceCall(apiEndpoint: String) {
         }
         dd.textContent = "Status: ${xhr.status} | Response Length: ${xhr.responseText.length}"
         debugView.appendChild(dd)
-        log("CORS - Access-Control-Allow-OrigiNN: ${xhr.getResponseHeader("Access-Control-Allow-Originn")}")
-        log("CORS - Access-Control-Allow-Origin: ${xhr.getResponseHeader("Access-Control-Allow-Origin")}")
-        log("CORS - access-control-allow-origin: ${xhr.getResponseHeader("access-control-allow-origin")}")
-        log("CORS - access-control-allow-credentials: ${xhr.getResponseHeader("access-control-allow-credentials")}")
-        log("CORS - Access-Control-Allow-Credentials: ${xhr.getResponseHeader("Access-Control-Allow-Credentials")}")
-        log("CORS - Origin: ${xhr.getResponseHeader("Origin")}")
-        log("CORS - Origin: ${xhr.getResponseHeader("origin")}")
     }
     xhr.send()
 }
+
 fun init() {
     log("init")
+    buildFinder()
 
     selfTest.addEventListener("click", { selfTest() })
     selfTest.innerText = "Self Test"
@@ -83,15 +78,29 @@ fun init() {
             "box-shadow: 0 2px 2px 0 gray, 0 1px 4px 0 gray, 0 3px 1px -2px gray; " +
                     "letter-spacing: .02em; " +
                     "min-height: 50px; max-height: 400px;" +
-                    "margin-top: 0; overflow-y: auto;" +
-                    "width: ${finder.clientWidth - 5}px;" +
-                    "border-radius: 0 0 .5em .5em;" +
+                    "margin-top: 2px; overflow-y: auto;" +
+                    "width: ${finder.getAttribute("width")?.toInt()!! - 9}px;" +
                     "padding-left: 8px;"
 
     if (DEBUG) {
         finder.parentElement?.appendChild(selfTest)
         finder.parentNode?.appendChild(debugView)
     }
+    finderInit.parentElement?.appendChild(finder)
+}
+
+private fun buildFinder() {
+    val finderStyle = finderInit.getAttribute("data-search-style")
+    finder.id = "sitesearch-finder"
+    finder.type = "search"
+    finder.title = "Finder"
+    finder.placeholder = "Find"
+    finder.style.cssText =
+            if (finderStyle.isNullOrBlank())
+                "width: 500px; font-size: 2em; text-indent: .5em;"
+            else
+                finderStyle!!
+    finder.width = finder.style.width.substringBeforeLast("px").toInt()
 }
 
 private val DEBUG = window.location.search.contains("sitesearch-finder-debug-view")
@@ -102,12 +111,13 @@ private fun log(msg: Any?) {
 }
 
 private val findingsContainer = document.createElement("dl") as HTMLDListElement
-private val finder = document.getElementById("sitesearch-finder") as HTMLInputElement
 
 private val finderService = "https://api.sitesearch.cloud"
-private val siteId = document.getElementById("sitesearch-finder-init")?.getAttribute("data-siteId")
+private val finderInit = document.getElementById("sitesearch-finder-init") as HTMLScriptElement
+private val siteId = finderInit.getAttribute("data-siteId")
 private val finderEndpoint = "search"
 private val autocompleteEndpoint = "autocomplete"
+private val finder = document.createElement("input") as HTMLInputElement
 
 fun main(args: Array<String>) {
     init()
@@ -155,7 +165,9 @@ private fun autocomplete(finder: HTMLInputElement) { // TODO remove "finder: HTM
         } else if (xhr.status.equals(404)) {
             log("no suggestions")
         }
-        finder.parentElement?.appendChild(findingsContainer)
+//        finderInit.parentElement?.appendChild(findingsContainer)
+        finder.appendChild(findingsContainer)
+//        finder.appendChild(findingsContainer)
         findingsContainer.focus()
     }
     xhr.onerror = {
@@ -192,7 +204,7 @@ private fun search(finder: HTMLInputElement) {
                 ddUrl.setAttribute("style", "margin-bottom: 1em;")
                 findingsContainer.appendChild(ddUrl)
             }
-        } else if (xhr.status.equals(404)) {
+        } else if (xhr.status.equals(200)) {
             val dtTitle = document.createElement("dt") as HTMLElement
             dtTitle.innerHTML = "..."
             dtTitle.setAttribute("style", "margin-bottom: .5em;" +

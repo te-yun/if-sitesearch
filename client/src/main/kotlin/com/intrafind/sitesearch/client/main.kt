@@ -24,9 +24,30 @@ import kotlin.dom.clear
 
 fun main(args: Array<String>) {
     window.addEventListener("DOMContentLoaded", {
-        console.warn("DOMContentLoaded")
         init()
     })
+}
+
+fun triggerFirstUsageOwnership() {
+    val serviceUrl: String
+    if (window.location.hostname.equals("localhost")) {
+        serviceUrl = "http://localhost:8001"
+    } else {
+        serviceUrl = "https://api.sitesearch.cloud"
+    }
+
+    val xhr = XMLHttpRequest()
+    val feedUrl = (document.getElementById("feedUrl") as HTMLInputElement).value
+    xhr.open("POST", "$serviceUrl/sites/rss?feedUrl=$feedUrl&stripHtmlTags=true")
+    xhr.onload = {
+        val siteId = JSON.parse<dynamic>(xhr.responseText).siteId as String
+        val siteSecret = JSON.parse<dynamic>(xhr.responseText).siteSecret as String
+        (document.getElementById("siteId") as HTMLInputElement).value = siteId
+        (document.getElementById("siteSecret") as HTMLInputElement).value = siteSecret
+        document.cookie = "override-site = $siteId"
+        ""
+    }
+    xhr.send()
 }
 
 private val loginLink = document.getElementById("loginLink") as HTMLAnchorElement
@@ -44,6 +65,31 @@ fun init() {
         showUser(xhr)
     }
     xhr.send()
+}
+
+fun showInitCode() {
+    val enterpriseSearchbarCode = document.getElementById("sitesearch-searchbar") as HTMLDivElement
+    val finderCode = document.getElementById("sitesearch-finder-init") as HTMLScriptElement
+    val finderContainer = document.getElementById("sitesearch-finder") as HTMLInputElement
+    finderContainer.style.display = "none"
+    val finderVariant = document.getElementById("finder-variant") as HTMLInputElement
+    val searchbarVariant = document.getElementById("searchbar-variant") as HTMLInputElement
+    val integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
+    integrationCode.value = enterpriseSearchbarCode.outerHTML
+    console.warn(document.getElementById("finder-variant").asDynamic().checked)
+    console.warn(document.getElementById("searchbar-variant").asDynamic().checked)
+
+    searchbarVariant.addEventListener("click", {
+        enterpriseSearchbarCode.style.display = "block"
+        finderContainer.style.display = "none"
+        integrationCode.value = enterpriseSearchbarCode.outerHTML
+    })
+    finderVariant.addEventListener("click", {
+        enterpriseSearchbarCode.style.display = "none"
+        finderContainer.style.display = "block"
+        integrationCode.value = finderCode.outerHTML
+    })
+
 }
 
 private fun showUser(xhr: XMLHttpRequest) {

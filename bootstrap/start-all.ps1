@@ -1,3 +1,8 @@
-iex ./start-elasticsearch.ps1
-& ./start-search-service.ps1
-#./populate-search-index.ps1
+#!/usr/bin/env powershell
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = "Stop"
+$PSDefaultParameterValues["*:ErrorAction"] = "Stop"
+
+iex ./start-sitesearch-elasticsearch.ps1
+& ./start-sitesearch-search-service.ps1
