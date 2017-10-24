@@ -4,5 +4,5 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 $PSDefaultParameterValues["*:ErrorAction"] = "Stop"
 
-./start-sitesearch-elasticsearch.ps1
-& ./start-sitesearch-search-service.ps1
+iex ./bootstrap/start-sitesearch-elasticsearch.ps1
+& ./bootstrap/start-sitesearch-search-service.ps1
