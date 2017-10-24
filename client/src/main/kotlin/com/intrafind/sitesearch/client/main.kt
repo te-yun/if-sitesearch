@@ -17,6 +17,7 @@
 package com.intrafind.sitesearch.client
 
 import org.w3c.dom.*
+import org.w3c.dom.events.Event
 import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
 import kotlin.browser.window
@@ -45,7 +46,7 @@ fun triggerFirstUsageOwnership() {
         (document.getElementById("siteId") as HTMLInputElement).value = siteId
         (document.getElementById("siteSecret") as HTMLInputElement).value = siteSecret
         document.cookie = "override-site = $siteId"
-        ""
+        document.dispatchEvent(Event("triggerFirstUsageOwnershipEvent"))
     }
     xhr.send()
 }
@@ -68,6 +69,8 @@ fun init() {
 }
 
 fun showInitCode() {
+    val defaultSiteId = "1585e8d8-c6cd-40b9-b53f-3afc5a590a3a"
+    val siteIdContainer = document.getElementById("siteId") as HTMLInputElement
     val enterpriseSearchbarCode = document.getElementById("sitesearch-searchbar") as HTMLDivElement
     val finderInitCode = document.getElementById("sitesearch-finder-init") as HTMLScriptElement
     val finderContainer = document.getElementById("sitesearch-finder") as HTMLDivElement
@@ -80,14 +83,27 @@ fun showInitCode() {
     searchbarVariant.addEventListener("click", {
         enterpriseSearchbarCode.style.display = "block"
         finderContainer.style.display = "none"
-        integrationCode.value = enterpriseSearchbarCode.outerHTML
+        if (siteIdContainer.value.isBlank()) {
+            integrationCode.value = enterpriseSearchbarCode.outerHTML
+        } else {
+            integrationCode.value = enterpriseSearchbarCode.outerHTML.replace(defaultSiteId, siteIdContainer.value)
+        }
     })
     finderVariant.addEventListener("click", {
         enterpriseSearchbarCode.style.display = "none"
         finderContainer.style.display = "block"
-        integrationCode.value = finderInitCode.outerHTML
+        if (siteIdContainer.value.isBlank()) {
+            integrationCode.value = finderInitCode.outerHTML
+        } else {
+            integrationCode.value = finderInitCode.outerHTML.replace(defaultSiteId, siteIdContainer.value)
+        }
     })
 
+    document.addEventListener("triggerFirstUsageOwnershipEvent", {
+        if (!siteIdContainer.value.isBlank()) {
+            integrationCode.value = integrationCode.value.replace(defaultSiteId, siteIdContainer.value)
+        }
+    })
 }
 
 private fun showUser(xhr: XMLHttpRequest) {

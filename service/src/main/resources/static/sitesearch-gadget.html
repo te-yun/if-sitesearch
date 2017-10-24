@@ -22,26 +22,6 @@
 <link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/theme/font/css/font-awesome.min.css"/>
 <script src="/app/runtime/kotlin.js"></script>
 
-<!--<script>-->
-<!--let serviceUrl;-->
-<!--if (location.hostname === "localhost") {-->
-<!--serviceUrl = "http://localhost:8001";-->
-<!--} else {-->
-<!--serviceUrl = "https://api.sitesearch.cloud";-->
-<!--}-->
-<!--const triggerFirstUsageOwnership = function (feedUrl) {-->
-<!--const xhr = new XMLHttpRequest();-->
-<!--xhr.open("POST", serviceUrl + "/sites/rss?feedUrl=" + feedUrl + "&stripHtmlTags=true");-->
-<!--xhr.onload = function () {-->
-<!--const siteId = JSON.parse(this.response)["siteId"];-->
-<!--document.getElementById("siteId").value = siteId;-->
-<!--document.cookie = "override-site = " + siteId;-->
-<!--document.getElementById("siteSecret").value = JSON.parse(this.response)["siteSecret"];-->
-<!--};-->
-<!--xhr.send();-->
-<!--}-->
-<!--</script>-->
-
 <body onload="client.com.intrafind.sitesearch.client.showInitCode()"></body>
 <style>
     label {
@@ -54,8 +34,6 @@
     }
 
     label, div.wrapper > input {
-        /*font-weight: bold;*/
-        /*border-radius: .1em;*/
         border: 3px;
         width: 399px;
     }
@@ -128,6 +106,7 @@
 <br>
 
 <script id="sitesearch-finder-init"
+        data-test="console.warn(1)"
         data-siteId="1585e8d8-c6cd-40b9-b53f-3afc5a590a3a"
         src="/app/finder/finder.js"
         data-search-style="width: 530px; font-size: 2em; text-indent: .5em;"
