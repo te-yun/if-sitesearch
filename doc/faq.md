@@ -112,11 +112,6 @@ FAQ obsolete, has been moved to [its new location](https://github.com/intrafind/
     
     <link rel="stylesheet" href="https://api.sitesearch.cloud/searchbar/css/app.css"/>
     <div id="searchbarContainer">
-        <style>
-            .if-teaser-highlight {
-                font-weight: bold;
-            }
-        </style>
         <div class="container" style="width: 530px;">
             <div id="searchbar"></div>
             <div id="resultlist"></div>

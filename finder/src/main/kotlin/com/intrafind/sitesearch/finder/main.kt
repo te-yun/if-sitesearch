@@ -78,20 +78,25 @@ fun init() {
             "box-shadow: 0 2px 2px 0 gray, 0 1px 4px 0 gray, 0 3px 1px -2px gray; " +
                     "letter-spacing: .02em; " +
                     "min-height: 50px; max-height: 400px;" +
-                    "margin-top: 2px; overflow-y: auto;" +
+                    "margin-top: 2px; overflow-y: auto; overflow-x: hidden;" +
                     "width: ${finder.getAttribute("width")?.toInt()!! - 9}px;" +
                     "padding-left: 8px;"
 
-    if (DEBUG) {
+    if (isDebugView) {
         finder.parentElement?.appendChild(selfTest)
         finder.parentNode?.appendChild(debugView)
     }
-    finderInit.parentElement?.appendChild(finder)
+
+    finderContainer.id = "sitesearch-finder"
+    finderInit.parentElement?.appendChild(finderContainer)
+    finderContainer.appendChild(finder)
+    finderContainer.appendChild(findingsContainer)
+    findingsContainer.style.display = "none"
 }
 
+private val finderContainer = document.createElement("div") as HTMLDivElement
 private fun buildFinder() {
     val finderStyle = finderInit.getAttribute("data-search-style")
-    finder.id = "sitesearch-finder"
     finder.type = "search"
     finder.title = "Finder"
     finder.placeholder = "Find"
@@ -103,9 +108,9 @@ private fun buildFinder() {
     finder.width = finder.style.width.substringBeforeLast("px").toInt()
 }
 
-private val DEBUG = window.location.search.contains("sitesearch-finder-debug-view")
+private val isDebugView = window.location.search.contains("debug-view")
 private fun log(msg: Any?) {
-    if (DEBUG) {
+    if (isDebugView) {
         println(msg)
     }
 }
@@ -121,7 +126,7 @@ private val finder = document.createElement("input") as HTMLInputElement
 
 fun main(args: Array<String>) {
     init()
-    window.addEventListener("DOMContentLoaded", {
+    document.addEventListener("DOMContentLoaded", {
         log("DOMContentLoaded")
     })
 
@@ -134,14 +139,17 @@ fun main(args: Array<String>) {
         debugView.remove()
         val keyboardEvent = event as KeyboardEvent
         if (keyboardEvent.key.equals("Enter")) {
-            search(finder)
+            if (finder.value.isBlank()) {
+                findingsContainer.style.display = "none"
+            }
+            search()
         } else {
-            autocomplete(finder)
+            autocomplete()
         }
     })
 }
 
-private fun autocomplete(finder: HTMLInputElement) { // TODO remove "finder: HTMLInputElement" as an argument of this method
+private fun autocomplete() {
     val xhr = XMLHttpRequest()
     xhr.open("GET", "$finderService/$autocompleteEndpoint?query=${finder.value}&siteId=$siteId")
     xhr.onload = {
@@ -158,17 +166,14 @@ private fun autocomplete(finder: HTMLInputElement) { // TODO remove "finder: HTM
                 suggestionEntry.onclick = {
                     log(suggestionEntry.innerText)
                     finder.value = suggestionEntry.innerText
-                    search(finder)
+                    search()
                 }
                 findingsContainer.appendChild(suggestionEntry)
             }
-        } else if (xhr.status.equals(404)) {
-            log("no suggestions")
+            if (suggestions.results.length > 0) {
+                findingsContainer.style.display = "block"
+            }
         }
-//        finderInit.parentElement?.appendChild(findingsContainer)
-        finder.appendChild(findingsContainer)
-//        finder.appendChild(findingsContainer)
-        findingsContainer.focus()
     }
     xhr.onerror = {
         log("Error: ${xhr.response}")
@@ -176,7 +181,7 @@ private fun autocomplete(finder: HTMLInputElement) { // TODO remove "finder: HTM
     xhr.send()
 }
 
-private fun search(finder: HTMLInputElement) {
+private fun search() {
     if (finder.value.equals("/selftest")) {
         findingsContainer.remove()
         finder.parentNode?.appendChild(debugView)
@@ -204,16 +209,17 @@ private fun search(finder: HTMLInputElement) {
                 ddUrl.setAttribute("style", "margin-bottom: 1em;")
                 findingsContainer.appendChild(ddUrl)
             }
-        } else if (xhr.status.equals(200)) {
-            val dtTitle = document.createElement("dt") as HTMLElement
-            dtTitle.innerHTML = "..."
-            dtTitle.setAttribute("style", "margin-bottom: .5em;" +
-                    "text-align: center;" +
-                    "font-size: 2em;"
-            )
-            findingsContainer.appendChild(dtTitle)
+            if (findings.results.isEmpty()) {
+                val dtTitle = document.createElement("dt") as HTMLElement
+                dtTitle.innerHTML = "..."
+                dtTitle.setAttribute("style", "margin-bottom: .5em;" +
+                        "text-align: center;" +
+                        "font-size: 2em;"
+                )
+                findingsContainer.appendChild(dtTitle)
+            }
+            findingsContainer.style.display = "block"
         }
-        finder.parentElement?.appendChild(findingsContainer)
     }
     xhr.onerror = {
         log("Error: ${xhr.response}")

@@ -69,15 +69,15 @@ fun init() {
 
 fun showInitCode() {
     val enterpriseSearchbarCode = document.getElementById("sitesearch-searchbar") as HTMLDivElement
-    val finderCode = document.getElementById("sitesearch-finder-init") as HTMLScriptElement
-    val finderContainer = document.getElementById("sitesearch-finder") as HTMLInputElement
-    finderContainer.style.display = "none"
+    val finderInitCode = document.getElementById("sitesearch-finder-init") as HTMLScriptElement
+    val finderContainer = document.getElementById("sitesearch-finder") as HTMLDivElement
     val finderVariant = document.getElementById("finder-variant") as HTMLInputElement
     val searchbarVariant = document.getElementById("searchbar-variant") as HTMLInputElement
     val integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
     integrationCode.value = enterpriseSearchbarCode.outerHTML
-    console.warn(document.getElementById("finder-variant").asDynamic().checked)
-    console.warn(document.getElementById("searchbar-variant").asDynamic().checked)
+    enterpriseSearchbarCode.style.display = "none"
+    (document.getElementById("sitesearch-finder-init") as HTMLScriptElement).style.display = "none"
+    (document.getElementById("sitesearch-finder-init") as HTMLScriptElement).hidden = true
 
     searchbarVariant.addEventListener("click", {
         enterpriseSearchbarCode.style.display = "block"
@@ -87,7 +87,7 @@ fun showInitCode() {
     finderVariant.addEventListener("click", {
         enterpriseSearchbarCode.style.display = "none"
         finderContainer.style.display = "block"
-        integrationCode.value = finderCode.outerHTML
+        integrationCode.value = finderInitCode.outerHTML
     })
 
 }

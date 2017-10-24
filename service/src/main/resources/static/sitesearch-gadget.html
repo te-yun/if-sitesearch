@@ -53,10 +53,11 @@
         grid-template-columns: 130px 400px;
     }
 
-    label, input {
-        font-weight: bold;
+    label, div.wrapper > input {
+        /*font-weight: bold;*/
         /*border-radius: .1em;*/
-        /*border: 2px;*/
+        border: 3px;
+        width: 399px;
     }
 
     label {
@@ -68,10 +69,6 @@
         font-weight: bold;
         width: 530px;
     }
-
-    /*.if-teaser-highlight {*/
-    /*font-weight: bold;*/
-    /*}*/
 </style>
 
 <a id="loginLink" href="/login?redirect_uri=https://api.sitesearch.cloud/login" style="text-decoration: none;"
@@ -82,7 +79,6 @@
     <label for="feedUrl"><span class="fa fa-rss"></span> Feed URL</label>
     <input id="feedUrl" placeholder="Feed URL, e.g. https://intrafind.de/share/enterprise-search-blog.xml"
            value="https://intrafind.de/share/enterprise-search-blog.xml">
-    <!--value="https://streemian.com/rss/blockchain">-->
     <label for="email"><span class="fa fa-envelope-o"></span> E-mail</label>
     <input id="email" placeholder="E-mail" value="feedback@sitesearch.cloud">
     <label for="siteId"><span class="fa fa-key"></span> Site ID</label>
@@ -96,8 +92,7 @@
     Enable Search
 </button>
 
-<h2>Add this to your website</h2>
-<br>
+<h2>Add a search bar to your website</h2>
 <input id="searchbar-variant" type="radio" style="width: 30px; height: 2em;" value="Enterprise search bar"
        name="clientChoice" title="Enterprise" checked>Enterprise
 <input id="finder-variant" type="radio" style="width: 30px; height: 2em;" value="{if-lab} Finder (experimental)"
@@ -108,11 +103,8 @@
 <br>
 
 <div id="sitesearch-searchbar">
-    <!--<style>-->
-    <!--.if-teaser-highlight {-->
-    <!--font-weight: bold;-->
-    <!--}-->
-    <!--</style>-->
+    <!--Uncomment the <link rel... below to activate the search bar. The search won't work if the line below remains commented.-->
+    <!--<link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/searchbar/css/app.css"/>-->
     <div class="container" style="margin-top:22px; width: 530px;">
         <div id="searchbar"></div>
         <div id="resultlist"></div>
@@ -131,6 +123,15 @@
         });
     </script>
 </div>
+
+<br>
+<br>
+
+<script id="sitesearch-finder-init"
+        data-siteId="1585e8d8-c6cd-40b9-b53f-3afc5a590a3a"
+        src="/app/finder/finder.js"
+        data-search-style="width: 530px; font-size: 2em; text-indent: .5em;"
+></script>
 
 <br>
 <style>
@@ -188,12 +189,6 @@
 </div>
 
 <br>
-
-<script id="sitesearch-finder-init"
-        data-siteId="1585e8d8-c6cd-40b9-b53f-3afc5a590a3a"
-        src="/app/finder/finder.js"
-        data-search-style="width: 530px; font-size: 2em; text-indent: .5em;"
-></script>
 
 <div style="float: right">
     <span class="fa fa-user-circle-o"></span> <a href="privacy.html">Privacy</a> | <span class="fa fa-gavel"></span>
