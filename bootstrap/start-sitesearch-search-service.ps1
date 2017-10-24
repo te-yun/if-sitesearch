@@ -11,8 +11,8 @@ $persistence_dir = "srv"
 
 docker network create $docker_network
 
-if(Test-Path ~/tmp/$service_name.tar){
-    docker load -i "~/tmp/$service_name.tar"
+if(Test-Path $HOME/tmp/$service_name.tar){
+    docker load -i "$HOME/tmp/$service_name.tar"
 
     mkdir -p $HOME/$persistence_dir/$service_name
     sudo chown -R 1000:1000 $HOME/$persistence_dir/$service_name
@@ -24,5 +24,5 @@ if(Test-Path ~/tmp/$service_name.tar){
         -v $HOME/$persistence_dir/$service_name/logs:/home/app_user/logs `
         $docker_image
 } else {
-    echo ~/tmp/$service_name.tar file is missing
+    echo $HOME/tmp/$service_name.tar file is missing
 }
