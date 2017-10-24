@@ -15,6 +15,7 @@ Backlog
     * let the *crawler* talk to Site Search API to feed its content
 
 # next
+* status.html page that show the results of TeamCity's SmokeTest
 * Customer Feedback Channel: Slack vs Twak
 * Smoketest
 * try https://www.elastic.co/cloud/enterprise

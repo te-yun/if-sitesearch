@@ -7,7 +7,7 @@ $PSDefaultParameterValues["*:ErrorAction"] = "Stop"
 $docker_network = "sitesearch"
 $service_name = "sitesearch-search-service"
 $docker_image = "intrafind/$service_name"
-$persistence_dir = "srv1"
+$persistence_dir = "srv"
 
 docker network create $docker_network
 
