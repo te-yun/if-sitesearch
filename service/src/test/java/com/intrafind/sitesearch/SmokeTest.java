@@ -56,10 +56,8 @@ public class SmokeTest {
 //    @Autowired
 //    private WebApplicationContext webApplicationContext;
 
-    // TODO add CORS checks
     // TODO make sure subsequent successful executions are possible
     // TODO make sure CI turns red when one of the tests is broken
-    // TODO CI notification
 
     @Test
     public void assureSiteSearchServiceBasicAuthProtectionForJsonPost() throws Exception {
@@ -68,6 +66,7 @@ public class SmokeTest {
         assertNull(secureEndpointJson.getBody());
     }
 
+    private static final String PRODUCT_FRONTPAGE_MARKER = "<title>Site Search from IntraFind Software AG</title>";
     @Test
     public void redirectFromHttpNakedDomain() throws Exception {
         final ResponseEntity<String> response = caller.exchange(
@@ -78,6 +77,30 @@ public class SmokeTest {
         );
         assertEquals(HttpStatus.OK, response.getStatusCode());
 //        assertTrue(response.getBody().contains("301 Moved Permanently"));
+    }
+
+    @Test
+    public void redirectFromUnencryptedWWW() throws Exception {
+        final ResponseEntity<String> response = caller.exchange(
+                "http://www.sitesearch.cloud",
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                String.class
+        );
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(response.getBody().contains(PRODUCT_FRONTPAGE_MARKER));
+    }
+
+    @Test
+    public void redirectFromWWW() throws Exception {
+        final ResponseEntity<String> response = caller.exchange(
+                "https://www.sitesearch.cloud",
+                HttpMethod.GET,
+                HttpEntity.EMPTY,
+                String.class
+        );
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(response.getBody().contains(PRODUCT_FRONTPAGE_MARKER));
     }
 
     @Test
