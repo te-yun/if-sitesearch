@@ -35,6 +35,18 @@ server {
 server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
+    server_name www.sitesearch.cloud;
+
+    include /etc/nginx/snippets/ssl.conf;
+
+    location / {
+        return 301 https://sitesearch.cloud$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
     server_name api.sitesearch.cloud;
 
     include /etc/nginx/snippets/ssl.conf;
