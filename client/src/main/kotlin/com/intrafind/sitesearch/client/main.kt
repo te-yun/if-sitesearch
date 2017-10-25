@@ -91,7 +91,7 @@ fun showInitCode() {
         if (siteIdContainer.value.isBlank()) {
             integrationCode.value = enterpriseSearchbarCode
         } else {
-            integrationCode.value = enterpriseSearchbarCode.replace(defaultSiteId, siteIdContainer.value)
+            integrationCode.value = integrationCode.value.replace(defaultSiteId, siteIdContainer.value)
         }
     })
     finderVariant.addEventListener("click", {
@@ -100,7 +100,7 @@ fun showInitCode() {
         if (siteIdContainer.value.isBlank()) {
             integrationCode.value = finderInitCode
         } else {
-            integrationCode.value = finderInitCode.replace(defaultSiteId, siteIdContainer.value)
+            integrationCode.value = integrationCode.value.replace(defaultSiteId, siteIdContainer.value)
         }
     })
 
