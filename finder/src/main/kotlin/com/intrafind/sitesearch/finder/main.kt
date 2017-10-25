@@ -99,7 +99,7 @@ private fun buildFinder() {
     val finderStyle = finderInit.getAttribute("data-search-style")
     finder.type = "search"
     finder.title = "Finder"
-    finder.placeholder = "{if-lab} Finder"
+    finder.placeholder = "{if-lab} Page Finder"
     finder.style.cssText =
             if (finderStyle.isNullOrBlank())
                 "width: 500px; font-size: 2em; text-indent: .5em;"

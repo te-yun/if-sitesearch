@@ -71,31 +71,36 @@ fun init() {
 fun showInitCode() {
     val defaultSiteId = "1585e8d8-c6cd-40b9-b53f-3afc5a590a3a"
     val siteIdContainer = document.getElementById("siteId") as HTMLInputElement
-    val enterpriseSearchbarCode = document.getElementById("sitesearch-searchbar") as HTMLDivElement
-    val finderInitCode = document.getElementById("sitesearch-finder-init") as HTMLScriptElement
+    val enterpriseSearchbar = document.getElementById("sitesearch-searchbar") as HTMLDivElement
+    val finderInit = document.getElementById("sitesearch-finder-init") as HTMLScriptElement
     val finderContainer = document.getElementById("sitesearch-finder") as HTMLDivElement
     val finderVariant = document.getElementById("finder-variant") as HTMLInputElement
     val searchbarVariant = document.getElementById("searchbar-variant") as HTMLInputElement
     val integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
-    integrationCode.value = enterpriseSearchbarCode.outerHTML
+    val enterpriseSearchbarCode = enterpriseSearchbar.outerHTML
+            .replace("searchbar-config/sitesearch-config.json", "https://api.sitesearch.cloud/searchbar-config/sitesearch-config.json")
+    integrationCode.value = enterpriseSearchbarCode
     finderContainer.style.display = "none"
+    val finderInitCode = "<script src=\"https://api.sitesearch.cloud/app/runtime/kotlin.js\"></script>\n" +
+            finderInit.outerHTML
+                    .replace("/app/finder/finder.js", "https://api.sitesearch.cloud/app/finder/finder.js")
 
     searchbarVariant.addEventListener("click", {
-        enterpriseSearchbarCode.style.display = "block"
+        enterpriseSearchbar.style.display = "block"
         finderContainer.style.display = "none"
         if (siteIdContainer.value.isBlank()) {
-            integrationCode.value = enterpriseSearchbarCode.outerHTML
+            integrationCode.value = enterpriseSearchbarCode
         } else {
-            integrationCode.value = enterpriseSearchbarCode.outerHTML.replace(defaultSiteId, siteIdContainer.value)
+            integrationCode.value = enterpriseSearchbarCode.replace(defaultSiteId, siteIdContainer.value)
         }
     })
     finderVariant.addEventListener("click", {
-        enterpriseSearchbarCode.style.display = "none"
+        enterpriseSearchbar.style.display = "none"
         finderContainer.style.display = "block"
         if (siteIdContainer.value.isBlank()) {
-            integrationCode.value = finderInitCode.outerHTML
+            integrationCode.value = finderInitCode
         } else {
-            integrationCode.value = finderInitCode.outerHTML.replace(defaultSiteId, siteIdContainer.value)
+            integrationCode.value = finderInitCode.replace(defaultSiteId, siteIdContainer.value)
         }
     })
 
