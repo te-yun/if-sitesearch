@@ -69,7 +69,7 @@ fun init() {
 }
 
 fun showInitCode() {
-    val defaultSiteId = "1585e8d8-c6cd-40b9-b53f-3afc5a590a3a"
+    val defaultSiteId = "siteId: \"(.+)\""
     val siteIdContainer = document.getElementById("siteId") as HTMLInputElement
     val enterpriseSearchbar = document.getElementById("sitesearch-searchbar") as HTMLDivElement
     val finderInit = document.getElementById("sitesearch-finder-init") as HTMLScriptElement
