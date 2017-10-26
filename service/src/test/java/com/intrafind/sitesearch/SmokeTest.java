@@ -66,7 +66,7 @@ public class SmokeTest {
         assertNull(secureEndpointJson.getBody());
     }
 
-    private static final String PRODUCT_FRONTPAGE_MARKER = "<title>Site Search from IntraFind Software AG</title>";
+    private static final String productFrontpageMarker = "<title>Site Search from IntraFind Software AG</title>";
     @Test
     public void redirectFromHttpNakedDomain() throws Exception {
         final ResponseEntity<String> response = caller.exchange(
@@ -88,7 +88,7 @@ public class SmokeTest {
                 String.class
         );
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(response.getBody().contains(PRODUCT_FRONTPAGE_MARKER));
+        assertTrue(response.getBody().contains(productFrontpageMarker));
     }
 
     @Test
@@ -100,7 +100,7 @@ public class SmokeTest {
                 String.class
         );
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(response.getBody().contains(PRODUCT_FRONTPAGE_MARKER));
+        assertTrue(response.getBody().contains(productFrontpageMarker));
     }
 
     @Test
@@ -156,7 +156,9 @@ public class SmokeTest {
         assertTrue(response.body().string().contains("<title>Simple Site Search</title>"));
 
         assertEquals(HttpStatus.OK.value(), response.code());
-        assureCorsHeaders(response.headers(), 495);
+        assertNull(response.headers().get("x-frame-options"));
+        assertNull(response.headers().get("X-Frame-Options"));
+        assureCorsHeaders(response.headers(), 472);
     }
 
     @Test
