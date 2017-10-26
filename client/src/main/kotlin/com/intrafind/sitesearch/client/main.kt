@@ -99,7 +99,7 @@ fun showInitCode() {
         if (siteIdContainer.value.isBlank()) {
             integrationCode.value = finderInitCode
         } else {
-            integrationCode.value = finderInitCode.replace("data-siteid=\".+\"".toRegex(), "data-siteid=\"${siteIdContainer.value}\"")
+            integrationCode.value = finderInitCode.replace("data-siteId=\".+\"".toRegex(RegexOption.IGNORE_CASE), "data-siteId=\"${siteIdContainer.value}\"")
         }
     })
 
@@ -108,7 +108,7 @@ fun showInitCode() {
             if (searchbarVariant.checked) {
                 integrationCode.value = integrationCode.value.replace("siteId\\:\\ \".+".toRegex(), "siteId: \"${siteIdContainer.value}\"")
             } else {
-                integrationCode.value = integrationCode.value.replace("data-siteid=\".+\"".toRegex(), "data-siteid=\"${siteIdContainer.value}\"")
+                integrationCode.value = integrationCode.value.replace("data-siteId=\".+\"".toRegex(RegexOption.IGNORE_CASE), "data-siteId=\"${siteIdContainer.value}\"")
             }
         }
     })
