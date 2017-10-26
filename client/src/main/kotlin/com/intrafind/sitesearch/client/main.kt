@@ -69,7 +69,6 @@ fun init() {
 }
 
 fun showInitCode() {
-    val defaultSiteId = "siteId: \"(.+)\""
     val siteIdContainer = document.getElementById("siteId") as HTMLInputElement
     val enterpriseSearchbar = document.getElementById("sitesearch-searchbar") as HTMLDivElement
     val finderInit = document.getElementById("sitesearch-finder-init") as HTMLScriptElement
@@ -91,7 +90,7 @@ fun showInitCode() {
         if (siteIdContainer.value.isBlank()) {
             integrationCode.value = enterpriseSearchbarCode
         } else {
-            integrationCode.value = enterpriseSearchbarCode.replace(defaultSiteId, siteIdContainer.value)
+            integrationCode.value = enterpriseSearchbarCode.replace("siteId\\:\\ \".+".toRegex(), "siteId: \"${siteIdContainer.value}\"")
         }
     })
     finderVariant.addEventListener("click", {
@@ -100,13 +99,17 @@ fun showInitCode() {
         if (siteIdContainer.value.isBlank()) {
             integrationCode.value = finderInitCode
         } else {
-            integrationCode.value = finderInitCode.replace(defaultSiteId, siteIdContainer.value)
+            integrationCode.value = finderInitCode.replace("data-siteid=\".+\"".toRegex(), "data-siteid=\"${siteIdContainer.value}\"")
         }
     })
 
     document.addEventListener("triggerFirstUsageOwnershipEvent", {
         if (!siteIdContainer.value.isBlank()) {
-            integrationCode.value = integrationCode.value.replace(defaultSiteId, siteIdContainer.value)
+            if (searchbarVariant.checked) {
+                integrationCode.value = integrationCode.value.replace("siteId\\:\\ \".+".toRegex(), "siteId: \"${siteIdContainer.value}\"")
+            } else {
+                integrationCode.value = integrationCode.value.replace("data-siteid=\".+\"".toRegex(), "data-siteid=\"${siteIdContainer.value}\"")
+            }
         }
     })
 }
