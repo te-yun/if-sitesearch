@@ -180,7 +180,7 @@ public class SmokeTest {
         assertEquals("http://intrafind.de/blog/wie-die-semantische-suche-vom-knowledge-graph-profitiert", found.getUrlRaw());
         assertTrue(found.getBody().startsWith("&lt;p&gt;Der <span class=\"if-teaser-highlight\">Knowledge</span> Graph ist vielen Nutzern bereits durch Google oder Facebook bekannt. Aber auch"));
 
-        assureCorsHeaders(response.headers(), 429);
+        assureCorsHeaders(response.headers(), 406);
     }
 
     @Test
@@ -196,6 +196,6 @@ public class SmokeTest {
 //        assertNotNull(actual.getBody());
 //        assertEquals(1, actual.getBody().getResults().size());
 //        assertEquals("knowledge graph", actual.getBody().getResults().get(0));
-        assureCorsHeaders(response.headers(), 429);
+        assureCorsHeaders(response.headers(), 406);
     }
 }
