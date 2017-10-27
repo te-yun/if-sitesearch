@@ -165,6 +165,7 @@ fun main(args: Array<String>) {
                 findingsContainer.style.display = "none"
                 findingsContainer.style.background = "#fff"
                 findingsContainer.style.zIndex = "99"
+                findingsContainer.style.position = "relative"
             } else {
                 search()
             }
