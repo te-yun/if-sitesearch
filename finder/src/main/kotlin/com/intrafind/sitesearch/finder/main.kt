@@ -163,6 +163,8 @@ fun main(args: Array<String>) {
         if (keyboardEvent.key.equals("Enter")) {
             if (finder.value.isBlank()) {
                 findingsContainer.style.display = "none"
+                findingsContainer.style.background = "#fff"
+                findingsContainer.style.zIndex = "99"
             } else {
                 search()
             }
