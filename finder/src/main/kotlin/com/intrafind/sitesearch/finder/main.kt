@@ -99,6 +99,10 @@ private fun showPageFinder() {
                     "width: ${finder.getAttribute("width")?.toInt()!! - 9}px;" +
                     "padding-left: 8px;"
 
+    findingsContainer.style.background = "#fff"
+    findingsContainer.style.zIndex = "99"
+    findingsContainer.style.position = "relative"
+
     finderContainer.id = "sitesearch-page-finder"
     val parentContainerId: String? = finderInit.getAttribute("data-append-as-child-to")
     if (parentContainerId.isNullOrBlank()) {
@@ -163,9 +167,6 @@ fun main(args: Array<String>) {
         if (keyboardEvent.key.equals("Enter")) {
             if (finder.value.isBlank()) {
                 findingsContainer.style.display = "none"
-                findingsContainer.style.background = "#fff"
-                findingsContainer.style.zIndex = "99"
-                findingsContainer.style.position = "relative"
             } else {
                 search()
             }
