@@ -105,6 +105,7 @@ private fun showPageFinder() {
         finderInit.parentElement?.appendChild(finderContainer)
     } else {
         val parentContainer = document.querySelector(parentContainerId!!)
+        log(parentContainer?.outerHTML)
         if (parentContainer == null) {
             finderInit.parentElement?.appendChild(finderContainer)
         } else {
@@ -151,7 +152,7 @@ fun main(args: Array<String>) {
         log("DOMContentLoaded")
     })
 
-    log(finder.value)
+    log("Query: ${finder.value}")
     finder.addEventListener("change", {
         log("change")
         log(finder.value)
