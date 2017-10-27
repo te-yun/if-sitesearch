@@ -243,7 +243,7 @@ public class PageTest {
         final ResponseEntity<Tenant> initialIndexCreation = caller.exchange(
                 SiteController.ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/meldungen/detail/rss.xml",
                 HttpMethod.POST, HttpEntity.EMPTY, Tenant.class);
-        TimeUnit.MILLISECONDS.sleep(8_000);
+        TimeUnit.MILLISECONDS.sleep(13_000);
         final Tenant tenantCreation = validateTenantSummary(initialIndexCreation, 10);
 
         UUID siteIdFromCreation = tenantCreation.getSiteId();
