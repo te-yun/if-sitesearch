@@ -22,10 +22,13 @@
 
 <h1>{if-lab} Page Finder</h1>
 
-<div id="some-parent-container">
+<div id="container"></div>
+
+<div id="some-parent-container-that-serves-as-default-container">
     <script id="sitesearch-finder-init"
-            data-siteId="1585e8d8-c6cd-40b9-b53f-3afc5a590a3a"
             src="/app/finder/finder.js"
             data-search-style="width: 500px; font-size: 2em; text-indent: .5em;"
+            data-append-as-child-to="container"
+            data-siteId="1585e8d8-c6cd-40b9-b53f-3afc5a590a3a"
     ></script>
 </div>

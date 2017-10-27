@@ -88,7 +88,17 @@ fun init() {
     }
 
     finderContainer.id = "sitesearch-finder"
-    finderInit.parentElement?.appendChild(finderContainer)
+    val parentContainerId: String? = finderInit.getAttribute("data-append-as-child-to")
+    if (parentContainerId.isNullOrBlank()) {
+        finderInit.parentElement?.appendChild(finderContainer)
+    } else {
+        val parentContainer = document.getElementById(parentContainerId!!)
+        if (parentContainer == null) {
+            finderInit.parentElement?.appendChild(finderContainer)
+        } else {
+            parentContainer.appendChild(finderContainer)
+        }
+    }
     finderContainer.appendChild(finder)
     finderContainer.appendChild(findingsContainer)
     findingsContainer.style.display = "none"
