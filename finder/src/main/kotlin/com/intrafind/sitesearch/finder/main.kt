@@ -79,7 +79,9 @@ fun init() {
 private fun injectPageFinderIntoWebsite() {
     val hiddenBehindFlag: String? = finderInit.getAttribute("data-hidden-behind-query-flag")
 
-    if (hiddenBehindFlag.isNullOrBlank() xor window.location.search.contains(hiddenBehindFlag!!)) {
+    if (hiddenBehindFlag.isNullOrBlank()) {
+        showPageFinder()
+    } else if (window.location.search.contains(hiddenBehindFlag!!)) {
         showPageFinder()
     }
 }
