@@ -34,7 +34,7 @@ private data class Finding(
 private data class Findings(val query: String, val results: Array<Finding> = arrayOf())
 
 private val debugView = document.createElement("dl") as HTMLDListElement
-private val selfTest = document.createElement("button") as HTMLButtonElement
+private val selfTestTrigger = document.createElement("button") as HTMLButtonElement
 
 private fun selfTest() {
     debugView.clear()
@@ -64,12 +64,27 @@ private fun validateServiceCall(apiEndpoint: String) {
 
 fun init() {
     log("init")
-    buildFinder()
+    buildPageFinder()
+    injectPageFinderIntoWebsite()
 
-    selfTest.addEventListener("click", { selfTest() })
-    selfTest.innerText = "Self Test"
-    selfTest.style.display = "block"
+    if (isDebugView) {
+        selfTestTrigger.addEventListener("click", { selfTest() })
+        selfTestTrigger.innerText = "Self Test"
+        selfTestTrigger.style.display = "block"
+        finderContainer.appendChild(selfTestTrigger)
+        finderContainer.appendChild(debugView)
+    }
+}
 
+private fun injectPageFinderIntoWebsite() {
+    val hiddenBehindFlag: String? = finderInit.getAttribute("data-hidden-behind-query-flag")
+
+    if (hiddenBehindFlag.isNullOrBlank() xor window.location.search.contains(hiddenBehindFlag!!)) {
+        showPageFinder()
+    }
+}
+
+private fun showPageFinder() {
     val style = document.createElement("style") as HTMLStyleElement
     style.innerText = ".if-teaser-highlight {font-weight: bold;}"
     finder.appendChild(style)
@@ -82,17 +97,12 @@ fun init() {
                     "width: ${finder.getAttribute("width")?.toInt()!! - 9}px;" +
                     "padding-left: 8px;"
 
-    if (isDebugView) {
-        finder.parentElement?.appendChild(selfTest)
-        finder.parentNode?.appendChild(debugView)
-    }
-
-    finderContainer.id = "sitesearch-finder"
+    finderContainer.id = "sitesearch-page-finder"
     val parentContainerId: String? = finderInit.getAttribute("data-append-as-child-to")
     if (parentContainerId.isNullOrBlank()) {
         finderInit.parentElement?.appendChild(finderContainer)
     } else {
-        val parentContainer = document.getElementById(parentContainerId!!)
+        val parentContainer = document.querySelector(parentContainerId!!)
         if (parentContainer == null) {
             finderInit.parentElement?.appendChild(finderContainer)
         } else {
@@ -105,7 +115,7 @@ fun init() {
 }
 
 private val finderContainer = document.createElement("div") as HTMLDivElement
-private fun buildFinder() {
+private fun buildPageFinder() {
     val finderStyle = finderInit.getAttribute("data-search-style")
     finder.type = "search"
     finder.title = "Finder"
@@ -126,9 +136,8 @@ private fun log(msg: Any?) {
 }
 
 private val findingsContainer = document.createElement("dl") as HTMLDListElement
-
 private val finderService = "https://api.sitesearch.cloud"
-private val finderInit = document.getElementById("sitesearch-finder-init") as HTMLScriptElement
+private val finderInit = document.getElementById("sitesearch-page-finder-init") as HTMLScriptElement
 private val siteId = finderInit.getAttribute("data-siteId")
 private val finderEndpoint = "search"
 private val autocompleteEndpoint = "autocomplete"

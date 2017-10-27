@@ -71,8 +71,8 @@ fun init() {
 fun showInitCode() {
     val siteIdContainer = document.getElementById("siteId") as HTMLInputElement
     val enterpriseSearchbar = document.getElementById("sitesearch-searchbar") as HTMLDivElement
-    val finderInit = document.getElementById("sitesearch-finder-init") as HTMLScriptElement
-    val finderContainer = document.getElementById("sitesearch-finder") as HTMLDivElement
+    val finderInit = document.getElementById("sitesearch-page-finder-init") as HTMLScriptElement
+    val finderContainer = document.getElementById("sitesearch-page-finder") as HTMLDivElement
     val finderVariant = document.getElementById("finder-variant") as HTMLInputElement
     val searchbarVariant = document.getElementById("searchbar-variant") as HTMLInputElement
     val integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
