@@ -109,7 +109,7 @@ private fun showPageFinder() {
         finderInit.parentElement?.appendChild(finderContainer)
     } else {
         val parentContainer = document.querySelector(parentContainerId!!)
-        log(parentContainer?.outerHTML)
+        log("Inserted into: ${parentContainer?.outerHTML}")
         if (parentContainer == null) {
             finderInit.parentElement?.appendChild(finderContainer)
         } else {
