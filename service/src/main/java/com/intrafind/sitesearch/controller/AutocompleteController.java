@@ -44,15 +44,15 @@ public class AutocompleteController {
     ResponseEntity<Autocomplete> suggestion(
             @CookieValue(value = "override-site", required = false) UUID cookieSite,
             @RequestParam(value = "query", defaultValue = "") String query,
-            @RequestParam(value = "siteId", required = false) UUID siteId,
-            @RequestParam(value = "tenantId", required = false) UUID tenantId  // TODO remove, once searchbar supports new API
+            @RequestParam(value = "siteId") UUID siteId
+//            @RequestParam(value = "tenantId", required = false) UUID tenantId  // TODO remove, once searchbar supports new API
     ) {
-        if (siteId == null) { // TODO hack to support legacy searchbar API
-            if (tenantId == null)
-                return ResponseEntity.badRequest().build();
-            else
-                siteId = tenantId;
-        }
+//        if (siteId == null) { // TODO hack to support legacy searchbar API
+//            if (tenantId == null)
+//                return ResponseEntity.badRequest().build();
+//            else
+//                siteId = tenantId;
+//        }
 
         if (query.isEmpty()) return ResponseEntity.badRequest().build();
 

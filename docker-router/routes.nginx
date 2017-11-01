@@ -77,9 +77,9 @@ server {
         proxy_pass http://sitesearch.online/bootstrap/;
     }
 
-    location /api/ {
-        proxy_pass http://main.sitesearch.cloud:2443/;
-    }
+#    location /api/ {
+#        proxy_pass http://main.sitesearch.cloud:2443/;
+#    }
 
     location / {
         # CORS headers
