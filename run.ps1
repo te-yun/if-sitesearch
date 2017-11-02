@@ -1,4 +1,4 @@
-#!/usr/bin/env powershell
+#!/usr/bin/env pwsh
 
 try {
     $Env:SPRING_CONFIG_NAME = "application, local"

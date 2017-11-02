@@ -1,4 +1,4 @@
-#!/usr/bin/env powershell
+#!/usr/bin/env pwsh
 
 $docker_image_name = "if-sitesearch"
 $docker_tag = "latest"
