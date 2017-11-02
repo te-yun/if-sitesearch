@@ -170,8 +170,11 @@ server {
         proxy_redirect off;
         proxy_pass http://sitesearch.online/;
     }
-    location / {
+    location /wp0 {
         proxy_redirect off;
         proxy_pass http://sitesearch.online/bootstrap/;
+    }
+    location / {
+        proxy_pass http://main.sitesearch.cloud:8080;
     }
 }
