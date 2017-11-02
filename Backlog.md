@@ -11,6 +11,7 @@ Backlog
     * let the *crawler* talk to Site Search API to feed its content
 
 # next
+* "sponsored by" branding for Site Search for freemium offers 
 * status.html page that show the results of TeamCity's SmokeTest
 * Customer Feedback Channel: Slack vs Twak
 * try https://www.elastic.co/cloud/enterprise

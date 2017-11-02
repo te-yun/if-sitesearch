@@ -132,6 +132,10 @@ FAQ obsolete, has been moved to [its new location](https://github.com/intrafind/
         </script>
     </div>  
  
+* I do not want to use Site Search anymore. Do I have to delete my data?
+    * You do not have to do anything. We will automatically delete your indexed data after a certain time of inactivity.
+    We would appreciate to [learn the reasons](mailto:feedback@sitesearch.cloud) behind your decision to stop using our service. 
+ 
 * Who is using Site Search?
     * Very soon, following website's search will be powered by Site Search
         * intrafind.de 

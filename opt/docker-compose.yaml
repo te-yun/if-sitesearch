@@ -1,0 +1,35 @@
+version: "2.0"
+services:
+  wordpress:
+    image: wordpress:4.8.3-apache
+    container_name: wordpress
+#    image: wordpress:4.8.2-php7.1-apache
+    restart: always
+#    networks:
+#       - optional
+#    volumes:
+#      - ~/srv/wordpress:/var/www/html
+#/var/www/html
+    ports:
+#      - 19000:9000
+      - 8080:80
+    environment:
+      WORDPRESS_DB_PASSWORD: 65b6f240-bf83-11e7-a6a6-0b797d0cf168
+#      WORDPRESS_SITE_URL: https://test.sitesearch.cloud
+#      WORDPRESS_DB_HOST: test.sitesearch.cloud
+
+  mysql:
+    image: mysql:5.7
+    container_name: wordpress-mysql
+    restart: always
+#    networks:
+#       - optional
+    volumes:
+      - ~/srv/wordpress-mysql:/var/lib/mysql
+#/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 65b6f240-bf83-11e7-a6a6-0b797d0cf168
+#      MYSQL_ROOT_HOST: test.sitesearch.cloud
+
+#networks:
+#    optional:
