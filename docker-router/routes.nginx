@@ -132,6 +132,8 @@ server {
     listen [::]:443 ssl http2;
     server_name green.sitesearch.cloud;
 
+    include /etc/nginx/snippets/ssl.conf;
+
     location / {
         proxy_pass http://main.sitesearch.cloud:3442;
     }
@@ -141,6 +143,8 @@ server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
     server_name blue.sitesearch.cloud;
+
+    include /etc/nginx/snippets/ssl.conf;
 
     location / {
         proxy_pass http://main.sitesearch.cloud:4442;
@@ -152,6 +156,8 @@ server {
     listen [::]:443 ssl http2;
     server_name dev.sitesearch.cloud;
 
+    include /etc/nginx/snippets/ssl.conf;
+
     location / {
         proxy_pass http://test.sitesearch.cloud:8080;
     }
@@ -161,6 +167,8 @@ server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
     server_name test.sitesearch.cloud;
+
+    include /etc/nginx/snippets/ssl.conf;
 
     #    location /wp {
     #        proxy_redirect off;
