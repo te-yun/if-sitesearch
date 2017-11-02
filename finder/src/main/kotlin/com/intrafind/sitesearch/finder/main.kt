@@ -71,13 +71,13 @@ fun init() {
         selfTestTrigger.addEventListener("click", { selfTest() })
         selfTestTrigger.innerText = "Self Test"
         selfTestTrigger.style.display = "block"
-        finderContainer.appendChild(selfTestTrigger)
-        finderContainer.appendChild(debugView)
+        pageFinderContainer.appendChild(selfTestTrigger)
+        pageFinderContainer.appendChild(debugView)
     }
 }
 
 private fun injectPageFinderIntoWebsite() {
-    val hiddenBehindFlag: String? = finderInit.getAttribute("data-hidden-behind-query-flag")
+    val hiddenBehindFlag: String? = pageFinderInit.getAttribute("data-hidden-behind-query-flag")
 
     if (hiddenBehindFlag.isNullOrBlank()) {
         showPageFinder()
@@ -103,27 +103,64 @@ private fun showPageFinder() {
     findingsContainer.style.zIndex = "99"
     findingsContainer.style.position = "relative"
 
-    finderContainer.id = "sitesearch-page-finder"
-    val parentContainerId: String? = finderInit.getAttribute("data-append-as-child-to")
-    if (parentContainerId.isNullOrBlank()) {
-        finderInit.parentElement?.appendChild(finderContainer)
-    } else {
-        val parentContainer = document.querySelector(parentContainerId!!)
-        log("Inserted into: ${parentContainer?.outerHTML}")
-        if (parentContainer == null) {
-            finderInit.parentElement?.appendChild(finderContainer)
-        } else {
-            parentContainer.appendChild(finderContainer)
-        }
-    }
-    finderContainer.appendChild(finder)
-    finderContainer.appendChild(findingsContainer)
+    pageFinderContainer.id = "sitesearch-page-finder"
+//    val parentContainerId: String? = pageFinderInit.getAttribute("data-append-as-child-to")
+//    if (parentContainerId.isNullOrBlank()) {
+//        pageFinderInit.parentElement?.appendChild(pageFinderContainer)
+//    } else {
+//        val parentContainer = document.querySelector(parentContainerId!!)
+//        log("Inserted into: ${parentContainer?.outerHTML}")
+//        if (parentContainer == null) {
+////            pageFinderInit.parentElement?.appendChild(pageFinderContainer)
+//        } else {
+//            parentContainer.appendChild(pageFinderContainer)
+//        }
+//    }
+    encapsulateAsComponent()
+
+    pageFinderContainer.appendChild(finder)
+    pageFinderContainer.appendChild(findingsContainer)
     findingsContainer.style.display = "none"
 }
 
-private val finderContainer = document.createElement("div") as HTMLDivElement
+private val pageFinderComponent = document.createElement("page-finder") as HTMLElement
+private fun encapsulateAsComponent() {
+    val parentContainerId: String? = pageFinderInit.getAttribute("data-append-as-child-to")
+    val parent: Element? =
+            if (parentContainerId.isNullOrBlank()) {
+                pageFinderInit.parentElement
+            } else {
+                val parentContainer = document.querySelector(parentContainerId!!)
+                log("Inserted into: ${parentContainer?.outerHTML}")
+                parentContainer ?: pageFinderInit.parentElement
+            }
+
+    window.onload = {
+        resetInheritedStyleProperties(pageFinderComponent)
+        pageFinderComponent.appendChild(pageFinderContainer)
+        parent?.attachShadow(ShadowRootInit(ShadowRootMode.OPEN))
+                ?.appendChild(pageFinderComponent)
+    }
+
+//    val pageFinderComponent: dynamic = js("Object.create(HTMLElement.prototype);") as HTMLElement
+//    pageFinderComponent.createdCallback = {
+//        js("this").createShadowRoot().appendChild(pageFinderContainer)
+//    }
+//    val doc: dynamic = document
+//    doc.registerElement("page-finder", js("({prototype: pageFinderComponent})"))
+}
+
+//private val pageFinderContainer = document.createElement("template") as HTMLTemplateElement
+private val pageFinderContainer = document.createElement("div") as HTMLDivElement
+private val findingsContainer = document.createElement("dl") as HTMLDListElement
+private val finderService = "https://api.sitesearch.cloud"
+private val pageFinderInit = document.currentScript as HTMLScriptElement
+private val siteId = pageFinderInit.getAttribute("data-siteId")
+private val finderEndpoint = "search"
+private val autocompleteEndpoint = "autocomplete"
+private val finder = document.createElement("input") as HTMLInputElement
 private fun buildPageFinder() {
-    val finderStyle = finderInit.getAttribute("data-search-style")
+    val finderStyle = pageFinderInit.getAttribute("data-search-style")
     finder.type = "search"
     finder.title = "Finder"
     finder.placeholder = "{if-lab} Page Finder"
@@ -141,14 +178,6 @@ private fun log(msg: Any?) {
         println(msg)
     }
 }
-
-private val findingsContainer = document.createElement("dl") as HTMLDListElement
-private val finderService = "https://api.sitesearch.cloud"
-private val finderInit = document.getElementById("sitesearch-page-finder-init") as HTMLScriptElement
-private val siteId = finderInit.getAttribute("data-siteId")
-private val finderEndpoint = "search"
-private val autocompleteEndpoint = "autocomplete"
-private val finder = document.createElement("input") as HTMLInputElement
 
 fun main(args: Array<String>) {
     init()
@@ -224,12 +253,13 @@ private fun search() {
             findings.results.forEach { finding ->
                 val dtTitle = document.createElement("dt") as HTMLElement
                 dtTitle.innerHTML = finding.title
-                dtTitle.setAttribute("style", "margin-bottom: .5em;" +
-                        "font-style: italic;")
+                dtTitle.setAttribute("style", "margin-bottom: .5em; font-style: italic;")
+//                resetInheritedStyleProperties(dtTitle)
                 findingsContainer.appendChild(dtTitle)
                 val ddBody = document.createElement("dd") as HTMLElement
                 ddBody.innerHTML = finding.body
                 ddBody.setAttribute("style", "margin-bottom: .5em")
+//                resetInheritedStyleProperties(ddBody)
                 findingsContainer.appendChild(ddBody)
                 val ddUrl = document.createElement("dd") as HTMLElement
                 ddUrl.innerHTML = "<a style=\"text-decoration:none\" href=\"${finding.urlRaw}\">${finding.url}</a>"
@@ -252,4 +282,9 @@ private fun search() {
         log("Error: ${xhr.response}")
     }
     xhr.send()
+}
+
+private fun resetInheritedStyleProperties(dirtyElement: HTMLElement) { // very expensive operation!!!
+    window.getComputedStyle(dirtyElement).cssText.split(": ; ")
+            .forEach { cssProperty -> dirtyElement.style.setProperty(cssProperty, "initial") }
 }

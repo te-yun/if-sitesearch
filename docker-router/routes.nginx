@@ -150,6 +150,16 @@ server {
 server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
+    server_name dev.sitesearch.cloud;
+
+    location / {
+        proxy_pass http://main.sitesearch.cloud:8080;
+    }
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
     server_name test.sitesearch.cloud;
 
     location /wp {

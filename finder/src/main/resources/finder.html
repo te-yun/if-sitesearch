@@ -17,25 +17,34 @@
 
 <html lang="en">
 <meta charset="utf-8"/>
-<title>Finder</title>
+<title>{if-lab} Page Finder</title>
 <script src="/app/runtime/kotlin.js"></script>
 
 <h1>{if-lab} Page Finder</h1>
 
-<div id="container"></div>
+<div id="container" style="background-color: #191; color: #191;"></div>
 
-<div id="some-parent-container-that-serves-as-default-container">
-    <!--<script id="sitesearch-page-finder-init"-->
+<div id="some-parent-container-that-serves-as-default-container" style="color: #911;">
+    <!--<script-->
     <!--src="/app/finder/finder.js"-->
     <!--data-search-style="width: 500px; font-size: 2em; text-indent: .5em;"-->
-    <!--data-append-as-child-to="#container"-->
     <!--data-siteId="1585e8d8-c6cd-40b9-b53f-3afc5a590a3a"-->
     <!--&gt;</script>-->
-    <script id="sitesearch-page-finder-init"
-            src="/app/finder/finder.js"
-            data-search-style="width: 500px; font-size: 2em; text-indent: .5em;"
-            data-append-as-child-to="#container"
-            data-hidden-behind-query-flag="enable-page-finder"
-            data-siteId="1585e8d8-c6cd-40b9-b53f-3afc5a590a3a"
-    ></script>
+    <!--<script-->
+            <!--src="/app/finder/finder.js"-->
+            <!--data-search-style="width: 500px; font-size: 2em; text-indent: .5em;"-->
+            <!--data-append-as-child-to="#container"-->
+            <!--data-hidden-behind-query-flag="enable-page-finder"-->
+            <!--data-siteId="1585e8d8-c6cd-40b9-b53f-3afc5a590a3a"-->
+    <!--&gt;</script>-->
 </div>
+
+<center style="background: #191; color: #911;">
+    <div style="background: #119; color: #191">
+        <script
+        src="/app/finder/finder.js"
+        data-search-style="width: 500px; font-size: 2em; text-indent: .5em;"
+        data-siteId="1585e8d8-c6cd-40b9-b53f-3afc5a590a3a"
+        ></script>
+    </div>
+</center>

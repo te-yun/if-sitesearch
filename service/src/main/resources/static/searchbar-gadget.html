@@ -19,11 +19,39 @@
 <meta charset="utf-8"/>
 <title>Site Search</title>
 <link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/searchbar/css/app.css"/>
+<script src="/app/runtime/kotlin.js"></script>
 
-<div class="container">
-    <div id="searchbar"></div>
-    <div id="resultlist"></div>
-</div>
+<style>
+    center {
+        color: #911;
+        font-size: 4em;
+        text-align: center;
+    }
+
+    article {
+        color: #911;
+        text-align: center;
+    }
+</style>
+
+<h1>Site Search Searchbar</h1>
+<article style="background-color: #191; color: #911; text-align: right; icon: url(/favicon.ico); font-size: 3em;">
+    <center style="background-color: #191; color: #911; icon: url(/favicon.ico); font-size: 3em;">
+        <div id="some-random-parent-container" style="color: #911;">
+            <div class="container" style="width: 500px;">
+                <div id="searchbar"></div>
+                <div id="resultlist"></div>
+            </div>
+        </div>
+        <div>
+            <script
+                    src="/app/finder/finder.js"
+                    data-search-style="width: 500px; font-size: 2em; text-indent: .5em;"
+                    data-siteId="1585e8d8-c6cd-40b9-b53f-3afc5a590a3a"
+            ></script>
+        </div>
+    </center>
+</article>
 
 <script src="https://api.sitesearch.cloud/searchbar/js/app.js"></script>
 <script>
