@@ -104,18 +104,6 @@ private fun showPageFinder() {
     findingsContainer.style.position = "relative"
 
     pageFinderContainer.id = "sitesearch-page-finder"
-//    val parentContainerId: String? = pageFinderInit.getAttribute("data-append-as-child-to")
-//    if (parentContainerId.isNullOrBlank()) {
-//        pageFinderInit.parentElement?.appendChild(pageFinderContainer)
-//    } else {
-//        val parentContainer = document.querySelector(parentContainerId!!)
-//        log("Inserted into: ${parentContainer?.outerHTML}")
-//        if (parentContainer == null) {
-////            pageFinderInit.parentElement?.appendChild(pageFinderContainer)
-//        } else {
-//            parentContainer.appendChild(pageFinderContainer)
-//        }
-//    }
     encapsulateAsComponent()
 
     pageFinderContainer.appendChild(finder)
@@ -140,7 +128,6 @@ private fun encapsulateAsComponent() {
         pageFinderComponent.appendChild(pageFinderContainer)
         parent?.attachShadow(ShadowRootInit(ShadowRootMode.OPEN))
                 ?.appendChild(pageFinderComponent)
-
         document.dispatchEvent(Event("page-finder-loaded"))
     }
 }
