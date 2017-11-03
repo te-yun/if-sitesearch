@@ -134,20 +134,15 @@ private fun encapsulateAsComponent() {
                 log("Inserted into: ${parentContainer?.outerHTML}")
                 parentContainer ?: pageFinderInit.parentElement
             }
-
+    console.warn(parent)
     window.onload = {
         resetInheritedStyleProperties(pageFinderComponent)
         pageFinderComponent.appendChild(pageFinderContainer)
         parent?.attachShadow(ShadowRootInit(ShadowRootMode.OPEN))
                 ?.appendChild(pageFinderComponent)
-    }
 
-//    val pageFinderComponent: dynamic = js("Object.create(HTMLElement.prototype);") as HTMLElement
-//    pageFinderComponent.createdCallback = {
-//        js("this").createShadowRoot().appendChild(pageFinderContainer)
-//    }
-//    val doc: dynamic = document
-//    doc.registerElement("page-finder", js("({prototype: pageFinderComponent})"))
+        document.dispatchEvent(Event("page-finder-loaded"))
+    }
 }
 
 //private val pageFinderContainer = document.createElement("template") as HTMLTemplateElement
@@ -254,12 +249,10 @@ private fun search() {
                 val dtTitle = document.createElement("dt") as HTMLElement
                 dtTitle.innerHTML = finding.title
                 dtTitle.setAttribute("style", "margin-bottom: .5em; font-style: italic;")
-//                resetInheritedStyleProperties(dtTitle)
                 findingsContainer.appendChild(dtTitle)
                 val ddBody = document.createElement("dd") as HTMLElement
                 ddBody.innerHTML = finding.body
                 ddBody.setAttribute("style", "margin-bottom: .5em")
-//                resetInheritedStyleProperties(ddBody)
                 findingsContainer.appendChild(ddBody)
                 val ddUrl = document.createElement("dd") as HTMLElement
                 ddUrl.innerHTML = "<a style=\"text-decoration:none\" href=\"${finding.urlRaw}\">${finding.url}</a>"
