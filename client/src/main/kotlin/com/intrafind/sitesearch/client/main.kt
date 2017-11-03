@@ -76,11 +76,11 @@ fun showInitCode() {
     val finderVariant = document.getElementById("finder-variant") as HTMLInputElement
     val searchbarVariant = document.getElementById("searchbar-variant") as HTMLInputElement
     val integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
+
     val enterpriseSearchbarCode = enterpriseSearchbar.outerHTML
             .replace("searchbar-config/sitesearch-config.json", "https://api.sitesearch.cloud/searchbar-config/sitesearch-config.json")
     integrationCode.value = enterpriseSearchbarCode
     finderContainer.style.display = "none"
-    document.createElement("page-finder").addEventListener("page-finder-loaded", { console.warn(123) })
     val finderInitCode = "<script src=\"https://api.sitesearch.cloud/app/runtime/kotlin.js\"></script>\n" +
             finderInit.outerHTML
                     .replace("/app/finder/finder.js", "https://api.sitesearch.cloud/app/finder/finder.js")

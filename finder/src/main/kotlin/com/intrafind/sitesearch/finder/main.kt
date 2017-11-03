@@ -122,7 +122,6 @@ private fun encapsulateAsComponent() {
                 log("Inserted into: ${parentContainer?.outerHTML}")
                 parentContainer ?: pageFinderInit.parentElement
             }
-    console.warn(parent)
     window.onload = {
         resetInheritedStyleProperties(pageFinderComponent)
         pageFinderComponent.appendChild(pageFinderContainer)
