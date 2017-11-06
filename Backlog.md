@@ -11,6 +11,9 @@ Backlog
     * let the *crawler* talk to Site Search API to feed its content
 
 # next
+* second CI worker
+* introduce second machine with iFinder Core
+* introduce load balancer for if-sitesearch 
 * "sponsored by" branding for Site Search for freemium offers 
 * status.html page that show the results of TeamCity's SmokeTest
 * Customer Feedback Channel: Slack vs Twak
