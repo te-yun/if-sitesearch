@@ -11,7 +11,7 @@ events {
 
 http {
     # load balancer placeholder, once multiple instances are required
-    upstream ifs {
+    upstream sitesearch-api {
         server if-sitesearch:8001;
         server if-sitesearch:8001;
         server if-sitesearch:8001 backup;
