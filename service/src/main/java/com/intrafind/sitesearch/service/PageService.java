@@ -144,7 +144,8 @@ public class PageService {
     private Optional<UUID> fetchSiteSecret(UUID siteId) {
         final ArrayByteIterable readableSiteId = StringBinding.stringToEntry(siteId.toString());
         final ByteIterable[] siteSecret = new ByteIterable[1];
-        SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInReadonlyTransaction(txn -> {
+        SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
+//        SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInReadonlyTransaction(txn -> {
             Store store = SearchController.ACID_PERSISTENCE_ENVIRONMENT.openStore(SITE_SECRET_FIELD, StoreConfig.WITHOUT_DUPLICATES, txn);
             siteSecret[0] = store.get(txn, readableSiteId);
         });
