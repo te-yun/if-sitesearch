@@ -16,6 +16,7 @@ $DOCKER_TAG = "latest"
 
 mkdir ~/srv/${DOCKER_IMAGE_NAME}
 sudo chown -R 1000:1000 ~/srv/${DOCKER_IMAGE_NAME} # make it a svc_usr' directory
+sudo chmod -R 744 ~/srv/${DOCKER_IMAGE_NAME}
 
 # TODO enable b/g deployment, or at least, reduce probability of failure 
 cd service
@@ -31,27 +32,6 @@ docker run -d --name ${DOCKER_IMAGE_NAME} `
     --network $docker_network `
     intrafind/${DOCKER_IMAGE_NAME}:${DOCKER_TAG}
 cd ..
-
-#function setupRedirectRouterContainer {
-#    $docker_network = "sitesearch"
-#    $docker_redirect_image = "router"
-#    $docker_redirect_image_tag = "latest"
-#    cd docker-$docker_redirect_image
-#    docker build --tag intrafind/${docker_redirect_image}:$docker_redirect_image_tag .
-#    docker rm -f $docker_redirect_image
-#    mkdir ~/srv/${docker_redirect_image}
-##        -v ~/srv/${docker_redirect_image}:/etc/nginx `
-#    docker run -d --name $docker_redirect_image `
-#        -p 80:80 -p 443:443 `
-#        -v /etc/letsencrypt:/etc/letsencrypt `
-#        --network $docker_network `
-#        intrafind/${docker_redirect_image}:$docker_redirect_image_tag
-#
-#    cd ..
-#}
-#setupRedirectRouterContainer
-
-#./switch-release.ps1
 
 function cleanupDocker {
     $danglingImages = $(docker images -f "dangling=true" -q)
