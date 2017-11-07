@@ -66,7 +66,7 @@ public class SmokeTest {
         assertNull(secureEndpointJson.getBody());
     }
 
-    private static final String productFrontpageMarker = "<title>Site Search from IntraFind Software AG</title>";
+    private static final String productFrontpageMarker = "<title>IntraFind Site Search - Site Search</title>";
     @Test
     public void redirectFromHttpNakedDomain() throws Exception {
         final ResponseEntity<String> response = caller.exchange(
@@ -78,7 +78,6 @@ public class SmokeTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-    @Ignore
     @Test
     public void redirectFromUnencryptedWWW() throws Exception {
         final ResponseEntity<String> response = caller.exchange(
@@ -91,7 +90,6 @@ public class SmokeTest {
         assertTrue(response.getBody().contains(productFrontpageMarker));
     }
 
-    @Ignore
     @Test
     public void redirectFromWWW() throws Exception {
         final ResponseEntity<String> response = caller.exchange(
@@ -104,7 +102,6 @@ public class SmokeTest {
         assertTrue(response.getBody().contains(productFrontpageMarker));
     }
 
-    @Ignore
     @Test
     public void productFrontpageContent() throws Exception {
         final ResponseEntity<String> response = caller.exchange(
@@ -114,7 +111,7 @@ public class SmokeTest {
                 String.class
         );
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(response.getBody().contains("<title>Site Search from IntraFind Software AG</title>"));
+        assertTrue(response.getBody().contains(productFrontpageMarker));
     }
 
     @Test
