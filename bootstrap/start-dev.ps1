@@ -5,7 +5,7 @@ docker start teamcity-server
 ~/buildAgent/bin/agent.sh start
 docker start teamcity-agent
 
-docker start elasticsearch
+docker start sitesearch-elasticsearch
 docker start sitesearch-search-service
 
 docker start if-sitesearch

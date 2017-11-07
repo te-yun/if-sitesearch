@@ -7,7 +7,6 @@ $PSDefaultParameterValues["*:ErrorAction"] = "Stop"
 $version = "2017.1.5"
 $docker_network = "dev"
 $service_name = "teamcity-server"
-#$docker_image = "jetbrains/teamcity-server:${version}"
 
 docker rm -f $service_name
 docker run -d -t --name $service_name `
@@ -26,12 +25,8 @@ docker run -d -t --name teamcity-agent `
     -v ~/srv/teamcity-agent:/data/teamcity_agent/conf `
     jetbrains/teamcity-agent:$version
 
-# TODO might need some adjustments to install PowerShel
-docker exec -it teamcity-agent curl -LO https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.9/powershell_6.0.0-beta.9-1.ubuntu.16.04_amd64.deb
-docker exec -it teamcity-agent dpkg -i powershell*.deb
-docker exec -it teamcity-agent apt -f install
-
-
-#docker run -d -t --name teamcity-agent -e SERVER_URL="https://ci.sitesearch.cloud" \
-#    -v ~/srv/teamcity-agent:/data/teamcity_agent/conf \
-#    jetbrains/teamcity-agent:2017.1.4
+# Add PowerShell to TeamCity Docker Agent
+docker exec teamcity-agent curl -L https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.9/powershell_6.0.0-beta.9-1.ubuntu.16.04_amd64.deb -o /tmp/sitesearch-ci-powershell.deb
+docker exec teamcity-agent apt-get update -y
+docker exec teamcity-agent dpkg -i /tmp/sitesearch-ci-powershell.deb
+docker exec teamcity-agent apt-get install -f -y
