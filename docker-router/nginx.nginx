@@ -9,10 +9,9 @@ events {
     worker_connections  1024;
 }
 
-
 http {
+    # load balancer placeholder, once multiple instances are required
     upstream ifs {
-         # load balancer placeholder, once multiple instances are required
         server if-sitesearch:8001;
         server if-sitesearch:8001;
         server if-sitesearch:8001 backup;
