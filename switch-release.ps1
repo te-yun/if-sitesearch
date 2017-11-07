@@ -43,6 +43,7 @@ if(isBlueUp){
 
 echo ~/srv/$green
 echo ~/srv/$data ~/srv/$green
+echo "~/srv/$data ~/srv/$green"
 #        sudo rm -rf ~/srv/$green
 #        sudo ln -s ~/srv/$data ~/srv/$green
 } else {
@@ -64,6 +65,7 @@ echo ~/srv/$data ~/srv/$green
 
 echo ~/srv/$blue
 echo ~/srv/$data ~/srv/$blue
+echo "~/srv/$data ~/srv/$blue"
 #        sudo rm -rf ~/srv/$blue
 #        sudo ln -s ~/srv/$data ~/srv/$blue
 }
