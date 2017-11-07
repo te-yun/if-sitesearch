@@ -1,6 +1,8 @@
 Backlog
 =
 
+intrafind.de DE siteId: 9f374ad4-57e6-46b8-84a4-8a6db8881eb5
+intrafind.de EN siteId: ba6200ed-f977-4a8a-b1ec-0d78f0c15e01
 # now
 * publish on Google G Suite Marketplace https://developers.google.com/gsuite/marketplace/
 * introduce Site Search, incl. search bar to intrafind.de
@@ -12,7 +14,6 @@ Backlog
     * let the *crawler* talk to Site Search API to feed its content
 
 # next
-* second CI worker
 * introduce second machine with iFinder Core
 * introduce load balancer for if-sitesearch 
 * "sponsored by" branding for Site Search for freemium offers 
@@ -53,4 +54,4 @@ Backlog
 
 # Feedback for 
 
-* 404 vs empty 200 for empty searches & autocompletes @Uli
+

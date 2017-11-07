@@ -56,7 +56,7 @@ public class LoadTest {
 
     private static final List<UUID> TENANTS = Arrays.asList(
             SearchTest.SEARCH_SITE_ID,
-            UUID.fromString("1585e8d8-c6cd-40b9-b53f-3afc5a590a3a"),
+            UUID.fromString("ba6200ed-f977-4a8a-b1ec-0d78f0c15e01"),
             UUID.fromString("1a6715d9-119f-48d1-9329-e8763273bbea")
     );
 
