@@ -41,8 +41,10 @@ if(isBlueUp){
         --network $docker_network `
         intrafind/${docker_image_name}:${docker_tag}
 
-        sudo rm -rf ~/srv/${blue}
-        sudo ln -s ~/srv/$data ~/srv/${blue}
+echo ~/srv/$green
+echo ~/srv/$data ~/srv/$green
+#        sudo rm -rf ~/srv/$green
+#        sudo ln -s ~/srv/$data ~/srv/$green
 } else {
     write-host blue is inactive
     $blue = "${docker_image_name}-blue"
@@ -60,6 +62,8 @@ if(isBlueUp){
         --network $docker_network `
         intrafind/${docker_image_name}:${docker_tag}
 
-        sudo rm -rf ~/srv/${blue}
-        sudo ln -s ~/srv/$data ~/srv/${blue}
+echo ~/srv/$blue
+echo ~/srv/$data ~/srv/$blue
+#        sudo rm -rf ~/srv/$blue
+#        sudo ln -s ~/srv/$data ~/srv/$blue
 }
