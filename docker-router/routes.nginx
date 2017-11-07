@@ -88,7 +88,6 @@ server {
         add_header access-control-allow-origin $http_origin always;
         proxy_hide_header x-frame-options;
 
-        #        proxy_pass http://main.sitesearch.cloud:2443;
         proxy_pass http://sitesearch-api;
     }
 }
