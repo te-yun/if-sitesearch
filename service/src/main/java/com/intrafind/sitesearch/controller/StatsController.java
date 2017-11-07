@@ -75,8 +75,7 @@ public class StatsController {
     ) {
         final AtomicLong queryCount = new AtomicLong();
         final ArrayByteIterable readableSiteId = StringBinding.stringToEntry(siteId.toString());
-        SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInReadonlyTransaction(txn -> {  // TODO make this a readonly tx
-//        SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {  // TODO make this a readonly tx
+        SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {  // using read-only tx fails creating a storage space, when executed in a fresh environment
             final Store store = SearchController.ACID_PERSISTENCE_ENVIRONMENT.openStore(QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
             final ByteIterable queryCountValue = store.get(txn, readableSiteId);
             if (queryCountValue != null) {
