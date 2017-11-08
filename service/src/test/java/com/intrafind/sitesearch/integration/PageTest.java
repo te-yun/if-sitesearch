@@ -19,7 +19,7 @@ package com.intrafind.sitesearch.integration;
 import com.intrafind.sitesearch.controller.PageController;
 import com.intrafind.sitesearch.controller.SiteController;
 import com.intrafind.sitesearch.dto.Page;
-import com.intrafind.sitesearch.dto.Tenant;
+import com.intrafind.sitesearch.dto.SiteIndexSummary;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -189,10 +189,10 @@ public class PageTest {
 
     @Test
     public void importFeed() throws Exception {
-        final ResponseEntity<Tenant> exchange = caller.exchange(
+        final ResponseEntity<SiteIndexSummary> exchange = caller.exchange(
                 SiteController.ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/fahrplanaenderungen/detail/rss.xml",
-                HttpMethod.POST, HttpEntity.EMPTY, Tenant.class);
-        final Tenant creation = validateTenantSummary(exchange, 10);
+                HttpMethod.POST, HttpEntity.EMPTY, SiteIndexSummary.class);
+        final SiteIndexSummary creation = validateTenantSummary(exchange, 10);
 
         TimeUnit.MILLISECONDS.sleep(8_000);
         validateUpdatedSites(creation);
@@ -200,21 +200,21 @@ public class PageTest {
 
     @Test
     public void importFeedAndReadSingleSiteWithSSL() throws Exception {  // TODO actually use SSL below >> httpS instead of http-sans-S
-        final ResponseEntity<Tenant> exchange = caller.exchange(SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml",
-                HttpMethod.POST, HttpEntity.EMPTY, Tenant.class);
-        final Tenant creation = validateTenantSummary(exchange, 25);
+        final ResponseEntity<SiteIndexSummary> exchange = caller.exchange(SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml",
+                HttpMethod.POST, HttpEntity.EMPTY, SiteIndexSummary.class);
+        final SiteIndexSummary creation = validateTenantSummary(exchange, 25);
 
         TimeUnit.MILLISECONDS.sleep(8_000);
         LOG.info("siteId: " + creation.getSiteId());
         validateUpdatedSites(creation);
     }
 
-    private void validateUpdatedSites(Tenant tenant) {
-        tenant.getDocuments().forEach(documentId -> {
+    private void validateUpdatedSites(SiteIndexSummary siteIndexSummary) {
+        siteIndexSummary.getDocuments().forEach(documentId -> {
             final ResponseEntity<Page> fetchedById = caller.exchange(
                     PageController.ENDPOINT + "/" + documentId, HttpMethod.GET, HttpEntity.EMPTY, Page.class);
             assertTrue(HttpStatus.OK.equals(fetchedById.getStatusCode()));
-            assertTrue(tenant.getSiteId().equals(fetchedById.getBody().getSiteId()));
+            assertTrue(siteIndexSummary.getSiteId().equals(fetchedById.getBody().getSiteId()));
             assertTrue(!fetchedById.getBody().getBody().isEmpty());
             assertNotNull(fetchedById.getBody().getUrl());
             assertNull(fetchedById.getBody().getSiteSecret());
@@ -224,14 +224,14 @@ public class PageTest {
     @Test
     public void importFeedStrippingHtml() throws Exception {
         // create index with stripped HTML tags
-        final ResponseEntity<Tenant> initialIndexCreation = caller.exchange(
+        final ResponseEntity<SiteIndexSummary> initialIndexCreation = caller.exchange(
                 SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml&stripHtmlTags=true",
-                HttpMethod.POST, HttpEntity.EMPTY, Tenant.class);
+                HttpMethod.POST, HttpEntity.EMPTY, SiteIndexSummary.class);
         TimeUnit.MILLISECONDS.sleep(8_000);
-        final Tenant tenantCreation = validateTenantSummary(initialIndexCreation, 25);
+        final SiteIndexSummary siteIndexSummaryCreation = validateTenantSummary(initialIndexCreation, 25);
 
-        UUID siteIdFromCreation = tenantCreation.getSiteId();
-        UUID siteSecretFromCreation = tenantCreation.getSiteSecret();
+        UUID siteIdFromCreation = siteIndexSummaryCreation.getSiteId();
+        UUID siteSecretFromCreation = siteIndexSummaryCreation.getSiteSecret();
 
         LOG.info("siteIdFromCreation: " + siteIdFromCreation);
         LOG.info("siteSecretFromCreation: " + siteSecretFromCreation);
@@ -240,38 +240,38 @@ public class PageTest {
     @Test
     public void importFeedAndUpdate() throws Exception {
         // create index
-        final ResponseEntity<Tenant> initialIndexCreation = caller.exchange(
+        final ResponseEntity<SiteIndexSummary> initialIndexCreation = caller.exchange(
                 SiteController.ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/meldungen/detail/rss.xml",
-                HttpMethod.POST, HttpEntity.EMPTY, Tenant.class);
+                HttpMethod.POST, HttpEntity.EMPTY, SiteIndexSummary.class);
         TimeUnit.MILLISECONDS.sleep(13_000);
-        final Tenant tenantCreation = validateTenantSummary(initialIndexCreation, 10);
+        final SiteIndexSummary siteIndexSummaryCreation = validateTenantSummary(initialIndexCreation, 10);
 
-        UUID siteIdFromCreation = tenantCreation.getSiteId();
-        UUID siteSecretFromCreation = tenantCreation.getSiteSecret();
+        UUID siteIdFromCreation = siteIndexSummaryCreation.getSiteId();
+        UUID siteSecretFromCreation = siteIndexSummaryCreation.getSiteSecret();
 
         LOG.info("siteIdFromCreation: " + siteIdFromCreation);
         LOG.info("siteSecretFromCreation: " + siteSecretFromCreation);
 
-        final ResponseEntity<Tenant> updateWithoutSecret = caller.exchange(
+        final ResponseEntity<SiteIndexSummary> updateWithoutSecret = caller.exchange(
                 SiteController.ENDPOINT + "/" + siteIdFromCreation + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml",
-                HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
+                HttpMethod.PUT, HttpEntity.EMPTY, SiteIndexSummary.class);
         assertEquals(HttpStatus.BAD_REQUEST, updateWithoutSecret.getStatusCode());
 
-        final ResponseEntity<Tenant> updateWithInvalidSecret = caller.exchange(
+        final ResponseEntity<SiteIndexSummary> updateWithInvalidSecret = caller.exchange(
                 SiteController.ENDPOINT + "/" + siteIdFromCreation + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
                         + "&siteSecret=" + UUID.randomUUID(),
-                HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
+                HttpMethod.PUT, HttpEntity.EMPTY, SiteIndexSummary.class);
         assertEquals(HttpStatus.BAD_REQUEST, updateWithInvalidSecret.getStatusCode());
 
 
         // update index
-        final ResponseEntity<Tenant> anotherFeedReplacement = caller.exchange(
+        final ResponseEntity<SiteIndexSummary> anotherFeedReplacement = caller.exchange(
                 SiteController.ENDPOINT + "/" + siteIdFromCreation + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
                         + "&siteSecret=" + siteSecretFromCreation,
-                HttpMethod.PUT, HttpEntity.EMPTY, Tenant.class);
-        final Tenant tenantUpdate = validateTenantSummary(anotherFeedReplacement, 25);
+                HttpMethod.PUT, HttpEntity.EMPTY, SiteIndexSummary.class);
+        final SiteIndexSummary siteIndexSummaryUpdate = validateTenantSummary(anotherFeedReplacement, 25);
 
-        validateUpdatedSites(tenantUpdate);
+        validateUpdatedSites(siteIndexSummaryUpdate);
 
         tryDeletionOfSites(siteIdFromCreation, siteSecretFromCreation);
     }
@@ -308,14 +308,14 @@ public class PageTest {
         LOG.info("siteCountBeforeDeletion: " + siteCountBeforeDeletion);
     }
 
-    private Tenant validateTenantSummary(ResponseEntity<Tenant> anotherFeedReplacement, int indexEntriesCount) {
+    private SiteIndexSummary validateTenantSummary(ResponseEntity<SiteIndexSummary> anotherFeedReplacement, int indexEntriesCount) {
         assertEquals(HttpStatus.OK, anotherFeedReplacement.getStatusCode());
-        final Tenant tenantUpdate = anotherFeedReplacement.getBody();
-        assertTrue(tenantUpdate.getSiteId() != null);
-        assertTrue(tenantUpdate.getSiteSecret() != null);
-        assertEquals(indexEntriesCount, tenantUpdate.getSuccessCount());
-        assertEquals(indexEntriesCount, tenantUpdate.getDocuments().size());
-        assertTrue(tenantUpdate.getFailed().isEmpty());
-        return tenantUpdate;
+        final SiteIndexSummary siteIndexSummaryUpdate = anotherFeedReplacement.getBody();
+        assertTrue(siteIndexSummaryUpdate.getSiteId() != null);
+        assertTrue(siteIndexSummaryUpdate.getSiteSecret() != null);
+        assertEquals(indexEntriesCount, siteIndexSummaryUpdate.getSuccessCount());
+        assertEquals(indexEntriesCount, siteIndexSummaryUpdate.getDocuments().size());
+        assertTrue(siteIndexSummaryUpdate.getFailed().isEmpty());
+        return siteIndexSummaryUpdate;
     }
 }

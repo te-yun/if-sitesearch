@@ -19,12 +19,12 @@ package com.intrafind.sitesearch;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intrafind.sitesearch.dto.FoundPage;
 import com.intrafind.sitesearch.dto.Hits;
+import com.intrafind.sitesearch.dto.SiteIndexSummary;
 import com.intrafind.sitesearch.integration.SearchTest;
 import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -197,27 +197,5 @@ public class SmokeTest {
         assureCorsHeaders(response.headers(), 406);
     }
 
-    @Test
-    public void index() throws Exception {
-//        Request request = new Request.Builder()
-//                .url("https://api.sitesearch.cloud/search?query=Knowledge&siteId=" + SearchTest.SEARCH_SITE_ID)
-//                .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
-//                .build();
-//        final Response response = HTTP_CLIENT.newCall(request).execute();
-//
-//        assertEquals(HttpStatus.OK.value(), response.code());
-//        assertNotNull(response.body());
-//        Hits result = MAPPER.readValue(response.body().bytes(), Hits.class);
-//        assertEquals("Knowledge", result.getQuery());
-//        assertEquals(1, result.getResults().size());
-//        FoundPage found = result.getResults().get(0);
-//        assertEquals("Wie die Semantische Suche vom <span class=\"if-teaser-highlight\">Knowledge</span> Graph profitiert", found.getTitle());
-//        assertEquals("http:&#x2F;&#x2F;intrafind.de&#x2F;blog&#x2F;wie-die-semantische-suche-vom-<span class=\"if-teaser-highlight\">knowledge</span>-graph-profitiert", found.getUrl());
-//        assertEquals("http://intrafind.de/blog/wie-die-semantische-suche-vom-knowledge-graph-profitiert", found.getUrlRaw());
-//        assertTrue(found.getBody().startsWith("&lt;p&gt;Der <span class=\"if-teaser-highlight\">Knowledge</span> Graph ist vielen Nutzern bereits durch Google oder Facebook bekannt. Aber auch"));
-//
-//        assureCorsHeaders(response.headers(), 406);
 
-        assertEquals(true, true);
-    }
 }

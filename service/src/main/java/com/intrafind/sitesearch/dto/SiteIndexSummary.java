@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class Tenant implements Serializable {
+public class SiteIndexSummary implements Serializable {
     private UUID siteId;
     private UUID siteSecret;
     // TODO remove successCount as it's an implicit part of documents(.size)
@@ -29,10 +29,10 @@ public class Tenant implements Serializable {
     private List<String> documents = Collections.emptyList();
     private List<String> failed = Collections.emptyList();
 
-    private Tenant() {
+    private SiteIndexSummary() {
     }
 
-    public Tenant(UUID siteId, UUID siteSecret, int successCount, List<String> documents, List<String> failed) {
+    public SiteIndexSummary(UUID siteId, UUID siteSecret, int successCount, List<String> documents, List<String> failed) {
         this.siteId = siteId;
         this.siteSecret = siteSecret;
         this.successCount = successCount;

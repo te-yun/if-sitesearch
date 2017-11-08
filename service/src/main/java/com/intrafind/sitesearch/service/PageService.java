@@ -26,7 +26,7 @@ import com.intrafind.sitesearch.TrustAllX509TrustManager;
 import com.intrafind.sitesearch.controller.SearchController;
 import com.intrafind.sitesearch.dto.FetchedPage;
 import com.intrafind.sitesearch.dto.Page;
-import com.intrafind.sitesearch.dto.Tenant;
+import com.intrafind.sitesearch.dto.SiteIndexSummary;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
@@ -205,7 +205,7 @@ public class PageService {
         }
     }
 
-    public Optional<Tenant> indexFeed(URI feedUrl, UUID siteId, UUID siteSecret, Boolean stripHtmlTags, Boolean isGeneric) {
+    public Optional<SiteIndexSummary> indexFeed(URI feedUrl, UUID siteId, UUID siteSecret, Boolean stripHtmlTags, Boolean isGeneric) {
         if (siteId != null && siteSecret != null) { // credentials are provided as a tuple only
             final Optional<UUID> fetchedSiteSecret = fetchSiteSecret(siteId);
             if (!fetchedSiteSecret.isPresent()) { // tenant does not exist
@@ -251,7 +251,7 @@ public class PageService {
         new TrustAllX509TrustManager();
     }
 
-    private Optional<Tenant> readXml(NodeList nodeList, AtomicInteger successfullyIndexed, List<String> documents, List<String> failedToIndex, UUID siteId) {
+    private Optional<SiteIndexSummary> readXml(NodeList nodeList, AtomicInteger successfullyIndexed, List<String> documents, List<String> failedToIndex, UUID siteId) {
         String title = null;
         String body = null;
         String url = null;
@@ -308,10 +308,10 @@ public class PageService {
             }
         }
 
-        return Optional.of(new Tenant(siteId, null, successfullyIndexed.get(), documents, failedToIndex));
+        return Optional.of(new SiteIndexSummary(siteId, null, successfullyIndexed.get(), documents, failedToIndex));
     }
 
-    private Optional<Tenant> updateIndexGenerically(URI feedUrl, UUID siteId, UUID siteSecret, Boolean stripHtmlTags) {
+    private Optional<SiteIndexSummary> updateIndexGenerically(URI feedUrl, UUID siteId, UUID siteSecret, Boolean stripHtmlTags) {
         LOG.info("URL-received: " + feedUrl);
         final AtomicInteger successfullyIndexed = new AtomicInteger(0);
         final List<String> documents = new ArrayList<>();
@@ -332,7 +332,7 @@ public class PageService {
         }
     }
 
-    private Optional<Tenant> updateIndex(URI feedUrl, UUID siteId, UUID siteSecret, Boolean stripHtmlTags) {
+    private Optional<SiteIndexSummary> updateIndex(URI feedUrl, UUID siteId, UUID siteSecret, Boolean stripHtmlTags) {
         LOG.info("URL-received: " + feedUrl);
         final AtomicInteger successfullyIndexed = new AtomicInteger(0);
         final List<String> documents = new ArrayList<>();
@@ -374,7 +374,7 @@ public class PageService {
                 }
             });
 
-            return Optional.of(new Tenant(siteId, siteSecret, successfullyIndexed.get(), documents, failedToIndex));
+            return Optional.of(new SiteIndexSummary(siteId, siteSecret, successfullyIndexed.get(), documents, failedToIndex));
         } catch (FeedException | IOException e) {
             LOG.warn(e.getMessage());
             return Optional.empty();

@@ -18,7 +18,7 @@ package com.intrafind.sitesearch.controller;
 
 import com.intrafind.sitesearch.dto.FetchedPage;
 import com.intrafind.sitesearch.dto.Page;
-import com.intrafind.sitesearch.dto.Tenant;
+import com.intrafind.sitesearch.dto.SiteIndexSummary;
 import com.intrafind.sitesearch.service.PageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,7 +112,7 @@ public class SiteController {
     }
 
     @RequestMapping(path = "{siteId}/xml", method = RequestMethod.PUT)
-    ResponseEntity<Tenant> indexXml(
+    ResponseEntity<SiteIndexSummary> indexXml(
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "siteSecret") UUID siteSecret,
             @RequestParam(value = "xmlUrl") URI xmlUrl,
@@ -122,7 +122,7 @@ public class SiteController {
     }
 
     @RequestMapping(path = "{siteId}/rss", method = RequestMethod.PUT)
-    ResponseEntity<Tenant> indexRssFeed(
+    ResponseEntity<SiteIndexSummary> indexRssFeed(
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "siteSecret") UUID siteSecret,
             @RequestParam(value = "feedUrl") URI feedUrl,
@@ -132,15 +132,15 @@ public class SiteController {
     }
 
     @RequestMapping(path = "rss", method = RequestMethod.POST)
-    ResponseEntity<Tenant> indexNewRssFeed(
+    ResponseEntity<SiteIndexSummary> indexNewRssFeed(
             @RequestParam(value = "feedUrl") URI feedUrl,
             @RequestParam(value = "stripHtmlTags", required = false, defaultValue = "false") Boolean stripHtmlTags
     ) {
         return indexAsRssFeed(null, null, feedUrl, stripHtmlTags, false);
     }
 
-    private ResponseEntity<Tenant> indexAsRssFeed(UUID siteId, UUID siteSecret, URI feedUrl, Boolean stripHtmlTags, Boolean isGeneric) {
-        Optional<Tenant> tenantCreatedInfo = service.indexFeed(feedUrl, siteId, siteSecret, stripHtmlTags, isGeneric);
+    private ResponseEntity<SiteIndexSummary> indexAsRssFeed(UUID siteId, UUID siteSecret, URI feedUrl, Boolean stripHtmlTags, Boolean isGeneric) {
+        Optional<SiteIndexSummary> tenantCreatedInfo = service.indexFeed(feedUrl, siteId, siteSecret, stripHtmlTags, isGeneric);
         if (tenantCreatedInfo.isPresent()) {
             return ResponseEntity.ok(tenantCreatedInfo.get());
         } else {

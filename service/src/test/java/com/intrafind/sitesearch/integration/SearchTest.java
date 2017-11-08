@@ -39,7 +39,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SearchTest {
-    public static final UUID SEARCH_SITE_ID = UUID.fromString("9f374ad4-57e6-46b8-84a4-8a6db8881eb5");
+    public static final UUID SEARCH_SITE_ID = UUID.fromString("ba6200ed-f977-4a8a-b1ec-0d78f0c15e01");
     private static final Logger LOG = LoggerFactory.getLogger(SearchTest.class);
     @Autowired
     private TestRestTemplate caller;
@@ -59,7 +59,7 @@ public class SearchTest {
         assertEquals(HttpStatus.OK, searchResults.getStatusCode());
         assertNotNull(searchResults.getBody());
         assertEquals("Knowledge", searchResults.getBody().getQuery());
-        assertEquals(1, searchResults.getBody().getResults().size());
+        assertEquals(25, searchResults.getBody().getResults().size());
         FoundPage found = searchResults.getBody().getResults().get(0);
         assertEquals("Wie die Semantische Suche vom <span class=\"if-teaser-highlight\">Knowledge</span> Graph profitiert", found.getTitle());
         assertEquals("http:&#x2F;&#x2F;intrafind.de&#x2F;blog&#x2F;wie-die-semantische-suche-vom-<span class=\"if-teaser-highlight\">knowledge</span>-graph-profitiert", found.getUrl());
