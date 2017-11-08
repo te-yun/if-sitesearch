@@ -154,6 +154,7 @@ public class PageService {
                 siteSecret[0] = store.get(txn, readableSiteId);
             });
             if (siteSecret[0] != null) {
+                storeSiteSecret(siteId, UUID.fromString(StringBinding.entryToString(siteSecret[0])));
                 return Optional.of(UUID.fromString(StringBinding.entryToString(siteSecret[0])));
             }
         }
