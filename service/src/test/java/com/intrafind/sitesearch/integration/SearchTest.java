@@ -39,7 +39,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SearchTest {
-    public static final UUID SEARCH_SITE_ID = UUID.fromString("ba6200ed-f977-4a8a-b1ec-0d78f0c15e01");
+    public static final UUID SEARCH_SITE_ID = UUID.fromString("9f374ad4-57e6-46b8-84a4-8a6db8881eb5");
     private static final Logger LOG = LoggerFactory.getLogger(SearchTest.class);
     @Autowired
     private TestRestTemplate caller;
