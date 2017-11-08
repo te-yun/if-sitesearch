@@ -44,7 +44,7 @@ public class PageController {
     @RequestMapping(method = RequestMethod.POST)
     ResponseEntity<Page> indexNewSite(@RequestBody Page page) {
         // TODO use SiteCreation DTO with siteId & siteSecret onReturn
-        Optional<Page> indexed = service.indexNewTenantCreatingSite(page);
+        Optional<Page> indexed = service.indexNewSiteCreatingPage(page);
         if (indexed.isPresent()) {
             Page created = indexed.get();
             return ResponseEntity.created(URI.create("https://api.sitesearch.cloud/sites/" + created.getId())).body(created);

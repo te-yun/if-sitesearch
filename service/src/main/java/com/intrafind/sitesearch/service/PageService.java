@@ -62,6 +62,7 @@ public class PageService {
     public static final String SITE_SECRET_FIELD = "siteSecret";
 
     private static final Index INDEX_SERVICE = IfinderCoreClient.newHessianClient(Index.class, Application.IFINDER_CORE + "/index");
+    private static final String SITE_CONFIGURATION_DOCUMENT_PREFIX = "site-configuration-";
 
     public Optional<FetchedPage> indexExistingPage(String id, UUID siteId, UUID siteSecret, Page page) {
         if (siteId != null && siteSecret != null) { // credentials are provided as a tuple only
@@ -92,13 +93,12 @@ public class PageService {
         indexable.set(Fields.TITLE, page.getTitle());
         indexable.set(Fields.URL, page.getUrl());
         indexable.set(Fields.TENANT, siteId);
-//        indexable.set(SITE_SECRET_FIELD, siteSecret); // TODO will become superfluous once siteSecret is stored in Exodus
         INDEX_SERVICE.index(indexable);
 
         return fetchById(id);
     }
 
-    public Optional<Page> indexNewTenantCreatingSite(Page page) {
+    public Optional<Page> indexNewSiteCreatingPage(Page page) {
         String pageId = createTenant(page);
 
         return fetchNewTenantCreatingSiteById(pageId);
@@ -142,29 +142,34 @@ public class PageService {
     }
 
     private Optional<UUID> fetchSiteSecret(UUID siteId) {
-        final ArrayByteIterable readableSiteId = StringBinding.stringToEntry(siteId.toString());
-        final ByteIterable[] siteSecret = new ByteIterable[1];
-        SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInReadonlyTransaction(txn -> {
-            Store store = SearchController.ACID_PERSISTENCE_ENVIRONMENT.openStore(SITE_SECRET_FIELD, StoreConfig.WITHOUT_DUPLICATES, txn);
-            siteSecret[0] = store.get(txn, readableSiteId);
-        });
-        if (siteSecret[0] != null) {
-            return Optional.of(
-                    UUID.fromString(StringBinding.entryToString(siteSecret[0]))
-            );
-        }
-
-        { // TODO remove this once the Exodus persistence the leading way to store site secrets
-            Hits documentWithSiteSecret = SearchService.SEARCH_SERVICE.search(Fields.TENANT + ":" + siteId, Search.HITS_LIST_SIZE, 1);
-
-            if (documentWithSiteSecret.getDocuments().isEmpty()) {
-                return Optional.empty();
-            } else {
-                return Optional.of(UUID.fromString(
-                        documentWithSiteSecret.getDocuments().get(0).get(SITE_SECRET_FIELD)
-                ));
+        // TODO make this the only method to fetch siteSecret
+        Optional<Document> siteConfiguration = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
+        if (siteConfiguration.isPresent()) {
+            return Optional.of(UUID.fromString(siteConfiguration.get().get("secret")));
+        } else {
+            final ArrayByteIterable readableSiteId = StringBinding.stringToEntry(siteId.toString());
+            final ByteIterable[] siteSecret = new ByteIterable[1];
+            SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInReadonlyTransaction(txn -> {
+                Store store = SearchController.ACID_PERSISTENCE_ENVIRONMENT.openStore(SITE_SECRET_FIELD, StoreConfig.WITHOUT_DUPLICATES, txn);
+                siteSecret[0] = store.get(txn, readableSiteId);
+            });
+            if (siteSecret[0] != null) {
+                return Optional.of(UUID.fromString(StringBinding.entryToString(siteSecret[0])));
             }
         }
+        return Optional.empty();
+
+//        { // TODO remove this once the Exodus persistence the leading way to store site secrets
+//            Hits documentWithSiteSecret = SearchService.SEARCH_SERVICE.search(Fields.TENANT + ":" + siteId, Search.HITS_LIST_SIZE, 1);
+//
+//            if (documentWithSiteSecret.getDocuments().isEmpty()) {
+//                return Optional.empty();
+//            } else {
+//                return Optional.of(UUID.fromString(
+//                        documentWithSiteSecret.getDocuments().get(0).get(SITE_SECRET_FIELD)
+//                ));
+//            }
+//        }
     }
 
     private Optional<Page> fetchNewTenantCreatingSiteById(String id) {
@@ -245,6 +250,11 @@ public class PageService {
     private void storeSiteSecret(ArrayByteIterable readableSiteId, @NotNull Transaction txn, UUID siteSecret) {
         Store store = SearchController.ACID_PERSISTENCE_ENVIRONMENT.openStore(SITE_SECRET_FIELD, StoreConfig.WITHOUT_DUPLICATES, txn);
         store.put(txn, readableSiteId, StringBinding.stringToEntry(siteSecret.toString()));
+
+        // TODO remove Exodus as it is not 12factor in this context
+        Document siteConfiguration = new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + StringBinding.entryToString(readableSiteId));
+        siteConfiguration.set("secret", siteSecret);
+        INDEX_SERVICE.index(siteConfiguration);
     }
 
     static {

@@ -53,16 +53,17 @@
     }
 </style>
 
-<a id="loginLink" href="/login?redirect_uri=https://api.sitesearch.cloud/login" style="text-decoration: none;"
+<a id="loginLink" href="/login?redirect_uri=https://api.sitesearch.cloud/login"
+   style="text-decoration: none; display: none;"
    class="fa fa-sign-in" aria-hidden="true"> Login</a>
-<br>
+<!--<br>-->
 <h1 style="font-size: 2em;"><span class="fa fa-search"></span> Simple Site Search Integrator</h1>
 <div class="wrapper">
     <label for="feedUrl"><span class="fa fa-rss"></span> Feed URL</label>
     <input id="feedUrl" placeholder="Feed URL, e.g. https://intrafind.de/share/enterprise-search-blog.xml"
            value="https://intrafind.de/share/enterprise-search-blog.xml">
     <label for="email"><span class="fa fa-envelope-o"></span> E-mail</label>
-    <input id="email" placeholder="E-mail" value="feedback@sitesearch.cloud">
+    <input id="email" placeholder="E-mail" value="feedback@sitesearch.cloud" readonly>
     <label for="siteId"><span class="fa fa-key"></span> Site ID</label>
     <input id="siteId" placeholder="Site ID">
     <label for="siteSecret"><span class="fa fa-user-secret"></span> Site Secret</label>
@@ -174,9 +175,9 @@
 
 <br>
 
-<div style="float: right">
-    <span class="fa fa-user-circle-o"></span> <a href="privacy.html">Privacy</a> | <span class="fa fa-gavel"></span>
-    <a href="terms.html">Terms</a> | <span class="fa fa-briefcase"></span> <a href="imprint.html">Imprint</a>
-</div>
+<!--<div style="float: right">-->
+<!--<span class="fa fa-user-circle-o"></span> <a href="privacy.html">Privacy</a> | <span class="fa fa-gavel"></span>-->
+<!--<a href="terms.html">Terms</a> | <span class="fa fa-briefcase"></span> <a href="imprint.html">Imprint</a>-->
+<!--</div>-->
 
 <script src="/app/client/client.js"></script>

@@ -18,13 +18,8 @@ package com.intrafind.sitesearch.controller;
 
 import com.intrafind.sitesearch.dto.Hits;
 import com.intrafind.sitesearch.service.SearchService;
-import jetbrains.exodus.ArrayByteIterable;
-import jetbrains.exodus.ByteIterable;
-import jetbrains.exodus.bindings.LongBinding;
-import jetbrains.exodus.bindings.StringBinding;
 import jetbrains.exodus.env.Environment;
 import jetbrains.exodus.env.Environments;
-import jetbrains.exodus.env.Store;
 import jetbrains.exodus.env.StoreConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,19 +81,19 @@ public class SearchController {
 //        if (searchResult.getResults().isEmpty()) {
 //            return ResponseEntity.notFound().build();
 //        } else {
-            if (queryCountEnabled) {
-                final ArrayByteIterable readableSiteId = StringBinding.stringToEntry(siteId.toString());
-                ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
-                    final Store store = ACID_PERSISTENCE_ENVIRONMENT.openStore(StatsController.QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
-                    long queryCount = 0;
-                    final ByteIterable tenantQueryCount = store.get(txn, readableSiteId);
-                    if (tenantQueryCount != null) {
-                        queryCount = LongBinding.entryToLong(tenantQueryCount);
-                        LOG.info("queryCount: " + queryCount);
-                    }
-                    store.put(txn, readableSiteId, LongBinding.longToEntry(++queryCount));
-                });
-            }
+//            if (queryCountEnabled) {
+//                final ArrayByteIterable readableSiteId = StringBinding.stringToEntry(siteId.toString());
+//                ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
+//                    final Store store = ACID_PERSISTENCE_ENVIRONMENT.openStore(StatsController.QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
+//                    long queryCount = 0;
+//                    final ByteIterable tenantQueryCount = store.get(txn, readableSiteId);
+//                    if (tenantQueryCount != null) {
+//                        queryCount = LongBinding.entryToLong(tenantQueryCount);
+//                        LOG.info("queryCount: " + queryCount);
+//                    }
+//                    store.put(txn, readableSiteId, LongBinding.longToEntry(++queryCount));
+//                });
+//            }
             return ResponseEntity.ok(searchResult);
 //        }
     }

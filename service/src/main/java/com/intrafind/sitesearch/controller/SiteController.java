@@ -140,9 +140,9 @@ public class SiteController {
     }
 
     private ResponseEntity<SiteIndexSummary> indexAsRssFeed(UUID siteId, UUID siteSecret, URI feedUrl, Boolean stripHtmlTags, Boolean isGeneric) {
-        Optional<SiteIndexSummary> tenantCreatedInfo = service.indexFeed(feedUrl, siteId, siteSecret, stripHtmlTags, isGeneric);
-        if (tenantCreatedInfo.isPresent()) {
-            return ResponseEntity.ok(tenantCreatedInfo.get());
+        Optional<SiteIndexSummary> siteCreatedInfo = service.indexFeed(feedUrl, siteId, siteSecret, stripHtmlTags, isGeneric);
+        if (siteCreatedInfo.isPresent()) {
+            return ResponseEntity.ok(siteCreatedInfo.get());
         } else {
             return ResponseEntity.badRequest().build();
         }

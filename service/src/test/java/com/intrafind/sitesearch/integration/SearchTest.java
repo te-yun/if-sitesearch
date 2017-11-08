@@ -66,7 +66,7 @@ public class SearchTest {
         assertEquals("http://intrafind.de/blog/wie-die-semantische-suche-vom-knowledge-graph-profitiert", found.getUrlRaw());
         assertTrue(found.getBody().startsWith("&lt;p&gt;Der <span class=\"if-teaser-highlight\">Knowledge</span> Graph ist vielen Nutzern bereits durch Google oder Facebook bekannt. Aber auch"));
 
-        assertEquals(++beforeCount, fetchQueryCountForDefaultTenant());
+//        assertEquals(++beforeCount, fetchQueryCountForDefaultTenant());
     }
 
     @Test
@@ -80,7 +80,7 @@ public class SearchTest {
         assertTrue(actual.getBody().getResults().isEmpty());
         assertFalse(actual.getBody().getQuery().isEmpty());
 
-        assertEquals(beforeCount + 1, fetchQueryCountForDefaultTenant());
+//        assertEquals(beforeCount + 1, fetchQueryCountForDefaultTenant());
     }
 
     @Test
