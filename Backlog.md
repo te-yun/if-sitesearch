@@ -1,8 +1,8 @@
 Backlog
 =
 
-intrafind.de DE siteId: 9f374ad4-57e6-46b8-84a4-8a6db8881eb5
-intrafind.de EN siteId: ba6200ed-f977-4a8a-b1ec-0d78f0c15e01
+intrafind.de DE siteId: afe0ba00-e4de-4ea5-8f4a-0bb1c417979c
+intrafind.de EN siteId: 4bcccea2-8bcf-4280-88c7-8736e9c3d15c
 # now
 * publish on Google G Suite Marketplace https://developers.google.com/gsuite/marketplace/
 * introduce Site Search, incl. search bar to intrafind.de

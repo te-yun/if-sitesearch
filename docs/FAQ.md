@@ -134,7 +134,7 @@ FAQ
                             sbTarget: "#searchbar",
                             configurl: "https://api.sitesearch.cloud/searchbar-config/sitesearch-config.json",
                             sitesearch: true,
-                            siteId: "ba6200ed-f977-4a8a-b1ec-0d78f0c15e01"
+                            siteId: "4bcccea2-8bcf-4280-88c7-8736e9c3d15c"
                         });
                     });
                 </script>
