@@ -111,7 +111,7 @@ public class SiteController {
         }
     }
 
-    @RequestMapping(path = "{siteId}/xml", method = RequestMethod.PUT)
+    @RequestMapping(path = "{siteId}/xml", method = RequestMethod.POST)
     ResponseEntity<SiteIndexSummary> indexXml(
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "siteSecret") UUID siteSecret,

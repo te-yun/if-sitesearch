@@ -65,6 +65,7 @@ public class BaseConfig {
                 .paths(Predicates.not(PathSelectors.regex("/login.*")))
                 .paths(Predicates.not(PathSelectors.regex("/subscriptions")))
                 .paths(Predicates.not(PathSelectors.regex("/assignments.*")))
+                .paths(Predicates.not(PathSelectors.regex("/pages/.*")))
                 .paths(Predicates.not(PathSelectors.regex("/authentication-providers.*")))
                 .paths(Predicates.not(PathSelectors.regex("/user")))
                 .paths(Predicates.not(PathSelectors.regex("/stats")))

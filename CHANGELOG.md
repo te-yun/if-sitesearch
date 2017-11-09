@@ -3,7 +3,8 @@ Change Log
 
 ## Version 1.0.1
 
-* 
+* improved **monitoring resilience**, i.e. monitoring configurations in physically separated locations
+* the new, reworked **product frontpage** went live 
 
 ## Version 1.0.0
 * Search bar updated

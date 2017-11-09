@@ -16,8 +16,8 @@
 
 buildscript {
     ext {
-        spring_boot_version = "1.5.7.RELEASE"
-//        spring_boot_version = "1.5.8.RELEASE"
+//        spring_boot_version = "1.5.7.RELEASE"
+        spring_boot_version = "1.5.8.RELEASE"
         swagger_version = "2.7.0"
         xodus_version = "1.0.6"
     }
@@ -26,9 +26,9 @@ buildscript {
 plugins {
     id "java"
     id "idea"
-    id "org.springframework.boot" version "1.5.7.RELEASE"
-//    id "org.springframework.boot" version "1.5.8.RELEASE"
-    id "io.morethan.jmhreport" version "0.6.2.1"
+//    id "org.springframework.boot" version "1.5.7.RELEASE"
+    id "org.springframework.boot" version "1.5.8.RELEASE"
+    id "io.morethan.jmhreport" version "0.7.0"
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
