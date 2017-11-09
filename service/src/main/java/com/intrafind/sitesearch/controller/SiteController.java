@@ -18,6 +18,7 @@ package com.intrafind.sitesearch.controller;
 
 import com.intrafind.sitesearch.dto.FetchedPage;
 import com.intrafind.sitesearch.dto.Page;
+import com.intrafind.sitesearch.dto.SiteCreation;
 import com.intrafind.sitesearch.dto.SiteIndexSummary;
 import com.intrafind.sitesearch.service.PageService;
 import org.slf4j.Logger;
@@ -45,12 +46,29 @@ public class SiteController {
         this.service = service;
     }
 
-@RequestMapping(path = "{siteId}/pages", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.POST)
+        // TODO add as init method to POST /sites
+//    ResponseEntity<Page> indexNewSite(@RequestBody Page page) {
+    ResponseEntity<SiteCreation> indexNewSite() {
+        // TODO use SiteCreation DTO with siteId & siteSecret onReturn
+        SiteCreation newlyCreatedSite = service.createSite();
+        return ResponseEntity
+                .created(URI.create("https://api.sitesearch.cloud/sites/" + newlyCreatedSite.getSiteId()))
+                .body(newlyCreatedSite);
+//        if (indexed.isPresent()) {
+//            Page created = indexed.get();
+//            return ResponseEntity.created(URI.create("https://api.sitesearch.cloud/sites/" + created.getId())).body(created);
+//        } else {
+//            return ResponseEntity.badRequest().build();
+//        }
+    }
+
+    @RequestMapping(path = "{siteId}/pages", method = RequestMethod.GET)
     ResponseEntity<FetchedPage> fetchViaUrl(
-        @PathVariable(value = "siteId") UUID siteId,
-        @RequestParam(value = "url") URI url
+            @PathVariable(value = "siteId") UUID siteId,
+            @RequestParam(value = "url") URI url
     ) throws UnsupportedEncodingException {
-    String pageId = Page.hashPageId(siteId, url);
+        String pageId = Page.hashPageId(siteId, url);
 
         Optional<FetchedPage> fetched = service.fetchById(pageId);
         if (fetched.isPresent()) {

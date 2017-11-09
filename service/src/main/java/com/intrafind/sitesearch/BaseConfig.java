@@ -70,6 +70,9 @@ public class BaseConfig {
                 .paths(Predicates.not(PathSelectors.regex("/user")))
                 .paths(Predicates.not(PathSelectors.regex("/stats")))
                 .build();
+
+        // TODO exclude from public Swagger API PUT /sites/{siteId}/pages/{pageId} ?
+        // TODO exclude from public Swagger API PUT DELETE /sites/{siteId}/pages/{pageId} ?
     }
 
 //    class BasePathAwareRelativePathProvider extends AbstractPathProvider {

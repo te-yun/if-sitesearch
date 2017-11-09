@@ -26,6 +26,7 @@ import com.intrafind.sitesearch.TrustAllX509TrustManager;
 import com.intrafind.sitesearch.controller.SearchController;
 import com.intrafind.sitesearch.dto.FetchedPage;
 import com.intrafind.sitesearch.dto.Page;
+import com.intrafind.sitesearch.dto.SiteCreation;
 import com.intrafind.sitesearch.dto.SiteIndexSummary;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
@@ -36,8 +37,6 @@ import jetbrains.exodus.ByteIterable;
 import jetbrains.exodus.bindings.StringBinding;
 import jetbrains.exodus.env.Store;
 import jetbrains.exodus.env.StoreConfig;
-import jetbrains.exodus.env.Transaction;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -98,50 +97,35 @@ public class PageService {
         return fetchById(id);
     }
 
-    public Optional<Page> indexNewSiteCreatingPage(Page page) {
-        String pageId = createTenant(page);
+//    public Optional<Page> indexNewSiteCreatingPage(Page page) {
+//        String pageId = createTenant(page);
+//
+//        return fetchNewTenantCreatingSiteById(pageId);
+//    }
+//
+//    private String createTenant(Page page) {
+//        UUID siteId = UUID.randomUUID();
+//        final ArrayByteIterable readableSiteId = StringBinding.stringToEntry(siteId.toString());
+//        String pageId = Page.hashPageId(siteId, page.getUrl());
+//
+//        SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
+//            Document indexable = new Document(pageId);
+//            indexable.set(Fields.BODY, page.getBody());
+//            indexable.set(Fields.TITLE, page.getTitle());
+//            indexable.set(Fields.URL, page.getUrl());
+//            indexable.set(Fields.TENANT, siteId);
+//            UUID siteSecret = UUID.randomUUID();
+//
+//            storeSiteSecret(readableSiteId, txn, siteSecret);
+//
+//            indexable.set(SITE_SECRET_FIELD, siteSecret);
+//            INDEX_SERVICE.index(indexable);
+//        });
+//
+//        return pageId;
+//    }
 
-        return fetchNewTenantCreatingSiteById(pageId);
-    }
-
-    private String createTenant(Page page) {
-        UUID siteId = UUID.randomUUID();
-        final ArrayByteIterable readableSiteId = StringBinding.stringToEntry(siteId.toString());
-        String pageId = Page.hashPageId(siteId, page.getUrl());
-
-        SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
-            Document indexable = new Document(pageId);
-            indexable.set(Fields.BODY, page.getBody());
-            indexable.set(Fields.TITLE, page.getTitle());
-            indexable.set(Fields.URL, page.getUrl());
-            indexable.set(Fields.TENANT, siteId);
-            UUID siteSecret = UUID.randomUUID();
-
-            storeSiteSecret(readableSiteId, txn, siteSecret);
-
-            indexable.set(SITE_SECRET_FIELD, siteSecret);
-            INDEX_SERVICE.index(indexable);
-        });
-
-        return pageId;
-    }
-
-    public Optional<List<String>> fetchAllDocuments(UUID siteId) {
-        // TODO only fetch ID info
-        Hits documentWithSiteSecret = SearchService.SEARCH_SERVICE.search(Fields.TENANT + ":" + siteId.toString(), Search.HITS_LIST_SIZE, 1_000);
-
-        if (documentWithSiteSecret.getDocuments().isEmpty()) {
-            return Optional.empty();
-        } else {
-            List<String> documents = new ArrayList<>();
-            documentWithSiteSecret.getDocuments().forEach(document -> {
-                documents.add(document.getId());
-            });
-            return Optional.of(documents);
-        }
-    }
-
-    private Optional<UUID> fetchSiteSecret(UUID siteId) {
+    public static Optional<UUID> fetchSiteSecret(UUID siteId) {
         // TODO make this the only method to fetch siteSecret
         Optional<Document> siteConfiguration = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
         if (siteConfiguration.isPresent()) {
@@ -171,6 +155,34 @@ public class PageService {
 //                ));
 //            }
 //        }
+    }
+
+    public Optional<List<String>> fetchAllDocuments(UUID siteId) {
+        // TODO only fetch ID info
+        Hits documentWithSiteSecret = SearchService.SEARCH_SERVICE.search(Fields.TENANT + ":" + siteId.toString(), Search.HITS_LIST_SIZE, 1_000);
+
+        if (documentWithSiteSecret.getDocuments().isEmpty()) {
+            return Optional.empty();
+        } else {
+            List<String> documents = new ArrayList<>();
+            documentWithSiteSecret.getDocuments().forEach(document -> {
+                documents.add(document.getId());
+            });
+            return Optional.of(documents);
+        }
+    }
+
+    private static void storeSiteSecret(UUID siteId, UUID siteSecret) {
+//        final ArrayByteIterable iterableSiteId = StringBinding.stringToEntry(siteId.toString());
+//
+//        SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
+//            storeSiteSecret(iterableSiteId, txn, siteSecret);
+//        });
+
+        // TODO remove Exodus as it is not 12factor in this context
+        Document siteConfiguration = new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId);
+        siteConfiguration.set("secret", siteSecret);
+        INDEX_SERVICE.index(siteConfiguration);
     }
 
     private Optional<Page> fetchNewTenantCreatingSiteById(String id) {
@@ -240,23 +252,42 @@ public class PageService {
         }
     }
 
-    private void storeSiteSecret(UUID siteId, UUID siteSecret) {
-        final ArrayByteIterable iterableSiteId = StringBinding.stringToEntry(siteId.toString());
+    public SiteCreation createSite() {
+//            UUID siteId = UUID.randomUUID();
+//            final ArrayByteIterable readableSiteId = StringBinding.stringToEntry(siteId.toString());
+//            String pageId = Page.hashPageId(siteId, page.getUrl());
+//
+//            SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
+//                Document indexable = new Document(pageId);
+//                indexable.set(Fields.BODY, page.getBody());
+//                indexable.set(Fields.TITLE, page.getTitle());
+//                indexable.set(Fields.URL, page.getUrl());
+//                indexable.set(Fields.TENANT, siteId);
+//                UUID siteSecret = UUID.randomUUID();
 
-        SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
-            storeSiteSecret(iterableSiteId, txn, siteSecret);
-        });
+//                storeSiteSecret(readableSiteId, txn, siteSecret);
+//
+//                indexable.set(SITE_SECRET_FIELD, siteSecret);
+//                INDEX_SERVICE.index(indexable);
+//            });
+//
+//            return pageId;
+
+        UUID siteId = UUID.randomUUID();
+        UUID siteSecret = UUID.randomUUID();
+        storeSiteSecret(siteId, siteSecret);
+        return new SiteCreation(siteId, siteSecret);
     }
 
-    private void storeSiteSecret(ArrayByteIterable readableSiteId, @NotNull Transaction txn, UUID siteSecret) {
-        Store store = SearchController.ACID_PERSISTENCE_ENVIRONMENT.openStore(SITE_SECRET_FIELD, StoreConfig.WITHOUT_DUPLICATES, txn);
-        store.put(txn, readableSiteId, StringBinding.stringToEntry(siteSecret.toString()));
-
-        // TODO remove Exodus as it is not 12factor in this context
-        Document siteConfiguration = new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + StringBinding.entryToString(readableSiteId));
-        siteConfiguration.set("secret", siteSecret);
-        INDEX_SERVICE.index(siteConfiguration);
-    }
+//    private void storeSiteSecret(ArrayByteIterable readableSiteId, @NotNull Transaction txn, UUID siteSecret) {
+//        Store store = SearchController.ACID_PERSISTENCE_ENVIRONMENT.openStore(SITE_SECRET_FIELD, StoreConfig.WITHOUT_DUPLICATES, txn);
+//        store.put(txn, readableSiteId, StringBinding.stringToEntry(siteSecret.toString()));
+//
+//        // TODO remove Exodus as it is not 12factor in this context
+//        Document siteConfiguration = new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + StringBinding.entryToString(readableSiteId));
+//        siteConfiguration.set("secret", siteSecret);
+//        INDEX_SERVICE.index(siteConfiguration);
+//    }
 
     static {
         new TrustAllX509TrustManager();

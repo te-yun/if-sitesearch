@@ -19,6 +19,7 @@ package com.intrafind.sitesearch.integration;
 import com.intrafind.sitesearch.controller.PageController;
 import com.intrafind.sitesearch.controller.SiteController;
 import com.intrafind.sitesearch.dto.Page;
+import com.intrafind.sitesearch.dto.SiteCreation;
 import com.intrafind.sitesearch.dto.SiteIndexSummary;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,9 +45,9 @@ public class PageTest {
     @Autowired
     private TestRestTemplate caller;
 
-    private static String testPageId;
-    private static UUID testSiteSiteSecret;
-    private static UUID testSiteId;
+//    private static String testPageId;
+//    private static UUID testSiteSiteSecret;
+//    private static UUID testSiteId;
 
     static Page buildSite(UUID siteSecret) {
         final UUID testSiteId = UUID.fromString("1a6715d9-119f-48d1-9329-e8763273bbea");
@@ -62,33 +63,50 @@ public class PageTest {
 
     @Before
     public void init() throws Exception {
-        Page testPage = createNewSiteViaPageCreation();
-        testPageId = testPage.getId();
-        testSiteId = testPage.getSiteId();
-        testSiteSiteSecret = testPage.getSiteSecret();
+//        SiteCreation testSite = createNewSite();
+//        testPageId = testSite.getId();
+//        testSiteId = testSite.getSiteId();
+//        testSiteSiteSecret = testSite.getSiteSecret();
     }
 
-    private Page createNewSiteViaPageCreation() throws Exception {
-        UUID irrelevantPageId = UUID.fromString("f55d093a-7911-11e7-8fc8-025041000001");
-        Page simple = buildSite(UUID.randomUUID());
-
-        ResponseEntity<Page> actual = caller.exchange(PageController.ENDPOINT, HttpMethod.POST, new HttpEntity<>(simple), Page.class);
+    private SiteCreation createNewSite() throws Exception {
+//        UUID irrelevantPageId = UUID.fromString("f55d093a-7911-11e7-8fc8-025041000001");
+//        Page simple = buildSite(UUID.randomUUID());
+//
+        ResponseEntity<SiteCreation> actual = caller.exchange(SiteController.ENDPOINT, HttpMethod.POST, HttpEntity.EMPTY, SiteCreation.class);
 
         assertEquals(HttpStatus.CREATED, actual.getStatusCode());
-        assertEquals(simple, actual.getBody());
-        assertNotEquals("assure irrelevancy of siteId during creation", irrelevantPageId, actual.getBody().getId());
-        assertEquals("https://api.sitesearch.cloud/sites/" + actual.getBody().getId(), actual.getHeaders().get(HttpHeaders.LOCATION).get(0));
+        assertNotNull(actual.getBody());
+        assertNotNull(actual.getBody().getSiteId());
+        assertNotNull(actual.getBody().getSiteSecret());
+        assertEquals("https://api.sitesearch.cloud/sites/" + actual.getBody().getSiteId(), actual.getHeaders().get(HttpHeaders.LOCATION).get(0));
 
-        ResponseEntity<Page> newlyCreatedSite = caller.exchange(PageController.ENDPOINT + "/" + actual.getBody().getId(), HttpMethod.GET, HttpEntity.EMPTY, Page.class);
-        assertEquals(HttpStatus.OK, newlyCreatedSite.getStatusCode());
-        assertEquals(actual.getBody().getId(), newlyCreatedSite.getBody().getId());
+//        ResponseEntity<SiteCreation> newlyCreatedSite = caller.exchange(PageController.ENDPOINT + "/" + actual.getBody().getId(), HttpMethod.GET, HttpEntity.EMPTY, Page.class);
+//        assertEquals(HttpStatus.OK, newlyCreatedSite.getStatusCode());
+//        assertEquals(actual.getBody().getId(), newlyCreatedSite.getBody().getId());
 
         return actual.getBody();
     }
 
+    private Page createNewPage(UUID siteId, UUID siteSecret) throws Exception {
+        Page simple = buildSite(UUID.randomUUID());
+        ResponseEntity<Page> newlyCreatedPage = caller.exchange(SiteController.ENDPOINT + "/" + siteId + "/pages?siteSecret=" + siteSecret, HttpMethod.PUT, new HttpEntity<>(simple), Page.class);
+        assertEquals(HttpStatus.OK, newlyCreatedPage.getStatusCode());
+        assertNotNull(newlyCreatedPage.getBody());
+        assertNotNull(newlyCreatedPage.getBody().getBody());
+        assertFalse(newlyCreatedPage.getBody().getBody().isEmpty());
+        assertNotNull(newlyCreatedPage.getBody().getTitle());
+        assertFalse(newlyCreatedPage.getBody().getTitle().isEmpty());
+        assertNotNull(newlyCreatedPage.getBody().getUrl());
+        assertFalse(newlyCreatedPage.getBody().getUrl().isEmpty());
+
+        return newlyCreatedPage.getBody();
+    }
+
     @Test
     public void updateSiteViaUrl() throws Exception {
-        final Page newPage = createNewSiteViaPageCreation();
+        final SiteCreation newSite = createNewSite();
+        final Page newPage = createNewPage(newSite.getSiteId(), newSite.getSiteSecret());
         final String updatedBodyContent = "Updated via Hash(siteId, URL)";
         newPage.setBody(updatedBodyContent);
 
@@ -96,7 +114,7 @@ public class PageTest {
 
         // update
         final ResponseEntity<Page> updatedSite = caller.exchange(SiteController.ENDPOINT
-                        + "/" + newPage.getSiteId() + "/pages?siteSecret=" + newPage.getSiteSecret(),
+                        + "/" + newSite.getSiteId() + "/pages?siteSecret=" + newSite.getSiteSecret(),
                 HttpMethod.PUT, new HttpEntity<>(newPage), Page.class);
         assertEquals(HttpStatus.OK, updatedSite.getStatusCode());
         assertEquals(newPage.getId(), updatedSite.getBody().getId());
@@ -105,7 +123,7 @@ public class PageTest {
         // fetch & check updated site
         assertEquals(Page.hashPageId(newPage.getSiteId(), newPage.getUrl()), newPage.getId());
         final ResponseEntity<Page> fetchedUpdatedSite = caller.exchange(PageController.ENDPOINT
-                        + "/" + Page.hashPageId(newPage.getSiteId(), newPage.getUrl()),
+                        + "/" + Page.hashPageId(newSite.getSiteId(), newPage.getUrl()),
                 HttpMethod.GET, HttpEntity.EMPTY, Page.class);
 
         assertEquals(HttpStatus.OK, fetchedUpdatedSite.getStatusCode());
@@ -114,7 +132,7 @@ public class PageTest {
 
         // fetch via URL
         final ResponseEntity<Page> fetchViaUrl = caller.exchange(SiteController.ENDPOINT
-                        + "/" + newPage.getSiteId() + "/pages?url=" + newPage.getUrl(),
+                        + "/" + newSite.getSiteId() + "/pages?url=" + newPage.getUrl(),
                 HttpMethod.GET, HttpEntity.EMPTY, Page.class);
         assertEquals(HttpStatus.OK, fetchViaUrl.getStatusCode());
         assertEquals(newPage.getId(), fetchViaUrl.getBody().getId());
@@ -124,16 +142,18 @@ public class PageTest {
 
     @Test
     public void fetchUpdatedById() throws Exception {
-        Page ying = createNewSiteViaPageCreation();
-        Page yang = createNewSiteViaPageCreation();
+        final SiteCreation newSiteYing = createNewSite();
+        final Page ying = createNewPage(newSiteYing.getSiteId(), newSiteYing.getSiteSecret());
+        final SiteCreation newSiteYang = createNewSite();
+        final Page yang = createNewPage(newSiteYang.getSiteId(), newSiteYang.getSiteSecret());
         TimeUnit.MILLISECONDS.sleep(8_000);
 
         final ResponseEntity<Page> actualYing = caller.exchange(SiteController.ENDPOINT + "/"
-                + ying.getSiteId() + "/pages/" + ying.getId() + "?siteSecret=" + ying.getSiteSecret(), HttpMethod.PUT, new HttpEntity<>(ying), Page.class);
+                + newSiteYing.getSiteId() + "/pages/" + ying.getId() + "?siteSecret=" + newSiteYing.getSiteSecret(), HttpMethod.PUT, new HttpEntity<>(ying), Page.class);
         assertEquals(HttpStatus.OK, actualYing.getStatusCode());
         assertEquals(ying, actualYing.getBody());
         final ResponseEntity<Page> actualYang = caller.exchange(SiteController.ENDPOINT + "/"
-                + yang.getSiteId() + "/pages/" + yang.getId() + "?siteSecret=" + yang.getSiteSecret(), HttpMethod.PUT, new HttpEntity<>(yang), Page.class);
+                + newSiteYang.getSiteId() + "/pages/" + yang.getId() + "?siteSecret=" + newSiteYang.getSiteSecret(), HttpMethod.PUT, new HttpEntity<>(yang), Page.class);
         assertEquals(HttpStatus.OK, actualYang.getStatusCode());
         assertEquals(yang, actualYang.getBody());
 
@@ -156,11 +176,12 @@ public class PageTest {
 
     @Test
     public void updatedSite() throws Exception {
-        Page createdPage = createNewSiteViaPageCreation();
+        SiteCreation createdSite = createNewSite();
+        Page createdPage = createNewPage(createdSite.getSiteId(), createdSite.getSiteSecret());
 
         TimeUnit.MILLISECONDS.sleep(8_000);
 
-        final ResponseEntity<Page> updateWithSiteIdOnly = caller.exchange(SiteController.ENDPOINT + "/" + createdPage.getSiteId()
+        final ResponseEntity<Page> updateWithSiteIdOnly = caller.exchange(SiteController.ENDPOINT + "/" + createdSite.getSiteId()
                 + "/pages/" + createdPage.getId(), HttpMethod.PUT, new HttpEntity<>(createdPage), Page.class);
         assertEquals("only valid siteId is provided", HttpStatus.BAD_REQUEST, updateWithSiteIdOnly.getStatusCode());
         assertEquals(29791, updateWithSiteIdOnly.getBody().hashCode());
@@ -170,7 +191,7 @@ public class PageTest {
         assertEquals("only valid siteSecret is provided", HttpStatus.BAD_REQUEST, updateWithSiteSecretOnly.getStatusCode());
         assertEquals(29791, updateWithSiteSecretOnly.getBody().hashCode());
 
-        final ResponseEntity<Page> updateWithWrongSiteSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdPage.getSiteId()
+        final ResponseEntity<Page> updateWithWrongSiteSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSite.getSiteId()
                         + "/pages/" + createdPage.getId() + "?siteSecret=" + UUID.randomUUID(),
                 HttpMethod.PUT, new HttpEntity<>(createdPage), Page.class);
         assertEquals("siteSecret is invalid", HttpStatus.NOT_FOUND, updateWithWrongSiteSecret.getStatusCode());
@@ -179,8 +200,8 @@ public class PageTest {
         createdPage.setTitle("updated title");
         createdPage.setBody("updated body");
         createdPage.setUrl("https://example.com/updated");
-        final ResponseEntity<Page> updated = caller.exchange(SiteController.ENDPOINT + "/" + createdPage.getSiteId()
-                        + "/pages/" + createdPage.getId() + "?siteSecret=" + createdPage.getSiteSecret(),
+        final ResponseEntity<Page> updated = caller.exchange(SiteController.ENDPOINT + "/" + createdSite.getSiteId()
+                        + "/pages/" + createdPage.getId() + "?siteSecret=" + createdSite.getSiteSecret(),
                 HttpMethod.PUT, new HttpEntity<>(createdPage), Page.class);
         assertEquals(HttpStatus.OK, updated.getStatusCode());
         assertEquals(createdPage, updated.getBody());
@@ -318,4 +339,51 @@ public class PageTest {
         assertTrue(siteIndexSummaryUpdate.getFailed().isEmpty());
         return siteIndexSummaryUpdate;
     }
+
+    //    @Test
+//        public void indexIntrafindDe() throws Exception {
+//            List<String> enIndexDocuments = new ArrayList<>();
+//            enIndexDocuments.add("en/2b4c27b0-6636-4a13-a911-4f495f99b604.xml");
+//            enIndexDocuments.add("en/32d2557e-7f03-48d9-ad60-bf7c0b70c487.xml");
+//            enIndexDocuments.add("en/534706ba-da98-4b45-b920-8ec0486d79fb.xml");
+//            enIndexDocuments.add("en/79f4cd25-39d1-42ad-8b2a-9247aabd7d13.xml");
+//            List<String> deIndexDocuments = new ArrayList<>();
+//            deIndexDocuments.add("de/0b23bbeb-b659-4b79-9cd5-46f06a9d6f46.xml");
+//            deIndexDocuments.add("de/141ba3e5-744c-4ecf-845b-b10046b13106.xml");
+//            deIndexDocuments.add("de/56d4d97a-a796-4899-b2d8-724fd2001a61.xml");
+//            deIndexDocuments.add("de/9b45617d-6050-4eea-8da5-68003db2cf3a.xml");
+//            deIndexDocuments.add("de/df49ea3b-4766-4c86-963c-b811deb307a9.xml");
+//
+//            enIndexDocuments.forEach(indexedDocumentsPage -> {
+//                indexCrawlerPage(indexedDocumentsPage, UUID.fromString("4bcccea2-8bcf-4280-88c7-8736e9c3d15c"),
+//                        null
+//                );
+//            });
+//            deIndexDocuments.forEach(indexedDocumentsPage -> {
+//                indexCrawlerPage(indexedDocumentsPage, UUID.fromString("afe0ba00-e4de-4ea5-8f4a-0bb1c417979c"),
+//                        null
+//                );
+//            });
+//        }
+//
+//        private void indexCrawlerPage(String indexedDocumentsPage, UUID siteId, UUID siteSecret) {
+//            Request request = new Request.Builder()
+//                    .url("https://api.sitesearch.cloud/sites/" + siteId + "/xml" +
+//                            "?xmlUrl=https://raw.githubusercontent.com/intrafind/if-sitesearch/master/service/src/test/resources/intrafind-de/" +
+//                            indexedDocumentsPage + "&siteSecret=" + siteSecret)
+//                    .post(RequestBody.create(MediaType.parse("applications/json"), ""))
+//                    .build();
+//
+//            try {
+//                final Response response = HTTP_CLIENT.newCall(request).execute();
+//                assertEquals(HttpStatus.OK.value(), response.code());
+//                assertNotNull(response.body());
+//                SiteIndexSummary result = MAPPER.readValue(response.body().bytes(), SiteIndexSummary.class);
+//                assertTrue(result.getFailed().isEmpty());
+//                assertFalse(result.getDocuments().isEmpty());
+//                assertTrue(result.getSuccessCount() > 0);
+//            } catch (IOException e) {
+//                LOG.error(e.getMessage());
+//            }
+//        }
 }
