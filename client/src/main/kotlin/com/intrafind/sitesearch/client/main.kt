@@ -74,9 +74,11 @@ fun showInitCode() {
     val finderInit = document.getElementById("sitesearch-page-finder-init") as HTMLScriptElement
     val finderContainer = document.getElementById("page-finder") as HTMLDivElement
     val finderVariant = document.getElementById("finder-variant") as HTMLInputElement
+    val searchbarInputField = document.getElementById("ifs-sb-searchfield") as HTMLInputElement
     val searchbarVariant = document.getElementById("searchbar-variant") as HTMLInputElement
     val integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
 
+    searchbarInputField.placeholder = "Search for \"knowledge\""
     val enterpriseSearchbarCode = enterpriseSearchbar.outerHTML
             .replace("searchbar-config/sitesearch-config.json", "https://api.sitesearch.cloud/searchbar-config/sitesearch-config.json")
     integrationCode.value = enterpriseSearchbarCode

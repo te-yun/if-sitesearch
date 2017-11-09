@@ -45,10 +45,6 @@ public class PageTest {
     @Autowired
     private TestRestTemplate caller;
 
-//    private static String testPageId;
-//    private static UUID testSiteSiteSecret;
-//    private static UUID testSiteId;
-
     static Page buildSite(UUID siteSecret) {
         final UUID testSiteId = UUID.fromString("1a6715d9-119f-48d1-9329-e8763273bbea");
         final String url = "https://api.sitesearch.cloud";
@@ -63,16 +59,9 @@ public class PageTest {
 
     @Before
     public void init() throws Exception {
-//        SiteCreation testSite = createNewSite();
-//        testPageId = testSite.getId();
-//        testSiteId = testSite.getSiteId();
-//        testSiteSiteSecret = testSite.getSiteSecret();
     }
 
     private SiteCreation createNewSite() throws Exception {
-//        UUID irrelevantPageId = UUID.fromString("f55d093a-7911-11e7-8fc8-025041000001");
-//        Page simple = buildSite(UUID.randomUUID());
-//
         ResponseEntity<SiteCreation> actual = caller.exchange(SiteController.ENDPOINT, HttpMethod.POST, HttpEntity.EMPTY, SiteCreation.class);
 
         assertEquals(HttpStatus.CREATED, actual.getStatusCode());
@@ -80,10 +69,6 @@ public class PageTest {
         assertNotNull(actual.getBody().getSiteId());
         assertNotNull(actual.getBody().getSiteSecret());
         assertEquals("https://api.sitesearch.cloud/sites/" + actual.getBody().getSiteId(), actual.getHeaders().get(HttpHeaders.LOCATION).get(0));
-
-//        ResponseEntity<SiteCreation> newlyCreatedSite = caller.exchange(PageController.ENDPOINT + "/" + actual.getBody().getId(), HttpMethod.GET, HttpEntity.EMPTY, Page.class);
-//        assertEquals(HttpStatus.OK, newlyCreatedSite.getStatusCode());
-//        assertEquals(actual.getBody().getId(), newlyCreatedSite.getBody().getId());
 
         return actual.getBody();
     }
@@ -130,6 +115,12 @@ public class PageTest {
         assertEquals(newPage.getId(), fetchedUpdatedSite.getBody().getId());
         assertEquals(updatedBodyContent, fetchedUpdatedSite.getBody().getBody());
 
+        // delete using an invalid siteSecret
+        UUID invalidSiteSecret = UUID.randomUUID();
+        final ResponseEntity<ResponseEntity> deletionWithInvalidSiteSecret = caller.exchange(SiteController.ENDPOINT + "/" + newSite.getSiteId() + "/pages?siteSecret=" + UUID.randomUUID() + "&url=" + newPage.getUrl(), HttpMethod.DELETE, HttpEntity.EMPTY, ResponseEntity.class);
+        assertEquals(HttpStatus.NOT_FOUND, deletionWithInvalidSiteSecret.getStatusCode());
+        assertNull(deletionWithInvalidSiteSecret.getBody());
+
         // fetch via URL
         final ResponseEntity<Page> fetchViaUrl = caller.exchange(SiteController.ENDPOINT
                         + "/" + newSite.getSiteId() + "/pages?url=" + newPage.getUrl(),
@@ -138,6 +129,17 @@ public class PageTest {
         assertEquals(newPage.getId(), fetchViaUrl.getBody().getId());
         assertEquals(updatedBodyContent, fetchViaUrl.getBody().getBody());
         assertEquals(newPage.getUrl(), fetchViaUrl.getBody().getUrl());
+
+        // delete using a valid siteSecret
+        final ResponseEntity<ResponseEntity> deletion = caller.exchange(SiteController.ENDPOINT + "/" + newSite.getSiteId() + "/pages?siteSecret=" + newSite.getSiteSecret() + "&url=" + newPage.getUrl(), HttpMethod.DELETE, HttpEntity.EMPTY, ResponseEntity.class);
+        assertEquals(HttpStatus.NO_CONTENT, deletion.getStatusCode());
+        assertNull(deletion.getBody());
+
+        // fetch via URL
+        final ResponseEntity<Page> fetchViaUrlForNonExistingPage = caller.exchange(SiteController.ENDPOINT
+                        + "/" + newSite.getSiteId() + "/pages?url=" + newPage.getUrl(),
+                HttpMethod.GET, HttpEntity.EMPTY, Page.class);
+        assertEquals(HttpStatus.NOT_FOUND, fetchViaUrlForNonExistingPage.getStatusCode());
     }
 
     @Test

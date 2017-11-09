@@ -71,7 +71,7 @@ public class SearchTest {
 
     @Test
     public void simpleSearchNotFound() throws Exception {
-        long beforeCount = fetchQueryCountForDefaultTenant();
+//        long beforeCount = fetchQueryCountForDefaultTenant();
 
         final ResponseEntity<Hits> actual = caller.getForEntity(SearchController.ENDPOINT + "?query=not_found&siteId=" + SEARCH_SITE_ID, Hits.class);
 

@@ -34,17 +34,11 @@ FAQ
   Still you can make a website searchable that does not expose any feeds by using our API and indexing a website page by page, 
   cf. "How can I index a page and make it searchable?".  
   
-* How can I **index a page**, automatically **creating a new site**, and make it searchable?
+* How can I **create a new site** to add pages to this site and make them searchable? 
+Or what should be the first thing, I need to do, to **get started** with Site Search?
     * After executing this ***curl command***, you will also obtain the *siteId* and *siteSecret* of the newly created site. 
 
-            curl -v -X POST \
-              https://api.sitesearch.cloud/pages \
-              -H 'content-type: application/json' \
-              -d '{ 
-                "url" : "https://example.com/page",
-                "title": "Test Page",
-                "body": "Test Content"
-            }'
+            curl -v -X POST https://api.sitesearch.cloud/sites
 
 * How can I **index a page**, within an **already existing site**, and make it searchable?
     * When a page with the provided URL already exists, the page will be updated with the given title & body.

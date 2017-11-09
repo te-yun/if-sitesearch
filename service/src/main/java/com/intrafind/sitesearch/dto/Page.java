@@ -49,12 +49,12 @@ public class Page implements Serializable {
     }
 
     public UUID getSiteSecret() {
-        return siteSecret;
+        return null;
     }
 
-    public void setSiteSecret(UUID siteSecret) {
-        this.siteSecret = siteSecret;
-    }
+//    public void setSiteSecret(UUID siteSecret) {
+//        this.siteSecret = null;
+//    }
 
     public String getTitle() {
         return title;
@@ -92,9 +92,9 @@ public class Page implements Serializable {
         this.body = body;
     }
 
-    public void setSiteId(UUID siteId) {
-        this.siteId = siteId;
-    }
+//    public void setSiteId(UUID siteId) {
+//        this.siteId = siteId;
+//    }
 
     public String getId() {
         return id;

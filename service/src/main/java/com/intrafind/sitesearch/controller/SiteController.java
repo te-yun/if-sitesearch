@@ -167,10 +167,10 @@ public class SiteController {
     }
 
     @RequestMapping(path = "{siteId}/pages/{pageId}", method = RequestMethod.DELETE)
-    ResponseEntity deleteSiteById(
+    ResponseEntity deleteById(
             @PathVariable(name = "siteId") UUID siteId,
             @PathVariable(name = "pageId") String pageId,
-            @RequestParam(name = "siteSecret") UUID siteSecret // TODO SECURITY_ISSUE implement a corresponding check
+            @RequestParam(name = "siteSecret") UUID siteSecret
     ) {
         LOG.info("delete-event" + pageId);
         if (service.delete(siteId, siteSecret, pageId)) {
@@ -178,5 +178,16 @@ public class SiteController {
         } else {
             return ResponseEntity.notFound().build(); // do not return UNAUTHORIZED/FORBIDDEN as those could be miss-used for brute force attacks
         }
+    }
+
+    @RequestMapping(path = "{siteId}/pages", method = RequestMethod.DELETE)
+    ResponseEntity<?> deleteViaUrl(
+            @PathVariable(value = "siteId") UUID siteId,
+            @RequestParam(value = "url") URI url,
+            @RequestParam(name = "siteSecret") UUID siteSecret
+    ) throws UnsupportedEncodingException {
+        String pageId = Page.hashPageId(siteId, url);
+
+        return deleteById(siteId, pageId, siteSecret);
     }
 }
