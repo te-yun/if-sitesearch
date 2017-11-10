@@ -372,7 +372,7 @@ public class PageTest {
                 newSite.getSiteSecret(), false
         );
         validateUpdatedSites(siteIndexSummaryAfterUpdate);
-        TimeUnit.MILLISECONDS.sleep(8_000);
+        TimeUnit.MILLISECONDS.sleep(13_000);
 
         final ResponseEntity<List> allPagesAfterUpdate = caller.exchange(SiteController.ENDPOINT + "/" + newSite.getSiteId(),
                 HttpMethod.GET, HttpEntity.EMPTY, List.class);
