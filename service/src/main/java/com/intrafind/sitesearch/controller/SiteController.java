@@ -47,20 +47,12 @@ public class SiteController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-        // TODO add as init method to POST /sites
-//    ResponseEntity<Page> indexNewSite(@RequestBody Page page) {
-    ResponseEntity<SiteCreation> indexNewSite() {
+    ResponseEntity<SiteCreation> createNewSite() {
         // TODO use SiteCreation DTO with siteId & siteSecret onReturn
         SiteCreation newlyCreatedSite = service.createSite();
         return ResponseEntity
                 .created(URI.create("https://api.sitesearch.cloud/sites/" + newlyCreatedSite.getSiteId()))
                 .body(newlyCreatedSite);
-//        if (indexed.isPresent()) {
-//            Page created = indexed.get();
-//            return ResponseEntity.created(URI.create("https://api.sitesearch.cloud/sites/" + created.getId())).body(created);
-//        } else {
-//            return ResponseEntity.badRequest().build();
-//        }
     }
 
     @RequestMapping(path = "{siteId}/pages", method = RequestMethod.GET)
@@ -129,14 +121,15 @@ public class SiteController {
         }
     }
 
-    @RequestMapping(path = "{siteId}/xml", method = RequestMethod.POST)
-    ResponseEntity<SiteIndexSummary> indexXml(
+    @RequestMapping(path = "{siteId}/xml", method = RequestMethod.PUT)
+    ResponseEntity<SiteIndexSummary> reimportIndex(
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "siteSecret") UUID siteSecret,
             @RequestParam(value = "xmlUrl") URI xmlUrl,
-            @RequestParam(value = "stripHtmlTags", required = false, defaultValue = "false") Boolean stripHtmlTags
+            @RequestParam(value = "stripHtmlTags", required = false, defaultValue = "false") Boolean stripHtmlTags,
+            @RequestParam(value = "clearIndex", required = false, defaultValue = "false") Boolean clearIndex
     ) {
-        return indexAsRssFeed(siteId, siteSecret, xmlUrl, stripHtmlTags, true);
+        return indexAsRssFeed(siteId, siteSecret, xmlUrl, stripHtmlTags, true, clearIndex);
     }
 
     @RequestMapping(path = "{siteId}/rss", method = RequestMethod.PUT)
@@ -146,7 +139,7 @@ public class SiteController {
             @RequestParam(value = "feedUrl") URI feedUrl,
             @RequestParam(value = "stripHtmlTags", required = false, defaultValue = "false") Boolean stripHtmlTags
     ) {
-        return indexAsRssFeed(siteId, siteSecret, feedUrl, stripHtmlTags, false);
+        return indexAsRssFeed(siteId, siteSecret, feedUrl, stripHtmlTags, false, false);
     }
 
     @RequestMapping(path = "rss", method = RequestMethod.POST)
@@ -154,11 +147,11 @@ public class SiteController {
             @RequestParam(value = "feedUrl") URI feedUrl,
             @RequestParam(value = "stripHtmlTags", required = false, defaultValue = "false") Boolean stripHtmlTags
     ) {
-        return indexAsRssFeed(null, null, feedUrl, stripHtmlTags, false);
+        return indexAsRssFeed(null, null, feedUrl, stripHtmlTags, false, false);
     }
 
-    private ResponseEntity<SiteIndexSummary> indexAsRssFeed(UUID siteId, UUID siteSecret, URI feedUrl, Boolean stripHtmlTags, Boolean isGeneric) {
-        Optional<SiteIndexSummary> siteCreatedInfo = service.indexFeed(feedUrl, siteId, siteSecret, stripHtmlTags, isGeneric);
+    private ResponseEntity<SiteIndexSummary> indexAsRssFeed(UUID siteId, UUID siteSecret, URI feedUrl, Boolean stripHtmlTags, Boolean isGeneric, Boolean clearIndex) {
+        Optional<SiteIndexSummary> siteCreatedInfo = service.indexFeed(feedUrl, siteId, siteSecret, stripHtmlTags, isGeneric, clearIndex);
         if (siteCreatedInfo.isPresent()) {
             return ResponseEntity.ok(siteCreatedInfo.get());
         } else {

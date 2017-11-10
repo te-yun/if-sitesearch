@@ -125,8 +125,8 @@ public class SmokeTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
-    private static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
+    public static final ObjectMapper MAPPER = new ObjectMapper();
+    public static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
             .followRedirects(false)
             .followSslRedirects(false)
             .build();

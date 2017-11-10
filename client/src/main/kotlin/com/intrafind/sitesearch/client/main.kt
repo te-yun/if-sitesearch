@@ -77,7 +77,8 @@ fun showInitCode() {
 //    val searchbarInputField = document.getElementById("ifs-sb-searchfield") as HTMLInputElement
     val searchbarVariant = document.getElementById("searchbar-variant") as HTMLInputElement
     val integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
-
+    window.addEventListener("DOMContentLoaded", { console.warn(1) })
+    document.addEventListener("DOMContentLoaded", { console.warn(2) })
 //    searchbarInputField.placeholder = "Search for \"knowledge\""
     val enterpriseSearchbarCode = enterpriseSearchbar.outerHTML
             .replace("searchbar-config/sitesearch-config.json", "https://api.sitesearch.cloud/searchbar-config/sitesearch-config.json")

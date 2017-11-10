@@ -17,10 +17,8 @@
 package com.intrafind.sitesearch.integration;
 
 import com.intrafind.sitesearch.controller.SearchController;
-import com.intrafind.sitesearch.controller.StatsController;
 import com.intrafind.sitesearch.dto.FoundPage;
 import com.intrafind.sitesearch.dto.Hits;
-import com.intrafind.sitesearch.dto.Stats;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -44,16 +42,16 @@ public class SearchTest {
     @Autowired
     private TestRestTemplate caller;
 
-    private long fetchQueryCountForDefaultTenant() {
-        final ResponseEntity<Stats> response = caller.getForEntity(StatsController.ENDPOINT + "?siteId=" + SEARCH_SITE_ID, Stats.class);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-
-        return response.getBody().getQueryCount();
-    }
+//    private long fetchQueryCountForDefaultTenant() {
+//        final ResponseEntity<Stats> response = caller.getForEntity(StatsController.ENDPOINT + "?siteId=" + SEARCH_SITE_ID, Stats.class);
+//        assertEquals(HttpStatus.OK, response.getStatusCode());
+//
+//        return response.getBody().getQueryCount();
+//    }
 
     @Test
     public void simpleSearch() throws Exception {
-        long beforeCount = fetchQueryCountForDefaultTenant();
+//        long beforeCount = fetchQueryCountForDefaultTenant();
         final ResponseEntity<Hits> searchResults = caller.getForEntity(SearchController.ENDPOINT + "?query=Knowledge&siteId=" + SEARCH_SITE_ID, Hits.class);
 
         assertEquals(HttpStatus.OK, searchResults.getStatusCode());
@@ -85,14 +83,14 @@ public class SearchTest {
 
     @Test
     public void searchWithoutSiteId() throws Exception {
-        long beforeCount = fetchQueryCountForDefaultTenant();
+//        long beforeCount = fetchQueryCountForDefaultTenant();
 
         final ResponseEntity<Hits> actual = caller.getForEntity(SearchController.ENDPOINT + "?query=not_found", Hits.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
 //        assertNotNull(actual.getBody()); // TODO reenable once legacy hack for searchbar is removed
 
-        assertEquals(beforeCount, fetchQueryCountForDefaultTenant());
+//        assertEquals(beforeCount, fetchQueryCountForDefaultTenant());
     }
 }
 

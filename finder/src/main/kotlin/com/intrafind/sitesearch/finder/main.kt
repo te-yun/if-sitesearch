@@ -145,7 +145,7 @@ private fun buildPageFinder() {
     val finderStyle = pageFinderInit.getAttribute("data-search-style")
     finder.type = "search"
     finder.title = "Finder"
-    finder.placeholder = "Search for \"knowledge\" in Page Finder"
+    finder.placeholder = "{if-lab} Page Finder"
     finder.style.cssText =
             if (finderStyle.isNullOrBlank())
                 "width: 500px; font-size: 2em; text-indent: .5em;"

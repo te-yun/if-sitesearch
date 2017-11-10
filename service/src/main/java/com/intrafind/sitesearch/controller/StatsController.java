@@ -16,29 +16,17 @@
 
 package com.intrafind.sitesearch.controller;
 
-import com.intrafind.sitesearch.dto.Stats;
-import jetbrains.exodus.ArrayByteIterable;
-import jetbrains.exodus.ByteIterable;
-import jetbrains.exodus.bindings.LongBinding;
-import jetbrains.exodus.bindings.StringBinding;
-import jetbrains.exodus.env.Store;
-import jetbrains.exodus.env.StoreConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 @RequestMapping(StatsController.ENDPOINT)
@@ -69,19 +57,19 @@ public class StatsController {
     private static final Logger LOG = LoggerFactory.getLogger(StatsController.class);
     static final String QUERIES_PER_TENANT_STORE = "tenantQueries";
 
-    @RequestMapping(method = RequestMethod.GET)
-    ResponseEntity<Stats> stats(
-            @RequestParam(value = "siteId") UUID siteId
-    ) {
-        final AtomicLong queryCount = new AtomicLong();
-        final ArrayByteIterable readableSiteId = StringBinding.stringToEntry(siteId.toString());
-        SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {  // using read-only tx fails creating a storage space, when executed in a fresh environment
-            final Store store = SearchController.ACID_PERSISTENCE_ENVIRONMENT.openStore(QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
-            final ByteIterable queryCountValue = store.get(txn, readableSiteId);
-            if (queryCountValue != null) {
-                queryCount.set(LongBinding.entryToLong(queryCountValue));
-            }
-        });
-        return ResponseEntity.ok(new Stats(System.getenv("BUILD_NUMBER"), System.getenv("SCM_HASH"), queryCount.get()));
-    }
+//    @RequestMapping(method = RequestMethod.GET)
+//    ResponseEntity<Stats> stats(
+//            @RequestParam(value = "siteId") UUID siteId
+//    ) {
+//        final AtomicLong queryCount = new AtomicLong();
+//        final ArrayByteIterable readableSiteId = StringBinding.stringToEntry(siteId.toString());
+//        SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {  // using read-only tx fails creating a storage space, when executed in a fresh environment
+//            final Store store = SearchController.ACID_PERSISTENCE_ENVIRONMENT.openStore(QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
+//            final ByteIterable queryCountValue = store.get(txn, readableSiteId);
+//            if (queryCountValue != null) {
+//                queryCount.set(LongBinding.entryToLong(queryCountValue));
+//            }
+//        });
+//        return ResponseEntity.ok(new Stats(System.getenv("BUILD_NUMBER"), System.getenv("SCM_HASH"), queryCount.get()));
+//    }
 }

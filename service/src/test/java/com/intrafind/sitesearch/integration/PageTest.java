@@ -32,6 +32,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -135,7 +136,7 @@ public class PageTest {
         assertEquals(HttpStatus.NO_CONTENT, deletion.getStatusCode());
         assertNull(deletion.getBody());
 
-        // fetch via URL
+        // fetch via URL an already deleted page
         final ResponseEntity<Page> fetchViaUrlForNonExistingPage = caller.exchange(SiteController.ENDPOINT
                         + "/" + newSite.getSiteId() + "/pages?url=" + newPage.getUrl(),
                 HttpMethod.GET, HttpEntity.EMPTY, Page.class);
@@ -238,7 +239,7 @@ public class PageTest {
                     PageController.ENDPOINT + "/" + documentId, HttpMethod.GET, HttpEntity.EMPTY, Page.class);
             assertTrue(HttpStatus.OK.equals(fetchedById.getStatusCode()));
             assertTrue(siteIndexSummary.getSiteId().equals(fetchedById.getBody().getSiteId()));
-            assertTrue(!fetchedById.getBody().getBody().isEmpty());
+            assertFalse(fetchedById.getBody().getBody().isEmpty());
             assertNotNull(fetchedById.getBody().getUrl());
             assertNull(fetchedById.getBody().getSiteSecret());
         });
@@ -340,6 +341,70 @@ public class PageTest {
         assertEquals(indexEntriesCount, siteIndexSummaryUpdate.getDocuments().size());
         assertTrue(siteIndexSummaryUpdate.getFailed().isEmpty());
         return siteIndexSummaryUpdate;
+    }
+
+    @Test
+    public void indexIntrafindDe() throws Exception {
+        final SiteCreation newSite = createNewSite();
+        List<String> enIndexDocuments = new ArrayList<>();
+        enIndexDocuments.add("en/2b4c27b0-6636-4a13-a911-4f495f99b604.xml");
+        enIndexDocuments.add("en/32d2557e-7f03-48d9-ad60-bf7c0b70c487.xml");
+        enIndexDocuments.add("en/534706ba-da98-4b45-b920-8ec0486d79fb.xml");
+        enIndexDocuments.add("en/79f4cd25-39d1-42ad-8b2a-9247aabd7d13.xml");
+
+        // create index without clearance
+        SiteIndexSummary siteIndexSummary = indexCrawlerPage(enIndexDocuments.get(0),
+                newSite.getSiteId(),
+                newSite.getSiteSecret(), false
+        );
+
+        validateUpdatedSites(siteIndexSummary);
+        TimeUnit.MILLISECONDS.sleep(13_000);
+
+        final ResponseEntity<List> allPages = caller.exchange(SiteController.ENDPOINT + "/" + newSite.getSiteId(),
+                HttpMethod.GET, HttpEntity.EMPTY, List.class);
+        List<String> pageIds = allPages.getBody();
+        assertEquals(siteIndexSummary.getDocuments().size(), pageIds.size());
+
+        // update index without clearance
+        SiteIndexSummary siteIndexSummaryAfterUpdate = indexCrawlerPage(enIndexDocuments.get(1),
+                newSite.getSiteId(),
+                newSite.getSiteSecret(), false
+        );
+        validateUpdatedSites(siteIndexSummaryAfterUpdate);
+        TimeUnit.MILLISECONDS.sleep(8_000);
+
+        final ResponseEntity<List> allPagesAfterUpdate = caller.exchange(SiteController.ENDPOINT + "/" + newSite.getSiteId(),
+                HttpMethod.GET, HttpEntity.EMPTY, List.class);
+        List<String> allPageIdsAfterUpdate = allPagesAfterUpdate.getBody();
+        assertEquals(siteIndexSummary.getDocuments().size() + siteIndexSummaryAfterUpdate.getDocuments().size(), allPageIdsAfterUpdate.size());
+
+        // create index with clearance
+        SiteIndexSummary siteIndexSummaryAfterClearance = indexCrawlerPage(enIndexDocuments.get(2),
+                newSite.getSiteId(),
+                newSite.getSiteSecret(), true
+        );
+        validateUpdatedSites(siteIndexSummaryAfterClearance);
+        TimeUnit.MILLISECONDS.sleep(8_000);
+
+        final ResponseEntity<List> allPagesAfterClearance = caller.exchange(SiteController.ENDPOINT + "/" + newSite.getSiteId(),
+                HttpMethod.GET, HttpEntity.EMPTY, List.class);
+        List<String> allPageIdsAfterClearance = allPagesAfterClearance.getBody();
+        assertEquals(siteIndexSummaryAfterClearance.getDocuments().size(), allPageIdsAfterClearance.size());
+    }
+
+    private SiteIndexSummary indexCrawlerPage(String indexedDocumentsPage, UUID siteId, UUID siteSecret, Boolean clearIndex) {
+        final ResponseEntity<SiteIndexSummary> response = caller.exchange(SiteController.ENDPOINT + "/" + siteId + "/xml" +
+                        "?xmlUrl=https://raw.githubusercontent.com/intrafind/if-sitesearch/master/service/src/test/resources/intrafind-de/" +
+                        indexedDocumentsPage + "&siteSecret=" + siteSecret + "&clearIndex=" + clearIndex,
+                HttpMethod.PUT, HttpEntity.EMPTY, SiteIndexSummary.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(response.getBody().getFailed().isEmpty());
+        assertFalse(response.getBody().getDocuments().isEmpty());
+        assertTrue(response.getBody().getSuccessCount() > 0);
+
+        return response.getBody();
     }
 
     //    @Test
