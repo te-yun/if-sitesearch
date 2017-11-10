@@ -55,7 +55,6 @@ build.doLast {
     String serviceBuildPath = "../service/build/resources/main/static/app"
     String buildPath = "../service/src/main/resources/static/app"
     project.file("$buildPath/$project.name").deleteDir()
-    project.file("$buildPath/$project.name").deleteDir()
     project.file("$serviceBuildPath/$project.name").deleteDir()
 
     copy {
@@ -65,15 +64,32 @@ build.doLast {
     }
 
     copy {
+        from compileTestKotlin2Js.destinationDir
+        into "$buildPath/$project.name"
+        into "$serviceBuildPath/$project.name"
+    }
+
+    copy {
         from sourceSets.main.output.resourcesDir
         into "$buildPath/$project.name/resources"
         into "$serviceBuildPath/$project.name/resources" // TODO create rather a symlink to above directory?
     }
 
-    configurations.compile.each { File file ->
+//    configurations.compile.each { File file ->
+//        copy {
+//            from zipTree(file.absolutePath)
+//            into "$buildPath/runtime"
+//        }
+//    }
+
+    configurations.testCompile.each { File file ->
         copy {
+            includeEmptyDirs = true
             from zipTree(file.absolutePath)
             into "$buildPath/runtime"
+            into "$serviceBuildPath/runtime"
+//            into "$buildPath/$project.name/resources"
+//            into "$serviceBuildPath/$project.name/resources" // TODO create rather a symlink to above directory?
         }
     }
 }
