@@ -6,7 +6,7 @@ $PSDefaultParameterValues["*:ErrorAction"] = "Stop"
 
 #    --no-scan --parallel --no-rebuild `
 #    --build-cache --continue `
-./gradlew clean test `
+./gradlew clean :service:test `
     --no-scan --parallel `
     --continue `
     --tests *Smoke* `
