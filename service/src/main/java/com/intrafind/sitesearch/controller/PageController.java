@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
-//@CrossOrigin
 @RestController
 @RequestMapping(PageController.ENDPOINT)
 public class PageController {

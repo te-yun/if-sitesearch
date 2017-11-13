@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 import java.util.UUID;
 
-//@CrossOrigin
 @RestController
 @RequestMapping(AutocompleteController.ENDPOINT)
 public class AutocompleteController {

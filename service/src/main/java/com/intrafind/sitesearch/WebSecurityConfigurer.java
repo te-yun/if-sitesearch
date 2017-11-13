@@ -28,7 +28,6 @@ import java.security.Principal;
 @EnableOAuth2Sso
 @EnableWebSecurity
 @RestController
-//@CrossOrigin
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @RequestMapping("user")
