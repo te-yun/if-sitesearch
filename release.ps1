@@ -22,13 +22,14 @@ sudo chmod -R 744 ~/srv/${DOCKER_IMAGE_NAME}
 cd service
 docker build --tag intrafind/${DOCKER_IMAGE_NAME}:${DOCKER_TAG} .
 docker rm -f ${DOCKER_IMAGE_NAME}
+#    -v ~/srv/${DOCKER_IMAGE_NAME}:/home/svc_usr/data `
 docker run -d --name ${DOCKER_IMAGE_NAME} `
     -p 2443:8001 `
     --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
     --env BUILD_NUMBER=$env:BUILD_NUMBER `
     --env SCM_HASH=$env:SCM_HASH `
     --env SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=$env:SECURITY_OAUTH2_CLIENT_CLIENT_SECRET `
-    -v ~/srv/${DOCKER_IMAGE_NAME}:/home/svc_usr/data `
+    -v ~/srv/${DOCKER_IMAGE_NAME}:/data `
     --network $docker_network `
     intrafind/${DOCKER_IMAGE_NAME}:${DOCKER_TAG}
 cd ..

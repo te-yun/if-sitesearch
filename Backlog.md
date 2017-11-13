@@ -28,6 +28,7 @@ intrafind.de EN siteId: 4bcccea2-8bcf-4280-88c7-8736e9c3d15c
 * save siteSecret in persistent store, not in the ElasticSearch document
 
 # future
+* https://github.com/yasserg/crawler4j#more-examples (or https://java-source.net/open-source/crawlers) as an alternative to iFinder crawler
 * explore http://ktor.io/assets/js/jekyll-search.js as alternative to search bar & finder
 * Results close to the actual appearance == preserve HTML in results (SB)
 * PDF converter support, Beni? (SB)
