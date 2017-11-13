@@ -35,7 +35,7 @@ services:
     volumes:
       - ops-elk:/usr/share/elasticsearch/data
     ports:
-      - 9200
+      - 9200:9200
 #      - 9300:9300
     networks:
       - ops
@@ -58,6 +58,29 @@ services:
     networks:
       - ops
 
+  ops-kibana-direct:
+    image: kibana:4
+    container_name: ops-kibana-direct
+    restart: always
+    environment:
+#      ELASTICSEARCH_URL: http://sitesearch-elasticsearch:9200
+      - "ELASTICSEARCH_URL=http://sitesearch-elasticsearch:9200"
+##      SERVER_NAME: ops-elasticsearch
+#      - "ELASTICSEARCH_URL=http://sitesearch-elasticsearch:9200"
+#      - cluster.name=sitesearch-ops-cluster-direct
+#      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "discovery.zen.ping.unicast.hosts=sitesearch-elasticsearch"
+    #      KIBANA_DEFAULTAPPID: kibana.defaultAppId
+    #      XPACK_MONITORING_ENABLED: xpack.monitoring.enabled
+    #
+#    volumes:
+#      - ~/srv/kibana.yml:/usr/share/kibana/config/kibana.yml
+    ports:
+      - 5606:5601
+    networks:
+      - sitesearch
+
 volumes:
   ops-elk:
     driver: local
@@ -68,3 +91,6 @@ networks:
   ops:
     external:
       name: ops
+  sitesearch:
+    external:
+      name: sitesearch
