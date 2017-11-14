@@ -46,7 +46,7 @@ public class SearchService {
 
                 Search.RETURN_TEASER_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL,
                 Search.RETURN_TEASER_COUNT, 1,
-                Search.RETURN_TEASER_SIZE, 100,
+                Search.RETURN_TEASER_SIZE, 150,
                 Search.RETURN_TEASER_TAG_PRE, "<span class=\"if-teaser-highlight\">",
                 Search.RETURN_TEASER_TAG_POST, "</span>",
 
