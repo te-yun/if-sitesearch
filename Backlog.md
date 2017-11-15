@@ -14,6 +14,7 @@ intrafind.de EN siteId: 4bcccea2-8bcf-4280-88c7-8736e9c3d15c
     * let the *crawler* talk to Site Search API to feed its content
 
 # next
+* API improvement: move /search & /autocomplete beneath /sites/{siteId}/*  
 * introduce second machine with iFinder Core
 * introduce load balancer for if-sitesearch 
 * "sponsored by" branding for Site Search for freemium offers 
@@ -28,6 +29,8 @@ intrafind.de EN siteId: 4bcccea2-8bcf-4280-88c7-8736e9c3d15c
 * save siteSecret in persistent store, not in the ElasticSearch document
 
 # future
+* Autocomplete-Rubrizierung: Wir könnten Websitetreffer und Blog-Treffer unterscheiden (Franz)
+* Autocomplete-Blacklisting (Franz)
 * https://github.com/yasserg/crawler4j#more-examples (or https://java-source.net/open-source/crawlers) as an alternative to iFinder crawler
 * explore http://ktor.io/assets/js/jekyll-search.js as alternative to search bar & finder
 * Results close to the actual appearance == preserve HTML in results (SB)
@@ -37,7 +40,11 @@ intrafind.de EN siteId: 4bcccea2-8bcf-4280-88c7-8736e9c3d15c
 * automatic disaster failover
 
 # Issues
- * (SB)Die Autocomplete-Funktion ist wirklich toll, aber die eigentliche Suche arbeitet nach anderen Regeln und sucht nach exakten Begriffen?
+* increase "Raw.Semantics"
+* improve fuzzines aka "Korrekturvorschlag/Tippfehler?" (POSSIBLE?): Frapart vs Fraport;
+* searchbar: fix "empty blank space" when no hits have been found 
+* intrafind.de: "crawl" =autocomplete> "crawling" (OK) "crawling-prozess" (without hits)
+* (SB)Die Autocomplete-Funktion ist wirklich toll, aber die eigentliche Suche arbeitet nach anderen Regeln und sucht nach exakten Begriffen?
     z.B. auf die Suche nach "Kran" liefert mir Autocomplete die Vorschläge "Kranprojekt" und "Kranlösung".
     Der SearchController findet für die Query "Kranlösung" aber nichts, nur für den exakten Begriff "Kranlösungen".
 
