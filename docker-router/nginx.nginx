@@ -12,9 +12,9 @@ events {
 http {
     # load balancer placeholder, once multiple instances are required
     upstream sitesearch-api {
-        server if-sitesearch:8001;
-        server if-sitesearch:8001;
-        server if-sitesearch:8001 backup;
+        server main.sitesearch.cloud:8001;
+        server main.sitesearch.cloud:8001;
+        server main.sitesearch.cloud:8001 backup;
     }
 
     include       /etc/nginx/mime.types;
