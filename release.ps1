@@ -23,6 +23,7 @@ cd service
 docker build --tag intrafind/${DOCKER_IMAGE_NAME}:${DOCKER_TAG} .
 docker rm -f ${DOCKER_IMAGE_NAME}
 #    -v ~/srv/${DOCKER_IMAGE_NAME}:/home/svc_usr/data `
+#    --log-opt syslog-address=tcp://main.sitesearch.cloud:9600 `
 docker run -d --name ${DOCKER_IMAGE_NAME} `
     -p 2443:8001 `
     --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
@@ -30,7 +31,6 @@ docker run -d --name ${DOCKER_IMAGE_NAME} `
     --env SCM_HASH=$env:SCM_HASH `
     --log-driver=syslog `
     --log-opt syslog-address=tcp://main.sitesearch.cloud:5044 `
-    --log-opt syslog-address=tcp://main.sitesearch.cloud:9600 `
     --env SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=$env:SECURITY_OAUTH2_CLIENT_CLIENT_SECRET `
     -v ~/srv/${DOCKER_IMAGE_NAME}:/data `
     --network $docker_network `
