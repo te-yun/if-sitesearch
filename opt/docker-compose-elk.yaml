@@ -1,7 +1,7 @@
 version: "2.0"
 services:
   ops-kibana:
-    image: docker.elastic.co/kibana/kibana:6.0.0-rc2
+    image: docker.elastic.co/kibana/kibana:6.0.0
     container_name: ops-kibana
     restart: always
     environment:
@@ -20,7 +20,7 @@ services:
       - sitesearch
 
   ops-elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.0.0-rc2
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.0.0
     container_name: ops-elasticsearch
     restart: always
     environment:
@@ -40,7 +40,7 @@ services:
       - sitesearch
       
   ops-elasticsearch-alt:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.0.0-rc2
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.0.0
     container_name: ops-elasticsearch-opt
     restart: always
     environment:
@@ -59,7 +59,7 @@ services:
       - sitesearch
 
   ops-logstash:
-    image: docker.elastic.co/logstash/logstash:6.0.0-rc2
+    image: docker.elastic.co/logstash/logstash:6.0.0
     container_name: ops-logstash
     restart: always
 #    logging:
@@ -88,9 +88,9 @@ volumes:
     driver: local
 
 networks:
-  ops:
-    external:
-      name: ops
+#  ops:
+#    external:
+#      name: ops
   sitesearch:
     external:
       name: sitesearch

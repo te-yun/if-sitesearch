@@ -26,6 +26,7 @@ docker rm -f ${DOCKER_IMAGE_NAME}
 #    --log-opt syslog-address=tcp://main.sitesearch.cloud:9600 `
 docker run -d --name ${DOCKER_IMAGE_NAME} `
     -p 2443:8001 `
+    --log-driver=journald `
     --log-driver=syslog `
     --log-opt syslog-address=tcp://main.sitesearch.cloud:5044 `
     --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `

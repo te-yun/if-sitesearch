@@ -40,6 +40,7 @@ intrafind.de EN siteId: 4bcccea2-8bcf-4280-88c7-8736e9c3d15c
 * automatic disaster failover
 
 # Issues
+* ToS: safe to include reference customers? 
 * increase "Raw.Semantics"
 * improve fuzzines aka "Korrekturvorschlag/Tippfehler?" (POSSIBLE?): Frapart vs Fraport;
 * searchbar: fix "empty blank space" when no hits have been found 
