@@ -23,7 +23,7 @@ cd service
 docker build --tag intrafind/${DOCKER_IMAGE_NAME}:${DOCKER_TAG} .
 docker rm -f ${DOCKER_IMAGE_NAME}
 #    -v ~/srv/${DOCKER_IMAGE_NAME}:/home/svc_usr/data `
-    --log-opt syslog-address=tcp://ops-logstash:5044 `
+#    --log-opt syslog-address=tcp://ops-logstash:5044 `
 docker run -d --name ${DOCKER_IMAGE_NAME} `
     -p 2443:8001 `
     --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
