@@ -28,6 +28,8 @@ docker run -d --name ${DOCKER_IMAGE_NAME} `
     --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
     --env BUILD_NUMBER=$env:BUILD_NUMBER `
     --env SCM_HASH=$env:SCM_HASH `
+    --log-driver=syslog `
+    --log-opt syslog-address=tcp://ops-logstash:5044 `
     --env SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=$env:SECURITY_OAUTH2_CLIENT_CLIENT_SECRET `
     -v ~/srv/${DOCKER_IMAGE_NAME}:/data `
     --network $docker_network `

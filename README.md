@@ -30,6 +30,11 @@ Required environment variables:
     * GITHUB_PUBLIC_ACCESS_TOKEN = "your long living GitHub token"
     * DEV_SKIP_FLAG = "true" # skip some oAuth2 checks in integration tests to enable additional test scenarios   
 
+# OSS Community Contributions are appreciated 🤓☺️ 
+
+* **WordPress Connector** wanted
+    * ...to index exported WordPress dumps (XML) via Site Search REST API  
+
 # Operations
 
 * [PowerShell required](https://github.com/PowerShell/PowerShell)
