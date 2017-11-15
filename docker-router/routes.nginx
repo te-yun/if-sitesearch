@@ -184,6 +184,6 @@ server {
     #        proxy_pass http://sitesearch.online/bootstrap/;
     #    }
     location / {
-        proxy_pass http://test.sitesearch.cloud:8080;
+        proxy_pass http://main.sitesearch.cloud:5601;
     }
 }
