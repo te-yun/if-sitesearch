@@ -30,6 +30,7 @@ docker run -d --name ${DOCKER_IMAGE_NAME} `
     --env SCM_HASH=$env:SCM_HASH `
     --log-driver=syslog `
     --log-opt syslog-address=tcp://main.sitesearch.cloud:5044 `
+    --log-opt syslog-address=tcp://main.sitesearch.cloud:9600 `
     --env SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=$env:SECURITY_OAUTH2_CLIENT_CLIENT_SECRET `
     -v ~/srv/${DOCKER_IMAGE_NAME}:/data `
     --network $docker_network `
