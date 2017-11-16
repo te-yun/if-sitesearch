@@ -5,7 +5,8 @@ echo "== startup-script =="
 docker start teamcity-server
 sudo rm /home/alexander_orlov/buildAgent/logs/buildAgent.properties.lock
 /home/alexander_orlov/buildAgent/bin/agent.sh start
-docker start teamcity-agent
+docker start teamcity-agent-Venus
+docker start teamcity-agent-Merkur
 
 docker start sitesearch-elasticsearch
 docker start sitesearch-search-service
