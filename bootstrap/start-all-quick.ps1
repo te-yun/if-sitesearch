@@ -3,8 +3,8 @@
 echo "== startup-script =="
 # toolchain
 docker start teamcity-server
-suod rm ~/buildAgent/logs/buildAgent.properties.lock
-~/buildAgent/bin/agent.sh start
+sudo rm /home/alexander_orlov/buildAgent/logs/buildAgent.properties.lock
+/home/alexander_orlov/buildAgent/bin/agent.sh start
 docker start teamcity-agent
 
 docker start sitesearch-elasticsearch
