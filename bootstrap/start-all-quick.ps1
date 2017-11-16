@@ -2,6 +2,7 @@
 
 # toolchain
 docker start teamcity-server
+suod rm ~/buildAgent/logs/buildAgent.properties.lock
 ~/buildAgent/bin/agent.sh start
 docker start teamcity-agent
 
