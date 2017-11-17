@@ -17,6 +17,7 @@ sudo certbot --standalone certonly --expand `
     -d www.sitesearch.cloud `
     -d sitesearch.cloud `
     -d doc.sitesearch.cloud `
+    -d logs.sitesearch.cloud `
     -d blue.sitesearch.cloud `
     -d green.sitesearch.cloud
 

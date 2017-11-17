@@ -1,0 +1,26 @@
+version: "2.0"
+services:
+  ops-consul:
+    image: consul:1.0.0
+    container_name: ops-core
+    restart: always
+#    depends_on:
+#      - ops-elasticsearch
+#      - ops-elasticsearch-alt
+#      - ops-logstash
+#    environment:
+#      ELASTICSEARCH_URL: http://ops-elasticsearch:9200
+#    volumes:
+#      - ~/srv/kibana:/usr/share/kibana
+    ports:
+      - 5601:5601
+    networks:
+      - sitesearch
+volumes:
+  ops-consul:
+    driver: local
+
+networks:
+  sitesearch:
+    external:
+      name: sitesearch

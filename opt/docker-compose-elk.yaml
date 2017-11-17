@@ -4,16 +4,19 @@ services:
     image: docker.elastic.co/kibana/kibana:6.0.0
     container_name: ops-kibana
     restart: always
+    depends_on:
+      - ops-elasticsearch
+      - ops-elasticsearch-alt
+      - ops-logstash
     environment:
 #      SERVER_NAME: ops-elasticsearch
       ELASTICSEARCH_URL: http://ops-elasticsearch:9200
     #      KIBANA_DEFAULTAPPID: kibana.defaultAppId
     #      XPACK_MONITORING_ENABLED: xpack.monitoring.enabled
     #
-#    networks:
-#       - sitesearch
 #    volumes:
-#      - ~/srv/kibana.yml:/usr/share/kibana/config/kibana.yml
+#      - ~/srv/kibana:/usr/share/kibana
+#      - ~/srv/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
     ports:
       - 5601:5601
     networks:
@@ -73,8 +76,8 @@ services:
 #      - bootstrap.memory_lock=true
 #      - "discovery.zen.ping.unicast.hosts=ops-elasticsearch"
       - "xpack.monitoring.elasticsearch.url=http://ops-elasticsearch:9200"
-#    volumes:
-#      - ~/srv/logstash/:/usr/share/logstash
+    volumes:
+      - ~/srv/logstash:/usr/share/logstash/pipeline:rw
     ports:
       - 5044:5044
       - 9600:9600
@@ -88,9 +91,6 @@ volumes:
     driver: local
 
 networks:
-#  ops:
-#    external:
-#      name: ops
   sitesearch:
     external:
       name: sitesearch

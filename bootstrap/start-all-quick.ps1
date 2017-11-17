@@ -1,6 +1,7 @@
 #!/usr/bin/env pwsh
 
 echo "== startup-script =="
+sudo sysctl -w vm.max_map_count=262144 # required for ELK's Elasticsearch
 # toolchain
 docker start teamcity-server
 sudo rm /home/alexander_orlov/buildAgent/logs/buildAgent.properties.lock
