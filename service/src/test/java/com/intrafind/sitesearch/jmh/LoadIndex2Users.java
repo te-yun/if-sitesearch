@@ -19,7 +19,6 @@ package com.intrafind.sitesearch.jmh;
 import com.intrafind.sitesearch.controller.SiteController;
 import com.intrafind.sitesearch.dto.FetchedPage;
 import com.intrafind.sitesearch.dto.Page;
-import org.jetbrains.annotations.NotNull;
 import org.openjdk.jmh.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,7 +89,6 @@ public class LoadIndex2Users {
         assertNull(actual.getHeaders().getLocation());
     }
 
-    @NotNull
     private Page buildPage(String loremIpsumText) {
         return new Page(
                 null, null, null,

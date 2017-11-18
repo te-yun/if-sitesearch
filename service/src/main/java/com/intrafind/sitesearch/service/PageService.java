@@ -23,7 +23,6 @@ import com.intrafind.api.search.Hits;
 import com.intrafind.api.search.Search;
 import com.intrafind.sitesearch.Application;
 import com.intrafind.sitesearch.TrustAllX509TrustManager;
-import com.intrafind.sitesearch.controller.SearchController;
 import com.intrafind.sitesearch.dto.FetchedPage;
 import com.intrafind.sitesearch.dto.Page;
 import com.intrafind.sitesearch.dto.SiteCreation;
@@ -32,11 +31,6 @@ import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
-import jetbrains.exodus.ArrayByteIterable;
-import jetbrains.exodus.ByteIterable;
-import jetbrains.exodus.bindings.StringBinding;
-import jetbrains.exodus.env.Store;
-import jetbrains.exodus.env.StoreConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -97,24 +91,10 @@ public class PageService {
         return fetchById(id);
     }
 
-    public static Optional<UUID> fetchSiteSecret(UUID siteId) {
+    private static Optional<UUID> fetchSiteSecret(UUID siteId) {
         // TODO make this the only method to fetch siteSecret
         Optional<Document> siteConfiguration = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
-        if (siteConfiguration.isPresent()) {
-            return Optional.of(UUID.fromString(siteConfiguration.get().get("secret")));
-        } else {
-            final ArrayByteIterable readableSiteId = StringBinding.stringToEntry(siteId.toString());
-            final ByteIterable[] siteSecret = new ByteIterable[1];
-            SearchController.ACID_PERSISTENCE_ENVIRONMENT.executeInReadonlyTransaction(txn -> {
-                Store store = SearchController.ACID_PERSISTENCE_ENVIRONMENT.openStore(SITE_SECRET_FIELD, StoreConfig.WITHOUT_DUPLICATES, txn);
-                siteSecret[0] = store.get(txn, readableSiteId);
-            });
-            if (siteSecret[0] != null) {
-                storeSiteSecret(siteId, UUID.fromString(StringBinding.entryToString(siteSecret[0])));
-                return Optional.of(UUID.fromString(StringBinding.entryToString(siteSecret[0])));
-            }
-        }
-        return Optional.empty();
+        return siteConfiguration.map(document -> UUID.fromString(document.get("secret")));
     }
 
     public Optional<List<String>> fetchAllDocuments(UUID siteId) {

@@ -209,6 +209,12 @@ public class PageTest {
         assertEquals(HttpStatus.OK, updated.getStatusCode());
         assertEquals(createdPage, updated.getBody());
         assertEquals("updated body", updated.getBody().getBody());
+
+        final ResponseEntity<Page> updateWithInvalidPageId = caller.exchange(SiteController.ENDPOINT + "/" + createdSite.getSiteId()
+                        + "/pages/" + "invalidSomething" + "?siteSecret=" + createdSite.getSiteSecret(),
+                HttpMethod.PUT, new HttpEntity<>(createdPage), Page.class);
+        assertEquals(HttpStatus.BAD_REQUEST, updateWithInvalidPageId.getStatusCode());
+        assertNull(updateWithInvalidPageId.getBody());
     }
 
     @Test

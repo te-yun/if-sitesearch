@@ -97,6 +97,9 @@ public class SiteController {
             @RequestParam(name = "siteSecret") UUID siteSecret,
             @RequestBody Page page
     ) {
+        if (pageId.length() != 64) { // just good enough but not sufficient to guarantee a valid, collision-safe pageId
+            return ResponseEntity.badRequest().build();
+        }
         // TODO use SiteUpdate DTO with NO siteId & NO siteSecret provided
 
         // TODO make sure that an existing page is actually updated

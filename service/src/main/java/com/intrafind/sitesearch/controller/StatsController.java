@@ -19,9 +19,7 @@ package com.intrafind.sitesearch.controller;
 import com.intrafind.sitesearch.dto.Stats;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,32 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping(StatsController.ENDPOINT)
 public class StatsController {
-    private final KafkaTemplate<String, String> template;
     private final CountDownLatch latch = new CountDownLatch(3);
-
-    @Autowired
-    private StatsController(KafkaTemplate<String, String> template) {
-        this.template = template;
-    }
-
-    public void run(String... args) throws Exception {
-        this.template.send("myTopic", "foo1");
-        this.template.send("myTopic", "foo2");
-        this.template.send("myTopic", "foo3");
-        latch.await(60, TimeUnit.SECONDS);
-        LOG.info("All received");
-    }
-
-//    @KafkaListener(topics = "myTopic")
-//    public void listen(ConsumerRecord<?, ?> cr) throws Exception {
-//        LOG.info(cr.toString());
-//        latch.countDown();
-//    }
 
     public static final String ENDPOINT = "/stats";
     private static final Logger LOG = LoggerFactory.getLogger(StatsController.class);

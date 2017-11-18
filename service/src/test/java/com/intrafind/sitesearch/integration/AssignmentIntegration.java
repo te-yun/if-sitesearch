@@ -21,7 +21,6 @@ import com.intrafind.sitesearch.controller.SiteController;
 import com.intrafind.sitesearch.dto.SiteCreation;
 import com.intrafind.sitesearch.dto.TenantOverview;
 import com.intrafind.sitesearch.dto.TenantSiteAssignment;
-import org.jetbrains.annotations.NotNull;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,7 +44,6 @@ public class AssignmentIntegration {
     @Autowired
     private TestRestTemplate caller;
 
-    @NotNull
     private SiteCreation newSite() {
         ResponseEntity<SiteCreation> site = caller.exchange(SiteController.ENDPOINT, HttpMethod.POST, HttpEntity.EMPTY, SiteCreation.class);
 

@@ -18,9 +18,6 @@ package com.intrafind.sitesearch.controller;
 
 import com.intrafind.sitesearch.dto.Hits;
 import com.intrafind.sitesearch.service.SearchService;
-import jetbrains.exodus.env.Environment;
-import jetbrains.exodus.env.Environments;
-import jetbrains.exodus.env.StoreConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,15 +30,15 @@ import java.util.UUID;
 @RestController
 @RequestMapping(SearchController.ENDPOINT)
 public class SearchController {
-    public static final Environment ACID_PERSISTENCE_ENVIRONMENT = Environments.newInstance("data");
-
-    static { // to initialize the store, required for virgin CI runs
-        ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
-            if (!ACID_PERSISTENCE_ENVIRONMENT.isOpen()) {
-                ACID_PERSISTENCE_ENVIRONMENT.openStore(StatsController.QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
-            }
-        });
-    }
+//    public static final Environment ACID_PERSISTENCE_ENVIRONMENT = Environments.newInstance("data");
+//
+//    static { // to initialize the store, required for virgin CI runs
+//        ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
+//            if (!ACID_PERSISTENCE_ENVIRONMENT.isOpen()) {
+//                ACID_PERSISTENCE_ENVIRONMENT.openStore(StatsController.QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
+//            }
+//        });
+//    }
 
     public static final String ENDPOINT = "/search";
     private static final Logger LOG = LoggerFactory.getLogger(SearchController.class);

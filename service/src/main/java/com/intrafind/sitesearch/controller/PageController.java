@@ -41,18 +41,6 @@ public class PageController {
         this.service = service;
     }
 
-//    @RequestMapping(method = RequestMethod.POST)  // TODO add as init method to POST /sites
-//    ResponseEntity<Page> indexNewSite(@RequestBody Page page) {
-//        // TODO use SiteCreation DTO with siteId & siteSecret onReturn
-//        Optional<Page> indexed = service.indexNewSiteCreatingPage(page);
-//        if (indexed.isPresent()) {
-//            Page created = indexed.get();
-//            return ResponseEntity.created(URI.create("https://api.sitesearch.cloud/sites/" + created.getId())).body(created);
-//        } else {
-//            return ResponseEntity.badRequest().build();
-//        }
-//    }
-
     @RequestMapping(method = RequestMethod.GET, path = "{id}")
     ResponseEntity<FetchedPage> fetchById(@PathVariable("id") String id) {
         Optional<FetchedPage> fetched = service.fetchById(id);

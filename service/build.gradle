@@ -43,12 +43,8 @@ configurations {
 }
 
 dependencies {
-    compile "org.springframework.kafka:spring-kafka:1.3.0.RELEASE"
-//    compile "org.springframework.kafka:spring-kafka:1.2.3.RELEASE"
+//    compile "org.springframework.kafka:spring-kafka:1.3.0.RELEASE"
 //    compile "org.springframework.kafka:spring-kafka:2.0.1.RELEASE"
-
-    compile "org.jetbrains.xodus:xodus-openAPI:$xodus_version"
-    compile "org.jetbrains.xodus:xodus-entity-store:$xodus_version"
 
     compile "com.rometools:rome:1.8.0"
 
