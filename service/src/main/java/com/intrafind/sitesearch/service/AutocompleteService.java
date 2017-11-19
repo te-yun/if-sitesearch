@@ -41,7 +41,6 @@ public class AutocompleteService {
                 Search.HITS_LIST_SIZE, 10
         );
 
-        LOG.info("query: " + query);
         final List<String> terms = hits.getMetaData().getAll("autocomplete.terms");
         if (terms == null || terms.isEmpty()) {
             return Optional.of(new Autocomplete(Collections.emptyList()));

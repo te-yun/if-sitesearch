@@ -56,23 +56,16 @@ public class SearchController {
             @CookieValue(value = "override-site", required = false) UUID cookieSite,
             @RequestParam(value = "query", defaultValue = "") String query,
             @RequestParam(value = "siteId") UUID siteId
-//            @RequestParam(value = "tenantId", required = false) UUID tenantId  // TODO remove, once searchbar supports new API
     ) {
-//        if (siteId == null) { // TODO hack to support legacy searchbar API
-//            if (tenantId == null)
-//                return ResponseEntity.badRequest().build();
-//            else
-//                siteId = tenantId;
-//        }
 
         if (query.isEmpty()) return ResponseEntity.badRequest().build();
 
         // override siteId with cookie value for debugging & speed up the getting started experience
         if (cookieSite != null) {
-            LOG.info("cookieSite: " + cookieSite);
             siteId = cookieSite;
         }
 
+        LOG.info("siteId: " + siteId);
         LOG.info("query: " + query);
         Hits searchResult = service.search(query, siteId);
 //        if (searchResult.getResults().isEmpty()) {
@@ -91,7 +84,7 @@ public class SearchController {
 //                    store.put(txn, readableSiteId, LongBinding.longToEntry(++queryCount));
 //                });
 //            }
-            return ResponseEntity.ok(searchResult);
+        return ResponseEntity.ok(searchResult);
 //        }
     }
 }

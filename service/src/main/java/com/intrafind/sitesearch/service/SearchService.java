@@ -53,7 +53,6 @@ public class SearchService {
                 Search.HITS_LIST_SIZE, 100 // page size
         );
 
-        LOG.info("query: " + query);
         List<FoundPage> siteDocuments = new ArrayList<>();
         hits.getDocuments().forEach(document -> {
             FoundPage site = new FoundPage(

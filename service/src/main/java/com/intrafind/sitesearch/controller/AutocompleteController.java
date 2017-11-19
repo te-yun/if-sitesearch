@@ -58,7 +58,7 @@ public class AutocompleteController {
         // override siteId with cookie value for debugging & speed up the getting started experience
         if (cookieSite != null) siteId = cookieSite;
 
-        LOG.info("cookieSiteId: " + cookieSite);
+        LOG.info("siteId: " + siteId);
         LOG.info("query: " + query);
         Optional<Autocomplete> result = service.autocomplete(query, siteId);
         if (result.isPresent()) {

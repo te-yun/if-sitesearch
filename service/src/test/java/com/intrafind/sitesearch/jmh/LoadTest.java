@@ -116,7 +116,6 @@ public class LoadTest {
                 Hits.class
         );
 
-        LOG.info("query: " + query);
         final long queryResultCount = LoadTest.SEARCH_QUERIES.get(query);
         if (queryResultCount == 0) {
             assertEquals(HttpStatus.OK, actual.getStatusCode());
