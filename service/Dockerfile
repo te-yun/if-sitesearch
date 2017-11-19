@@ -1,5 +1,4 @@
-#FROM openjdk:8-jre-alpine
-FROM openjdk:9-jre
+FROM openjdk:8-jre-alpine
 
 MAINTAINER Alexander Orlov <alexander.orlov@intrafind.de>
 

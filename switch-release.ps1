@@ -28,8 +28,9 @@ if(isBlueUp){
     write-host blue is active
     $green = "${docker_image_name}-green"
 
-    mkdir ~/srv/$green
-    sudo chown -R 1000:1000 ~/srv/$green # make it a svc_usr' directory
+#    mkdir ~/srv/$green
+#    sudo chown -R 1000:1000 ~/srv/$green # make it a svc_usr' directory
+#        -v ~/srv/${green}:/home/svc_usr/data `
 
     docker rm -f $green
     docker run -d --name $green `
@@ -39,7 +40,6 @@ if(isBlueUp){
         --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
         --env BUILD_NUMBER=$env:BUILD_NUMBER `
         --env SCM_HASH=$env:SCM_HASH `
-        -v ~/srv/${green}:/home/svc_usr/data `
         --network $docker_network `
         intrafind/${docker_image_name}:${docker_tag}
 
@@ -52,8 +52,9 @@ if(isBlueUp){
     write-host blue is inactive
     $blue = "${docker_image_name}-blue"
 
-    mkdir ~/srv/$blue
-    sudo chown -R 1000:1000 ~/srv/$blue # make it a svc_usr' directory
+#    mkdir ~/srv/$blue
+#    sudo chown -R 1000:1000 ~/srv/$blue # make it a svc_usr' directory
+#        -v ~/srv/${blue}:/home/svc_usr/data `
 
     docker rm -f $blue
     docker run -d --name $blue `
@@ -63,7 +64,6 @@ if(isBlueUp){
         --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
         --env BUILD_NUMBER=$env:BUILD_NUMBER `
         --env SCM_HASH=$env:SCM_HASH `
-        -v ~/srv/${blue}:/home/svc_usr/data `
         --network $docker_network `
         intrafind/${docker_image_name}:${docker_tag}
 
