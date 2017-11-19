@@ -34,6 +34,9 @@ if(isBlueUp){
     docker rm -f $green
     docker run -d --name $green `
         -p 3442:8001 `
+        --log-driver=syslog `
+        --log-driver=journald `
+        --log-opt syslog-address=tcp://main.sitesearch.cloud:5044 `
         --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
         --env BUILD_NUMBER=$env:BUILD_NUMBER `
         --env SCM_HASH=$env:SCM_HASH `
@@ -41,10 +44,10 @@ if(isBlueUp){
         --network $docker_network `
         intrafind/${docker_image_name}:${docker_tag}
 
-echo ~/srv/$green
-echo ~/srv/$data ~/srv/$green
-echo "~/srv/$data ~/srv/$green"
-        sudo rm -rf ~/srv/$blue
+#echo ~/srv/$green
+#echo ~/srv/$data ~/srv/$green
+#echo "~/srv/$data ~/srv/$green"
+#        sudo rm -rf ~/srv/$blue
 #        sudo ln -s ~/srv/$data ~/srv/$green
 } else {
     write-host blue is inactive
@@ -56,6 +59,8 @@ echo "~/srv/$data ~/srv/$green"
     docker rm -f $blue
     docker run -d --name $blue `
         -p 4442:8001 `
+        --log-driver=syslog `
+        --log-opt syslog-address=tcp://main.sitesearch.cloud:5044 `
         --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
         --env BUILD_NUMBER=$env:BUILD_NUMBER `
         --env SCM_HASH=$env:SCM_HASH `
@@ -63,9 +68,9 @@ echo "~/srv/$data ~/srv/$green"
         --network $docker_network `
         intrafind/${docker_image_name}:${docker_tag}
 
-echo ~/srv/$blue
-echo ~/srv/$data ~/srv/$blue
-echo "~/srv/$data ~/srv/$blue"
-        sudo rm -rf ~/srv/$green
+#echo ~/srv/$blue
+#echo ~/srv/$data ~/srv/$blue
+#echo "~/srv/$data ~/srv/$blue"
+#        sudo rm -rf ~/srv/$green
 #        sudo ln -s ~/srv/$data ~/srv/$blue
 }
