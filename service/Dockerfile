@@ -13,8 +13,7 @@ MAINTAINER Alexander Orlov <alexander.orlov@intrafind.de>
 ADD build/libs/*.jar svc/
 ENV SPRING_CONFIG_NAME application,prod
 
-#VOLUME /home/svc_usr/data
-VOLUME /data
+#VOLUME /data
 EXPOSE 8001
 
 CMD java -jar -Xmx64m svc/*.jar
