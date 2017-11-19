@@ -55,12 +55,11 @@ if(isBlueUp){
 #    mkdir ~/srv/$blue
 #    sudo chown -R 1000:1000 ~/srv/$blue # make it a svc_usr' directory
 #        -v ~/srv/${blue}:/home/svc_usr/data `
-
+#        --log-driver=gelf `
+#        --log-opt gelf-address=udp://main.sitesearch.cloud:12201 `
     docker rm -f $blue
     docker run -d --name $blue `
         -p 4442:8001 `
-        --log-driver=gelf `
-        --log-opt gelf-address=udp://main.sitesearch.cloud:12201 `
         --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
         --env BUILD_NUMBER=$env:BUILD_NUMBER `
         --env SCM_HASH=$env:SCM_HASH `

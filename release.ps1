@@ -28,6 +28,8 @@ docker rm -f ${DOCKER_IMAGE_NAME}
 #    -v ~/srv/${DOCKER_IMAGE_NAME}:/data `
 docker run -d --name ${DOCKER_IMAGE_NAME} `
     -p 2443:8001 `
+    --log-driver=gelf `
+    --log-opt gelf-address=udp://main.sitesearch.cloud:12201 `
     --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
     --env BUILD_NUMBER=$env:BUILD_NUMBER `
     --env SCM_HASH=$env:SCM_HASH `
