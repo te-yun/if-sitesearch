@@ -68,14 +68,16 @@ services:
 #      options:
 #        syslog-address: "udp://$IP_LOGSTASH:5000"
 #        syslog-tag: "nginx-with-syslog"
-    environment:
-      - "xpack.monitoring.elasticsearch.url=http://ops-elasticsearch:9200"
+#    environment:
+#      - "xpack.monitoring.elasticsearch.url=http://ops-elasticsearch:9200"
     volumes:
       - ops-logstash:/usr/share/logstash:rw
-#      - ~/srv/logstash:/usr/share/logstash/pipeline:rw
+#      - /home/alexander_orlov/srv/logstash/pipeline:/usr/share/logstash/pipeline
     ports:
       - 5044:5044
       - 9600:9600
+#      - 12201:12201/tcp
+      - 12201:12201/udp
     networks:
       - sitesearch
 
