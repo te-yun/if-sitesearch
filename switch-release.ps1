@@ -35,7 +35,6 @@ if(isBlueUp){
     docker run -d --name $green `
         -p 3442:8001 `
         --log-driver=syslog `
-        --log-driver=journald `
         --log-opt syslog-address=tcp://main.sitesearch.cloud:5044 `
         --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
         --env BUILD_NUMBER=$env:BUILD_NUMBER `
