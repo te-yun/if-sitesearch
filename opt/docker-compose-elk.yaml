@@ -77,7 +77,8 @@ services:
 #      - "discovery.zen.ping.unicast.hosts=ops-elasticsearch"
       - "xpack.monitoring.elasticsearch.url=http://ops-elasticsearch:9200"
     volumes:
-      - ~/srv/logstash:/usr/share/logstash/pipeline:rw
+      - ops-logstash:/usr/share/logstash:rw
+#      - ~/srv/logstash:/usr/share/logstash/pipeline:rw
     ports:
       - 5044:5044
       - 9600:9600
@@ -88,6 +89,8 @@ volumes:
   ops-elk:
     driver: local
   ops-elk-alt:
+    driver: local
+  ops-logstash:
     driver: local
 
 networks:
