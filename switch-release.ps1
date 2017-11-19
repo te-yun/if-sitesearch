@@ -59,7 +59,7 @@ if(isBlueUp){
     docker run -d --name $blue `
         -p 4442:8001 `
         --log-driver=gelf `
-        --log-opt gelf-address=tcp://main.sitesearch.cloud:5044 `
+        --log-opt gelf-address=udp://main.sitesearch.cloud:5044 `
         --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
         --env BUILD_NUMBER=$env:BUILD_NUMBER `
         --env SCM_HASH=$env:SCM_HASH `
