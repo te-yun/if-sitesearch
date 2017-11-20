@@ -45,16 +45,16 @@ public class AutocompleteController {
             @RequestParam(value = "query", defaultValue = "") String query,
             @RequestParam(value = "siteId") UUID siteId
     ) {
-
         if (query.isEmpty()) return ResponseEntity.badRequest().build();
 
         // override siteId with cookie value for debugging & speed up the getting started experience
         if (cookieSite != null) siteId = cookieSite;
 
-        LOG.info("siteId: " + siteId + " - query: " + query);
         Optional<Autocomplete> result = service.autocomplete(query, siteId);
         if (result.isPresent()) {
-            return ResponseEntity.ok(result.get());
+            final Autocomplete autocomplete = result.get();
+            LOG.info("siteId: " + siteId + " - query: " + query + " - results: " + autocomplete.getResults().size());
+            return ResponseEntity.ok(autocomplete);
         } else {
             return ResponseEntity.notFound().build();
         }

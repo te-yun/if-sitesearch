@@ -65,7 +65,6 @@ public class SearchController {
             siteId = cookieSite;
         }
 
-        LOG.info("siteId: " + siteId + " | query: " + query);
         Hits searchResult = service.search(query, siteId);
 //        if (searchResult.getResults().isEmpty()) {
 //            return ResponseEntity.notFound().build();
@@ -83,6 +82,7 @@ public class SearchController {
 //                    store.put(txn, readableSiteId, LongBinding.longToEntry(++queryCount));
 //                });
 //            }
+        LOG.info("siteId: " + siteId + " | query: " + query + " | results: " + searchResult.getResults().size());
         return ResponseEntity.ok(searchResult);
 //        }
     }
