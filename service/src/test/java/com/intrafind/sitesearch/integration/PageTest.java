@@ -391,7 +391,7 @@ public class PageTest {
                 newSite.getSiteSecret(), true
         );
         validateUpdatedSites(siteIndexSummaryAfterClearance);
-        TimeUnit.MILLISECONDS.sleep(8_000);
+        TimeUnit.MILLISECONDS.sleep(13_000);
 
         final ResponseEntity<List> allPagesAfterClearance = caller.exchange(SiteController.ENDPOINT + "/" + newSite.getSiteId(),
                 HttpMethod.GET, HttpEntity.EMPTY, List.class);
