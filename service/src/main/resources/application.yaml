@@ -50,10 +50,10 @@ server:
   port: 8001
 
 spring:
-  kafka:
-    consumer:
-      group-id: foo
-      auto-offset-reset: earliest
+#  kafka:
+#    consumer:
+#      group-id: foo
+#      auto-offset-reset: earliest
 
 #  data:
 #    elasticsearch:
