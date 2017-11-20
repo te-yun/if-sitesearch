@@ -65,8 +65,7 @@ public class SearchController {
             siteId = cookieSite;
         }
 
-        LOG.info("siteId: " + siteId);
-        LOG.info("query: " + query);
+        LOG.info("siteId: " + siteId + " | query: " + query);
         Hits searchResult = service.search(query, siteId);
 //        if (searchResult.getResults().isEmpty()) {
 //            return ResponseEntity.notFound().build();
