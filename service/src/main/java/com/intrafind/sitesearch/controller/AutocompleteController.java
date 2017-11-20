@@ -28,7 +28,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(AutocompleteController.ENDPOINT)
 public class AutocompleteController {
     public static final String ENDPOINT = "/autocomplete";
     private static final Logger LOG = LoggerFactory.getLogger(AutocompleteController.class);
@@ -39,8 +38,8 @@ public class AutocompleteController {
         this.service = service;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    ResponseEntity<Autocomplete> suggestion(
+    @RequestMapping(path = ENDPOINT, method = RequestMethod.GET)
+    ResponseEntity<Autocomplete> autocompleteSuggestionDeprecatedAPI(
             @CookieValue(value = "override-site", required = false) UUID cookieSite,
             @RequestParam(value = "query", defaultValue = "") String query,
             @RequestParam(value = "siteId") UUID siteId
@@ -58,5 +57,14 @@ public class AutocompleteController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @RequestMapping(path = "/sites/{siteId}/autocomplete", method = RequestMethod.GET)
+    ResponseEntity<Autocomplete> autocompleteSuggestion(
+            @CookieValue(value = "override-site", required = false) UUID cookieSite,
+            @RequestParam(value = "query", defaultValue = "") String query,
+            @PathVariable(value = "siteId") UUID siteId
+    ) {
+        return autocompleteSuggestionDeprecatedAPI(cookieSite, query, siteId);
     }
 }

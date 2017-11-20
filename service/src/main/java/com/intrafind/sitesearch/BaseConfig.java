@@ -31,16 +31,6 @@ import javax.servlet.ServletContext;
 
 @Configuration
 public class BaseConfig {
-//    @Bean
-//    public WebMvcConfigurer corsConfigurer() {   // TODO check if this can be enabled in WebSecurityConfigurer class only
-//        return new WebMvcConfigurerAdapter() {
-//            @Override
-//            public void addCorsMappings(CorsRegistry registry) {
-//                registry.addMapping("/**");
-//                registry.addMapping("/v2/api-docs");
-//            }
-//        };
-//    }
 
     @Bean
     public EmbeddedServletContainerFactory servletContainer() {
@@ -48,7 +38,6 @@ public class BaseConfig {
         factory.addBuilderCustomizers(builder -> builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true));
         return factory;
     }
-
 
     @Bean
     public Docket hideApi(ServletContext servletContext) {
@@ -66,6 +55,8 @@ public class BaseConfig {
                 .paths(Predicates.not(PathSelectors.regex("/subscriptions")))
                 .paths(Predicates.not(PathSelectors.regex("/assignments.*")))
                 .paths(Predicates.not(PathSelectors.regex("/pages/.*")))
+                .paths(Predicates.not(PathSelectors.regex("/sites/rss")))
+                .paths(Predicates.not(PathSelectors.regex("/sites/.+/pages/.*")))
                 .paths(Predicates.not(PathSelectors.regex("/authentication-providers.*")))
                 .paths(Predicates.not(PathSelectors.regex("/user")))
                 .paths(Predicates.not(PathSelectors.regex("/stats")))
@@ -74,29 +65,4 @@ public class BaseConfig {
         // TODO exclude from public Swagger API PUT /sites/{siteId}/pages/{pageId} ?
         // TODO exclude from public Swagger API PUT DELETE /sites/{siteId}/pages/{pageId} ?
     }
-
-//    class BasePathAwareRelativePathProvider extends AbstractPathProvider {
-//        private String basePath;
-//
-//        public BasePathAwareRelativePathProvider(String basePath) {
-//            this.basePath = basePath;
-//        }
-//
-//        @Override
-//        protected String applicationPath() {
-//            return basePath;
-//        }
-//
-//        @Override
-//        protected String getDocumentationPath() {
-//            return "/";
-//        }
-//
-//        @Override
-//        public String getOperationPath(String operationPath) {
-//            UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromPath("/");
-//            return Paths.removeAdjacentForwardSlashes(
-//                    uriComponentsBuilder.path(operationPath.replaceFirst(basePath, "")).build().toString());
-//        }
-//    }
 }

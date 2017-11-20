@@ -21,14 +21,12 @@ import com.intrafind.sitesearch.service.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
 @RestController
-@RequestMapping(SearchController.ENDPOINT)
 public class SearchController {
 //    public static final Environment ACID_PERSISTENCE_ENVIRONMENT = Environments.newInstance("data");
 //
@@ -43,16 +41,16 @@ public class SearchController {
     public static final String ENDPOINT = "/search";
     private static final Logger LOG = LoggerFactory.getLogger(SearchController.class);
     private final SearchService service;
-    @Value("${sitesearch.queryCountEnabled}")
-    private Boolean queryCountEnabled;
+//    @Value("${sitesearch.queryCountEnabled}")
+//    private Boolean queryCountEnabled;
 
     @Autowired
     private SearchController(SearchService service) {
         this.service = service;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    ResponseEntity<Hits> search(
+    @RequestMapping(path = ENDPOINT, method = RequestMethod.GET)
+    private ResponseEntity<Hits> searchDeprecatedAPI(
             @CookieValue(value = "override-site", required = false) UUID cookieSite,
             @RequestParam(value = "query", defaultValue = "") String query,
             @RequestParam(value = "siteId") UUID siteId
@@ -85,5 +83,14 @@ public class SearchController {
         LOG.info("siteId: " + siteId + " | query: " + query + " | results: " + searchResult.getResults().size());
         return ResponseEntity.ok(searchResult);
 //        }
+    }
+
+    @RequestMapping(path = "/sites/{siteId}/search", method = RequestMethod.GET)
+    ResponseEntity<Hits> search(
+            @CookieValue(value = "override-site", required = false) UUID cookieSite,
+            @RequestParam(value = "query", defaultValue = "") String query,
+            @PathVariable(value = "siteId") UUID siteId
+    ) {
+        return searchDeprecatedAPI(cookieSite, query, siteId);
     }
 }
