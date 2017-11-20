@@ -6,7 +6,6 @@ sudo apt install software-properties-common -y
 sudo add-apt-repository ppa:certbot/certbot -y
 sudo apt update -y
 sudo apt install certbot -y
-sudo certbot certonly
 
 docker stop router
 sudo certbot --standalone certonly --expand `

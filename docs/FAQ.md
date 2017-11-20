@@ -139,8 +139,8 @@ Or what should be the first thing, I need to do, to **get started** with Site Se
     We would appreciate to [learn the reasons](mailto:feedback@sitesearch.cloud) behind your decision to stop using our service. 
      
 * Who is using Site Search?
-    * Very soon, following website's search will be powered by Site Search
-        * intrafind.de [coming soon]
+    * The following website's search is powered by Site Search
+        * [intrafind.de](https://www.intrafind.de)
         * intrafind.com [coming soon]
         * analyzelaw.com [coming soon]
         

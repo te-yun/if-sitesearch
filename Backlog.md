@@ -29,6 +29,7 @@ intrafind.de EN siteId: 4bcccea2-8bcf-4280-88c7-8736e9c3d15c
 * save siteSecret in persistent store, not in the ElasticSearch document
 
 # future
+* Display Maps support for visually improved presentation for autocomplete => sitesearch-search-service
 * ELK for logging
 * Terraform for provisioning 
 * Consul for B/G deployment, service discovery, core scalability features
