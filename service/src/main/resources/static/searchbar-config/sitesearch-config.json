@@ -29,8 +29,7 @@
         }
       },
       "categories": [
-        "autocomplete",
-        "websites"
+        "autocomplete"
       ],
       "facets": {
         "template": "app/templates/default/filters.hbs",
@@ -118,19 +117,6 @@
             "minLength": 3,
             "searchOnClick": true,
             "type": "autocomplete"
-          },
-          "websites": {
-            "name": "websites",
-            "wrapperTemplate": "app/templates/default/swyt/websites-wrapper.hbs",
-            "itemTemplate": "app/templates/default/swyt/websites.hbs",
-            "display": [
-              "type"
-            ],
-            "delay": 400,
-            "minLength": 3,
-            "searchOnClick": false,
-            "type": "swyt",
-            "searchByAutocompleteSuggestion": false
           }
         }
       },
