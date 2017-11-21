@@ -44,6 +44,7 @@ intrafind.de EN siteId: 4bcccea2-8bcf-4280-88c7-8736e9c3d15c
 * automatic disaster failover
 
 # Issues
+* 400s for: https://api.sitesearch.cloud/search?action=WHILEYOUTYPE&search=cre&siteId=  
 * ToS: safe to include reference customers? 
 * increase "Raw.Semantics"
 * improve fuzzines aka "Korrekturvorschlag/Tippfehler?" (POSSIBLE?): Frapart vs Fraport;

@@ -1,6 +1,8 @@
 FAQ
 =
 
+# Site Search Service
+
 * What is Site Search?
     * Site Search is an on-demand SaaS offering from IntraFind Software AG to enable website operators 
     to provide search functionality for their websites.
@@ -79,19 +81,6 @@ Or what should be the first thing, I need to do, to **get started** with Site Se
     The site secret enables you to **add new pages and update existing pages** within a site. 
     You need to provide a *siteSecret* as a query parameter to authorize operations that modify the index of a site.
 
-* Do I need the **search bar** to use Site Search?
-    * No, not necessarily; the **search bar is a sample implementation** to quickly show you how 
-    a search bar may look like and interact with the *Site Search service*.
-    Still, the **search bar** is a production-grade implementation and ready for production deployments.
-
-* Can I use my own search bar with Site Search?
-    * Yes, you can use any search bar, written in any language that also runs on native platforms as long as it follows
-    [Site Search' API specification](https://api.sitesearch.cloud/swagger-ui.html).
-
-* Can I *customize* the layout and/or design of the search bar?   
-    * Yes, you can *fully customize the appearance of the search bar* using HBS templates.
-    * Alternative you can customize the search bar overriding its CSS classes which is appropriate for minor customizations only.
-
 * How can I make my website searchable?
     * The easiest & quickest way is to use the [Site Search Gadget](https://api.sitesearch.cloud/sitesearch-gadget.html)
     to **create an index** from an RSS / Atom feed and make it **instantly searchable** without even embedding it into a website.
@@ -107,6 +96,34 @@ Or what should be the first thing, I need to do, to **get started** with Site Se
     * Currently we have no fixed plans as Site Search is still in BETA. 
     As soon as Site Search meets all our production requirements, we will offer a **free basic plan** 
     and additional **enterprise offerings**.  
+
+* I do not want to use Site Search anymore. Do I have to delete my data?
+    * You do not have to do anything. We will automatically delete your indexed data after a certain time of inactivity.
+    We would appreciate to [learn the reasons](mailto:feedback@sitesearch.cloud) behind your decision to stop using our service. 
+    
+* After using the *Site Search Integrator Gadget* I get search results that do not correspond to the specified *siteId*.
+    * Delete your browser's cookies for *api.sitesearch.cloud* and specifically the "override-site" cookie.
+     
+* Who is using Site Search?
+    * The following website's search is powered by Site Search
+        * [IntraFind Software AG](https://www.intrafind.de)
+        * intrafind.com [coming soon]
+        * analyzelaw.com [coming soon]
+        
+# Site Search' Search Bar
+
+* Do I need the **search bar** to use Site Search?
+    * No, not necessarily; the **search bar is a sample implementation** to quickly show you how 
+    a search bar may look like and interact with the *Site Search service*.
+    Still, the **search bar** is a production-grade implementation and ready for production deployments.
+
+* Can I use my own search bar with Site Search?
+    * Yes, you can use any search bar, written in any language that also runs on native platforms as long as it follows
+    [Site Search' API specification](https://api.sitesearch.cloud/swagger-ui.html).
+
+* Can I *customize* the layout and/or design of the search bar?   
+    * Yes, you can *fully customize the appearance of the search bar* using HBS templates.
+    * Alternative you can customize the search bar overriding its CSS classes which is appropriate for minor customizations only.
 
 * How do I integrate Site Search' search bar into my website?
     * Embed the following HTML fragment into your website and **adjust the siteId** provided in the snippet:
@@ -134,18 +151,12 @@ Or what should be the first thing, I need to do, to **get started** with Site Se
                 </script>
             </div>  
 
-* I do not want to use Site Search anymore. Do I have to delete my data?
-    * You do not have to do anything. We will automatically delete your indexed data after a certain time of inactivity.
-    We would appreciate to [learn the reasons](mailto:feedback@sitesearch.cloud) behind your decision to stop using our service. 
-    
-* After using the *Site Search Integrator Gadget* I get search results that do not correspond to the specified *siteId*.
-    * Delete your browser's cookies for *api.sitesearch.cloud* and specifically the "override-site" cookie.
-     
-* Who is using Site Search?
-    * The following website's search is powered by Site Search
-        * [IntraFind Software AG](https://www.intrafind.de)
-        * intrafind.com [coming soon]
-        * analyzelaw.com [coming soon]
+* I want to change the *tooltips* provided by the search bar. Does the search bar support **i18n / l10n**?
+    * Yes, you need to download the [search bar](https://api.sitesearch.cloud/integration_artifacts/searchbar.zip), adjust the translations inside `searchbar/data/language/` and replace 
+    `https://api.sitesearch.cloud` inside the [configuration folder](https://api.sitesearch.cloud/integration_artifacts/searchbar-config.zip) with your new location. 
+
+
+
         
     
 
