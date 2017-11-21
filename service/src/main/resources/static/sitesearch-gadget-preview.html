@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright 2017 IntraFind Software AG. All rights reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html lang="en">
+<meta charset="utf-8"/>
+<title>Site Search</title>
+<link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/theme/font/css/font-awesome.min.css"/>
+<link rel="stylesheet" type="text/css"
+      href="https://sitesearch.cloud/wp-content/themes/jupiter/assets/stylesheet/core-styles.css"/>
+<script src="/app/runtime/kotlin.js"></script>
+
+<body onload="client.com.intrafind.sitesearch.client.showInitCode()">
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        client.com.intrafind.sitesearch.client.showInitCode();
+    });
+</script>
+<style>
+    label {
+        font-weight: bold;
+    }
+
+    .wrapper {
+        display: grid;
+        grid-template-columns: 130px 400px;
+    }
+
+    label, div.wrapper > input {
+        border: 3px;
+        width: 399px;
+    }
+
+    label {
+        font-weight: normal;
+    }
+
+    #index {
+        text-align: center;
+        font-weight: bold;
+        width: 530px;
+    }
+</style>
+
+<a id="loginLink" href="/login?redirect_uri=https://api.sitesearch.cloud/login"
+   class="fa fa-sign-in" aria-hidden="true"> Login</a>
+<h1><span class="fa fa-search"></span> Simple Site Search Integrator</h1>
+<div class="wrapper">
+    <label for="feedUrl"><span class="fa fa-rss"></span> RSS Feed URL</label>
+    <input id="feedUrl" placeholder="Feed URL, e.g. https://intrafind.de/share/enterprise-search-blog.xml"
+           value="https://intrafind.de/share/enterprise-search-blog.xml">
+    <label for="email"><span class="fa fa-envelope-o"></span> E-mail</label>
+    <input id="email" placeholder="E-mail" value="feedback@sitesearch.cloud" readonly>
+    <label for="siteId"><span class="fa fa-key"></span> Site ID</label>
+    <input id="siteId" placeholder="Site ID" readonly>
+    <label for="siteSecret"><span class="fa fa-user-secret"></span> Site Secret</label>
+    <input id="siteSecret" placeholder="Site Secret" readonly>
+</div>
+<button id="index" class="fa fa-cogs"
+        onclick="client.com.intrafind.sitesearch.client.triggerFirstUsageOwnership()">
+    Enable Search
+</button>
+<br>
+
+<div id="sitesearch-searchbar">
+    <link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/searchbar/css/app.css"/>
+    <div class="container" style="width: 530px;">
+        <div id="searchbar"></div>
+        <div id="resultlist"></div>
+    </div>
+
+    <script src="https://api.sitesearch.cloud/searchbar/js/app.js"></script>
+    <script>
+        jQuery.noConflict();
+        jQuery(document).ready(function ($) {
+            IFS.initClient({
+                sbTarget: "#searchbar",
+                configurl: "searchbar-config/sitesearch-config.json",
+                sitesearch: true,
+                siteId: "4bcccea2-8bcf-4280-88c7-8736e9c3d15c"
+            });
+        });
+    </script>
+</div>
+
+<div id="page-finder"></div>
+<script id="sitesearch-page-finder-init"
+        src="/app/finder/finder.js"
+        data-append-as-child-to="#page-finder"
+        data-search-style="width: 530px; font-size: 2em; text-indent: .5em;"
+        data-siteId="4bcccea2-8bcf-4280-88c7-8736e9c3d15c"
+></script>
+
+<br>
+<br>
+
+<h2>Add a search bar to your website</h2>
+<input id="searchbar-variant" type="radio" value="Enterprise search bar"
+       name="clientChoice" title="Enterprise" checked>Enterprise
+<input id="finder-variant" type="radio" value="{if-lab} Finder (experimental)"
+       name="clientChoice" title="Experimental">Experimental
+<br>
+<br>
+<textarea id="integration-code" cols="69" rows="20" title="Integration Code"></textarea>
+
+<br>
+<style>
+    input {
+        width: 280px;
+    }
+</style>
+<br>
+<br>
+<div id="assignmentController" style="display: none;">
+    <a href="/admin.html">Site Assignments</a>
+    | <a href="/sitesearch-gadget.html">Establish Site Assignment</a>
+    <br>
+    <br>
+    <label for="siteName">Site Name</label>
+    <br>
+    <input id="siteName" type="text" value="Main" placeholder="Site Name"/>
+    <br>
+    <label for="contactEmail">Contact E-mail</label>
+    <br>
+    <input id="contactEmail" type="email" value="" placeholder="Contact e-mail"/>
+    <br>
+    <label for="company">Company</label>
+    <br>
+    <input id="company" type="text" value="" placeholder="Company Name"/>
+    <br>
+    <br>
+    <input type="button"
+           id="assignSite"
+           style="text-align: center; width: 285px;"
+           onclick="client.com.intrafind.sitesearch.client.assignSite()"
+           value="Assign Site">
+</div>
+
+<br>
+<br>
+
+<div id="assignmentsContainer" style="display: none;">
+    <dl>
+        <dt id="companyName"></dt>
+        <dd id="companyContact"></dd>
+    </dl>
+
+    <table>
+        <thead>
+        <tr>
+            <td>Site Name</td>
+            <td>Site ID</td>
+            <td>Site Secret</td>
+        </tr>
+        </thead>
+        <tbody id="assignments">
+        </tbody>
+    </table>
+</div>
+
+<script src="/app/client/client.js"></script>
