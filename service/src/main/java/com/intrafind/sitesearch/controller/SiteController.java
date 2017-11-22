@@ -57,7 +57,8 @@ public class SiteController {
     @RequestMapping(path = "{siteId}/pages", method = RequestMethod.GET)
     ResponseEntity<FetchedPage> fetchViaUrl(
             @PathVariable(value = "siteId") UUID siteId,
-            @RequestParam(value = "url") URI url
+//            @RequestParam(value = "url") URI url
+            @RequestParam(value = "url") String url
     ) throws UnsupportedEncodingException {
         String pageId = Page.hashPageId(siteId, url);
 
@@ -127,29 +128,32 @@ public class SiteController {
     ResponseEntity<SiteIndexSummary> reimportIndex(
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "siteSecret") UUID siteSecret,
-            @RequestParam(value = "xmlUrl") URI xmlUrl,
+//            @RequestParam(value = "xmlUrl") URI xmlUrl,
+            @RequestParam(value = "xmlUrl") String xmlUrl,
             @RequestParam(value = "stripHtmlTags", required = false, defaultValue = "false") Boolean stripHtmlTags,
             @RequestParam(value = "clearIndex", required = false, defaultValue = "false") Boolean clearIndex
     ) {
-        return indexAsRssFeed(siteId, siteSecret, xmlUrl, stripHtmlTags, true, clearIndex);
+        return indexAsRssFeed(siteId, siteSecret, URI.create(xmlUrl), stripHtmlTags, true, clearIndex);
     }
 
     @RequestMapping(path = "{siteId}/rss", method = RequestMethod.PUT)
     ResponseEntity<SiteIndexSummary> indexRssFeed(
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "siteSecret") UUID siteSecret,
-            @RequestParam(value = "feedUrl") URI feedUrl,
+//            @RequestParam(value = "feedUrl") URI feedUrl,
+            @RequestParam(value = "feedUrl") String feedUrl,
             @RequestParam(value = "stripHtmlTags", required = false, defaultValue = "false") Boolean stripHtmlTags
     ) {
-        return indexAsRssFeed(siteId, siteSecret, feedUrl, stripHtmlTags, false, false);
+        return indexAsRssFeed(siteId, siteSecret, URI.create(feedUrl), stripHtmlTags, false, false);
     }
 
     @RequestMapping(path = "rss", method = RequestMethod.POST)
     ResponseEntity<SiteIndexSummary> indexNewRssFeed(
-            @RequestParam(value = "feedUrl") URI feedUrl,
+            @RequestParam(value = "feedUrl") String feedUrl,
+//            @RequestParam(value = "feedUrl") URI feedUrl,
             @RequestParam(value = "stripHtmlTags", required = false, defaultValue = "false") Boolean stripHtmlTags
     ) {
-        return indexAsRssFeed(null, null, feedUrl, stripHtmlTags, false, false);
+        return indexAsRssFeed(null, null, URI.create(feedUrl), stripHtmlTags, false, false);
     }
 
     private ResponseEntity<SiteIndexSummary> indexAsRssFeed(UUID siteId, UUID siteSecret, URI feedUrl, Boolean stripHtmlTags, Boolean isGeneric, Boolean clearIndex) {
@@ -178,7 +182,8 @@ public class SiteController {
     @RequestMapping(path = "{siteId}/pages", method = RequestMethod.DELETE)
     ResponseEntity<?> deleteViaUrl(
             @PathVariable(value = "siteId") UUID siteId,
-            @RequestParam(value = "url") URI url,
+//            @RequestParam(value = "url") URI url,
+            @RequestParam(value = "url") String url,
             @RequestParam(name = "siteSecret") UUID siteSecret
     ) throws UnsupportedEncodingException {
         String pageId = Page.hashPageId(siteId, url);
