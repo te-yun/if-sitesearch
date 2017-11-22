@@ -14,6 +14,7 @@ intrafind.de EN siteId: 4bcccea2-8bcf-4280-88c7-8736e9c3d15c
     * let the *crawler* talk to Site Search API to feed its content
 
 # next
+* Search bar versioning
 * API improvement: move /search & /autocomplete beneath /sites/{siteId}/*  
 * introduce second machine with iFinder Core
 * introduce load balancer for if-sitesearch 
@@ -29,6 +30,9 @@ intrafind.de EN siteId: 4bcccea2-8bcf-4280-88c7-8736e9c3d15c
 * save siteSecret in persistent store, not in the ElasticSearch document
 
 # future
+* Search bar: dedicated page for search results
+    * OR at least make the Search the center point of interaction 
+* Site Search in a minute YouTube video
 * Display Maps support for visually improved presentation for autocomplete => sitesearch-search-service
 * ELK for logging
 * Terraform for provisioning 
@@ -44,6 +48,8 @@ intrafind.de EN siteId: 4bcccea2-8bcf-4280-88c7-8736e9c3d15c
 * automatic disaster failover
 
 # Issues
+* specify language via query parameter
+* enable user to click-away the results list: search bar
 * 400s for: https://api.sitesearch.cloud/search?action=WHILEYOUTYPE&search=cre&siteId=  
 * ToS: safe to include reference customers? 
 * increase "Raw.Semantics"

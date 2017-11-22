@@ -29,8 +29,12 @@
     <script>
         jQuery.noConflict();
         jQuery(document).ready(function ($) {
-
             IFS.initClient({
+                customConfig: {
+                    overwrite: {
+                        "appLang": "it"
+                    }
+                },
                 sbTarget: "#searchbar",
                 configurl: "https://api.sitesearch.cloud/searchbar-config/sitesearch-config.json",
                 sitesearch: true,
