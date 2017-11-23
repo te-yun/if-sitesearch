@@ -79,7 +79,6 @@ public class SiteController {
 //        page.setUrl(decodedUrl); // make sure both URLs are aligned, TODO use a separate DTO sans-url later on
 
         String pageId = Page.hashPageId(siteId, page.getUrl());
-//        String pageId = Page.hashPageId(siteId, decodedUrl);
         // TODO use SiteUpdate DTO with NO siteId & NO siteSecret provided
 
         // TODO make sure that an existing page is actually updated
@@ -98,7 +97,7 @@ public class SiteController {
             @RequestParam(name = "siteSecret") UUID siteSecret,
             @RequestBody Page page
     ) {
-        if (pageId.length() != 64) { // just good enough but not sufficient to guarantee a valid, collision-safe pageId
+        if (pageId.length() != 64) { // just good enough but not sufficient to guarantee a valid, collision-safe GLOBAL pageId
             return ResponseEntity.badRequest().build();
         }
         // TODO use SiteUpdate DTO with NO siteId & NO siteSecret provided

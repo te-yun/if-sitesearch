@@ -64,14 +64,14 @@ public class PageService {
                 return Optional.empty();
             } else if (siteSecret.equals(fetchedSiteSecret.get())) { // authorized
                 LOG.info("updating-feed: " + siteId);
-                return indexDocument(id, siteId, siteSecret, page);
+                return indexDocument(id, siteId, page);
             } else { // unauthorized
                 return Optional.empty();
             }
         } else if (siteId == null ^ siteSecret == null) { // it does not make any sense if only one of the parameters is set
             return Optional.empty();
         } else { // consider request as first-usage-ownership-granting request, create new index
-            return indexDocument(Page.hashPageId(UUID.randomUUID(), page.getUrl()), UUID.randomUUID(), UUID.randomUUID(), page);
+            return indexDocument(Page.hashPageId(UUID.randomUUID(), page.getUrl()), UUID.randomUUID(), page);
         }
     }
 
@@ -80,13 +80,13 @@ public class PageService {
         return fetchedSiteSecret.isPresent() && siteSecret.equals(fetchedSiteSecret.get());
     }
 
-    private Optional<FetchedPage> indexDocument(String id, UUID siteId, UUID siteSecret, Page page) {
-        Document indexable = new Document(id);
-        indexable.set(Fields.BODY, page.getBody());
-        indexable.set(Fields.TITLE, page.getTitle());
-        indexable.set(Fields.URL, page.getUrl());
-        indexable.set(Fields.TENANT, siteId);
-        INDEX_SERVICE.index(indexable);
+    private Optional<FetchedPage> indexDocument(String id, UUID siteId, Page page) {
+        Document doc = new Document(id);
+        doc.set(Fields.BODY, page.getBody());
+        doc.set(Fields.TITLE, page.getTitle());
+        doc.set(Fields.URL, page.getUrl());
+        doc.set(Fields.TENANT, siteId);
+        INDEX_SERVICE.index(doc);
 
         return fetchById(id);
     }
@@ -122,25 +122,24 @@ public class PageService {
         INDEX_SERVICE.index(siteConfiguration);
     }
 
-    private Optional<Page> fetchNewTenantCreatingSiteById(String id) {
-        Optional<Document> found = INDEX_SERVICE.fetch(Index.ALL, id).stream().findAny();
-
-        if (found.isPresent()) {
-            Document foundDocument = found.get();
-            Page representationOfFoundDocument = new Page(
-                    foundDocument.getId(),
-                    UUID.fromString(foundDocument.get(Fields.TENANT)),
-                    UUID.fromString(foundDocument.get(SITE_SECRET_FIELD)),
-                    foundDocument.get(Fields.TITLE),
-                    foundDocument.get(Fields.BODY),
-                    foundDocument.get(Fields.URL)
-            );
-
-            return Optional.of(representationOfFoundDocument);
-        } else {
-            return Optional.empty();
-        }
-    }
+//    private Optional<Page> fetchNewTenantCreatingSiteById(String id) {
+//        Optional<Document> found = INDEX_SERVICE.fetch(Index.ALL, id).stream().findAny();
+//
+//        if (found.isPresent()) {
+//            Document foundDocument = found.get();
+//            Page representationOfFoundDocument = new Page(
+//                    foundDocument.getId(),
+//                    UUID.fromString(foundDocument.get(Fields.TENANT)),
+//                    foundDocument.get(Fields.TITLE),
+//                    foundDocument.get(Fields.BODY),
+//                    foundDocument.get(Fields.URL)
+//            );
+//
+//            return Optional.of(representationOfFoundDocument);
+//        } else {
+//            return Optional.empty();
+//        }
+//    }
 
     public Optional<FetchedPage> fetchById(String id) {
         Optional<Document> found = INDEX_SERVICE.fetch(Index.ALL, id).stream().findAny();
@@ -230,9 +229,7 @@ public class PageService {
 
                 if (tempNode.hasChildNodes()) {
                     toIndex = new Page(
-                            null,
                             siteId,
-                            null,
                             title,
                             body,
                             url
@@ -241,7 +238,7 @@ public class PageService {
                     if (toIndex.getTitle() != null && toIndex.getBody() != null && toIndex.getUrl() != null) {
                         final String pageId = Page.hashPageId(siteId, url);
 
-                        Optional<FetchedPage> indexed = indexDocument(pageId, siteId, null, toIndex);
+                        Optional<FetchedPage> indexed = indexDocument(pageId, siteId, toIndex);
                         if (indexed.isPresent()) {
                             successfullyIndexed.incrementAndGet();
                             documents.add(pageId);
@@ -310,15 +307,15 @@ public class PageService {
 
                 String url = entry.getLink();
                 Page toIndex = new Page(
-                        null,
                         siteId,
-                        siteSecret, // TODO this will become superfluous once siteSecret is stored in Exodus
+//                        siteSecret, // TODO this will become superfluous once siteSecret is stored in Exodus
+                        // TODO this will become superfluous once siteSecret is stored in Exodus
                         entry.getTitle(),
                         body,
                         url
                 );
                 final String pageId = Page.hashPageId(siteId, url);
-                Optional<FetchedPage> indexed = indexDocument(pageId, siteId, siteSecret, toIndex);
+                Optional<FetchedPage> indexed = indexDocument(pageId, siteId, toIndex);
                 if (indexed.isPresent()) {
                     successfullyIndexed.incrementAndGet();
                     documents.add(pageId);

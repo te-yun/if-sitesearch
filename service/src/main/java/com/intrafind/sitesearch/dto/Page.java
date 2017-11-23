@@ -17,21 +17,14 @@
 package com.intrafind.sitesearch.dto;
 
 import com.google.common.hash.Hashing;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.Serializable;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Page implements Serializable {
-    private static final Logger LOG = LoggerFactory.getLogger(Page.class);
-
-    private String id;
+public class Page {
     private UUID siteId;
-    private UUID siteSecret;
     private String title;
     private String body;
     private String url;
@@ -39,22 +32,12 @@ public class Page implements Serializable {
     private Page() {
     }
 
-    public Page(String id, UUID siteId, UUID siteSecret, String title, String body, String url) {
-        this.id = id;
+    public Page(UUID siteId, String title, String body, String url) {
         this.siteId = siteId;
-        this.siteSecret = siteSecret;
         this.title = title;
         this.body = body;
         this.url = url;
     }
-
-    public UUID getSiteSecret() {
-        return null;
-    }
-
-//    public void setSiteSecret(UUID siteSecret) {
-//        this.siteSecret = null;
-//    }
 
     public String getTitle() {
         return title;
@@ -92,15 +75,6 @@ public class Page implements Serializable {
         this.body = body;
     }
 
-//    public void setSiteId(UUID siteId) {
-//        this.siteId = siteId;
-//    }
-
-    public String getId() {
-        return id;
-    }
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -116,7 +90,12 @@ public class Page implements Serializable {
         return Objects.hash(title, body, url);
     }
 
-    public void setId(String id) {
-        this.id = id;
+    @Override
+    public String toString() {
+        return "{" +
+                "\"title\":\"" + title + "\"," +
+                "\"body\":\"" + body + "\"," +
+                "\"url\":\"" + url + "\"" +
+                "}";
     }
 }
