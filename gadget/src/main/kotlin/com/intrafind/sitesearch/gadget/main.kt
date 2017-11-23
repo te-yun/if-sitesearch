@@ -65,7 +65,8 @@ fun showInitCode() {
     val searchbarVariant = document.getElementById("searchbar-variant") as HTMLInputElement
     val integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
     val enterpriseSearchbarCode = enterpriseSearchbar.outerHTML
-            .replace("/searchbar-config/sitesearch-config.json", "https://api.sitesearch.cloud/searchbar-config/sitesearch-config.json")
+            .replace("/searchbar-config/sitesearch-config.json",
+                    "https://api.sitesearch.cloud/searchbar-config/sitesearch-config.json")
     integrationCode.value = enterpriseSearchbarCode
     finderContainer.style.display = "none"
     val finderInitCode = "<script src=\"https://api.sitesearch.cloud/app/runtime/kotlin.js\"></script>\n" +
@@ -78,7 +79,7 @@ fun showInitCode() {
         if (siteIdContainer.value.isBlank()) {
             integrationCode.value = enterpriseSearchbarCode
         } else {
-            integrationCode.value = enterpriseSearchbarCode.replace("siteId\\:\\ \".+".toRegex(), "siteId: \"${siteIdContainer.value}\"")
+            integrationCode.value = enterpriseSearchbarCode.replace("siteId: \".+".toRegex(), "siteId: \"${siteIdContainer.value}\"")
         }
     })
 
@@ -95,7 +96,7 @@ fun showInitCode() {
     document.addEventListener("triggerFirstUsageOwnershipEvent", {
         if (!siteIdContainer.value.isBlank()) {
             if (searchbarVariant.checked) {
-                integrationCode.value = integrationCode.value.replace("siteId\\:\\ \".+".toRegex(), "siteId: \"${siteIdContainer.value}\"")
+                integrationCode.value = integrationCode.value.replace("siteId: \".+".toRegex(), "siteId: \"${siteIdContainer.value}\"")
             } else {
                 integrationCode.value = integrationCode.value.replace("data-siteId=\".+\"".toRegex(RegexOption.IGNORE_CASE), "data-siteId=\"${siteIdContainer.value}\"")
             }
