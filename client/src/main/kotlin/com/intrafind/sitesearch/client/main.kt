@@ -145,13 +145,13 @@ private fun assignSite() {
     xhr.onload = {
         if (xhr.status.equals(200) && xhr.response != null) {
             val user = JSON.parse<dynamic>(xhr.responseText)
-            val xhr = XMLHttpRequest()
-            xhr.open("PUT", "/assignments/sites/"
+            val assignmentsUpdate = XMLHttpRequest()
+            assignmentsUpdate.open("PUT", "/assignments/sites/"
                     + (document.getElementById("siteId") as HTMLInputElement).value + "?siteSecret="
                     + (document.getElementById("siteSecret") as HTMLInputElement).value
                     + "&siteName=" + (document.getElementById("siteName") as HTMLInputElement).value)
-            xhr.setRequestHeader("content-type", "application/json")
-            xhr.onload = {
+            assignmentsUpdate.setRequestHeader("content-type", "application/json")
+            assignmentsUpdate.onload = {
                 showAssignments()
             }
 
@@ -162,14 +162,14 @@ private fun assignSite() {
             tenantSiteAssignment.contactEmail = (document.getElementById("contactEmail") as HTMLInputElement).value
             tenantSiteAssignment.company = (document.getElementById("company") as HTMLInputElement).value
 
-//            xhr.send(JSON.stringify("""
+//            assignmentsUpdate.send(JSON.stringify("""
 //                "authProviderId": "${user.userAuthentication.details.id}",
 //                "authProvider": "github",
 //                "authProviderToken": "${user.details.tokenValue}",
 //                "contactEmail": "${(document.getElementById("contactEmail") as HTMLInputElement).value}",
 //                "company": "${(document.getElementById("company") as HTMLInputElement).value}"
 //            """))
-            xhr.send(JSON.stringify(tenantSiteAssignment))
+            assignmentsUpdate.send(JSON.stringify(tenantSiteAssignment))
         }
     }
     xhr.send()
@@ -181,15 +181,15 @@ private fun showAssignments() {
     xhr.onload = {
         if (xhr.status.equals(200) && xhr.response != null) {
             val user = JSON.parse<dynamic>(xhr.responseText)
-            val xhr = XMLHttpRequest()
-            xhr.open("GET", "/authentication-providers/github/" + user.userAuthentication.details.id
+            val authProviderRetrieval = XMLHttpRequest()
+            authProviderRetrieval.open("GET", "/authentication-providers/github/" + user.userAuthentication.details.id
                     + "?accessToken=" + user.details.tokenValue)
-            xhr.setRequestHeader("content-type", "application/json")
-            xhr.onload = {
-                if (xhr.status.equals(200) && xhr.response != null) {
+            authProviderRetrieval.setRequestHeader("content-type", "application/json")
+            authProviderRetrieval.onload = {
+                if (authProviderRetrieval.status.equals(200) && authProviderRetrieval.response != null) {
                     document.getElementById("assignments")?.clear()
                     document.getElementById("assignmentsContainer")?.setAttribute("style", "display: block;")
-                    val assignments = JSON.parse<dynamic>(xhr.responseText)
+                    val assignments = JSON.parse<dynamic>(authProviderRetrieval.responseText)
                     assignments.tenants.forEach({ tenant ->
                         val tenantCompany = document.getElementById("companyName") as HTMLElement
                         val tenantContactEmail = document.getElementById("companyContact") as HTMLElement
@@ -212,7 +212,7 @@ private fun showAssignments() {
                     })
                 }
             }
-            xhr.send()
+            authProviderRetrieval.send()
         }
     }
     xhr.send()

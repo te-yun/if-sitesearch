@@ -158,7 +158,7 @@ public class SmokeTest {
     }
 
     @Test
-    public void search() throws Exception {
+    public void searchDeprecated() throws Exception {
         Request request = new Request.Builder()
                 .url("https://api.sitesearch.cloud/search?query=Knowledge&siteId=" + SearchTest.SEARCH_SITE_ID)
                 .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
@@ -179,10 +179,49 @@ public class SmokeTest {
         assureCorsHeaders(response.headers(), 406);
     }
 
+
+    @Test
+    public void search() throws Exception {
+        Request request = new Request.Builder()
+                .url("https://api.sitesearch.cloud/sites/" + SearchTest.SEARCH_SITE_ID + "/search?query=Knowledge")
+                .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
+                .build();
+        final Response response = HTTP_CLIENT.newCall(request).execute();
+
+        assertEquals(HttpStatus.OK.value(), response.code());
+        assertNotNull(response.body());
+        Hits result = MAPPER.readValue(response.body().bytes(), Hits.class);
+        assertEquals("Knowledge", result.getQuery());
+        assertEquals(1, result.getResults().size());
+        FoundPage found = result.getResults().get(0);
+        assertEquals("Wie die Semantische Suche vom <span class=\"if-teaser-highlight\">Knowledge</span> Graph profitiert", found.getTitle());
+        assertEquals("http:&#x2F;&#x2F;intrafind.de&#x2F;blog&#x2F;wie-die-semantische-suche-vom-<span class=\"if-teaser-highlight\">knowledge</span>-graph-profitiert", found.getUrl());
+        assertEquals("http://intrafind.de/blog/wie-die-semantische-suche-vom-knowledge-graph-profitiert", found.getUrlRaw());
+        assertTrue(found.getBody().startsWith("&lt;p&gt;Der <span class=\"if-teaser-highlight\">Knowledge</span> Graph ist vielen Nutzern bereits durch Google oder Facebook bekannt. Aber auch"));
+
+        assureCorsHeaders(response.headers(), 406);
+    }
+
+    @Test
+    public void autocompleteDeprecated() throws Exception {
+        Request request = new Request.Builder()
+                .url("https://api.sitesearch.cloud/autocomplete?query=Knowledge&siteId=" + SearchTest.SEARCH_SITE_ID)
+                .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
+                .build();
+        final Response response = HTTP_CLIENT.newCall(request).execute();
+
+        assertEquals(HttpStatus.OK.value(), response.code()); // actually 200, should be returned but due to a bug this is not the case yet
+//        Hits result = MAPPER.readValue(response.body().bytes(), Autocomplete.class);
+//        assertNotNull(actual.getBody());
+//        assertEquals(1, actual.getBody().getResults().size());
+//        assertEquals("knowledge graph", actual.getBody().getResults().get(0));
+        assureCorsHeaders(response.headers(), 406);
+    }
+
     @Test
     public void autocomplete() throws Exception {
         Request request = new Request.Builder()
-                .url("https://api.sitesearch.cloud/autocomplete?query=Knowledge&siteId=" + SearchTest.SEARCH_SITE_ID)
+                .url("https://api.sitesearch.cloud/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=Knowledge")
                 .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
                 .build();
         final Response response = HTTP_CLIENT.newCall(request).execute();
