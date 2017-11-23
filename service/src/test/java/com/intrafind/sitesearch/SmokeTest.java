@@ -60,7 +60,7 @@ public class SmokeTest {
         assertNull(secureEndpointJson.getBody());
     }
 
-    private static final String productFrontpageMarker = "<title>IntraFind Site Search - Site Search</title>";
+    private static final String PRODUCT_FRONTPAGE_MARKER = "<title>IntraFind Site Search - Site Search</title>";
 
     @Test
     public void redirectFromHttpNakedDomain() throws Exception {
@@ -70,7 +70,7 @@ public class SmokeTest {
                 HttpEntity.EMPTY,
                 String.class
         );
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.MOVED_PERMANENTLY, response.getStatusCode());
     }
 
     @Test
@@ -82,7 +82,7 @@ public class SmokeTest {
                 String.class
         );
         assertEquals(HttpStatus.MOVED_PERMANENTLY, response.getStatusCode());
-//        assertTrue(response.getBody().contains(productFrontpageMarker));
+//        assertTrue(response.getBody().contains(PRODUCT_FRONTPAGE_MARKER));
     }
 
     @Test
@@ -94,7 +94,7 @@ public class SmokeTest {
                 String.class
         );
         assertEquals(HttpStatus.MOVED_PERMANENTLY, response.getStatusCode());
-//        assertTrue(response.getBody().contains(productFrontpageMarker));
+//        assertTrue(response.getBody().contains(PRODUCT_FRONTPAGE_MARKER));
     }
 
     @Test
@@ -106,7 +106,7 @@ public class SmokeTest {
                 String.class
         );
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(response.getBody().contains(productFrontpageMarker));
+        assertTrue(response.getBody().contains(PRODUCT_FRONTPAGE_MARKER));
     }
 
     @Test
