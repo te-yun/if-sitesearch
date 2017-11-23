@@ -53,11 +53,6 @@ public class SmokeTest {
     @Autowired
     private TestRestTemplate caller;
 
-//    @Autowired
-//    private WebApplicationContext webApplicationContext;
-
-    // TODO make sure subsequent successful executions are possible
-
     @Test
     public void assureSiteSearchServiceBasicAuthProtectionForJsonPost() throws Exception {
         final ResponseEntity<String> secureEndpointJson = caller.postForEntity(URI.create(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "json/index?method=index"), HttpEntity.EMPTY, String.class);
@@ -86,8 +81,8 @@ public class SmokeTest {
                 HttpEntity.EMPTY,
                 String.class
         );
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(response.getBody().contains(productFrontpageMarker));
+        assertEquals(HttpStatus.MOVED_PERMANENTLY, response.getStatusCode());
+//        assertTrue(response.getBody().contains(productFrontpageMarker));
     }
 
     @Test
@@ -98,8 +93,8 @@ public class SmokeTest {
                 HttpEntity.EMPTY,
                 String.class
         );
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(response.getBody().contains(productFrontpageMarker));
+        assertEquals(HttpStatus.MOVED_PERMANENTLY, response.getStatusCode());
+//        assertTrue(response.getBody().contains(productFrontpageMarker));
     }
 
     @Test
@@ -122,7 +117,7 @@ public class SmokeTest {
                 HttpEntity.EMPTY,
                 String.class
         );
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.MOVED_PERMANENTLY, response.getStatusCode());
     }
 
     public static final ObjectMapper MAPPER = new ObjectMapper();
