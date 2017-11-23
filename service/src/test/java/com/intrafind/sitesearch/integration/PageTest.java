@@ -51,7 +51,6 @@ public class PageTest {
         final UUID testSiteId = UUID.fromString("1a6715d9-119f-48d1-9329-e8763273bbea");
         final String url = "https://api.sitesearch.cloud";
         return new Page(
-                testSiteId,
                 "Cloud Solution",
                 "Site Search is IntraFind's on-demand solution for site search.",
                 url
@@ -239,8 +238,8 @@ public class PageTest {
 
     private void validateUpdatedSites(SiteIndexSummary siteIndexSummary) {
         siteIndexSummary.getDocuments().forEach(documentId -> {
-            final ResponseEntity<Page> fetchedById = caller.exchange(
-                    PageController.ENDPOINT + "/" + documentId, HttpMethod.GET, HttpEntity.EMPTY, Page.class);
+            final ResponseEntity<FetchedPage> fetchedById = caller.exchange(
+                    PageController.ENDPOINT + "/" + documentId, HttpMethod.GET, HttpEntity.EMPTY, FetchedPage.class);
             assertTrue(HttpStatus.OK.equals(fetchedById.getStatusCode()));
             assertTrue(siteIndexSummary.getSiteId().equals(fetchedById.getBody().getSiteId()));
             assertFalse(fetchedById.getBody().getBody().isEmpty());

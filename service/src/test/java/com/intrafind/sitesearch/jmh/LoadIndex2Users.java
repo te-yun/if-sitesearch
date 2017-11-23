@@ -91,7 +91,6 @@ public class LoadIndex2Users {
 
     private Page buildPage(String loremIpsumText) {
         return new Page(
-                null,
                 loremIpsumText.substring(0, 42),
                 loremIpsumText,
                 "https://example.com/" + UUID.randomUUID()

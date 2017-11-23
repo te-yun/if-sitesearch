@@ -24,7 +24,6 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class Page {
-    private UUID siteId;
     private String title;
     private String body;
     private String url;
@@ -32,8 +31,7 @@ public class Page {
     private Page() {
     }
 
-    public Page(UUID siteId, String title, String body, String url) {
-        this.siteId = siteId;
+    public Page(String title, String body, String url) {
         this.title = title;
         this.body = body;
         this.url = url;
@@ -57,10 +55,6 @@ public class Page {
 
     public static String hashPageId(UUID siteId, URI siteUrl) {
         return Hashing.sha256().hashString(siteId.toString() + siteUrl, Charset.forName("UTF-8")).toString();
-    }
-
-    public UUID getSiteId() {
-        return siteId;
     }
 
     public void setUrl(String url) {

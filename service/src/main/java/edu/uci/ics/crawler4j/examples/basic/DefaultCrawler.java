@@ -23,6 +23,8 @@ import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
 import okhttp3.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Set;
@@ -30,14 +32,16 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
-public class MyCrawler extends WebCrawler {
-    public static final ObjectMapper MAPPER = new ObjectMapper();
-    public static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
+public class DefaultCrawler extends WebCrawler {
+    private final static Logger LOG = LoggerFactory.getLogger(DefaultCrawler.class);
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
             .followRedirects(false)
             .followSslRedirects(false)
             .build();
-    private static final AtomicInteger pages = new AtomicInteger(0);
-    private static final Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg|png|mp3|mp4|zip|gz))$");
+    private static final AtomicInteger PAGES = new AtomicInteger(0);
+    //    private static final Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg|png|mp3|mp4|zip|gz))$");
+    private static final Pattern FILTERS = Pattern.compile(".*(\\.(html|htm|txt|pdf))$");
     private PageService service = new PageService();
 
     /**
@@ -53,8 +57,11 @@ public class MyCrawler extends WebCrawler {
     @Override
     public boolean shouldVisit(Page referringPage, WebURL url) {
         String href = url.getURL().toLowerCase();
-        return !FILTERS.matcher(href).matches()
-                && href.startsWith("https://www.migrosbank.ch/it/");
+//        return !FILTERS.matcher(href).matches()
+        return FILTERS.matcher(href).matches()
+//                && href.startsWith("https://www.migrosbank.ch/it/");
+//                && href.startsWith("https://www.migrosbank.ch/fr/");
+                && href.startsWith("https://www.migrosbank.ch/de/");
     }
 
     /**
@@ -64,7 +71,9 @@ public class MyCrawler extends WebCrawler {
     @Override
     public void visit(Page page) {
         String url = page.getWebURL().getURL();
-        System.out.println("URL: " + url);
+        if (!url.endsWith("html")) {
+            throw new RuntimeException("NOT HTML");
+        }
 
         if (page.getParseData() instanceof HtmlParseData) {
             HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
@@ -74,9 +83,13 @@ public class MyCrawler extends WebCrawler {
             String title = htmlParseData.getTitle();
             Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
-            UUID siteId = UUID.fromString("4e20429d-3637-45e7-9a0f-3ead67fcfc13");
-            UUID siteSecret = UUID.fromString("0716fde9-9e39-486b-95c7-fad7f11ae3f3");
-            com.intrafind.sitesearch.dto.Page sitePage = new com.intrafind.sitesearch.dto.Page(siteId, title, body.trim(), url);
+            UUID siteId = UUID.fromString("a2e8d60b-0696-47ea-bc48-982598ee35bd"); // DE
+            UUID siteSecret = UUID.fromString("04a0afc6-d89a-45c9-8ba8-41d393d8d2f8"); // DE
+//            UUID siteId = UUID.fromString("760a7c78-508c-4625-ae69-c04c9efa0e34"); // FR
+//            UUID siteSecret = UUID.fromString("aee39492-1276-4602-86ef-fe7e32a7dd9f"); // FR
+//            UUID siteId = UUID.fromString("4e20429d-3637-45e7-9a0f-3ead67fcfc13"); // IT
+//            UUID siteSecret = UUID.fromString("0716fde9-9e39-486b-95c7-fad7f11ae3f3"); // IT
+            com.intrafind.sitesearch.dto.Page sitePage = new com.intrafind.sitesearch.dto.Page(title, body.trim(), url);
             System.out.println("sitePage: " + sitePage);
             try {
                 Request request = new Request.Builder()
@@ -84,16 +97,15 @@ public class MyCrawler extends WebCrawler {
                         .put(RequestBody.create(MediaType.parse("application/json"), MAPPER.writeValueAsBytes(sitePage)))
                         .build();
                 final Response response = HTTP_CLIENT.newCall(request).execute();
-                System.out.println("response.code(): " + response.code());
-                System.out.println("response.body().string(): " + response.body().string());
+                if (response.code() != 200) {
+                    throw new RuntimeException("INVALID");
+                }
             } catch (IOException e) {
-                System.out.println("e.getMessage(): " + e.getMessage());
+                LOG.error(e.getMessage());
             }
 
-            System.out.println("Text length: " + text.length());
-            System.out.println("Html length: " + html.length());
             System.out.println("Number of outgoing links: " + links.size());
         }
-        System.out.println("pages.incrementAndGet(): " + pages.incrementAndGet());
+        LOG.info("pageCount: " + PAGES.incrementAndGet());
     }
 }

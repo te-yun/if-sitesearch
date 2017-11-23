@@ -23,8 +23,8 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
 public class Controller {
-    public static void main(String[] args) throws Exception {
-        String crawlStorageFolder = "data/crawl/root";
+    public static void main(String... args) throws Exception {
+        String crawlStorageFolder = "data/crawler";
         int numberOfCrawlers = 7;
 
         CrawlConfig config = new CrawlConfig();
@@ -47,12 +47,14 @@ public class Controller {
 //        controller.addSeed("http://www.ics.uci.edu/~welling/");
 //        controller.addSeed("http://www.ics.uci.edu/");
 //        controller.addSeed("https://api.muctool.de/");
-        controller.addSeed("https://www.migrosbank.ch/it/");
+//        controller.addSeed("https://www.migrosbank.ch/it/");
+//        controller.addSeed("https://www.migrosbank.ch/fr/");
+        controller.addSeed("https://www.migrosbank.ch/de/");
 
         /*
          * Start the crawl. This is a blocking operation, meaning that your code
          * will reach the line after this only when crawling is finished.
          */
-        controller.start(MyCrawler.class, numberOfCrawlers);
+        controller.start(DefaultCrawler.class, numberOfCrawlers);
     }
 }

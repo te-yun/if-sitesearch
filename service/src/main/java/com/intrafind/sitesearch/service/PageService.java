@@ -229,7 +229,6 @@ public class PageService {
 
                 if (tempNode.hasChildNodes()) {
                     toIndex = new Page(
-                            siteId,
                             title,
                             body,
                             url
@@ -307,9 +306,6 @@ public class PageService {
 
                 String url = entry.getLink();
                 Page toIndex = new Page(
-                        siteId,
-//                        siteSecret, // TODO this will become superfluous once siteSecret is stored in Exodus
-                        // TODO this will become superfluous once siteSecret is stored in Exodus
                         entry.getTitle(),
                         body,
                         url
