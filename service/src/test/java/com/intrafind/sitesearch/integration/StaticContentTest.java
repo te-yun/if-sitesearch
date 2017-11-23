@@ -16,6 +16,7 @@
 
 package com.intrafind.sitesearch.integration;
 
+import com.intrafind.sitesearch.SmokeTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class StaticContentTest {
         final ResponseEntity<String> staticContent = caller.getForEntity("/index.html", String.class);
 
         assertEquals(HttpStatus.OK, staticContent.getStatusCode());
-        assertTrue(staticContent.getBody().contains("<title>Simple Site Search</title>"));
+        assertTrue(staticContent.getBody().contains(SmokeTest.API_FRONTPAGE_MARKER));
     }
 
     @Test

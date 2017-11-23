@@ -49,6 +49,7 @@ public class SmokeTest {
     private static final Logger LOG = LoggerFactory.getLogger(SmokeTest.class);
     private static final String SEARCH_SERVICE_DOMAIN = "@main.sitesearch.cloud/";
     private static final String INVALID_CREDENTIALS = "https://" + System.getenv("SECURITY_USER_PASSWORD") + "invalid:" + System.getenv("SECURITY_USER_PASSWORD");
+    public static final String API_FRONTPAGE_MARKER = "<title>Site Search</title>";
 
     @Autowired
     private TestRestTemplate caller;
@@ -146,7 +147,7 @@ public class SmokeTest {
         final Response response = HTTP_CLIENT.newCall(request).execute();
         assertEquals(HttpStatus.OK.value(), response.code());
         assertNotNull(response.body());
-        assertTrue(response.body().string().contains("<title>Simple Site Search</title>"));
+        assertTrue(response.body().string().contains(API_FRONTPAGE_MARKER));
 
         assertEquals(HttpStatus.OK.value(), response.code());
         assertNull(response.headers().get("x-frame-options"));
