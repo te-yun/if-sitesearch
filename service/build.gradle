@@ -43,6 +43,7 @@ configurations {
 }
 
 dependencies {
+    compile "edu.uci.ics:crawler4j:4.3"
 //    compile "org.springframework.kafka:spring-kafka:1.3.0.RELEASE"
 //    compile "org.springframework.kafka:spring-kafka:2.0.1.RELEASE"
 

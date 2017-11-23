@@ -30,6 +30,8 @@ intrafind.de EN siteId: 4bcccea2-8bcf-4280-88c7-8736e9c3d15c
 * save siteSecret in persistent store, not in the ElasticSearch document
 
 # future
+* Search bar: integrate on mobile intrafind.de
+* Search bar: override translation keys for tooltips etc.
 * Search bar: dedicated page for search results
     * OR at least make the Search the center point of interaction 
 * Site Search in a minute YouTube video

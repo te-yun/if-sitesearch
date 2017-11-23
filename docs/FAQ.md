@@ -110,7 +110,7 @@ Or what should be the first thing, I need to do, to **get started** with Site Se
         * intrafind.com [coming soon]
         * analyzelaw.com [coming soon]
         
-# Site Search' Search Bar
+# Search Bar
 
 * Do I need the **search bar** to use Site Search?
     * No, not necessarily; the **search bar is a sample implementation** to quickly show you how 
@@ -154,9 +154,24 @@ Or what should be the first thing, I need to do, to **get started** with Site Se
 * I want to change the *tooltips* provided by the search bar. Does the search bar support **i18n / l10n**?
     * Yes, you need to download the [search bar](https://api.sitesearch.cloud/integration_artifacts/searchbar.zip), adjust the translations inside `searchbar/data/language/` and replace 
     `https://api.sitesearch.cloud` inside the [configuration folder](https://api.sitesearch.cloud/integration_artifacts/searchbar-config.zip) with your new location. 
-
-
-
-        
     
-
+* How can I override search bar's *default language selection mechanism*?
+    * The below example specifies German as search bar's user interface language. 
+    
+            <script>
+                jQuery.noConflict();
+                jQuery(document).ready(function ($) {
+                    IFS.initClient({
+                        customConfig: {
+                            overwrite: {
+                                "appLang": "de"
+                            }
+                        },
+                        sbTarget: "#searchbar",
+                        configurl: "https://api.sitesearch.cloud/searchbar-config/sitesearch-config.json",
+                        sitesearch: true,
+                        siteId: "4bcccea2-8bcf-4280-88c7-8736e9c3d15c"
+                    });
+                });
+            </script>
+    

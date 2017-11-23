@@ -25,7 +25,7 @@ import kotlin.dom.clear
 
 fun main(args: Array<String>) {
     window.addEventListener("DOMContentLoaded", {
-        init()
+        //        init()
     })
 }
 
@@ -51,92 +51,90 @@ fun triggerFirstUsageOwnership() {
     xhr.send()
 }
 
-private val loginLink = document.getElementById("loginLink") as HTMLAnchorElement
-fun init() {
-    loginLink.text = " Login"
-    if (window.location.hostname.equals("localhost")) {
-        loginLink.href = "http://${window.location.host}/login?redirect_uri=http://${window.location.host}/login"
-    } else {
-        loginLink.href = "https://api.sitesearch.cloud/login?redirect_uri=https://api.sitesearch.cloud/login"
-    }
-
-    val xhr = XMLHttpRequest()
-    xhr.open("GET", "/user")
-    xhr.onload = {
-        showUser(xhr)
-    }
-    xhr.send()
-}
+//private val loginLink = document.getElementById("loginLink") as HTMLAnchorElement
+//fun init() {
+//    loginLink.text = " Login"
+//    if (window.location.hostname.equals("localhost")) {
+//        loginLink.href = "http://${window.location.host}/login?redirect_uri=http://${window.location.host}/login"
+//    } else {
+//        loginLink.href = "https://api.sitesearch.cloud/login?redirect_uri=https://api.sitesearch.cloud/login"
+//    }
+//
+//    val xhr = XMLHttpRequest()
+//    xhr.open("GET", "/user")
+//    xhr.onload = {
+//        showUser(xhr)
+//    }
+//    xhr.send()
+//}
 
 fun showInitCode() {
     val siteIdContainer = document.getElementById("siteId") as HTMLInputElement
     val enterpriseSearchbar = document.getElementById("sitesearch-searchbar") as HTMLDivElement
-    val finderInit = document.getElementById("sitesearch-page-finder-init") as HTMLScriptElement
-    val finderContainer = document.getElementById("page-finder") as HTMLDivElement
-    val finderVariant = document.getElementById("finder-variant") as HTMLInputElement
+//    val finderInit = document.getElementById("sitesearch-page-finder-init") as HTMLScriptElement
+//    val finderContainer = document.getElementById("page-finder") as HTMLDivElement
+//    val finderVariant = document.getElementById("finder-variant") as HTMLInputElement
 //    val searchbarInputField = document.getElementById("ifs-sb-searchfield") as HTMLInputElement
-    val searchbarVariant = document.getElementById("searchbar-variant") as HTMLInputElement
+//    val searchbarVariant = document.getElementById("searchbar-variant") as HTMLInputElement
     val integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
-    window.addEventListener("DOMContentLoaded", { console.warn(1) })
-    document.addEventListener("DOMContentLoaded", { console.warn(2) })
 //    searchbarInputField.placeholder = "Search for \"knowledge\""
     val enterpriseSearchbarCode = enterpriseSearchbar.outerHTML
             .replace("searchbar-config/sitesearch-config.json", "https://api.sitesearch.cloud/searchbar-config/sitesearch-config.json")
     integrationCode.value = enterpriseSearchbarCode
-    finderContainer.style.display = "none"
-    val finderInitCode = "<script src=\"https://api.sitesearch.cloud/app/runtime/kotlin.js\"></script>\n" +
-            finderInit.outerHTML
-                    .replace("/app/finder/finder.js", "https://api.sitesearch.cloud/app/finder/finder.js")
-
-    searchbarVariant.addEventListener("click", {
-        enterpriseSearchbar.style.display = "block"
-        finderContainer.style.display = "none"
-        if (siteIdContainer.value.isBlank()) {
-            integrationCode.value = enterpriseSearchbarCode
-        } else {
-            integrationCode.value = enterpriseSearchbarCode.replace("siteId\\:\\ \".+".toRegex(), "siteId: \"${siteIdContainer.value}\"")
-        }
-    })
-
-    finderVariant.addEventListener("click", {
-        enterpriseSearchbar.style.display = "none"
-        finderContainer.style.display = "block"
-        if (siteIdContainer.value.isBlank()) {
-            integrationCode.value = finderInitCode
-        } else {
-            integrationCode.value = finderInitCode.replace("data-siteId=\".+\"".toRegex(RegexOption.IGNORE_CASE), "data-siteId=\"${siteIdContainer.value}\"")
-        }
-    })
+//    finderContainer.style.display = "none"
+//    val finderInitCode = "<script src=\"https://api.sitesearch.cloud/app/runtime/kotlin.js\"></script>\n" +
+//            finderInit.outerHTML
+//                    .replace("/app/finder/finder.js", "https://api.sitesearch.cloud/app/finder/finder.js")
+//
+//    searchbarVariant.addEventListener("click", {
+//        enterpriseSearchbar.style.display = "block"
+//        finderContainer.style.display = "none"
+//        if (siteIdContainer.value.isBlank()) {
+//            integrationCode.value = enterpriseSearchbarCode
+//        } else {
+//            integrationCode.value = enterpriseSearchbarCode.replace("siteId\\:\\ \".+".toRegex(), "siteId: \"${siteIdContainer.value}\"")
+//        }
+//    })
+//
+//    finderVariant.addEventListener("click", {
+//        enterpriseSearchbar.style.display = "none"
+//        finderContainer.style.display = "block"
+//        if (siteIdContainer.value.isBlank()) {
+//            integrationCode.value = finderInitCode
+//        } else {
+//            integrationCode.value = finderInitCode.replace("data-siteId=\".+\"".toRegex(RegexOption.IGNORE_CASE), "data-siteId=\"${siteIdContainer.value}\"")
+//        }
+//    })
 
     document.addEventListener("triggerFirstUsageOwnershipEvent", {
         if (!siteIdContainer.value.isBlank()) {
-            if (searchbarVariant.checked) {
+//            if (searchbarVariant.checked) {
                 integrationCode.value = integrationCode.value.replace("siteId\\:\\ \".+".toRegex(), "siteId: \"${siteIdContainer.value}\"")
-            } else {
-                integrationCode.value = integrationCode.value.replace("data-siteId=\".+\"".toRegex(RegexOption.IGNORE_CASE), "data-siteId=\"${siteIdContainer.value}\"")
-            }
+//            } else {
+//                integrationCode.value = integrationCode.value.replace("data-siteId=\".+\"".toRegex(RegexOption.IGNORE_CASE), "data-siteId=\"${siteIdContainer.value}\"")
+//            }
         }
     })
 }
 
-private fun showUser(xhr: XMLHttpRequest) {
-    if (xhr.status.equals(200) && xhr.responseText.isEmpty()) {
-        loginLink.text = " Login"
-    } else
-        if (xhr.status.equals(200) && xhr.response != null) {
-            showAssignments()
-            val user = JSON.parse<dynamic>(xhr.responseText)
-            (document.getElementById("assignmentController") as HTMLDivElement).style.display = "block"
-            loginLink.textContent = " Logout: ${user.userAuthentication.details.name}"
-            loginLink.title = user.userAuthentication.details.id
-            loginLink.className = "fa fa-sign-out"
-            loginLink.href = "/logout"
-            if (document.getElementById("company") != null) {
-                (document.getElementById("company") as HTMLInputElement).value = user.userAuthentication.details.company
-                (document.getElementById("contactEmail") as HTMLInputElement).value = user.userAuthentication.details.email
-            }
-        }
-}
+//private fun showUser(xhr: XMLHttpRequest) {
+//    if (xhr.status.equals(200) && xhr.responseText.isEmpty()) {
+//        loginLink.text = " Login"
+//    } else
+//        if (xhr.status.equals(200) && xhr.response != null) {
+//            showAssignments()
+//            val user = JSON.parse<dynamic>(xhr.responseText)
+//            (document.getElementById("assignmentController") as HTMLDivElement).style.display = "block"
+//            loginLink.textContent = " Logout: ${user.userAuthentication.details.name}"
+//            loginLink.title = user.userAuthentication.details.id
+//            loginLink.className = "fa fa-sign-out"
+//            loginLink.href = "/logout"
+//            if (document.getElementById("company") != null) {
+//                (document.getElementById("company") as HTMLInputElement).value = user.userAuthentication.details.company
+//                (document.getElementById("contactEmail") as HTMLInputElement).value = user.userAuthentication.details.email
+//            }
+//        }
+//}
 
 @JsName("assignSite")
 private fun assignSite() {

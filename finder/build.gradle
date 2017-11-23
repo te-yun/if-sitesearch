@@ -53,32 +53,34 @@ compileKotlin2Js {
 
 build.doLast {
     String serviceBuildPath = "../service/build/resources/main/static/app"
-    String buildPath = "../service/src/main/resources/static/app"
-    project.file("$buildPath/$project.name").deleteDir()
+    String artifactPath = "../service/src/main/resources/static/app"
+    project.file("$artifactPath/$project.name").deleteDir()
     project.file("$serviceBuildPath/$project.name").deleteDir()
 
     copy {
         from compileKotlin2Js.destinationDir
-        into "$buildPath/$project.name"
+        into "$artifactPath/$project.name"
+    }
+
+    copy {
+        from compileKotlin2Js.destinationDir
         into "$serviceBuildPath/$project.name" // TODO create rather a symlink to above directory?
     }
 
     copy {
-        from compileTestKotlin2Js.destinationDir
-        into "$buildPath/$project.name"
-        into "$serviceBuildPath/$project.name"
+        from sourceSets.main.output.resourcesDir
+        into "$artifactPath/$project.name/resources"
     }
 
     copy {
         from sourceSets.main.output.resourcesDir
-        into "$buildPath/$project.name/resources"
         into "$serviceBuildPath/$project.name/resources" // TODO create rather a symlink to above directory?
     }
 
 //    configurations.compile.each { File file ->
 //        copy {
 //            from zipTree(file.absolutePath)
-//            into "$buildPath/runtime"
+//            into "$artifactPath/runtime"
 //        }
 //    }
 
@@ -86,9 +88,15 @@ build.doLast {
         copy {
             includeEmptyDirs = true
             from zipTree(file.absolutePath)
-            into "$buildPath/runtime"
+            into "$artifactPath/runtime"
+//            into "$artifactPath/$project.name/resources"
+//            into "$serviceBuildPath/$project.name/resources" // TODO create rather a symlink to above directory?
+        }
+        copy {
+            includeEmptyDirs = true
+            from zipTree(file.absolutePath)
             into "$serviceBuildPath/runtime"
-//            into "$buildPath/$project.name/resources"
+//            into "$artifactPath/$project.name/resources"
 //            into "$serviceBuildPath/$project.name/resources" // TODO create rather a symlink to above directory?
         }
     }

@@ -131,7 +131,7 @@
   "iconPath": "searchbar/img/filetypes",
   "lyncIconPath": "searchbar/img/shared/lync",
   "defaultLang": "en",
-  "appLang": "de",
+  "appLang": "en",
   "rootDir": ".",
   "debug": false
 }
