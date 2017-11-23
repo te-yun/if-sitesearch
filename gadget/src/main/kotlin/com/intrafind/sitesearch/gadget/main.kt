@@ -27,15 +27,19 @@ import kotlin.browser.window
 
 fun main(args: Array<String>) {
     window.addEventListener("DOMContentLoaded", {
+        showInitCode()
+        js("    IFS.eventbus.addEventListener(IFS.constants.events.SEARCHBAR_RENDERED_INITIALLY, function () {" +
+                "        document.getElementById(\"ifs-sb-searchfield\").setAttribute(\"placeholder\", \"Search for \\\"Knowledge\\\"\");" +
+                "    });"
+        )
     })
 }
 
 fun triggerFirstUsageOwnership() {
-    val serviceUrl: String
-    if (window.location.hostname.equals("localhost")) {
-        serviceUrl = "http://localhost:8001"
+    val serviceUrl: String = if (window.location.hostname.equals("localhost")) {
+        "http://localhost:8001"
     } else {
-        serviceUrl = "https://api.sitesearch.cloud"
+        "https://api.sitesearch.cloud"
     }
 
     val xhr = XMLHttpRequest()
@@ -58,10 +62,8 @@ fun showInitCode() {
     val finderInit = document.getElementById("sitesearch-page-finder-init") as HTMLScriptElement
     val finderContainer = document.getElementById("page-finder") as HTMLDivElement
     val finderVariant = document.getElementById("finder-variant") as HTMLInputElement
-    val searchbarInputField = document.getElementById("ifs-sb-searchfield") as HTMLInputElement
     val searchbarVariant = document.getElementById("searchbar-variant") as HTMLInputElement
     val integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
-    searchbarInputField.placeholder = "Search for \"knowledge\""
     val enterpriseSearchbarCode = enterpriseSearchbar.outerHTML
             .replace("searchbar-config/sitesearch-config.json", "https://api.sitesearch.cloud/searchbar-config/sitesearch-config.json")
     integrationCode.value = enterpriseSearchbarCode

@@ -77,6 +77,7 @@
     Enable Search
 </button>
 <br>
+<br>
 
 <div id="sitesearch-searchbar">
     <link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/searchbar/css/app.css"/>
@@ -90,6 +91,11 @@
         jQuery.noConflict();
         jQuery(document).ready(function ($) {
             IFS.initClient({
+                customConfig: {
+                    overwrite: {
+                        "appLang": "en"
+                    }
+                },
                 sbTarget: "#searchbar",
                 configurl: "searchbar-config/sitesearch-config.json",
                 sitesearch: true,
