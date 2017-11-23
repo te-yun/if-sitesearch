@@ -29,7 +29,7 @@ fun main(args: Array<String>) {
     window.addEventListener("DOMContentLoaded", {
         showInitCode()
         js("    IFS.eventbus.addEventListener(IFS.constants.events.SEARCHBAR_RENDERED_INITIALLY, function () {" +
-                "        document.getElementById(\"ifs-sb-searchfield\").setAttribute(\"placeholder\", \"Search for \\\"Knowledge\\\"\");" +
+                "        document.getElementById('ifs-sb-searchfield').setAttribute('placeholder', 'Search for \\\"Knowledge\\\"');" +
                 "    });"
         )
     })
