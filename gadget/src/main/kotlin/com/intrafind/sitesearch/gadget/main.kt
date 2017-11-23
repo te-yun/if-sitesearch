@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.intrafind.sitesearch.client
+package com.intrafind.sitesearch.gadget
 
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLInputElement

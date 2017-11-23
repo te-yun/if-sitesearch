@@ -23,10 +23,9 @@
       href="https://sitesearch.cloud/wp-content/themes/jupiter/assets/stylesheet/core-styles.css"/>
 <script src="/app/runtime/kotlin.js"></script>
 
-<body onload="client.com.intrafind.sitesearch.client.showInitCode()">
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function () {
-        client.com.intrafind.sitesearch.client.showInitCode();
+        gadget.com.intrafind.sitesearch.client.showInitCode();
     });
 </script>
 <style>
@@ -73,7 +72,7 @@
 </div>
 <button id="index" class="fa fa-cogs"
         style="height: 1.5em; font-size: 2em;"
-        onclick="client.com.intrafind.sitesearch.client.triggerFirstUsageOwnership()">
+        onclick="gadget.com.intrafind.sitesearch.gadget.triggerFirstUsageOwnership()">
     Enable Search
 </button>
 <br>
@@ -148,7 +147,7 @@
     <input type="button"
            id="assignSite"
            style="text-align: center; width: 285px;"
-           onclick="client.com.intrafind.sitesearch.client.assignSite()"
+           onclick="gadget.com.intrafind.sitesearch.gadget.assignSite()"
            value="Assign Site">
 </div>
 
@@ -174,11 +173,4 @@
     </table>
 </div>
 
-<br>
-
-<!--<div style="float: right">-->
-<!--<span class="fa fa-user-circle-o"></span> <a href="privacy.html">Privacy</a> | <span class="fa fa-gavel"></span>-->
-<!--<a href="terms-of-service-agreement.html">Terms</a> | <span class="fa fa-briefcase"></span> <a href="imprint.html">Imprint</a>-->
-<!--</div>-->
-
-<script src="/app/client/client.js"></script>
+<script src="/app/gadget/gadget.js"></script>

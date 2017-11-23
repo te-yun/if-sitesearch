@@ -5,7 +5,7 @@ $ErrorActionPreference = "Stop"
 $PSDefaultParameterValues["*:ErrorAction"] = "Stop"
 
 ./gradlew `
-    :client:clean :client:build `
+    :gadget:clean :gadget:build `
     :finder:build `
     --parallel --continuous `
     $args

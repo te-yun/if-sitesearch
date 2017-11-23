@@ -20,9 +20,9 @@
 <meta name="description"
       content="Simple Site Search from the makers of the enterprise search vendor IntraFind Software AG.">
 <title>Simple Site Search</title>
-<link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/searchbar/css/app.css"/>
+<!--<link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/searchbar/css/app.css"/>-->
 <link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/theme/font/css/font-awesome.min.css"/>
-<script src="/app/runtime/kotlin.js"></script>
+<!--<script src="/app/runtime/kotlin.js"></script>-->
 
 <h1 style="font-size: 2em;"><span class="fa fa-search"></span> Simple Site Search<sup>BETA</sup></h1>
 <img src="/theme/logo.png" width="361" height="105" style="float: right;">
@@ -67,53 +67,50 @@
 <br>
 <hr>
 <ul style="list-style: none; font-size: 1.5em;">
-    <li><a class="fa fa-book" href="/swagger-ui.html" style="text-decoration: none;">
-        API specification &amp; playground</a></li>
-    <li><a class="fa fa-cog" href="sitesearch-gadget.html"
+    <li><a class="fa fa-book" href="swagger-ui.html" style="text-decoration: none;">
+        (Swagger) API</a></li>
+    <li><a class="fa fa-cog" href="app/gadget/resources/sitesearch-gadget.html"
            style="text-decoration: none;">
-        Getting started with Site Search Integrator</a></li>
+        Site Search Integrator</a></li>
     <li><a class="fa fa-book" href="https://doc.sitesearch.cloud/FAQ" style="text-decoration: none;">
         FAQ</a></li>
-    <li><a class="fa fa-heartbeat" href="https://api.sitesearch.cloud/api-health.html" style="text-decoration: none;">
-        Status / API Health</a></li>
-    <li><a class="fa fa-flask" href="https://api.sitesearch.cloud/app/finder/resources/finder.html"
-           style="text-decoration: none;">
-        {if-lab} Page Finder</a></li>
+    <li><a class="fa fa-heartbeat" href="api-health.html" style="text-decoration: none;">
+        API Health</a></li>
 </ul>
 
-<div class="container" style="margin-top:130px; width: 530px;">
-    <div id="searchbar"></div>
-    <div id="resultlist" style="margin-top:20px;"></div>
-</div>
+<!--<div class="container" style="margin-top:130px; width: 530px;">-->
+<!--<div id="searchbar"></div>-->
+<!--<div id="resultlist" style="margin-top:20px;"></div>-->
+<!--</div>-->
 
-<script src="https://api.sitesearch.cloud/searchbar/js/app.js"></script>
-<script>
-    jQuery.noConflict();
-    jQuery(document).ready(function ($) {
-        IFS.initClient({
-            sbTarget: "#searchbar",
-            configurl: "searchbar-config/sitesearch-config.json",
-            sitesearch: true,
-            siteId: "4bcccea2-8bcf-4280-88c7-8736e9c3d15c"
-        });
+<!--<script src="https://api.sitesearch.cloud/searchbar/js/app.js"></script>-->
+<!--<script>-->
+<!--jQuery.noConflict();-->
+<!--jQuery(document).ready(function ($) {-->
+<!--IFS.initClient({-->
+<!--sbTarget: "#searchbar",-->
+<!--configurl: "searchbar-config/sitesearch-config.json",-->
+<!--sitesearch: true,-->
+<!--siteId: "4bcccea2-8bcf-4280-88c7-8736e9c3d15c"-->
+<!--});-->
 
-        IFS.handlebars.registerHelper("formatHighlightedUrl", function (url) {
-            if (typeof url !== "undefined") {
-                console.warn(url);
-                console.warn(decodeURIComponent(url));
-                console.warn(decodeURI(url));
-                return decodeURIComponent(url);
-            } else {
-                return "";
-            }
-        });
-    });
-</script>
+<!--IFS.handlebars.registerHelper("formatHighlightedUrl", function (url) {-->
+<!--if (typeof url !== "undefined") {-->
+<!--console.warn(url);-->
+<!--console.warn(decodeURIComponent(url));-->
+<!--console.warn(decodeURI(url));-->
+<!--return decodeURIComponent(url);-->
+<!--} else {-->
+<!--return "";-->
+<!--}-->
+<!--});-->
+<!--});-->
+<!--</script>-->
 
-<div style="float: right">
-    <span class="fa fa-user-circle-o"></span> <a href="privacy.html">Privacy</a> | <span class="fa fa-gavel"></span>
-    <a href="terms-of-service-agreement.html">Terms</a> | <span class="fa fa-briefcase"></span> <a href="imprint.html">Imprint</a>
-</div>
+<!--<div style="float: right">-->
+<!--<span class="fa fa-user-circle-o"></span> <a href="privacy.html">Privacy</a> | <span class="fa fa-gavel"></span>-->
+<!--<a href="terms-of-service-agreement.html">Terms</a> | <span class="fa fa-briefcase"></span> <a href="imprint.html">Imprint</a>-->
+<!--</div>-->
 
-<script src="/app/client/client.js"></script>
+<!--<script src="/app/client/client.js"></script>-->
 
