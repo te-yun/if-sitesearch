@@ -39,7 +39,7 @@ public class StaticContentTest {
         final ResponseEntity<String> staticContent = caller.getForEntity("/index.html", String.class);
 
         assertEquals(HttpStatus.OK, staticContent.getStatusCode());
-        assertTrue(staticContent.getBody().contains("API specification"));
+        assertTrue(staticContent.getBody().contains("<title>Simple Site Search</title>"));
     }
 
     @Test
