@@ -48,8 +48,8 @@
 <div class="wrapper">
     <label for="feedUrl"><span class="fa fa-rss"></span> RSS Feed URL</label>
     <input id="feedUrl" placeholder="Feed URL, e.g. https://intrafind.de/share/enterprise-search-blog.xml"
+           title="Crawling support, coming soon"
            value="https://intrafind.de/share/enterprise-search-blog.xml" style="border-color: #119;">
-    <!--automated crawling, coming soon-->
     <!--<label for="email"><span class="fa fa-envelope-o"></span> E-mail</label>-->
     <!--<input id="email" placeholder="E-mail" value="feedback@sitesearch.cloud" readonly>-->
     <label for="siteId"><span class="fa fa-key"></span> Site ID</label>
@@ -66,11 +66,11 @@
 <br>
 <input id="overrideSiteId"
        title="Leave it blank if you do not know what this means."
-       placeholder="Site ID to use for all Site Search requests" style="width: 300px;">
+       placeholder="Site ID to use for all Site Search requests" style="width: 306px;">
 <button
         onclick="gadget.com.intrafind.sitesearch.gadget.overrideSite(document.getElementById('overrideSiteId').value)"
         title="Site ID Cookie overrides the Site ID which is specified in the initialization code for all requests to Site Search."
-        style="width: 222px;"
+        style="width: 217px;"
 >
     Override with Site ID Cookie
 </button>
