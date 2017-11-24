@@ -59,7 +59,7 @@ fun triggerFirstUsageOwnership() {
 
 @JsName("overrideSite")
 fun overrideSite(siteId: String) {
-    document.cookie = "override-site = $siteId"
+    document.cookie = "override-site = $siteId; path=/"
 }
 
 fun showInitCode() {

@@ -23,11 +23,14 @@ import org.springframework.boot.context.embedded.undertow.UndertowEmbeddedServle
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.paths.RelativePathProvider;
 import springfox.documentation.spring.web.plugins.Docket;
 
 import javax.servlet.ServletContext;
+import java.util.Collections;
 
 @Configuration
 public class BaseConfig {
@@ -43,6 +46,16 @@ public class BaseConfig {
     public Docket hideApi(ServletContext servletContext) {
         return new Docket(DocumentationType.SWAGGER_2)
                 .host("api.sitesearch.cloud")
+                .apiInfo(new ApiInfo(
+                        "Site Search API",
+                        "On-demand website search for enterprises",
+                        "v1",
+                        "https://sitesearch.cloud/terms",
+                        new Contact("IntraFind Software AG", "https://sitesearch.cloud", "feedback@sitesearch.cloud"),
+                        "Apache License, Version 2.0",
+                        "https://github.com/intrafind/if-sitesearch/blob/master/LICENSE",
+                        Collections.emptyList()
+                ))
                 .pathProvider(new RelativePathProvider(servletContext) {
                     @Override
                     public String getApplicationBasePath() {
@@ -62,8 +75,5 @@ public class BaseConfig {
                 .paths(Predicates.not(PathSelectors.regex("/user")))
                 .paths(Predicates.not(PathSelectors.regex("/stats")))
                 .build();
-
-        // TODO exclude from public Swagger API PUT /sites/{siteId}/pages/{pageId} ?
-        // TODO exclude from public Swagger API PUT DELETE /sites/{siteId}/pages/{pageId} ?
     }
 }

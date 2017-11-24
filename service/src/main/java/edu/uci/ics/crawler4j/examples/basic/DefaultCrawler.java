@@ -83,12 +83,8 @@ public class DefaultCrawler extends WebCrawler {
             String title = htmlParseData.getTitle();
             Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
-//            UUID siteId = UUID.fromString("a2e8d60b-0696-47ea-bc48-982598ee35bd"); // DE
-//            UUID siteSecret = UUID.fromString("04a0afc6-d89a-45c9-8ba8-41d393d8d2f8"); // DE
-            UUID siteId = UUID.fromString("760a7c78-508c-4625-ae69-c04c9efa0e34"); // FR
-            UUID siteSecret = UUID.fromString("aee39492-1276-4602-86ef-fe7e32a7dd9f"); // FR
-//            UUID siteId = UUID.fromString("4e20429d-3637-45e7-9a0f-3ead67fcfc13"); // IT
-//            UUID siteSecret = UUID.fromString("0716fde9-9e39-486b-95c7-fad7f11ae3f3"); // IT
+            UUID siteId = UUID.fromString("760b7c78-508c-4625-ae69-c04c9efa0e34");
+            UUID siteSecret = UUID.fromString("aee39a92-1276-4602-86ef-fe7e32a7dd9f"); 
             com.intrafind.sitesearch.dto.Page sitePage = new com.intrafind.sitesearch.dto.Page(
                     title,
                     body.replaceAll("^\\s+|\\s+$", "").trim(),
