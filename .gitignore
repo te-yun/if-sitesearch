@@ -6,7 +6,7 @@ config.json
 /*.log
 /*.hprof
 
-# Spring Boot
+/data
 service/config
 
 client/build/js

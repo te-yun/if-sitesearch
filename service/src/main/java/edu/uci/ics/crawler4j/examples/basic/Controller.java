@@ -22,6 +22,8 @@ import edu.uci.ics.crawler4j.fetcher.PageFetcher;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
+import static edu.uci.ics.crawler4j.examples.basic.DefaultCrawler.crawlTarget;
+
 public class Controller {
     public static void main(String... args) throws Exception {
         String crawlStorageFolder = "data/crawler";
@@ -29,10 +31,9 @@ public class Controller {
 
         CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(crawlStorageFolder);
+        config.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36");
+        config.setPolitenessDelay(1_000);
 
-        /*
-         * Instantiate the controller for this crawl.
-         */
         PageFetcher pageFetcher = new PageFetcher(config);
         RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
         RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
@@ -49,7 +50,7 @@ public class Controller {
 //        controller.addSeed("https://api.muctool.de/");
 //        controller.addSeed("https://www.migrosbank.ch/it/");
 //        controller.addSeed("https://www.migrosbank.ch/fr/");
-        controller.addSeed("https://www.migrosbank.ch/de/");
+        controller.addSeed(crawlTarget);
 
         /*
          * Start the crawl. This is a blocking operation, meaning that your code
