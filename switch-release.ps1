@@ -33,15 +33,17 @@ if(isBlueUp){
 #        -v ~/srv/${green}:/home/svc_usr/data `
 
     docker rm -f $green
-    docker run -d --name $green `
-        -p 3442:8001 `
-        --log-driver=gelf `
-        --log-opt gelf-address=udp://main.sitesearch.cloud:12201 `
-        --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
-        --env BUILD_NUMBER=$env:BUILD_NUMBER `
-        --env SCM_HASH=$env:SCM_HASH `
-        --network $docker_network `
-        intrafind/${docker_image_name}:${docker_tag}
+    runService -container_name $green
+#    docker run -d --name $green `
+#        -p 3442:8001 `
+#        --log-driver=gelf `
+#        --log-opt gelf-address=udp://main.sitesearch.cloud:12201 `
+#        --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
+#        --env BUILD_NUMBER=$env:BUILD_NUMBER `
+#        --env SCM_HASH=$env:SCM_HASH `
+#        --env SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=$env:SECURITY_OAUTH2_CLIENT_CLIENT_SECRET `
+#        --network $docker_network `
+#        intrafind/${docker_image_name}:${docker_tag}
 
 #echo ~/srv/$green
 #echo ~/srv/$data ~/srv/$green
@@ -58,19 +60,35 @@ if(isBlueUp){
 #        --log-driver=gelf `
 #        --log-opt gelf-address=udp://main.sitesearch.cloud:12201 `
     docker rm -f $blue
-    docker run -d --name $blue `
-        -p 4442:8001 `
-        --log-driver=gelf `
-        --log-opt gelf-address=udp://main.sitesearch.cloud:12201 `
-        --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
-        --env BUILD_NUMBER=$env:BUILD_NUMBER `
-        --env SCM_HASH=$env:SCM_HASH `
-        --network $docker_network `
-        intrafind/${docker_image_name}:${docker_tag}
+    runService -service_port 4442 -container_name $blue
+
+#    docker run -d --name $blue `
+#        -p 4442:8001 `
+#        --log-driver=gelf `
+#        --log-opt gelf-address=udp://main.sitesearch.cloud:12201 `
+#        --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
+#        --env BUILD_NUMBER=$env:BUILD_NUMBER `
+#        --env SCM_HASH=$env:SCM_HASH `
+#        --env SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=$env:SECURITY_OAUTH2_CLIENT_CLIENT_SECRET `
+#        --network $docker_network `
+#        intrafind/${docker_image_name}:${docker_tag}
 
 #echo ~/srv/$blue
 #echo ~/srv/$data ~/srv/$blue
 #echo "~/srv/$data ~/srv/$blue"
 #        sudo rm -rf ~/srv/$green
 #        sudo ln -s ~/srv/$data ~/srv/$blue
+}
+
+function runService([Int] $service_port = 3442, [String] $container_name) {
+    docker run -d --name ${container_name} `
+        -p ${service_port}:8001 `
+        --log-driver=gelf `
+        --log-opt gelf-address=udp://main.sitesearch.cloud:12201 `
+        --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
+        --env BUILD_NUMBER=$env:BUILD_NUMBER `
+        --env SCM_HASH=$env:SCM_HASH `
+        --env SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=$env:SECURITY_OAUTH2_CLIENT_CLIENT_SECRET `
+        --network $docker_network `
+        intrafind/${docker_image_name}:${docker_tag}
 }
