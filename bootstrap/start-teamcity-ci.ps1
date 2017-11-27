@@ -19,6 +19,10 @@ docker run -d -t --name $service_name `
 ~/buildAgent/bin/agent.sh stop
 ~/buildAgent/bin/agent.sh start # run agent on host machine
 
+# Run for major version upgrades
+#~/buildAgent/bin/install.sh https://ci.sitesearch.cloud
+#~/buildAgent/bin/agent.sh run
+
 function start-ci-agent([String] $agent_name = "sun") {
     docker rm -f teamcity-agent-$agent_name
     docker run -d -t --name teamcity-agent-$agent_name `

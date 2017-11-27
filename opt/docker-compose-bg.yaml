@@ -17,7 +17,8 @@ services:
 #      - blue-green
 
   bg:
-    image: hanzel/blue-green
+#    image: hanzel/blue-green
+    image: intrafind/router
     container_name: bg
     ports:
       - 81:80
