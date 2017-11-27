@@ -28,7 +28,6 @@ docker rm -f ${docker_image_name}
 #    -v ~/srv/${docker_image_name}:/data `
 cd ..
 
-runService
 function runService([Int] $service_port = 2443) {
     docker run -d --name ${docker_image_name} `
         -p ${service_port}:8001 `
@@ -41,6 +40,7 @@ function runService([Int] $service_port = 2443) {
         --network $docker_network `
         intrafind/${docker_image_name}:${docker_tag}
 }
+runService
 
 function cleanupDocker {
     $danglingImages = $(docker images -f "dangling=true" -q)
