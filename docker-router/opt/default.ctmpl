@@ -24,7 +24,7 @@ http {
     least_conn;
     {{range service $green}}
     server {{.Address}}:{{.Port}} max_fails=3 fail_timeout=60 weight=1;{{else}}
-    server 127.0.0.1:4442;{{end}}
+    server 127.0.0.1:2443;{{end}}
   }
 
   server {
