@@ -131,17 +131,17 @@ server {
     }
 }
 
-server {
-    listen 443 ssl http2;
-    listen [::]:443 ssl http2;
-    server_name green.sitesearch.cloud;
-
-    include /etc/nginx/snippets/ssl.conf;
-
-    location / {
-        proxy_pass http://main.sitesearch.cloud:3442;
-    }
-}
+#server {
+#    listen 443 ssl http2;
+#    listen [::]:443 ssl http2;
+#    server_name green.sitesearch.cloud;
+#
+#    include /etc/nginx/snippets/ssl.conf;
+#
+#    location / {
+#        proxy_pass http://main.sitesearch.cloud:3442;
+#    }
+#}
 
 server {
     listen 443 ssl http2;

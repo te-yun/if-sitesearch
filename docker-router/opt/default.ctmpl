@@ -52,15 +52,16 @@ http {
       # blue
       proxy_pass http://sitesearch-api;
       {{else}}
-      proxy_pass http://sitesearch-api;
+      # green
+      proxy_pass http://green;
       {{end}}
     }
   }
 
   server {
-    listen 1443 ssl http2;
-    listen [::]:1443 ssl http2;
-    server_name api.sitesearch.cloud;
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name green.sitesearch.cloud;
 
     gzip on;
     gzip_types text/plain text/html text/css application/xml application/json application/javascript;
@@ -80,9 +81,10 @@ http {
 
       {{if eq $live "blue"}}
       # green
-      proxy_pass http://sitesearch-api;
+        proxy_pass http://green;
       {{else}}
-      proxy_pass http://sitesearch-api;
+      # blue
+        proxy_pass http://sitesearch-api;
       {{end}}
     }
   }
