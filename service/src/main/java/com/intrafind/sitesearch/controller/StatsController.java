@@ -17,8 +17,6 @@
 package com.intrafind.sitesearch.controller;
 
 import com.intrafind.sitesearch.dto.Stats;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,16 +24,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
-import java.util.concurrent.CountDownLatch;
 
 @RestController
 @RequestMapping(StatsController.ENDPOINT)
 public class StatsController {
-    private final CountDownLatch latch = new CountDownLatch(3);
+//    private final CountDownLatch latch = new CountDownLatch(3);
 
     public static final String ENDPOINT = "/stats";
-    private static final Logger LOG = LoggerFactory.getLogger(StatsController.class);
-    static final String QUERIES_PER_TENANT_STORE = "tenantQueries";
+//    private static final Logger LOG = LoggerFactory.getLogger(StatsController.class);
+//    static final String QUERIES_PER_TENANT_STORE = "tenantQueries";
 
     @RequestMapping(method = RequestMethod.GET)
     ResponseEntity<Stats> stats(
