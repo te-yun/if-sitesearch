@@ -33,6 +33,8 @@ services:
       - green
       - blue
       - consul
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     networks:
       - sitesearch
 #      - blue-green

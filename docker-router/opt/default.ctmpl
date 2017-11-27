@@ -17,18 +17,18 @@ http {
     least_conn;
     {{range service $blue}}
     server {{.Address}}:{{.Port}} max_fails=3 fail_timeout=60 weight=1;{{else}}
-    server 127.0.0.1:55000;{{end}}
+    server 127.0.0.1:2443;{{end}}
   }
 
   upstream green {
     least_conn;
     {{range service $green}}
     server {{.Address}}:{{.Port}} max_fails=3 fail_timeout=60 weight=1;{{else}}
-    server 127.0.0.1:55000;{{end}}
+    server 127.0.0.1:8111;{{end}}
   }
 
   server {
-    listen 80 default;
+    listen 81 default;
 
     location / {
       {{if eq $live "blue"}}
@@ -40,7 +40,7 @@ http {
   }
 
   server {
-    listen 8080;
+    listen 8081;
 
     location / {
       {{if eq $live "blue"}}
