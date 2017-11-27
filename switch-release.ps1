@@ -47,6 +47,8 @@ if(isBlueUp){
 
     docker rm -f $green
     runService -container_name $green
+    sleep 150
+    echo "TEST"
 #    docker run -d --name $green `
 #        -p 3442:8001 `
 #        --log-driver=gelf `

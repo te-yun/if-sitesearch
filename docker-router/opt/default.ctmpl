@@ -16,15 +16,23 @@ http {
   upstream blue {
     least_conn;
     {{range service $blue}}
-    server {{.Address}}:{{.Port}} max_fails=3 fail_timeout=60 weight=1;{{else}}
-    server 127.0.0.1:3442;{{end}}
+    server {{.Address}}:{{.Port}} max_fails=3 fail_timeout=60 weight=1;
+    {{else}}
+    server main.sitesearch.cloud:4442;
+    server main.sitesearch.cloud:4442;
+    server main.sitesearch.cloud:3442 backup;
+    {{end}}
   }
 
   upstream green {
     least_conn;
     {{range service $green}}
-    server {{.Address}}:{{.Port}} max_fails=3 fail_timeout=60 weight=1;{{else}}
-    server main.sitesearch.cloud:2443;{{end}}
+    server {{.Address}}:{{.Port}} max_fails=3 fail_timeout=60 weight=1;
+    {{else}}
+    server main.sitesearch.cloud:3443;
+    server main.sitesearch.cloud:3443;
+    server main.sitesearch.cloud:4443 backup;
+    {{end}}
   }
 
   server {
@@ -46,11 +54,9 @@ http {
         include /etc/nginx/snippets/cors-headers.conf;
 
       {{if eq $live "blue"}}
-      # blue
-      proxy_pass http://sitesearch-api;
+        proxy_pass http://blue;
       {{else}}
-      # green
-      proxy_pass http://green;
+        proxy_pass http://green;
       {{end}}
     }
   }
@@ -74,11 +80,9 @@ http {
         include /etc/nginx/snippets/cors-headers.conf;
 
       {{if eq $live "blue"}}
-      # green
         proxy_pass http://green;
       {{else}}
-      # blue
-        proxy_pass http://sitesearch-api;
+        proxy_pass http://blue;
       {{end}}
     }
   }
