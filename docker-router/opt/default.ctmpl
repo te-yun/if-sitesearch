@@ -34,7 +34,7 @@ http {
       {{if eq $live "blue"}}
       proxy_pass http://blue;
       {{else}}
-      proxy_pass http://green;
+      proxy_pass http://sitesearch-api;
       {{end}}
     }
   }
@@ -44,7 +44,7 @@ http {
 
     location / {
       {{if eq $live "blue"}}
-      proxy_pass http://green;
+      proxy_pass http://sitesearch-api;
       {{else}}
       proxy_pass http://blue;
       {{end}}

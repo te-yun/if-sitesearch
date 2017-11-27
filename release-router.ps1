@@ -11,7 +11,7 @@ function setupRedirectRouterContainer {
     cd docker-$docker_redirect_image
     docker build --tag intrafind/${docker_redirect_image}:$docker_redirect_image_tag .
     docker rm -f $docker_redirect_image
-    mkdir ~/srv/${docker_redirect_image}
+#    mkdir ~/srv/${docker_redirect_image}
     docker run -d --name $docker_redirect_image `
         -p 80:80 -p 443:443 `
         -p 81:81 -p 8081:8081 `
