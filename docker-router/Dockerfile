@@ -11,7 +11,7 @@ RUN chmod +x /bin/switch.sh /bin/start.sh
 COPY opt/default.* /templates/
 
 RUN mkdir -p /var/www/letsencrypt/.well-known/acme-challenge # enables Letsencrypt validation
-COPY nginx.nginx /etc/nginx/nginx.conf
+#COPY nginx.nginx /etc/nginx/nginx.conf
 COPY ssl.nginx /etc/nginx/snippets/ssl.conf
 COPY letsencrypt.nginx /etc/nginx/snippets/letsencrypt.conf
 COPY routes.nginx /etc/nginx/conf.d/default.conf
@@ -23,4 +23,4 @@ ENV BLUE_NAME blue
 ENV GREEN_NAME green
 
 EXPOSE 80 443 81 8081
-#ENTRYPOINT ["/bin/start.sh"]
+ENTRYPOINT ["/bin/start.sh"]
