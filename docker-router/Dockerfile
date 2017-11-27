@@ -8,7 +8,7 @@ RUN unzip /usr/bin/consul-template_0.14.0_linux_amd64.zip -d /usr/local/bin
 
 COPY opt/* /bin/
 RUN chmod +x /bin/switch.sh /bin/start.sh
-COPY opt/default.* /templates/default.ctmpl
+COPY opt/default.* /templates/
 
 RUN mkdir -p /var/www/letsencrypt/.well-known/acme-challenge # enables Letsencrypt validation
 COPY nginx.nginx /etc/nginx/nginx.conf
