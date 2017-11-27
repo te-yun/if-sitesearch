@@ -3,9 +3,7 @@ FROM nginx:1.13-alpine
 MAINTAINER Alexander Orlov <alexander.orlov@intrafind.de>
 
 RUN apk add --no-cache --virtual unzip
-#ADD https://releases.hashicorp.com/consul-template/0.14.0/consul-template_0.14.0_linux_amd64.zip /usr/bin/
 ADD https://releases.hashicorp.com/consul-template/0.19.4/consul-template_0.19.4_linux_amd64.zip /usr/bin/
-#RUN unzip /usr/bin/consul-template_0.14.0_linux_amd64.zip -d /usr/local/bin
 RUN unzip /usr/bin/consul-template_0.19.4_linux_amd64.zip -d /usr/local/bin
 
 COPY opt/* /bin/

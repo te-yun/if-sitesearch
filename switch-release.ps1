@@ -47,8 +47,9 @@ if(isBlueUp){
 
     docker rm -f $green
     runService -container_name $green
+    echo "TEST BEGIN GREEN"
     sleep 150
-    echo "TEST"
+    echo "TEST END GREEN"
 #    docker run -d --name $green `
 #        -p 3442:8001 `
 #        --log-driver=gelf `
@@ -76,6 +77,9 @@ if(isBlueUp){
 #        --log-opt gelf-address=udp://main.sitesearch.cloud:12201 `
     docker rm -f $blue
     runService -service_port 4442 -container_name $blue
+    echo "TEST BEGIN BLUE"
+    sleep 150
+    echo "TEST END BLUE"
 
 #    docker run -d --name $blue `
 #        -p 4442:8001 `
