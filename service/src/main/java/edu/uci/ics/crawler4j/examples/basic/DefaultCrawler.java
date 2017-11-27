@@ -45,6 +45,14 @@ public class DefaultCrawler extends WebCrawler {
     //    private static final Pattern FILTERS = Pattern.compile(".*(\\.(html|htm|txt|pdf))$");
     private PageService service = new PageService();
 
+    private UUID siteId;
+    private UUID siteSecret;
+
+    public DefaultCrawler(UUID siteId, UUID siteSecret) {
+        this.siteId = siteId;
+        this.siteSecret = siteSecret;
+    }
+
     /**
      * This method receives two parameters. The first parameter is the page
      * in which we have discovered this new url and the second parameter is
@@ -83,8 +91,8 @@ public class DefaultCrawler extends WebCrawler {
             String title = htmlParseData.getTitle();
             Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
-            UUID siteId = UUID.fromString("760b7c78-508c-4625-ae69-c04c9efa0e34");
-            UUID siteSecret = UUID.fromString("aee39a92-1276-4602-86ef-fe7e32a7dd9f"); 
+//            UUID siteId = UUID.fromString("760b7c78-508c-4625-ae69-c04c9efa0e34");
+//            UUID siteSecret = UUID.fromString("aee39a92-1276-4602-86ef-fe7e32a7dd9f");
             com.intrafind.sitesearch.dto.Page sitePage = new com.intrafind.sitesearch.dto.Page(
                     title,
                     body.replaceAll("^\\s+|\\s+$", "").trim(),

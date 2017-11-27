@@ -329,6 +329,20 @@ public class PageService {
         }
     }
 
+
+    public boolean clearSite(UUID siteId, UUID siteSecret) {
+        if (isAllowedToModify(siteId, siteSecret)) {
+            final Optional<List<String>> pages = fetchAllDocuments(siteId);
+            if (pages.isPresent()) {
+                String[] documents = new String[pages.get().size()];
+                documents = pages.get().toArray(documents);
+                INDEX_SERVICE.delete(documents);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean delete(UUID siteId, UUID siteSecret, String pageId) {
         if (isAllowedToModify(siteId, siteSecret)) {
             // just assume everything works... right?

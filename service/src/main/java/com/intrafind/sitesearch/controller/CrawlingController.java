@@ -42,7 +42,10 @@ public class CrawlingController {
             @RequestParam(name = "siteSecret") UUID siteSecret,
             @RequestParam(name = "crawlerTargetUrl") String crawlerTargetUrl
     ) {
-        DefaultCrawler.crawlTarget = crawlerTargetUrl;
+//        CrawlerControllerFactory factory = new CrawlerControllerFactory(siteId, siteSecret);
+//        controller.startNonBlocking(factory, numberOfCrawlers);
+
+        DefaultCrawler.crawlTarget = crawlerTargetUrl; // TODO pass to factory constructor
         LOG.info("crawlerTargetUrl: " + DefaultCrawler.crawlTarget);
 
         CrawlConfig config = new CrawlConfig();
@@ -65,6 +68,7 @@ public class CrawlingController {
 
         controller.addSeed(crawlerTargetUrl);
         controller.start(DefaultCrawler.class, CRAWLER_THREADS);
+//        controller.start(factory, CRAWLER_THREADS);
 
         return ResponseEntity.ok().build();
     }

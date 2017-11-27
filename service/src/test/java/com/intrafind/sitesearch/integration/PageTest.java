@@ -226,14 +226,30 @@ public class PageTest {
     }
 
     @Test
-    public void importFeedAndReadSingleSiteWithSSL() throws Exception {  // TODO actually use SSL below >> httpS instead of http-sans-S
+    public void importFeedAndClearSite() throws Exception {
         final ResponseEntity<SiteIndexSummary> exchange = caller.exchange(SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml",
                 HttpMethod.POST, HttpEntity.EMPTY, SiteIndexSummary.class);
         final SiteIndexSummary creation = validateTenantSummary(exchange, 25);
 
         TimeUnit.MILLISECONDS.sleep(8_000);
         LOG.info("siteId: " + creation.getSiteId());
+        LOG.info("siteSecret: " + creation.getSiteSecret());
         validateUpdatedSites(creation);
+
+        final ResponseEntity<Object> clearSite = caller.exchange(SiteController.ENDPOINT + "/" + creation.getSiteId() + "/?siteSecret=" + creation.getSiteSecret(),
+                HttpMethod.DELETE, HttpEntity.EMPTY, Object.class);
+        assertNull(clearSite.getBody());
+        assertEquals(HttpStatus.OK, clearSite.getStatusCode());
+        assureClearedSite(creation);
+    }
+
+    private void assureClearedSite(SiteIndexSummary siteIndexSummary) {
+        siteIndexSummary.getDocuments().forEach(docId -> {
+            final ResponseEntity<FetchedPage> fetchedById = caller.exchange(
+                    PageController.ENDPOINT + "/" + docId, HttpMethod.GET, HttpEntity.EMPTY, FetchedPage.class);
+            assertTrue(HttpStatus.NOT_FOUND.equals(fetchedById.getStatusCode()));
+            assertNull(fetchedById.getBody());
+        });
     }
 
     private void validateUpdatedSites(SiteIndexSummary siteIndexSummary) {

@@ -189,4 +189,16 @@ public class SiteController {
 
         return deleteById(siteId, pageId, siteSecret);
     }
+
+    @RequestMapping(path = "{siteId}", method = RequestMethod.DELETE)
+    ResponseEntity<?> clearSiteIndex(
+            @PathVariable(value = "siteId") UUID siteId,
+            @RequestParam(name = "siteSecret") UUID siteSecret
+    ) {
+        if (service.clearSite(siteId, siteSecret)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.noContent().build();
+        }
+    }
 }
