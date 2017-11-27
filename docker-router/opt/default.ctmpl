@@ -18,9 +18,9 @@ http {
     {{range service $blue}}
     server {{.Address}}:{{.Port}} max_fails=3 fail_timeout=60 weight=1;
     {{else}}
-    server main.sitesearch.cloud:4442;
-    server main.sitesearch.cloud:4442;
-    server main.sitesearch.cloud:3442 backup;
+    server main.sitesearch.cloud:4443;
+    server main.sitesearch.cloud:4443;
+    server main.sitesearch.cloud:3443 backup;
     {{end}}
   }
 
@@ -29,9 +29,9 @@ http {
     {{range service $green}}
     server {{.Address}}:{{.Port}} max_fails=3 fail_timeout=60 weight=1;
     {{else}}
-    server main.sitesearch.cloud:3442;
-    server main.sitesearch.cloud:3442;
-    server main.sitesearch.cloud:4442 backup;
+    server main.sitesearch.cloud:3443;
+    server main.sitesearch.cloud:3443;
+    server main.sitesearch.cloud:4443 backup;
     {{end}}
   }
 

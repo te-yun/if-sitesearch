@@ -19,7 +19,7 @@ function isBlueUp() {
     return $isBlueGreenLockSet
 }
 
-function runService([Int] $service_port = 3442, [String] $container_name) {
+function runService([Int] $service_port = 3443, [String] $container_name) {
     docker run -d --name ${container_name} `
         -p ${service_port}:8001 `
         --log-driver=gelf `
@@ -47,9 +47,9 @@ if(isBlueUp){
 
     docker rm -f $green
     runService -container_name $green
-    echo "TEST BEGIN GREEN"
-    sleep 150
-    echo "TEST END GREEN"
+    sleep 21
+    docker exec router switch.sh green
+
 #    docker run -d --name $green `
 #        -p 3442:8001 `
 #        --log-driver=gelf `
@@ -76,10 +76,9 @@ if(isBlueUp){
 #        --log-driver=gelf `
 #        --log-opt gelf-address=udp://main.sitesearch.cloud:12201 `
     docker rm -f $blue
-    runService -service_port 4442 -container_name $blue
-    echo "TEST BEGIN BLUE"
-    sleep 150
-    echo "TEST END BLUE"
+    runService -service_port 4443 -container_name $blue
+    sleep 21
+    docker exec router switch.sh blue
 
 #    docker run -d --name $blue `
 #        -p 4442:8001 `

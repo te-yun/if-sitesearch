@@ -16,6 +16,7 @@ docker start if-sitesearch
 docker start if-sitesearch-green
 docker start if-sitesearch-blue
 
+docker start consul
 docker start router
 echo "/== startup-script =="
 
