@@ -50,7 +50,6 @@ fun triggerFirstUsageOwnership() {
         val siteSecret = JSON.parse<dynamic>(xhr.responseText).siteSecret as String
         (document.getElementById("siteId") as HTMLInputElement).value = siteId
         (document.getElementById("siteSecret") as HTMLInputElement).value = siteSecret
-//        document.cookie = "override-site = $siteId"
         overrideSite(siteId)
         document.dispatchEvent(Event("triggerFirstUsageOwnershipEvent"))
     }

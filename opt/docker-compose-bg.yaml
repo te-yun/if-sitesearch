@@ -1,26 +1,69 @@
 version: "2.0"
+
 services:
-  ops-consul:
-    image: consul:1.0.0
-    container_name: ops-core
+
+  consul:
+    image: consul:1.0.1
+    container_name: consul
     restart: always
-#    depends_on:
-#      - ops-elasticsearch
-#      - ops-elasticsearch-alt
-#      - ops-logstash
-#    environment:
-#      ELASTICSEARCH_URL: http://ops-elasticsearch:9200
-#    volumes:
-#      - ~/srv/kibana:/usr/share/kibana
     ports:
-      - 5601:5601
+      - 8500:8500
+      - 8600:8600
+      - 8300:8300
+      - 8301:8301
+      - 8302:8302
     networks:
       - sitesearch
+#      - blue-green
+
+  bg:
+    image: hanzel/blue-green
+    container_name: bg
+    ports:
+      - 81:80
+      - 8081:8080
+    environment:
+      - constraint:node==master
+      - CONSUL_URL=consul:8500
+      - BLUE_NAME=blue
+      - GREEN_NAME=green
+      - LIVE=blue
+    depends_on:
+      - green
+      - blue
+      - consul
+    networks:
+      - sitesearch
+#      - blue-green
+
+  blue:
+    image: hanzel/nginx-html:1
+    ports:
+      - "80"
+    environment:
+      - SERVICE_80_NAME=blue
+    networks:
+#      - blue-green
+      - sitesearch
+
+  green:
+    image: hanzel/nginx-html:2
+    ports:
+      - "80"
+    environment:
+      - SERVICE_80_NAME=green
+    networks:
+#      - blue-green
+      - sitesearch
+
 volumes:
   ops-consul:
     driver: local
 
 networks:
+#  blue-green:
+#    external:
+#      name: blue-green
   sitesearch:
     external:
       name: sitesearch
