@@ -19,6 +19,19 @@ function isBlueUp() {
     return $isBlueGreenLockSet
 }
 
+function runService([Int] $service_port = 3442, [String] $container_name) {
+    docker run -d --name ${container_name} `
+        -p ${service_port}:8001 `
+        --log-driver=gelf `
+        --log-opt gelf-address=udp://main.sitesearch.cloud:12201 `
+        --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
+        --env BUILD_NUMBER=$env:BUILD_NUMBER `
+        --env SCM_HASH=$env:SCM_HASH `
+        --env SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=$env:SECURITY_OAUTH2_CLIENT_CLIENT_SECRET `
+        --network $docker_network `
+        intrafind/${docker_image_name}:${docker_tag}
+}
+
 #$data = "${docker_image_name}-data"
 #mkdir ~/srv/$data
 #sudo chown -R 1000:1000 ~/srv/$data # make it a svc_usr' directory
@@ -78,17 +91,4 @@ if(isBlueUp){
 #echo "~/srv/$data ~/srv/$blue"
 #        sudo rm -rf ~/srv/$green
 #        sudo ln -s ~/srv/$data ~/srv/$blue
-}
-
-function runService([Int] $service_port = 3442, [String] $container_name) {
-    docker run -d --name ${container_name} `
-        -p ${service_port}:8001 `
-        --log-driver=gelf `
-        --log-opt gelf-address=udp://main.sitesearch.cloud:12201 `
-        --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
-        --env BUILD_NUMBER=$env:BUILD_NUMBER `
-        --env SCM_HASH=$env:SCM_HASH `
-        --env SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=$env:SECURITY_OAUTH2_CLIENT_CLIENT_SECRET `
-        --network $docker_network `
-        intrafind/${docker_image_name}:${docker_tag}
 }
