@@ -14,7 +14,7 @@ function setupRedirectRouterContainer {
     mkdir ~/srv/${docker_redirect_image}
     docker run -d --name $docker_redirect_image `
         -p 80:80 -p 443:443 `
-        -p 81:81 -p 8081:8080 -p 8081:8081 `
+        -p 81:81 -p 8081:8081 `
         -v /etc/letsencrypt:/etc/letsencrypt `
         -e constraint:node=master `
         -e CONSUL_URL=consul:8500 `
