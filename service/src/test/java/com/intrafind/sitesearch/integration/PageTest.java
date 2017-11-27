@@ -247,7 +247,7 @@ public class PageTest {
         siteIndexSummary.getDocuments().forEach(docId -> {
             final ResponseEntity<FetchedPage> fetchedById = caller.exchange(
                     PageController.ENDPOINT + "/" + docId, HttpMethod.GET, HttpEntity.EMPTY, FetchedPage.class);
-            assertTrue(HttpStatus.NOT_FOUND.equals(fetchedById.getStatusCode()));
+            assertEquals(HttpStatus.NOT_FOUND, fetchedById.getStatusCode());
             assertNull(fetchedById.getBody());
         });
     }

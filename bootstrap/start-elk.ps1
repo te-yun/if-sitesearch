@@ -1,4 +1,6 @@
-## Logstash 
+#!/usr/bin/env pwsh
+
+## Logstash
 #wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
 #sudo apt-get install apt-transport-https -y
 #echo "deb https://artifacts.elastic.co/packages/6.x-prerelease/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-6.x-prerelease.list
