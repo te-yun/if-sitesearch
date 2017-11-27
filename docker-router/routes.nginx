@@ -45,55 +45,55 @@ server {
     }
 }
 
-server {
-    listen 443 ssl http2;
-    listen [::]:443 ssl http2;
-    server_name api.sitesearch.cloud;
-
-    gzip on;
-    gzip_types text/plain text/html text/css application/xml application/json application/javascript;
-
-    include /etc/nginx/snippets/ssl.conf;
-
-    location /status {
-        stub_status on;
-        access_log off;
-    }
-
-    location /technology/ {
-        proxy_pass http://main.sitesearch.cloud:2443/;
-    }
-
-    location /product-info {
-        proxy_redirect off;
-        proxy_pass http://sitesearch.online;
-    }
-    location /product-info0 {
-        proxy_redirect off;
-        proxy_pass http://sitesearch.online;
-    }
-    location /product-info1 {
-        proxy_redirect off;
-        proxy_pass http://sitesearch.online/bootstrap;
-    }
-    location /product-info2 {
-        proxy_redirect off;
-        proxy_pass http://sitesearch.online/bootstrap/;
-    }
-
-    #    location /api/ {
-    #        proxy_pass http://main.sitesearch.cloud:2443/;
-    #    }
-
-    location / {
-        # CORS headers
-        add_header access-control-allow-credentials true always;
-        add_header access-control-allow-origin $http_origin always;
-        proxy_hide_header x-frame-options;
-
-        proxy_pass http://sitesearch-api;
-    }
-}
+#server {
+#    listen 443 ssl http2;
+#    listen [::]:443 ssl http2;
+#    server_name api.sitesearch.cloud;
+#
+#    gzip on;
+#    gzip_types text/plain text/html text/css application/xml application/json application/javascript;
+#
+#    include /etc/nginx/snippets/ssl.conf;
+#
+#    location /status {
+#        stub_status on;
+#        access_log off;
+#    }
+#
+#    location /technology/ {
+#        proxy_pass http://main.sitesearch.cloud:2443/;
+#    }
+#
+#    location /product-info {
+#        proxy_redirect off;
+#        proxy_pass http://sitesearch.online;
+#    }
+#    location /product-info0 {
+#        proxy_redirect off;
+#        proxy_pass http://sitesearch.online;
+#    }
+#    location /product-info1 {
+#        proxy_redirect off;
+#        proxy_pass http://sitesearch.online/bootstrap;
+#    }
+#    location /product-info2 {
+#        proxy_redirect off;
+#        proxy_pass http://sitesearch.online/bootstrap/;
+#    }
+#
+#    #    location /api/ {
+#    #        proxy_pass http://main.sitesearch.cloud:2443/;
+#    #    }
+#
+#    location / {
+#        # CORS headers
+#        add_header access-control-allow-credentials true always;
+#        add_header access-control-allow-origin $http_origin always;
+#        proxy_hide_header x-frame-options;
+#
+#        proxy_pass http://sitesearch-api;
+#    }
+#}
 
 server {
     listen 443 ssl http2;

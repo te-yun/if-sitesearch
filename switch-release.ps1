@@ -19,9 +19,9 @@ function isBlueUp() {
     return $isBlueGreenLockSet
 }
 
-$data = "${docker_image_name}-data"
-mkdir ~/srv/$data
-sudo chown -R 1000:1000 ~/srv/$data # make it a svc_usr' directory
+#$data = "${docker_image_name}-data"
+#mkdir ~/srv/$data
+#sudo chown -R 1000:1000 ~/srv/$data # make it a svc_usr' directory
 
 # TODO change mapped volumes to avoid collision with other running containers
 if(isBlueUp){
@@ -36,7 +36,7 @@ if(isBlueUp){
     docker run -d --name $green `
         -p 3442:8001 `
         --log-driver=gelf `
-        --log-opt gelf-address=tcp://main.sitesearch.cloud:12201 `
+        --log-opt gelf-address=udp://main.sitesearch.cloud:12201 `
         --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
         --env BUILD_NUMBER=$env:BUILD_NUMBER `
         --env SCM_HASH=$env:SCM_HASH `
@@ -60,6 +60,8 @@ if(isBlueUp){
     docker rm -f $blue
     docker run -d --name $blue `
         -p 4442:8001 `
+        --log-driver=gelf `
+        --log-opt gelf-address=udp://main.sitesearch.cloud:12201 `
         --env SECURITY_USER_PASSWORD=$env:SECURITY_USER_PASSWORD `
         --env BUILD_NUMBER=$env:BUILD_NUMBER `
         --env SCM_HASH=$env:SCM_HASH `
