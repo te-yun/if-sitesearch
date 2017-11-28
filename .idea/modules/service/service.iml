@@ -24,19 +24,19 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: edu.uci.ics:crawler4j:4.3" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.apache.tika:tika-parsers:1.14" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.rometools:rome:1.8.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.rometools:rome:1.9.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.caucho:hessian:4.0.51" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework.boot:spring-boot-starter-hateoas:1.5.9.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework.boot:spring-boot-starter-undertow:1.5.9.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: io.springfox:springfox-swagger2:2.7.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: io.springfox:springfox-swagger-ui:2.7.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework.security.oauth:spring-security-oauth2:2.2.0.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework.security.oauth:spring-security-oauth2:2.2.1.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.squareup.okhttp3:okhttp:3.9.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework.boot:spring-boot-starter-web:1.5.9.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework.boot:spring-boot-starter:1.5.9.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework.boot:spring-boot-starter-logging:1.5.9.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: ch.qos.logback:logback-classic:1.1.11" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.rometools:rome-utils:1.8.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: com.rometools:rome-utils:1.9.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework.hateoas:spring-hateoas:0.23.0.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: io.springfox:springfox-swagger-common:2.7.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: io.springfox:springfox-spring-web:2.7.0" level="project" />
@@ -190,13 +190,13 @@
     </orderEntry>
     <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.uci.ics:crawler4j:4.3" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.tika:tika-parsers:1.14" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.rometools:rome:1.8.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.rometools:rome:1.9.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.caucho:hessian:4.0.51" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.boot:spring-boot-starter-hateoas:1.5.9.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.boot:spring-boot-starter-undertow:1.5.9.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.springfox:springfox-swagger2:2.7.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.springfox:springfox-swagger-ui:2.7.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.security.oauth:spring-security-oauth2:2.2.0.RELEASE" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.security.oauth:spring-security-oauth2:2.2.1.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.squareup.okhttp3:okhttp:3.9.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.boot:spring-boot-devtools:1.5.9.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.ucar:netcdf4:4.5.5" level="project" />
@@ -205,7 +205,7 @@
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.boot:spring-boot-starter:1.5.9.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.boot:spring-boot-starter-logging:1.5.9.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: ch.qos.logback:logback-classic:1.1.11" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.rometools:rome-utils:1.8.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.rometools:rome-utils:1.9.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.hateoas:spring-hateoas:0.23.0.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.springfox:springfox-swagger-common:2.7.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.springfox:springfox-spring-web:2.7.0" level="project" />
@@ -357,13 +357,13 @@
     </orderEntry>
     <orderEntry type="library" scope="TEST" name="Gradle: edu.uci.ics:crawler4j:4.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.apache.tika:tika-parsers:1.14" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: com.rometools:rome:1.8.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.rometools:rome:1.9.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.caucho:hessian:4.0.51" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.boot:spring-boot-starter-hateoas:1.5.9.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.boot:spring-boot-starter-undertow:1.5.9.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: io.springfox:springfox-swagger2:2.7.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: io.springfox:springfox-swagger-ui:2.7.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.security.oauth:spring-security-oauth2:2.2.0.RELEASE" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.security.oauth:spring-security-oauth2:2.2.1.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.squareup.okhttp3:okhttp:3.9.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.openjdk.jmh:jmh-generator-annprocess:1.19" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.boot:spring-boot-starter-test:1.5.9.RELEASE" level="project" />
@@ -371,7 +371,7 @@
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.boot:spring-boot-starter:1.5.9.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.boot:spring-boot-starter-logging:1.5.9.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: ch.qos.logback:logback-classic:1.1.11" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: com.rometools:rome-utils:1.8.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: com.rometools:rome-utils:1.9.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.hateoas:spring-hateoas:0.23.0.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: io.springfox:springfox-swagger-common:2.7.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: io.springfox:springfox-spring-web:2.7.0" level="project" />
