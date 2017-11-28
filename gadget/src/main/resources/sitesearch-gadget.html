@@ -68,16 +68,18 @@
 </button>
 <br>
 <br>
-<input id="overrideSiteId"
-       title="Leave it blank if you do not know what this means."
-       placeholder="Site ID to use for all Site Search requests" style="width: 306px;">
-<button
-        onclick="gadget.com.intrafind.sitesearch.gadget.overrideSite(document.getElementById('overrideSiteId').value)"
-        title="Site ID Cookie overrides the Site ID which is specified in the initialization code for all requests to Site Search."
-        style="width: 217px;"
->
-    Override with Site ID Cookie
-</button>
+<div style="display: none;">
+    <input id="overrideSiteId"
+           title="Leave it blank if you do not know what this means."
+           placeholder="Site ID to use for all Site Search requests" style="width: 306px;">
+    <button
+            onclick="gadget.com.intrafind.sitesearch.gadget.overrideSite(document.getElementById('overrideSiteId').value)"
+            title="Site ID Cookie overrides the Site ID which is specified in the initialization code for all requests to Site Search."
+            style="width: 217px;"
+    >
+        Override with Site ID Cookie
+    </button>
+</div>
 
 <div id="sitesearch-searchbar">
     <link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/searchbar/css/app.css"/>
