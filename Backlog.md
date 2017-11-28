@@ -38,6 +38,7 @@ intrafind.de EN siteId: 4bcccea2-8bcf-4280-88c7-8736e9c3d15c
 * Display Maps support for visually improved presentation for autocomplete => sitesearch-search-service
 * ELK for logging
 * Terraform for provisioning 
+* Commerzialization API / AppDirect
 * Consul for B/G deployment, service discovery, core scalability features
 * Autocomplete-Rubrizierung: Wir könnten Websitetreffer und Blog-Treffer unterscheiden (Franz)
 * Autocomplete-Blacklisting (Franz)
