@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -48,6 +49,9 @@ public class DefaultCrawler extends WebCrawler {
     private UUID siteId;
     private UUID siteSecret;
 
+    public DefaultCrawler() {
+    }
+
     public DefaultCrawler(UUID siteId, UUID siteSecret) {
         this.siteId = siteId;
         this.siteSecret = siteSecret;
@@ -68,7 +72,9 @@ public class DefaultCrawler extends WebCrawler {
         String href = url.getURL().toLowerCase();
         return !FILTERS.matcher(href).matches()
 //        return FILTERS.matcher(href).matches()
-                && href.startsWith(crawlTarget);
+                && href.startsWith(crawlTarget)
+                && (URI.create(url.getURL()).getQuery() == null || URI.create(url.getURL()).getQuery().isEmpty())   // no query parameter
+                ;
     }
 
     /**
@@ -86,19 +92,34 @@ public class DefaultCrawler extends WebCrawler {
         if (page.getParseData() instanceof HtmlParseData) {
             HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
             String text = htmlParseData.getText();
-            String body = htmlParseData.getText();
+            String body;
+            if (
+                    text.contains(" ö") ||
+                            text.contains(" ä") ||
+                            text.contains(" ü") ||
+                            text.contains(" ß")
+                    ) {
+                body = text
+                        .replaceAll(" ö", "ö")
+                        .replaceAll(" ä", "ä")
+                        .replaceAll(" ü", "ü")
+                        .replaceAll(" ß", "ß")
+                ;
+            } else {
+                body = text;
+            }
             String html = htmlParseData.getHtml();
             String title = htmlParseData.getTitle();
             Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
-//            UUID siteId = UUID.fromString("760b7c78-508c-4625-ae69-c04c9efa0e34");
-//            UUID siteSecret = UUID.fromString("aee39a92-1276-4602-86ef-fe7e32a7dd9f");
             com.intrafind.sitesearch.dto.Page sitePage = new com.intrafind.sitesearch.dto.Page(
                     title,
-                    body.replaceAll("^\\s+|\\s+$", "").trim(),
+                    body
+                            .replaceAll("(?s)<!--.+//-->", "")
+                            .replaceAll("^\\s+|\\s+$", "").trim(),
                     url
             );
-            System.out.println("sitePage: " + sitePage);
+            LOG.info("sitePage: " + sitePage);
             try {
                 Request request = new Request.Builder()
                         .url("https://api.sitesearch.cloud/sites/" + siteId + "/pages?siteSecret=" + siteSecret)
