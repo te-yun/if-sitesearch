@@ -42,6 +42,10 @@
     label {
         font-weight: normal;
     }
+
+    textarea:focus {
+        zoom: 82.4%;
+    }
 </style>
 
 <h1 style="font-size: 2em;"><span class="fa fa-search"></span> Site Search Integrator Gadget</h1>
@@ -116,9 +120,9 @@
 <h2>Add Site Search to your website</h2>
 
 <input id="searchbar-variant" type="radio" style="width: 30px; height: 1.2em;" value="Enterprise search bar"
-       name="clientChoice" title="Enterprise" checked><strong>Enterprise</strong>
+       name="clientChoice" title="Solid, reliable, production-grade search bar implementation" checked><strong>Enterprise</strong>
 <input id="finder-variant" type="radio" style="width: 30px; height: 1.2em;" value="{if-lab} Finder (experimental)"
-       name="clientChoice" title="Experimental"><strong>Experimental</strong>
+       name="clientChoice" title="A proof of concept search bar, not recommended for production deployments"><strong>Experimental</strong>
 <br>
 <br>
-<textarea id="integration-code" cols="70" rows="20" title="Integration Code"></textarea>
+<textarea id="integration-code" cols="70" rows="28" title="Integration Code"></textarea>

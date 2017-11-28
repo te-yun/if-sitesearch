@@ -109,6 +109,15 @@ Or what should be the first thing, I need to do, to **get started** with Site Se
         * [IntraFind Software AG](https://www.intrafind.de)
         * intrafind.com [coming soon]
         * analyzelaw.com [coming soon]
+   
+# Crawler 
+
+* Does the crawler support **dynamic, JavaScript generated content**?
+    * Like most (all?) other crawlers, the Site Search crawler cannot extract runtime-generated content.
+    A common practice is to provide the crawler with **HTML snapshots** of the page content you want to be crawled.  
+    
+* Can the crawler access sites or pages that require **authentication**, e.g. Basic Auth protected sites?
+    * **Not yet**, but if this feature is frequently requested, we might consider to implement this functionality.
         
 # Search Bar
 

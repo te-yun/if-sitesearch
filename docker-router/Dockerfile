@@ -23,7 +23,7 @@ ENV BLUE_NAME blue
 ENV GREEN_NAME green
 ENV LIVE blue
 ENV CONSUL_URL consul:8500
-ENV constraint:node master
+#ENV constraint:node master
 
 EXPOSE 80 443
 ENTRYPOINT ["/bin/start.sh"]
