@@ -93,7 +93,7 @@ http {
     keepalive_timeout  65;
 
     gzip on;
-    gzip_types text/plain text/html text/css application/xml application/json application/javascript;
+    gzip_types text/plain text/css application/xml application/json application/javascript;
 
     include /etc/nginx/conf.d/*.conf;
 }
