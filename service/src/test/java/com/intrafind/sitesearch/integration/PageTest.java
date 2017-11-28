@@ -238,7 +238,7 @@ public class PageTest {
 
         final ResponseEntity<Object> clearSite = caller.exchange(SiteController.ENDPOINT + "/" + creation.getSiteId() + "/?siteSecret=" + creation.getSiteSecret(),
                 HttpMethod.DELETE, HttpEntity.EMPTY, Object.class);
-        TimeUnit.MILLISECONDS.sleep(8_000);
+        TimeUnit.MILLISECONDS.sleep(13_000);
         assertNull(clearSite.getBody());
         assertEquals(HttpStatus.OK, clearSite.getStatusCode());
         assureClearedSite(creation);
