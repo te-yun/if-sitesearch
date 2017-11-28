@@ -42,11 +42,6 @@ http {
 
     include /etc/nginx/snippets/ssl.conf;
 
-    location /status {
-        stub_status on;
-        access_log off;
-    }
-
     location / {
         include /etc/nginx/snippets/cors-headers.conf;
 
@@ -65,11 +60,6 @@ http {
 
     include /etc/nginx/snippets/ssl.conf;
 
-    location /status {
-        stub_status on;
-        access_log off;
-    }
-
     location / {
         include /etc/nginx/snippets/cors-headers.conf;
 
@@ -82,7 +72,7 @@ http {
   }
 
     # load balancer placeholder, once multiple instances are required
-    upstream sitesearch-api {
+    upstream sitesearch-api-dev {
         server main.sitesearch.cloud:2443;
         server main.sitesearch.cloud:2443;
         server main.sitesearch.cloud:2443 backup;

@@ -126,6 +126,11 @@ server {
 
     include /etc/nginx/snippets/ssl.conf;
 
+    location /status {
+        stub_status on;
+        access_log off;
+    }
+
     location / {
         proxy_pass http://main.sitesearch.cloud:9605;
     }
