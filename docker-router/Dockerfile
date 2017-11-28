@@ -19,9 +19,10 @@ COPY routes.nginx /etc/nginx/conf.d/default.conf
 COPY htpasswd.txt /etc/nginx/.htpasswd
 #COPY frontpage /usr/share/nginx/html/frontpage
 
-ENV LIVE blue
 ENV BLUE_NAME blue
 ENV GREEN_NAME green
+ENV LIVE blue
+ENV CONSUL_URL consul:8500
 
 EXPOSE 80 443
 ENTRYPOINT ["/bin/start.sh"]

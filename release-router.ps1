@@ -12,14 +12,14 @@ function setupRedirectRouterContainer {
     docker build --tag intrafind/${docker_redirect_image}:$docker_redirect_image_tag .
     docker rm -f $docker_redirect_image
 #    mkdir ~/srv/${docker_redirect_image}
+#        -e BLUE_NAME=blue `
+#        -e GREEN_NAME=green `
+#        -e LIVE=blue `
+#        -e CONSUL_URL=consul:8500 `
     docker run -d --name $docker_redirect_image `
         -p 80:80 -p 443:443 `
         -v /etc/letsencrypt:/etc/letsencrypt `
         -e constraint:node=master `
-        -e CONSUL_URL=consul:8500 `
-        -e BLUE_NAME=blue `
-        -e GREEN_NAME=green `
-        -e LIVE=blue `
         --network $docker_network `
         intrafind/${docker_redirect_image}:$docker_redirect_image_tag
 
