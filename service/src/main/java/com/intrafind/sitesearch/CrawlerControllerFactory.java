@@ -34,6 +34,7 @@ public class CrawlerControllerFactory implements CrawlController.WebCrawlerFacto
 
     @Override
     public WebCrawler newInstance() {
-        return new DefaultCrawler(siteId, siteSecret);
+        return new DefaultCrawler();
+//        return new DefaultCrawler(siteId, siteSecret);
     }
 }

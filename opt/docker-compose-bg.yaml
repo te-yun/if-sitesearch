@@ -1,7 +1,7 @@
 version: "2.0"
 
 services:
-
+        # TODO not tested!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   consul:
     image: consul:1.0.1
     container_name: consul
@@ -14,51 +14,63 @@ services:
       - 8302:8302
     networks:
       - sitesearch
-#      - blue-green
 
-  bg:
-#    image: hanzel/blue-green
-    image: intrafind/router
-    container_name: bg
+  bg:    # TODO sync with container_name to make it work?
+    image: intrafind/router:latest
+    container_name: router
+    restart: always
     ports:
       - 80:80
       - 443:443
-      - 81:80
-      - 8081:8080
     environment:
-      - constraint:node==master
-      - CONSUL_URL=consul:8500
-      - BLUE_NAME=blue
-      - GREEN_NAME=green
-      - LIVE=blue
+      - constraint:node=master
+#      - CONSUL_URL=consul:8500
+#      - BLUE_NAME=blue
+#      - GREEN_NAME=green
+#      - LIVE=blue
     depends_on:
-      - green
-      - blue
       - consul
+      - if-sitesearch-blue
+      - if-sitesearch-green
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt:ro
     networks:
       - sitesearch
-#      - blue-green
 
-  blue:
-    image: hanzel/nginx-html:1
+  blue:   # TODO sync with container_name to make it work?
+    image: intrafind/if-sitesearch:latest
+    container_name: if-sitesearch-blue
+    restart: always
     ports:
-      - "80"
-    environment:
-      - SERVICE_80_NAME=blue
+      - 4443:8001
+    environment:  # TODO in case it is not working, check alternative notations here: https://docs.docker.com/compose/environment-variables/
+      - SECURITY_USER_PASSWORD
+      - BUILD_NUMBER
+      - SCM_HASH
+      - SECURITY_OAUTH2_CLIENT_CLIENT_SECRET
+    logging:
+      driver: gelf
+      options:
+        gelf-address: udp://main.sitesearch.cloud:12201
     networks:
-#      - blue-green
       - sitesearch
 
-  green:
-    image: hanzel/nginx-html:2
+  green:   # TODO sync with container_name to make it work?
+    image: intrafind/if-sitesearch:latest
+    container_name: if-sitesearch-green
+    restart: always
     ports:
-      - "80"
-    environment:
-      - SERVICE_80_NAME=green
+      - 3443:8001
+    environment:  # TODO in case it is not working, check alternative notations here: https://docs.docker.com/compose/environment-variables/
+      - SECURITY_USER_PASSWORD
+      - BUILD_NUMBER
+      - SCM_HASH
+      - SECURITY_OAUTH2_CLIENT_CLIENT_SECRET
+    logging:
+      driver: gelf
+      options:
+        gelf-address: udp://main.sitesearch.cloud:12201
     networks:
-#      - blue-green
       - sitesearch
 
 volumes:
@@ -66,9 +78,6 @@ volumes:
     driver: local
 
 networks:
-#  blue-green:
-#    external:
-#      name: blue-green
   sitesearch:
     external:
       name: sitesearch
