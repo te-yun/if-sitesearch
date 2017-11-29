@@ -62,7 +62,6 @@ public class PageService {
             if (!fetchedSiteSecret.isPresent()) { // site does not exist
                 return Optional.empty();
             } else if (siteSecret.equals(fetchedSiteSecret.get())) { // authorized
-                LOG.info("updating-feed: " + siteId);
                 return indexDocument(id, siteId, page);
             } else { // unauthorized
                 return Optional.empty();
@@ -86,7 +85,7 @@ public class PageService {
         doc.set(Fields.URL, page.getUrl());
         doc.set(Fields.TENANT, siteId);
         INDEX_SERVICE.index(doc);
-
+        LOG.info("siteId: " + siteId + " - bodySize: " + page.getBody().length() + " - titleSize: " + page.getTitle().length() + " - url: " + page.getUrl());
         return fetchById(id);
     }
 
@@ -154,7 +153,6 @@ public class PageService {
                 if (isGeneric) {
                     return updateIndexGenerically(feedUrl, siteId, siteSecret, stripHtmlTags);
                 } else {
-                    LOG.info("updating-feed: " + siteId);
                     return updateIndex(feedUrl, siteId, siteSecret, stripHtmlTags);
                 }
             } else { // unauthorized
@@ -189,7 +187,7 @@ public class PageService {
         String title = null;
         String body = null;
         String url = null;
-        Page toIndex = null;
+        Page toIndex;
         for (int count = 0; count < nodeList.getLength(); count++) {
             Node tempNode = nodeList.item(count);
             if (tempNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -221,7 +219,6 @@ public class PageService {
                         if (indexed.isPresent()) {
                             successfullyIndexed.incrementAndGet();
                             documents.add(pageId);
-                            LOG.info("index-successful: " + indexed.get().getId());
                         } else {
                             failedToIndex.add(url);
                             LOG.warn("index-failed:" + url);
@@ -272,16 +269,12 @@ public class PageService {
             SyndFeed feed = new SyndFeedInput().build(new XmlReader(feedUrl.toURL()));
 
             feed.getEntries().forEach(entry -> {
-                LOG.info("entry: " + entry.getTitle());
-                LOG.info("link: " + entry.getLink());
                 final String body;
                 if (stripHtmlTags) {
                     body = entry.getDescription().getValue()
                             .replaceAll("\\<[^>]*>", "");
-                    LOG.info("body with striped HTML: " + body);
                 } else {
                     body = entry.getDescription().getValue();
-                    LOG.info("raw body: " + body);
                 }
 
                 String url = entry.getLink();
@@ -295,7 +288,6 @@ public class PageService {
                 if (indexed.isPresent()) {
                     successfullyIndexed.incrementAndGet();
                     documents.add(pageId);
-                    LOG.info("successfully-indexed: " + indexed.get().getId());
                 } else {
                     failedToIndex.add(entry.getLink());
                     LOG.warn("unsuccessfully-indexed:" + entry.getLink());
