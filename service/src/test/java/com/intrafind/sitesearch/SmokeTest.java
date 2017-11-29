@@ -52,6 +52,7 @@ public class SmokeTest {
     private static final String SEARCH_SERVICE_DOMAIN = "@main.sitesearch.cloud/";
     private static final String INVALID_CREDENTIALS = "https://" + System.getenv("SECURITY_USER_PASSWORD") + "invalid:" + System.getenv("SECURITY_USER_PASSWORD");
     public static final String API_FRONTPAGE_MARKER = "<title>Site Search</title>";
+    public static final String SITES_API = "https://api.sitesearch.cloud/sites/";
 
     @Autowired
     private TestRestTemplate caller;
@@ -185,7 +186,7 @@ public class SmokeTest {
     @Test
     public void search() throws Exception {
         Request request = new Request.Builder()
-                .url("https://api.sitesearch.cloud/sites/" + SearchTest.SEARCH_SITE_ID + "/search?query=Knowledge")
+                .url(SITES_API + SearchTest.SEARCH_SITE_ID + "/search?query=Knowledge")
                 .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
                 .build();
         final Response response = HTTP_CLIENT.newCall(request).execute();
@@ -223,7 +224,7 @@ public class SmokeTest {
     @Test
     public void autocomplete() throws Exception {
         Request request = new Request.Builder()
-                .url("https://api.sitesearch.cloud/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=Knowledge")
+                .url(SITES_API + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=Knowledge")
                 .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
                 .build();
         final Response response = HTTP_CLIENT.newCall(request).execute();
@@ -242,7 +243,7 @@ public class SmokeTest {
         final Page pageToUpdate = PageTest.buildPage();
         pageToUpdate.setUrl(entropyToCheckInUpdate);
         Request request = new Request.Builder()
-                .url("https://api.sitesearch.cloud/sites/" + LoadIndex2Users.SEARCH_SITE_ID + "/pages?siteSecret=" + LoadIndex2Users.SEARCH_SITE_SECRET)
+                .url(SITES_API + LoadIndex2Users.SEARCH_SITE_ID + "/pages?siteSecret=" + LoadIndex2Users.SEARCH_SITE_SECRET)
                 .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
                 .put(RequestBody.create(MediaType.parse("application/json"), MAPPER.writeValueAsBytes(pageToUpdate)))
                 .build();

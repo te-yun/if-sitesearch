@@ -1,6 +1,9 @@
 Change Log
 =
 
+# 29-11-2017
+* **Zero-downtime deployment** enables us to deploy new releases of Site Search several times a day, without a single second downtime
+
 # 22-11-2017
 * Log monitoring with ELK (Elasticsearch, Logstash, Kibana) for insights into the usage of Site Search
 * API simplifications without breaking any clients

@@ -16,6 +16,7 @@
 
 package com.intrafind.sitesearch.integration;
 
+import com.intrafind.sitesearch.SmokeTest;
 import com.intrafind.sitesearch.controller.PageController;
 import com.intrafind.sitesearch.controller.SiteController;
 import com.intrafind.sitesearch.dto.FetchedPage;
@@ -67,7 +68,7 @@ public class PageTest {
         assertNotNull(actual.getBody());
         assertNotNull(actual.getBody().getSiteId());
         assertNotNull(actual.getBody().getSiteSecret());
-        assertEquals("https://api.sitesearch.cloud/sites/" + actual.getBody().getSiteId(), actual.getHeaders().get(HttpHeaders.LOCATION).get(0));
+        assertEquals(SmokeTest.SITES_API + actual.getBody().getSiteId(), actual.getHeaders().get(HttpHeaders.LOCATION).get(0));
 
         return actual.getBody();
     }
