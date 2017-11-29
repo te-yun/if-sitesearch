@@ -2,7 +2,9 @@ Change Log
 =
 
 # 29-11-2017
-* **Zero-downtime deployment** enables us to deploy new releases of Site Search several times a day, without a single second downtime
+* **Zero-downtime deployment** enables us to deploy new releases of Site Search several times a day, without a single second downtime.
+* We are evaluating the option to offer our crawler as a self-service. 
+    This would enable our customers to crawl sites directly and evaluate results without the need to contact us. 
 
 # 22-11-2017
 * Log monitoring with ELK (Elasticsearch, Logstash, Kibana) for insights into the usage of Site Search
