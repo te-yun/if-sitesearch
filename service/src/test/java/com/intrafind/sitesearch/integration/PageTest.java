@@ -47,8 +47,7 @@ public class PageTest {
     @Autowired
     private TestRestTemplate caller;
 
-    private static Page buildSite() {
-        final UUID testSiteId = UUID.fromString("1a6715d9-119f-48d1-9329-e8763273bbea");
+    public static Page buildPage() {
         final String url = "https://api.sitesearch.cloud";
         return new Page(
                 "Cloud Solution",
@@ -74,7 +73,7 @@ public class PageTest {
     }
 
     private FetchedPage createNewPage(UUID siteId, UUID siteSecret) throws Exception {
-        Page simple = buildSite();
+        Page simple = buildPage();
         ResponseEntity<FetchedPage> newlyCreatedPage = caller.exchange(SiteController.ENDPOINT + "/" + siteId + "/pages?siteSecret=" + siteSecret, HttpMethod.PUT, new HttpEntity<>(simple), FetchedPage.class);
         assertEquals(HttpStatus.OK, newlyCreatedPage.getStatusCode());
         assertNotNull(newlyCreatedPage.getBody());

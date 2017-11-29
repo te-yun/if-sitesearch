@@ -30,6 +30,7 @@ intrafind.de EN siteId: 4bcccea2-8bcf-4280-88c7-8736e9c3d15c
 * save siteSecret in persistent store, not in the ElasticSearch document
 
 # future
+* Support for custom fields like "img" to provide people's photos in the search bar
 * Wizard for Site Search
 * Search bar: integrate on mobile intrafind.de
 * Search bar: override translation keys for tooltips etc.

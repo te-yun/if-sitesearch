@@ -36,8 +36,8 @@ import static org.junit.Assert.*;
 @BenchmarkMode(Mode.Throughput)
 @State(Scope.Benchmark)
 public class LoadIndex2Users {
-    private static final UUID SEARCH_SITE_ID = UUID.fromString("a620f72b-b02c-4b57-8730-8edf72debb05");
-    private static final UUID SEARCH_SITE_SECRET = UUID.fromString("ac2618a6-c48b-4702-892b-6450ad501b92");
+    public static final UUID SEARCH_SITE_ID = UUID.fromString("a620f72b-b02c-4b57-8730-8edf72debb05");
+    public static final UUID SEARCH_SITE_SECRET = UUID.fromString("ac2618a6-c48b-4702-892b-6450ad501b92");
     private final static Logger LOG = LoggerFactory.getLogger(LoadIndex2Users.class);
 
     private static String generateLoremIpsum() {

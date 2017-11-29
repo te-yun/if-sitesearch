@@ -17,13 +17,14 @@
 package com.intrafind.sitesearch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.intrafind.sitesearch.dto.FetchedPage;
 import com.intrafind.sitesearch.dto.FoundPage;
 import com.intrafind.sitesearch.dto.Hits;
+import com.intrafind.sitesearch.dto.Page;
+import com.intrafind.sitesearch.integration.PageTest;
 import com.intrafind.sitesearch.integration.SearchTest;
-import okhttp3.Headers;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import com.intrafind.sitesearch.jmh.LoadIndex2Users;
+import okhttp3.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -40,6 +41,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -232,5 +234,26 @@ public class SmokeTest {
 //        assertEquals(1, actual.getBody().getResults().size());
 //        assertEquals("knowledge graph", actual.getBody().getResults().get(0));
         assureCorsHeaders(response.headers(), 406);
+    }
+
+    @Test
+    public void updatePage() throws Exception {
+        String entropyToCheckInUpdate = "https://example.com/" + UUID.randomUUID();
+        final Page pageToUpdate = PageTest.buildPage();
+        pageToUpdate.setUrl(entropyToCheckInUpdate);
+        Request request = new Request.Builder()
+                .url("https://api.sitesearch.cloud/sites/" + LoadIndex2Users.SEARCH_SITE_ID + "/pages?siteSecret=" + LoadIndex2Users.SEARCH_SITE_SECRET)
+                .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
+                .put(RequestBody.create(MediaType.parse("application/json"), MAPPER.writeValueAsBytes(pageToUpdate)))
+                .build();
+        final Response response = HTTP_CLIENT.newCall(request).execute();
+
+        assertEquals(HttpStatus.OK.value(), response.code());
+        assertNull(response.headers().get("Location"));
+        assureCorsHeaders(response.headers(), 406);
+        FetchedPage fetchedPage = MAPPER.readValue(response.body().bytes(), FetchedPage.class);
+        assertEquals(entropyToCheckInUpdate, fetchedPage.getUrl());
+        assertFalse(fetchedPage.getBody().isEmpty());
+        assertFalse(fetchedPage.getTitle().isEmpty());
     }
 }

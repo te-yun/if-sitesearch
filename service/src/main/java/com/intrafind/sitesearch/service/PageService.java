@@ -52,7 +52,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 public class PageService {
     private static final Logger LOG = LoggerFactory.getLogger(PageService.class);
-    public static final String SITE_SECRET_FIELD = "siteSecret";
 
     private static final Index INDEX_SERVICE = IfinderCoreClient.newHessianClient(Index.class, Application.IFINDER_CORE + "/index");
     private static final String SITE_CONFIGURATION_DOCUMENT_PREFIX = "site-configuration-";
@@ -121,25 +120,6 @@ public class PageService {
         siteConfiguration.set("secret", siteSecret);
         INDEX_SERVICE.index(siteConfiguration);
     }
-
-//    private Optional<Page> fetchNewTenantCreatingSiteById(String id) {
-//        Optional<Document> found = INDEX_SERVICE.fetch(Index.ALL, id).stream().findAny();
-//
-//        if (found.isPresent()) {
-//            Document foundDocument = found.get();
-//            Page representationOfFoundDocument = new Page(
-//                    foundDocument.getId(),
-//                    UUID.fromString(foundDocument.get(Fields.TENANT)),
-//                    foundDocument.get(Fields.TITLE),
-//                    foundDocument.get(Fields.BODY),
-//                    foundDocument.get(Fields.URL)
-//            );
-//
-//            return Optional.of(representationOfFoundDocument);
-//        } else {
-//            return Optional.empty();
-//        }
-//    }
 
     public Optional<FetchedPage> fetchById(String id) {
         Optional<Document> found = INDEX_SERVICE.fetch(Index.ALL, id).stream().findAny();
