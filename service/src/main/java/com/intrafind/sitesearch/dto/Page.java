@@ -24,16 +24,16 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class Page {
-    private String title = "";
-    private String body = "";
+    private String title;
+    private String body;
     private String url;
 
     private Page() {
     }
 
     public Page(String title, String body, String url) {
-        this.title = title == null ? "" : title;
-        this.body = body == null ? "" : body;
+        this.title = title;
+        this.body = body;
         this.url = url;
     }
 
