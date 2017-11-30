@@ -204,7 +204,7 @@ public class SiteController {
         }
     }
 
-    @RequestMapping(path = "/sites/{siteId}/autocomplete", method = RequestMethod.GET)
+    @RequestMapping(path = "{siteId}/autocomplete", method = RequestMethod.GET)
     ResponseEntity<Autocomplete> autocompleteSuggestion(
             @CookieValue(value = "override-site", required = false) UUID cookieSite,
             @RequestParam(value = "query", defaultValue = "") String query,
@@ -223,5 +223,25 @@ public class SiteController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @RequestMapping(path = "{siteId}/search", method = RequestMethod.GET)
+    ResponseEntity<Hits> search(
+            @CookieValue(value = "override-site", required = false) UUID cookieSite,
+            @RequestParam(value = "query", defaultValue = "") String query,
+            @PathVariable(value = "siteId") UUID siteId
+    ) {
+//        return searchDeprecatedAPI(cookieSite, query, siteId);
+
+        if (query.isEmpty()) return ResponseEntity.badRequest().build();
+
+        // override siteId with cookie value for debugging & speed up the getting started experience
+        if (cookieSite != null) {
+            siteId = cookieSite;
+        }
+
+        Hits searchResult = searchService.search(query, siteId);
+        LOG.info("siteId: " + siteId + " - query: " + query + " - results: " + searchResult.getResults().size());
+        return ResponseEntity.ok(searchResult);
     }
 }

@@ -66,12 +66,4 @@ public class SearchController {
         return ResponseEntity.ok(searchResult);
     }
 
-    @RequestMapping(path = "/sites/{siteId}/search", method = RequestMethod.GET)
-    ResponseEntity<Hits> search(
-            @CookieValue(value = "override-site", required = false) UUID cookieSite,
-            @RequestParam(value = "query", defaultValue = "") String query,
-            @PathVariable(value = "siteId") UUID siteId
-    ) {
-        return searchDeprecatedAPI(cookieSite, query, siteId);
-    }
 }
