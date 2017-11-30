@@ -58,10 +58,10 @@ public class PageTest {
     }
 
     @Before
-    public void init() throws Exception {
+    public void init() {
     }
 
-    private SiteCreation createNewSite() throws Exception {
+    private SiteCreation createNewSite() {
         ResponseEntity<SiteCreation> actual = caller.exchange(SiteController.ENDPOINT, HttpMethod.POST, HttpEntity.EMPTY, SiteCreation.class);
 
         assertEquals(HttpStatus.CREATED, actual.getStatusCode());
@@ -73,7 +73,7 @@ public class PageTest {
         return actual.getBody();
     }
 
-    private FetchedPage createNewPage(UUID siteId, UUID siteSecret) throws Exception {
+    private FetchedPage createNewPage(UUID siteId, UUID siteSecret) {
         Page simple = buildPage();
         ResponseEntity<FetchedPage> newlyCreatedPage = caller.exchange(SiteController.ENDPOINT + "/" + siteId + "/pages?siteSecret=" + siteSecret, HttpMethod.PUT, new HttpEntity<>(simple), FetchedPage.class);
         assertEquals(HttpStatus.OK, newlyCreatedPage.getStatusCode());
@@ -236,7 +236,7 @@ public class PageTest {
         LOG.info("siteSecret: " + creation.getSiteSecret());
         validateUpdatedSites(creation);
 
-        final ResponseEntity<Object> clearSite = caller.exchange(SiteController.ENDPOINT + "/" + creation.getSiteId() + "/?siteSecret=" + creation.getSiteSecret(),
+        final ResponseEntity<Object> clearSite = caller.exchange(SiteController.ENDPOINT + "/" + creation.getSiteId() + "?siteSecret=" + creation.getSiteSecret(),
                 HttpMethod.DELETE, HttpEntity.EMPTY, Object.class);
         assertNull(clearSite.getBody());
         assertEquals(HttpStatus.OK, clearSite.getStatusCode());
