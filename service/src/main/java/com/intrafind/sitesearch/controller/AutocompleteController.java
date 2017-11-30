@@ -58,13 +58,4 @@ public class AutocompleteController {
             return ResponseEntity.notFound().build();
         }
     }
-
-    @RequestMapping(path = "/sites/{siteId}/autocomplete", method = RequestMethod.GET)
-    ResponseEntity<Autocomplete> autocompleteSuggestion(
-            @CookieValue(value = "override-site", required = false) UUID cookieSite,
-            @RequestParam(value = "query", defaultValue = "") String query,
-            @PathVariable(value = "siteId") UUID siteId
-    ) {
-        return autocompleteSuggestionDeprecatedAPI(cookieSite, query, siteId);
-    }
 }

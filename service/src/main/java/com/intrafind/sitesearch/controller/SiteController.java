@@ -16,10 +16,7 @@
 
 package com.intrafind.sitesearch.controller;
 
-import com.intrafind.sitesearch.dto.FetchedPage;
-import com.intrafind.sitesearch.dto.Page;
-import com.intrafind.sitesearch.dto.SiteCreation;
-import com.intrafind.sitesearch.dto.SiteIndexSummary;
+import com.intrafind.sitesearch.dto.*;
 import com.intrafind.sitesearch.service.AutocompleteService;
 import com.intrafind.sitesearch.service.PageService;
 import com.intrafind.sitesearch.service.SearchService;
@@ -204,6 +201,27 @@ public class SiteController {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.noContent().build();
+        }
+    }
+
+    @RequestMapping(path = "/sites/{siteId}/autocomplete", method = RequestMethod.GET)
+    ResponseEntity<Autocomplete> autocompleteSuggestion(
+            @CookieValue(value = "override-site", required = false) UUID cookieSite,
+            @RequestParam(value = "query", defaultValue = "") String query,
+            @PathVariable(value = "siteId") UUID siteId
+    ) {
+        if (query.isEmpty()) return ResponseEntity.badRequest().build();
+
+        // override siteId with cookie value for debugging & speed up the getting started experience
+        if (cookieSite != null) siteId = cookieSite;
+
+        Optional<Autocomplete> result = autocompleteService.autocomplete(query, siteId);
+        if (result.isPresent()) {
+            final Autocomplete autocomplete = result.get();
+            LOG.info("siteId: " + siteId + " - query: " + query + " - results: " + autocomplete.getResults().size());
+            return ResponseEntity.ok(autocomplete);
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 }
