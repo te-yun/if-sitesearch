@@ -41,8 +41,6 @@ public class SearchController {
     public static final String ENDPOINT = "/search";
     private static final Logger LOG = LoggerFactory.getLogger(SearchController.class);
     private final SearchService service;
-//    @Value("${sitesearch.queryCountEnabled}")
-//    private Boolean queryCountEnabled;
 
     @Autowired
     private SearchController(SearchService service) {
@@ -64,25 +62,8 @@ public class SearchController {
         }
 
         Hits searchResult = service.search(query, siteId);
-//        if (searchResult.getResults().isEmpty()) {
-//            return ResponseEntity.notFound().build();
-//        } else {
-//            if (queryCountEnabled) {
-//                final ArrayByteIterable readableSiteId = StringBinding.stringToEntry(siteId.toString());
-//                ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
-//                    final Store store = ACID_PERSISTENCE_ENVIRONMENT.openStore(StatsController.QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
-//                    long queryCount = 0;
-//                    final ByteIterable tenantQueryCount = store.get(txn, readableSiteId);
-//                    if (tenantQueryCount != null) {
-//                        queryCount = LongBinding.entryToLong(tenantQueryCount);
-//                        LOG.info("queryCount: " + queryCount);
-//                    }
-//                    store.put(txn, readableSiteId, LongBinding.longToEntry(++queryCount));
-//                });
-//            }
-        LOG.info("siteId: " + siteId + " | query: " + query + " | results: " + searchResult.getResults().size());
+        LOG.info("siteId: " + siteId + " - query: " + query + " - results: " + searchResult.getResults().size());
         return ResponseEntity.ok(searchResult);
-//        }
     }
 
     @RequestMapping(path = "/sites/{siteId}/search", method = RequestMethod.GET)
