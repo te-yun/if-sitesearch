@@ -20,14 +20,15 @@ import com.intrafind.sitesearch.dto.FetchedPage;
 import com.intrafind.sitesearch.dto.Page;
 import com.intrafind.sitesearch.dto.SiteCreation;
 import com.intrafind.sitesearch.dto.SiteIndexSummary;
+import com.intrafind.sitesearch.service.AutocompleteService;
 import com.intrafind.sitesearch.service.PageService;
+import com.intrafind.sitesearch.service.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -39,10 +40,14 @@ public class SiteController {
     public static final String ENDPOINT = "/sites";
     private static final Logger LOG = LoggerFactory.getLogger(SiteController.class);
     private final PageService service;
+    private final SearchService searchService;
+    private final AutocompleteService autocompleteService;
 
     @Autowired
-    private SiteController(PageService service) {
+    private SiteController(PageService service, SearchService searchService, AutocompleteService autocompleteService) {
         this.service = service;
+        this.searchService = searchService;
+        this.autocompleteService = autocompleteService;
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -59,7 +64,7 @@ public class SiteController {
             @PathVariable(value = "siteId") UUID siteId,
 //            @RequestParam(value = "url") URI url
             @RequestParam(value = "url") String url
-    ) throws UnsupportedEncodingException {
+    ) {
         String pageId = Page.hashPageId(siteId, url);
 
         Optional<FetchedPage> fetched = service.fetchById(pageId);
@@ -184,7 +189,7 @@ public class SiteController {
 //            @RequestParam(value = "url") URI url,
             @RequestParam(value = "url") String url,
             @RequestParam(name = "siteSecret") UUID siteSecret
-    ) throws UnsupportedEncodingException {
+    ) {
         String pageId = Page.hashPageId(siteId, url);
 
         return deleteById(siteId, pageId, siteSecret);
