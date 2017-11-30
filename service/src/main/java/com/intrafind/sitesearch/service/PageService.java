@@ -85,7 +85,7 @@ public class PageService {
         doc.set(Fields.URL, page.getUrl());
         doc.set(Fields.TENANT, siteId);
         INDEX_SERVICE.index(doc);
-        LOG.info("siteId: " + siteId + " - bodySize: " + page.getBody().length() + " - titleSize: " + page.getTitle().length() + " - url: " + page.getUrl());
+        LOG.info("siteId: " + siteId + " - bodySize: " + page.getBody().length() + " - titleSize: " + page.getTitle().length() + " - URL: " + page.getUrl());
         return fetchById(id);
     }
 

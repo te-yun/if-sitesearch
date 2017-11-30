@@ -10,11 +10,13 @@ COPY opt/* /bin/
 RUN chmod +x /bin/switch.sh /bin/start.sh
 COPY opt/default.* /templates/
 
-RUN mkdir -p /var/www/letsencrypt/.well-known/acme-challenge # enables Letsencrypt validation
+#RUN mkdir -p /var/www/letsencrypt/.well-known/acme-challenge # enables Letsencrypt validation
+#RUN mkdir -p /etc/letsencrypt/.well-known/acme-challenge # enables Letsencrypt validation
+RUN mkdir /etc/letsencrypt/.well-known # enables Letsencrypt validation
 #COPY nginx.nginx /etc/nginx/nginx.conf
 COPY ssl.nginx /etc/nginx/snippets/ssl.conf
 COPY cors-headers.nginx /etc/nginx/snippets/cors-headers.conf
-COPY letsencrypt.nginx /etc/nginx/snippets/letsencrypt.conf
+#COPY letsencrypt.nginx /etc/nginx/snippets/letsencrypt.conf
 COPY routes.nginx /etc/nginx/conf.d/default.conf
 COPY htpasswd.txt /etc/nginx/.htpasswd
 #COPY frontpage /usr/share/nginx/html/frontpage

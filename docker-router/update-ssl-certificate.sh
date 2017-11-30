@@ -7,17 +7,19 @@ sudo add-apt-repository ppa:certbot/certbot -y
 sudo apt update -y
 sudo apt install certbot -y
 
-docker stop router
-sudo certbot --standalone certonly --expand \
-    --domains "main.sitesearch.cloud, test.sitesearch.cloud" \
+#docker stop router
+sudo certbot certonly --webroot -w /etc/letsencrypt --expand  \
+    -d main.sitesearch.cloud \
+    -d test.sitesearch.cloud \
     -d ci.sitesearch.cloud \
     -d api.sitesearch.cloud \
     -d dev.sitesearch.cloud \
-    -d www.sitesearch.cloud \
-    -d sitesearch.cloud \
+    -d cdn.sitesearch.cloud \
     -d doc.sitesearch.cloud \
     -d logs.sitesearch.cloud \
     -d blue.sitesearch.cloud \
     -d green.sitesearch.cloud
+#    -d sitesearch.cloud \
+#    -d www.sitesearch.cloud \
 
-docker start router
+#docker start router

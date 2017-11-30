@@ -2,7 +2,11 @@ server {
     listen 80 default_server;
     listen [::]:80 default_server;
 
-    include /etc/nginx/snippets/letsencrypt.conf;
+    #    include /etc/nginx/snippets/letsencrypt.conf;
+    location ^~ /.well-known/acme-challenge/ {
+        #        default_type "text/plain";
+        root /etc/letsencrypt;
+    }
 
     location / {
         return 301 https://$host$request_uri;
@@ -136,17 +140,17 @@ server {
     }
 }
 
-#server {
-#    listen 443 ssl http2;
-#    listen [::]:443 ssl http2;
-#    server_name green.sitesearch.cloud;
-#
-#    include /etc/nginx/snippets/ssl.conf;
-#
-#    location / {
-#        proxy_pass http://main.sitesearch.cloud:3442;
-#    }
-#}
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name green.sitesearch.cloud;
+
+    include /etc/nginx/snippets/ssl.conf;
+
+    location / {
+        proxy_pass http://main.sitesearch.cloud:3442;
+    }
+}
 
 server {
     listen 443 ssl http2;
@@ -171,30 +175,6 @@ server {
         proxy_pass http://dev.sitesearch.cloud:2443;
     }
 }
-
-#server {
-#    listen 443 ssl http2;
-#    listen [::]:443 ssl http2;
-#    server_name test.sitesearch.cloud;
-#
-#    include /etc/nginx/snippets/ssl.conf;
-#
-#    #    location /wp {
-#    #        proxy_redirect off;
-#    #        proxy_pass http://sitesearch.online;
-#    #    }
-#    #    location /wp1 {
-#    #        proxy_redirect off;
-#    #        proxy_pass http://sitesearch.online/;
-#    #    }
-#    #    location /wp0 {
-#    #        proxy_redirect off;
-#    #        proxy_pass http://sitesearch.online/bootstrap/;
-#    #    }
-#    location / {
-#        proxy_pass http://main.sitesearch.cloud:3442;
-#    }
-#}
 
 server {
     listen 443 ssl http2;
