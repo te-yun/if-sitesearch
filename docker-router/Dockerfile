@@ -12,7 +12,7 @@ COPY opt/default.* /templates/
 
 #RUN mkdir -p /var/www/letsencrypt/.well-known/acme-challenge # enables Letsencrypt validation
 #RUN mkdir -p /etc/letsencrypt/.well-known/acme-challenge # enables Letsencrypt validation
-RUN mkdir /etc/letsencrypt/.well-known # enables Letsencrypt validation
+RUN mkdir -p /etc/letsencrypt/.well-known # enables Letsencrypt validation
 #COPY nginx.nginx /etc/nginx/nginx.conf
 COPY ssl.nginx /etc/nginx/snippets/ssl.conf
 COPY cors-headers.nginx /etc/nginx/snippets/cors-headers.conf
@@ -23,9 +23,9 @@ COPY htpasswd.txt /etc/nginx/.htpasswd
 
 ENV BLUE_NAME blue
 ENV GREEN_NAME green
-ENV LIVE blue
+#ENV LIVE blue
 ENV CONSUL_URL consul:8500
-#ENV constraint:node master
+ENV constraint:node master
 
 EXPOSE 80 443
 ENTRYPOINT ["/bin/start.sh"]
