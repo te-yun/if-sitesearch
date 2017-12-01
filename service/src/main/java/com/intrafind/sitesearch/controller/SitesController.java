@@ -32,16 +32,16 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(SiteController.ENDPOINT)
-public class SiteController {
+@RequestMapping(SitesController.ENDPOINT)
+public class SitesController {
     public static final String ENDPOINT = "/sites";
-    private static final Logger LOG = LoggerFactory.getLogger(SiteController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SitesController.class);
     private final PageService service;
     private final SearchService searchService;
     private final AutocompleteService autocompleteService;
 
     @Autowired
-    private SiteController(PageService service, SearchService searchService, AutocompleteService autocompleteService) {
+    private SitesController(PageService service, SearchService searchService, AutocompleteService autocompleteService) {
         this.service = service;
         this.searchService = searchService;
         this.autocompleteService = autocompleteService;
