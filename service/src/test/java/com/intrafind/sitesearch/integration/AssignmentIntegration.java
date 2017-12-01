@@ -17,7 +17,7 @@
 package com.intrafind.sitesearch.integration;
 
 import com.intrafind.sitesearch.controller.AssignmentController;
-import com.intrafind.sitesearch.controller.SiteController;
+import com.intrafind.sitesearch.controller.SitesController;
 import com.intrafind.sitesearch.dto.SiteCreation;
 import com.intrafind.sitesearch.dto.TenantOverview;
 import com.intrafind.sitesearch.dto.TenantSiteAssignment;
@@ -45,7 +45,7 @@ public class AssignmentIntegration {
     private TestRestTemplate caller;
 
     private SiteCreation newSite() {
-        ResponseEntity<SiteCreation> site = caller.exchange(SiteController.ENDPOINT, HttpMethod.POST, HttpEntity.EMPTY, SiteCreation.class);
+        ResponseEntity<SiteCreation> site = caller.exchange(SitesController.ENDPOINT, HttpMethod.POST, HttpEntity.EMPTY, SiteCreation.class);
 
         assertEquals(HttpStatus.CREATED, site.getStatusCode());
         assertNotNull(site.getBody());
@@ -56,7 +56,7 @@ public class AssignmentIntegration {
     }
 
     @Test
-    public void assignSiteToTenant() throws Exception {
+    public void assignSiteToTenant() {
         SiteCreation site = newSite();
 
         final UUID tenantId = UUID.randomUUID();
