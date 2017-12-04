@@ -75,14 +75,14 @@ public class LoadTest {
 
     public static void main(String... args) throws RunnerException {
         Options options = new OptionsBuilder()
-                .timeout(TimeValue.seconds(21))
+                .timeout(TimeValue.seconds(18))
 //                .include(".*")
 //                .include(LoadIndex2Users.class.getSimpleName())
                 .include(LoadTest.class.getSimpleName())
                 .warmupIterations(10)
                 .measurementIterations(10)
                 .forks(1)
-                .threads(50)
+                .threads(30)
                 .mode(Mode.Throughput)
                 .resultFormat(ResultFormatType.JSON)
                 .result("build/jmh-result.json")
