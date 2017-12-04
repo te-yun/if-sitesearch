@@ -82,7 +82,7 @@ public class LoadTest {
                 .warmupIterations(1)
                 .measurementIterations(20)
                 .forks(1)
-                .threads(50)
+                .threads(10)
                 .mode(Mode.Throughput)
                 .resultFormat(ResultFormatType.JSON)
                 .result("build/jmh-result.json")
