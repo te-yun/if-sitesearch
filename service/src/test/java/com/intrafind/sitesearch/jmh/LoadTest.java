@@ -152,7 +152,7 @@ public class LoadTest {
         final String query = LoadTest.QUERY_LIST_AUTOCOMPLETE.get(queryIndex);
 
         final ResponseEntity<Autocomplete> actual = CALLER.getForEntity(
-                LOAD_TARGET + "/" + LOAD_SITE_ID + AutocompleteController.ENDPOINT
+                LOAD_TARGET + "/sites/" + LOAD_SITE_ID + AutocompleteController.ENDPOINT
                         + "?query=" + query,
                 Autocomplete.class
         );
