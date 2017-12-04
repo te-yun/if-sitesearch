@@ -43,6 +43,7 @@ function runService([Int] $service_port = 2443) {
 runService
 
 function cleanupDocker {
+#    docker volume prune -f
     $danglingImages = $(docker images -f "dangling=true" -q)
     if ([string]::IsNullOrEmpty($danglingImages)){
         "There are no dangling Docker images"

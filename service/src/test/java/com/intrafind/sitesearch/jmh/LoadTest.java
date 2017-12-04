@@ -30,7 +30,6 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
-import org.openjdk.jmh.runner.options.TimeValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -75,7 +74,7 @@ public class LoadTest {
 
     public static void main(String... args) throws RunnerException {
         Options options = new OptionsBuilder()
-                .timeout(TimeValue.seconds(60))
+//                .timeout(TimeValue.seconds(60))
 //                .include(".*")
 //                .include(LoadIndex2Users.class.getSimpleName())
                 .include(LoadTest.class.getSimpleName())
