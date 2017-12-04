@@ -45,7 +45,7 @@ import static org.junit.Assert.*;
 @State(Scope.Benchmark)
 public class LoadTest {
     private static final Logger LOG = LoggerFactory.getLogger(LoadTest.class);
-
+    private static final UUID LOAD_SITE_ID = UUID.fromString("563714f1-96c0-4500-b366-4fc7e734fa1d");
     static final String[] LOREM_IPSUM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras viverra enim vitae malesuada placerat. Nam auctor pellentesque libero, et venenatis enim molestie vel. Duis est metus, congue quis orci id, tincidunt mattis turpis. In fringilla ultricies sapien ultrices accumsan. Sed mattis tellus lacus, quis scelerisque turpis hendrerit et. In iaculis malesuada ipsum, ac rhoncus mauris auctor quis. Proin varius, ex vestibulum condimentum lacinia, ligula est finibus ligula, id consectetur nisi enim ut velit. Sed aliquet gravida justo ac condimentum. In malesuada sed elit vitae vestibulum. Mauris vitae congue lacus. Quisque vitae tincidunt orci. Donec viverra enim a lacinia pulvinar. Sed vel ullamcorper est. Vestibulum vel urna at nisl tincidunt blandit. Donec purus leo, interdum in diam in, posuere varius tellus. Quisque eleifend nulla at nulla vestibulum ullamcorper. Praesent interdum vehicula cursus. Morbi vitae nunc et urna rhoncus semper aliquam nec velit. Quisque aliquet et velit ut mollis. Sed mattis eleifend tristique. Praesent pharetra, eros eget viverra tempus, nisi turpis molestie metus, nec tristique nulla dolor a mauris. Nullam cursus finibus erat, in pretium urna fermentum ac. In hac habitasse platea dictumst. Cras id velit id nisi euismod eleifend. Duis vehicula gravida bibendum. Cras rhoncus, massa et accumsan euismod, metus arcu rutrum orci, eu porttitor lacus tellus sed quam. Morbi tincidunt est sit amet sem convallis porta in nec nisi. Sed ex enim, fringilla nec diam in, luctus pulvinar enim. Suspendisse potenti. Quisque ut pellentesque erat. In tincidunt metus id sem fringilla sagittis. Interdum et malesuada fames ac ante ipsum primis in faucibus. Proin erat nunc, pharetra sit amet iaculis nec, malesuada eu dui. Nullam sagittis ut arcu vitae convallis. Mauris molestie gravida lectus, eu commodo quam bibendum aliquam. Donec laoreet sed dolor eu consectetur."
             .split("\\s");
 
@@ -62,8 +62,9 @@ public class LoadTest {
 
     static final Map<String, Long> SEARCH_QUERIES = new HashMap<>();
     static {
-        SEARCH_QUERIES.put("knowledge", 1L);
-        SEARCH_QUERIES.put("ifinder", 7L);
+        SEARCH_QUERIES.put("bank", 51L);
+        SEARCH_QUERIES.put("fonds", 37L);
+        SEARCH_QUERIES.put("finanzen", 27L);
         SEARCH_QUERIES.put("\uD83E\uDD84", 0L);
     }
 
@@ -91,14 +92,17 @@ public class LoadTest {
     }
 
     static {
-        AUTOCOMPLETE_QUERIES.put("kno", 1L);
-        AUTOCOMPLETE_QUERIES.put("ifi", 6L);
-        AUTOCOMPLETE_QUERIES.put("ifin", 6L);
+        AUTOCOMPLETE_QUERIES.put("hyp", 4L);
+        AUTOCOMPLETE_QUERIES.put("gel", 4L);
+        AUTOCOMPLETE_QUERIES.put("geld", 4L);
+        AUTOCOMPLETE_QUERIES.put("ban", 4L);
+        AUTOCOMPLETE_QUERIES.put("bank", 5L);
+        AUTOCOMPLETE_QUERIES.put("fond", 4L);
         QUERY_LIST_AUTOCOMPLETE = new ArrayList<>(AUTOCOMPLETE_QUERIES.keySet());
     }
 
     @Benchmark
-    public void staticFiles() throws Exception {
+    public void staticFiles() {
         final ResponseEntity<String> staticFile = CALLER.getForEntity(LOAD_TARGET, String.class);
 
         assertEquals(HttpStatus.OK, staticFile.getStatusCode());
@@ -106,13 +110,13 @@ public class LoadTest {
     }
 
     @Benchmark
-    public void searchComplex() throws Exception {
+    public void searchComplex() {
         final int queryIndex = LoadTest.PSEUDO_ENTROPY.nextInt(LoadTest.SEARCH_QUERIES.size());
         final String query = LoadTest.QUERY_LIST_SEARCH.get(queryIndex);
 
         final ResponseEntity<Hits> actual = CALLER.getForEntity(
                 LoadTest.LOAD_TARGET + SearchController.ENDPOINT
-                        + "?query=" + query + "&siteId=" + SearchTest.SEARCH_SITE_ID,
+                        + "?query=" + query + "&siteId=" + LOAD_SITE_ID,
                 Hits.class
         );
 
@@ -127,19 +131,34 @@ public class LoadTest {
     }
 
     @Benchmark
-    public void autocomplete() throws Exception {
+    public void autocompleteDeprecated() {
         final int queryIndex = LoadTest.PSEUDO_ENTROPY.nextInt(LoadTest.AUTOCOMPLETE_QUERIES.size());
         final String query = LoadTest.QUERY_LIST_AUTOCOMPLETE.get(queryIndex);
 
         final ResponseEntity<Autocomplete> actual = CALLER.getForEntity(
                 LOAD_TARGET + AutocompleteController.ENDPOINT
-                        + "?query=" + query + "&siteId=" + SearchTest.SEARCH_SITE_ID,
+                        + "?query=" + query + "&siteId=" + LOAD_SITE_ID,
                 Autocomplete.class
         );
 
-        // Autocomplete decay bug prevents assertions
-//        assertEquals(HttpStatus.OK, actual.getStatusCode());
-//        final long queryResultCount = AUTOCOMPLETE_QUERIES.get(query);
-//        assertEquals(queryResultCount, actual.getBody().getResults().size());
+        assertEquals(HttpStatus.OK, actual.getStatusCode());
+        final long queryResultCount = AUTOCOMPLETE_QUERIES.get(query);
+        assertEquals(queryResultCount, actual.getBody().getResults().size());
+    }
+
+    @Benchmark
+    public void autocomplete() {
+        final int queryIndex = LoadTest.PSEUDO_ENTROPY.nextInt(LoadTest.AUTOCOMPLETE_QUERIES.size());
+        final String query = LoadTest.QUERY_LIST_AUTOCOMPLETE.get(queryIndex);
+
+        final ResponseEntity<Autocomplete> actual = CALLER.getForEntity(
+                LOAD_TARGET + "/" + LOAD_SITE_ID + AutocompleteController.ENDPOINT
+                        + "?query=" + query,
+                Autocomplete.class
+        );
+
+        assertEquals(HttpStatus.OK, actual.getStatusCode());
+        final long queryResultCount = AUTOCOMPLETE_QUERIES.get(query);
+        assertEquals(queryResultCount, actual.getBody().getResults().size());
     }
 }

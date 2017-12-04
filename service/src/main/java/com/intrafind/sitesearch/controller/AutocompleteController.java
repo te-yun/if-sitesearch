@@ -52,7 +52,7 @@ public class AutocompleteController {
         Optional<Autocomplete> result = service.autocomplete(query, siteId);
         if (result.isPresent()) {
             final Autocomplete autocomplete = result.get();
-            LOG.info("siteId: " + siteId + " - query: " + query + " - results: " + autocomplete.getResults().size());
+            LOG.info("siteId: " + siteId + " - query-fragment: " + query + " - suggestions: " + autocomplete.getResults().size());
             return ResponseEntity.ok(autocomplete);
         } else {
             return ResponseEntity.notFound().build();

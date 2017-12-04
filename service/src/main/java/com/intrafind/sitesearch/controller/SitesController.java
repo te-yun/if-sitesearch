@@ -213,12 +213,14 @@ public class SitesController {
         if (query.isEmpty()) return ResponseEntity.badRequest().build();
 
         // override siteId with cookie value for debugging & speed up the getting started experience
-        if (cookieSite != null) siteId = cookieSite;
+        if (cookieSite != null) {
+            siteId = cookieSite;
+        }
 
         Optional<Autocomplete> result = autocompleteService.autocomplete(query, siteId);
         if (result.isPresent()) {
             final Autocomplete autocomplete = result.get();
-            LOG.info("siteId: " + siteId + " - query: " + query + " - results: " + autocomplete.getResults().size());
+            LOG.info("siteId: " + siteId + " - query-fragment: " + query + " - suggestions: " + autocomplete.getResults().size());
             return ResponseEntity.ok(autocomplete);
         } else {
             return ResponseEntity.notFound().build();
@@ -231,8 +233,6 @@ public class SitesController {
             @RequestParam(value = "query", defaultValue = "") String query,
             @PathVariable(value = "siteId") UUID siteId
     ) {
-//        return searchDeprecatedAPI(cookieSite, query, siteId);
-
         if (query.isEmpty()) return ResponseEntity.badRequest().build();
 
         // override siteId with cookie value for debugging & speed up the getting started experience

@@ -89,10 +89,12 @@
         <div id="resultlist"></div>
     </div>
 
+    <!--Place this "Search Bar Integration Code" at the very end of your HTML document.-->
+    <!--BEGIN "Search Bar Integration Code"-->
     <script src="https://api.sitesearch.cloud/searchbar/latest/app/js/app.js"></script>
     <script>
-        jQuery.noConflict();
-        jQuery(document).ready(function ($) {
+        IFS.jQuery.noConflict();
+        IFS.jQuery(document).ready(function ($) {
             IFS.initClient({
                 customConfig: {
                     overwrite: {
@@ -106,6 +108,7 @@
             });
         });
     </script>
+    <!--END "Search Bar Integration Code"-->
 </div>
 
 <br>
