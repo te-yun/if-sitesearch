@@ -93,11 +93,11 @@ public class LoadTest {
 
     static {
         AUTOCOMPLETE_QUERIES.put("hyp", 4L);
-        AUTOCOMPLETE_QUERIES.put("gel", 4L);
-        AUTOCOMPLETE_QUERIES.put("geld", 4L);
-        AUTOCOMPLETE_QUERIES.put("ban", 4L);
-        AUTOCOMPLETE_QUERIES.put("bank", 5L);
-        AUTOCOMPLETE_QUERIES.put("fond", 4L);
+        AUTOCOMPLETE_QUERIES.put("gel", 5L);
+        AUTOCOMPLETE_QUERIES.put("geld", 6L);
+        AUTOCOMPLETE_QUERIES.put("ban", 7L);
+        AUTOCOMPLETE_QUERIES.put("bank", 10L);
+        AUTOCOMPLETE_QUERIES.put("fond", 5L);
         QUERY_LIST_AUTOCOMPLETE = new ArrayList<>(AUTOCOMPLETE_QUERIES.keySet());
     }
 
@@ -110,13 +110,34 @@ public class LoadTest {
     }
 
     @Benchmark
-    public void searchComplex() {
+    public void searchComplexDeprecated() {
         final int queryIndex = LoadTest.PSEUDO_ENTROPY.nextInt(LoadTest.SEARCH_QUERIES.size());
         final String query = LoadTest.QUERY_LIST_SEARCH.get(queryIndex);
 
         final ResponseEntity<Hits> actual = CALLER.getForEntity(
                 LoadTest.LOAD_TARGET + SearchController.ENDPOINT
                         + "?query=" + query + "&siteId=" + LOAD_SITE_ID,
+                Hits.class
+        );
+
+        final long queryResultCount = LoadTest.SEARCH_QUERIES.get(query);
+        if (queryResultCount == 0) {
+            assertEquals(HttpStatus.OK, actual.getStatusCode());
+            assertNotNull(actual.getBody());
+        } else {
+            assertEquals(HttpStatus.OK, actual.getStatusCode());
+            assertEquals(queryResultCount, actual.getBody().getResults().size());
+        }
+    }
+
+    @Benchmark
+    public void search() {
+        final int queryIndex = LoadTest.PSEUDO_ENTROPY.nextInt(LoadTest.SEARCH_QUERIES.size());
+        final String query = LoadTest.QUERY_LIST_SEARCH.get(queryIndex);
+
+        final ResponseEntity<Hits> actual = CALLER.getForEntity(
+                LoadTest.LOAD_TARGET + "/sites/" + LOAD_SITE_ID + SearchController.ENDPOINT
+                        + "?query=" + query,
                 Hits.class
         );
 
