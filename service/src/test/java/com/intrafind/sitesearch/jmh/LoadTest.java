@@ -63,7 +63,7 @@ public class LoadTest {
     static final Map<String, Long> SEARCH_QUERIES = new HashMap<>();
     static {
         SEARCH_QUERIES.put("bank", 50L);
-        SEARCH_QUERIES.put("fonds", 37L);
+        SEARCH_QUERIES.put("fonds", 50L);
         SEARCH_QUERIES.put("finanzen", 24L);
         SEARCH_QUERIES.put("geld", 50L);
         SEARCH_QUERIES.put("\uD83E\uDD84", 0L);
