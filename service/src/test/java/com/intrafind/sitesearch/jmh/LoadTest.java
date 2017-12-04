@@ -97,7 +97,7 @@ public class LoadTest {
         AUTOCOMPLETE_QUERIES.put("geld", 5L);
         AUTOCOMPLETE_QUERIES.put("ban", 10L);
         AUTOCOMPLETE_QUERIES.put("bank", 10L);
-        AUTOCOMPLETE_QUERIES.put("fond", 5L);
+        AUTOCOMPLETE_QUERIES.put("fond", 10L);
         QUERY_LIST_AUTOCOMPLETE = new ArrayList<>(AUTOCOMPLETE_QUERIES.keySet());
     }
 
