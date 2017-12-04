@@ -40,8 +40,7 @@ public class SearchService {
     public Hits search(String query, UUID siteId) {
         com.intrafind.api.search.Hits hits = SEARCH_SERVICE.search(
 //                query + " AND " + Fields.TENANT + ":" + siteId,
-                query,
-                Search.FILTER_QUERY, Fields.TENANT + ":" + siteId,
+                query, Search.FILTER_QUERY, Fields.TENANT + ":" + siteId,
 //                Search.RETURN_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL + QUERY_SEPARATOR + Fields.TENANT,
 
                 Search.RETURN_TEASER_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL,
@@ -50,7 +49,7 @@ public class SearchService {
                 Search.RETURN_TEASER_TAG_PRE, "<span class=\"if-teaser-highlight\">",
                 Search.RETURN_TEASER_TAG_POST, "</span>",
 
-                Search.HITS_LIST_SIZE, 100 // page size
+                Search.HITS_LIST_SIZE, 50 // max total results
         );
 
         List<FoundPage> siteDocuments = new ArrayList<>();

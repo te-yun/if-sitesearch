@@ -117,7 +117,7 @@ public class PageTest {
 
         // delete using an invalid siteSecret
         UUID invalidSiteSecret = UUID.randomUUID();
-        final ResponseEntity<ResponseEntity> deletionWithInvalidSiteSecret = caller.exchange(SitesController.ENDPOINT + "/" + newSite.getSiteId() + "/pages?siteSecret=" + UUID.randomUUID() + "&url=" + newPage.getUrl(), HttpMethod.DELETE, HttpEntity.EMPTY, ResponseEntity.class);
+        final ResponseEntity<ResponseEntity> deletionWithInvalidSiteSecret = caller.exchange(SitesController.ENDPOINT + "/" + newSite.getSiteId() + "/pages?siteSecret=" + invalidSiteSecret + "&url=" + newPage.getUrl(), HttpMethod.DELETE, HttpEntity.EMPTY, ResponseEntity.class);
         assertEquals(HttpStatus.NOT_FOUND, deletionWithInvalidSiteSecret.getStatusCode());
         assertNull(deletionWithInvalidSiteSecret.getBody());
 
@@ -382,6 +382,7 @@ public class PageTest {
 
         final ResponseEntity<List> allPages = caller.exchange(SitesController.ENDPOINT + "/" + newSite.getSiteId(),
                 HttpMethod.GET, HttpEntity.EMPTY, List.class);
+        @SuppressWarnings("unchecked")
         List<String> pageIds = allPages.getBody();
         assertEquals(siteIndexSummary.getDocuments().size(), pageIds.size());
 
@@ -395,6 +396,7 @@ public class PageTest {
 
         final ResponseEntity<List> allPagesAfterUpdate = caller.exchange(SitesController.ENDPOINT + "/" + newSite.getSiteId(),
                 HttpMethod.GET, HttpEntity.EMPTY, List.class);
+        @SuppressWarnings("unchecked")
         List<String> allPageIdsAfterUpdate = allPagesAfterUpdate.getBody();
         assertEquals(siteIndexSummary.getDocuments().size() + siteIndexSummaryAfterUpdate.getDocuments().size(), allPageIdsAfterUpdate.size());
 
@@ -408,6 +410,7 @@ public class PageTest {
 
         final ResponseEntity<List> allPagesAfterClearance = caller.exchange(SitesController.ENDPOINT + "/" + newSite.getSiteId(),
                 HttpMethod.GET, HttpEntity.EMPTY, List.class);
+        @SuppressWarnings("unchecked")
         List<String> allPageIdsAfterClearance = allPagesAfterClearance.getBody();
         assertEquals(siteIndexSummaryAfterClearance.getDocuments().size(), allPageIdsAfterClearance.size());
     }
