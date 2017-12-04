@@ -27,12 +27,12 @@ public class Load1000Users {
     private static final LoadTest LOAD_10_USERS = new LoadTest();
 
     @Benchmark
-    public void searchComplex() throws Exception {
-        LOAD_10_USERS.searchComplex();
+    public void searchComplex() {
+        LOAD_10_USERS.search();
     }
 
     @Benchmark
-    public void autocomplete() throws Exception {
+    public void autocomplete() {
         LOAD_10_USERS.autocomplete();
     }
 }
