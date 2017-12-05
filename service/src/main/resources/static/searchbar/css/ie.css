@@ -15,5 +15,5 @@
  */
 
 .glyphicons.glyphicons-search::before {
-    content: url(search.png)
+    content: url(https://api.sitesearch.cloud/searchbar/css/search.png)
 }
