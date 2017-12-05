@@ -28,6 +28,6 @@
         <Require feature="dynamic-height"/>
     </ModulePrefs>
 
-    <Content href="https://api.sitesearch.cloud/searchbar-gadget.html?siteId=0-0-0-0-0" type="url"/>
+    <Content href="https://api.sitesearch.cloud/searchbar/latest/searchbar-gadget.html?siteId=0-0-0-0-0" type="url"/>
 </Module>
         

@@ -80,7 +80,7 @@ public class LoadTest {
 //                .include(LoadIndex2Users.class.getSimpleName())
                 .include(LoadTest.class.getSimpleName())
                 .warmupIterations(20)
-                .measurementIterations(20)
+                .measurementIterations(10)
                 .forks(1)
                 .threads(100)
                 .mode(Mode.Throughput)
