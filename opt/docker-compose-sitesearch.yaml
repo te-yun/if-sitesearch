@@ -1,0 +1,85 @@
+version: "2.0"
+services:
+  ops-kibana:
+    image: docker.elastic.co/kibana/kibana:6.0.0
+    container_name: ops-kibana
+    restart: always
+    depends_on:
+      - ops-elasticsearch
+      - ops-elasticsearch-alt
+      - ops-logstash
+    environment:
+#      SERVER_NAME: ops-elasticsearch
+      ELASTICSEARCH_URL: http://ops-elasticsearch:9200
+    #      KIBANA_DEFAULTAPPID: kibana.defaultAppId
+    #      XPACK_MONITORING_ENABLED: xpack.monitoring.enabled
+    #
+#    volumes:
+#      - ~/srv/kibana:/usr/share/kibana
+#      - ~/srv/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+    ports:
+      - 5601:5601
+    networks:
+      - sitesearch
+
+  sitesearch-elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.0.0
+    container_name: sitesearch-elasticsearch
+    restart: always
+    environment:
+      - cluster.name=sitesearch-ops-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx1g"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ops-elk:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - sitesearch
+      
+  sitesearch-elasticsearch-alt:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.0.0
+    container_name: sitesearch-elasticsearch-1
+    restart: always
+    environment:
+      - cluster.name=sitesearch-ops-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "discovery.zen.ping.unicast.hosts=ops-elasticsearch"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ops-elk-alt:/usr/share/elasticsearch/data
+    networks:
+      - sitesearch
+
+  ops-logstash:
+    image: docker.elastic.co/logstash/logstash:6.0.0
+    container_name: ops-logstash
+    restart: always
+    volumes:
+      - ops-logstash:/usr/share/logstash:rw
+#      - /home/alexander_orlov/srv/logstash/pipeline:/usr/share/logstash/pipeline
+    ports:
+      - 9600:9600
+    networks:
+      - sitesearch
+
+volumes:
+  ops-elk:
+    driver: local
+  ops-elk-alt:
+    driver: local
+  ops-logstash:
+    driver: local
+
+networks:
+  sitesearch:
+    external:
+      name: sitesearch
