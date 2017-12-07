@@ -34,6 +34,8 @@ Required environment variables:
 
 * **WordPress Connector** wanted
     * ...to index exported WordPress dumps (XML) via Site Search REST API  
+* **Google Drive Connector** wanted
+    * ...to find things better in this new kind of "share"
 
 # Operations
 
