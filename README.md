@@ -51,6 +51,9 @@ Required environment variables:
 ## Load Test
     ./load-test.sh
 
+## Build browser clients
+    ./js-app-build.sh
+
 ## Release
     ./release.ps1
     

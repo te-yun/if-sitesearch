@@ -7,7 +7,7 @@ $PSDefaultParameterValues["*:ErrorAction"] = "Stop"
 $docker_network = "sitesearch"
 
 $Env:SPRING_CONFIG_NAME = "application, prod"
-./gradlew build --no-rebuild --build-cache --info -x test
+./gradlew build --build-cache --info -x test
 
 #$docker_image_name = (Get-ChildItem  service/build/libs/*.jar).BaseName
 $docker_image_name = "if-sitesearch"
