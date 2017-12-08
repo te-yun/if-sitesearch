@@ -46,10 +46,10 @@ Required environment variables:
     http://localhost:8001
     
 ## Test
-    ./test.ps1
+    ./test.sh
 
 ## Load Test
-    ./load-test.ps1
+    ./load-test.sh
 
 ## Release
     ./release.ps1
