@@ -18,6 +18,9 @@ docker start if-sitesearch-blue
 
 docker start consul
 docker start router
+
+#docker-compose --file opt/docker-compose-elk.yaml restart
+#docker-compose --file opt/docker-compose-bg.yaml restart
 echo "/== startup-script =="
 
 

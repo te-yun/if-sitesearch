@@ -25,9 +25,6 @@ services:
     environment:
       - constraint:node=master
 #      - CONSUL_URL=consul:8500
-#      - BLUE_NAME=blue
-#      - GREEN_NAME=green
-#      - LIVE=blue
     depends_on:
       - consul
       - if-sitesearch-blue
