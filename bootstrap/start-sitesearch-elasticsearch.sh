@@ -4,6 +4,7 @@ docker_network="sitesearch"
 service_name="sitesearch-elasticsearch"
 docker_image="intrafind/$service_name"
 persistence_dir="srv"
+HOME=/home/alexander_orlov
 
 docker network create $docker_network
 
