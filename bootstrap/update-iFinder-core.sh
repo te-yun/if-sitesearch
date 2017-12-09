@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 pwsh ./bootstrap/start-sitesearch-elasticsearch.ps1
 pwsh ./bootstrap/start-sitesearch-search-service.ps1
