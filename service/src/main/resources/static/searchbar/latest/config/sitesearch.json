@@ -10,7 +10,7 @@
   },
   "components": {
     "searchbar": {
-      "templatesUrl": "{{CDNroot}}/config/sitesearch.hbs",
+      "templatesUrl": "{{cdnroot}}/config/sitesearch.hbs",
       "inputMaxLength": 250,
       "typeaheadProps": {
         "maxItemPerGroup": 4,
