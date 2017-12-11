@@ -232,10 +232,8 @@ public class SmokeTest {
         final Response response = HTTP_CLIENT.newCall(request).execute();
 
         assertEquals(HttpStatus.OK.value(), response.code());
-        Hits results = MAPPER.readValue(response.body().bytes(), Hits.class);
-        assertEquals("Knowledge", results.getQuery());
+        Autocomplete results = MAPPER.readValue(response.body().bytes(), Autocomplete.class);
         assertEquals(1, results.getResults().size());
-        assertEquals("Wie die Semantische Suche vom Knowledge Graph profitiert", results.getResults().get(0).getTitle());
         assureCorsHeaders(response.headers(), 406);
     }
 
@@ -249,7 +247,7 @@ public class SmokeTest {
 
         assertEquals(HttpStatus.OK.value(), response.code());
         Autocomplete result = MAPPER.readValue(response.body().bytes(), Autocomplete.class);
-        assertEquals(4, result.getResults().size());
+        assertEquals(1, result.getResults().size());
         assertEquals("knowledge graph", result.getResults().get(0));
         assureCorsHeaders(response.headers(), 406);
     }
