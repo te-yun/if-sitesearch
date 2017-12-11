@@ -18,7 +18,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Site Search</title>
 
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:100italic,200italic,300italic,400italic,500italic,600italic,700italic,800italic,900italic,100,200,300,400,500,600,700,800,900" media="all">
@@ -118,32 +118,30 @@
     <body>
 
 
-        <h1 style="font-size: 2em;"><span class="fa fa-search"></span> Site Search Integrator Gadget</h1>
+        <h2>Site Search Widget</h2>
 
 
-        <div class="wrapper">
+        <!-- <div class="wrapper">
     <label for="feedUrl"><span class="fa fa-rss"></span> RSS Feed URL</label>
-    <input id="feedUrl" placeholder="Feed URL, e.g. https://intrafind.de/share/enterprise-search-blog.xml"
-           title="Crawling support, coming soon"
-           value="https://intrafind.de/share/enterprise-search-blog.xml" style="border-color: #119;">
+    <input id="feedUrl" placeholder="Feed URL, e.g. https://intrafind.de/share/enterprise-search-blog.xml" title="Crawling support, coming soon" value="https://intrafind.de/share/enterprise-search-blog.xml" style="border-color: #119;"> -->
     <!--<label for="email"><span class="fa fa-envelope-o"></span> E-mail</label>-->
     <!--<input id="email" placeholder="E-mail" value="feedback@sitesearch.cloud" readonly>-->
-    <label for="siteId"><span class="fa fa-key"></span> Site ID</label>
+    <!-- <label for="siteId"><span class="fa fa-key"></span> Site ID</label>
     <input id="siteId" placeholder="Site ID" readonly>
     <label for="siteSecret"><span class="fa fa-user-secret"></span> Site Secret</label>
     <input id="siteSecret" placeholder="Site Secret" readonly>
-</div>
+</div> -->
 
 
-<button id="index" class="fa fa-cogs"
+<!-- <button id="index" class="fa fa-cogs"
         style="height: 1.5em; font-size: 2em; text-align: center; font-weight: bold; width: 530px;"
         title="Extract content from website"
         onclick="gadget.com.intrafind.sitesearch.gadget.triggerFirstUsageOwnership()">
     Enable Search
-</button>
+</button> -->
 
 
-<div style="display: none;">
+<!-- <div style="display: none;">
     <input id="overrideSiteId"
            title="Leave it blank if you do not know what this means."
            placeholder="Site ID to use for all Site Search requests" style="width: 306px;">
@@ -154,19 +152,19 @@
     >
         Override with Site ID Cookie
     </button>
-</div>
+</div> -->
 
 
-<div id="sitesearch-searchbar">
+<!-- <div id="sitesearch-searchbar">
     <link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/searchbar/latest/app/css/app.css"/>
     <div class="container" style="margin-top:22px; width: 530px;">
         <div id="searchbar"></div>
         <div id="resultlist"></div>
-    </div>
+    </div> -->
 
     <!--Place this "Search Bar Integration Code" at the very end of your HTML document.-->
     <!--BEGIN "Search Bar Integration Code"-->
-    <script src="https://api.sitesearch.cloud/searchbar/latest/app/js/app.js"></script>
+    <!-- <script src="https://api.sitesearch.cloud/searchbar/latest/app/js/app.js"></script>
     <script>
         IFS.jQuery.noConflict();
         IFS.jQuery(document).ready(function ($) {
@@ -183,34 +181,33 @@
                 siteId: "4bcccea2-8bcf-4280-88c7-8736e9c3d15c"
             });
         });
-    </script>
+    </script> -->
     <!--END "Search Bar Integration Code"-->
-</div>
+<!-- </div> -->
 
 
-<div id="page-finder"></div>
+<!-- <div id="page-finder"></div>
 <script id="sitesearch-page-finder-init"
         src="/app/finder/finder.js"
         data-append-as-child-to="#page-finder"
         data-search-style="width: 530px; font-size: 2em; text-indent: .5em;"
         data-siteId="4bcccea2-8bcf-4280-88c7-8736e9c3d15c"
-></script>
+></script> -->
 
 
-<h2>Add Site Search to your website</h2>
+        <h3>Add Site Search to your website</h3>
 
 
-<div id="searchbar-variant-choice" style="display: none;">
+<!-- <div id="searchbar-variant-choice" style="display: none;">
     <input id="searchbar-variant" type="radio" style="width: 30px; height: 1.2em;" value="Enterprise search bar"
            name="clientChoice" title="Solid, reliable, production-grade search bar implementation" checked><strong>Enterprise</strong>
     <input id="finder-variant" type="radio" style="width: 30px; height: 1.2em;" value="{if-lab} Finder (experimental)"
            name="clientChoice"
            title="A proof of concept search bar, not recommended for production deployments"><strong>Experimental</strong>
-</div>
+</div> -->
 
 
-<textarea id="integration-code" cols="70" rows="34"
-          title="Integration code to be inserted into your website to include a search bar"></textarea>
+<!-- <textarea id="integration-code" cols="70" rows="34" title="Integration code to be inserted into your website to include a search bar"></textarea> -->
 
     </body>
 
