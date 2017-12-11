@@ -194,7 +194,7 @@ public class SmokeTest {
         assertNotNull(response.body());
         Hits result = MAPPER.readValue(response.body().bytes(), Hits.class);
         assertEquals(query, result.getQuery());
-        assertEquals(10, result.getResults().size());
+        assertEquals(50, result.getResults().size());
         FoundPage found = result.getResults().get(0);
         assertEquals(433, found.getBody().length());
 
@@ -264,7 +264,7 @@ public class SmokeTest {
         final Response response = HTTP_CLIENT.newCall(request).execute();
         assertEquals(HttpStatus.OK.value(), response.code());
         Autocomplete result = MAPPER.readValue(response.body().bytes(), Autocomplete.class);
-        assertEquals(6, result.getResults().size());
+        assertEquals(5, result.getResults().size());
         assureCorsHeaders(response.headers(), 406);
     }
 
