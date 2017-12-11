@@ -119,16 +119,18 @@
         data-search-style="width: 530px; font-size: 2em; text-indent: .5em;"
         data-siteId="4bcccea2-8bcf-4280-88c7-8736e9c3d15c"
 ></script>
-
 <br>
 <br>
 
 <h2>Add Site Search to your website</h2>
 
-<input id="searchbar-variant" type="radio" style="width: 30px; height: 1.2em;" value="Enterprise search bar"
-       name="clientChoice" title="Solid, reliable, production-grade search bar implementation" checked><strong>Enterprise</strong>
-<input id="finder-variant" type="radio" style="width: 30px; height: 1.2em;" value="{if-lab} Finder (experimental)"
-       name="clientChoice" title="A proof of concept search bar, not recommended for production deployments"><strong>Experimental</strong>
+<div id="searchbar-variant-choice" style="display: none;">
+    <input id="searchbar-variant" type="radio" style="width: 30px; height: 1.2em;" value="Enterprise search bar"
+           name="clientChoice" title="Solid, reliable, production-grade search bar implementation" checked><strong>Enterprise</strong>
+    <input id="finder-variant" type="radio" style="width: 30px; height: 1.2em;" value="{if-lab} Finder (experimental)"
+           name="clientChoice"
+           title="A proof of concept search bar, not recommended for production deployments"><strong>Experimental</strong>
+</div>
 <br>
 <br>
 <textarea id="integration-code" cols="70" rows="34"
