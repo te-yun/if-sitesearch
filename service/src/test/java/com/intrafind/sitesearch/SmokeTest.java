@@ -232,10 +232,10 @@ public class SmokeTest {
         final Response response = HTTP_CLIENT.newCall(request).execute();
 
         assertEquals(HttpStatus.OK.value(), response.code());
-//        Hits result = MAPPER.readValue(response.body().bytes(), Autocomplete.class);
-//        assertNotNull(actual.getBody());
-//        assertEquals(1, actual.getBody().getResults().size());
-//        assertEquals("knowledge graph", actual.getBody().getResults().get(0));
+        Hits results = MAPPER.readValue(response.body().bytes(), Hits.class);
+        assertEquals("Knowledge", results.getQuery());
+        assertEquals(1, results.getResults().size());
+        assertEquals("Wie die Semantische Suche vom Knowledge Graph profitiert", results.getResults().get(0).getTitle());
         assureCorsHeaders(response.headers(), 406);
     }
 
@@ -247,11 +247,10 @@ public class SmokeTest {
                 .build();
         final Response response = HTTP_CLIENT.newCall(request).execute();
 
-        assertEquals(HttpStatus.OK.value(), response.code()); // actually 200, should be returned but due to a bug this is not the case yet
-//        Hits result = MAPPER.readValue(response.body().bytes(), Autocomplete.class);
-//        assertNotNull(actual.getBody());
-//        assertEquals(1, actual.getBody().getResults().size());
-//        assertEquals("knowledge graph", actual.getBody().getResults().get(0));
+        assertEquals(HttpStatus.OK.value(), response.code());
+        Autocomplete result = MAPPER.readValue(response.body().bytes(), Autocomplete.class);
+        assertEquals(4, result.getResults().size());
+        assertEquals("knowledge graph", result.getResults().get(0));
         assureCorsHeaders(response.headers(), 406);
     }
 
@@ -264,7 +263,7 @@ public class SmokeTest {
         final Response response = HTTP_CLIENT.newCall(request).execute();
         assertEquals(HttpStatus.OK.value(), response.code());
         Autocomplete result = MAPPER.readValue(response.body().bytes(), Autocomplete.class);
-        assertEquals(5, result.getResults().size());
+        assertEquals(4, result.getResults().size());
         assureCorsHeaders(response.headers(), 406);
     }
 
