@@ -185,7 +185,7 @@ public class SmokeTest {
     public void searchBwBank() throws Exception {
         final String query = "bank";
         Request request = new Request.Builder()
-                .url(SITES_API + SearchTest.SEARCH_SITE_ID + "/search?query=" + query)
+                .url(SITES_API + BW_BANK_SITE_ID + "/search?query=" + query)
                 .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
                 .build();
         final Response response = HTTP_CLIENT.newCall(request).execute();
@@ -258,7 +258,7 @@ public class SmokeTest {
     @Test
     public void autocompleteBwBank() throws Exception {
         Request request = new Request.Builder()
-                .url(SITES_API + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=bank")
+                .url(SITES_API + BW_BANK_SITE_ID + "/autocomplete?query=bank")
                 .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
                 .build();
         final Response response = HTTP_CLIENT.newCall(request).execute();
