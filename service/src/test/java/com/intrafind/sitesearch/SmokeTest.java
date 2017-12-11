@@ -17,10 +17,7 @@
 package com.intrafind.sitesearch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.intrafind.sitesearch.dto.FetchedPage;
-import com.intrafind.sitesearch.dto.FoundPage;
-import com.intrafind.sitesearch.dto.Hits;
-import com.intrafind.sitesearch.dto.Page;
+import com.intrafind.sitesearch.dto.*;
 import com.intrafind.sitesearch.integration.PageTest;
 import com.intrafind.sitesearch.integration.SearchTest;
 import com.intrafind.sitesearch.jmh.LoadIndex2Users;
@@ -53,12 +50,13 @@ public class SmokeTest {
     private static final String INVALID_CREDENTIALS = "https://" + System.getenv("SECURITY_USER_PASSWORD") + "invalid:" + System.getenv("SECURITY_USER_PASSWORD");
     public static final String API_FRONTPAGE_MARKER = "<title>Site Search</title>";
     public static final String SITES_API = "https://api.sitesearch.cloud/sites/";
+    public static final UUID BW_BANK_SITE_ID = UUID.fromString("269b0538-120b-44b1-a365-488c2f3fcc15");
 
     @Autowired
     private TestRestTemplate caller;
 
     @Test
-    public void assureSiteSearchServiceBasicAuthProtectionForJsonPost() throws Exception {
+    public void assureSiteSearchServiceBasicAuthProtectionForJsonPost() {
         final ResponseEntity<String> secureEndpointJson = caller.postForEntity(URI.create(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "json/index?method=index"), HttpEntity.EMPTY, String.class);
         assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJson.getStatusCode());
         assertNull(secureEndpointJson.getBody());
@@ -67,7 +65,7 @@ public class SmokeTest {
     private static final String PRODUCT_FRONTPAGE_MARKER = "<title>IntraFind Site Search - Site Search</title>";
 
     @Test
-    public void redirectFromHttpNakedDomain() throws Exception {
+    public void redirectFromHttpNakedDomain() {
         final ResponseEntity<String> response = caller.exchange(
                 "http://sitesearch.cloud",
                 HttpMethod.GET,
@@ -78,7 +76,7 @@ public class SmokeTest {
     }
 
     @Test
-    public void redirectFromUnencryptedWWW() throws Exception {
+    public void redirectFromUnencryptedWWW() {
         final ResponseEntity<String> response = caller.exchange(
                 "http://www.sitesearch.cloud",
                 HttpMethod.GET,
@@ -90,7 +88,7 @@ public class SmokeTest {
     }
 
     @Test
-    public void redirectFromWWW() throws Exception {
+    public void redirectFromWWW() {
         final ResponseEntity<String> response = caller.exchange(
                 "https://www.sitesearch.cloud",
                 HttpMethod.GET,
@@ -102,7 +100,7 @@ public class SmokeTest {
     }
 
     @Test
-    public void productFrontpageContent() throws Exception {
+    public void productFrontpageContent() {
         final ResponseEntity<String> response = caller.exchange(
                 "https://sitesearch.cloud",
                 HttpMethod.GET,
@@ -114,7 +112,7 @@ public class SmokeTest {
     }
 
     @Test
-    public void redirectFromHttpApiDomain() throws Exception {
+    public void redirectFromHttpApiDomain() {
         final ResponseEntity<String> response = caller.exchange(
                 "http://api.sitesearch.cloud",
                 HttpMethod.GET,
@@ -184,6 +182,26 @@ public class SmokeTest {
 
 
     @Test
+    public void searchBwBank() throws Exception {
+        final String query = "bank";
+        Request request = new Request.Builder()
+                .url(SITES_API + SearchTest.SEARCH_SITE_ID + "/search?query=" + query)
+                .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
+                .build();
+        final Response response = HTTP_CLIENT.newCall(request).execute();
+
+        assertEquals(HttpStatus.OK.value(), response.code());
+        assertNotNull(response.body());
+        Hits result = MAPPER.readValue(response.body().bytes(), Hits.class);
+        assertEquals(query, result.getQuery());
+        assertEquals(10, result.getResults().size());
+        FoundPage found = result.getResults().get(0);
+        assertEquals(433, found.getBody().length());
+
+        assureCorsHeaders(response.headers(), 406);
+    }
+
+    @Test
     public void search() throws Exception {
         Request request = new Request.Builder()
                 .url(SITES_API + SearchTest.SEARCH_SITE_ID + "/search?query=Knowledge")
@@ -213,7 +231,7 @@ public class SmokeTest {
                 .build();
         final Response response = HTTP_CLIENT.newCall(request).execute();
 
-        assertEquals(HttpStatus.OK.value(), response.code()); // actually 200, should be returned but due to a bug this is not the case yet
+        assertEquals(HttpStatus.OK.value(), response.code());
 //        Hits result = MAPPER.readValue(response.body().bytes(), Autocomplete.class);
 //        assertNotNull(actual.getBody());
 //        assertEquals(1, actual.getBody().getResults().size());
@@ -234,6 +252,19 @@ public class SmokeTest {
 //        assertNotNull(actual.getBody());
 //        assertEquals(1, actual.getBody().getResults().size());
 //        assertEquals("knowledge graph", actual.getBody().getResults().get(0));
+        assureCorsHeaders(response.headers(), 406);
+    }
+
+    @Test
+    public void autocompleteBwBank() throws Exception {
+        Request request = new Request.Builder()
+                .url(SITES_API + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=Knowledge")
+                .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
+                .build();
+        final Response response = HTTP_CLIENT.newCall(request).execute();
+        assertEquals(HttpStatus.OK.value(), response.code());
+        Autocomplete result = MAPPER.readValue(response.body().bytes(), Autocomplete.class);
+        assertEquals(6, result.getResults().size());
         assureCorsHeaders(response.headers(), 406);
     }
 
