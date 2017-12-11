@@ -258,7 +258,7 @@ public class SmokeTest {
     @Test
     public void autocompleteBwBank() throws Exception {
         Request request = new Request.Builder()
-                .url(SITES_API + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=Knowledge")
+                .url(SITES_API + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=bank")
                 .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
                 .build();
         final Response response = HTTP_CLIENT.newCall(request).execute();
