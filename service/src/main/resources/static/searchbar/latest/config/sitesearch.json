@@ -10,7 +10,7 @@
   },
   "components": {
     "searchbar": {
-      "templatesUrl": "https://api.sitesearch.cloud/searchbar/latest/config/sitesearch.hbs",
+      "templatesUrl": "config/sitesearch.hbs",
       "inputMaxLength": 250,
       "typeaheadProps": {
         "maxItemPerGroup": 4,
