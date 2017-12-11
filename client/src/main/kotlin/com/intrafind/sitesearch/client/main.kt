@@ -81,7 +81,7 @@ fun showInitCode() {
     document.addEventListener("DOMContentLoaded", { console.warn(2) })
 //    searchbarInputField.placeholder = "Search for \"knowledge\""
     val enterpriseSearchbarCode = enterpriseSearchbar.outerHTML
-            .replace("searchbar-config/sitesearch-config.json", "https://api.sitesearch.cloud/searchbar-config/sitesearch-config.json")
+            .replace("searchbar-config/sitesearch-config.json", "https://cdn.sitesearch.cloud/searchbar/latest/config/sitesearch.json")
     integrationCode.value = enterpriseSearchbarCode
     finderContainer.style.display = "none"
     val finderInitCode = "<script src=\"https://api.sitesearch.cloud/app/runtime/kotlin.js\"></script>\n" +

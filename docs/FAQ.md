@@ -138,14 +138,14 @@ Or what should be the first thing, I need to do, to **get started** with Site Se
     * Embed the following HTML fragment into your website and **adjust the siteId** provided in the snippet:
     
         
-            <link rel="stylesheet" href="https://api.sitesearch.cloud/searchbar/latest/app/css/app.css"/>
+            <link rel="stylesheet" href="https://cdn.sitesearch.cloud/searchbar/latest/app/css/app.css"/>
             <div id="searchbarContainer">
                 <div class="container" style="width: 530px;">
                     <div id="searchbar"></div>
                     <div id="resultlist"></div>
                 </div>
             
-                <script src="https://api.sitesearch.cloud/searchbar/latest/app/js/app.js"></script>
+                <script src="https://cdn.sitesearch.cloud/searchbar/latest/app/js/app.js"></script>
                 <script>
                     jQuery.noConflict();
                     jQuery(document).ready(function ($) {
@@ -156,7 +156,7 @@ Or what should be the first thing, I need to do, to **get started** with Site Se
                                 }
                             },
                             sbTarget: "#searchbar",
-                            configurl: "https://api.sitesearch.cloud/searchbar/latest/config/sitesearch.json",
+                            configurl: "https://cdn.sitesearch.cloud/searchbar/latest/config/sitesearch.json",
                             sitesearch: true,
                             siteId: "4bcccea2-8bcf-4280-88c7-8736e9c3d15c"
                         });
@@ -181,7 +181,7 @@ Or what should be the first thing, I need to do, to **get started** with Site Se
                             }
                         },
                         sbTarget: "#searchbar",
-                        configurl: "https://api.sitesearch.cloud/searchbar/latest/config/sitesearch.json",
+                        configurl: "https://cdn.sitesearch.cloud/searchbar/latest/config/sitesearch.json",
                         sitesearch: true,
                         siteId: "4bcccea2-8bcf-4280-88c7-8736e9c3d15c"
                     });
