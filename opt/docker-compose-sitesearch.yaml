@@ -49,7 +49,7 @@ services:
     environment:
       - unicast_hosts=sitesearch-elasticsearch:9300, sitesearch-elasticsearch-1:9300, sitesearch-elasticsearch-quorum:9300
       - minimum_master_nodes=2    
-      - ELASTICSEARCH_NODE_DATA=false
+      - ELASTICSEARCH_NODE_DATA=true
     volumes:
       - $HOME/srv/sitesearch-elasticsearch-quorum/data:/home/app_user/data:rw
     networks:

@@ -79,7 +79,7 @@ public class LoadTest {
 //                .include(".*")
 //                .include(LoadIndex2Users.class.getSimpleName())
                 .include(LoadTest.class.getSimpleName())
-                .warmupIterations(10)
+                .warmupIterations(5)
                 .measurementIterations(5)
                 .forks(1)
                 .threads(100)
