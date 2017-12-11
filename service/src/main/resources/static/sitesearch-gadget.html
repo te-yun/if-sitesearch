@@ -22,13 +22,8 @@
 <link rel="stylesheet" type="text/css"
       href="https://sitesearch.cloud/wp-content/themes/jupiter/assets/stylesheet/core-styles.css"/>
 <script src="/app/runtime/kotlin.js"></script>
+<script src="/app/gadget/gadget.js"></script>
 
-<body onload="client.com.intrafind.sitesearch.client.showInitCode()">
-<script type="text/javascript">
-    document.addEventListener("DOMContentLoaded", function () {
-        client.com.intrafind.sitesearch.client.showInitCode();
-    });
-</script>
 <style>
     label {
         font-weight: bold;
@@ -48,48 +43,58 @@
         font-weight: normal;
     }
 
-    #index {
-        text-align: center;
-        font-weight: bold;
-        width: 530px;
+    textarea:focus {
+        zoom: 82.4%;
     }
 </style>
 
-<a id="loginLink" href="/login?redirect_uri=https://api.sitesearch.cloud/login"
-   style="text-decoration: none; display: none;"
-   class="fa fa-sign-in" aria-hidden="true"> Login</a>
-<!--<br>-->
-<h1 style="font-size: 2em;"><span class="fa fa-search"></span> Simple Site Search Integrator</h1>
+<h1 style="font-size: 2em;"><span class="fa fa-search"></span> Site Search Integrator Gadget</h1>
 <div class="wrapper">
     <label for="feedUrl"><span class="fa fa-rss"></span> RSS Feed URL</label>
     <input id="feedUrl" placeholder="Feed URL, e.g. https://intrafind.de/share/enterprise-search-blog.xml"
+           title="Crawling support, coming soon"
            value="https://intrafind.de/share/enterprise-search-blog.xml" style="border-color: #119;">
-    <label for="email"><span class="fa fa-envelope-o"></span> E-mail</label>
-    <input id="email" placeholder="E-mail" value="feedback@sitesearch.cloud" readonly>
+    <!--<label for="email"><span class="fa fa-envelope-o"></span> E-mail</label>-->
+    <!--<input id="email" placeholder="E-mail" value="feedback@sitesearch.cloud" readonly>-->
     <label for="siteId"><span class="fa fa-key"></span> Site ID</label>
     <input id="siteId" placeholder="Site ID" readonly>
     <label for="siteSecret"><span class="fa fa-user-secret"></span> Site Secret</label>
     <input id="siteSecret" placeholder="Site Secret" readonly>
 </div>
 <button id="index" class="fa fa-cogs"
-        style="height: 1.5em; font-size: 2em;"
-        onclick="client.com.intrafind.sitesearch.client.triggerFirstUsageOwnership()">
+        style="height: 1.5em; font-size: 2em; text-align: center; font-weight: bold; width: 530px;"
+        title="Extract content from website"
+        onclick="gadget.com.intrafind.sitesearch.gadget.triggerFirstUsageOwnership()">
     Enable Search
 </button>
 <br>
 <br>
+<div style="display: none;">
+    <input id="overrideSiteId"
+           title="Leave it blank if you do not know what this means."
+           placeholder="Site ID to use for all Site Search requests" style="width: 306px;">
+    <button
+            onclick="gadget.com.intrafind.sitesearch.gadget.overrideSite(document.getElementById('overrideSiteId').value)"
+            title="Site ID Cookie overrides the Site ID which is specified in the initialization code for all requests to Site Search."
+            style="width: 217px;"
+    >
+        Override with Site ID Cookie
+    </button>
+</div>
 
 <div id="sitesearch-searchbar">
-    <link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/searchbar/css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.sitesearch.cloud/searchbar/latest/app/css/app.css"/>
     <div class="container" style="margin-top:22px; width: 530px;">
         <div id="searchbar"></div>
         <div id="resultlist"></div>
     </div>
 
-    <script src="https://api.sitesearch.cloud/searchbar/js/app.js"></script>
+    <!--Place this "Search Bar Integration Code" at the very end of your HTML document.-->
+    <!--BEGIN "Search Bar Integration Code"-->
+    <script src="https://cdn.sitesearch.cloud/searchbar/latest/app/js/app.js"></script>
     <script>
-        jQuery.noConflict();
-        jQuery(document).ready(function ($) {
+        IFS.jQuery.noConflict();
+        IFS.jQuery(document).ready(function ($) {
             IFS.initClient({
                 customConfig: {
                     overwrite: {
@@ -97,14 +102,17 @@
                     }
                 },
                 sbTarget: "#searchbar",
-                configurl: "searchbar-config/sitesearch-config.json",
+                configurl: "/searchbar/latest/config/sitesearch.json",
                 sitesearch: true,
+                cdnroot: "https://cdn.sitesearch.cloud/searchbar/latest",
                 siteId: "4bcccea2-8bcf-4280-88c7-8736e9c3d15c"
             });
         });
     </script>
+    <!--END "Search Bar Integration Code"-->
 </div>
 
+<br>
 <div id="page-finder"></div>
 <script id="sitesearch-page-finder-init"
         src="/app/finder/finder.js"
@@ -112,79 +120,19 @@
         data-search-style="width: 530px; font-size: 2em; text-indent: .5em;"
         data-siteId="4bcccea2-8bcf-4280-88c7-8736e9c3d15c"
 ></script>
-
 <br>
 <br>
 
-<h2>Add a search bar to your website</h2>
-<input id="searchbar-variant" type="radio" style="width: 30px; height: 2em;" value="Enterprise search bar"
-       name="clientChoice" title="Enterprise" checked>Enterprise
-<input id="finder-variant" type="radio" style="width: 30px; height: 2em;" value="{if-lab} Finder (experimental)"
-       name="clientChoice" title="Experimental">Experimental
-<br>
-<br>
-<textarea id="integration-code" cols="69" rows="20" title="Integration Code"></textarea>
+<h2>Add Site Search to your website</h2>
 
-<br>
-<style>
-    input {
-        width: 280px;
-    }
-</style>
-<br>
-<br>
-<div id="assignmentController" style="display: none;">
-    <a href="/admin.html">Site Assignments</a>
-    | <a href="/sitesearch-gadget.html">Establish Site Assignment</a>
-    <br>
-    <br>
-    <label for="siteName">Site Name</label>
-    <br>
-    <input id="siteName" type="text" value="Main" placeholder="Site Name"/>
-    <br>
-    <label for="contactEmail">Contact E-mail</label>
-    <br>
-    <input id="contactEmail" type="email" value="" placeholder="Contact e-mail"/>
-    <br>
-    <label for="company">Company</label>
-    <br>
-    <input id="company" type="text" value="" placeholder="Company Name"/>
-    <br>
-    <br>
-    <input type="button"
-           id="assignSite"
-           style="text-align: center; width: 285px;"
-           onclick="client.com.intrafind.sitesearch.client.assignSite()"
-           value="Assign Site">
+<div id="searchbar-variant-choice" style="display: none;">
+    <input id="searchbar-variant" type="radio" style="width: 30px; height: 1.2em;" value="Enterprise search bar"
+           name="clientChoice" title="Solid, reliable, production-grade search bar implementation" checked><strong>Enterprise</strong>
+    <input id="finder-variant" type="radio" style="width: 30px; height: 1.2em;" value="{if-lab} Finder (experimental)"
+           name="clientChoice"
+           title="A proof of concept search bar, not recommended for production deployments"><strong>Experimental</strong>
 </div>
-
 <br>
 <br>
-
-<div id="assignmentsContainer" style="display: none;">
-    <dl>
-        <dt id="companyName"></dt>
-        <dd id="companyContact"></dd>
-    </dl>
-
-    <table>
-        <thead>
-        <tr>
-            <td>Site Name</td>
-            <td>Site ID</td>
-            <td>Site Secret</td>
-        </tr>
-        </thead>
-        <tbody id="assignments">
-        </tbody>
-    </table>
-</div>
-
-<br>
-
-<!--<div style="float: right">-->
-<!--<span class="fa fa-user-circle-o"></span> <a href="privacy.html">Privacy</a> | <span class="fa fa-gavel"></span>-->
-<!--<a href="terms-of-service-agreement.html">Terms</a> | <span class="fa fa-briefcase"></span> <a href="imprint.html">Imprint</a>-->
-<!--</div>-->
-
-<script src="/app/client/client.js"></script>
+<textarea id="integration-code" cols="70" rows="34"
+          title="Integration code to be inserted into your website to include a search bar"></textarea>
