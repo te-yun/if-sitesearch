@@ -100,6 +100,10 @@ button {
     cursor: pointer;
 }
 
+.searchbar {
+    margin-bottom: 60px;
+}
+
 textarea {
     width: calc(100% - 26px);
     height: 470px;
