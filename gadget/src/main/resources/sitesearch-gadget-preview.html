@@ -121,25 +121,33 @@
 
         <h2>Site Search Widget</h2>
 
+        <div class="wrapper">
+            <div class="form-inline">
+                <label for="feedUrl">
+                    <span class="fa fa-rss"></span>
+                    RSS Feed URL
+                </label>
+                <input type="text" id="feedUrl" placeholder="Feed URL, e.g. https://intrafind.de/share/enterprise-search-blog.xml" title="Crawling support, coming soon" value="https://intrafind.de/share/enterprise-search-blog.xml">
+            </div>
+            <div class="form-inline">
+                <label for="siteId">
+                    <span class="fa fa-key"></span>
+                    Site ID
+                </label>
+                <div id="siteId">Site ID</div>
+            </div>
+            <div class="form-inline">
+                <label for="siteSecret">
+                    <span class="fa fa-user-secret"></span>
+                    Site Secret
+                </label>
+                <div id="siteSecret">Site Secret</div>
+            </div>
+        </div>
 
-        <!-- <div class="wrapper">
-    <label for="feedUrl"><span class="fa fa-rss"></span> RSS Feed URL</label>
-    <input id="feedUrl" placeholder="Feed URL, e.g. https://intrafind.de/share/enterprise-search-blog.xml" title="Crawling support, coming soon" value="https://intrafind.de/share/enterprise-search-blog.xml" style="border-color: #119;"> -->
-    <!--<label for="email"><span class="fa fa-envelope-o"></span> E-mail</label>-->
-    <!--<input id="email" placeholder="E-mail" value="feedback@sitesearch.cloud" readonly>-->
-    <!-- <label for="siteId"><span class="fa fa-key"></span> Site ID</label>
-    <input id="siteId" placeholder="Site ID" readonly>
-    <label for="siteSecret"><span class="fa fa-user-secret"></span> Site Secret</label>
-    <input id="siteSecret" placeholder="Site Secret" readonly>
-</div> -->
-
-
-<!-- <button id="index" class="fa fa-cogs"
-        style="height: 1.5em; font-size: 2em; text-align: center; font-weight: bold; width: 530px;"
-        title="Extract content from website"
-        onclick="gadget.com.intrafind.sitesearch.gadget.triggerFirstUsageOwnership()">
-    Enable Search
-</button> -->
+        <button id="index" class="button-wrapper" title="Extract content from website" onclick="gadget.com.intrafind.sitesearch.gadget.triggerFirstUsageOwnership()">
+            Enable Search
+        </button>
 
 
 <!-- <div style="display: none;">
@@ -197,15 +205,6 @@
 
 
         <h3>Add Site Search to your website</h3>
-
-
-<!-- <div id="searchbar-variant-choice" style="display: none;">
-    <input id="searchbar-variant" type="radio" style="width: 30px; height: 1.2em;" value="Enterprise search bar"
-           name="clientChoice" title="Solid, reliable, production-grade search bar implementation" checked><strong>Enterprise</strong>
-    <input id="finder-variant" type="radio" style="width: 30px; height: 1.2em;" value="{if-lab} Finder (experimental)"
-           name="clientChoice"
-           title="A proof of concept search bar, not recommended for production deployments"><strong>Experimental</strong>
-</div> -->
 
         <textarea id="integration-code" title="Integration code to be inserted into your website to include a search bar"></textarea>
 
