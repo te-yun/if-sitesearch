@@ -271,7 +271,7 @@ public class SmokeTest {
                 .url("https://logs.sitesearch.cloud")
                 .build();
         final Response response = HTTP_CLIENT.newCall(request).execute();
-        assertEquals(HttpStatus.OK.value(), response.code());
+        assertEquals(HttpStatus.UNAUTHORIZED.value(), response.code());
     }
 
     @Test

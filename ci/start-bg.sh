@@ -1,10 +1,6 @@
-#!/usr/bin/env pwsh
+#!/usr/bin/env sh
 
-Set-StrictMode -Version Latest
-$ErrorActionPreference = "Stop"
-$PSDefaultParameterValues["*:ErrorAction"] = "Stop"
-
-$docker_network = "sitesearch"
+docker_network="sitesearch"
 
 docker network create $docker_network
 
