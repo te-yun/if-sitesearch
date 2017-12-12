@@ -39,8 +39,6 @@ Required environment variables:
 
 # Operations
 
-* [PowerShell required](https://github.com/PowerShell/PowerShell)
-
 ## Run 
     ./run.sh
     http://localhost:8001
