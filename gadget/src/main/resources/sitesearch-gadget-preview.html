@@ -60,9 +60,11 @@
         <!--<label for="email"><span class="fa fa-envelope-o"></span> E-mail</label>-->
         <!--<input id="email" placeholder="E-mail" value="feedback@sitesearch.cloud" readonly>-->
 
-        <button id="index" class="button-wrapper" title="Extract content from website" onclick="gadget.com.intrafind.sitesearch.gadget.triggerFirstUsageOwnership()">
-            Enable Search
-        </button>
+        <div class="button-wrapper">
+            <button id="index" class="button-wrapper" title="Extract content from website" onclick="gadget.com.intrafind.sitesearch.gadget.triggerFirstUsageOwnership()">
+                Enable Search
+            </button>
+        </div>
 
         <div style="display: none;">
             <input id="overrideSiteId"
@@ -76,9 +78,9 @@
             </button>
         </div>
 
-        <div id="sitesearch-searchbar">
+        <div id="sitesearch-searchbar" class="searchbar">
             <link rel="stylesheet" type="text/css" href="https://cdn.sitesearch.cloud/searchbar/latest/app/css/app.css"/>
-            <div class="container" style="margin-top:22px; width: 530px;">
+            <div class="container">
                 <div id="searchbar"></div>
                 <div id="resultlist"></div>
             </div>
