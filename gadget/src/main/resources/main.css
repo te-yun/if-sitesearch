@@ -102,11 +102,12 @@ button {
 
 textarea {
     width: calc(100% - 26px);
-    height: 500px;
+    height: 470px;
     padding: 10px 12px;
     border: 1px solid #e3e3e3;
     outline: none;
     background-color: #f7f7f7;
     font-size: 13px;
     color: #6f6f6f;
+    resize: none;
 }
