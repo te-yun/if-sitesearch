@@ -48,8 +48,8 @@ fun triggerFirstUsageOwnership() {
     xhr.onload = {
         val siteId = JSON.parse<dynamic>(xhr.responseText).siteId as String
         val siteSecret = JSON.parse<dynamic>(xhr.responseText).siteSecret as String
-        (document.getElementById("siteId") as HTMLInputElement).value = siteId
-        (document.getElementById("siteSecret") as HTMLInputElement).value = siteSecret
+        (document.getElementById("siteId") as HTMLDivElement).textContent = siteId
+        (document.getElementById("siteSecret") as HTMLDivElement).textContent = siteSecret
         overrideSite(siteId)
         document.dispatchEvent(Event("triggerFirstUsageOwnershipEvent"))
     }
@@ -62,7 +62,7 @@ fun overrideSite(siteId: String) {
 }
 
 fun showInitCode() {
-    val siteIdContainer = document.getElementById("siteId") as HTMLInputElement
+    val siteIdContainer = document.getElementById("siteId") as HTMLDivElement
     val enterpriseSearchbar = document.getElementById("sitesearch-searchbar") as HTMLDivElement
     val finderInit = document.getElementById("sitesearch-page-finder-init") as HTMLScriptElement
     val finderContainer = document.getElementById("page-finder") as HTMLDivElement
@@ -84,29 +84,29 @@ fun showInitCode() {
     searchbarVariant.addEventListener("click", {
         enterpriseSearchbar.style.display = "block"
         finderContainer.style.display = "none"
-        if (siteIdContainer.value.isBlank()) {
+        if (siteIdContainer.textContent?.isBlank()!!) {
             integrationCode.value = enterpriseSearchbarCode
         } else {
-            integrationCode.value = enterpriseSearchbarCode.replace("siteId: \".+".toRegex(), "siteId: \"${siteIdContainer.value}\"")
+            integrationCode.value = enterpriseSearchbarCode.replace("siteId: \".+".toRegex(), "siteId: \"${siteIdContainer.textContent}\"")
         }
     })
 
     finderVariant.addEventListener("click", {
         enterpriseSearchbar.style.display = "none"
         finderContainer.style.display = "block"
-        if (siteIdContainer.value.isBlank()) {
+        if (siteIdContainer.textContent?.isBlank()!!) {
             integrationCode.value = finderInitCode
         } else {
-            integrationCode.value = finderInitCode.replace("data-siteId=\".+\"".toRegex(RegexOption.IGNORE_CASE), "data-siteId=\"${siteIdContainer.value}\"")
+            integrationCode.value = finderInitCode.replace("data-siteId=\".+\"".toRegex(RegexOption.IGNORE_CASE), "data-siteId=\"${siteIdContainer.textContent}\"")
         }
     })
 
     document.addEventListener("triggerFirstUsageOwnershipEvent", {
-        if (!siteIdContainer.value.isBlank()) {
+        if (!siteIdContainer.textContent?.isBlank()!!) {
             if (searchbarVariant.checked) {
-                integrationCode.value = integrationCode.value.replace("siteId: \".+".toRegex(), "siteId: \"${siteIdContainer.value}\"")
+                integrationCode.value = integrationCode.value.replace("siteId: \".+".toRegex(), "siteId: \"${siteIdContainer.textContent}\"")
             } else {
-                integrationCode.value = integrationCode.value.replace("data-siteId=\".+\"".toRegex(RegexOption.IGNORE_CASE), "data-siteId=\"${siteIdContainer.value}\"")
+                integrationCode.value = integrationCode.value.replace("data-siteId=\".+\"".toRegex(RegexOption.IGNORE_CASE), "data-siteId=\"${siteIdContainer.textContent}\"")
             }
         }
     })
