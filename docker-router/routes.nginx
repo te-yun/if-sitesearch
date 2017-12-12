@@ -122,6 +122,8 @@ server {
     include /etc/nginx/snippets/ssl.conf;
 
     location / {
+        include /etc/nginx/snippets/cors-headers.conf;
+        
         proxy_pass http://dev.sitesearch.cloud:2443;
     }
 }

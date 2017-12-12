@@ -42,7 +42,7 @@ Required environment variables:
 * [PowerShell required](https://github.com/PowerShell/PowerShell)
 
 ## Run 
-    ./run.ps1
+    ./run.sh
     http://localhost:8001
     
 ## Test
