@@ -196,7 +196,7 @@ public class SmokeTest {
         assertEquals(query, result.getQuery());
         assertTrue(40 < result.getResults().size());
         FoundPage found = result.getResults().get(0);
-        assertEquals(268, found.getBody().length());
+        assertTrue(100 < found.getBody().length());
 
         assureCorsHeaders(response.headers(), 406);
     }
