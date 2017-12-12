@@ -266,6 +266,15 @@ public class SmokeTest {
     }
 
     @Test
+    public void logsUp() throws Exception {
+        Request request = new Request.Builder()
+                .url("https://logs.sitesearch.cloud")
+                .build();
+        final Response response = HTTP_CLIENT.newCall(request).execute();
+        assertEquals(HttpStatus.OK.value(), response.code());
+    }
+
+    @Test
     public void updatePage() throws Exception {
         String entropyToCheckInUpdate = "https://example.com/" + UUID.randomUUID();
         final Page pageToUpdate = PageTest.buildPage();
