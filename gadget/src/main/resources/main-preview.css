@@ -141,7 +141,7 @@ textarea {
     border: 1px solid #e3e3e3;
     outline: none;
     background-color: #f7f7f7;
-    font-size: 13px;
+    font-size: 13px !important; /* because app.css overrides on focus the fontsize */
     color: #6f6f6f;
     resize: none;
 }
