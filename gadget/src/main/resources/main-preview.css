@@ -55,18 +55,18 @@ h3 {
     line-height: 1.66em;
 }
 
-.form-inline .tipsy {
+.form-inline .tipsy-container {
     position: relative;
     flex: auto;
 }
 
 @media (max-width: 768px) {
-    .form-inline .tipsy {
+    .form-inline .tipsy-container {
         width: 100%;
     }
 }
 
-.form-inline .tipsy-icon {
+.form-inline .tipsy {
     position: absolute;
     top: -15px;
     right: 10px;
@@ -78,7 +78,7 @@ h3 {
     line-height: 30px;
 }
 
-.form-inline .tipsy-icon::after {
+.form-inline .tipsy::after {
     content: "?";
 }
 
