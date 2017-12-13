@@ -105,6 +105,14 @@ h3 {
     color: #767676;
 }
 
+.form-inline .subline {
+    position: absolute;
+    right: 40px;
+    bottom: -20px;
+    font-size: 12px;
+    color: #767676;
+}
+
 .button-wrapper {
     display: flex;
     margin: 20px 0 40px;
