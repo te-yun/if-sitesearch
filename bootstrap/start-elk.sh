@@ -13,4 +13,7 @@ sudo sysctl -w vm.max_map_count=262144
 
 docker-compose down; vim docker-compose.yaml; docker-compose up -d --force-recreate; docker-compose ps; docker ps;
 
-curl -X PUT -u elastic http://<host>:9200/_xpack/license -H "Content-Type: application/json" -d @license-*.json
+# Provide Basic License
+#docker exec -it ops-elasticsearch bash
+#vi license.json # paste license
+#curl -X PUT -u elastic http://localhost:9200/_xpack/license -H "Content-Type: application/json" -d @license-*.json
