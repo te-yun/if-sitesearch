@@ -50,7 +50,7 @@
       },
       "resultlist": {
         "scrollContainer": "#ifs-rl-modal",
-        "scrollReloadsBeforeButtonAppears": 1000,
+        "scrollReloadsBeforeButtonAppears" : 1000,
         "templates": {
           "resultlistWrapper": "app/templates/default/resultlist/resultlist-wrapper.hbs",
           "resultlistContainer": "app/templates/default/resultlist/resultlist-container.hbs",
@@ -79,12 +79,10 @@
             "title": "ifs.category.websites",
             "query": {
               "filter": {
-                "++_str.connector": [
-                  "crawler"
-                ]
+                "++_str.connector": ["crawler"]
               }
             },
-            "facetWhitelist": [
+            "facetWhitelist":[
               "_facet.author"
             ]
           }

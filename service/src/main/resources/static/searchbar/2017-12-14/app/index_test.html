@@ -138,176 +138,176 @@
 <script type="text/javascript" src="js/app.js"></script>
 
 <script type="text/javascript">
-    IFS.jQuery.noConflict();
-    (function ($) {
-        var configServerUrl = "http://localhost:3000";
-        var configEndpoint = configServerUrl + '/config';
+  IFS.jQuery.noConflict();
+  (function ($) {
+    var configServerUrl = "http://localhost:3000";
+    var configEndpoint = configServerUrl + '/config';
 
-        function displayMsg(text) {
-            $('#infoMessage').empty().text(text);
-        }
+    function displayMsg(text){
+      $('#infoMessage').empty().text(text);
+    }
 
-        function setTextField(data) {
-            var configTextArea = $('#configTextArea');
-            configTextArea.val(data);
-            configTextArea.text(data);
-        }
+    function setTextField(data) {
+      var configTextArea = $('#configTextArea');
+      configTextArea.val(data);
+      configTextArea.text(data);
+    }
 
-        function doRequest(type, successMsg, errorMsg) {
-            $.ajax({
-                url: configEndpoint,
-                type: type,
-                crossDomain: true,
-                withCredentials: true
-            })
-                .done(function (data) {
-                    setTextField(data);
-                    displayMsg(successMsg);
-                })
-                .fail(function (err) {
-                    displayMsg(errorMsg + JSON.stringify(err, null, 2));
-                });
-        }
+    function doRequest(type, successMsg, errorMsg){
+      $.ajax({
+        url: configEndpoint,
+        type: type,
+        crossDomain: true,
+        withCredentials: true
+      })
+        .done(function (data) {
+          setTextField(data);
+          displayMsg(successMsg);
+        })
+        .fail(function (err) {
+          displayMsg(errorMsg + JSON.stringify(err, null, 2));
+        });
+    }
 
-        function resetConfig() {
-            doRequest('DELETE', "successfully reset data", "error resetting data: ");
-        }
+    function resetConfig() {
+      doRequest('DELETE', "successfully reset data", "error resetting data: ");
+    }
 
-        function loadConfig() {
-            doRequest('GET', "success loading data", "error loading data:");
-        }
+    function loadConfig() {
+      doRequest('GET', "success loading data", "error loading data:");
+    }
 
-        function saveConfig(url, $) {
-            try {
-                var configData = JSON.parse($('#configTextArea').val());
-                $.post({
-                    url: url,
-                    data: JSON.stringify(configData),
-                    contentType: "application/json",
-                    crossDomain: true,
-                    withCredentials: true
-                })
-                    .done(function () {
-                        setTextField(JSON.stringify(configData, null, 2));
-                        displayMsg("successfully saved data");
-                    })
-                    .fail(function (err) {
-                        displayMsg("error saving data:" + JSON.stringify(err, null, 2));
-                    });
-            } catch (err) {
-                displayMsg("error saving data:" + err);
-            }
-        }
+    function saveConfig(url, $) {
+      try {
+        var configData = JSON.parse($('#configTextArea').val());
+        $.post({
+          url: url,
+          data: JSON.stringify(configData),
+          contentType: "application/json",
+          crossDomain: true,
+          withCredentials: true
+        })
+          .done(function () {
+            setTextField(JSON.stringify(configData, null, 2));
+            displayMsg("successfully saved data");
+          })
+          .fail(function (err) {
+            displayMsg("error saving data:" + JSON.stringify(err, null, 2));
+          });
+      } catch(err){
+        displayMsg("error saving data:" + err);
+      }
+    }
 
-        function registerEvents($) {
-            $('#btnSaveConfig').on('click', function () {
-                saveConfig(configEndpoint, $)
-            });
-            $('#btnResetConfig').on('click', function () {
-                resetConfig()
-            });
-        }
+    function registerEvents($) {
+      $('#btnSaveConfig').on('click', function () {
+        saveConfig(configEndpoint, $)
+      });
+      $('#btnResetConfig').on('click', function () {
+        resetConfig()
+      });
+    }
 
 
-        registerEvents($);
-        loadConfig(configEndpoint, $);
-    })(IFS.jQuery);
+    registerEvents($);
+    loadConfig(configEndpoint, $);
+  })(IFS.jQuery);
 </script>
 
 
 <script type="text/javascript">
-    if (window.location.href.indexOf('config=true') === -1) {
-        IFS.jQuery('#utilities').hide();
-        initSearchbar();
+    if (window.location.href.indexOf('config=true') === -1){
+      IFS.jQuery('#utilities').hide();
+      initSearchbar();
     }
 
-    function initSearchbar() {
+  function initSearchbar() {
 
-        IFS.noConflict();
-        IFS.jQuery(document).ready(function ($) {
-            $('#btnInitSearchbar').prop("disabled", true);
+    IFS.noConflict();
+    IFS.jQuery(document).ready(function ($) {
+      $('#btnInitSearchbar').prop("disabled",true);
 
-            IFS.eventbus.addEventListener(IFS.constants.events.STATE_LOADED, function (e) {
-                $('li.active').removeClass('active');
-                $('a[data-value=' + e.target.id + ']').parent().addClass('active');
+      IFS.eventbus.addEventListener(IFS.constants.events.STATE_LOADED, function (e) {
+        $('li.active').removeClass('active');
+        $('a[data-value=' + e.target.id + ']').parent().addClass('active');
+      });
+
+      IFS.initClient({
+        sbTarget: '#searchbar',
+        rlTarget: '#resultlist',
+        configurl: 'http://localhost:3000/config',
+        cors: true,
+        withCredentials: true,
+        callbacks: {
+          persistentState: true
+        },
+        preview: {
+          getCustomPreviewUrl: function(hit) {
+            return "http://www.example.com/"
+          },
+          shouldUseCustomPreview: function(hit){
+            return hit.integer === 2;
+          }
+        }
+      });
+
+
+      /*// Dummy Tabs //////////////////////////////////
+   * to show how to integrate the search bar with tabs
+   */
+
+      $('body').on('click', '[data-action="switch-tab"]', function (e) {
+        e.preventDefault();
+
+        // Cache vars
+        var me = $(this);
+        var parent = me.parent();
+
+
+        if (!parent.hasClass('disabled')) {
+
+          var oldTarget = $('#if-searchareas li.active > a').attr('data-value');
+          var newTarget = me.attr('data-value');
+
+          // Reset active state
+          for (var i = 1; i <= 8; i++) {
+            $('#check' + i + '').parent().removeClass('active');
+          }
+
+          // Set active
+          parent.addClass('active');
+
+          IFS.eventbus.dispatch(IFS.constants.events.RESULT_TARGET_CHANGED, {
+            oldTarget: oldTarget,
+            newTarget: newTarget
+          });
+
+        }
+      });
+
+
+      /*// Horizontal Scrollbox //////////////////////////////////*/
+      $('#if-sa-col').ifHscroll({
+        scrollArea: '#if-searchareas',
+        scrollLeftTrigger: '#if-hs-scrollleft',
+        scrollRightTrigger: '#if-hs-scrollright',
+        scrollAmount: 200
+      });
+
+
+      IFS.eventbus.addEventListener(IFS.constants.events.SEARCHBAR_RENDERED_INITIALLY, function (event) {
+            IFS.jQuery.ajax({
+              url: "http://localhost:3000/config",
+              type: 'DELETE'
             });
+      });
 
-            IFS.initClient({
-                sbTarget: '#searchbar',
-                rlTarget: '#resultlist',
-                configurl: 'http://localhost:3000/config',
-                cors: true,
-                withCredentials: true,
-                callbacks: {
-                    persistentState: true
-                },
-                preview: {
-                    getCustomPreviewUrl: function (hit) {
-                        return "http://www.example.com/"
-                    },
-                    shouldUseCustomPreview: function (hit) {
-                        return hit.integer === 2;
-                    }
-                }
-            });
-
-
-            /*// Dummy Tabs //////////////////////////////////
-         * to show how to integrate the search bar with tabs
-         */
-
-            $('body').on('click', '[data-action="switch-tab"]', function (e) {
-                e.preventDefault();
-
-                // Cache vars
-                var me = $(this);
-                var parent = me.parent();
-
-
-                if (!parent.hasClass('disabled')) {
-
-                    var oldTarget = $('#if-searchareas li.active > a').attr('data-value');
-                    var newTarget = me.attr('data-value');
-
-                    // Reset active state
-                    for (var i = 1; i <= 8; i++) {
-                        $('#check' + i + '').parent().removeClass('active');
-                    }
-
-                    // Set active
-                    parent.addClass('active');
-
-                    IFS.eventbus.dispatch(IFS.constants.events.RESULT_TARGET_CHANGED, {
-                        oldTarget: oldTarget,
-                        newTarget: newTarget
-                    });
-
-                }
-            });
-
-
-            /*// Horizontal Scrollbox //////////////////////////////////*/
-            $('#if-sa-col').ifHscroll({
-                scrollArea: '#if-searchareas',
-                scrollLeftTrigger: '#if-hs-scrollleft',
-                scrollRightTrigger: '#if-hs-scrollright',
-                scrollAmount: 200
-            });
-
-
-            IFS.eventbus.addEventListener(IFS.constants.events.SEARCHBAR_RENDERED_INITIALLY, function (event) {
-                IFS.jQuery.ajax({
-                    url: "http://localhost:3000/config",
-                    type: 'DELETE'
-                });
-            });
-
-            IFS.eventbus.addEventListener(IFS.constants.events.NEW_RESULT_LOADED, function (event) {
-                $('#if-searchareas li').removeClass('active');
-                $('#if-searchareas li > a[data-value="' + event.target.id + '"]').parent().addClass('active');
-            });
-        });
-    };
+      IFS.eventbus.addEventListener(IFS.constants.events.NEW_RESULT_LOADED, function (event) {
+        $('#if-searchareas li').removeClass('active');
+        $('#if-searchareas li > a[data-value="' + event.target.id + '"]').parent().addClass('active');
+      });
+    });
+  };
 </script>
 </body>
 </html>
