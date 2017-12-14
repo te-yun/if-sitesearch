@@ -1,19 +1,3 @@
-/*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 /* Commit:7588e60c83e3f7c38816596b542b43a239d401ca */
 (function (window, document) {
     var require = null;
@@ -4913,7 +4897,7 @@
             }
 
             function g(a) {
-                for (var b = new Object, c = a, d = a, e = 0, f = 0, g = 0, h = "rtl" == document.dir; c && "SPAN" != c.tagName && "TABLE" != c.tagName;) c = c.parentNode;
+                for (var b = {}, c = a, d = a, e = 0, f = 0, g = 0, h = "rtl" == document.dir; c && "SPAN" != c.tagName && "TABLE" != c.tagName;) c = c.parentNode;
                 if (c) {
                     var i, j = "TABLE" == c.tagName ? c.rows(0).cells(0).childNodes : c.childNodes;
                     for (i = 0; i < j.length; ++i) if ("IMG" == j.item(i).tagName && j.item(i).id) {
@@ -21150,7 +21134,7 @@
                         var c = b.match(/^dot-height-(\d+)$/);
                         null !== c && (d = Number(c[1]))
                     });
-                    var f = new Object;
+                    var f = {};
                     c && (f.watch = !0), b && (f.watch = "window"), d > 0 && (f.height = d), a(this).dotdotdot(f)
                 })
             }), IFS.jQuery(window).load(function () {
