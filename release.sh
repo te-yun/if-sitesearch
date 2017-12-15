@@ -1,12 +1,12 @@
 #!/usr/bin/env sh
 
-docker_network="sitesearch"
+docker_network=sitesearch
 
 SPRING_CONFIG_NAME="application, prod"
 ./gradlew build --build-cache --info -x test
 
-docker_image_name="if-sitesearch"
-docker_tag="latest"
+docker_image_name=if-sitesearch
+docker_tag=latest
 
 cd service
 docker build --tag intrafind/${docker_image_name}:${docker_tag} .
@@ -30,4 +30,5 @@ if [ "$danglingImages" ]; then
 else
     echo "There are no dangling Docker images"
 fi
+
 docker volume prune -f
