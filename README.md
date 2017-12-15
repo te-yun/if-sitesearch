@@ -53,7 +53,7 @@ Required environment variables:
     ./js-app-build.sh
 
 ## Release
-    ./release.ps1
+    ./release.sh
     
 ## CI configuration
 Required environment variables:
