@@ -1,17 +1,17 @@
 #!/usr/bin/env pwsh
 
 Set-StrictMode -Version Latest
-$ErrorActionPreference = "Stop"
-$PSDefaultParameterValues["*:ErrorAction"] = "Stop"
+$ErrorActionPreference="Stop"
+$PSDefaultParameterValues["*:ErrorAction"]="Stop"
 
-$docker_network = "sitesearch"
+$docker_network="sitesearch"
 
-$Env:SPRING_CONFIG_NAME = "application, prod"
+$Env:SPRING_CONFIG_NAME="application, prod"
 ./gradlew build --build-cache --info -x test
 
-#$docker_image_name = (Get-ChildItem  service/build/libs/*.jar).BaseName
-$docker_image_name = "if-sitesearch"
-$docker_tag = "latest"
+#$docker_image_name=(Get-ChildItem  service/build/libs/*.jar).BaseName
+$docker_image_name="if-sitesearch"
+$docker_tag="latest"
 
 #mkdir ~/srv/${docker_image_name}
 #sudo chown -R 1000:1000 ~/srv/${docker_image_name} # make it a svc_usr' directory
@@ -28,7 +28,7 @@ docker rm -f ${docker_image_name}
 #    -v ~/srv/${docker_image_name}:/data `
 cd ..
 
-function runService([Int] $service_port = 2443) {
+function runService([Int] $service_port=2443) {
     docker run -d --name ${docker_image_name} `
         -p ${service_port}:8001 `
         --log-driver=gelf `
@@ -44,7 +44,7 @@ runService
 
 function cleanupDocker {
 #    docker volume prune -f
-    $danglingImages = $(docker images -f "dangling=true" -q)
+    $danglingImages=$(docker images -f "dangling=true" -q)
     if ([string]::IsNullOrEmpty($danglingImages)){
         "There are no dangling Docker images"
     } else {
