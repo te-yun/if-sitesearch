@@ -20,7 +20,7 @@ isBlueUp() {
     fi
 }
 
-function runService {
+runService() {
     docker run -d --name $2 \
         -p $1:8001 \
         --log-driver=gelf \
