@@ -24,10 +24,10 @@ docker run -d --name ${docker_image_name} \
     --network $docker_network \
     intrafind/${docker_image_name}:${docker_tag}
 
-docker volume prune -f
 danglingImages=$(docker images -f "dangling=true" -q)
 if [ "$danglingImages" ]; then
     docker rmi -f $danglingImages # cleanup, GC for dangling images
 else
     echo "There are no dangling Docker images"
 fi
+docker volume prune -f
