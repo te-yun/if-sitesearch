@@ -1,8 +1,4 @@
-#!/usr/bin/env pwsh
-
-Set-StrictMode -Version Latest
-$ErrorActionPreference = "Stop"
-$PSDefaultParameterValues["*:ErrorAction"] = "Stop"
+#!/usr/bin/env sh
 
 #curl -s sitesearch:9605/json/autocomplete?method=search --data param0=int
 #

@@ -1,12 +1,12 @@
 #!/usr/bin/env pwsh
 
 Set-StrictMode -Version Latest
-$ErrorActionPreference = "Stop"
-$PSDefaultParameterValues["*:ErrorAction"] = "Stop"
+$ErrorActionPreference="Stop"
+$PSDefaultParameterValues["*:ErrorAction"]="Stop"
 
-$version = "2017.2"
-$docker_network = "dev"
-$service_name = "teamcity-server"
+$version="2017.2"
+$docker_network="dev"
+$service_name="teamcity-server"
 
 docker rm -f $service_name
 docker run -d -t --name $service_name `
@@ -23,7 +23,7 @@ docker run -d -t --name $service_name `
 #~/buildAgent/bin/install.sh https://ci.sitesearch.cloud
 #~/buildAgent/bin/agent.sh run
 
-function start-ci-agent([String] $agent_name = "sun") {
+function start-ci-agent([String] $agent_name="sun") {
     docker rm -f teamcity-agent-$agent_name
     docker run -d -t --name teamcity-agent-$agent_name `
         -e SERVER_URL="https://ci.sitesearch.cloud" `
