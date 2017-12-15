@@ -14,21 +14,33 @@
  * limitations under the License.
  */
 
-body {
+ body {
     margin: 0;
     padding: 0;
     font-family: 'Open Sans', sans-serif;
 }
 
-h2,
-h3 {
+h2 {
     font-size: 24px;
     color: #404040;
     font-weight: 600;
 }
 
 h3 {
+    position: relative;
+    display: inline-block;
     font-size: 20px;
+    color: #404040;
+    font-weight: 600;
+}
+
+.tipsy {
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.tipsy::after {
+    content: "?";
 }
 
 .wrapper {
@@ -42,7 +54,7 @@ h3 {
     -webkit-box-align: center;
         -ms-flex-align: center;
             align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: 40px;
 }
 
 @media (max-width: 768px) {
@@ -64,8 +76,38 @@ h3 {
     line-height: 1.66em;
 }
 
-.form-inline > input[type="text"] {
-    width: calc(100% - 26px);
+.form-inline .tipsy-container {
+    position: relative;
+    -webkit-box-flex: 1;
+        -ms-flex: auto;
+            flex: auto;
+}
+
+@media (max-width: 768px) {
+    .form-inline .tipsy-container {
+        width: 100%;
+    }
+}
+
+.form-inline .tipsy {
+    position: absolute;
+    top: -15px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+}
+
+h3 .tipsy {
+    position: absolute;
+    right: -14px;
+    top: -3px;
+    font-weight: normal;
+}
+
+.form-inline input[type="text"] {
+    width: calc(100% - 66px);
     padding: 10px 12px;
     border: 1px solid #e3e3e3;
     outline: 0;
@@ -74,15 +116,24 @@ h3 {
     color: #767676;
 }
 
-.form-inline > input[type="text"]:focus {
+.form-inline input[type="text"]:focus {
     padding: 9px 12px;
     font-size: 16px;
 }
 
-.form-inline > div {
-    width: 100%;
+.form-inline .output {
+    width: calc(100% - 66px);
     padding: 10px 14px;
+    border-bottom: 1px solid #e3e3e3;
     font-size: 13px;
+    color: #767676;
+}
+
+.form-inline .subline {
+    position: absolute;
+    right: 40px;
+    bottom: -20px;
+    font-size: 12px;
     color: #767676;
 }
 
@@ -90,7 +141,7 @@ h3 {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    margin: 20px 0 40px;
+    margin: 20px 0;
 }
 
 button {
@@ -111,12 +162,20 @@ button {
 
 textarea {
     width: calc(100% - 26px);
-    height: 470px;
+    height: 580px;
     padding: 10px 12px;
     border: 1px solid #e3e3e3;
     outline: none;
     background-color: #f7f7f7;
-    font-size: 13px;
+    font-size: 13px !important; /* because app.css overrides on focus the fontsize */
     color: #6f6f6f;
     resize: none;
+}
+
+/* Tippy Custom Styles */
+.tippy-popper {
+    pointer-events: auto;
+}
+.tippy-content a {
+    color: white;
 }
