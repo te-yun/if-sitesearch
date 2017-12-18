@@ -3,9 +3,9 @@
 sudo sysctl -w vm.max_map_count=262144
 #docker network create sitesearch
 
-docker-compose --file opt/docker-compose-elk.yaml down
-docker-compose --file opt/docker-compose-elk.yaml up -d --force-recreate
-docker-compose --file opt/docker-compose-elk.yaml ps
+docker-compose --file opt/docker-compose-elk.yaml -p tmp down
+docker-compose --file opt/docker-compose-elk.yaml -p tmp up -d --force-recreate
+docker-compose --file opt/docker-compose-elk.yaml -p tmp ps
 
 # Provide Basic License
 #docker exec -it ops-elasticsearch bash
