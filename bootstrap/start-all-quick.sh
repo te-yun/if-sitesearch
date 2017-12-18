@@ -10,6 +10,7 @@ docker start teamcity-agent-Venus
 docker start teamcity-agent-Merkur
 
 docker start sitesearch-elasticsearch
+docker start sitesearch-elasticsearch-1
 docker start sitesearch-search-service
 
 docker start if-sitesearch
@@ -19,7 +20,7 @@ docker start if-sitesearch-blue
 docker start consul
 docker start router
 
-#docker-compose --file opt/docker-compose-elk.yaml restart
+docker-compose --file opt/docker-compose-elk.yaml up
 #docker-compose --file opt/docker-compose-bg.yaml restart
 echo "/== startup-script =="
 

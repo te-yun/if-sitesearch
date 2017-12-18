@@ -1,7 +1,7 @@
 # SSL Certificate
-ssl_certificate /etc/letsencrypt/live/sitesearch.cloud/fullchain.pem;
-ssl_certificate_key /etc/letsencrypt/live/sitesearch.cloud/privkey.pem;
-ssl_trusted_certificate /etc/letsencrypt/live/sitesearch.cloud/fullchain.pem;
+ssl_certificate /etc/letsencrypt/live/main.sitesearch.cloud/fullchain.pem;
+ssl_certificate_key /etc/letsencrypt/live/main.sitesearch.cloud/privkey.pem;
+ssl_trusted_certificate /etc/letsencrypt/live/main.sitesearch.cloud/fullchain.pem;
 
 ssl_session_timeout 1d;
 ssl_session_cache shared:SSL:50m;
