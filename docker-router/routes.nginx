@@ -4,7 +4,6 @@ server {
 
     #    include /etc/nginx/snippets/letsencrypt.conf;
     location ^~ /.well-known/acme-challenge/ {
-        #        default_type "text/plain";
         root /etc/letsencrypt;
     }
 

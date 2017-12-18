@@ -1,9 +1,5 @@
 #!/usr/bin/env sh
 
-#Set-StrictMode -Version Latest
-#$ErrorActionPreference = "Stop"
-#$PSDefaultParameterValues["*:ErrorAction"] = "Stop"
-
 #function setupRedirectRouterContainer {
     docker_network="sitesearch"
     docker_redirect_image="router"

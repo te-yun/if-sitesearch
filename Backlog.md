@@ -14,6 +14,7 @@ intrafind.de EN siteId: 4bcccea2-8bcf-4280-88c7-8736e9c3d15c
     * let the *crawler* talk to Site Search API to feed its content
 
 # next
+* listing on "UK Market Place", a digital subscription marketplace, ask R.
 * Search bar versioning
 * API improvement: move /search & /autocomplete beneath /sites/{siteId}/*  
 * introduce second machine with iFinder Core
