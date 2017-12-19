@@ -85,8 +85,7 @@ http {
 
     keepalive_timeout  65;
 
-    resolver                  8.8.8.8 valid=30s;
-    resolver_timeout          10s;
+    resolver_timeout          5s;
 
     gzip on;
     gzip_types text/plain text/css application/xml application/json application/javascript;
