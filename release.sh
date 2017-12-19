@@ -15,7 +15,7 @@ cd ..
 
 docker run -d --name ${docker_image_name} \
     --log-driver=gelf \
-    --log-opt gelf-address=udp://ops-logstash:12201 \
+    --log-opt gelf-address=udp://localhost:12201 \
     --env SECURITY_USER_PASSWORD=$SECURITY_USER_PASSWORD \
     --env BUILD_NUMBER=$BUILD_NUMBER \
     --env SCM_HASH=$SCM_HASH \
