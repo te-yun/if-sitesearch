@@ -14,7 +14,6 @@ docker rm -f ${docker_image_name}
 cd ..
 
 docker run -d --name ${docker_image_name} \
-    -p 2443:8001 \
     --log-driver=gelf \
     --log-opt gelf-address=udp://localhost:12201 \
     --env SECURITY_USER_PASSWORD=$SECURITY_USER_PASSWORD \
