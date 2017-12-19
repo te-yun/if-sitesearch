@@ -12,7 +12,6 @@ docker run -d -t --name $service_name \
     jetbrains/${service_name}:${version}
 
 ~/buildAgent/bin/agent.sh stop
-~/buildAgent/bin/agent.sh start # run agent on host machine
 
 # Run for major version upgrades
 #~/buildAgent/bin/install.sh https://ci.sitesearch.cloud
@@ -30,3 +29,5 @@ start_ci_agent() {
 
 start_ci_agent Merkur
 start_ci_agent Venus
+
+~/buildAgent/bin/agent.sh start # run agent on host machine
