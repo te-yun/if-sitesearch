@@ -214,16 +214,16 @@ public class PageTest {
         assertNull(updateWithInvalidPageId.getBody());
     }
 
-    @Test
-    public void importFeed() throws Exception {
-        final ResponseEntity<SiteIndexSummary> exchange = caller.exchange(
-                SitesController.ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/fahrplanaenderungen/detail/rss.xml",
-                HttpMethod.POST, HttpEntity.EMPTY, SiteIndexSummary.class);
-        final SiteIndexSummary creation = validateTenantSummary(exchange, 10);
-
-        TimeUnit.MILLISECONDS.sleep(8_000);
-        validateUpdatedSites(creation);
-    }
+//    @Test
+//    public void importFeed() throws Exception {
+//        final ResponseEntity<SiteIndexSummary> exchange = caller.exchange(
+//                SitesController.ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/fahrplanaenderungen/detail/rss.xml",
+//                HttpMethod.POST, HttpEntity.EMPTY, SiteIndexSummary.class);
+//        final SiteIndexSummary creation = validateTenantSummary(exchange, 10);
+//
+//        TimeUnit.MILLISECONDS.sleep(8_000);
+//        validateUpdatedSites(creation);
+//    }
 
     @Test
     public void importFeedAndClearSite() throws Exception {
