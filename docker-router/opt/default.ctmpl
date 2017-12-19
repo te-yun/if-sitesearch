@@ -18,9 +18,9 @@ http {
     {{range service $blue}}
     server {{.Address}}:{{.Port}} max_fails=3 fail_timeout=60 weight=1;
     {{else}}
-    server main.sitesearch.cloud:4443;
-    server main.sitesearch.cloud:4443;
-    server main.sitesearch.cloud:3443 backup;
+    server localhost:4443;
+    server localhost:4443;
+    server localhost:3443 backup;
     {{end}}
   }
 
@@ -29,9 +29,9 @@ http {
     {{range service $green}}
     server {{.Address}}:{{.Port}} max_fails=3 fail_timeout=60 weight=1;
     {{else}}
-    server main.sitesearch.cloud:3443;
-    server main.sitesearch.cloud:3443;
-    server main.sitesearch.cloud:4443 backup;
+    server localhost:3443;
+    server localhost:3443;
+    server localhost:4443 backup;
     {{end}}
   }
 
@@ -73,9 +73,9 @@ http {
 
     # load balancer placeholder, once multiple instances are required
     upstream sitesearch-api-dev {
-        server main.sitesearch.cloud:2443;
-        server main.sitesearch.cloud:2443;
-        server main.sitesearch.cloud:2443 backup;
+        server localhost:2443;
+        server localhost:2443;
+        server localhost:2443 backup;
     }
 
     include       /etc/nginx/mime.types;
