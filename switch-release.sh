@@ -32,7 +32,6 @@ runService() {
         intrafind/${docker_image_name}:${docker_tag}
 }
 
-# TODO change mapped volumes to avoid collision with other running containers
 if isBlueUp; then
     echo "blue is active"
     green="${docker_image_name}-green"

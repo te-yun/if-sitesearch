@@ -5,7 +5,6 @@ service_name=teamcity-server
 
 docker rm -f $service_name
 docker run -d -t --name $service_name \
-    -p 8111:8111 \
     -e TEAMCITY_SERVER_MEM_OPTS="-Xmx2g -XX:MaxPermSize=270m -XX:ReservedCodeCacheSize=350m" \
     -v ~/srv/${service_name}:/data/teamcity_server/datadir \
     -v ~/srv/${service_name}/logs:/opt/teamcity/logs \
