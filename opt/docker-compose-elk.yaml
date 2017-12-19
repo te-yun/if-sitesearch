@@ -73,7 +73,7 @@ services:
     volumes:
       - ops-logstash:/usr/share/logstash:rw
     ports:
-      - 12201/udp
+      - 12201:12201/udp
 #      - 5044:5044
 #      - 9600:9600
     networks:
