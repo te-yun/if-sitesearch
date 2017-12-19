@@ -19,7 +19,7 @@ docker run -d -t --name $service_name \
 #~/buildAgent/bin/install.sh https://ci.sitesearch.cloud
 #~/buildAgent/bin/agent.sh run
 
-start-ci-agent() {
+start_ci_agent() {
     docker rm -f teamcity-agent-$1
     docker run -d -t --name teamcity-agent-$1 \
         -e SERVER_URL="https://ci.sitesearch.cloud" \
@@ -29,5 +29,5 @@ start-ci-agent() {
         jetbrains/teamcity-agent:${version}
 }
 
-start-ci-agent Merkur
-start-ci-agent Venus
+start_ci_agent Merkur
+start_ci_agent Venus
