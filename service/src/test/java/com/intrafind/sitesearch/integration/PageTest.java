@@ -284,7 +284,7 @@ public class PageTest {
     public void importFeedAndUpdate() throws Exception {
         // create index
         final ResponseEntity<SiteIndexSummary> initialIndexCreation = caller.exchange(
-                SitesController.ENDPOINT + "/rss?feedUrl=http://raw.githubusercontent.com/intrafind/if-sitesearch/master/service/src/test/resources/rss-feed-example.xml",
+                SitesController.ENDPOINT + "/rss?feedUrl=http://raw.githubusercontent.com/intrafind/if-sitesearch/master/service/src/test/resources/steem-blockchain-rss-feed-init.xml",
                 HttpMethod.POST, HttpEntity.EMPTY, SiteIndexSummary.class);
         TimeUnit.MILLISECONDS.sleep(13_000);
         final SiteIndexSummary siteIndexSummaryCreation = validateTenantSummary(initialIndexCreation, 10);
