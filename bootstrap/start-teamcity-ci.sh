@@ -1,7 +1,6 @@
 #!/usr/bin/env sh
 
 version="2017.2"
-docker_network=dev
 service_name=teamcity-server
 
 docker rm -f $service_name

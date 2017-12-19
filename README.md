@@ -46,7 +46,7 @@ Required environment variables:
 ## Test
     ./test.sh
 
-## Load Test
+## Test throughput
     ./load-test.sh
 
 ## Build browser clients
