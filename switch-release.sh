@@ -21,8 +21,7 @@ isBlueUp() {
 }
 
 runService() {
-    docker run -d --name $2 \
-        -p $1:8001 \
+    docker run -d --name $1 \
         --log-driver=gelf \
         --log-opt gelf-address=udp://localhost:12201 \
         --env SECURITY_USER_PASSWORD=$SECURITY_USER_PASSWORD \
@@ -39,7 +38,7 @@ if isBlueUp; then
     green="${docker_image_name}-green"
 
     docker rm -f $green
-    runService 3443 $green
+    runService $green
     sleep 21
     docker exec router switch.sh green
 
@@ -48,7 +47,7 @@ else
     blue="${docker_image_name}-blue"
 
     docker rm -f $blue
-    runService 4443 $blue
+    runService $blue
     sleep 21
     docker exec router switch.sh blue
 fi
