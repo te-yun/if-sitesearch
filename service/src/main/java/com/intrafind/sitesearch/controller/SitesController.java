@@ -59,7 +59,6 @@ public class SitesController {
     @RequestMapping(path = "{siteId}/pages", method = RequestMethod.GET)
     ResponseEntity<FetchedPage> fetchViaUrl(
             @PathVariable(value = "siteId") UUID siteId,
-//            @RequestParam(value = "url") URI url
             @RequestParam(value = "url") String url
     ) {
         String pageId = Page.hashPageId(siteId, url);
@@ -78,8 +77,6 @@ public class SitesController {
             @RequestParam(name = "siteSecret") UUID siteSecret,
             @RequestBody Page page
     ) {
-//        page.setUrl(decodedUrl); // make sure both URLs are aligned, TODO use a separate DTO sans-url later on
-
         String pageId = Page.hashPageId(siteId, page.getUrl());
         // TODO use SiteUpdate DTO with NO siteId & NO siteSecret provided
 
@@ -129,7 +126,6 @@ public class SitesController {
     ResponseEntity<SiteIndexSummary> reimportIndex(
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "siteSecret") UUID siteSecret,
-//            @RequestParam(value = "xmlUrl") URI xmlUrl,
             @RequestParam(value = "xmlUrl") String xmlUrl,
             @RequestParam(value = "stripHtmlTags", required = false, defaultValue = "false") Boolean stripHtmlTags,
             @RequestParam(value = "clearIndex", required = false, defaultValue = "false") Boolean clearIndex
@@ -141,7 +137,6 @@ public class SitesController {
     ResponseEntity<SiteIndexSummary> indexRssFeed(
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "siteSecret") UUID siteSecret,
-//            @RequestParam(value = "feedUrl") URI feedUrl,
             @RequestParam(value = "feedUrl") String feedUrl,
             @RequestParam(value = "stripHtmlTags", required = false, defaultValue = "false") Boolean stripHtmlTags
     ) {
@@ -151,7 +146,6 @@ public class SitesController {
     @RequestMapping(path = "rss", method = RequestMethod.POST)
     ResponseEntity<SiteIndexSummary> indexNewRssFeed(
             @RequestParam(value = "feedUrl") String feedUrl,
-//            @RequestParam(value = "feedUrl") URI feedUrl,
             @RequestParam(value = "stripHtmlTags", required = false, defaultValue = "false") Boolean stripHtmlTags
     ) {
         return indexAsRssFeed(null, null, URI.create(feedUrl), stripHtmlTags, false, false);
@@ -183,7 +177,6 @@ public class SitesController {
     @RequestMapping(path = "{siteId}/pages", method = RequestMethod.DELETE)
     ResponseEntity<?> deleteViaUrl(
             @PathVariable(value = "siteId") UUID siteId,
-//            @RequestParam(value = "url") URI url,
             @RequestParam(value = "url") String url,
             @RequestParam(name = "siteSecret") UUID siteSecret
     ) {
