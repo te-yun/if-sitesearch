@@ -9,8 +9,18 @@ services:
       - sitesearch-elasticsearch
       - sitesearch-elasticsearch-1
       - sitesearch-elasticsearch-quorum
-#    ports:
-#      - 9605:9605
+    networks:
+      - sitesearch
+
+# TODO sitesearch-search-service-1 not tested yet
+  sitesearch-search-service-1:
+    image: intrafind/sitesearch-search-service:latest
+    container_name: sitesearch-search-service-1
+    restart: always
+    depends_on:
+      - sitesearch-elasticsearch
+      - sitesearch-elasticsearch-1
+      - sitesearch-elasticsearch-quorum
     networks:
       - sitesearch
 
