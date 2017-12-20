@@ -94,10 +94,10 @@ public class LoadTest {
 
     static {
         AUTOCOMPLETE_QUERIES.put("hyp", 0L);
-        AUTOCOMPLETE_QUERIES.put("gel", 10L);
-        AUTOCOMPLETE_QUERIES.put("geld", 9L);
+        AUTOCOMPLETE_QUERIES.put("gel", 6L);
+        AUTOCOMPLETE_QUERIES.put("geld", 6L);
         AUTOCOMPLETE_QUERIES.put("ban", 10L);
-        AUTOCOMPLETE_QUERIES.put("bank", 9L);
+        AUTOCOMPLETE_QUERIES.put("bank", 6L);
         AUTOCOMPLETE_QUERIES.put("fond", 2L);
         QUERY_LIST_AUTOCOMPLETE = new ArrayList<>(AUTOCOMPLETE_QUERIES.keySet());
     }
