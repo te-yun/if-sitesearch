@@ -44,7 +44,7 @@ private fun selfTest() {
 
 private fun validateServiceCall(apiEndpoint: String) {
     val xhr = XMLHttpRequest()
-    xhr.open("GET", "https://api.sitesearch.cloud/$apiEndpoint?query=ifinder&siteId=$siteId")
+    xhr.open("GET", "$finderService/$siteId/$apiEndpoint?query=ifinder")
     xhr.onload = {
         val dt = document.createElement("dt") as HTMLElement
         debugView.appendChild(dt)
@@ -135,7 +135,7 @@ private fun encapsulateAsComponent() {
 //private val pageFinderContainer = document.createElement("template") as HTMLTemplateElement
 private val pageFinderContainer = document.createElement("div") as HTMLDivElement
 private val findingsContainer = document.createElement("dl") as HTMLDListElement
-private val finderService = "https://api.sitesearch.cloud"
+private val finderService = "https://api.sitesearch.cloud/sites"
 private val pageFinderInit = document.currentScript as HTMLScriptElement
 private val siteId = pageFinderInit.getAttribute("data-siteId")
 private val finderEndpoint = "search"
@@ -189,7 +189,7 @@ fun main(args: Array<String>) {
 
 private fun autocomplete() {
     val xhr = XMLHttpRequest()
-    xhr.open("GET", "$finderService/$autocompleteEndpoint?query=${finder.value}&siteId=$siteId")
+    xhr.open("GET", "$finderService/$siteId/$autocompleteEndpoint?query=${finder.value}")
     xhr.onload = {
         findingsContainer.clear()
         if (xhr.status.equals(200)) {
@@ -227,7 +227,7 @@ private fun search() {
         return
     }
     val xhr = XMLHttpRequest()
-    xhr.open("GET", "$finderService/$finderEndpoint?query=${finder.value}&siteId=$siteId")
+    xhr.open("GET", "$finderService/$siteId/$finderEndpoint?query=${finder.value}")
     xhr.onload = {
         findingsContainer.clear()
         if (xhr.status.equals(200)) {
