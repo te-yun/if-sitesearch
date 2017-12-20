@@ -20,7 +20,7 @@ docker start consul
 docker start router
 
 sudo sysctl -w vm.max_map_count=262144 # required for ELK's Elasticsearch
-docker-compose --file opt/docker-compose-elk.yaml up -d
+docker-compose --file opt/docker-compose-elk.yaml -p tmp up -d
 #docker-compose --file opt/docker-compose-bg.yaml restart
 echo "/== startup-script =="
 
