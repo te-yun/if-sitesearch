@@ -93,12 +93,12 @@ public class LoadTest {
     }
 
     static {
-        AUTOCOMPLETE_QUERIES.put("hyp", 4L);
+        AUTOCOMPLETE_QUERIES.put("hyp", 2L);
         AUTOCOMPLETE_QUERIES.put("gel", 5L);
-        AUTOCOMPLETE_QUERIES.put("geld", 5L);
-        AUTOCOMPLETE_QUERIES.put("ban", 10L);
-        AUTOCOMPLETE_QUERIES.put("bank", 10L);
-        AUTOCOMPLETE_QUERIES.put("fond", 10L);
+        AUTOCOMPLETE_QUERIES.put("geld", 6L);
+        AUTOCOMPLETE_QUERIES.put("ban", 5L);
+        AUTOCOMPLETE_QUERIES.put("bank", 5L);
+        AUTOCOMPLETE_QUERIES.put("fond", 5L);
         QUERY_LIST_AUTOCOMPLETE = new ArrayList<>(AUTOCOMPLETE_QUERIES.keySet());
     }
 
