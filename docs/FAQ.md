@@ -101,7 +101,7 @@ Or what should be the first thing, I need to do, to **get started** with Site Se
     * You do not have to do anything. We will automatically delete your indexed data after a certain time of inactivity.
     We would appreciate to [learn the reasons](mailto:feedback@sitesearch.cloud) behind your decision to stop using our service. 
     
-* After using the *Site Search Integrator Gadget* I get search results that do not correspond to the specified *siteId*.
+* After using the *Site Search Gadget* I get search results that do not correspond to the specified *siteId*.
     * Delete your browser's cookies for *api.sitesearch.cloud* and specifically the "override-site" cookie.
      
 * Who is using Site Search?

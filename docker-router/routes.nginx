@@ -85,7 +85,8 @@ server {
     }
 
     location / {
-        proxy_pass http://sitesearch-search-service:9605;
+        #        proxy_pass http://sitesearch-search-service:9605;
+        proxy_pass http://ifinder-search-service;
     }
 }
 
