@@ -74,7 +74,7 @@ public class LoadTest {
 
     static {
         AUTOCOMPLETE_QUERIES.put("hyp", 0L);
-        AUTOCOMPLETE_QUERIES.put("gel", 7L);
+        AUTOCOMPLETE_QUERIES.put("gel", 6L);
         AUTOCOMPLETE_QUERIES.put("geld", 6L);
         AUTOCOMPLETE_QUERIES.put("ban", 7L);
         AUTOCOMPLETE_QUERIES.put("bank", 7L);
