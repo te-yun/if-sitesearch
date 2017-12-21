@@ -26,7 +26,7 @@ http {
         server {{.Address}}:{{.Port}} max_fails=3 fail_timeout=60 weight=1;
     {{else}}
         server if-sitesearch-blue:8001;
-        server if-sitesearch-blue:8001;
+        server if-sitesearch-blue-1:8001;
         server if-sitesearch-green:8001 backup;
     {{end}}
   }
@@ -37,7 +37,7 @@ http {
         server {{.Address}}:{{.Port}} max_fails=3 fail_timeout=60 weight=1;
     {{else}}
         server if-sitesearch-green:8001;
-        server if-sitesearch-green:8001;
+        server if-sitesearch-green-1:8001;
         server if-sitesearch-blue:8001 backup;
     {{end}}
   }
