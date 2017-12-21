@@ -11,10 +11,13 @@ docker start teamcity-agent-Merkur
 docker start sitesearch-elasticsearch
 docker start sitesearch-elasticsearch-1
 docker start sitesearch-search-service
+docker start sitesearch-search-service-1
 
 docker start if-sitesearch
 docker start if-sitesearch-green
+docker start if-sitesearch-green-1
 docker start if-sitesearch-blue
+docker start if-sitesearch-blue-1
 
 docker start consul
 docker start router
