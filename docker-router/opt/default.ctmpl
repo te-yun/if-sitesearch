@@ -91,7 +91,6 @@ http {
         }
 
         location / {
-            #        proxy_pass http://sitesearch-search-service-1:9605;
             proxy_pass http://ifinder-search-service;
         }
     }

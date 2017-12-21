@@ -14,7 +14,6 @@ RUN mkdir -p /etc/letsencrypt/.well-known # enables Letsencrypt validation
 COPY ssl.nginx /etc/nginx/snippets/ssl.conf
 COPY cors-headers.nginx /etc/nginx/snippets/cors-headers.conf
 COPY routes.nginx /etc/nginx/conf.d/default.conf
-#COPY htpasswd.txt /etc/nginx/.htpasswd
 RUN echo 'sitesearch:$apr1$yiWHOvCy$YVz/vNHOKrH9LJGEglMOg.' > /etc/nginx/.htpasswd
 
 ENV BLUE_NAME blue
