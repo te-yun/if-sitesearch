@@ -15,6 +15,7 @@ COPY ssl.nginx /etc/nginx/snippets/ssl.conf
 COPY cors-headers.nginx /etc/nginx/snippets/cors-headers.conf
 COPY routes.nginx /etc/nginx/conf.d/default.conf
 COPY htpasswd.txt /etc/nginx/.htpasswd
+#RUN echo "user:$apr1$yiWHOvCy$YVz/vNHOKrH9LJGEglMOg." >> /etc/nginx/.htpasswd.new
 
 ENV BLUE_NAME blue
 ENV GREEN_NAME green
