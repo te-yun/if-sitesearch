@@ -42,7 +42,7 @@ if isBlueUp; then
     green="${docker_image_name}-green"
 
     startComponent ${green}
-#    startComponent ${green}-1
+    startComponent ${green}-1
     sleep 21
     docker exec router switch.sh green
 
@@ -51,7 +51,7 @@ else
     blue="${docker_image_name}-blue"
 
     startComponent ${blue}
-#    startComponent ${blue}-1
+    startComponent ${blue}-1
     sleep 21
     docker exec router switch.sh blue
 fi
