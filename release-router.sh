@@ -13,5 +13,3 @@ docker run -d --name $docker_redirect_image \
     -v /etc/letsencrypt:/etc/letsencrypt \
     --network $docker_network \
     intrafind/${docker_redirect_image}:${docker_tag}
-
-cd ..

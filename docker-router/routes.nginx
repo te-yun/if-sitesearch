@@ -75,24 +75,6 @@ server {
 server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
-    server_name main.sitesearch.cloud;
-
-    include /etc/nginx/snippets/ssl.conf;
-
-    location /status {
-        stub_status on;
-        access_log off;
-    }
-
-    location / {
-        #        proxy_pass http://sitesearch-search-service-1:9605;
-        proxy_pass http://ifinder-search-service;
-    }
-}
-
-server {
-    listen 443 ssl http2;
-    listen [::]:443 ssl http2;
     server_name green.sitesearch.cloud;
 
     include /etc/nginx/snippets/ssl.conf;
