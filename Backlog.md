@@ -58,6 +58,7 @@ intrafind.de EN siteId: 4bcccea2-8bcf-4280-88c7-8736e9c3d15c
 * automatic disaster failover
 
 # Issues
+* SB: clicking on the embedding website should discard searchbar results 
 * specify language via query parameter
 * enable user to click-away the results list: search bar
 * 400s for: https://api.sitesearch.cloud/search?action=WHILEYOUTYPE&search=cre&siteId=  

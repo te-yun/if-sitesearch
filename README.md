@@ -16,7 +16,7 @@ an on-demand SaaS offering for providing websites with an externally managed sea
 * [Documentation](https://github.com/intrafind/if-sitesearch/blob/master/docs/faq.md)
 * [Integration](https://github.com/intrafind/if-sitesearch/blob/master/docs/Site%20Search%20Product%20Overview.pdf)
     
-***> > > [Try out!](https://api.sitesearch.cloud) < < <***    
+***> > > [Try out!](https://sitesearch.cloud) < < <***    
     
 # Local Configuration
 
@@ -27,8 +27,8 @@ Required environment variables:
 
     * SECURITY_OAUTH2_CLIENT_CLIENT_SECRET
     * SECURITY_USER_PASSWORD # for iFinder Core access 
-    * GITHUB_PUBLIC_ACCESS_TOKEN = "your long living GitHub token"
-    * DEV_SKIP_FLAG = "true" # skip some oAuth2 checks in integration tests to enable additional test scenarios   
+    * GITHUB_PUBLIC_ACCESS_TOKEN="your long living GitHub token"
+    * DEV_SKIP_FLAG="true" # skip some oAuth2 checks in integration tests to enable additional test scenarios   
 
 # OSS Community Contributions are appreciated 🤓☺️ 
 
@@ -59,11 +59,11 @@ Required environment variables:
 Required environment variables:
 
     * SECURITY_OAUTH2_CLIENT_CLIENT_SECRET
-    * BUILD_NUMBER = "extracted from CI"
-    * GITHUB_PUBLIC_ACCESS_TOKEN = "your long living GitHub token"
-    * DEV_SKIP_FLAG = "true" # skip some oAuth2 checks in integration tests to enable additional test scenarios
-    * SCM_HASH = "Git commit hash, extracted from CI"
-    * SECURITY_USER_PASSWORD = "Basic Auth password" # for iFinder Core access   
+    * BUILD_NUMBER="extracted from CI"
+    * GITHUB_PUBLIC_ACCESS_TOKEN="your long living GitHub token"
+    * DEV_SKIP_FLAG="true" # skip some oAuth2 checks in integration tests to enable additional test scenarios
+    * SCM_HASH="Git commit hash, extracted from CI"
+    * SECURITY_USER_PASSWORD="Basic Auth password" # for iFinder Core access   
     
 # Attribution
 * Made with ♥ in Munich

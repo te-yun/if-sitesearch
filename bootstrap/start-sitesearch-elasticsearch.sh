@@ -6,7 +6,7 @@ docker_image="intrafind/$service_name"
 persistence_dir=srv
 HOME=/home/alexander_orlov
 
-docker network create $docker_network
+#docker network create $docker_network
 
 if [ -f "$HOME/tmp/$service_name.tar" ]; then
 #if(Test-Path $HOME/tmp/$service_name.tar){

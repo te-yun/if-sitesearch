@@ -12,7 +12,6 @@ services:
     networks:
       - sitesearch
 
-# TODO sitesearch-search-service-1 not tested yet
   sitesearch-search-service-1:
     image: intrafind/sitesearch-search-service:latest
     container_name: sitesearch-search-service-1
