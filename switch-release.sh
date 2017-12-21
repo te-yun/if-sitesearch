@@ -32,12 +32,17 @@ runService() {
         intrafind/${docker_image_name}:${docker_tag}
 }
 
+startComponent() {
+    docker rm -f $1
+    runService $1
+}
+
 if isBlueUp; then
     echo "blue is active"
     green="${docker_image_name}-green"
 
-    docker rm -f $green
-    runService $green
+    startComponent ${green}
+#    startComponent ${green}-1
     sleep 21
     docker exec router switch.sh green
 
@@ -45,8 +50,8 @@ else
     echo "blue is inactive"
     blue="${docker_image_name}-blue"
 
-    docker rm -f $blue
-    runService $blue
+    startComponent ${blue}
+#    startComponent ${blue}-1
     sleep 21
     docker exec router switch.sh blue
 fi
