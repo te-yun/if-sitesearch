@@ -19,17 +19,17 @@ package com.intrafind.sitesearch.dto;
 import java.io.Serializable;
 
 public class Stats implements Serializable {
-    private long queryCount;
     private String buildNumber;
     private String scmHash;
+    private String hostname;
 
     private Stats() {
     }
 
-    public Stats(String buildNumber, String scmHash, long queryCount) {
+    public Stats(String buildNumber, String scmHash, String hostname) {
         this.buildNumber = buildNumber;
         this.scmHash = scmHash;
-        this.queryCount = queryCount;
+        this.hostname = hostname;
     }
 
     public String getScmHash() {
@@ -40,12 +40,12 @@ public class Stats implements Serializable {
         this.scmHash = scmHash;
     }
 
-    public long getQueryCount() {
-        return queryCount;
+    public String getHostname() {
+        return hostname;
     }
 
-    public void setQueryCount(long queryCount) {
-        this.queryCount = queryCount;
+    public void setHostname(String hostname) {
+        this.hostname = hostname;
     }
 
     public String getBuildNumber() {
