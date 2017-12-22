@@ -32,7 +32,8 @@ intrafind.de EN siteId: 4bcccea2-8bcf-4280-88c7-8736e9c3d15c
 * save siteSecret in persistent store, not in the ElasticSearch document
 
 # future
-* Crawler: exclude specific paths
+* aggregated domain search for: sub.example.com & example.com & sub-blub.example.com
+* Crawler: exclude specific paths and/or path infix 
 * DDoS prevention for all API calls
 * Google drive connector 
 * Synonyms: "privat" should also autocomplete "privakonto"
