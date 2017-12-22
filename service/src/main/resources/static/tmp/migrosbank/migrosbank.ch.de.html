@@ -19,14 +19,14 @@
 <h1>DE</h1>
 <p>Bitte löschen Sie Cookies für api.sitesearch.cloud</p>
 
-<link rel="stylesheet" href="https://api.sitesearch.cloud/searchbar/css/app.css"/>
+<link rel="stylesheet" href="https://cdn.sitesearch.cloud/searchbar/2017-12-14/app/css/app.css"/>
 <div id="searchbarContainer">
     <div class="container" style="width: 530px;">
         <div id="searchbar"></div>
         <div id="resultlist"></div>
     </div>
 
-    <script src="https://api.sitesearch.cloud/searchbar/js/app.js"></script>
+    <script src="https://cdn.sitesearch.cloud/searchbar/2017-12-14/app/js/app.js"></script>
     <script>
         jQuery.noConflict();
         jQuery(document).ready(function ($) {
@@ -37,8 +37,9 @@
                     }
                 },
                 sbTarget: "#searchbar",
-                configurl: "https://api.sitesearch.cloud/searchbar-config/sitesearch-config.json",
+                configurl: "https://cdn.sitesearch.cloud/searchbar/2017-12-14/config/sitesearch.json",
                 sitesearch: true,
+                withCredentials: false,
                 siteId: "563714f1-96c0-4500-b366-4fc7e734fa1d"
             });
         });
