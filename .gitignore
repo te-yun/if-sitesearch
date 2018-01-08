@@ -12,7 +12,7 @@ service/config
 
 client/build/js
 service/src/main/resources/static/app
-/build
+build
 /.gradle
 
 # IntelliJ
