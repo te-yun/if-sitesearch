@@ -14,24 +14,25 @@
  * limitations under the License.
  */
 
-package com.intrafind.sitesearch.service;
+package com.intrafind.sitesearch.dto;
 
-import com.intrafind.sitesearch.dto.CrawlerJobResult;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import java.util.List;
 
-import java.util.Arrays;
+public class CrawlerJobResult {
+    private List<String> urls;
 
-@Service
-public class CrawlerService {
-    private static final Logger LOG = LoggerFactory.getLogger(CrawlerService.class);
+    public CrawlerJobResult(List<String> urls) {
+        this.urls = urls;
+    }
 
-    public CrawlerJobResult crawl() {
-        String url = "https://example.com";
-        String url1 = "https://example.com/page.html";
-        String url2 = "https://example.com/url.html";
+    private CrawlerJobResult() {
+    }
 
-        return new CrawlerJobResult(Arrays.asList(url, url1, url2));
+    public List<String> getUrls() {
+        return urls;
+    }
+
+    public void setUrls(List<String> urls) {
+        this.urls = urls;
     }
 }

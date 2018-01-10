@@ -16,6 +16,7 @@
 
 package com.intrafind.sitesearch.controller;
 
+import com.intrafind.sitesearch.dto.CrawlerJobResult;
 import com.intrafind.sitesearch.service.CrawlerService;
 import com.intrafind.sitesearch.service.PageService;
 import com.intrafind.sitesearch.service.SearchService;
@@ -44,13 +45,17 @@ public class CrawlerController {
     }
 
     @RequestMapping(path = "{siteId}/crawling", method = RequestMethod.PUT)
-    ResponseEntity crawl(
+    ResponseEntity<CrawlerJobResult> crawl(
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "siteSecret") UUID siteSecret,
             @RequestParam(value = "url") String url
     ) {
-        final String crawl = crawlerService.crawling();
-        System.out.println("crawl: " + crawl);
-        return ResponseEntity.ok().build();
+        if (!pageService.isAllowedToModify(siteId, siteSecret)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        final CrawlerJobResult crawlerJobResult = crawlerService.crawl();
+
+        return ResponseEntity.ok(crawlerJobResult);
     }
 }

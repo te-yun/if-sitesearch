@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 {
     SPRING_CONFIG_NAME="application, local" ./gradlew bootRun \

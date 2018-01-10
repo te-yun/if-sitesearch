@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,7 +73,7 @@ public class PageService {
         }
     }
 
-    private boolean isAllowedToModify(UUID siteId, UUID siteSecret) {
+    public boolean isAllowedToModify(UUID siteId, UUID siteSecret) {
         final Optional<UUID> fetchedSiteSecret = fetchSiteSecret(siteId);
         return fetchedSiteSecret.isPresent() && siteSecret.equals(fetchedSiteSecret.get());
     }
