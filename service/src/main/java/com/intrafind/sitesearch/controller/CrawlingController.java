@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.intrafind.sitesearch.controller;
 
+import com.intrafind.sitesearch.service.PageService;
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.examples.basic.DefaultCrawler;
@@ -24,6 +25,7 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +37,12 @@ public class CrawlingController {
     private static final Logger LOG = LoggerFactory.getLogger(CrawlingController.class);
     private static final String CRAWLER_STORAGE = "data/crawler";
     private static final int CRAWLER_THREADS = 7;
+    private final PageService pageService;
+
+    @Autowired
+    private CrawlingController(PageService pageService) {
+        this.pageService = pageService;
+    }
 
     @RequestMapping(path = "/sites/{siteId}/crawl", method = RequestMethod.PUT)
     ResponseEntity crawl(
@@ -42,6 +50,9 @@ public class CrawlingController {
             @RequestParam(name = "siteSecret") UUID siteSecret,
             @RequestParam(name = "crawlerTargetUrl") String crawlerTargetUrl
     ) {
+        if (!pageService.isAllowedToModify(siteId, siteSecret)) {
+            return ResponseEntity.notFound().build();
+        }
 //        CrawlerControllerFactory factory = new CrawlerControllerFactory(siteId, siteSecret);
 //        controller.startNonBlocking(factory, numberOfCrawlers);
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,13 +36,13 @@ import java.util.regex.Pattern;
 public class DefaultCrawler extends WebCrawler {
     private final static Logger LOG = LoggerFactory.getLogger(DefaultCrawler.class);
     private static final Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg|png|mp3|mp4|zip|gz))$");
+    public static String crawlTarget;
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
             .followRedirects(false)
             .followSslRedirects(false)
             .build();
     private static final AtomicInteger PAGES = new AtomicInteger(0);
-    public static String crawlTarget = "https://www.migrosbank.ch/de/";
     //    private static final Pattern FILTERS = Pattern.compile(".*(\\.(html|htm|txt|pdf))$");
     private PageService service = new PageService();
 
@@ -50,6 +50,8 @@ public class DefaultCrawler extends WebCrawler {
     private UUID siteSecret;
 
     public DefaultCrawler() {
+        this.siteId = UUID.fromString("a2e8d60b-0696-47ea-bc48-982598ee35bd");
+        this.siteSecret = UUID.fromString("04a0afc6-d89a-45c9-8ba8-41d393d8d2f8");
     }
 
     public DefaultCrawler(UUID siteId, UUID siteSecret) {
@@ -57,36 +59,24 @@ public class DefaultCrawler extends WebCrawler {
         this.siteSecret = siteSecret;
     }
 
-    /**
-     * This method receives two parameters. The first parameter is the page
-     * in which we have discovered this new url and the second parameter is
-     * the new url. You should implement this function to specify whether
-     * the given url should be crawled or not (based on your crawling logic).
-     * In this example, we are instructing the crawler to ignore urls that
-     * have css, js, git, ... extensions and to only accept urls that start
-     * with "http://www.ics.uci.edu/". In this case, we didn't need the
-     * referringPage parameter to make the decision.
-     */
     @Override
     public boolean shouldVisit(Page referringPage, WebURL url) {
         String href = url.getURL().toLowerCase();
         return !FILTERS.matcher(href).matches()
-//        return FILTERS.matcher(href).matches()
                 && href.startsWith(crawlTarget)
-                && (URI.create(url.getURL()).getQuery() == null || URI.create(url.getURL()).getQuery().isEmpty())   // no query parameter
+                && noQueryParameter(url)
                 ;
     }
 
-    /**
-     * This function is called when a page is fetched and ready
-     * to be processed by your program.
-     */
+    private boolean noQueryParameter(WebURL url) {
+        return URI.create(url.getURL()).getQuery() == null || URI.create(url.getURL()).getQuery().isEmpty();
+    }
+
     @Override
     public void visit(Page page) {
         String url = page.getWebURL().getURL();
-        if (!url.endsWith("html")) {
-            LOG.error("NOT HTML>>>: " + url);
-//            throw new RuntimeException("NOT HTML");
+        if (!url.endsWith("html")) { // TODO filter not necessary as the filter is applied in `shouldVisit`
+            throw new RuntimeException("Not an HTML page: " + url);
         }
 
         if (page.getParseData() instanceof HtmlParseData) {
@@ -127,16 +117,16 @@ public class DefaultCrawler extends WebCrawler {
                         .build();
                 final Response response = HTTP_CLIENT.newCall(request).execute();
                 if (response.code() != 200) {
-                    LOG.error("response.code(): " + response.code());
+                    LOG.error("response.code: " + response.code());
                     response.close();
-                    throw new RuntimeException("INVALID");
+                    throw new RuntimeException("Error while adding page to index");
                 }
                 response.close();
             } catch (IOException e) {
                 LOG.error(e.getMessage());
             }
 
-            System.out.println("Number of outgoing links: " + links.size());
+            LOG.info("outgoingURLs: " + links.size());
         }
         LOG.info("pageCount: " + PAGES.incrementAndGet());
     }
