@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,16 +28,6 @@ import java.util.UUID;
 
 @RestController
 public class SearchController {
-//    public static final Environment ACID_PERSISTENCE_ENVIRONMENT = Environments.newInstance("data");
-//
-//    static { // to initialize the store, required for virgin CI runs
-//        ACID_PERSISTENCE_ENVIRONMENT.executeInTransaction(txn -> {
-//            if (!ACID_PERSISTENCE_ENVIRONMENT.isOpen()) {
-//                ACID_PERSISTENCE_ENVIRONMENT.openStore(StatsController.QUERIES_PER_TENANT_STORE, StoreConfig.WITHOUT_DUPLICATES, txn);
-//            }
-//        });
-//    }
-
     public static final String ENDPOINT = "/search";
     private static final Logger LOG = LoggerFactory.getLogger(SearchController.class);
     private final SearchService service;
