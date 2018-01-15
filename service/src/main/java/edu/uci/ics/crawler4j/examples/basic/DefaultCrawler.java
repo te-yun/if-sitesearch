@@ -42,7 +42,7 @@ public class DefaultCrawler extends WebCrawler {
             .followRedirects(false)
             .followSslRedirects(false)
             .build();
-    private static final AtomicInteger PAGES = new AtomicInteger(0);
+    private final AtomicInteger pages = new AtomicInteger(0);
     //    private static final Pattern FILTERS = Pattern.compile(".*(\\.(html|htm|txt|pdf))$");
     private PageService service = new PageService();
 
@@ -128,6 +128,6 @@ public class DefaultCrawler extends WebCrawler {
 
             LOG.info("outgoingURLs: " + links.size());
         }
-        LOG.info("pageCount: " + PAGES.incrementAndGet());
+        LOG.info("siteId: "+ siteId +" - pageCount: " + pages.incrementAndGet());
     }
 }
