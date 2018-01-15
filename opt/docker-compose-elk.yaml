@@ -1,7 +1,7 @@
 version: "2.0"
 services:
   ops-kibana:
-    image: docker.elastic.co/kibana/kibana:6.1.0
+    image: docker.elastic.co/kibana/kibana:6.1.1
     container_name: ops-kibana
     restart: always
     depends_on:
@@ -17,13 +17,11 @@ services:
 #    volumes:
 #      - ~/srv/kibana:/usr/share/kibana
 #      - ~/srv/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
-#    ports:
-#      - 5601:5601
     networks:
       - sitesearch
 
   ops-elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.1.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.1.1
     container_name: ops-elasticsearch
     restart: always
     environment:
@@ -36,13 +34,11 @@ services:
         hard: -1
     volumes:
       - ops-elk:/usr/share/elasticsearch/data
-#    ports:
-#      - 9200:9200
     networks:
       - sitesearch
       
   ops-elasticsearch-alt:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.1.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.1.1
     container_name: ops-elasticsearch-opt
     restart: always
     environment:
@@ -60,7 +56,7 @@ services:
       - sitesearch
 
   ops-logstash:
-    image: docker.elastic.co/logstash/logstash:6.1.0
+    image: docker.elastic.co/logstash/logstash:6.1.1
     container_name: ops-logstash
     restart: always
 #    logging:
@@ -74,8 +70,6 @@ services:
       - ops-logstash:/usr/share/logstash:rw
     ports:
       - 12201:12201/udp
-#      - 5044:5044
-#      - 9600:9600
     networks:
       - sitesearch
 
