@@ -171,6 +171,15 @@ textarea {
     resize: none;
 }
 
+a {
+    color: #00aeef;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
 /* Tippy Custom Styles */
 .tippy-popper {
     pointer-events: auto;
