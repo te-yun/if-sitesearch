@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
- body {
+body {
     margin: 0;
-    padding: 0;
+    padding: 0 5px;
     font-family: 'Open Sans', sans-serif;
 }
 
@@ -35,12 +35,12 @@ h3 {
 }
 
 .tipsy {
-    font-size: 13px;
     cursor: pointer;
+    background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPgoJPHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCQkuc3Qwe2ZpbGw6IzQwNDA0MDt9CgkJLnN0MXtmaWxsOm5vbmU7c3Ryb2tlOiM0MDQwNDA7c3Ryb2tlLXdpZHRoOjEuNTtzdHJva2UtbWl0ZXJsaW1pdDoxMDt9Cgk8L3N0eWxlPgoJPGc+CgkJPHBhdGggY2xhc3M9InN0MCIgZD0iTTEwLjksMTQuNXYtMC40YzAtMC42LDAuMS0xLjEsMC4zLTEuNXMwLjUtMC44LDEtMS4yYzAuNy0wLjYsMS4yLTEsMS4zLTEuNGMwLjItMC4zLDAuMy0wLjcsMC4zLTEuMQoJCQljMC0wLjUtMC4yLTAuOS0wLjUtMS4ycy0wLjgtMC40LTEuNS0wLjRjLTAuNCwwLTAuOCwwLTEuMiwwLjFTOS44LDcuNyw5LjMsNy45bC0wLjQtMWMxLTAuNSwyLTAuOCwzLjEtMC44YzEsMCwxLjgsMC4yLDIuMywwLjcKCQkJYzAuNiwwLjUsMC44LDEuMiwwLjgsMi4xYzAsMC40LTAuMSwwLjctMC4yLDFzLTAuMywwLjYtMC40LDAuOHMtMC42LDAuNy0xLjMsMS4yYy0wLjUsMC40LTAuOSwwLjgtMSwxLjFzLTAuMywwLjctMC4zLDEuMnYwLjMKCQkJSDEwLjl6IE0xMC41LDE2LjljMC0wLjcsMC4zLTEuMSwwLjktMS4xYzAuMywwLDAuNSwwLjEsMC43LDAuM2MwLjIsMC4yLDAuMiwwLjQsMC4yLDAuOGMwLDAuMy0wLjEsMC42LTAuMiwwLjhTMTEuNywxOCwxMS40LDE4CgkJCXMtMC41LTAuMS0wLjctMC4yUzEwLjUsMTcuMiwxMC41LDE2Ljl6Ii8+Cgk8L2c+Cgk8Y2lyY2xlIGNsYXNzPSJzdDEiIGN4PSIxMiIgY3k9IjEyIiByPSIxMCIvPgo8L3N2Zz4K") center center no-repeat transparent;
 }
 
-.tipsy::after {
-    content: "?";
+.tipsy:hover {
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMjQgMjQiPgoJPHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCQkuc3Qwe2ZpbGw6IzAwQUVFRjtzdHJva2U6IzAwQUVFRjtzdHJva2Utd2lkdGg6MS41O3N0cm9rZS1taXRlcmxpbWl0OjEwO30KCQkuc3Qxe2ZpbGw6I0ZGRkZGRjt9Cgk8L3N0eWxlPgoJPGNpcmNsZSBjbGFzcz0ic3QwIiBjeD0iMTIiIGN5PSIxMiIgcj0iMTAiLz4KCTxnPgoJCTxwYXRoIGNsYXNzPSJzdDEiIGQ9Ik0xMC45LDE0LjV2LTAuNGMwLTAuNiwwLjEtMS4xLDAuMy0xLjVzMC41LTAuOCwxLTEuMmMwLjctMC42LDEuMi0xLDEuMy0xLjRjMC4yLTAuMywwLjMtMC43LDAuMy0xLjEKCQkJYzAtMC41LTAuMi0wLjktMC41LTEuMnMtMC44LTAuNC0xLjUtMC40Yy0wLjQsMC0wLjgsMC0xLjIsMC4xUzkuOCw3LjcsOS4zLDcuOWwtMC40LTFjMS0wLjUsMi0wLjgsMy4xLTAuOGMxLDAsMS44LDAuMiwyLjMsMC43CgkJCWMwLjYsMC41LDAuOCwxLjIsMC44LDIuMWMwLDAuNC0wLjEsMC43LTAuMiwxcy0wLjMsMC42LTAuNCwwLjhzLTAuNiwwLjctMS4zLDEuMmMtMC41LDAuNC0wLjksMC44LTEsMS4xcy0wLjMsMC43LTAuMywxLjJ2MC4zCgkJCUgxMC45eiBNMTAuNSwxNi45YzAtMC43LDAuMy0xLjEsMC45LTEuMWMwLjMsMCwwLjUsMC4xLDAuNywwLjNjMC4yLDAuMiwwLjIsMC40LDAuMiwwLjhjMCwwLjMtMC4xLDAuNi0wLjIsMC44UzExLjcsMTgsMTEuNCwxOAoJCQlzLTAuNS0wLjEtMC43LTAuMlMxMC41LDE3LjIsMTAuNSwxNi45eiIvPgoJPC9nPgo8L3N2Zz4K");
 }
 
 .wrapper {
@@ -91,19 +91,18 @@ h3 {
 
 .form-inline .tipsy {
     position: absolute;
-    top: -15px;
-    right: 10px;
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    line-height: 30px;
+    top: -10px;
+    right: 13px;
+    width: 18px;
+    height: 18px;
 }
 
 h3 .tipsy {
     position: absolute;
-    right: -14px;
+    right: -28px;
     top: -3px;
-    font-weight: normal;
+    width: 20px;
+    height: 20px;
 }
 
 .form-inline input[type="text"] {
