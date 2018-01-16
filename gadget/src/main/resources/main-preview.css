@@ -187,3 +187,19 @@ a:hover {
 .tippy-content a {
     color: white;
 }
+
+/* Getting started searchbar */
+#rl-and-modal #ifs-rl-wrapper.ifs-component .media-list {
+    margin: 0;
+    background: #e8f8ff;
+    border-right: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+}
+
+#rl-and-modal #ifs-rl-wrapper li.media {
+    border-color: #ccc;
+}
+
+#rl-and-modal #ifs-rl-wrapper.ifs-component li.ifs-rl-pageseparator {
+    display: none;
+}
