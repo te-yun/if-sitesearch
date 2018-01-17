@@ -124,3 +124,15 @@ server {
         proxy_pass http://ops-kibana:5601;
     }
 }
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name team.sitesearch.cloud;
+
+    include /etc/nginx/snippets/ssl.conf;
+
+    location / {
+        return 301 https://teams.microsoft.com/l/team/19%3a09eed7a6301c4722bccf0c5d8138e43d%40thread.skype/conversations?groupId=160a111e-ad5f-4b7a-9fed-44ec87100c5a&tenantId=09bb6857-2fbd-4b58-9c1a-93213574239a;
+    }
+}

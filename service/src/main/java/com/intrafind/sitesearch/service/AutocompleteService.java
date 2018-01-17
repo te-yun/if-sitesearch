@@ -38,7 +38,7 @@ public class AutocompleteService {
         com.intrafind.api.search.Hits hits = SEARCH_AUTOCOMPLETE_SERVICE.search(
                 query,
                 Search.FILTER_QUERY, Fields.TENANT + ":" + siteId,
-//                "ac-dym.profile", "fuzzy",
+                "ac-dym.profile", "fuzzy",
                 Search.HITS_LIST_SIZE, 10
         );
 
