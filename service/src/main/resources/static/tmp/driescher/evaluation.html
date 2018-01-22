@@ -16,6 +16,13 @@
   -->
 
 <meta charset="utf-8"/>
+<title>Evaluation</title>
+<script>
+    // This script section is not required in production deployments.
+    // This code ensures that a development & integration mode cookie is removed.
+    document.cookie = "override-site = ";
+    document.cookie = "override-site = ; path=/";
+</script>
 <h1>Evaluation</h1>
 
 <link rel="stylesheet" href="https://cdn.sitesearch.cloud/searchbar/2018-01-15/app/css/app.css"/>
