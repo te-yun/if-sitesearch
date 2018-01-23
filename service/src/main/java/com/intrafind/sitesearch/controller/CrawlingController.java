@@ -16,71 +16,46 @@
 
 package com.intrafind.sitesearch.controller;
 
+import com.intrafind.sitesearch.dto.CrawlerJobResult;
+import com.intrafind.sitesearch.service.CrawlerService;
 import com.intrafind.sitesearch.service.PageService;
-import edu.uci.ics.crawler4j.crawler.CrawlConfig;
-import edu.uci.ics.crawler4j.crawler.CrawlController;
-import edu.uci.ics.crawler4j.examples.basic.DefaultCrawler;
-import edu.uci.ics.crawler4j.fetcher.PageFetcher;
-import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
-import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
+import com.intrafind.sitesearch.service.SearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
 @RestController
+@RequestMapping(CrawlingController.ENDPOINT)
 public class CrawlingController {
+    public static final String ENDPOINT = "/sites";
     private static final Logger LOG = LoggerFactory.getLogger(CrawlingController.class);
-    private static final String CRAWLER_STORAGE = "data/crawler";
-    private static final int CRAWLER_THREADS = 7;
     private final PageService pageService;
+    private final CrawlerService crawlerService;
+    private final SearchService searchService;
 
     @Autowired
-    private CrawlingController(PageService pageService) {
+    private CrawlingController(PageService pageService, CrawlerService crawlerService, SearchService searchService) {
         this.pageService = pageService;
+        this.crawlerService = crawlerService;
+        this.searchService = searchService;
     }
 
-    @RequestMapping(path = "/sites/{siteId}/crawl", method = RequestMethod.PUT)
-    ResponseEntity crawl(
-            @PathVariable(name = "siteId") UUID siteId,
-            @RequestParam(name = "siteSecret") UUID siteSecret,
-            @RequestParam(name = "crawlerTargetUrl") String crawlerTargetUrl
+    @RequestMapping(path = "{siteId}/crawling", method = RequestMethod.PUT)
+    ResponseEntity<CrawlerJobResult> crawl(
+            @PathVariable(value = "siteId") UUID siteId,
+            @RequestParam(value = "siteSecret") UUID siteSecret,
+            @RequestParam(value = "url") String url
     ) {
         if (!pageService.isAllowedToModify(siteId, siteSecret)) {
             return ResponseEntity.notFound().build();
         }
-//        CrawlerControllerFactory factory = new CrawlerControllerFactory(siteId, siteSecret);
-//        controller.startNonBlocking(factory, numberOfCrawlers);
 
-        DefaultCrawler.crawlTarget = crawlerTargetUrl; // TODO pass to factory constructor
-        LOG.info("crawlerTargetUrl: " + DefaultCrawler.crawlTarget);
+        final CrawlerJobResult crawlerJobResult = crawlerService.crawl(url);
 
-        CrawlConfig config = new CrawlConfig();
-        config.setCrawlStorageFolder(CRAWLER_STORAGE);
-        config.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36");
-        config.setPolitenessDelay(1_000);
-        config.setMaxOutgoingLinksToFollow(500);
-        config.setMaxPagesToFetch(500);
-
-        PageFetcher pageFetcher = new PageFetcher(config);
-        RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
-        RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
-        CrawlController controller;
-        try {
-            controller = new CrawlController(config, pageFetcher, robotstxtServer);
-        } catch (Exception e) {
-            LOG.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-
-        controller.addSeed(crawlerTargetUrl);
-        controller.start(DefaultCrawler.class, CRAWLER_THREADS);
-//        controller.start(factory, CRAWLER_THREADS);
-
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(crawlerJobResult);
     }
 }

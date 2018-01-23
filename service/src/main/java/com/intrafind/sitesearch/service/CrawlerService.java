@@ -26,12 +26,42 @@ import java.util.Arrays;
 @Service
 public class CrawlerService {
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerService.class);
+    private static final String CRAWLER_STORAGE = "data/crawler";
+    private static final int CRAWLER_THREADS = 7;
 
-    public CrawlerJobResult crawl() {
-        String url = "https://example.com";
+    public CrawlerJobResult crawl(String url) {
+        //        CrawlerControllerFactory factory = new CrawlerControllerFactory(siteId, siteSecret);
+        //        controller.startNonBlocking(factory, numberOfCrawlers);
+
+//                DefaultCrawler.crawlTarget = url; // TODO pass to factory constructor
+//                LOG.info("crawlerTargetUrl: " + DefaultCrawler.crawlTarget);
+//
+//                CrawlConfig config = new CrawlConfig();
+//                config.setCrawlStorageFolder(CRAWLER_STORAGE);
+//                config.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36");
+//                config.setPolitenessDelay(1_000);
+//                config.setMaxOutgoingLinksToFollow(500);
+//                config.setMaxPagesToFetch(500);
+//
+//                PageFetcher pageFetcher = new PageFetcher(config);
+//                RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
+//                RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
+//                CrawlController controller;
+//                try {
+//                    controller = new CrawlController(config, pageFetcher, robotstxtServer);
+//                } catch (Exception e) {
+//                    LOG.error(e.getMessage());
+//                    throw new RuntimeException();
+//                }
+//
+//                controller.addSeed(url);
+//                controller.start(DefaultCrawler.class, CRAWLER_THREADS);
+        //        controller.start(factory, CRAWLER_THREADS);
+
+
         String url1 = "https://example.com/page.html";
         String url2 = "https://example.com/url.html";
 
-        return new CrawlerJobResult(Arrays.asList(url, url1, url2));
+        return new CrawlerJobResult(Arrays.asList(url1, url2));
     }
 }
