@@ -48,7 +48,7 @@ public class BaseConfig {
                 .host("api.sitesearch.cloud")
                 .apiInfo(new ApiInfo(
                         "Site Search API",
-                        "On-demand website search for enterprises",
+                        "A simple website search solution",
                         "v1",
                         "https://sitesearch.cloud/terms",
                         new Contact("IntraFind Software AG", "https://sitesearch.cloud", "feedback@sitesearch.cloud"),

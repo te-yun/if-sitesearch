@@ -54,7 +54,7 @@ public class CrawlingController {
             return ResponseEntity.notFound().build();
         }
 
-        final CrawlerJobResult crawlerJobResult = crawlerService.crawl(url);
+        final CrawlerJobResult crawlerJobResult = crawlerService.crawl(url, siteId, siteSecret);
 
         return ResponseEntity.ok(crawlerJobResult);
     }

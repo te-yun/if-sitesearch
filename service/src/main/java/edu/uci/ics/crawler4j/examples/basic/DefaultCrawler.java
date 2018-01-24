@@ -36,13 +36,13 @@ import java.util.regex.Pattern;
 public class DefaultCrawler extends WebCrawler {
     private final static Logger LOG = LoggerFactory.getLogger(DefaultCrawler.class);
     private static final Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg|png|mp3|mp4|zip|gz))$");
+    private static final AtomicInteger pages = new AtomicInteger(0);
     public static String crawlTarget;
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
             .followRedirects(false)
             .followSslRedirects(false)
             .build();
-    private final AtomicInteger pages = new AtomicInteger(0);
     //    private static final Pattern FILTERS = Pattern.compile(".*(\\.(html|htm|txt|pdf))$");
     private PageService service = new PageService();
 

@@ -28,26 +28,24 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 @Service
 public class CrawlerService {
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerService.class);
     private static final String CRAWLER_STORAGE = "data/crawler";
-    private static final int CRAWLER_THREADS = 7;
+    private static final int CRAWLER_THREADS = 5;
 
-    public CrawlerJobResult crawl(String url) {
-        //        CrawlerControllerFactory factory = new CrawlerControllerFactory(siteId, siteSecret);
-        //        controller.startNonBlocking(factory, numberOfCrawlers);
-
+    public CrawlerJobResult crawl(String url, UUID siteId, UUID siteSecret) {
         DefaultCrawler.crawlTarget = url; // TODO pass to factory constructor
         LOG.info("crawlerTargetUrl: " + DefaultCrawler.crawlTarget);
 
         CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(CRAWLER_STORAGE);
         config.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36");
-        config.setPolitenessDelay(1_000);
-        config.setMaxOutgoingLinksToFollow(1);
-        config.setMaxPagesToFetch(50);
+        config.setPolitenessDelay(100);
+        config.setMaxOutgoingLinksToFollow(10);
+        config.setMaxPagesToFetch(500);
 
         PageFetcher pageFetcher = new PageFetcher(config);
         RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
@@ -62,7 +60,9 @@ public class CrawlerService {
 
         controller.addSeed(url);
         controller.start(DefaultCrawler.class, CRAWLER_THREADS);
-        //        controller.start(factory, CRAWLER_THREADS);
+//        CrawlerControllerFactory factory = new CrawlerControllerFactory(siteId, siteSecret);
+//        controller.startNonBlocking(factory, CRAWLER_THREADS);
+//                controller.start(factory, CRAWLER_THREADS);
 
 
         String url1 = "https://example.com/page.html";

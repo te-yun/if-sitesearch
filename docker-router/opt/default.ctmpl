@@ -4,6 +4,7 @@
 
 user  nginx;
 worker_processes  1;
+server_tokens off; # hide nginx version # TODO not tested yet
 
 error_log  /var/log/nginx/error.log warn;
 pid        /var/run/nginx.pid;
