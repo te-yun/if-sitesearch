@@ -28,8 +28,8 @@
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.caucho:hessian:4.0.51" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework.boot:spring-boot-starter-hateoas:1.5.9.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework.boot:spring-boot-starter-undertow:1.5.9.RELEASE" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.springfox:springfox-swagger2:2.7.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.springfox:springfox-swagger-ui:2.7.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.springfox:springfox-swagger2:2.8.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.springfox:springfox-swagger-ui:2.8.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework.security.oauth:spring-security-oauth2:2.2.1.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.squareup.okhttp3:okhttp:3.9.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework.boot:spring-boot-starter-web:1.5.9.RELEASE" level="project" />
@@ -38,14 +38,14 @@
     <orderEntry type="library" scope="PROVIDED" name="Gradle: ch.qos.logback:logback-classic:1.1.11" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.rometools:rome-utils:1.9.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework.hateoas:spring-hateoas:0.23.0.RELEASE" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.springfox:springfox-swagger-common:2.7.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.springfox:springfox-spring-web:2.7.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.springfox:springfox-schema:2.7.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.springfox:springfox-spi:2.7.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.springfox:springfox-core:2.7.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.springfox:springfox-swagger-common:2.8.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.springfox:springfox-spring-web:2.8.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.springfox:springfox-schema:2.8.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.springfox:springfox-spi:2.8.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.springfox:springfox-core:2.8.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework.plugin:spring-plugin-metadata:1.2.0.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework.plugin:spring-plugin-core:1.2.0.RELEASE" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.swagger:swagger-models:1.5.13" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.swagger:swagger-models:1.5.14" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: edu.ucar:netcdf4:4.5.5" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: edu.ucar:grib:4.5.5" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: edu.ucar:cdm:4.5.5" level="project" />
@@ -66,10 +66,10 @@
     <orderEntry type="library" scope="PROVIDED" name="Gradle: io.undertow:undertow-core:1.4.21.Final" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: javax.servlet:javax.servlet-api:3.1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.glassfish:javax.el:3.0.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.swagger:swagger-annotations:1.5.13" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: io.swagger:swagger-annotations:1.5.14" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.hibernate:hibernate-validator:5.3.6.Final" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: com.fasterxml:classmate:1.3.4" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.mapstruct:mapstruct:1.1.0.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: org.mapstruct:mapstruct:1.2.0.Final" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework:spring-webmvc:4.3.13.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework.security:spring-security-config:4.2.3.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.springframework.security:spring-security-web:4.2.3.RELEASE" level="project" />
@@ -165,7 +165,7 @@
     <orderEntry type="library" scope="PROVIDED" name="Gradle: javax.measure:jsr-275:0.9.3" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.yaml:snakeyaml:1.17" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: javax.validation:validation-api:1.1.0.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.bytebuddy:byte-buddy:1.6.14" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Gradle: net.bytebuddy:byte-buddy:1.7.9" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.javassist:javassist:3.21.0-GA" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.apache.xmlbeans:xmlbeans:2.6.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.apache.maven.scm:maven-scm-provider-svnexe:1.4" level="project" />
@@ -186,8 +186,8 @@
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.caucho:hessian:4.0.51" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.boot:spring-boot-starter-hateoas:1.5.9.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.boot:spring-boot-starter-undertow:1.5.9.RELEASE" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.springfox:springfox-swagger2:2.7.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.springfox:springfox-swagger-ui:2.7.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.springfox:springfox-swagger2:2.8.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.springfox:springfox-swagger-ui:2.8.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.security.oauth:spring-security-oauth2:2.2.1.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.squareup.okhttp3:okhttp:3.9.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.boot:spring-boot-devtools:1.5.9.RELEASE" level="project" />
@@ -199,14 +199,14 @@
     <orderEntry type="library" scope="RUNTIME" name="Gradle: ch.qos.logback:logback-classic:1.1.11" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.rometools:rome-utils:1.9.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.hateoas:spring-hateoas:0.23.0.RELEASE" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.springfox:springfox-swagger-common:2.7.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.springfox:springfox-spring-web:2.7.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.springfox:springfox-schema:2.7.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.springfox:springfox-spi:2.7.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.springfox:springfox-core:2.7.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.springfox:springfox-swagger-common:2.8.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.springfox:springfox-spring-web:2.8.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.springfox:springfox-schema:2.8.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.springfox:springfox-spi:2.8.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.springfox:springfox-core:2.8.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.plugin:spring-plugin-metadata:1.2.0.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.plugin:spring-plugin-core:1.2.0.RELEASE" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.swagger:swagger-models:1.5.13" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.swagger:swagger-models:1.5.14" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.ucar:grib:4.5.5" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.ucar:cdm:4.5.5" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.ucar:httpservices:4.5.5" level="project" />
@@ -226,10 +226,10 @@
     <orderEntry type="library" scope="RUNTIME" name="Gradle: io.undertow:undertow-core:1.4.21.Final" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: javax.servlet:javax.servlet-api:3.1.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.glassfish:javax.el:3.0.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.swagger:swagger-annotations:1.5.13" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: io.swagger:swagger-annotations:1.5.14" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.hibernate:hibernate-validator:5.3.6.Final" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.fasterxml:classmate:1.3.4" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.mapstruct:mapstruct:1.1.0.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.mapstruct:mapstruct:1.2.0.Final" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework:spring-webmvc:4.3.13.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.security:spring-security-config:4.2.3.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.security:spring-security-web:4.2.3.RELEASE" level="project" />
@@ -324,7 +324,7 @@
     <orderEntry type="library" scope="RUNTIME" name="Gradle: javax.measure:jsr-275:0.9.3" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.yaml:snakeyaml:1.17" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: javax.validation:validation-api:1.1.0.Final" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: net.bytebuddy:byte-buddy:1.6.14" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: net.bytebuddy:byte-buddy:1.7.9" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.javassist:javassist:3.21.0-GA" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.xmlbeans:xmlbeans:2.6.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.maven.scm:maven-scm-provider-svnexe:1.4" level="project" />
@@ -345,11 +345,11 @@
     <orderEntry type="library" scope="TEST" name="Gradle: com.caucho:hessian:4.0.51" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.boot:spring-boot-starter-hateoas:1.5.9.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.boot:spring-boot-starter-undertow:1.5.9.RELEASE" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: io.springfox:springfox-swagger2:2.7.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: io.springfox:springfox-swagger-ui:2.7.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: io.springfox:springfox-swagger2:2.8.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: io.springfox:springfox-swagger-ui:2.8.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.security.oauth:spring-security-oauth2:2.2.1.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.squareup.okhttp3:okhttp:3.9.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.openjdk.jmh:jmh-generator-annprocess:1.19" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.openjdk.jmh:jmh-generator-annprocess:1.20" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.boot:spring-boot-starter-test:1.5.9.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.boot:spring-boot-starter-web:1.5.9.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.boot:spring-boot-starter:1.5.9.RELEASE" level="project" />
@@ -357,14 +357,14 @@
     <orderEntry type="library" scope="TEST" name="Gradle: ch.qos.logback:logback-classic:1.1.11" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.rometools:rome-utils:1.9.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.hateoas:spring-hateoas:0.23.0.RELEASE" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: io.springfox:springfox-swagger-common:2.7.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: io.springfox:springfox-spring-web:2.7.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: io.springfox:springfox-schema:2.7.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: io.springfox:springfox-spi:2.7.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: io.springfox:springfox-core:2.7.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: io.springfox:springfox-swagger-common:2.8.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: io.springfox:springfox-spring-web:2.8.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: io.springfox:springfox-schema:2.8.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: io.springfox:springfox-spi:2.8.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: io.springfox:springfox-core:2.8.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.plugin:spring-plugin-metadata:1.2.0.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.plugin:spring-plugin-core:1.2.0.RELEASE" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: io.swagger:swagger-models:1.5.13" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: io.swagger:swagger-models:1.5.14" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.jayway.jsonpath:json-path:2.2.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: edu.ucar:netcdf4:4.5.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: edu.ucar:grib:4.5.5" level="project" />
@@ -386,10 +386,10 @@
     <orderEntry type="library" scope="TEST" name="Gradle: io.undertow:undertow-core:1.4.21.Final" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: javax.servlet:javax.servlet-api:3.1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.glassfish:javax.el:3.0.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: io.swagger:swagger-annotations:1.5.13" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: io.swagger:swagger-annotations:1.5.14" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.hibernate:hibernate-validator:5.3.6.Final" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.fasterxml:classmate:1.3.4" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.mapstruct:mapstruct:1.1.0.Final" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.mapstruct:mapstruct:1.2.0.Final" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework:spring-webmvc:4.3.13.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.security:spring-security-config:4.2.3.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.security:spring-security-web:4.2.3.RELEASE" level="project" />
@@ -411,7 +411,7 @@
     <orderEntry type="library" scope="TEST" name="Gradle: commons-codec:commons-codec:1.10" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.codehaus.jackson:jackson-mapper-asl:1.9.13" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.squareup.okio:okio:1.13.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: org.openjdk.jmh:jmh-core:1.19" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.openjdk.jmh:jmh-core:1.20" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: junit:junit:4.12" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.assertj:assertj-core:2.6.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.mockito:mockito-core:1.10.19" level="project" />
@@ -501,7 +501,7 @@
     <orderEntry type="library" scope="TEST" name="Gradle: javax.measure:jsr-275:0.9.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.yaml:snakeyaml:1.17" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: javax.validation:validation-api:1.1.0.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: net.bytebuddy:byte-buddy:1.6.14" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: net.bytebuddy:byte-buddy:1.7.9" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.javassist:javassist:3.21.0-GA" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.apache.xmlbeans:xmlbeans:2.6.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.apache.maven.scm:maven-scm-provider-svnexe:1.4" level="project" />
