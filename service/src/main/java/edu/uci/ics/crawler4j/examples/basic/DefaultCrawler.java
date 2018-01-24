@@ -112,7 +112,7 @@ public class DefaultCrawler extends WebCrawler {
             LOG.info("sitePage: " + sitePage);
             try {
                 Request request = new Request.Builder()
-                        .url("https://api.sitesearch.cloud/sites/" + siteId + "/pages?siteSecret=" + siteSecret)
+                        .url("https://api.sitesearch.cloud/sites/" + siteId + "/pages?siteSecret=" + siteSecret + "&clearIndex=true")
                         .put(RequestBody.create(MediaType.parse("application/json"), MAPPER.writeValueAsBytes(sitePage)))
                         .build();
                 final Response response = HTTP_CLIENT.newCall(request).execute();
