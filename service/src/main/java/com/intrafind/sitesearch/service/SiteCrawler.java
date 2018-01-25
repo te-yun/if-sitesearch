@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package edu.uci.ics.crawler4j.examples.basic;
+package com.intrafind.sitesearch.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.intrafind.sitesearch.service.PageService;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
@@ -33,38 +32,36 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
-public class DefaultCrawler extends WebCrawler {
-    private final static Logger LOG = LoggerFactory.getLogger(DefaultCrawler.class);
-    private static final Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg|png|mp3|mp4|zip|gz))$");
-    private static final AtomicInteger pages = new AtomicInteger(0);
-    public static String crawlTarget;
+public class SiteCrawler extends WebCrawler {
+    private final static Logger LOG = LoggerFactory.getLogger(SiteCrawler.class);
+    private static final Pattern BLACKLIST = Pattern.compile(".*(\\.(css|js|gif|jpg|png|mp3|mp4|zip|gz|xml))$");
+    //    private static final Pattern WHITELIST= Pattern.compile(".*(\\.(html|htm|txt|pdf))$");
+    private final AtomicInteger pages = new AtomicInteger(0);
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
             .followRedirects(false)
             .followSslRedirects(false)
             .build();
-    //    private static final Pattern FILTERS = Pattern.compile(".*(\\.(html|htm|txt|pdf))$");
-    private PageService service = new PageService();
 
     private UUID siteId;
     private UUID siteSecret;
+    private URI url;
 
-    public DefaultCrawler() {
-        this.siteId = UUID.fromString("a2e8d60b-0696-47ea-bc48-982598ee35bd");
-        this.siteSecret = UUID.fromString("04a0afc6-d89a-45c9-8ba8-41d393d8d2f8");
+    private SiteCrawler() {
     }
 
-    public DefaultCrawler(UUID siteId, UUID siteSecret) {
+    public SiteCrawler(UUID siteId, UUID siteSecret, URI url) {
         this.siteId = siteId;
         this.siteSecret = siteSecret;
+        this.url = url;
     }
 
     @Override
-    public boolean shouldVisit(Page referringPage, WebURL url) {
-        String href = url.getURL().toLowerCase();
-        return !FILTERS.matcher(href).matches()
-                && href.startsWith(crawlTarget)
-                && noQueryParameter(url)
+    public boolean shouldVisit(Page referringPage, WebURL webUrl) {
+        String href = webUrl.getURL().toLowerCase();
+        return !BLACKLIST.matcher(href).matches()
+                && href.startsWith(url.toString())
+                && noQueryParameter(webUrl)
                 ;
     }
 
@@ -75,7 +72,8 @@ public class DefaultCrawler extends WebCrawler {
     @Override
     public void visit(Page page) {
         String url = page.getWebURL().getURL();
-        if (!url.endsWith("html")) { // TODO filter not necessary as the filter is applied in `shouldVisit`
+        if (url.replace(this.url.toString(), "").contains(".")) {
+            LOG.warn("siteId: " + siteId + " - url: " + url);
             throw new RuntimeException("Not an HTML page: " + url);
         }
 
@@ -98,7 +96,6 @@ public class DefaultCrawler extends WebCrawler {
             } else {
                 body = text;
             }
-            String html = htmlParseData.getHtml();
             String title = htmlParseData.getTitle();
             Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
@@ -106,10 +103,13 @@ public class DefaultCrawler extends WebCrawler {
                     title,
                     body
                             .replaceAll("(?s)<!--.+//-->", "")
+                            .replaceAll("(?s)<script .+</script>", "")
+                            .replaceAll("(?s)style.+style", "")
+                            .replaceAll("(?s)/\\* <!\\[CDATA\\[.+]]> \\*/", "")
                             .replaceAll("^\\s+|\\s+$", "").trim(),
                     url
             );
-            LOG.info("sitePage: " + sitePage);
+
             try {
                 Request request = new Request.Builder()
                         .url("https://api.sitesearch.cloud/sites/" + siteId + "/pages?siteSecret=" + siteSecret + "&clearIndex=true")
@@ -117,7 +117,7 @@ public class DefaultCrawler extends WebCrawler {
                         .build();
                 final Response response = HTTP_CLIENT.newCall(request).execute();
                 if (response.code() != 200) {
-                    LOG.error("response.code: " + response.code());
+                    LOG.warn("siteId: " + siteId + " - url: " + url + " - responseCode: " + response.code());
                     response.close();
                     throw new RuntimeException("Error while adding page to index");
                 }
@@ -126,7 +126,8 @@ public class DefaultCrawler extends WebCrawler {
                 LOG.error(e.getMessage());
             }
 
-            LOG.info("outgoingURLs: " + links.size());
+            LOG.debug("sitePage: " + sitePage);
+            LOG.debug("outgoingURLs: " + links.size());
         }
         LOG.info("siteId: "+ siteId +" - pageCount: " + pages.incrementAndGet());
     }

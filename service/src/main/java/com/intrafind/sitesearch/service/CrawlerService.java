@@ -16,10 +16,10 @@
 
 package com.intrafind.sitesearch.service;
 
+import com.intrafind.sitesearch.CrawlerControllerFactory;
 import com.intrafind.sitesearch.dto.CrawlerJobResult;
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
-import edu.uci.ics.crawler4j.examples.basic.DefaultCrawler;
 import edu.uci.ics.crawler4j.fetcher.PageFetcher;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -34,12 +35,9 @@ import java.util.UUID;
 public class CrawlerService {
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerService.class);
     private static final String CRAWLER_STORAGE = "data/crawler";
-    private static final int CRAWLER_THREADS = 2;
+    private static final int CRAWLER_THREADS = 1;
 
     public CrawlerJobResult crawl(String url, UUID siteId, UUID siteSecret) {
-        DefaultCrawler.crawlTarget = url; // TODO pass to factory constructor
-        LOG.info("crawlerTargetUrl: " + DefaultCrawler.crawlTarget);
-
         CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(CRAWLER_STORAGE);
         config.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36");
@@ -59,13 +57,13 @@ public class CrawlerService {
         }
 
         controller.addSeed(url);
-        controller.startNonBlocking(DefaultCrawler.class, CRAWLER_THREADS);
-//        controller.shutdown();
-//        controller.waitUntilFinish();
+//        controller.startNonBlocking(SiteCrawler.class, CRAWLER_THREADS);
 
-//        CrawlerControllerFactory factory = new CrawlerControllerFactory(siteId, siteSecret);
-//        controller.startNonBlocking(factory, CRAWLER_THREADS);
-//                controller.start(factory, CRAWLER_THREADS);
+        CrawlerControllerFactory factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url));
+        controller.startNonBlocking(factory, CRAWLER_THREADS);
+
+//                controller.shutdown();
+//        controller.waitUntilFinish();
 
 
         String url1 = "https://example.com/page.html";
