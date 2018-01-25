@@ -103,8 +103,8 @@ public class SiteCrawler extends WebCrawler {
                     title,
                     body
                             .replaceAll("(?s)<!--.+//-->", "")
-                            .replaceAll("(?s)<script .+</script>", "")
-                            .replaceAll("(?s)style.+style", "")
+                            .replaceAll("(?s)<script.+</script>", "")
+                            .replaceAll("(?s)<style>.*</style>", "")
                             .replaceAll("(?s)/\\* <!\\[CDATA\\[.+]]> \\*/", "")
                             .replaceAll("^\\s+|\\s+$", "").trim(),
                     url
