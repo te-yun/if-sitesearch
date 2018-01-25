@@ -34,7 +34,7 @@ import java.util.UUID;
 public class CrawlerService {
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerService.class);
     private static final String CRAWLER_STORAGE = "data/crawler";
-    private static final int CRAWLER_THREADS = 5;
+    private static final int CRAWLER_THREADS = 2;
 
     public CrawlerJobResult crawl(String url, UUID siteId, UUID siteSecret) {
         DefaultCrawler.crawlTarget = url; // TODO pass to factory constructor
@@ -44,7 +44,7 @@ public class CrawlerService {
         config.setCrawlStorageFolder(CRAWLER_STORAGE);
         config.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36");
         config.setPolitenessDelay(100);
-        config.setMaxOutgoingLinksToFollow(10);
+        config.setMaxOutgoingLinksToFollow(100);
         config.setMaxPagesToFetch(500);
 
         PageFetcher pageFetcher = new PageFetcher(config);
@@ -55,11 +55,14 @@ public class CrawlerService {
             controller = new CrawlController(config, pageFetcher, robotstxtServer);
         } catch (Exception e) {
             LOG.error(e.getMessage());
-            throw new RuntimeException();
+            throw new RuntimeException(e.getMessage());
         }
 
         controller.addSeed(url);
-        controller.start(DefaultCrawler.class, CRAWLER_THREADS);
+        controller.startNonBlocking(DefaultCrawler.class, CRAWLER_THREADS); /// CONTINUE TODO with nonBLocking and look if 129 pages are delivered as well
+//        controller.shutdown();
+//        controller.waitUntilFinish();
+
 //        CrawlerControllerFactory factory = new CrawlerControllerFactory(siteId, siteSecret);
 //        controller.startNonBlocking(factory, CRAWLER_THREADS);
 //                controller.start(factory, CRAWLER_THREADS);
