@@ -59,7 +59,7 @@ public class CrawlerService {
         }
 
         controller.addSeed(url);
-        controller.startNonBlocking(DefaultCrawler.class, CRAWLER_THREADS); /// CONTINUE TODO with nonBLocking and look if 129 pages are delivered as well
+        controller.startNonBlocking(DefaultCrawler.class, CRAWLER_THREADS);
 //        controller.shutdown();
 //        controller.waitUntilFinish();
 
