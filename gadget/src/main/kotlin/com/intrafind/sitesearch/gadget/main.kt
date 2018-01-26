@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -107,4 +107,12 @@ fun showInitCode() {
             }
         }
     })
+
+    if (location.search.indexOf("siteId=") != -1) {
+        val siteId = location.search.substring(location.search.indexOf("siteId=") + 7)
+        overrideSite(siteId)
+        console.warn(location.search.indexOf("siteId=") != -1)
+        console.warn(location.search.indexOf("siteId=") + 7)
+        console.warn(siteId)
+    }
 }

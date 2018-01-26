@@ -42,7 +42,7 @@ public class CrawlerService {
         config.setCrawlStorageFolder(CRAWLER_STORAGE);
         config.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36");
         config.setPolitenessDelay(100);
-        config.setMaxOutgoingLinksToFollow(100);
+        config.setMaxOutgoingLinksToFollow(1_000);
         config.setMaxPagesToFetch(500);
 
         PageFetcher pageFetcher = new PageFetcher(config);
@@ -61,9 +61,7 @@ public class CrawlerService {
         CrawlerControllerFactory factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url));
         controller.startNonBlocking(factory, CRAWLER_THREADS);
 
-//                controller.shutdown();
         controller.waitUntilFinish();
-
 
         return new CrawlerJobResult((List) controller.getCrawlersLocalData(), (int) controller.getCustomData());
     }
