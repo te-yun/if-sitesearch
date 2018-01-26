@@ -29,16 +29,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(CrawlingController.ENDPOINT)
-public class CrawlingController {
+@RequestMapping(CrawlerController.ENDPOINT)
+public class CrawlerController {
     public static final String ENDPOINT = "/sites";
-    private static final Logger LOG = LoggerFactory.getLogger(CrawlingController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CrawlerController.class);
     private final PageService pageService;
     private final CrawlerService crawlerService;
     private final SearchService searchService;
 
     @Autowired
-    private CrawlingController(PageService pageService, CrawlerService crawlerService, SearchService searchService) {
+    private CrawlerController(PageService pageService, CrawlerService crawlerService, SearchService searchService) {
         this.pageService = pageService;
         this.crawlerService = crawlerService;
         this.searchService = searchService;

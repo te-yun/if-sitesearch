@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
-import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -57,18 +57,14 @@ public class CrawlerService {
         }
 
         controller.addSeed(url);
-//        controller.startNonBlocking(SiteCrawler.class, CRAWLER_THREADS);
 
         CrawlerControllerFactory factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url));
         controller.startNonBlocking(factory, CRAWLER_THREADS);
 
 //                controller.shutdown();
-//        controller.waitUntilFinish();
+        controller.waitUntilFinish();
 
 
-        String url1 = "https://example.com/page.html";
-        String url2 = "https://example.com/url.html";
-
-        return new CrawlerJobResult(Arrays.asList(url1, url2));
+        return new CrawlerJobResult((List) controller.getCrawlersLocalData(), (int) controller.getCustomData());
     }
 }

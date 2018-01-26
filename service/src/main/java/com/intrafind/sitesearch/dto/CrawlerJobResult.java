@@ -20,12 +20,18 @@ import java.util.List;
 
 public class CrawlerJobResult {
     private List<String> urls;
+    private int pageCount;
 
-    public CrawlerJobResult(List<String> urls) {
+    public CrawlerJobResult(List<String> urls, int pageCount) {
         this.urls = urls;
+        this.pageCount = pageCount;
     }
 
     private CrawlerJobResult() {
+    }
+
+    public int getPageCount() {
+        return pageCount;
     }
 
     public List<String> getUrls() {

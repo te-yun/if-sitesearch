@@ -72,10 +72,10 @@ public class SiteCrawler extends WebCrawler {
     @Override
     public void visit(Page page) {
         String url = page.getWebURL().getURL();
-        if (url.replace(this.url.toString(), "").contains(".")) {
-            LOG.warn("siteId: " + siteId + " - url: " + url);
-            throw new RuntimeException("Not an HTML page: " + url);
-        }
+//        if (url.replace(this.url.toString(), "").contains(".")) {
+//            LOG.warn("siteId: " + siteId + " - url: " + url);
+//            throw new RuntimeException("Not an HTML page: " + url);
+//        }
 
         if (page.getParseData() instanceof HtmlParseData) {
             HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
@@ -119,6 +119,7 @@ public class SiteCrawler extends WebCrawler {
                 if (response.code() != 200) {
                     LOG.warn("siteId: " + siteId + " - url: " + url + " - responseCode: " + response.code());
                     response.close();
+                    this.getMyController().getCrawlersLocalData().add("FAILED: " + url);
                     throw new RuntimeException("Error while adding page to index");
                 }
                 response.close();
@@ -130,5 +131,8 @@ public class SiteCrawler extends WebCrawler {
             LOG.debug("outgoingURLs: " + links.size());
         }
         LOG.info("siteId: "+ siteId +" - pageCount: " + pages.incrementAndGet());
+
+        this.getMyController().setCustomData(pages.get());
+        this.getMyController().getCrawlersLocalData().add(url);
     }
 }
