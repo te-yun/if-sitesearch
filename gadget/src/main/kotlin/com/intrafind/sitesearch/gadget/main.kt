@@ -108,11 +108,11 @@ fun showInitCode() {
         }
     })
 
-    if (location.search.indexOf("siteId=") != -1) {
-        val siteId = location.search.substring(location.search.indexOf("siteId=") + 7)
+    if (window.location.search.indexOf("siteId=") != -1) {
+        val siteId = window.location.search.substring(window.location.search.indexOf("siteId=") + 7)
         overrideSite(siteId)
-        console.warn(location.search.indexOf("siteId=") != -1)
-        console.warn(location.search.indexOf("siteId=") + 7)
+        console.warn(window.location.search.indexOf("siteId=") != -1)
+        console.warn(window.location.search.indexOf("siteId=") + 7)
         console.warn(siteId)
     }
 }
