@@ -21,7 +21,6 @@ import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLScriptElement
 import org.w3c.dom.HTMLTextAreaElement
 import org.w3c.dom.events.Event
-import org.w3c.dom.url.URL
 import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
 import kotlin.browser.window
@@ -152,7 +151,7 @@ fun startCrawler() {
         console.warn(xhr.responseText)
         val pageCount = JSON.parse<dynamic>(xhr.responseText).pageCount as Int
         console.warn(pageCount)
-        val urls = JSON.parse<dynamic>(xhr.responseText).urls as List<URL?>
+        val urls = JSON.parse<dynamic>(xhr.responseText).urls as List<String?>?
         console.warn(urls)
         document.dispatchEvent(Event("crawlerFinishedEvent"))
     }
