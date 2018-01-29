@@ -29,9 +29,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(CrawlerController.ENDPOINT)
+@RequestMapping(SitesController.ENDPOINT)
 public class CrawlerController {
-    public static final String ENDPOINT = "/sites";
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerController.class);
     private final PageService pageService;
     private final CrawlerService crawlerService;

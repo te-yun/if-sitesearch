@@ -145,13 +145,11 @@ fun showInitCode() {
 external fun encodeURIComponent(str: String): String
 fun startCrawler() {
     val url = (document.getElementById("url") as HTMLInputElement).value
-    console.warn(siteId)
-    console.warn(siteSecret)
-    console.warn(encodeURIComponent(url))
 
     val xhr = XMLHttpRequest()
     xhr.open("PUT", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(url)}")
     xhr.onload = {
+        console.warn(xhr.responseText)
         val pageCount = JSON.parse<dynamic>(xhr.responseText).pageCount as Int
         val urls = JSON.parse<dynamic>(xhr.responseText).urls as List<URL>
         console.warn(urls)
