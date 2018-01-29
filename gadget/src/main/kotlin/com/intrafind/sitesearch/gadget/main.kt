@@ -151,7 +151,8 @@ fun startCrawler() {
         console.warn(xhr.responseText)
         val pageCount = JSON.parse<dynamic>(xhr.responseText).pageCount as Int
         console.warn(pageCount)
-        val urls = JSON.parse<dynamic>(xhr.responseText).urls as List<String?>?
+        console.warn(JSON.parse<dynamic>(xhr.responseText).urls)
+        val urls = JSON.parse<dynamic>(xhr.responseText).urls as ArrayList<String?>?
         console.warn(urls)
         document.dispatchEvent(Event("crawlerFinishedEvent"))
     }
