@@ -21,6 +21,7 @@ import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLScriptElement
 import org.w3c.dom.HTMLTextAreaElement
 import org.w3c.dom.events.Event
+import org.w3c.dom.url.URL
 import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
 import kotlin.browser.window
@@ -151,13 +152,10 @@ fun startCrawler() {
     val xhr = XMLHttpRequest()
     xhr.open("PUT", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(url)}")
     xhr.onload = {
-        //        siteId = JSON.parse<dynamic>(xhr.responseText).siteId as String
-//        siteSecret = JSON.parse<dynamic>(xhr.responseText).siteSecret as String
-//        (document.getElementById("siteId") as HTMLDivElement).textContent = siteId
-//        (document.getElementById("siteSecret") as HTMLDivElement).textContent = siteSecret
-//        overrideSite(siteId)
-//        document.dispatchEvent(Event("triggerFirstUsageOwnershipEvent"))
-        println(xhr.responseText)
+        val pageCount = JSON.parse<dynamic>(xhr.responseText).pageCount as Int
+        val urls = JSON.parse<dynamic>(xhr.responseText).urls as List<URL>
+        console.warn(urls)
+        console.warn(pageCount)
         document.dispatchEvent(Event("crawlerFinishedEvent"))
     }
     xhr.send()
