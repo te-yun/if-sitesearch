@@ -46,7 +46,29 @@ public class CrawlerTest {
     private TestRestTemplate caller;
 
     @Test
+    public void crawlExampleViaHttp() {
+        final ResponseEntity<CrawlerJobResult> request = caller
+                .postForEntity(SitesController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET + "&url=" + "http://example.com", RequestEntity.EMPTY, CrawlerJobResult.class);
+
+        assertEquals(HttpStatus.OK, request.getStatusCode());
+        assertNotNull(request.getBody());
+        assertEquals(1, request.getBody().getPageCount());
+        assertEquals(2, request.getBody().getUrls().size());
+    }
+
+    @Test
     public void crawlHttp() {
+        final ResponseEntity<CrawlerJobResult> request = caller
+                .postForEntity(SitesController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET + "&url=" + "http://example.de", RequestEntity.EMPTY, CrawlerJobResult.class);
+
+        assertEquals(HttpStatus.OK, request.getStatusCode());
+        assertNotNull(request.getBody());
+        assertEquals(15, request.getBody().getPageCount());
+        assertEquals(16, request.getBody().getUrls().size());
+    }
+
+    @Test
+    public void crawlSiteSearchViaHttps() {
         final ResponseEntity<CrawlerJobResult> request = caller
                 .postForEntity(SitesController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET + "&url=" + "https://sitesearch.cloud", RequestEntity.EMPTY, CrawlerJobResult.class);
 
