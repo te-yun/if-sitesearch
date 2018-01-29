@@ -48,12 +48,12 @@ public class CrawlerTest {
     @Test
     public void crawlHttp() {
         final ResponseEntity<CrawlerJobResult> request = caller
-                .postForEntity(SitesController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET + "&url=" + "http://api.sitesearch.cloud", RequestEntity.EMPTY, CrawlerJobResult.class);
+                .postForEntity(SitesController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET + "&url=" + "https://api.sitesearch.cloud", RequestEntity.EMPTY, CrawlerJobResult.class);
 
         assertEquals(HttpStatus.OK, request.getStatusCode());
-//        assertNotNull(request.getBody());
-//        assertEquals(15, request.getBody().getPageCount());
-//        assertEquals(16, request.getBody().getUrls().size());
+        assertNotNull(request.getBody());
+        assertEquals(7, request.getBody().getPageCount());
+        assertEquals(8, request.getBody().getUrls().size());
     }
 
     @Test
