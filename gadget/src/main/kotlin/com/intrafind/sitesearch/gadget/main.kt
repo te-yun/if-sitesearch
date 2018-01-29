@@ -35,19 +35,41 @@ fun main(args: Array<String>) {
     })
 }
 
-fun triggerFirstUsageOwnership() {
-    val serviceUrl: String = if (window.location.hostname.equals("localhost")) {
-        "http://localhost:8001"
-    } else {
-        "https://api.sitesearch.cloud"
-    }
+//fun triggerFirstUsageOwnership() {
+//    val serviceUrl: String = if (window.location.hostname.equals("localhost")) {
+//        "http://localhost:8001"
+//    } else {
+//        "https://api.sitesearch.cloud"
+//    }
+//
+//    val xhr = XMLHttpRequest()
+//    val feedUrl = (document.getElementById("feedUrl") as HTMLInputElement).value
+//    xhr.open("POST", "$serviceUrl/sites/rss?feedUrl=$feedUrl&stripHtmlTags=true")
+//    xhr.onload = {
+//        val siteId = JSON.parse<dynamic>(xhr.responseText).siteId as String
+//        val siteSecret = JSON.parse<dynamic>(xhr.responseText).siteSecret as String
+//        (document.getElementById("siteId") as HTMLDivElement).textContent = siteId
+//        (document.getElementById("siteSecret") as HTMLDivElement).textContent = siteSecret
+//        overrideSite(siteId)
+//        document.dispatchEvent(Event("triggerFirstUsageOwnershipEvent"))
+//    }
+//    xhr.send()
+//}
 
+private var siteId: String = ""
+private var siteSecret: String = ""
+private val serviceUrl: String = if (window.location.hostname.equals("localhost")) {
+    "http://localhost:8001"
+} else {
+    "https://api.sitesearch.cloud"
+}
+
+fun triggerFirstUsageOwnership() {
     val xhr = XMLHttpRequest()
-    val feedUrl = (document.getElementById("feedUrl") as HTMLInputElement).value
-    xhr.open("POST", "$serviceUrl/sites/rss?feedUrl=$feedUrl&stripHtmlTags=true")
+    xhr.open("POST", "$serviceUrl/sites")
     xhr.onload = {
-        val siteId = JSON.parse<dynamic>(xhr.responseText).siteId as String
-        val siteSecret = JSON.parse<dynamic>(xhr.responseText).siteSecret as String
+        siteId = JSON.parse<dynamic>(xhr.responseText).siteId as String
+        siteSecret = JSON.parse<dynamic>(xhr.responseText).siteSecret as String
         (document.getElementById("siteId") as HTMLDivElement).textContent = siteId
         (document.getElementById("siteSecret") as HTMLDivElement).textContent = siteSecret
         overrideSite(siteId)
@@ -98,7 +120,12 @@ fun showInitCode() {
         }
     })
 
+    document.addEventListener("crawlerFinishedEvent", {
+        console.warn("Crawler Finished")
+    })
+
     document.addEventListener("triggerFirstUsageOwnershipEvent", {
+        startCrawler()
         if (!siteIdContainer.textContent?.isBlank()!!) {
             if (searchbarVariant.checked) {
                 integrationCode.value = integrationCode.value.replace("siteId: \".+".toRegex(), "siteId: \"${siteIdContainer.textContent}\"")
@@ -112,4 +139,26 @@ fun showInitCode() {
         val siteId = window.location.search.substring(window.location.search.indexOf("siteId=") + 7)
         overrideSite(siteId)
     }
+}
+
+external fun encodeURIComponent(str: String): String
+fun startCrawler() {
+    val url = (document.getElementById("url") as HTMLInputElement).value
+    console.warn(siteId)
+    console.warn(siteSecret)
+    console.warn(encodeURIComponent(url))
+
+    val xhr = XMLHttpRequest()
+    xhr.open("PUT", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(url)}")
+    xhr.onload = {
+        //        siteId = JSON.parse<dynamic>(xhr.responseText).siteId as String
+//        siteSecret = JSON.parse<dynamic>(xhr.responseText).siteSecret as String
+//        (document.getElementById("siteId") as HTMLDivElement).textContent = siteId
+//        (document.getElementById("siteSecret") as HTMLDivElement).textContent = siteSecret
+//        overrideSite(siteId)
+//        document.dispatchEvent(Event("triggerFirstUsageOwnershipEvent"))
+        println(xhr.responseText)
+        document.dispatchEvent(Event("crawlerFinishedEvent"))
+    }
+    xhr.send()
 }
