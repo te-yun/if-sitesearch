@@ -66,6 +66,7 @@ public class CrawlerService {
             controller.startNonBlocking(factory, CRAWLER_THREADS);
 
             controller.waitUntilFinish();
+            controller.shutdown();
 
             return new CrawlerJobResult((List) controller.getCrawlersLocalData(), (int) controller.getCustomData());
         }
