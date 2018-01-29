@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.List;
+import java.util.Collections;
 import java.util.UUID;
 
 @Service
@@ -55,7 +55,7 @@ public class CrawlerService {
         try {
             controller = new CrawlController(config, pageFetcher, robotstxtServer);
         } catch (Exception e) {
-            LOG.error(e.getMessage());
+            LOG.error("Controller init fail: " + e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
 
@@ -66,9 +66,12 @@ public class CrawlerService {
             controller.startNonBlocking(factory, CRAWLER_THREADS);
 
             controller.waitUntilFinish();
-            controller.shutdown();
+            controller.shutdown();     // TODO not tested 
 
-            return new CrawlerJobResult((List) controller.getCrawlersLocalData(), (int) controller.getCustomData());
+            return new CrawlerJobResult(
+                    controller.getCrawlersLocalData().isEmpty() ? Collections.emptyList() : controller.getCrawlersLocalData(),
+                    controller.getCustomData() == null ? 0 : (int) controller.getCustomData()
+            );
         }
         return null;
     }
@@ -80,14 +83,14 @@ public class CrawlerService {
                     .delete()
                     .build();
             final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
-            if (response.code() == 204) {
+            if (response.code() == 204 || response.code() == 200) {
                 return true;
             } else {
-                LOG.error(response.message());
+                LOG.error("Clear Index result: " + response.code());
                 return false;
             }
         } catch (IOException e) {
-            LOG.error(e.getMessage());
+            LOG.error("Clear Index call fail: " + e.getMessage());
             return false;
         }
     }
