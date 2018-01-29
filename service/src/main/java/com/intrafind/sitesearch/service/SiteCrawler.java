@@ -113,7 +113,7 @@ public class SiteCrawler extends WebCrawler {
                         .put(RequestBody.create(MediaType.parse("application/json"), MAPPER.writeValueAsBytes(sitePage)))
                         .build();
                 final Response response = HTTP_CLIENT.newCall(request).execute();
-                if (response.code() == 200 || response.code() == 300 || response.code() == 301 || response.code() == 302) {
+                if (response.code() == 200 || response.code() == 304 || response.code() == 301 || response.code() == 302) {
                     LOG.warn("siteId: " + siteId + " - url: " + url + " - responseCode: " + response.code());
                     response.close();
                     this.getMyController().getCrawlersLocalData().add("FAILED: " + url);
