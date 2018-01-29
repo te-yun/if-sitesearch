@@ -147,7 +147,7 @@ fun startCrawler() {
     val url = (document.getElementById("url") as HTMLInputElement).value
 
     val xhr = XMLHttpRequest()
-    xhr.open("PUT", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(url)}")
+    xhr.open("POST", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(url)}")
     xhr.onload = {
         console.warn(xhr.responseText)
         val pageCount = JSON.parse<dynamic>(xhr.responseText).pageCount as Int
