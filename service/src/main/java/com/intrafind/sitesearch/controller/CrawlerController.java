@@ -43,7 +43,7 @@ public class CrawlerController {
         this.searchService = searchService;
     }
 
-    @RequestMapping(path = "{siteId}/crawl", method = RequestMethod.PUT)
+    @RequestMapping(path = "{siteId}/crawl", method = RequestMethod.POST)
     ResponseEntity<CrawlerJobResult> crawl(
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "siteSecret") UUID siteSecret,

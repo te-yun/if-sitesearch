@@ -39,8 +39,8 @@ public class SiteCrawler extends WebCrawler {
     private final AtomicInteger pages = new AtomicInteger(0);
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
-            .followRedirects(true)
-            .followSslRedirects(true)
+            .followRedirects(false)
+            .followSslRedirects(false)
             .build();
 
     private UUID siteId;
