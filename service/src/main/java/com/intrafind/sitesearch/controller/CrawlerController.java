@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.UUID;
 
 @RestController
@@ -47,13 +48,13 @@ public class CrawlerController {
     ResponseEntity<CrawlerJobResult> crawl(
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "siteSecret") UUID siteSecret,
-            @RequestParam(value = "url") String url
+            @RequestParam(value = "url") URI url
     ) {
         if (!pageService.isAllowedToModify(siteId, siteSecret)) {
             return ResponseEntity.notFound().build();
         }
 
-        final CrawlerJobResult crawlerJobResult = crawlerService.crawl(url, siteId, siteSecret);
+        final CrawlerJobResult crawlerJobResult = crawlerService.crawl(url.toString(), siteId, siteSecret);
 
         return ResponseEntity.ok(crawlerJobResult);
     }

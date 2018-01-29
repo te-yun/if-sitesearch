@@ -37,11 +37,11 @@ public class SiteCrawler extends WebCrawler {
     private static final Pattern BLACKLIST = Pattern.compile(".*(\\.(css|js|gif|jpg|png|mp3|mp4|zip|gz|xml))$");
     //    private static final Pattern WHITELIST= Pattern.compile(".*(\\.(html|htm|txt|pdf))$");
     private final AtomicInteger pages = new AtomicInteger(0);
-    private static final ObjectMapper MAPPER = new ObjectMapper();
-    private static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
+    static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
             .followRedirects(false)
             .followSslRedirects(false)
             .build();
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private UUID siteId;
     private UUID siteSecret;
@@ -72,10 +72,6 @@ public class SiteCrawler extends WebCrawler {
     @Override
     public void visit(Page page) {
         String url = page.getWebURL().getURL();
-//        if (url.replace(this.url.toString(), "").contains(".")) {
-//            LOG.warn("siteId: " + siteId + " - url: " + url);
-//            throw new RuntimeException("Not an HTML page: " + url);
-//        }
 
         if (page.getParseData() instanceof HtmlParseData) {
             HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
@@ -111,8 +107,9 @@ public class SiteCrawler extends WebCrawler {
             );
 
             try {
+                // TODO move this to CrawlerService
                 Request request = new Request.Builder()
-                        .url("https://api.sitesearch.cloud/sites/" + siteId + "/pages?siteSecret=" + siteSecret + "&clearIndex=true")
+                        .url("https://api.sitesearch.cloud/sites/" + siteId + "/pages?siteSecret=" + siteSecret)
                         .put(RequestBody.create(MediaType.parse("application/json"), MAPPER.writeValueAsBytes(sitePage)))
                         .build();
                 final Response response = HTTP_CLIENT.newCall(request).execute();
@@ -130,7 +127,7 @@ public class SiteCrawler extends WebCrawler {
             LOG.debug("sitePage: " + sitePage);
             LOG.debug("outgoingURLs: " + links.size());
         }
-        LOG.info("siteId: "+ siteId +" - pageCount: " + pages.incrementAndGet());
+        LOG.info("siteId: " + siteId + " - pageCount: " + pages.incrementAndGet());
 
         this.getMyController().setCustomData(pages.get());
         this.getMyController().getCrawlersLocalData().add(url);

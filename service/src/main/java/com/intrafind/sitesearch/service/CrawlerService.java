@@ -23,10 +23,13 @@ import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.fetcher.PageFetcher;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.UUID;
@@ -58,11 +61,33 @@ public class CrawlerService {
 
         controller.addSeed(url);
 
-        CrawlerControllerFactory factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url));
-        controller.startNonBlocking(factory, CRAWLER_THREADS);
+        if (clearIndex(siteId, siteSecret)) {
+            CrawlerControllerFactory factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url));
+            controller.startNonBlocking(factory, CRAWLER_THREADS);
 
-        controller.waitUntilFinish();
+            controller.waitUntilFinish();
 
-        return new CrawlerJobResult((List) controller.getCrawlersLocalData(), (int) controller.getCustomData());
+            return new CrawlerJobResult((List) controller.getCrawlersLocalData(), (int) controller.getCustomData());
+        }
+        return null;
+    }
+
+    private boolean clearIndex(UUID siteId, UUID siteSecret) {
+        try {
+            Request request = new Request.Builder()
+                    .url("https://api.sitesearch.cloud/sites/" + siteId + "?siteSecret=" + siteSecret)
+                    .delete()
+                    .build();
+            final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
+            if (response.code() == 204) {
+                return true;
+            } else {
+                LOG.error(response.message());
+                return false;
+            }
+        } catch (IOException e) {
+            LOG.error(e.getMessage());
+            return false;
+        }
     }
 }
