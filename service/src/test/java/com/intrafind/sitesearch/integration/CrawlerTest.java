@@ -41,59 +41,30 @@ public class CrawlerTest {
     private static final UUID CRAWL_SITE_ID = UUID.fromString("a2e8d60b-0696-47ea-bc48-982598ee35bd");
     private static final UUID CRAWL_SITE_SECRET = UUID.fromString("04a0afc6-d89a-45c9-8ba8-41d393d8d2f8");
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerTest.class);
-    //    private static final ObjectMapper MAPPER = new ObjectMapper();
-//    private static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
-//            .followRedirects(false)
-//            .followSslRedirects(false)
-//            .build();
+
     @Autowired
     private TestRestTemplate caller;
 
+    @Test
+    public void crawlHttp() {
+        final ResponseEntity<CrawlerJobResult> request = caller
+                .postForEntity(SitesController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET + "&url=" + "http://api.sitesearch.cloud", RequestEntity.EMPTY, CrawlerJobResult.class);
+
+        assertEquals(HttpStatus.OK, request.getStatusCode());
+//        assertNotNull(request.getBody());
+//        assertEquals(15, request.getBody().getPageCount());
+//        assertEquals(16, request.getBody().getUrls().size());
+    }
 
     @Test
     public void crawlHttps() {
-//        final ResponseEntity<CrawlerJobResult> request = caller.postForEntity(SitesController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET + "&url=" + URLEncoder.encode("https://api.sitesearch.cloud", Charsets.UTF_8.toString()), RequestEntity.EMPTY, CrawlerJobResult.class);
-        final ResponseEntity<CrawlerJobResult> request = caller.postForEntity(SitesController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET + "&url=" + "https://api.sitesearch.cloud", RequestEntity.EMPTY, CrawlerJobResult.class);
+        final ResponseEntity<CrawlerJobResult> request = caller
+                .postForEntity(SitesController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET + "&url=" + "https://api.sitesearch.cloud", RequestEntity.EMPTY, CrawlerJobResult.class);
 
-//        Request request = new Request.Builder()
-//                .url(SitesController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET + "&url=" + URLEncoder.encode("https://api.sitesearch.cloud", Charsets.UTF_8.toString()))
-//                .put(RequestBody.create(MediaType.parse("application/json"), ""))
-//                .build();
-//        final Response response = HTTP_CLIENT.newCall(request).execute();
-//        CrawlerJobResult result = MAPPER.readValue(response.body().bytes(), CrawlerJobResult.class);
-
-
-//        assertEquals(HttpStatus.OK.value(), response.code());
         assertEquals(HttpStatus.OK, request.getStatusCode());
-//        assertNotNull(result);
         assertNotNull(request.getBody());
-//        assertEquals(1, result.getPageCount());
         assertEquals(7, request.getBody().getPageCount());
-//        assertEquals(2, result.getUrls().size());
         assertEquals(8, request.getBody().getUrls().size());
-    }
-
-    //    @Test
-    public void crawlHttp() {
-//        final ResponseEntity<CrawlerJobResult> request = caller.postForEntity(SitesController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET + "&url=" + URLEncoder.encode("http://example.com", Charsets.UTF_8.toString()), RequestEntity.EMPTY, CrawlerJobResult.class);
-        final ResponseEntity<CrawlerJobResult> request = caller.postForEntity(SitesController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET + "&url=" + "http://www.example.de", RequestEntity.EMPTY, CrawlerJobResult.class);
-
-//        Request request = new Request.Builder()
-//                .url(SitesController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET + "&url=" + URLEncoder.encode("http://example.com", Charsets.UTF_8.toString()))
-//                .put(RequestBody.create(MediaType.parse("application/json"), ""))
-//                .build();
-//
-//        final Response response = HTTP_CLIENT.newCall(request).execute();
-//        CrawlerJobResult result = MAPPER.readValue(response.body().bytes(), CrawlerJobResult.class);
-
-//        assertEquals(HttpStatus.OK.value(), response.code());
-        assertEquals(HttpStatus.OK, request.getStatusCode());
-//        assertNotNull(result);
-        assertNotNull(request.getBody());
-//        assertEquals(1, result.getPageCount());
-        assertEquals(15, request.getBody().getPageCount());
-//        assertEquals(2, result.getUrls().size());
-        assertEquals(16, request.getBody().getUrls().size());
     }
 }
 
