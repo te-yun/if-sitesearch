@@ -1,4 +1,4 @@
-FROM nginx:1.13.7-alpine
+FROM nginx:1.13
 
 MAINTAINER Alexander Orlov <alexander.orlov@intrafind.de>
 
