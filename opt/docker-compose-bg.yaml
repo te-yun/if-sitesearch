@@ -37,7 +37,7 @@ services:
   blue-instance:   # TODO sync with container_name to make it work?
     image: intrafind/if-sitesearch:latest
     container_name: if-sitesearch-blue
-    restart: always
+    restart: on-failure
 #    ports:
 #      - 4443:8001
     environment:  # TODO in case it is not working, check alternative notations here: https://docs.docker.com/compose/environment-variables/
@@ -55,7 +55,7 @@ services:
   green-instance:   # TODO sync with container_name to make it work?
     image: intrafind/if-sitesearch:latest
     container_name: if-sitesearch-green
-    restart: always
+    restart: on-failure
 #    ports:
 #      - 3443:8001
     environment:  # TODO in case it is not working, check alternative notations here: https://docs.docker.com/compose/environment-variables/
