@@ -57,6 +57,7 @@ fun triggerFirstUsageOwnership() {
 @JsName("overrideSite")
 fun overrideSite(siteId: String) {
     document.cookie = "override-site = $siteId; domain = .sitesearch.cloud; path = /"
+    console.warn("Cookie set: $siteId")
 }
 
 fun showInitCode() {
@@ -99,13 +100,15 @@ fun showInitCode() {
 
     document.addEventListener("crawlerFinishedEvent", {
         triggerButton.textContent = "Enable Search"
+        triggerButton.disabled = false
         (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = "Consider that it takes around a minute before you can find here everything we have found."
     })
 
-    val waitWhileCrawlerIsRunningMsg = "Crawler is running... please give us a minute or two."
+    val waitWhileCrawlerIsRunningMsg = "Crawler is running... please give us just a minute or two."
     document.addEventListener("triggerFirstUsageOwnershipEvent", {
         startCrawler()
         triggerButton.textContent = waitWhileCrawlerIsRunningMsg
+        triggerButton.disabled = true
         (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = waitWhileCrawlerIsRunningMsg
         if (!siteIdContainer.textContent?.isBlank()!!) {
             if (searchbarVariant.checked) {
