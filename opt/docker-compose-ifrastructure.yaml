@@ -1,0 +1,25 @@
+version: "2.0"
+
+services:
+#docker run -d -p 5000:5000 --name registry registry:2
+  registry:
+    image: registry:2
+    container_name: docker-registry
+    restart: always
+    ports:
+      - 5000:5000
+    logging:
+      driver: gelf
+      options:
+        gelf-address: udp://localhost:12201
+    networks:
+      - sitesearch
+
+volumes:
+  docker-registry:
+    driver: local
+
+networks:
+  sitesearch:
+    external:
+      name: sitesearch

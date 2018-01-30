@@ -16,10 +16,7 @@
 
 package com.intrafind.sitesearch.gadget
 
-import org.w3c.dom.HTMLDivElement
-import org.w3c.dom.HTMLInputElement
-import org.w3c.dom.HTMLScriptElement
-import org.w3c.dom.HTMLTextAreaElement
+import org.w3c.dom.*
 import org.w3c.dom.events.Event
 import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
@@ -34,27 +31,6 @@ fun main(args: Array<String>) {
         )
     })
 }
-
-//fun triggerFirstUsageOwnership() {
-//    val serviceUrl: String = if (window.location.hostname.equals("localhost")) {
-//        "http://localhost:8001"
-//    } else {
-//        "https://api.sitesearch.cloud"
-//    }
-//
-//    val xhr = XMLHttpRequest()
-//    val feedUrl = (document.getElementById("feedUrl") as HTMLInputElement).value
-//    xhr.open("POST", "$serviceUrl/sites/rss?feedUrl=$feedUrl&stripHtmlTags=true")
-//    xhr.onload = {
-//        val siteId = JSON.parse<dynamic>(xhr.responseText).siteId as String
-//        val siteSecret = JSON.parse<dynamic>(xhr.responseText).siteSecret as String
-//        (document.getElementById("siteId") as HTMLDivElement).textContent = siteId
-//        (document.getElementById("siteSecret") as HTMLDivElement).textContent = siteSecret
-//        overrideSite(siteId)
-//        document.dispatchEvent(Event("triggerFirstUsageOwnershipEvent"))
-//    }
-//    xhr.send()
-//}
 
 private var siteId: String = ""
 private var siteSecret: String = ""
@@ -81,10 +57,10 @@ fun triggerFirstUsageOwnership() {
 @JsName("overrideSite")
 fun overrideSite(siteId: String) {
     document.cookie = "override-site = $siteId; domain = .sitesearch.cloud; path = /"
-//    document.cookie = "override-site = $siteId; domain = api.sitesearch.cloud; path = /"
 }
 
 fun showInitCode() {
+    val triggerButton = document.getElementById("index") as HTMLButtonElement
     val siteIdContainer = document.getElementById("siteId") as HTMLDivElement
     val enterpriseSearchbar = document.getElementById("sitesearch-searchbar") as HTMLDivElement
     val finderInit = document.getElementById("sitesearch-page-finder-init") as HTMLScriptElement
@@ -92,9 +68,9 @@ fun showInitCode() {
     val finderVariant = document.getElementById("finder-variant") as HTMLInputElement
     val searchbarVariant = document.getElementById("searchbar-variant") as HTMLInputElement
     val integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
-    val siteSearchConfig = "https://cdn.sitesearch.cloud/searchbar/2017-12-14/config/sitesearch.json"
+    val siteSearchConfig = "https://cdn.sitesearch.cloud/searchbar/2018-01-15/config/sitesearch.json"
     val enterpriseSearchbarCode = enterpriseSearchbar.outerHTML
-            .replace("/searchbar/2017-12-14/config/sitesearch.json", siteSearchConfig)
+            .replace("/searchbar/2018-01-15/config/sitesearch.json", siteSearchConfig)
     integrationCode.value = enterpriseSearchbarCode
     finderContainer.style.display = "none"
     val finderInitCode = "<script src=\"https://api.sitesearch.cloud/app/runtime/kotlin.js\"></script>\n" +
@@ -122,11 +98,15 @@ fun showInitCode() {
     })
 
     document.addEventListener("crawlerFinishedEvent", {
-        console.warn("Crawler Finished")
+        triggerButton.textContent = "Enable Search"
+        (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = "Consider that it takes around a minute before you can find here everything we have found."
     })
 
+    val waitWhileCrawlerIsRunningMsg = "Crawler is running... please give us a minute or two."
     document.addEventListener("triggerFirstUsageOwnershipEvent", {
         startCrawler()
+        triggerButton.textContent = waitWhileCrawlerIsRunningMsg
+        (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = waitWhileCrawlerIsRunningMsg
         if (!siteIdContainer.textContent?.isBlank()!!) {
             if (searchbarVariant.checked) {
                 integrationCode.value = integrationCode.value.replace("siteId: \".+".toRegex(), "siteId: \"${siteIdContainer.textContent}\"")
@@ -151,10 +131,9 @@ fun startCrawler() {
     xhr.onload = {
         console.warn(xhr.responseText)
         val pageCount = JSON.parse<dynamic>(xhr.responseText).pageCount as Int
-        console.warn(pageCount)
-        console.warn(JSON.parse<dynamic>(xhr.responseText).urls as List<String?>?)
-        val urls = JSON.parse<dynamic>(xhr.responseText).urls as ArrayList<String?>?
-        console.warn(urls)
+//        console.warn(JSON.parse<dynamic>(xhr.responseText).urls as List<String?>?)
+//        val urls = JSON.parse<dynamic>(xhr.responseText).urls as ArrayList<String?>?
+//        console.warn(urls)
         document.dispatchEvent(Event("crawlerFinishedEvent"))
     }
     xhr.send()
