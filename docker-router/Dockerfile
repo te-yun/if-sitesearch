@@ -1,8 +1,11 @@
-FROM nginx:1.13-alpine
+#FROM nginx:1.13-alpine
+FROM nginx:1.13
 
 MAINTAINER Alexander Orlov <alexander.orlov@intrafind.de>
 
-RUN apk add --no-cache --virtual unzip
+#RUN apk add --no-cache --virtual unzip
+RUN apt-get update
+RUN apt-get install unzip
 ADD https://releases.hashicorp.com/consul-template/0.19.4/consul-template_0.19.4_linux_amd64.zip /usr/bin/
 RUN unzip /usr/bin/consul-template_0.19.4_linux_amd64.zip -d /usr/local/bin
 
