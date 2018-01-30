@@ -15,15 +15,15 @@ services:
     networks:
       - sitesearch
 
-  bg:    # TODO sync with container_name to make it work?
+  blue-green-router:    # TODO sync with container_name to make it work?
     image: intrafind/router:latest
     container_name: router
     restart: always
     ports:
       - 80:80
       - 443:443
-    environment:
-      - constraint:node=master
+#    environment:
+#      - constraint:node=master
 #      - CONSUL_URL=consul:8500
     depends_on:
       - consul
@@ -34,12 +34,12 @@ services:
     networks:
       - sitesearch
 
-  blue:   # TODO sync with container_name to make it work?
+  blue-instance:   # TODO sync with container_name to make it work?
     image: intrafind/if-sitesearch:latest
     container_name: if-sitesearch-blue
     restart: always
-    ports:
-      - 4443:8001
+#    ports:
+#      - 4443:8001
     environment:  # TODO in case it is not working, check alternative notations here: https://docs.docker.com/compose/environment-variables/
       - SECURITY_USER_PASSWORD
       - BUILD_NUMBER
@@ -52,12 +52,12 @@ services:
     networks:
       - sitesearch
 
-  green:   # TODO sync with container_name to make it work?
+  green-instance:   # TODO sync with container_name to make it work?
     image: intrafind/if-sitesearch:latest
     container_name: if-sitesearch-green
     restart: always
-    ports:
-      - 3443:8001
+#    ports:
+#      - 3443:8001
     environment:  # TODO in case it is not working, check alternative notations here: https://docs.docker.com/compose/environment-variables/
       - SECURITY_USER_PASSWORD
       - BUILD_NUMBER
