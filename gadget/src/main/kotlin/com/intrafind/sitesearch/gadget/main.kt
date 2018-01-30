@@ -81,6 +81,7 @@ fun triggerFirstUsageOwnership() {
 @JsName("overrideSite")
 fun overrideSite(siteId: String) {
     document.cookie = "override-site = $siteId; domain = .sitesearch.cloud; path = /"
+    document.cookie = "override-site = $siteId; domain = api.sitesearch.cloud; path = /"
 }
 
 fun showInitCode() {
