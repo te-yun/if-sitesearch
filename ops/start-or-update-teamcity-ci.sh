@@ -15,7 +15,7 @@ docker run -d -t --name $service_name \
 
 # Run for major version upgrades
 ~/buildAgent/bin/install.sh https://ci.sitesearch.cloud
-~/buildAgent/bin/agent.sh run
+#~/buildAgent/bin/agent.sh run
 
 start_ci_agent() {
     docker rm -f teamcity-agent-$1
@@ -30,5 +30,5 @@ start_ci_agent() {
 start_ci_agent merkur
 start_ci_agent venus
 
-rm -f ~/buildAgent/logs/buildAgent.pid
+#rm -f ~/buildAgent/logs/buildAgent.pid
 ~/buildAgent/bin/agent.sh start # run localhost-agent on host machine
