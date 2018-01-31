@@ -64,6 +64,7 @@ private lateinit var integrationCode: HTMLTextAreaElement
 private lateinit var siteIdContainer: HTMLDivElement
 private lateinit var triggerButton: HTMLButtonElement
 private lateinit var url: HTMLInputElement
+
 fun showInitCode() {
     url = document.getElementById("url") as HTMLInputElement
     integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
@@ -127,7 +128,7 @@ private fun applyQueryOverrides() {
         console.warn("applyQueryOverrides $siteId")
         siteIdContainer.textContent = siteId
         url.value = ""
-        url.placeholder = "The search bellow will provide your with search results for Site ID: $siteId"
+        url.placeholder = "The search results below, belong to Site ID: $siteId"
         (document.getElementById("siteSecret") as HTMLDivElement).textContent = "Securely stored in our records"
         overrideSite(siteId)
         insertSiteIdIntoIntegrationCode()       // TODO check if it works
@@ -135,7 +136,6 @@ private fun applyQueryOverrides() {
 }
 
 private fun insertSiteIdIntoIntegrationCode() {
-    console.warn(siteIdContainer.textContent)
     if (!siteIdContainer.textContent?.isBlank()!!) {
         if (searchbarVariant.checked) {
             integrationCode.value = integrationCode.value.replace("siteId: \".+".toRegex(), "siteId: \"${siteIdContainer.textContent}\"")
