@@ -62,11 +62,14 @@ fun overrideSite(siteId: String) {
 private lateinit var searchbarVariant: HTMLInputElement
 private lateinit var integrationCode: HTMLTextAreaElement
 private lateinit var siteIdContainer: HTMLDivElement
+private lateinit var triggerButton: HTMLButtonElement
+private lateinit var url: HTMLInputElement
 fun showInitCode() {
+    url = document.getElementById("url") as HTMLInputElement
     integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
     searchbarVariant = document.getElementById("searchbar-variant") as HTMLInputElement
     siteIdContainer = document.getElementById("siteId") as HTMLDivElement
-    val triggerButton = document.getElementById("index") as HTMLButtonElement
+    triggerButton = document.getElementById("index") as HTMLButtonElement
     val enterpriseSearchbar = document.getElementById("sitesearch-searchbar") as HTMLDivElement
     val finderInit = document.getElementById("sitesearch-page-finder-init") as HTMLScriptElement
     val finderContainer = document.getElementById("page-finder") as HTMLDivElement
@@ -103,7 +106,7 @@ fun showInitCode() {
     document.addEventListener("crawlerFinishedEvent", {
         triggerButton.textContent = "Enable Search"
         triggerButton.disabled = false
-        (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = "Consider that it takes around a minute before you can find here everything we have found."
+        (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = "$crawlerPageCount pages have been crawled. Consider that it takes around a minute before you can find here everything we have found."
     })
 
     val waitWhileCrawlerIsRunningMsg = "Crawler is running... please give us just a minute or two."
@@ -123,7 +126,9 @@ private fun applyQueryOverrides() {
         val siteId = window.location.search.substring(window.location.search.indexOf("siteId=") + 7)
         console.warn("applyQueryOverrides $siteId")
         siteIdContainer.textContent = siteId
-        (document.getElementById("siteSecret") as HTMLDivElement).textContent = "Safely stored in our records"
+        url.value = ""
+        url.placeholder = "The search bellow will provide your with search results for Site ID: $siteId"
+        (document.getElementById("siteSecret") as HTMLDivElement).textContent = "Securely stored in our records"
         overrideSite(siteId)
         insertSiteIdIntoIntegrationCode()       // TODO check if it works
     }
@@ -141,17 +146,13 @@ private fun insertSiteIdIntoIntegrationCode() {
 }
 
 external fun encodeURIComponent(str: String): String
+private var crawlerPageCount: Int = 0
 fun startCrawler() {
-    val url = (document.getElementById("url") as HTMLInputElement).value
-
     val xhr = XMLHttpRequest()
-    xhr.open("POST", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(url)}")
+    xhr.open("POST", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(url.value)}")
     xhr.onload = {
         console.warn(xhr.responseText)
-        val pageCount = JSON.parse<dynamic>(xhr.responseText).pageCount as Int
-//        console.warn(JSON.parse<dynamic>(xhr.responseText).urls as List<String?>?)
-//        val urls = JSON.parse<dynamic>(xhr.responseText).urls as ArrayList<String?>?
-//        console.warn(urls)
+        crawlerPageCount = JSON.parse<dynamic>(xhr.responseText).pageCount as Int
         document.dispatchEvent(Event("crawlerFinishedEvent"))
     }
     xhr.send()
