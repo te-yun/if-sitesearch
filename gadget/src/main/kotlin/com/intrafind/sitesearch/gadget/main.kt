@@ -115,12 +115,13 @@ fun showInitCode() {
         insertSiteIdIntoIntegrationCode()
     })
 
-    applyQueryOverrides(siteIdContainer)
+    applyQueryOverrides()
 }
 
-private fun applyQueryOverrides(siteIdContainer: HTMLDivElement) {
+private fun applyQueryOverrides() {
     if (window.location.search.indexOf("siteId=") != -1) {
         val siteId = window.location.search.substring(window.location.search.indexOf("siteId=") + 7)
+        console.warn("applyQueryOverrides $siteId")
         siteIdContainer.textContent = siteId
         (document.getElementById("siteSecret") as HTMLDivElement).textContent = "Safely stored in our records"
         overrideSite(siteId)
@@ -129,6 +130,7 @@ private fun applyQueryOverrides(siteIdContainer: HTMLDivElement) {
 }
 
 private fun insertSiteIdIntoIntegrationCode() {
+    console.warn(siteIdContainer.textContent)
     if (!siteIdContainer.textContent?.isBlank()!!) {
         if (searchbarVariant.checked) {
             integrationCode.value = integrationCode.value.replace("siteId: \".+".toRegex(), "siteId: \"${siteIdContainer.textContent}\"")
