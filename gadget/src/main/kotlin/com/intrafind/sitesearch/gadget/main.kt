@@ -57,18 +57,20 @@ fun triggerFirstUsageOwnership() {
 @JsName("overrideSite")
 fun overrideSite(siteId: String) {
     document.cookie = "override-site = $siteId; domain = .sitesearch.cloud; path = /"
-    console.warn("Cookie set: $siteId")
 }
 
+private lateinit var searchbarVariant: HTMLInputElement
+private lateinit var integrationCode: HTMLTextAreaElement
+private lateinit var siteIdContainer: HTMLDivElement
 fun showInitCode() {
+    integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
+    searchbarVariant = document.getElementById("searchbar-variant") as HTMLInputElement
+    siteIdContainer = document.getElementById("siteId") as HTMLDivElement
     val triggerButton = document.getElementById("index") as HTMLButtonElement
-    val siteIdContainer = document.getElementById("siteId") as HTMLDivElement
     val enterpriseSearchbar = document.getElementById("sitesearch-searchbar") as HTMLDivElement
     val finderInit = document.getElementById("sitesearch-page-finder-init") as HTMLScriptElement
     val finderContainer = document.getElementById("page-finder") as HTMLDivElement
     val finderVariant = document.getElementById("finder-variant") as HTMLInputElement
-    val searchbarVariant = document.getElementById("searchbar-variant") as HTMLInputElement
-    val integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
     val siteSearchConfig = "https://cdn.sitesearch.cloud/searchbar/2018-01-15/config/sitesearch.json"
     val enterpriseSearchbarCode = enterpriseSearchbar.outerHTML
             .replace("/searchbar/2018-01-15/config/sitesearch.json", siteSearchConfig)
@@ -110,18 +112,29 @@ fun showInitCode() {
         triggerButton.textContent = waitWhileCrawlerIsRunningMsg
         triggerButton.disabled = true
         (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = waitWhileCrawlerIsRunningMsg
-        if (!siteIdContainer.textContent?.isBlank()!!) {
-            if (searchbarVariant.checked) {
-                integrationCode.value = integrationCode.value.replace("siteId: \".+".toRegex(), "siteId: \"${siteIdContainer.textContent}\"")
-            } else {
-                integrationCode.value = integrationCode.value.replace("data-siteId=\".+\"".toRegex(RegexOption.IGNORE_CASE), "data-siteId=\"${siteIdContainer.textContent}\"")
-            }
-        }
+        insertSiteIdIntoIntegrationCode()
     })
 
+    applyQueryOverrides(siteIdContainer)
+}
+
+private fun applyQueryOverrides(siteIdContainer: HTMLDivElement) {
     if (window.location.search.indexOf("siteId=") != -1) {
         val siteId = window.location.search.substring(window.location.search.indexOf("siteId=") + 7)
+        siteIdContainer.textContent = siteId
+        (document.getElementById("siteSecret") as HTMLDivElement).textContent = "Safely stored in our records"
         overrideSite(siteId)
+        insertSiteIdIntoIntegrationCode()       // TODO check if it works
+    }
+}
+
+private fun insertSiteIdIntoIntegrationCode() {
+    if (!siteIdContainer.textContent?.isBlank()!!) {
+        if (searchbarVariant.checked) {
+            integrationCode.value = integrationCode.value.replace("siteId: \".+".toRegex(), "siteId: \"${siteIdContainer.textContent}\"")
+        } else {
+            integrationCode.value = integrationCode.value.replace("data-siteId=\".+\"".toRegex(RegexOption.IGNORE_CASE), "data-siteId=\"${siteIdContainer.textContent}\"")
+        }
     }
 }
 
