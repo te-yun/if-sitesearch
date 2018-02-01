@@ -16,7 +16,10 @@
 
 package com.intrafind.sitesearch.gadget
 
-import org.w3c.dom.*
+import org.w3c.dom.HTMLButtonElement
+import org.w3c.dom.HTMLDivElement
+import org.w3c.dom.HTMLInputElement
+import org.w3c.dom.HTMLTextAreaElement
 import org.w3c.dom.events.Event
 import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
@@ -49,7 +52,7 @@ fun triggerFirstUsageOwnership() {
         (document.getElementById("siteId") as HTMLDivElement).textContent = siteId
         (document.getElementById("siteSecret") as HTMLDivElement).textContent = siteSecret
         overrideSite(siteId)
-        document.dispatchEvent(Event("triggerFirstUsageOwnershipEvent"))
+        document.dispatchEvent(Event("sis.triggerFirstUsageOwnershipEvent"))
     }
     xhr.send()
 }
@@ -59,7 +62,7 @@ fun overrideSite(siteId: String) {
     document.cookie = "override-site = $siteId; domain = .sitesearch.cloud; path = /"
 }
 
-private lateinit var searchbarVariant: HTMLInputElement
+//private lateinit var searchbarVariant: HTMLInputElement
 private lateinit var integrationCode: HTMLTextAreaElement
 private lateinit var siteIdContainer: HTMLDivElement
 private lateinit var triggerButton: HTMLButtonElement
@@ -68,50 +71,51 @@ private lateinit var url: HTMLInputElement
 fun showInitCode() {
     url = document.getElementById("url") as HTMLInputElement
     integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
-    searchbarVariant = document.getElementById("searchbar-variant") as HTMLInputElement
+//    searchbarVariant = document.getElementById("searchbar-variant") as HTMLInputElement
     siteIdContainer = document.getElementById("siteId") as HTMLDivElement
     triggerButton = document.getElementById("index") as HTMLButtonElement
     val enterpriseSearchbar = document.getElementById("sitesearch-searchbar") as HTMLDivElement
-    val finderInit = document.getElementById("sitesearch-page-finder-init") as HTMLScriptElement
-    val finderContainer = document.getElementById("page-finder") as HTMLDivElement
-    val finderVariant = document.getElementById("finder-variant") as HTMLInputElement
-    val siteSearchConfig = "https://cdn.sitesearch.cloud/searchbar/2018-01-15/config/sitesearch.json"
+//    val finderInit = document.getElementById("sitesearch-page-finder-init") as HTMLScriptElement
+//    val finderContainer = document.getElementById("page-finder") as HTMLDivElement
+//    val finderVariant = document.getElementById("finder-variant") as HTMLInputElement
+    val searchbarVersion = "2018-01-15"
+    val siteSearchConfig = "https://cdn.sitesearch.cloud/searchbar/$searchbarVersion/config/sitesearch.json"
     val enterpriseSearchbarCode = enterpriseSearchbar.outerHTML
-            .replace("/searchbar/2018-01-15/config/sitesearch.json", siteSearchConfig)
+            .replace("/searchbar/$searchbarVersion/config/sitesearch.json", siteSearchConfig)
     integrationCode.value = enterpriseSearchbarCode
-    finderContainer.style.display = "none"
-    val finderInitCode = "<script src=\"https://api.sitesearch.cloud/app/runtime/kotlin.js\"></script>\n" +
-            finderInit.outerHTML
-                    .replace("/app/finder/finder.js", "https://api.sitesearch.cloud/app/finder/finder.js")
+//    finderContainer.style.display = "none"
+//    val finderInitCode = "<script src=\"https://api.sitesearch.cloud/app/runtime/kotlin.js\"></script>\n" +
+//            finderInit.outerHTML
+//                    .replace("/app/finder/finder.js", "https://api.sitesearch.cloud/app/finder/finder.js")
 
-    searchbarVariant.addEventListener("click", {
-        enterpriseSearchbar.style.display = "block"
-        finderContainer.style.display = "none"
-        if (siteIdContainer.textContent?.isBlank()!!) {
-            integrationCode.value = enterpriseSearchbarCode
-        } else {
-            integrationCode.value = enterpriseSearchbarCode.replace("siteId: \".+".toRegex(), "siteId: \"${siteIdContainer.textContent}\"")
-        }
-    })
+//    searchbarVariant.addEventListener("click", {
+//        enterpriseSearchbar.style.display = "block"
+//        finderContainer.style.display = "none"
+//        if (siteIdContainer.textContent?.isBlank()!!) {
+//            integrationCode.value = enterpriseSearchbarCode
+//        } else {
+//            integrationCode.value = enterpriseSearchbarCode.replace("siteId: \".+".toRegex(), "siteId: \"${siteIdContainer.textContent}\"")
+//        }
+//    })
 
-    finderVariant.addEventListener("click", {
-        enterpriseSearchbar.style.display = "none"
-        finderContainer.style.display = "block"
-        if (siteIdContainer.textContent?.isBlank()!!) {
-            integrationCode.value = finderInitCode
-        } else {
-            integrationCode.value = finderInitCode.replace("data-siteId=\".+\"".toRegex(RegexOption.IGNORE_CASE), "data-siteId=\"${siteIdContainer.textContent}\"")
-        }
-    })
+//    finderVariant.addEventListener("click", {
+//        enterpriseSearchbar.style.display = "none"
+//        finderContainer.style.display = "block"
+//        if (siteIdContainer.textContent?.isBlank()!!) {
+//            integrationCode.value = finderInitCode
+//        } else {
+//            integrationCode.value = finderInitCode.replace("data-siteId=\".+\"".toRegex(RegexOption.IGNORE_CASE), "data-siteId=\"${siteIdContainer.textContent}\"")
+//        }
+//    })
 
-    document.addEventListener("crawlerFinishedEvent", {
+    document.addEventListener("sis.crawlerFinishedEvent", {
         triggerButton.textContent = "Enable Search"
         triggerButton.disabled = false
         (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = "$crawlerPageCount pages have been crawled. Consider that it takes around a minute before you can find here everything we have found."
     })
 
     val waitWhileCrawlerIsRunningMsg = "Crawler is running... please give us just a minute or two."
-    document.addEventListener("triggerFirstUsageOwnershipEvent", {
+    document.addEventListener("sis.triggerFirstUsageOwnershipEvent", {
         startCrawler()
         triggerButton.textContent = waitWhileCrawlerIsRunningMsg
         triggerButton.disabled = true
@@ -131,17 +135,17 @@ private fun applyQueryOverrides() {
         url.placeholder = "The search results below, belong to Site ID: $siteId"
         (document.getElementById("siteSecret") as HTMLDivElement).textContent = "Securely stored in our records"
         overrideSite(siteId)
-        insertSiteIdIntoIntegrationCode()       // TODO check if it works
+        insertSiteIdIntoIntegrationCode()
     }
 }
 
 private fun insertSiteIdIntoIntegrationCode() {
     if (!siteIdContainer.textContent?.isBlank()!!) {
-        if (searchbarVariant.checked) {
+//        if (searchbarVariant.checked) {
             integrationCode.value = integrationCode.value.replace("siteId: \".+".toRegex(), "siteId: \"${siteIdContainer.textContent}\"")
-        } else {
-            integrationCode.value = integrationCode.value.replace("data-siteId=\".+\"".toRegex(RegexOption.IGNORE_CASE), "data-siteId=\"${siteIdContainer.textContent}\"")
-        }
+//        } else {
+//            integrationCode.value = integrationCode.value.replace("data-siteId=\".+\"".toRegex(RegexOption.IGNORE_CASE), "data-siteId=\"${siteIdContainer.textContent}\"")
+//        }
     }
 }
 
@@ -153,7 +157,7 @@ fun startCrawler() {
     xhr.onload = {
         console.warn(xhr.responseText)
         crawlerPageCount = JSON.parse<dynamic>(xhr.responseText).pageCount as Int
-        document.dispatchEvent(Event("crawlerFinishedEvent"))
+        document.dispatchEvent(Event("sis.crawlerFinishedEvent"))
     }
     xhr.send()
 }
