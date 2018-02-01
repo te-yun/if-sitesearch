@@ -11,7 +11,7 @@ docker run -d -t --name $service_name \
     --network sitesearch \
     jetbrains/${service_name}:${version}
 
-~/buildAgent/bin/agent.sh stop # stop localhost-agent      #TODO try to append kill 
+~/buildAgent/bin/agent.sh stop kill # stop localhost-agent      #TODO try to append kill
 
 # Run for major version upgrades
 cd ~/buildAgent/bin
