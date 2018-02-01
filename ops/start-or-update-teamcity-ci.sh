@@ -14,7 +14,8 @@ docker run -d -t --name $service_name \
 ~/buildAgent/bin/agent.sh stop # stop localhost-agent
 
 # Run for major version upgrades
-~/buildAgent/bin/install.sh https://ci.sitesearch.cloud
+cd ~/buildAgent/bin
+    ./install.sh https://ci.sitesearch.cloud
 #~/buildAgent/bin/agent.sh run
 
 #TODO, investigate
