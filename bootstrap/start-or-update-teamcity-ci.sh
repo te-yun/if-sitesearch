@@ -12,19 +12,14 @@ docker run -d -t --name $service_name \
     --network sitesearch \
     jetbrains/${service_name}:${version}
 
-sudo ~/buildAgent/bin/agent.sh stop # stop localhost-agent      #TODO try to append kill
+sudo ~/buildAgent/bin/agent.sh stop kill # stop localhost-agent
 
 # Run for major version upgrades
 #cd ~/buildAgent/bin
 #    ./install.sh https://ci.sitesearch.cloud
 #~/buildAgent/bin/agent.sh run
 
-#TODO, investigate
-#[16:54:37][Step 1/1] chmod: cannot access 'findJava.sh': No such file or directory
-#[16:54:37][Step 1/1] /home/alexander_orlov/buildAgent/bin/install.sh: 31: .: Can't open ./findJava.sh
-# in https://ci.sitesearch.cloud/viewLog.html?tab=buildLog&buildTypeId=IntraFind_Oss_UpdateCi&buildId=166122
-# TODO fix ELK issue
-# TODO fix SiS Gadget does not support query param in WordPress 
+# TODO fix SiS Gadget does not support query param in WordPress
 
 start_ci_agent() {
     docker rm -f teamcity-agent-$1
