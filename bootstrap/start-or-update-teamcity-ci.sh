@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+# Should be executed on the host with `~/buildAgent` directory  
 
 version=2017.2.2
 service_name=teamcity-server
@@ -11,11 +12,11 @@ docker run -d -t --name $service_name \
     --network sitesearch \
     jetbrains/${service_name}:${version}
 
-~/buildAgent/bin/agent.sh stop kill # stop localhost-agent      #TODO try to append kill
+sudo ~/buildAgent/bin/agent.sh stop # stop localhost-agent      #TODO try to append kill
 
 # Run for major version upgrades
-cd ~/buildAgent/bin
-    ./install.sh https://ci.sitesearch.cloud
+#cd ~/buildAgent/bin
+#    ./install.sh https://ci.sitesearch.cloud
 #~/buildAgent/bin/agent.sh run
 
 #TODO, investigate
@@ -39,4 +40,4 @@ start_ci_agent merkur
 start_ci_agent venus
 
 #rm -f ~/buildAgent/logs/buildAgent.pid
-~/buildAgent/bin/agent.sh start # run localhost-agent on host machine
+sudo ~/buildAgent/bin/agent.sh start # run localhost-agent on host machine

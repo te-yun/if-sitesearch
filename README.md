@@ -18,7 +18,7 @@ an on-demand SaaS offering for providing websites with an externally managed sea
     
 ***> > > [Try out!](https://sitesearch.cloud) < < <***    
     
-# Local Configuration
+# Local configuration
 
 Add a [configuration profile](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config-profile-specific-properties) 
 to the `config` folder inside this project.
@@ -30,7 +30,7 @@ Required environment variables:
     * GITHUB_PUBLIC_ACCESS_TOKEN="your long living GitHub token"
     * DEV_SKIP_FLAG="true" # skip some oAuth2 checks in integration tests to enable additional test scenarios   
 
-# OSS Community Contributions are appreciated 🤓☺️ 
+# OSS community contributions are appreciated 🤓☺️ 
 
 * **WordPress Connector** wanted
     * ...to index exported WordPress dumps (XML) via Site Search REST API  
@@ -40,6 +40,7 @@ Required environment variables:
 # Operations
 
 ## Run 
+    ./gradlew build -x test # just upon initial execution 
     ./run.sh
     http://localhost:8001
     
@@ -50,6 +51,7 @@ Required environment variables:
     ./load-test.sh
 
 ## Build browser clients
+    ./gradlew build -x test # just upon initial execution
     ./js-app-build.sh
 
 ## Release
