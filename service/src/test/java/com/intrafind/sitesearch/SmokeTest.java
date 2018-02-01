@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,7 +62,7 @@ public class SmokeTest {
         assertNull(secureEndpointJson.getBody());
     }
 
-    private static final String PRODUCT_FRONTPAGE_MARKER = "<title>IntraFind Site Search - Site Search</title>";
+    private static final String PRODUCT_FRONTPAGE_MARKER = "<title>Site Search - Get the best search results from your Website - IntraFind AG</title>";
 
     @Test
     public void redirectFromHttpNakedDomain() {
