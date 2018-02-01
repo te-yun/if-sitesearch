@@ -78,7 +78,7 @@ fun showInitCode() {
 //    val finderInit = document.getElementById("sitesearch-page-finder-init") as HTMLScriptElement
 //    val finderContainer = document.getElementById("page-finder") as HTMLDivElement
 //    val finderVariant = document.getElementById("finder-variant") as HTMLInputElement
-    val searchbarVersion = "2018-01-15"
+    val searchbarVersion = "2018-01-15" // when updating, update the value in the corresponding HTML container too
     val siteSearchConfig = "https://cdn.sitesearch.cloud/searchbar/$searchbarVersion/config/sitesearch.json"
     val enterpriseSearchbarCode = enterpriseSearchbar.outerHTML
             .replace("/searchbar/$searchbarVersion/config/sitesearch.json", siteSearchConfig)

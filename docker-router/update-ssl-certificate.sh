@@ -7,7 +7,7 @@ sudo add-apt-repository ppa:certbot/certbot -y
 sudo apt update -y
 sudo apt install certbot -y
 
-sudo certbot certonly --webroot -w /etc/letsencrypt --expand  \
+sudo certbot certonly --webroot -w /etc/letsencrypt --expand \
     -d main.sitesearch.cloud \
     -d test.sitesearch.cloud \
     -d ci.sitesearch.cloud \
