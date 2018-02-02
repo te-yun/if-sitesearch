@@ -8,10 +8,6 @@ services:
     restart: always
     ports:
       - 5000:5000
-    logging:
-      driver: gelf
-      options:
-        gelf-address: udp://localhost:12201
     networks:
       - sitesearch
 
