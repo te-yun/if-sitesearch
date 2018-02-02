@@ -17,9 +17,6 @@
 package com.intrafind.sitesearch;
 
 import com.google.common.base.Predicates;
-import io.undertow.UndertowOptions;
-import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
-import org.springframework.boot.context.embedded.undertow.UndertowEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.PathSelectors;
@@ -35,13 +32,13 @@ import java.util.Collections;
 @Configuration
 public class BaseConfig {
 
-    @Bean
-    public EmbeddedServletContainerFactory servletContainer() {
-        UndertowEmbeddedServletContainerFactory factory = new UndertowEmbeddedServletContainerFactory();
-        factory.addBuilderCustomizers(builder -> builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true));
-
-        return factory;
-    }
+//    @Bean
+//    public EmbeddedServletContainerFactory servletContainer() {
+//        UndertowEmbeddedServletContainerFactory factory = new UndertowEmbeddedServletContainerFactory();
+//        factory.addBuilderCustomizers(builder -> builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true));
+//
+//        return factory;
+//    }
 
     @Bean
     public Docket hideApi(ServletContext servletContext) {
