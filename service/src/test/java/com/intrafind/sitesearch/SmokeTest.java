@@ -154,9 +154,7 @@ public class SmokeTest {
         assertEquals(HttpStatus.OK.value(), response.code());
         assertNull(response.headers().get("x-frame-options"));
         assertNull(response.headers().get("X-Frame-Options"));
-//        response.headers().names().forEach(headerName -> LOG.info(headerName + ":" + response.headers().get(headerName)));
-//        assertEquals("gzip", response.headers().get("content-encoding"));
-        assureCorsHeaders(response.headers(), 456);
+        assureCorsHeaders(response.headers(), 449);
     }
 
     @Test
