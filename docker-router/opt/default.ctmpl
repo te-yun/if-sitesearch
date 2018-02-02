@@ -4,7 +4,6 @@
 
 user  nginx;
 worker_processes  1;
-#server_tokens off; # hide nginx version # TODO not tested yet
 
 error_log  /var/log/nginx/error.log warn;
 pid        /var/run/nginx.pid;
@@ -14,7 +13,9 @@ events {
 }
 
 http {
-  upstream ifinder-search-service {
+ server_tokens off; # hide nginx version # TODO not tested yet
+
+ upstream ifinder-search-service {
     least_conn;
         server sitesearch-search-service:9605;
         server sitesearch-search-service-1:9605;
