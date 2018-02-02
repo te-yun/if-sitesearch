@@ -136,6 +136,7 @@ server {
     auth_basic_user_file /etc/nginx/.htpasswd; # supply this via env vars somehow or as raw file at build time
 
     location / {
+        client_max_body_size 2G;
         proxy_pass http://docker-registry:5000;
     }
 }

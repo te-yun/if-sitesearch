@@ -13,7 +13,7 @@ events {
 }
 
 http {
- server_tokens off; # hide nginx version # TODO not tested yet
+ server_tokens off; # hide nginx version 
 
  upstream ifinder-search-service {
     least_conn;
