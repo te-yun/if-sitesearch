@@ -51,7 +51,7 @@ public class SmokeTest {
     public static final String API_FRONTPAGE_MARKER = "<title>Site Search</title>";
     public static final String SITES_API = "https://api.sitesearch.cloud/sites/";
     private static final UUID BW_BANK_SITE_ID = UUID.fromString("269b0538-120b-44b1-a365-488c2f3fcc15");
-    private static final int HEADER_SIZE = 406;
+    private static final int HEADER_SIZE = 399;
 
     @Autowired
     private TestRestTemplate caller;
