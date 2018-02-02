@@ -85,7 +85,7 @@ public class SmokeTest {
                 String.class
         );
         assertEquals(HttpStatus.MOVED_PERMANENTLY, response.getStatusCode());
-//        assertTrue(response.getBody().contains(PRODUCT_FRONTPAGE_MARKER));
+        assertTrue(response.getBody().contains(PRODUCT_FRONTPAGE_MARKER));
     }
 
     @Test
@@ -97,7 +97,7 @@ public class SmokeTest {
                 String.class
         );
         assertEquals(HttpStatus.MOVED_PERMANENTLY, response.getStatusCode());
-//        assertTrue(response.getBody().contains(PRODUCT_FRONTPAGE_MARKER));
+        assertTrue(response.getBody().contains(PRODUCT_FRONTPAGE_MARKER));
     }
 
     @Test
