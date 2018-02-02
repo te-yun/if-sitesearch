@@ -34,10 +34,9 @@ public class BaseConfig {
 
 //    @Bean
 //    public EmbeddedServletContainerFactory servletContainer() {
-//        JettyEmbeddedServletContainerFactory factory = new JettyEmbeddedServletContainerFactory();
-////        UndertowEmbeddedServletContainerFactory factory = new UndertowEmbeddedServletContainerFactory();
-////        factory.addBuilderCustomizers(builder -> builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true));
-////        return factory;
+//        UndertowEmbeddedServletContainerFactory factory = new UndertowEmbeddedServletContainerFactory();
+//        factory.addBuilderCustomizers(builder -> builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true));
+//        return factory;
 //    }
 
     @Bean
@@ -70,7 +69,7 @@ public class BaseConfig {
                 .paths(Predicates.not(PathSelectors.regex("/autocomplete")))
                 .paths(Predicates.not(PathSelectors.regex("/sites/rss")))
                 .paths(Predicates.not(PathSelectors.regex("/sites/.+/pages/.*")))
-                .paths(Predicates.not(PathSelectors.regex("/sites/.+/email")))
+                .paths(Predicates.not(PathSelectors.regex("/sites/.+/email.*")))
                 .paths(Predicates.not(PathSelectors.regex("/sites/.+/crawl")))
                 .paths(Predicates.not(PathSelectors.regex("/sites/.+/crawling")))
                 .paths(Predicates.not(PathSelectors.regex("/authentication-providers.*")))

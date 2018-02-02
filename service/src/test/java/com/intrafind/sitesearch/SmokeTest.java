@@ -50,7 +50,8 @@ public class SmokeTest {
     private static final String INVALID_CREDENTIALS = "https://" + System.getenv("SECURITY_USER_PASSWORD") + "invalid:" + System.getenv("SECURITY_USER_PASSWORD");
     public static final String API_FRONTPAGE_MARKER = "<title>Site Search</title>";
     public static final String SITES_API = "https://api.sitesearch.cloud/sites/";
-    public static final UUID BW_BANK_SITE_ID = UUID.fromString("269b0538-120b-44b1-a365-488c2f3fcc15");
+    private static final UUID BW_BANK_SITE_ID = UUID.fromString("269b0538-120b-44b1-a365-488c2f3fcc15");
+    private static final int HEADER_SIZE = 406;
 
     @Autowired
     private TestRestTemplate caller;
@@ -177,7 +178,7 @@ public class SmokeTest {
         assertEquals("http://intrafind.de/blog/wie-die-semantische-suche-vom-knowledge-graph-profitiert", found.getUrlRaw());
         assertTrue(found.getBody().startsWith("&lt;p&gt;Der <span class=\"if-teaser-highlight\">Knowledge</span> Graph ist vielen Nutzern bereits durch Google oder Facebook bekannt. Aber auch"));
 
-        assureCorsHeaders(response.headers(), 406);
+        assureCorsHeaders(response.headers(), HEADER_SIZE);
     }
 
 
@@ -198,7 +199,7 @@ public class SmokeTest {
         FoundPage found = result.getResults().get(0);
         assertTrue(100 < found.getBody().length());
 
-        assureCorsHeaders(response.headers(), 406);
+        assureCorsHeaders(response.headers(), HEADER_SIZE);
     }
 
     @Test
@@ -220,7 +221,7 @@ public class SmokeTest {
         assertEquals("http://intrafind.de/blog/wie-die-semantische-suche-vom-knowledge-graph-profitiert", found.getUrlRaw());
         assertTrue(found.getBody().startsWith("&lt;p&gt;Der <span class=\"if-teaser-highlight\">Knowledge</span> Graph ist vielen Nutzern bereits durch Google oder Facebook bekannt. Aber auch"));
 
-        assureCorsHeaders(response.headers(), 406);
+        assureCorsHeaders(response.headers(), HEADER_SIZE);
     }
 
     @Test
@@ -234,7 +235,7 @@ public class SmokeTest {
         assertEquals(HttpStatus.OK.value(), response.code());
         Autocomplete results = MAPPER.readValue(response.body().bytes(), Autocomplete.class);
         assertEquals(1, results.getResults().size());
-        assureCorsHeaders(response.headers(), 406);
+        assureCorsHeaders(response.headers(), HEADER_SIZE);
     }
 
     @Test
@@ -249,7 +250,7 @@ public class SmokeTest {
         Autocomplete result = MAPPER.readValue(response.body().bytes(), Autocomplete.class);
         assertEquals(1, result.getResults().size());
         assertEquals("knowledge graph", result.getResults().get(0));
-        assureCorsHeaders(response.headers(), 406);
+        assureCorsHeaders(response.headers(), HEADER_SIZE);
     }
 
     @Test
@@ -262,7 +263,7 @@ public class SmokeTest {
         assertEquals(HttpStatus.OK.value(), response.code());
         Autocomplete result = MAPPER.readValue(response.body().bytes(), Autocomplete.class);
         assertTrue(5 < result.getResults().size());
-        assureCorsHeaders(response.headers(), 406);
+        assureCorsHeaders(response.headers(), HEADER_SIZE);
     }
 
     @Test
@@ -288,7 +289,7 @@ public class SmokeTest {
 
         assertEquals(HttpStatus.OK.value(), response.code());
         assertNull(response.headers().get("Location"));
-        assureCorsHeaders(response.headers(), 406);
+        assureCorsHeaders(response.headers(), HEADER_SIZE);
         FetchedPage fetchedPage = MAPPER.readValue(response.body().bytes(), FetchedPage.class);
         assertEquals(entropyToCheckInUpdate, fetchedPage.getUrl());
         assertFalse(fetchedPage.getBody().isEmpty());
