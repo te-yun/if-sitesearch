@@ -62,7 +62,6 @@ fun overrideSite(siteId: String) {
     document.cookie = "override-site = $siteId; domain = .sitesearch.cloud; path = /"
 }
 
-//private lateinit var searchbarVariant: HTMLInputElement
 private lateinit var integrationCode: HTMLTextAreaElement
 private lateinit var siteIdContainer: HTMLDivElement
 private lateinit var triggerButton: HTMLButtonElement
@@ -71,42 +70,14 @@ private lateinit var url: HTMLInputElement
 fun showInitCode() {
     url = document.getElementById("url") as HTMLInputElement
     integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
-//    searchbarVariant = document.getElementById("searchbar-variant") as HTMLInputElement
     siteIdContainer = document.getElementById("siteId") as HTMLDivElement
     triggerButton = document.getElementById("index") as HTMLButtonElement
     val enterpriseSearchbar = document.getElementById("sitesearch-searchbar") as HTMLDivElement
-//    val finderInit = document.getElementById("sitesearch-page-finder-init") as HTMLScriptElement
-//    val finderContainer = document.getElementById("page-finder") as HTMLDivElement
-//    val finderVariant = document.getElementById("finder-variant") as HTMLInputElement
     val searchbarVersion = "2018-01-15" // when updating, update the value in the corresponding HTML container too
     val siteSearchConfig = "https://cdn.sitesearch.cloud/searchbar/$searchbarVersion/config/sitesearch.json"
     val enterpriseSearchbarCode = enterpriseSearchbar.outerHTML
             .replace("/searchbar/$searchbarVersion/config/sitesearch.json", siteSearchConfig)
     integrationCode.value = enterpriseSearchbarCode
-//    finderContainer.style.display = "none"
-//    val finderInitCode = "<script src=\"https://api.sitesearch.cloud/app/runtime/kotlin.js\"></script>\n" +
-//            finderInit.outerHTML
-//                    .replace("/app/finder/finder.js", "https://api.sitesearch.cloud/app/finder/finder.js")
-
-//    searchbarVariant.addEventListener("click", {
-//        enterpriseSearchbar.style.display = "block"
-//        finderContainer.style.display = "none"
-//        if (siteIdContainer.textContent?.isBlank()!!) {
-//            integrationCode.value = enterpriseSearchbarCode
-//        } else {
-//            integrationCode.value = enterpriseSearchbarCode.replace("siteId: \".+".toRegex(), "siteId: \"${siteIdContainer.textContent}\"")
-//        }
-//    })
-
-//    finderVariant.addEventListener("click", {
-//        enterpriseSearchbar.style.display = "none"
-//        finderContainer.style.display = "block"
-//        if (siteIdContainer.textContent?.isBlank()!!) {
-//            integrationCode.value = finderInitCode
-//        } else {
-//            integrationCode.value = finderInitCode.replace("data-siteId=\".+\"".toRegex(RegexOption.IGNORE_CASE), "data-siteId=\"${siteIdContainer.textContent}\"")
-//        }
-//    })
 
     document.addEventListener("sis.crawlerFinishedEvent", {
         triggerButton.textContent = "Enable Search"
@@ -141,11 +112,7 @@ private fun applyQueryOverrides() {
 
 private fun insertSiteIdIntoIntegrationCode() {
     if (!siteIdContainer.textContent?.isBlank()!!) {
-//        if (searchbarVariant.checked) {
             integrationCode.value = integrationCode.value.replace("siteId: \".+".toRegex(), "siteId: \"${siteIdContainer.textContent}\"")
-//        } else {
-//            integrationCode.value = integrationCode.value.replace("data-siteId=\".+\"".toRegex(RegexOption.IGNORE_CASE), "data-siteId=\"${siteIdContainer.textContent}\"")
-//        }
     }
 }
 
