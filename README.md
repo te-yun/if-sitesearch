@@ -16,7 +16,7 @@ an on-demand SaaS offering for providing websites with an externally managed sea
 * [Documentation](https://github.com/intrafind/if-sitesearch/blob/master/docs/faq.md)
 * [Integration](https://github.com/intrafind/if-sitesearch/blob/master/docs/Site%20Search%20Product%20Overview.pdf)
     
-***> > > [Try out!](https://sitesearch.cloud) < < <***    
+***> > > [Try out!](https://sitesearch.cloud/getting-started) < < <***    
     
 # Local configuration
 

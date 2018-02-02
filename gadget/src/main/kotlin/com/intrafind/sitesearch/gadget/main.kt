@@ -102,8 +102,7 @@ private fun applyQueryOverrides() {
         val siteId = window.location.search.substring(window.location.search.indexOf("siteId=") + 7)
         console.warn("applyQueryOverrides $siteId")
         siteIdContainer.textContent = siteId
-        url.value = ""
-        url.placeholder = "The search results below, belong to Site ID: $siteId"
+        url.value = "The search results below, belong to Site ID: $siteId"
         (document.getElementById("siteSecret") as HTMLDivElement).textContent = "Securely stored in our records"
         overrideSite(siteId)
         insertSiteIdIntoIntegrationCode()
