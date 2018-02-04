@@ -179,6 +179,6 @@ public class LoadTest {
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         final long queryResultCount = AUTOCOMPLETE_QUERIES.get(query);
-        assertTrue(queryResultCount <= actual.getBody().getResults().size());
+        assertTrue((int) queryResultCount <= actual.getBody().getResults().size());
     }
 }
