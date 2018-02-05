@@ -16,6 +16,8 @@
 
 package com.intrafind.sitesearch.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.intrafind.sitesearch.dto.CaptchaVerification;
 import com.intrafind.sitesearch.service.PageService;
 import com.intrafind.sitesearch.service.SiteCrawler;
 import okhttp3.MediaType;
@@ -91,6 +93,7 @@ public class EmailController {
         return ResponseEntity.ok().build();
     }
 
+    public static final ObjectMapper MAPPER = new ObjectMapper();
     @RequestMapping(path = "verify", method = RequestMethod.POST)
     ResponseEntity<Object> verify(
             @RequestParam(value = "data-callback", required = false) String dataCallback,
@@ -106,7 +109,10 @@ public class EmailController {
                     .post(okhttp3.RequestBody.create(MediaType.parse("applications/json"), ""))
                     .build();
             final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
-            return ResponseEntity.ok(System.getenv("RECAPTCHA_SITE_SECRET") + " | data-callback: " + payload + " -1-- payload: " + dataCallback + " response: " + response.body().string());
+            final CaptchaVerification captchaVerification = MAPPER.readValue(response.body().bytes(), CaptchaVerification.class);
+
+            return ResponseEntity.ok(System.getenv("RECAPTCHA_SITE_SECRET") + " | data-callback: " + payload + " -1-- payload: " + dataCallback + " response: " + response.body().string()
+                    + "captchaVerification: " + captchaVerification.getSuccess() + "captchaVerification.errorCodes: " + captchaVerification.getErrorCodes());
         } catch (IOException e) {
             LOG.error(e.getMessage());
             return ResponseEntity.unprocessableEntity().build();
