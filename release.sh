@@ -5,8 +5,8 @@ docker_network=sitesearch
 SPRING_CONFIG_NAME="application, prod"
 ./gradlew build --build-cache --info -x test
 
-docker_image_name=if-sitesearch
 docker_tag=latest
+docker_image_name=docker-registry.sitesearch.cloud/intrafind/if-sitesearch:${docker_tag}
 
 cd service
 docker build --tag intrafind/${docker_image_name}:${docker_tag} .
@@ -23,7 +23,7 @@ docker run -d --name ${docker_image_name} \
     --network $docker_network \
     intrafind/${docker_image_name}:${docker_tag}
 
-docker push docker-registry.sitesearch.cloud/intrafind/${docker_image_name}:${docker_tag}
+docker push $docker_image_name
 
 danglingImages=$(docker images -f "dangling=true" -q)
 if [ "$danglingImages" ]; then
