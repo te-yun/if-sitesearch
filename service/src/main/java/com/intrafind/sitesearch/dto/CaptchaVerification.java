@@ -16,6 +16,9 @@
 
 package com.intrafind.sitesearch.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CaptchaVerification {
     private Boolean success;
 
