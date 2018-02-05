@@ -40,4 +40,12 @@ public class CaptchaVerification {
     public List<String> getErrorCodes() {
         return errorCodes;
     }
+
+    public void setSuccess(Boolean success) {
+        this.success = success;
+    }
+
+    public void setErrorCodes(List<String> errorCodes) {
+        this.errorCodes = errorCodes;
+    }
 }
