@@ -52,6 +52,7 @@ public class CrawlerController {
     }
 
     public static final ObjectMapper MAPPER = new ObjectMapper();
+
     @RequestMapping(path = "{siteId}/crawl", method = RequestMethod.POST)
     ResponseEntity<CrawlerJobResult> crawl(
             @PathVariable(value = "siteId") UUID siteId,
@@ -63,6 +64,7 @@ public class CrawlerController {
             return ResponseEntity.notFound().build();
         }
 
+        boolean captchaPassed = false;
         try {
             Request request = new Request.Builder()
                     .url("https://www.google.com/recaptcha/api/siteverify?secret=" + System.getenv("RECAPTCHA_SITE_SECRET") + "&response=" + captchaToken)
@@ -73,14 +75,21 @@ public class CrawlerController {
 
             LOG.info(System.getenv("RECAPTCHA_SITE_SECRET") + " | data-callback: " + captchaToken
                     + "captchaVerification: " + captchaVerification.getSuccess());
+
+            if (captchaVerification.getSuccess() || "true".equals(System.getenv("DEV_SKIP_FLAG"))) {
+                captchaPassed = true;
+            }
         } catch (IOException e) {
             LOG.error(e.getMessage());
             return ResponseEntity.unprocessableEntity().build();
         }
 
+        if (captchaPassed) {
+            final CrawlerJobResult crawlerJobResult = crawlerService.crawl(url.toString(), siteId, siteSecret);
 
-        final CrawlerJobResult crawlerJobResult = crawlerService.crawl(url.toString(), siteId, siteSecret);
-
-        return ResponseEntity.ok(crawlerJobResult);
+            return ResponseEntity.ok(crawlerJobResult);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
