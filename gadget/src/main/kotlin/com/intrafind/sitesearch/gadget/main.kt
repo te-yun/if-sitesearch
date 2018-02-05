@@ -102,11 +102,11 @@ fun showInitCode() {
 
 @JsName("applyQueryOverrides")
 private fun applyQueryOverrides() {
-    console.warn("applyQueryOverrides")
-    console.warn("window.location: ${window.location}")
-    if (window.location.search.indexOf("siteId=") != -1) {
+    if (window.location.search.indexOf("siteId=") != -1 || document.cookie.contains("override-site")) {
+        console.warn(window.top)
+        console.warn(window.top.locationbar)
+        console.warn(window.top.location)
         val siteId = window.location.search.substring(window.location.search.indexOf("siteId=") + 7)
-        console.warn("applyQueryOverrides $siteId")
         siteIdContainer.textContent = siteId
         url.value = "The search results below, belong to Site ID: $siteId"
         (document.getElementById("siteSecret") as HTMLDivElement).textContent = "Securely stored in our records"
