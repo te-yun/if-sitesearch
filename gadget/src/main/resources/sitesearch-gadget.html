@@ -30,6 +30,13 @@
         <script src="tippy.all.min.js"></script>
         <script src="/app/runtime/kotlin.js"></script>
         <script src="/app/gadget/gadget.js"></script>
+        <script>
+            var onloadCallback = function () {
+                grecaptcha.render("captcha", {
+                    "sitekey": "6LflVEQUAAAAANVEkwc63uQX96feH1H_6jDU-Bn5"
+                });
+            };
+        </script>
     </head>
 
     <body>
@@ -97,6 +104,7 @@
             <input id="overrideSiteId"
                 title="Leave it blank if you do not know what this means."
                 placeholder="Site ID to use for all Site Search requests" style="width: 306px;">
+            <div id="captcha"></div>
             <button
                     onclick="gadget.com.intrafind.sitesearch.gadget.overrideSite(document.getElementById('overrideSiteId').value)"
                     title="Site ID Cookie overrides the Site ID which is specified in the initialization code for all requests to Site Search."
@@ -147,14 +155,6 @@
         </div>
         <!--END "Search Bar Integration Code"-->
 
-    <!--<div id="page-finder"></div>-->
-    <!--<script id="sitesearch-page-finder-init"-->
-    <!--src="/app/finder/finder.js"-->
-    <!--data-append-as-child-to="#page-finder"-->
-    <!--data-search-style="width: 530px; font-size: 2em; text-indent: .5em;"-->
-    <!--data-siteId="4bcccea2-8bcf-4280-88c7-8736e9c3d15c"-->
-    <!--&gt;</script>-->
-
     <h3 id="addToWebsite">
             Add Site Search to your website
             <span class="tipsy"
@@ -189,7 +189,6 @@
                 trigger: 'click'
             });
         </script>
-
+    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
     </body>
-
 </html>
