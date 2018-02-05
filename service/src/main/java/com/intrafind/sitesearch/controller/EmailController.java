@@ -17,12 +17,17 @@
 package com.intrafind.sitesearch.controller;
 
 import com.intrafind.sitesearch.service.PageService;
+import com.intrafind.sitesearch.service.SiteCrawler;
+import okhttp3.MediaType;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -95,7 +100,16 @@ public class EmailController {
         LOG.info("dataCallback: " + dataCallback);
         LOG.info("payload: " + payload);
 
-
-        return ResponseEntity.ok("env.RECAPTCHA_SITE_SECRET: " + System.getenv("env.RECAPTCHA_SITE_SECRET") + " | data-callback: " + payload + " --- payload: " + dataCallback);
+        try {
+            Request request = new Request.Builder()
+                    .url("https://www.google.com/recaptcha/api/siteverify?secret=" + System.getenv("env.RECAPTCHA_SITE_SECRET") + "&response=" + payload)
+                    .post(okhttp3.RequestBody.create(MediaType.parse("applications/json"), ""))
+                    .build();
+            final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
+            return ResponseEntity.ok("env.RECAPTCHA_SITE_SECRET: " + System.getenv("env.RECAPTCHA_SITE_SECRET") + " | data-callback: " + payload + " --- payload: " + dataCallback + " response: " + response.body().string());
+        } catch (IOException e) {
+            LOG.error(e.getMessage());
+            return ResponseEntity.unprocessableEntity().build();
+        }
     }
 }

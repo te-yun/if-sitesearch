@@ -37,7 +37,7 @@ public class SiteCrawler extends WebCrawler {
     private static final Pattern BLACKLIST = Pattern.compile(".*(\\.(css|js|gif|jpg|png|mp3|mp4|zip|gz|xml))$");
     //    private static final Pattern WHITELIST= Pattern.compile(".*(\\.(html|htm|txt|pdf))$");
     private final AtomicInteger pages = new AtomicInteger(0);
-    static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
+    public static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
             .followRedirects(false)
             .followSslRedirects(false)
             .build();
