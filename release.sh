@@ -9,7 +9,8 @@ docker_tag=latest
 docker_image_name=docker-registry.sitesearch.cloud/intrafind/if-sitesearch:${docker_tag}
 
 cd service
-docker build --tag intrafind/${docker_image_name}:${docker_tag} .
+#docker build --tag intrafind/${docker_image_name}:${docker_tag} .
+docker build --tag $docker_image_name .
 docker rm -f ${docker_image_name}
 cd ..
 
