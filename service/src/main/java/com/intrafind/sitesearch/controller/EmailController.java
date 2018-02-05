@@ -96,6 +96,6 @@ public class EmailController {
         LOG.info("payload: " + payload);
 
 
-        return ResponseEntity.ok("data-callback: " + payload + " --- payload: " + dataCallback);
+        return ResponseEntity.ok("env.RECAPTCHA_SITE_SECRET: " + System.getenv("env.RECAPTCHA_SITE_SECRET") + " | data-callback: " + payload + " --- payload: " + dataCallback);
     }
 }
