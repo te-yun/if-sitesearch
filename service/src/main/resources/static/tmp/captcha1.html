@@ -18,12 +18,16 @@
 <head>
     <title>reCAPTCHA demo: Explicit render after an onload callback</title>
     <script>
+        var test1 = function (token) {
+            console.warn("BLUB");
+            console.warn(token);
+        };
+
         var onloadCallback = function () {
-            console.warn("RE...");
             grecaptcha.render("captcha", {
-                "sitekey": "6LflVEQUAAAAANVEkwc63uQX96feH1H_6jDU-Bn5"
+                "sitekey": "6LflVEQUAAAAANVEkwc63uQX96feH1H_6jDU-Bn5",
+                "callback": test1()
             });
-            console.warn("...CAPTCHA");
         };
     </script>
 </head>

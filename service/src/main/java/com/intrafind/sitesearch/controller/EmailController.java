@@ -106,7 +106,7 @@ public class EmailController {
                     .post(okhttp3.RequestBody.create(MediaType.parse("applications/json"), ""))
                     .build();
             final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
-            return ResponseEntity.ok("env.RECAPTCHA_SITE_SECRET: " + System.getenv("env.RECAPTCHA_SITE_SECRET") + " alt.. " + System.getenv("RECAPTCHA_SITE_SECRET") + " | data-callback: " + payload + " --- payload: " + dataCallback + " response: " + response.body().string());
+            return ResponseEntity.ok(System.getenv("RECAPTCHA_SITE_SECRET") + " | data-callback: " + payload + " -1-- payload: " + dataCallback + " response: " + response.body().string());
         } catch (IOException e) {
             LOG.error(e.getMessage());
             return ResponseEntity.unprocessableEntity().build();
