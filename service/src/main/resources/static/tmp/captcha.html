@@ -17,10 +17,7 @@
 <html>
 <head>
     <title>reCAPTCHA demo: Simple page</title>
-    <!--<script src="https://www.google.com/recaptcha/api.js" async defer></script>-->
-    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
-            async defer>
-    </script>
+
 </head>
 <body>
 https://www.google.com/recaptcha/admin
@@ -30,10 +27,14 @@ https://developers.google.com/recaptcha/docs/display
         console.warn("grecaptcha is ready!");
     };
 </script>
-<form action="https://muctool.de/echo" method="POST">
+<form action="/sites/verify" method="POST">
     <div class="g-recaptcha" data-sitekey="6LflVEQUAAAAANVEkwc63uQX96feH1H_6jDU-Bn5"></div>
     <br/>
     <input type="submit" value="Submit">
 </form>
+<!--<script src="https://www.google.com/recaptcha/api.js" async defer></script>-->
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+        async defer>
+</script>
 </body>
 </html>

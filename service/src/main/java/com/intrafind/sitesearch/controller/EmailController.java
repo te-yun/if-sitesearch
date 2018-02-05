@@ -85,4 +85,17 @@ public class EmailController {
 
         return ResponseEntity.ok().build();
     }
+
+    @RequestMapping(path = "verify", method = RequestMethod.POST)
+    ResponseEntity<Object> verify(
+            @RequestParam(value = "data-callback") String dataCallback,
+            @RequestBody String payload
+    ) {
+
+        LOG.info("dataCallback: " + dataCallback);
+        LOG.info("payload: " + payload);
+
+
+        return ResponseEntity.ok(payload + " ||| " + dataCallback);
+    }
 }
