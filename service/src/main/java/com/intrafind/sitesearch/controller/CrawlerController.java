@@ -16,16 +16,23 @@
 
 package com.intrafind.sitesearch.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.intrafind.sitesearch.dto.CaptchaVerification;
 import com.intrafind.sitesearch.dto.CrawlerJobResult;
 import com.intrafind.sitesearch.service.CrawlerService;
 import com.intrafind.sitesearch.service.PageService;
 import com.intrafind.sitesearch.service.SearchService;
+import com.intrafind.sitesearch.service.SiteCrawler;
+import okhttp3.MediaType;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.UUID;
 
@@ -44,6 +51,7 @@ public class CrawlerController {
         this.searchService = searchService;
     }
 
+    public static final ObjectMapper MAPPER = new ObjectMapper();
     @RequestMapping(path = "{siteId}/crawl", method = RequestMethod.POST)
     ResponseEntity<CrawlerJobResult> crawl(
             @PathVariable(value = "siteId") UUID siteId,
@@ -54,6 +62,22 @@ public class CrawlerController {
         if (!pageService.isAllowedToModify(siteId, siteSecret)) {
             return ResponseEntity.notFound().build();
         }
+
+        try {
+            Request request = new Request.Builder()
+                    .url("https://www.google.com/recaptcha/api/siteverify?secret=" + System.getenv("RECAPTCHA_SITE_SECRET") + "&response=" + captchaToken)
+                    .post(okhttp3.RequestBody.create(MediaType.parse("applications/json"), ""))
+                    .build();
+            final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
+            final CaptchaVerification captchaVerification = MAPPER.readValue(response.body().bytes(), CaptchaVerification.class);
+
+            LOG.info(System.getenv("RECAPTCHA_SITE_SECRET") + " | data-callback: " + captchaToken + " response: " + response.body().string()
+                    + "captchaVerification: " + captchaVerification.getSuccess());
+        } catch (IOException e) {
+            LOG.error(e.getMessage());
+            return ResponseEntity.unprocessableEntity().build();
+        }
+
 
         final CrawlerJobResult crawlerJobResult = crawlerService.crawl(url.toString(), siteId, siteSecret);
 

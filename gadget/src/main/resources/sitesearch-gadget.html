@@ -32,7 +32,6 @@
     <script src="/app/gadget/gadget.js"></script>
     <script>
         var verifyCallback = function (token) {
-            console.warn(token);
             gadget.com.intrafind.sitesearch.gadget.captchaResult = token;
         };
 
@@ -175,16 +174,6 @@
     If you have any other specific questions, consider reading our <a href="https://sitesearch.cloud/faq"
                                                                       target="_top">FAQ</a>.
 </p>
-
-<!--<div id="searchbar-variant-choice" style="display: none;">-->
-<!--<input id="searchbar-variant" type="radio" style="width: 30px; height: 1.2em;" value="Enterprise search bar"-->
-<!--name="clientChoice" title="Solid, reliable, production-grade search bar implementation"-->
-<!--checked><strong>Enterprise</strong>-->
-<!--<input id="finder-variant" type="radio" style="width: 30px; height: 1.2em;"-->
-<!--value="{if-lab} Finder (experimental)"-->
-<!--name="clientChoice"-->
-<!--title="A proof of concept search bar, not recommended for production deployments"><strong>Experimental</strong>-->
-<!--</div>-->
 <br>
 
 <textarea id="integration-code"
