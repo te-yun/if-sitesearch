@@ -17,6 +17,7 @@
 package com.intrafind.sitesearch.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.intrafind.sitesearch.dto.CaptchaVerification;
 import com.intrafind.sitesearch.dto.CrawlerJobResult;
 import com.intrafind.sitesearch.service.CrawlerService;
 import com.intrafind.sitesearch.service.PageService;
@@ -68,10 +69,10 @@ public class CrawlerController {
                     .post(okhttp3.RequestBody.create(MediaType.parse("applications/json"), ""))
                     .build();
             final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
-//            final CaptchaVerification captchaVerification = MAPPER.readValue(response.body().bytes(), CaptchaVerification.class);
-//
-//            LOG.info(System.getenv("RECAPTCHA_SITE_SECRET") + " | data-callback: " + captchaToken + " response: " + response.body().string()
-//                    + "captchaVerification: " + captchaVerification.getSuccess());
+            final CaptchaVerification captchaVerification = MAPPER.readValue(response.body().bytes(), CaptchaVerification.class);
+
+            LOG.info(System.getenv("RECAPTCHA_SITE_SECRET") + " | data-callback: " + captchaToken
+                    + "captchaVerification: " + captchaVerification.getSuccess());
         } catch (IOException e) {
             LOG.error(e.getMessage());
             return ResponseEntity.unprocessableEntity().build();
