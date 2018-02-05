@@ -24,7 +24,7 @@ docker run -d --name ${docker_image_name} \
     --env SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=$SECURITY_OAUTH2_CLIENT_CLIENT_SECRET \
     --network $docker_network \
     intrafind/${docker_image_name}:${docker_tag}
-    $docker_image_name
+#    $docker_image_name
 
 docker push $docker_image_name
 
