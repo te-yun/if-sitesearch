@@ -11,7 +11,6 @@ img_fqn=docker-registry.sitesearch.cloud/intrafind/${docker_image_name}:${docker
 
 cd service
 docker build --tag intrafind/${docker_image_name}:${docker_tag} .
-#docker build --tag $docker_image_name .
 docker rm -f ${docker_image_name}
 cd ..
 
@@ -24,7 +23,6 @@ docker run -d --name ${docker_image_name} \
     --env SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=$SECURITY_OAUTH2_CLIENT_CLIENT_SECRET \
     --network $docker_network \
     intrafind/${docker_image_name}:${docker_tag}
-#    $docker_image_name
 
 docker push $img_fqn
 

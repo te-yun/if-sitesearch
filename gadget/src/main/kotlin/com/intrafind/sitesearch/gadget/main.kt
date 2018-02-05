@@ -99,7 +99,6 @@ fun showInitCode() {
 
 @JsName("applyQueryOverrides")
 private fun applyQueryOverrides() {
-    console.warn("applyQueryOverrides-----")
     console.warn(window.location)
     console.warn(window.top.location)
     if (window.location.search.indexOf("siteId=") != -1) {

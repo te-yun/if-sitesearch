@@ -102,7 +102,7 @@ public class EmailController {
 
         try {
             Request request = new Request.Builder()
-                    .url("https://www.google.com/recaptcha/api/siteverify?secret=" + System.getenv("env.RECAPTCHA_SITE_SECRET") + "&response=" + payload)
+                    .url("https://www.google.com/recaptcha/api/siteverify?secret=" + System.getenv("env.RECAPTCHA_SITE_SECRET") + System.getenv("RECAPTCHA_SITE_SECRET") + "&response=" + payload)
                     .post(okhttp3.RequestBody.create(MediaType.parse("applications/json"), ""))
                     .build();
             final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
