@@ -48,7 +48,8 @@ public class CrawlerController {
     ResponseEntity<CrawlerJobResult> crawl(
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "siteSecret") UUID siteSecret,
-            @RequestParam(value = "url") URI url
+            @RequestParam(value = "url") URI url,
+            @RequestParam(value = "token") String captchaToken
     ) {
         if (!pageService.isAllowedToModify(siteId, siteSecret)) {
             return ResponseEntity.notFound().build();

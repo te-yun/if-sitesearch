@@ -62,6 +62,9 @@ fun overrideSite(siteId: String) {
     document.cookie = "override-site = $siteId; domain = .sitesearch.cloud; path = /"
 }
 
+@JsName("captchaResult")
+lateinit var captchaResult: String
+
 private lateinit var integrationCode: HTMLTextAreaElement
 private lateinit var siteIdContainer: HTMLDivElement
 private lateinit var triggerButton: HTMLButtonElement
@@ -121,8 +124,9 @@ private fun insertSiteIdIntoIntegrationCode() {
 external fun encodeURIComponent(str: String): String
 private var crawlerPageCount: Int = 0
 fun startCrawler() {
+    console.warn(captchaResult)
     val xhr = XMLHttpRequest()
-    xhr.open("POST", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(url.value)}")
+    xhr.open("POST", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(url.value)}&token=$captchaResult")
     xhr.onload = {
         console.warn(xhr.responseText)
         crawlerPageCount = JSON.parse<dynamic>(xhr.responseText).pageCount as Int

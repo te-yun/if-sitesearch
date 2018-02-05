@@ -19,8 +19,8 @@
     <title>reCAPTCHA demo: Explicit render after an onload callback</title>
     <script>
         var verifyCallback = function (token) {
-            console.warn("BLUB");
             console.warn(token);
+            captchaResult
         };
 
         var onloadCallback = function () {

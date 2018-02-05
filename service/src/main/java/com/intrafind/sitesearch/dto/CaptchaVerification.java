@@ -16,36 +16,21 @@
 
 package com.intrafind.sitesearch.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.List;
-
 public class CaptchaVerification {
     private Boolean success;
-    @JsonProperty("error-codes")
-    private List<String> errorCodes;
 
     private CaptchaVerification() {
     }
 
-    public CaptchaVerification(Boolean success, List<String> errorCodes) {
+    public CaptchaVerification(Boolean success) {
         this.success = success;
-        this.errorCodes = errorCodes;
     }
 
     public Boolean getSuccess() {
         return success;
     }
 
-    public List<String> getErrorCodes() {
-        return errorCodes;
-    }
-
     public void setSuccess(Boolean success) {
         this.success = success;
-    }
-
-    public void setErrorCodes(List<String> errorCodes) {
-        this.errorCodes = errorCodes;
     }
 }
