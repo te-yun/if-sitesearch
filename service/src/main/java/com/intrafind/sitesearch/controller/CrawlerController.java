@@ -74,12 +74,12 @@ public class CrawlerController {
             final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
             final CaptchaVerification captchaVerification = MAPPER.readValue(response.body().bytes(), CaptchaVerification.class);
 
-            LOG.info(System.getenv("RECAPTCHA_SITE_SECRET") + " | data-callback: " + captchaToken
-                    + "captchaVerification: " + captchaVerification.getSuccess());
-
-            if (captchaVerification.getSuccess() || "true".equals(System.getenv("DEV_SKIP_FLAG"))) {
+//            LOG.info(System.getenv("RECAPTCHA_SITE_SECRET") + " | data-callback: " + captchaToken
+//                    + "captchaVerification: " + captchaVerification.getSuccess());
+//
+//            if (captchaVerification.getSuccess() || "true".equals(System.getenv("DEV_SKIP_FLAG"))) {
                 captchaPassed = true;
-            }
+//            }
         } catch (IOException e) {
             LOG.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
