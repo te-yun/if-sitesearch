@@ -97,7 +97,9 @@ fun showInitCode() {
     applyQueryOverrides()
 }
 
+@JsName("applyQueryOverrides")
 private fun applyQueryOverrides() {
+    console.warn("applyQueryOverrides....")
     if (window.location.search.indexOf("siteId=") != -1) {
         val siteId = window.location.search.substring(window.location.search.indexOf("siteId=") + 7)
         console.warn("applyQueryOverrides $siteId")
