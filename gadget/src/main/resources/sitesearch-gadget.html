@@ -32,9 +32,11 @@
         <script src="/app/gadget/gadget.js"></script>
         <script>
             var onloadCallback = function () {
+                console.warn(1);
                 grecaptcha.render("captcha", {
                     "sitekey": "6LflVEQUAAAAANVEkwc63uQX96feH1H_6jDU-Bn5"
                 });
+                console.warn(2);
             };
         </script>
     </head>
