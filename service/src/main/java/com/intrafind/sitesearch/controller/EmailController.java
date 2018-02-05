@@ -88,8 +88,8 @@ public class EmailController {
 
     @RequestMapping(path = "verify", method = RequestMethod.POST)
     ResponseEntity<Object> verify(
-            @RequestParam(value = "data-callback") String dataCallback,
-            @RequestBody String payload
+            @RequestParam(value = "data-callback", required = false) String dataCallback,
+            @RequestBody(required = false) String payload
     ) {
 
         LOG.info("dataCallback: " + dataCallback);
