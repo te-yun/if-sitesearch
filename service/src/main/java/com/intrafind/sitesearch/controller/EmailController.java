@@ -96,6 +96,6 @@ public class EmailController {
         LOG.info("payload: " + payload);
 
 
-        return ResponseEntity.ok(payload + " ||| " + dataCallback);
+        return ResponseEntity.ok("data-callback: " + payload + " --- payload: " + dataCallback);
     }
 }
