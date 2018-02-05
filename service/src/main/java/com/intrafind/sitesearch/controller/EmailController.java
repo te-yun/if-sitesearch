@@ -111,10 +111,9 @@ public class EmailController {
             final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
             final CaptchaVerification captchaVerification = MAPPER.readValue(response.body().bytes(), CaptchaVerification.class);
 
-            return ResponseEntity.ok(System.getenv("RECAPTCHA_SITE_SECRET") + " | data-callback: " + payload + " -1-- payload: " + dataCallback
-                    + " response: " + response.body().string());
-//                    + "captchaVerification: " + captchaVerification.getSuccess()
-//            );
+            return ResponseEntity.ok(System.getenv("RECAPTCHA_SITE_SECRET") + " | data-callback: " + payload + " --- payload: " + dataCallback
+                    + "captchaVerification: " + captchaVerification.getSuccess()
+            );
         } catch (IOException e) {
             LOG.error(e.getMessage());
             return ResponseEntity.unprocessableEntity().build();
