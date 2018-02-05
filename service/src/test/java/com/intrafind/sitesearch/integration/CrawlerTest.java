@@ -48,7 +48,8 @@ public class CrawlerTest {
     @Test
     public void crawlExampleViaHttp() {
         final ResponseEntity<CrawlerJobResult> request = caller
-                .postForEntity(SitesController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET + "&url=" + "http://example.com", RequestEntity.EMPTY, CrawlerJobResult.class);
+                .postForEntity(SitesController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET + "&url=" + "http://example.com&token=" + UUID.randomUUID(),
+                        RequestEntity.EMPTY, CrawlerJobResult.class);
 
         assertEquals(HttpStatus.OK, request.getStatusCode());
         assertNotNull(request.getBody());
@@ -59,7 +60,8 @@ public class CrawlerTest {
     @Test
     public void crawlHttp() {
         final ResponseEntity<CrawlerJobResult> request = caller
-                .postForEntity(SitesController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET + "&url=" + "http://example.de", RequestEntity.EMPTY, CrawlerJobResult.class);
+                .postForEntity(SitesController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET + "&url=" + "http://example.de&token=" + UUID.randomUUID(),
+                        RequestEntity.EMPTY, CrawlerJobResult.class);
 
         assertEquals(HttpStatus.OK, request.getStatusCode());
         assertNotNull(request.getBody());
@@ -70,7 +72,8 @@ public class CrawlerTest {
     @Test
     public void crawlSiteSearchViaHttps() {
         final ResponseEntity<CrawlerJobResult> request = caller
-                .postForEntity(SitesController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET + "&url=" + "https://sitesearch.cloud", RequestEntity.EMPTY, CrawlerJobResult.class);
+                .postForEntity(SitesController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET + "&url=" + "https://sitesearch.cloud&token=" + UUID.randomUUID(),
+                        RequestEntity.EMPTY, CrawlerJobResult.class);
 
         assertEquals(HttpStatus.OK, request.getStatusCode());
         assertNotNull(request.getBody());
@@ -81,7 +84,8 @@ public class CrawlerTest {
     @Test
     public void crawlHttps() {
         final ResponseEntity<CrawlerJobResult> request = caller
-                .postForEntity(SitesController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET + "&url=" + "https://api.sitesearch.cloud", RequestEntity.EMPTY, CrawlerJobResult.class);
+                .postForEntity(SitesController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET + "&url=" + "https://api.sitesearch.cloud&token=" + UUID.randomUUID(),
+                        RequestEntity.EMPTY, CrawlerJobResult.class);
 
         assertEquals(HttpStatus.OK, request.getStatusCode());
         assertNotNull(request.getBody());
