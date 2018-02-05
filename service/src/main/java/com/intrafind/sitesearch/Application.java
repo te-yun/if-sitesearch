@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -150,8 +150,6 @@ public class Application {
         final ConfigurableApplicationContext run = SpringApplication.run(Application.class, args);
         run.addApplicationListener((ApplicationListener<ContextClosedEvent>) event -> {
             LOG.info(">>>>>>>>>>>>>>>>>>>>>>> Close Event triggered");
-//            SearchController.ACID_PERSISTENCE_ENVIRONMENT.close();
-//            AssignmentController.ACID_PERSISTENCE_ENTITY.close();
         });
     }
 }
