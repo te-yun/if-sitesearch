@@ -114,7 +114,7 @@ public class SiteCrawler extends WebCrawler {
                         .build();
                 final Response response = HTTP_CLIENT.newCall(request).execute();
                 if (response.code() != 200) {
-                    LOG.warn("siteId: " + siteId + " - url: " + url + " - responseCode: " + response.code());
+                    LOG.warn("siteId: " + siteId + " - URL: " + url + " - responseCode: " + response.code());
                     response.close();
                     this.getMyController().getCrawlersLocalData().add("FAILED: " + url);
                     throw new RuntimeException("Error while adding page to index");

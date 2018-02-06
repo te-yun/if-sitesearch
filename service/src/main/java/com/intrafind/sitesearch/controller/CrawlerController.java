@@ -82,8 +82,7 @@ public class CrawlerController {
 
         if (captchaPassed) {
             final CrawlerJobResult crawlerJobResult = crawlerService.crawl(url.toString(), siteId, siteSecret);
-            // TODO add e-mail
-            LOG.info("siteId: " + siteId + " - siteSecret: " + siteSecret + " - url: " + url + " - pageCount: " + crawlerJobResult.getPageCount() + " - email: " + email);
+            LOG.info("siteId: " + siteId + " - siteSecret: " + siteSecret + " - URL: " + url + " - pageCount: " + crawlerJobResult.getPageCount() + " - email: " + email);
             return ResponseEntity.ok(crawlerJobResult);
         } else {
             return ResponseEntity.unprocessableEntity().build();
