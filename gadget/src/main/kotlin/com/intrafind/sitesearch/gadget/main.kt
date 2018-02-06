@@ -67,6 +67,10 @@ lateinit var captchaResult: String
 
 private lateinit var integrationCode: HTMLTextAreaElement
 private lateinit var siteIdContainer: HTMLDivElement
+private lateinit var captcha: HTMLDivElement
+private lateinit var siteSecretContainer: HTMLDivElement
+private lateinit var emailContainer: HTMLDivElement
+private lateinit var websiteUrlContainer: HTMLDivElement
 private lateinit var triggerButton: HTMLButtonElement
 private lateinit var url: HTMLInputElement
 
@@ -74,6 +78,10 @@ fun showInitCode() {
     url = document.getElementById("url") as HTMLInputElement
     integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
     siteIdContainer = document.getElementById("siteId") as HTMLDivElement
+    captcha = document.getElementById("captcha") as HTMLDivElement
+    siteSecretContainer = document.getElementById("siteSecret-container") as HTMLDivElement
+    emailContainer = document.getElementById("email-container") as HTMLDivElement
+    websiteUrlContainer = document.getElementById("websiteUrl-container") as HTMLDivElement
     triggerButton = document.getElementById("index") as HTMLButtonElement
     val enterpriseSearchbar = document.getElementById("sitesearch-searchbar") as HTMLDivElement
     val searchbarVersion = "2018-01-15" // when updating, update the value in the corresponding HTML container too
@@ -100,22 +108,30 @@ fun showInitCode() {
     applyQueryOverrides()
 }
 
+@JsName("verifyCallback")
+private fun verifyCallback(token: String) {
+    captchaResult = token
+    triggerButton.disabled = false
+}
+
 @JsName("applyQueryOverrides")
 private fun applyQueryOverrides() {
-    val siteId = if (window.location.search.indexOf("siteId=") != -1)
-        window.location.search.substring(window.location.search.indexOf("siteId=") + 7)
-    else if (document.cookie.indexOf("override-site") != -1)
-        document.cookie.substring(document.cookie.indexOf("override-site") + 14, document.cookie.indexOf("override-site") + 14 + 36)
-    else ""
-//    if (window.location.search.indexOf("siteId=") != -1 || document.cookie.indexOf("override-site") != -1) {
+    val siteId = when {
+        window.location.search.indexOf("siteId=") != -1 -> window.location.search.substring(window.location.search.indexOf("siteId=") + 7)
+        document.cookie.indexOf("override-site") != -1 -> document.cookie.substring(document.cookie.indexOf("override-site") + 14, document.cookie.indexOf("override-site") + 14 + 36)
+        else -> ""
+    }
     if (siteId.isNotEmpty()) {
-//        console.warn(document.cookie.substring(document.cookie.indexOf("override-site") + 14, document.cookie.indexOf("override-site") + 14 + 36))
-//        val siteId = window.location.search.substring(window.location.search.indexOf("siteId=") + 7)
         siteIdContainer.textContent = siteId
         url.value = "The search results below, belong to Site ID: $siteId"
         (document.getElementById("siteSecret") as HTMLDivElement).textContent = "Securely stored in our records"
         overrideSite(siteId)
         insertSiteIdIntoIntegrationCode()
+        triggerButton.style.display = "none"
+        captcha.style.display = "none"
+        siteSecretContainer.style.display = "none"
+        emailContainer.style.display = "none"
+        websiteUrlContainer.style.display = "none"
     }
 }
 

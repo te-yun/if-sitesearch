@@ -31,14 +31,15 @@
     <script src="/app/runtime/kotlin.js"></script>
     <script src="/app/gadget/gadget.js"></script>
     <script>
-        var verifyCallback = function (token) {
-            gadget.com.intrafind.sitesearch.gadget.captchaResult = token;
-        };
+        // var verifyCallback = function (token) {
+        //     gadget.com.intrafind.sitesearch.gadget.captchaResult = token;
+        //     // TODO enable an initially disabled button
+        // };
 
         var onloadCallback = function () {
-            grecaptcha.render("captcha", {
+            captchaWidget = grecaptcha.render("captcha", {
                 "sitekey": "6LflVEQUAAAAANVEkwc63uQX96feH1H_6jDU-Bn5",
-                "callback": verifyCallback
+                "callback": gadget.com.intrafind.sitesearch.gadget.verifyCallback
             });
         };
     </script>
@@ -55,7 +56,7 @@
 </p>
 
 <div class="wrapper">
-    <div class="form-inline">
+    <div class="form-inline" id="websiteUrl-container">
         <label for="url">
             <span class="fa fa-wordpress"></span>
             Website URL
@@ -71,6 +72,19 @@
                 mode</strong></div>
         </div>
     </div>
+    <div class="form-inline" id="email-container">
+        <label for="email">
+            <span class="fa fa-envelope-o"></span>
+            E-mail
+        </label>
+        <div class="tipsy-container">
+            <input type="text" id="email"
+                   placeholder="search.integrator@example.com"
+                   value="">
+            <div class="tipsy"
+                 title="E-mail address to receive all integration data, incl. Site Secret."></div>
+        </div>
+    </div>
     <div class="form-inline">
         <label for="siteId">
             <span class="fa fa-key"></span>
@@ -83,7 +97,7 @@
             </div>
         </div>
     </div>
-    <div class="form-inline">
+    <div class="form-inline" id="siteSecret-container">
         <label for="siteSecret">
             <span class="fa fa-user-secret"></span>
             Site Secret
@@ -95,14 +109,12 @@
         </div>
     </div>
 </div>
-<!--<label for="email"><span class="fa fa-envelope-o"></span> E-mail</label>-->
-<!--<input id="email" placeholder="E-mail" value="feedback@sitesearch.cloud" readonly>-->
-
-<div id="captcha"></div>
 
 <div class="button-wrapper">
+    <div id="captcha"></div>
     <button id="index" class="button-wrapper" title="Extract content from website"
-            onclick="gadget.com.intrafind.sitesearch.gadget.triggerFirstUsageOwnership()">
+            onclick="gadget.com.intrafind.sitesearch.gadget.triggerFirstUsageOwnership()"
+            disabled>
         Enable Search
     </button>
 </div>
