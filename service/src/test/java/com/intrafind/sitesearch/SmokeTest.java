@@ -63,7 +63,7 @@ public class SmokeTest {
         assertNull(secureEndpointJson.getBody());
     }
 
-    private static final String PRODUCT_FRONTPAGE_MARKER = "<title>Site Search - Get the best search results from your Website - IntraFind AG</title>";
+    private static final String PRODUCT_FRONTPAGE_MARKER = "<title>Site Search - Get the best search results from your Website</title>";
 
     @Test
     public void redirectFromHttpNakedDomain() {
