@@ -102,7 +102,7 @@ fun showInitCode() {
 
 @JsName("applyQueryOverrides")
 private fun applyQueryOverrides() {
-    if (window.location.search.indexOf("siteId=") != -1 || document.cookie.contains("override-site")) {
+    if (window.location.search.indexOf("siteId=") != -1 || document.cookie.indexOf("override-site") != -1) {
         console.warn(window.top)
         console.warn(window.top.locationbar)
         console.warn(window.top.location)
@@ -124,7 +124,7 @@ private fun insertSiteIdIntoIntegrationCode() {
 external fun encodeURIComponent(str: String): String
 private var crawlerPageCount: Int = 0
 fun startCrawler() {
-    console.warn(captchaResult)
+    console.warn("captchaResult: $captchaResult")
     val xhr = XMLHttpRequest()
     xhr.open("POST", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(url.value)}&token=$captchaResult")
     xhr.onload = {
