@@ -21,7 +21,6 @@ import com.intrafind.sitesearch.dto.CaptchaVerification;
 import com.intrafind.sitesearch.dto.CrawlerJobResult;
 import com.intrafind.sitesearch.service.CrawlerService;
 import com.intrafind.sitesearch.service.PageService;
-import com.intrafind.sitesearch.service.SearchService;
 import com.intrafind.sitesearch.service.SiteCrawler;
 import okhttp3.MediaType;
 import okhttp3.Request;
@@ -43,13 +42,11 @@ public class CrawlerController {
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerController.class);
     private final PageService pageService;
     private final CrawlerService crawlerService;
-    private final SearchService searchService;
 
     @Autowired
-    private CrawlerController(PageService pageService, CrawlerService crawlerService, SearchService searchService) {
+    private CrawlerController(PageService pageService, CrawlerService crawlerService) {
         this.pageService = pageService;
         this.crawlerService = crawlerService;
-        this.searchService = searchService;
     }
 
     public static final ObjectMapper MAPPER = new ObjectMapper();
@@ -84,7 +81,7 @@ public class CrawlerController {
 
         if (captchaPassed) {
             final CrawlerJobResult crawlerJobResult = crawlerService.crawl(url.toString(), siteId, siteSecret);
-
+            LOG.info("siteId: " + siteId + " - siteSecret: " + siteSecret + " - url: " + url + " - pageCount: " + crawlerJobResult.getPageCount());
             return ResponseEntity.ok(crawlerJobResult);
         } else {
             return ResponseEntity.unprocessableEntity().build();

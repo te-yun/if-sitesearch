@@ -94,7 +94,8 @@ public class EmailController {
     }
 
     public static final ObjectMapper MAPPER = new ObjectMapper();
-    @RequestMapping(path = "verify", method = RequestMethod.POST)
+
+    //    @RequestMapping(path = "verify", method = RequestMethod.POST)
     ResponseEntity<Object> verify(
             @RequestParam(value = "data-callback", required = false) String dataCallback,
             @RequestBody(required = false) String payload
