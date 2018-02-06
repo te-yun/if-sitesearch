@@ -74,7 +74,7 @@ public class LoadTest {
 
     static {
         AUTOCOMPLETE_QUERIES.put("hyp", 0L);
-        AUTOCOMPLETE_QUERIES.put("geld", 6L);
+        AUTOCOMPLETE_QUERIES.put("geld", 5L);
         AUTOCOMPLETE_QUERIES.put("bank", 7L);
         AUTOCOMPLETE_QUERIES.put("fond", 10L);
         QUERY_LIST_AUTOCOMPLETE = new ArrayList<>(AUTOCOMPLETE_QUERIES.keySet());
@@ -180,5 +180,6 @@ public class LoadTest {
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         final long queryResultCount = AUTOCOMPLETE_QUERIES.get(query);
         assertEquals(queryResultCount, actual.getBody().getResults().size());
+        assertTrue(queryResultCount <= actual.getBody().getResults().size());
     }
 }
