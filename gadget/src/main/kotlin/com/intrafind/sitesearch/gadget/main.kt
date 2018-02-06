@@ -102,10 +102,8 @@ fun showInitCode() {
 
 @JsName("applyQueryOverrides")
 private fun applyQueryOverrides() {
+    console.warn(document.cookie.indexOf("override-site"))
     if (window.location.search.indexOf("siteId=") != -1 || document.cookie.indexOf("override-site") != -1) {
-        console.warn(window.top)
-        console.warn(window.top.locationbar)
-        console.warn(window.top.location)
         console.warn(document.cookie.substring(document.cookie.indexOf("override-site") + 14, document.cookie.indexOf("override-site") + 14 + 36))
         val siteId = window.location.search.substring(window.location.search.indexOf("siteId=") + 7)
         siteIdContainer.textContent = siteId
