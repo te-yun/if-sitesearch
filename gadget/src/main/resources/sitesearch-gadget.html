@@ -31,14 +31,9 @@
     <script src="/app/runtime/kotlin.js"></script>
     <script src="/app/gadget/gadget.js"></script>
     <script>
-        // var verifyCallback = function (token) {
-        //     gadget.com.intrafind.sitesearch.gadget.captchaResult = token;
-        //     // TODO enable an initially disabled button
-        // };
-
-        var onloadCallback = function () {
+        var captchaLoad = function () {
             captchaWidget = grecaptcha.render("captcha", {
-                "sitekey": "6LflVEQUAAAAANVEkwc63uQX96feH1H_6jDU-Bn5",
+                "sitekey": gadget.com.intrafind.sitesearch.gadget.SiteSearch.Companion.captchaSiteKey,
                 "callback": gadget.com.intrafind.sitesearch.gadget.verifyCallback
             });
         };
@@ -197,6 +192,6 @@
         trigger: 'click'
     });
 </script>
-<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
+<script src="https://www.google.com/recaptcha/api.js?onload=captchaLoad&render=explicit" async defer></script>
 </body>
 </html>

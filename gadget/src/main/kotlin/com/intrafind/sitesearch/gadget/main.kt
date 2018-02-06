@@ -154,3 +154,9 @@ fun startCrawler() {
     }
     xhr.send()
 }
+
+class SiteSearch {
+    companion object {
+        val captchaSiteKey = "6LflVEQUAAAAANVEkwc63uQX96feH1H_6jDU-Bn5"
+    }
+}
