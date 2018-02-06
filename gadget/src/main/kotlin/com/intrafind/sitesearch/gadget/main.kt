@@ -106,6 +106,7 @@ private fun applyQueryOverrides() {
         console.warn(window.top)
         console.warn(window.top.locationbar)
         console.warn(window.top.location)
+        console.warn(document.cookie.substring(document.cookie.indexOf("override-site") + 14, document.cookie.indexOf("override-site") + 14 + 36))
         val siteId = window.location.search.substring(window.location.search.indexOf("siteId=") + 7)
         siteIdContainer.textContent = siteId
         url.value = "The search results below, belong to Site ID: $siteId"
