@@ -102,10 +102,15 @@ fun showInitCode() {
 
 @JsName("applyQueryOverrides")
 private fun applyQueryOverrides() {
-    console.warn(document.cookie.indexOf("override-site"))
-    if (window.location.search.indexOf("siteId=") != -1 || document.cookie.indexOf("override-site") != -1) {
-        console.warn(document.cookie.substring(document.cookie.indexOf("override-site") + 14, document.cookie.indexOf("override-site") + 14 + 36))
-        val siteId = window.location.search.substring(window.location.search.indexOf("siteId=") + 7)
+    val siteId = if (window.location.search.indexOf("siteId=") != -1)
+        window.location.search.substring(window.location.search.indexOf("siteId=") + 7)
+    else if (document.cookie.indexOf("override-site") != -1)
+        document.cookie.substring(document.cookie.indexOf("override-site") + 14, document.cookie.indexOf("override-site") + 14 + 36)
+    else ""
+//    if (window.location.search.indexOf("siteId=") != -1 || document.cookie.indexOf("override-site") != -1) {
+    if (siteId.isNotEmpty()) {
+//        console.warn(document.cookie.substring(document.cookie.indexOf("override-site") + 14, document.cookie.indexOf("override-site") + 14 + 36))
+//        val siteId = window.location.search.substring(window.location.search.indexOf("siteId=") + 7)
         siteIdContainer.textContent = siteId
         url.value = "The search results below, belong to Site ID: $siteId"
         (document.getElementById("siteSecret") as HTMLDivElement).textContent = "Securely stored in our records"
@@ -116,7 +121,7 @@ private fun applyQueryOverrides() {
 
 private fun insertSiteIdIntoIntegrationCode() {
     if (!siteIdContainer.textContent?.isBlank()!!) {
-            integrationCode.value = integrationCode.value.replace("siteId: \".+".toRegex(), "siteId: \"${siteIdContainer.textContent}\"")
+        integrationCode.value = integrationCode.value.replace("siteId: \".+".toRegex(), "siteId: \"${siteIdContainer.textContent}\"")
     }
 }
 
