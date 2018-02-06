@@ -56,6 +56,7 @@ public class CrawlerController {
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "siteSecret") UUID siteSecret,
             @RequestParam(value = "url") URI url,
+            @RequestParam(value = "email") String email,
             @RequestParam(value = "token") String captchaToken
     ) {
         if (!pageService.isAllowedToModify(siteId, siteSecret)) {
@@ -81,7 +82,8 @@ public class CrawlerController {
 
         if (captchaPassed) {
             final CrawlerJobResult crawlerJobResult = crawlerService.crawl(url.toString(), siteId, siteSecret);
-            LOG.info("siteId: " + siteId + " - siteSecret: " + siteSecret + " - url: " + url + " - pageCount: " + crawlerJobResult.getPageCount());
+            // TODO add e-mail
+            LOG.info("siteId: " + siteId + " - siteSecret: " + siteSecret + " - url: " + url + " - pageCount: " + crawlerJobResult.getPageCount() + " - email: " + email);
             return ResponseEntity.ok(crawlerJobResult);
         } else {
             return ResponseEntity.unprocessableEntity().build();

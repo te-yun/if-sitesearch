@@ -73,8 +73,10 @@ private lateinit var emailContainer: HTMLDivElement
 private lateinit var websiteUrlContainer: HTMLDivElement
 private lateinit var triggerButton: HTMLButtonElement
 private lateinit var url: HTMLInputElement
+private lateinit var email: HTMLInputElement
 
 fun showInitCode() {
+    email = document.getElementById("email") as HTMLInputElement
     url = document.getElementById("url") as HTMLInputElement
     integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
     siteIdContainer = document.getElementById("siteId") as HTMLDivElement
@@ -146,7 +148,7 @@ private var crawlerPageCount: Int = 0
 fun startCrawler() {
     console.warn("captchaResult: $captchaResult")
     val xhr = XMLHttpRequest()
-    xhr.open("POST", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(url.value)}&token=$captchaResult")
+    xhr.open("POST", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(url.value)}&token=$captchaResult&email=${email.value}")
     xhr.onload = {
         console.warn(xhr.responseText)
         crawlerPageCount = JSON.parse<dynamic>(xhr.responseText).pageCount as Int
