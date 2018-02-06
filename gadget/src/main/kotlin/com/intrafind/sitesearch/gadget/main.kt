@@ -146,13 +146,16 @@ private fun insertSiteIdIntoIntegrationCode() {
 external fun encodeURIComponent(str: String): String
 private var crawlerPageCount: Int = 0
 fun startCrawler() {
-    console.warn("captchaResult: $captchaResult")
     val xhr = XMLHttpRequest()
     xhr.open("POST", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(url.value)}&token=$captchaResult&email=${email.value}")
     xhr.onload = {
         console.warn(xhr.responseText)
-        crawlerPageCount = JSON.parse<dynamic>(xhr.responseText).pageCount as Int
-        document.dispatchEvent(Event("sis.crawlerFinishedEvent"))
+        if (xhr.status.equals(200)) {
+            crawlerPageCount = JSON.parse<dynamic>(xhr.responseText).pageCount as Int
+            document.dispatchEvent(Event("sis.crawlerFinishedEvent"))
+        } else {
+            console.warn("Request failed")
+        }
     }
     xhr.send()
 }
