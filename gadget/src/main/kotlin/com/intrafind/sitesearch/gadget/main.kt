@@ -95,7 +95,7 @@ fun showInitCode() {
     document.addEventListener("sis.crawlerFinishedEvent", {
         triggerButton.textContent = "Enable Search"
         triggerButton.disabled = false
-        (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = "$crawlerPageCount pages have been crawled. Consider that it takes around a minute before you can find here everything we have found."
+        (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = "$crawlerPageCount pages from \"${url.value}\" have been crawled. Consider that it takes around a minute before you can find here everything we have found."
     })
 
     val waitWhileCrawlerIsRunningMsg = "Crawler is running... please give us just a minute or two."
