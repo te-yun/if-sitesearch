@@ -83,8 +83,8 @@ public class CrawlerTest {
 
         assertEquals(HttpStatus.OK, request.getStatusCode());
         assertNotNull(request.getBody());
-        assertEquals(12, request.getBody().getPageCount());
-        assertEquals(13, request.getBody().getUrls().size());
+        assertEquals(16, request.getBody().getPageCount());
+        assertEquals(17, request.getBody().getUrls().size());
     }
 
     @Test
