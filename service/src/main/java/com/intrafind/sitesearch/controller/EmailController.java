@@ -17,20 +17,27 @@
 package com.intrafind.sitesearch.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.api.services.gmail.Gmail;
 import com.intrafind.sitesearch.dto.CaptchaVerification;
 import com.intrafind.sitesearch.service.PageService;
 import com.intrafind.sitesearch.service.SiteCrawler;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -46,34 +53,46 @@ public class EmailController {
         this.pageService = pageService;
     }
 
-//    public static MimeMessage createEmail(String to,
-//                                          String from,
-//                                          String subject,
-//                                          String bodyText)
-//            throws MessagingException {
-//        Properties props = new Properties();
-//        Session session = Session.getDefaultInstance(props, null);
-//
-//        MimeMessage email = new MimeMessage(session);
-//
-//        email.setFrom(new InternetAddress(from));
-//        email.addRecipient(javax.mail.Message.RecipientType.TO,
-//                new InternetAddress(to));
-//        email.setSubject(subject);
-//        email.setText(bodyText);
-//        return email;
-//    }
-//
-//    public static Message createMessageWithEmail(MimeMessage emailContent)
-//            throws MessagingException, IOException {
-//        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-//        emailContent.writeTo(buffer);
-//        byte[] bytes = buffer.toByteArray();
-//        String encodedEmail = Base64.encodeBase64URLSafeString(bytes);
-//        Message message = new Message();
-//        message.setRaw(encodedEmail);
-//        return message;
-//    }
+    public static MimeMessage createEmail(String to,
+                                          String from,
+                                          String subject,
+                                          String bodyText)
+            throws Exception {
+        Properties props = new Properties();
+        Session session = Session.getDefaultInstance(props, null);
+
+        MimeMessage email = new MimeMessage(session);
+
+        email.setFrom(new InternetAddress(from));
+        email.addRecipient(javax.mail.Message.RecipientType.TO,
+                new InternetAddress(to));
+        email.setSubject(subject);
+        email.setText(bodyText);
+        return email;
+    }
+
+    public static com.google.api.services.gmail.model.Message createMessageWithEmail(MimeMessage emailContent)
+            throws Exception {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        emailContent.writeTo(buffer);
+        byte[] bytes = buffer.toByteArray();
+        String encodedEmail = Base64.encodeBase64URLSafeString(bytes);
+        com.google.api.services.gmail.model.Message message = new com.google.api.services.gmail.model.Message();
+        message.setRaw(encodedEmail);
+        return message;
+    }
+
+    public static com.google.api.services.gmail.model.Message sendMessage(Gmail service,
+                                                                          String userId,
+                                                                          MimeMessage emailContent)
+            throws Exception {
+        com.google.api.services.gmail.model.Message message = createMessageWithEmail(emailContent);
+        message = service.users().messages().send(userId, message).execute();
+
+        System.out.println("Message id: " + message.getId());
+        System.out.println(message.toPrettyString());
+        return message;
+    }
 
     @RequestMapping(path = "{siteId}/email/setup-info", method = RequestMethod.POST)
     ResponseEntity<Object> email(

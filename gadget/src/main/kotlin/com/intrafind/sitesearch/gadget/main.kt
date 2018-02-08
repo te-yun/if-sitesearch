@@ -66,12 +66,14 @@ fun overrideSite(siteId: String) {
 lateinit var captchaResult: String
 
 private lateinit var integrationCode: HTMLTextAreaElement
+private lateinit var searchSetupUrl: HTMLInputElement
 private lateinit var siteIdContainer: HTMLDivElement
 private lateinit var captcha: HTMLDivElement
 private lateinit var siteSecretContainer: HTMLDivElement
 private lateinit var emailContainer: HTMLDivElement
 private lateinit var websiteUrlContainer: HTMLDivElement
 private lateinit var triggerButton: HTMLButtonElement
+private lateinit var preserveSearchSetup: HTMLInputElement
 private lateinit var url: HTMLInputElement
 private lateinit var email: HTMLInputElement
 
@@ -79,12 +81,14 @@ fun showInitCode() {
     email = document.getElementById("email") as HTMLInputElement
     url = document.getElementById("url") as HTMLInputElement
     integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
+    searchSetupUrl = document.getElementById("searchSetupUrl") as HTMLInputElement
     siteIdContainer = document.getElementById("siteId") as HTMLDivElement
     captcha = document.getElementById("captcha") as HTMLDivElement
     siteSecretContainer = document.getElementById("siteSecret-container") as HTMLDivElement
     emailContainer = document.getElementById("email-container") as HTMLDivElement
     websiteUrlContainer = document.getElementById("websiteUrl-container") as HTMLDivElement
     triggerButton = document.getElementById("index") as HTMLButtonElement
+    preserveSearchSetup = document.getElementById("preserveSearchSetup") as HTMLInputElement
     val enterpriseSearchbar = document.getElementById("sitesearch-searchbar") as HTMLDivElement
     val searchbarVersion = "2018-01-15" // when updating, update the value in the corresponding HTML container too
     val siteSearchConfig = "https://cdn.sitesearch.cloud/searchbar/$searchbarVersion/config/sitesearch.json"
@@ -103,6 +107,8 @@ fun showInitCode() {
         startCrawler()
         triggerButton.textContent = waitWhileCrawlerIsRunningMsg
         triggerButton.disabled = true
+        preserveSearchSetup.disabled = false
+        searchSetupUrl.value = "https://sitesearch.cloud/getting-started?siteId=$siteId&siteSecret=$siteSecret"
         (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = waitWhileCrawlerIsRunningMsg
         insertSiteIdIntoIntegrationCode()
     })
@@ -115,6 +121,14 @@ private fun verifyCallback(token: String) {
     captchaResult = token
     triggerButton.disabled = false
 }
+
+@JsName("preserveSearchSetup")
+private fun preserveSearchSetup() {
+    searchSetupUrl.select()
+    console.warn(searchSetupUrl.value)
+    document.execCommand("Copy")
+}
+
 
 @JsName("applyQueryOverrides")
 private fun applyQueryOverrides() {
@@ -134,6 +148,9 @@ private fun applyQueryOverrides() {
         siteSecretContainer.style.display = "none"
         emailContainer.style.display = "none"
         websiteUrlContainer.style.display = "none"
+
+        searchSetupUrl.hidden = true
+        preserveSearchSetup.hidden = true
     }
 }
 

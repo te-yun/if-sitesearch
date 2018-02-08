@@ -113,6 +113,20 @@
         Enable Search
     </button>
 </div>
+<nobr>
+    <input size="124"
+           type="text" id="searchSetupUrl" readonly title="Site Search Setup URL"
+           value="Generated URL with your site setup credentials"
+    >
+    <input id="preserveSearchSetup"
+           type="button"
+           onclick="gadget.com.intrafind.sitesearch.gadget.preserveSearchSetup()"
+           title="The copied URL contains all information you need, to resume your evaluation or setup the search on your website"
+           style="width: 75px;"
+           value="Copy URL"
+           disabled
+    >
+</nobr>
 
 <div style="display: none;">
     <input id="overrideSiteId"
@@ -192,6 +206,6 @@
         trigger: 'click'
     });
 </script>
-<script src="https://www.google.com/recaptcha/api.js?onload=captchaLoad&render=explicit" async defer></script>
+<script src="https://www.google.com/recaptcha/api.js?onload=captchaLoad&render=explicit&hl=en" async defer></script>
 </body>
 </html>
