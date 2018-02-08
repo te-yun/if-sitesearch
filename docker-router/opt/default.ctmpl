@@ -53,6 +53,7 @@ http {
 
     location / {
         include /etc/nginx/snippets/cors-headers.conf;
+        proxy_read_timeout 300; # required for long-lasting crawler calls 
 
       {{if eq $live "blue"}}
         proxy_pass http://blue;

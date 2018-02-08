@@ -125,8 +125,7 @@ private fun verifyCallback(token: String) {
 @JsName("preserveSearchSetup")
 private fun preserveSearchSetup() {
     searchSetupUrl.select()
-    console.warn(searchSetupUrl.value)
-    document.execCommand("Copy")
+    document.execCommand("copy")
 }
 
 
