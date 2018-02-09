@@ -148,13 +148,13 @@ private fun applyQueryOverrides() {
     }
     websiteUrl = when {
         window.location.search.indexOf("url=") != -1 -> window.location.search.substring(window.location.search.indexOf("url=") + 4)
-        else -> ""
+        else -> url.value
     }
     if (siteId.isNotEmpty()) {
         console.warn("url.value: ${url.value}")
         console.warn("websiteUrl: $websiteUrl")
 //        siteIdContainer.textContent = siteId
-        url.value = websiteUrl
+//        url.value = websiteUrl
 //        (document.getElementById("siteSecret") as HTMLDivElement).textContent = "Securely stored in our records"
         overrideSite(siteId)
         insertSiteIdIntoIntegrationCode()
