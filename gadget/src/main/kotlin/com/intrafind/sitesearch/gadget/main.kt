@@ -148,14 +148,15 @@ private fun applyQueryOverrides() {
     }
     websiteUrl = when {
         window.location.search.indexOf("url=") != -1 -> window.location.search.substring(window.location.search.indexOf("url=") + 4)
-        document.cookie.indexOf("sis.websiteUrl") != -1 -> document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15)
+        document.cookie.indexOf("sis.websiteUrl") != -1 -> document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15,
+                (document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).indexOf(";")))
         else -> ""
     }
     if (siteId.isNotEmpty()) {
         console.warn("url.value: ${url.value}")
         console.warn("websiteUrl: $websiteUrl")
 //        siteIdContainer.textContent = siteId
-//        url.value = websiteUrl
+        url.value = websiteUrl
 //        (document.getElementById("siteSecret") as HTMLDivElement).textContent = "Securely stored in our records"
         overrideSite(siteId)
         insertSiteIdIntoIntegrationCode()
@@ -168,6 +169,7 @@ private fun applyQueryOverrides() {
 //        searchSetupUrl.hidden = true
 //        preserveSearchSetup.hidden = true
         console.warn(window.top)
+        console.warn(window.top.location)
     }
 }
 
