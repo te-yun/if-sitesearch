@@ -66,14 +66,16 @@ fun overrideSite(siteId: String) {
 lateinit var captchaResult: String
 
 private lateinit var integrationCode: HTMLTextAreaElement
-private lateinit var searchSetupUrl: HTMLInputElement
+//private lateinit var searchSetupUrl: HTMLInputElement
 private lateinit var siteIdContainer: HTMLDivElement
+private lateinit var siteIdContainerSuper: HTMLDivElement
 private lateinit var captcha: HTMLDivElement
 private lateinit var siteSecretContainer: HTMLDivElement
 private lateinit var emailContainer: HTMLDivElement
 private lateinit var websiteUrlContainer: HTMLDivElement
+private lateinit var siteSearchSetupUrl: HTMLDivElement
 private lateinit var triggerButton: HTMLButtonElement
-private lateinit var preserveSearchSetup: HTMLInputElement
+//private lateinit var preserveSearchSetup: HTMLInputElement
 private lateinit var url: HTMLInputElement
 private lateinit var email: HTMLInputElement
 
@@ -81,14 +83,16 @@ fun showInitCode() {
     email = document.getElementById("email") as HTMLInputElement
     url = document.getElementById("url") as HTMLInputElement
     integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
-    searchSetupUrl = document.getElementById("searchSetupUrl") as HTMLInputElement
+//    searchSetupUrl = document.getElementById("searchSetupUrl") as HTMLInputElement
     siteIdContainer = document.getElementById("siteId") as HTMLDivElement
+    siteIdContainerSuper = document.getElementById("siteId-container") as HTMLDivElement
     captcha = document.getElementById("captcha") as HTMLDivElement
     siteSecretContainer = document.getElementById("siteSecret-container") as HTMLDivElement
     emailContainer = document.getElementById("email-container") as HTMLDivElement
     websiteUrlContainer = document.getElementById("websiteUrl-container") as HTMLDivElement
+    siteSearchSetupUrl = document.getElementById("siteSearchSetupUrl") as HTMLDivElement
     triggerButton = document.getElementById("index") as HTMLButtonElement
-    preserveSearchSetup = document.getElementById("preserveSearchSetup") as HTMLInputElement
+//    preserveSearchSetup = document.getElementById("preserveSearchSetup") as HTMLInputElement
     val enterpriseSearchbar = document.getElementById("sitesearch-searchbar") as HTMLDivElement
     val searchbarVersion = "2018-01-15" // when updating, update the value in the corresponding HTML container too
     val siteSearchConfig = "https://cdn.sitesearch.cloud/searchbar/$searchbarVersion/config/sitesearch.json"
@@ -107,10 +111,15 @@ fun showInitCode() {
         startCrawler()
         triggerButton.textContent = waitWhileCrawlerIsRunningMsg
         triggerButton.disabled = true
-        preserveSearchSetup.disabled = false
-        searchSetupUrl.value = "https://sitesearch.cloud/getting-started?siteId=$siteId&siteSecret=$siteSecret"
+//        preserveSearchSetup.disabled = false
+//        searchSetupUrl.value = "https://sitesearch.cloud/getting-started?siteId=$siteId&siteSecret=$siteSecret&url=${url.value}"
+        siteSearchSetupUrl.innerHTML = "<strong>Copy this search setup URL to resume evaluation later:</strong> " +
+                "<a href='https://sitesearch.cloud/getting-started?siteId=$siteId&siteSecret=$siteSecret&url=${url.value}'>" +
+                "https://sitesearch.cloud/getting-started?siteId=$siteId&siteSecret=$siteSecret&url=${url.value}" +
+                "</a>"
         (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = waitWhileCrawlerIsRunningMsg
         insertSiteIdIntoIntegrationCode()
+        //TODO make crawl requests visible in logs.sis that do not have any email provided
     })
 
     applyQueryOverrides()
@@ -124,39 +133,45 @@ private fun verifyCallback(token: String) {
 
 @JsName("preserveSearchSetup")
 private fun preserveSearchSetup() {
-    searchSetupUrl.select()
+//    searchSetupUrl.select()
     document.execCommand("copy")
 }
 
 
 @JsName("applyQueryOverrides")
 private fun applyQueryOverrides() {
-    val siteId = when {
-        window.location.search.indexOf("siteId=") != -1 -> window.location.search.substring(window.location.search.indexOf("siteId=") + 7)
+    siteId = when {
+        window.location.search.indexOf("siteId=") != -1 -> window.location.search.substring(window.location.search.indexOf("siteId=") + 7, 44)
         document.cookie.indexOf("override-site") != -1 -> document.cookie.substring(document.cookie.indexOf("override-site") + 14, document.cookie.indexOf("override-site") + 14 + 36)
         else -> ""
     }
+    val websiteUrl = when {
+        window.location.search.indexOf("url=") != -1 -> window.location.search.substring(window.location.search.indexOf("url=") + 4)
+        else -> ""
+    }
     if (siteId.isNotEmpty()) {
-        siteIdContainer.textContent = siteId
-        url.value = "The search results below, belong to Site ID: $siteId"
-        (document.getElementById("siteSecret") as HTMLDivElement).textContent = "Securely stored in our records"
+//        siteIdContainer.textContent = siteId
+        url.value = websiteUrl
+//        (document.getElementById("siteSecret") as HTMLDivElement).textContent = "Securely stored in our records"
         overrideSite(siteId)
         insertSiteIdIntoIntegrationCode()
         triggerButton.style.display = "none"
         captcha.style.display = "none"
         siteSecretContainer.style.display = "none"
         emailContainer.style.display = "none"
-        websiteUrlContainer.style.display = "none"
+        siteIdContainerSuper.style.display = "none"
 
-        searchSetupUrl.hidden = true
-        preserveSearchSetup.hidden = true
+//        searchSetupUrl.hidden = true
+//        preserveSearchSetup.hidden = true
     }
 }
 
 private fun insertSiteIdIntoIntegrationCode() {
-    if (!siteIdContainer.textContent?.isBlank()!!) {
-        integrationCode.value = integrationCode.value.replace("siteId: \".+".toRegex(), "siteId: \"${siteIdContainer.textContent}\"")
-    }
+//    if (!siteIdContainer.textContent?.isBlank()!!) {
+//        integrationCode.value = integrationCode.value.replace("siteId: \".+".toRegex(), "siteId: \"${siteIdContainer.textContent}\"")
+//    } else {
+    integrationCode.value = integrationCode.value.replace("siteId: \".+".toRegex(), "siteId: \"$siteId\"")
+//    }
 }
 
 external fun encodeURIComponent(str: String): String
