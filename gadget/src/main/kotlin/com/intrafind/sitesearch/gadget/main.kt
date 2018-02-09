@@ -172,7 +172,7 @@ private fun applyQueryOverrides() {
         console.warn(window.top)
         console.warn(window.top.location)
 //        console.warn(window.top.location.href)
-        console.warn(window.top.location.search)
+//        console.warn(window.top.location.search)
     }
 }
 
