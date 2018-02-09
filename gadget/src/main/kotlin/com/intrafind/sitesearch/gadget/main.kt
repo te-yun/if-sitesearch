@@ -148,7 +148,8 @@ private fun applyQueryOverrides() {
     }
     websiteUrl = when {
         window.location.search.indexOf("url=") != -1 -> window.location.search.substring(window.location.search.indexOf("url=") + 4)
-        else -> url.value
+        document.cookie.indexOf("sis.websiteUrl") != -1 -> document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15)
+        else -> ""
     }
     if (siteId.isNotEmpty()) {
         console.warn("url.value: ${url.value}")
@@ -166,6 +167,7 @@ private fun applyQueryOverrides() {
 
 //        searchSetupUrl.hidden = true
 //        preserveSearchSetup.hidden = true
+        console.warn(window.top)
     }
 }
 
