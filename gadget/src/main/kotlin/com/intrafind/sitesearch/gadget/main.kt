@@ -143,13 +143,14 @@ private fun preserveSearchSetup() {
 private fun applyQueryOverrides() {
     siteId = when {
         window.location.search.indexOf("siteId=") != -1 -> window.location.search.substring(window.location.search.indexOf("siteId=") + 7, 44)
-        document.cookie.indexOf("override-site") != -1 -> document.cookie.substring(document.cookie.indexOf("override-site") + 14, document.cookie.indexOf("override-site") + 14 + 36)
+        document.cookie.indexOf("override-site") != -1 ->
+            document.cookie.substring(document.cookie.indexOf("override-site") + 14, document.cookie.indexOf("override-site") + 14 + 36) // relies on cookie-setting code in embedding iframe container
         else -> ""
     }
     websiteUrl = when {
         window.location.search.indexOf("url=") != -1 -> window.location.search.substring(window.location.search.indexOf("url=") + 4)
         document.cookie.indexOf("sis.websiteUrl") != -1 -> document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15,
-                (document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).indexOf(";")))
+                document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).indexOf(";")) // relies on cookie-setting code in embedding iframe container
         else -> ""
     }
     if (siteId.isNotEmpty()) {
@@ -170,6 +171,8 @@ private fun applyQueryOverrides() {
 //        preserveSearchSetup.hidden = true
         console.warn(window.top)
         console.warn(window.top.location)
+        console.warn(window.top.location.href)
+        console.warn(window.top.location.search)
     }
 }
 
