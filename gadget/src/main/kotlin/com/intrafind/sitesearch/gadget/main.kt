@@ -37,6 +37,7 @@ fun main(args: Array<String>) {
 
 private var siteId: String = ""
 private var siteSecret: String = ""
+private var websiteUrl: String = ""
 private val serviceUrl: String = if (window.location.hostname.equals("localhost")) {
     "http://localhost:8001"
 } else {
@@ -145,11 +146,13 @@ private fun applyQueryOverrides() {
         document.cookie.indexOf("override-site") != -1 -> document.cookie.substring(document.cookie.indexOf("override-site") + 14, document.cookie.indexOf("override-site") + 14 + 36)
         else -> ""
     }
-    val websiteUrl = when {
+    websiteUrl = when {
         window.location.search.indexOf("url=") != -1 -> window.location.search.substring(window.location.search.indexOf("url=") + 4)
         else -> ""
     }
     if (siteId.isNotEmpty()) {
+        console.warn("url.value: ${url.value}")
+        console.warn("websiteUrl: $websiteUrl")
 //        siteIdContainer.textContent = siteId
         url.value = websiteUrl
 //        (document.getElementById("siteSecret") as HTMLDivElement).textContent = "Securely stored in our records"
