@@ -9,6 +9,7 @@ docker_tag=latest
 docker_image_name=if-sitesearch
 img_fqn=docker-registry.sitesearch.cloud/intrafind/${docker_image_name}:${docker_tag}
 
+cp -r /home/alexander_orlov/docker-build-data/api-sitesearch/service/config service/
 cd service
 docker build --tag intrafind/${docker_image_name}:${docker_tag} .
 docker rm -f ${docker_image_name}
