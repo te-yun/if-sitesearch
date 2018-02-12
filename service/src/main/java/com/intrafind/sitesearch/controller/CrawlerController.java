@@ -72,7 +72,8 @@ public class CrawlerController {
 
     static final ObjectMapper MAPPER = new ObjectMapper();
     private static final List<String> SCOPES = Collections.singletonList(GmailScopes.GMAIL_SEND);
-    private static final File DATA_STORE_DIR = new File("service/config/gmail-api");
+    private static final String SERVICE_CONFIG_PATH = "service/config/";
+    private static final File DATA_STORE_DIR = new File(SERVICE_CONFIG_PATH + "gmail-api");
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static FileDataStoreFactory DATA_STORE_FACTORY;
     private static HttpTransport HTTP_TRANSPORT;
@@ -124,7 +125,7 @@ public class CrawlerController {
 
     public static Credential authorize() throws IOException {
 //        final InputStream resourceAsStream = EmailController.class.getResourceAsStream("service/config/gmail-api-client_secret.json");
-        final InputStream resourceAsStream = new FileInputStream(new File("service/config/gmail-api-client_secret.json"));
+        final InputStream resourceAsStream = new FileInputStream(new File(SERVICE_CONFIG_PATH + "gmail-api-client_secret.json"));
         final GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(resourceAsStream));
 
         final GoogleAuthorizationCodeFlow flow =
