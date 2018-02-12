@@ -149,8 +149,7 @@ private fun applyQueryOverrides() {
     }
     websiteUrl = when {
         window.location.search.indexOf("url=") != -1 -> window.location.search.substring(window.location.search.indexOf("url=") + 4)
-        document.cookie.indexOf("sis.websiteUrl") != -1 -> document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15,
-                document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).indexOf(";")) // relies on cookie-setting code in embedding iframe container
+        document.cookie.indexOf("sis.websiteUrl") != -1 -> document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).substring(0, document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).indexOf(";")) // relies on cookie-setting code in embedding iframe container
         else -> ""
     }
     if (siteId.isNotEmpty()) {
