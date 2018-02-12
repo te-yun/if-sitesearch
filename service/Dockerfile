@@ -2,10 +2,10 @@ FROM openjdk:8-jre-alpine
 
 MAINTAINER Alexander Orlov <alexander.orlov@intrafind.de>
 
-ADD build/libs/*.jar svc/
-ADD config svc/config
+ADD build/libs/*.jar service/
+ADD config service/config
 ENV SPRING_CONFIG_NAME application,prod
 
 EXPOSE 8001
 
-CMD java -jar -Xms64m -Xmx64m svc/*.jar
+CMD java -jar -Xms64m -Xmx64m service/*.jar
