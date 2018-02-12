@@ -67,7 +67,7 @@ dependencies {
     compile "com.squareup.okhttp3:okhttp:3.9.1" // downgrade to test scope, once crawler4j is removed
     
     compile "org.mnode.mstor:mstor:0.9.13"
-    compile "com.google.api-client:google-api-client:1.23.0"
+//    compile "com.google.api-client:google-api-client:1.23.0"
     compile "com.google.oauth-client:google-oauth-client-jetty:1.23.0"
     compile "com.google.apis:google-api-services-gmail:v1-rev79-1.23.0"
 }
