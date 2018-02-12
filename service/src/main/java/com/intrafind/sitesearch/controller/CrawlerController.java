@@ -60,6 +60,7 @@ import java.util.UUID;
 @RequestMapping(SitesController.ENDPOINT)
 public class CrawlerController {
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerController.class);
+    private static final String SUPPORT_EMAIL_ADDRESS = "Support - Site Search <f518c8ec.intrafind.de@emea.teams.ms>";
     private final PageService pageService;
     private final CrawlerService crawlerService;
 
@@ -165,7 +166,7 @@ public class CrawlerController {
     }
 
     public static void main(String[] args) throws Exception {
-        sendSetupInfoEmail(UUID.randomUUID(), UUID.randomUUID(), URI.create("https://example.com"), "Support - Site Search <f518c8ec.intrafind.de@emea.teams.ms>");
+        sendSetupInfoEmail(UUID.randomUUID(), UUID.randomUUID(), URI.create("https://example.com"), SUPPORT_EMAIL_ADDRESS);
     }
 
     @RequestMapping(path = "{siteId}/crawl", method = RequestMethod.POST)
@@ -200,9 +201,24 @@ public class CrawlerController {
         if (captchaPassed) {
             final CrawlerJobResult crawlerJobResult = crawlerService.crawl(url.toString(), siteId, siteSecret);
             LOG.info("siteId: " + siteId + " - siteSecret: " + siteSecret + " - siteUrl: " + url + " - pageCount: " + crawlerJobResult.getPageCount() + " - email: " + email);
+            String emailAddress = determineEmailAddress(email);
+            try {
+                sendSetupInfoEmail(siteId, siteSecret, url, emailAddress);
+            } catch (Exception e) {
+                LOG.error(e.getMessage());
+            }
             return ResponseEntity.ok(crawlerJobResult);
         } else {
             return ResponseEntity.unprocessableEntity().build();
+        }
+    }
+
+    private String determineEmailAddress(String email) {
+        if (email == null || email.isEmpty() || !email.contains("@")) {
+            return SUPPORT_EMAIL_ADDRESS;
+        } else {
+            return SUPPORT_EMAIL_ADDRESS;
+//                      return email;
         }
     }
 }
