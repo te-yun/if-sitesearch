@@ -2,7 +2,7 @@
 
 docker_network=sitesearch
 
-SPRING_CONFIG_NAME="application, prod"
+#SPRING_CONFIG_NAME="application, prod"
 ./gradlew build --build-cache --info -x test
 
 docker_tag=latest

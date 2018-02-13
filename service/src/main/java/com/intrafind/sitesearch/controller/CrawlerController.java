@@ -149,7 +149,7 @@ public class CrawlerController {
                         email,
                         "Evaluation Information - Site Search",
                         "\nHello," +
-                                "\nYou are just a few steps away from adding a search to your website." +
+                                "\nYou are just a few steps away from adding Site Search to your website." +
                                 "\nBelow you should find everything you need to evaluate Site Search for your website." +
                                 "\n\tWebsite URL: " + url +
                                 "\n\tSite ID: " + siteId +
