@@ -60,7 +60,7 @@ import java.util.UUID;
 @RequestMapping(SitesController.ENDPOINT)
 public class CrawlerController {
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerController.class);
-    private static final String SUPPORT_EMAIL_ADDRESS = "Support - Site Search <f518c8ec.intrafind.de@emea.teams.ms>";
+    private static final String PROSPECTS_EMAIL_ADDRESS = "Support - Site Search <f518c8ec.intrafind.de@emea.teams.ms>";
     private final PageService pageService;
     private final CrawlerService crawlerService;
 
@@ -87,19 +87,15 @@ public class CrawlerController {
         }
     }
 
-    private static MimeMessage createEmail(String to, String subject, String bodyText)
-            throws Exception {
-        Properties props = new Properties();
+    private static MimeMessage createEmail(String to, String subject, String bodyText) throws Exception {
+        final Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
 
-        MimeMessage email = new MimeMessage(session);
-
+        final MimeMessage email = new MimeMessage(session);
         email.setFrom(new InternetAddress("team@sitesearch.cloud"));
         email.setReplyTo(new InternetAddress[]{new InternetAddress("feedback@sitesearch.cloud")});
-        email.addRecipient(javax.mail.Message.RecipientType.TO,
-                new InternetAddress(to));
-        email.addRecipient(javax.mail.Message.RecipientType.TO,
-                new InternetAddress("DevOps - Site Search <6752dd9c.intrafind.de@emea.teams.ms>"));
+        email.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(to));
+        email.addRecipient(javax.mail.Message.RecipientType.BCC, new InternetAddress(PROSPECTS_EMAIL_ADDRESS));
         email.setSubject(subject);
         email.setText(bodyText);
         return email;
@@ -152,7 +148,8 @@ public class CrawlerController {
                 createEmail(
                         email,
                         "Evaluation Information - Site Search",
-                        "Welcome to Site Search!" +
+                        "\nHello," +
+                                "\nYou are just a few steps away from adding a search to your website." +
                                 "\nBelow you should find everything you need to evaluate Site Search for your website." +
                                 "\n\tWebsite URL: " + url +
                                 "\n\tSite ID: " + siteId +
@@ -166,7 +163,7 @@ public class CrawlerController {
     }
 
     public static void main(String[] args) throws Exception {
-        sendSetupInfoEmail(UUID.randomUUID(), UUID.randomUUID(), URI.create("https://example.com"), SUPPORT_EMAIL_ADDRESS);
+        sendSetupInfoEmail(UUID.randomUUID(), UUID.randomUUID(), URI.create("https://example.com"), PROSPECTS_EMAIL_ADDRESS);
     }
 
     @RequestMapping(path = "{siteId}/crawl", method = RequestMethod.POST)
@@ -215,9 +212,9 @@ public class CrawlerController {
 
     private String determineEmailAddress(String email) {
         if (email == null || email.isEmpty() || !email.contains("@")) {
-            return SUPPORT_EMAIL_ADDRESS;
+            return PROSPECTS_EMAIL_ADDRESS;
         } else {
-//            return SUPPORT_EMAIL_ADDRESS;
+//            return PROSPECTS_EMAIL_ADDRESS;
             return email; // TODO enable, once team@sitesearch.cloud works as FROM address
         }
     }
