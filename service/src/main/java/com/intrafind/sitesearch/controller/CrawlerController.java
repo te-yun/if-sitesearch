@@ -72,7 +72,7 @@ public class CrawlerController {
 
     static final ObjectMapper MAPPER = new ObjectMapper();
     private static final List<String> SCOPES = Collections.singletonList(GmailScopes.GMAIL_SEND);
-    private static final String SERVICE_CONFIG_PATH = "service/config/";
+    private static final String SERVICE_CONFIG_PATH = "config/";
     private static final File DATA_STORE_DIR = new File(SERVICE_CONFIG_PATH + "gmail-api");
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static FileDataStoreFactory DATA_STORE_FACTORY;
