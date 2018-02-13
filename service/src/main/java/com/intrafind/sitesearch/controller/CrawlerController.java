@@ -154,8 +154,8 @@ public class CrawlerController {
                                 "\n\tWebsite URL: " + url +
                                 "\n\tSite ID: " + siteId +
                                 "\n\tSite Secret: " + siteSecret +
-                                "\nSite Search Evaluation URL: https://sitesearch.cloud/getting-started/?siteId=" + siteId + "&siteSecret=" + siteSecret + "&url=" + url +
-                                "\n\nPlease do not hesitate to ask us any questions you should encounter during your 14 days evaluation period!" +
+                                "\n\tSite Search Evaluation URL: https://sitesearch.cloud/getting-started/?siteId=" + siteId + "&siteSecret=" + siteSecret + "&url=" + url +
+                                "\n\nPlease do not hesitate to ask us any questions you should encounter during your 14-day evaluation period!" +
                                 "\n\nCheers," +
                                 "\nSite Search Team"
                 )
