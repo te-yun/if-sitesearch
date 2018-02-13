@@ -4,6 +4,8 @@ MAINTAINER Alexander Orlov <alexander.orlov@intrafind.de>
 
 ADD build/libs/*.jar service/
 ADD config .
+COPY config config1
+ADD config config2
 ENV SPRING_CONFIG_NAME application, prod
 
 EXPOSE 8001
