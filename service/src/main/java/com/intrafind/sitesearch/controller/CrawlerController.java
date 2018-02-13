@@ -94,7 +94,7 @@ public class CrawlerController {
 
         MimeMessage email = new MimeMessage(session);
 
-        email.setFrom(new InternetAddress("feedback@sitesearch.cloud"));
+        email.setFrom(new InternetAddress("team@sitesearch.cloud"));
         email.setReplyTo(new InternetAddress[]{new InternetAddress("feedback@sitesearch.cloud")});
         email.addRecipient(javax.mail.Message.RecipientType.TO,
                 new InternetAddress(to));
@@ -124,7 +124,6 @@ public class CrawlerController {
     }
 
     public static Credential authorize() throws IOException {
-//        final InputStream resourceAsStream = EmailController.class.getResourceAsStream("service/config/gmail-api-client_secret.json");
         final InputStream resourceAsStream = new FileInputStream(new File(SERVICE_CONFIG_PATH + "gmail-api-client_secret.json"));
         final GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(resourceAsStream));
 
@@ -147,9 +146,9 @@ public class CrawlerController {
 
     private static void sendSetupInfoEmail(UUID siteId, UUID siteSecret, URI url, String email) throws Exception {
         final Gmail service = initGmailService();
-        LOG.debug("service: " + service.getServicePath());
+        LOG.debug("servicePath: " + service.getServicePath());
 
-        final Message message = sendMessage(service, "alexander.orlov@loxal.net",
+        final Message message = sendMessage(service, "me",
                 createEmail(
                         email,
                         "Evaluation Information - Site Search",
@@ -159,7 +158,7 @@ public class CrawlerController {
                                 "\n\tSite ID: " + siteId +
                                 "\n\tSite Secret: " + siteSecret +
                                 "\nSite Search Evaluation URL: https://sitesearch.cloud/getting-started/?siteId=" + siteId + "&siteSecret=" + siteSecret + "&url=" + url +
-                                "\nPlease do not hesitate to ask us any questions you should encounter during your 14 days evaluation period!" +
+                                "\n\nPlease do not hesitate to ask us any questions you should encounter during your 14 days evaluation period!" +
                                 "\n\nCheers," +
                                 "\nSite Search Team"
                 )
@@ -218,8 +217,8 @@ public class CrawlerController {
         if (email == null || email.isEmpty() || !email.contains("@")) {
             return SUPPORT_EMAIL_ADDRESS;
         } else {
-            return SUPPORT_EMAIL_ADDRESS;
-//                      return email;
+//            return SUPPORT_EMAIL_ADDRESS;
+            return email; // TODO enable, once team@sitesearch.cloud works as FROM address
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ public class StaticContentTest {
     private TestRestTemplate caller;
 
     @Test
-    public void indexPage() throws Exception {
+    public void indexPage() {
         final ResponseEntity<String> staticContent = caller.getForEntity("/index.html", String.class);
 
         assertEquals(HttpStatus.OK, staticContent.getStatusCode());
@@ -44,7 +44,7 @@ public class StaticContentTest {
     }
 
     @Test
-    public void searchbarPage() throws Exception {
+    public void searchbarPage() {
         final ResponseEntity<String> staticContent = caller.getForEntity("/searchbar/js/app.js", String.class);
 
         assertEquals(HttpStatus.OK, staticContent.getStatusCode());
@@ -55,7 +55,8 @@ public class StaticContentTest {
      * Reduces probability of a broken searchbar due to lack of proper configuration.
      */
     @Test
-    public void searchbarConfiguration() throws Exception {
+    public void searchbarConfiguration() {
+        // TODO adjust this test to reference the new structure
         final ResponseEntity<String> staticContent = caller.getForEntity("/searchbar-config/sitesearch-config.json", String.class);
 
         assertEquals(HttpStatus.OK, staticContent.getStatusCode());
@@ -66,7 +67,8 @@ public class StaticContentTest {
     }
 
     @Test
-    public void searchbarAppJs() throws Exception {
+    public void searchbarAppJs() {
+        // TODO adjust this test to reference the new structure
         final ResponseEntity<String> staticContent = caller.getForEntity("/searchbar/js/app.js", String.class);
 
         assertEquals(HttpStatus.OK, staticContent.getStatusCode());
