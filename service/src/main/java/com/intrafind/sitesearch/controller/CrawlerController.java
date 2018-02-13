@@ -197,13 +197,13 @@ public class CrawlerController {
 
         if (captchaPassed) {
             final CrawlerJobResult crawlerJobResult = crawlerService.crawl(url.toString(), siteId, siteSecret);
-            LOG.info("siteId: " + siteId + " - siteSecret: " + siteSecret + " - siteUrl: " + url + " - pageCount: " + crawlerJobResult.getPageCount() + " - email: " + email);
             String emailAddress = determineEmailAddress(email);
             try {
                 sendSetupInfoEmail(siteId, siteSecret, url, emailAddress);
             } catch (Exception e) {
                 LOG.error(e.getMessage());
             }
+            LOG.info("siteId: " + siteId + " - siteSecret: " + siteSecret + " - siteUrl: " + url + " - pageCount: " + crawlerJobResult.getPageCount() + " - email: " + email);
             return ResponseEntity.ok(crawlerJobResult);
         } else {
             return ResponseEntity.unprocessableEntity().build();
@@ -214,8 +214,7 @@ public class CrawlerController {
         if (email == null || email.isEmpty() || !email.contains("@")) {
             return PROSPECTS_EMAIL_ADDRESS;
         } else {
-//            return PROSPECTS_EMAIL_ADDRESS;
-            return email; // TODO enable, once team@sitesearch.cloud works as FROM address
+            return email;
         }
     }
 }
