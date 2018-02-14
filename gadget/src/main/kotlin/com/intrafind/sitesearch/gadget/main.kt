@@ -165,9 +165,8 @@ private fun applyQueryOverrides() {
         else -> ""
     }
     if (siteId.isNotEmpty()) {
-        console.warn("url.value: ${url.value}")
-        console.warn("websiteUrl: $websiteUrl")
         url.value = websiteUrl
+        url.readOnly = true
         overrideSite(siteId)
         insertSiteIdIntoIntegrationCode()
         triggerButton.style.display = "none"
