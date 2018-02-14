@@ -103,15 +103,7 @@ fun showInitCode() {
         (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = "$crawlerPageCount pages from \"${url.value}\" have been crawled. Consider that it takes around a minute before you can find here everything we have found."
     })
 
-    url.addEventListener("keyup", {
-        val xhr = XMLHttpRequest()
-        xhr.open("GET", url.value)
-        xhr.onreadystatechange = {
-            console.warn(xhr.readyState)
-            console.warn(xhr.status)
-        }
-        xhr.send()
-    })
+    fixUrlWithoutProtocol()
 
     val waitWhileCrawlerIsRunningMsg = "Crawler is running... please give us just a minute or two."
     document.addEventListener("sis.triggerFirstUsageOwnershipEvent", {
@@ -129,6 +121,15 @@ fun showInitCode() {
 
     applyQueryOverrides()
 //    showDisabledCookiesWarning()
+}
+
+private fun fixUrlWithoutProtocol() {
+    url.addEventListener("blur", {
+        console.warn(url.value)
+        if (!url.value.startsWith("http") || !url.value.startsWith("https")) {
+            url.value = "https://${url.value}"
+        }
+    })
 }
 
 //fun showDisabledCookiesWarning() {
@@ -161,9 +162,11 @@ private fun applyQueryOverrides() {
     }
     websiteUrl = when {
         window.location.search.indexOf("url=") != -1 -> window.location.search.substring(window.location.search.indexOf("url=") + 4)
-        document.cookie.indexOf("sis.websiteUrl") != -1 -> document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).substring(0, document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).indexOf(";")) // relies on cookie-setting code in embedding iframe container
+        document.cookie.indexOf("sis.websiteUrl") != -1 -> document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15)
+                .substring(0, document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).indexOf(";")) // relies on cookie-setting code in embedding iframe container
         else -> ""
     }
+    console.warn(websiteUrl)
     if (siteId.isNotEmpty()) {
         url.value = websiteUrl
         url.readOnly = true
