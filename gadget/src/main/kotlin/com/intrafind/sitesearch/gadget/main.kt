@@ -16,7 +16,10 @@
 
 package com.intrafind.sitesearch.gadget
 
-import org.w3c.dom.*
+import org.w3c.dom.HTMLButtonElement
+import org.w3c.dom.HTMLDivElement
+import org.w3c.dom.HTMLInputElement
+import org.w3c.dom.HTMLTextAreaElement
 import org.w3c.dom.events.Event
 import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
@@ -115,16 +118,16 @@ fun showInitCode() {
     })
 
     applyQueryOverrides()
-    showDisabledCookiesWarning()
+//    showDisabledCookiesWarning()
 }
 
-fun showDisabledCookiesWarning() {
-    if (!document.cookie.contains("override-site")) {
-        val cookieWarning = document.getElementById("sis.warning") as HTMLParagraphElement
-        cookieWarning.textContent = "Cookies are disabled, please permit cookies for this site, to fully leverage this gadget."
-        cookieWarning.style.display = "inline"
-    }
-}
+//fun showDisabledCookiesWarning() {
+//    if (!document.cookie.contains("override-site")) {
+//        val cookieWarning = document.getElementById("sis.warning") as HTMLParagraphElement
+//        cookieWarning.textContent = "Cookies are disabled, please permit cookies for this site, to fully leverage this gadget."
+//        cookieWarning.style.display = "inline"
+//    }
+//}
 
 @JsName("verifyCallback")
 private fun verifyCallback(token: String) {
