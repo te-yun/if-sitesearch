@@ -53,9 +53,9 @@ public class AutocompleteTest {
         final ResponseEntity<Autocomplete> actual = caller.getForEntity("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=Knowledge", Autocomplete.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
-//        assertNotNull(actual.getBody());
+        assertNotNull(actual.getBody());
 //        assertEquals(1, actual.getBody().getResults().size());
-//        assertEquals("knowledge graph", actual.getBody().getResults().get(0));
+        assertEquals("knowledge graph", actual.getBody().getResults().get(0));
     }
 
     @Test
@@ -63,12 +63,12 @@ public class AutocompleteTest {
         final ResponseEntity<Autocomplete> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=ifinder&siteId=" + SearchTest.SEARCH_SITE_ID, Autocomplete.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
-//        assertNotNull(actual.getBody());
+        assertNotNull(actual.getBody());
 //        assertEquals(6, actual.getBody().getResults().size());
-//        actual.getBody().getResults().forEach(term -> {
-//            LOG.info("term: " + term);
-//            assertTrue(term.contains("ifinder"));
-//        });
+        actual.getBody().getResults().forEach(term -> {
+            LOG.info("term: " + term);
+            assertTrue(term.contains("ifinder"));
+        });
     }
 
     @Test
@@ -76,12 +76,12 @@ public class AutocompleteTest {
         final ResponseEntity<Autocomplete> actual = caller.getForEntity("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=ifinder", Autocomplete.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
-//        assertNotNull(actual.getBody());
+        assertNotNull(actual.getBody());
 //        assertEquals(6, actual.getBody().getResults().size());
-//        actual.getBody().getResults().forEach(term -> {
-//            LOG.info("term: " + term);
-//            assertTrue(term.contains("ifinder"));
-//        });
+        actual.getBody().getResults().forEach(term -> {
+            LOG.info("term: " + term);
+            assertTrue(term.contains("ifinder"));
+        });
     }
 
     @Test
@@ -107,7 +107,7 @@ public class AutocompleteTest {
         final ResponseEntity<Autocomplete> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=not_found", Autocomplete.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
-//        assertNotNull(actual.getBody());  // TODO reenable once legacy hack for searchbar is removed
+        assertNotNull(actual.getBody());
     }
 
     @Test
@@ -117,7 +117,7 @@ public class AutocompleteTest {
 
         final ResponseEntity<Autocomplete> response = caller.getForEntity("/sites" + "?query=not_found", Autocomplete.class);
         assertEquals(HttpStatus.METHOD_NOT_ALLOWED, response.getStatusCode());
-        assertNotNull(actual.getBody());  // TODO reenable once legacy hack for searchbar is removed
+        assertNotNull(actual.getBody());
     }
 
     @Test
@@ -125,7 +125,7 @@ public class AutocompleteTest {
         final ResponseEntity<Autocomplete> actual = caller.getForEntity("/sites/invalid-siteId" + "/autocomplete?query=not_found", Autocomplete.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
-//        assertNotNull(actual.getBody());  // TODO reenable once legacy hack for searchbar is removed
+        assertNotNull(actual.getBody());
     }
 }
 
