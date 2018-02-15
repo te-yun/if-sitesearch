@@ -92,10 +92,10 @@ public class PageTest {
                 CrawlerTest.TEST_EMAIL_ADDRESS
         );
         final SiteCreation createdSiteProfile = createNewSite(siteProfileCreation);
-//        TimeUnit.MILLISECONDS.sleep(8_000);   // TODO consider to reduce this timeout
 
         ResponseEntity<SiteProfile> actual = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() +
                 "/profile?siteSecret=" + createdSiteProfile.getSiteSecret(), HttpMethod.GET, HttpEntity.EMPTY, SiteProfile.class);
+        assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertEquals(createdSiteProfile.getSiteId(), actual.getBody().getId());
         assertEquals(createdSiteProfile.getSiteSecret(), actual.getBody().getSecret());
         assertEquals(CrawlerTest.TEST_EMAIL_ADDRESS, actual.getBody().getEmail());

@@ -42,7 +42,7 @@ public class CrawlerService {
     private static final int CRAWLER_THREADS = 1;
 
     public CrawlerJobResult crawl(String url, UUID siteId, UUID siteSecret) {
-        CrawlConfig config = new CrawlConfig();
+        final CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(CRAWLER_STORAGE);
         config.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36");
         config.setPolitenessDelay(200);
@@ -63,8 +63,8 @@ public class CrawlerService {
         controller.addSeed(url);
 
         if (clearIndex(siteId, siteSecret)) {
-            CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url));
-            controller.startNonBlocking(factory, CRAWLER_THREADS);
+            final CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url));
+            controller.start(factory, CRAWLER_THREADS);
 
 //            controller.waitUntilFinish();
 //            controller.shutdown();
