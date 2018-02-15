@@ -106,7 +106,7 @@ public class PageTest {
 
         ResponseEntity<SiteProfile> siteProfileWithInvalidSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() +
                 "/profile?siteSecret=" + UUID.randomUUID(), HttpMethod.GET, HttpEntity.EMPTY, SiteProfile.class);
-        assertEquals(HttpStatus.NOT_FOUND, siteProfileWithAdminSecret.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, siteProfileWithInvalidSecret.getStatusCode());
     }
 
     @Test
