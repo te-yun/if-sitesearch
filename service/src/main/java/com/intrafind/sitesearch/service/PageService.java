@@ -113,10 +113,12 @@ public class PageService {
         }
     }
 
-    private static void storeSiteSecret(UUID siteId, UUID siteSecret) {
-        // TODO remove Exodus as it is not 12factor in this context
+    //    private static void storeSite(UUID siteId, UUID siteSecret, Set<URI> websiteURLs, String email) {
+    private static void storeSite(UUID siteId, UUID siteSecret) {
         Document siteConfiguration = new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId);
         siteConfiguration.set("secret", siteSecret);
+//        siteConfiguration.set("websiteURLs", websiteURLs);
+//        siteConfiguration.set("email", email);
         INDEX_SERVICE.index(siteConfiguration);
     }
 
@@ -163,7 +165,7 @@ public class PageService {
         } else { // consider request as first-usage-ownership-granting request (early binding), create new index
             UUID newSiteId = UUID.randomUUID();
             UUID newSiteSecret = UUID.randomUUID();
-            storeSiteSecret(newSiteId, newSiteSecret);
+            storeSite(newSiteId, newSiteSecret);
             if (isGeneric) {
                 return Optional.empty();
             } else {
@@ -175,7 +177,7 @@ public class PageService {
     public SiteCreation createSite() {
         UUID siteId = UUID.randomUUID();
         UUID siteSecret = UUID.randomUUID();
-        storeSiteSecret(siteId, siteSecret);
+        storeSite(siteId, siteSecret);
         return new SiteCreation(siteId, siteSecret);
     }
 

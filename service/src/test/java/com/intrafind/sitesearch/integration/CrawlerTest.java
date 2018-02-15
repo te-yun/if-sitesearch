@@ -41,7 +41,7 @@ public class CrawlerTest {
     private static final UUID CRAWL_SITE_ID = UUID.fromString("a2e8d60b-0696-47ea-bc48-982598ee35bd");
     private static final UUID CRAWL_SITE_SECRET = UUID.fromString("04a0afc6-d89a-45c9-8ba8-41d393d8d2f8");
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerTest.class);
-    private static final String TEST_EMAIL_ADDRESS = "6752dd9c.intrafind.de@emea.teams.ms";
+    private static final String TEST_EMAIL_ADDRESS = "DevOps - Site Search <6752dd9c.intrafind.de@emea.teams.ms>";
 
     @Autowired
     private TestRestTemplate caller;
