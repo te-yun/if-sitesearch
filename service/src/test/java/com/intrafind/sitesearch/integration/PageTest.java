@@ -85,7 +85,7 @@ public class PageTest {
     }
 
     @Test
-    private void createNewSiteWithProfile() {
+    public void createNewSiteWithProfile() {
         final SiteProfileCreation siteProfileCreation = new SiteProfileCreation(
                 new HashSet<>(Collections.unmodifiableList(Arrays.asList(URI.create("https://example.com"), URI.create("https://subdomain.example.com")))),
                 CrawlerTest.TEST_EMAIL_ADDRESS
