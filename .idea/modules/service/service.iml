@@ -34,7 +34,9 @@
     <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:3.9.1" level="project" />
     <orderEntry type="library" name="Gradle: org.mnode.mstor:mstor:0.9.13" level="project" />
     <orderEntry type="library" name="Gradle: com.google.oauth-client:google-oauth-client-jetty:1.23.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.apis:google-api-services-gmail:v1-rev79-1.23.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.apis:google-api-services-gmail:v1-rev81-1.23.0" level="project" />
+    <orderEntry type="library" name="Gradle: edu.ucar:grib:4.5.5" level="project" />
+    <orderEntry type="library" name="Gradle: org.jsoup:jsoup:1.11.2" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-web:1.5.10.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter:1.5.10.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-logging:1.5.10.RELEASE" level="project" />
@@ -53,7 +55,6 @@
     <orderEntry type="library" name="Gradle: net.sf.ehcache:ehcache:2.10.4" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:jul-to-slf4j:1.7.25" level="project" />
     <orderEntry type="library" name="Gradle: edu.ucar:netcdf4:4.5.5" level="project" />
-    <orderEntry type="library" name="Gradle: edu.ucar:grib:4.5.5" level="project" />
     <orderEntry type="library" name="Gradle: edu.ucar:cdm:4.5.5" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:jcl-over-slf4j:1.7.25" level="project" />
     <orderEntry type="library" name="Gradle: edu.ucar:httpservices:4.5.5" level="project" />
@@ -182,7 +183,6 @@
     <orderEntry type="library" name="Gradle: net.jcip:jcip-annotations:1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Gradle: net.java.dev.jna:jna:4.2.2" level="project" />
     <orderEntry type="library" name="Gradle: com.google.protobuf:protobuf-java:2.5.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.jsoup:jsoup:1.7.2" level="project" />
     <orderEntry type="library" name="Gradle: edu.ucar:jj2000:5.2" level="project" />
     <orderEntry type="library" name="Gradle: org.itadaki:bzip2:0.9.1" level="project" />
     <orderEntry type="library" name="Gradle: joda-time:joda-time:2.9.9" level="project" />
