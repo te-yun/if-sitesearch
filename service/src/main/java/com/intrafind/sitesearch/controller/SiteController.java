@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,25 +32,32 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(SitesController.ENDPOINT)
-public class SitesController {
+@RequestMapping(SiteController.ENDPOINT)
+public class SiteController {
     public static final String ENDPOINT = "/sites";
-    private static final Logger LOG = LoggerFactory.getLogger(SitesController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SiteController.class);
     private final PageService service;
     private final SearchService searchService;
     private final AutocompleteService autocompleteService;
 
     @Autowired
-    private SitesController(PageService service, SearchService searchService, AutocompleteService autocompleteService) {
+    private SiteController(PageService service, SearchService searchService, AutocompleteService autocompleteService) {
         this.service = service;
         this.searchService = searchService;
         this.autocompleteService = autocompleteService;
     }
 
+//    @RequestMapping(method = RequestMethod.POST)
+//    ResponseEntity<SiteCreation> createNewSite() {
+//        final SiteCreation newlyCreatedSite = service.createSite();
+//        return ResponseEntity
+//                .created(URI.create("https://api.sitesearch.cloud/sites/" + newlyCreatedSite.getSiteId()))
+//                .body(newlyCreatedSite);
+//    }
+
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity<SiteCreation> createNewSite() {
-        // TODO use SiteCreation DTO with siteId & siteSecret onReturn
-        SiteCreation newlyCreatedSite = service.createSite();
+    ResponseEntity<SiteCreation> createNewSite(@RequestBody(required = false) SiteProfileCreation siteProfileCreation) {
+        final SiteCreation newlyCreatedSite = service.createSite();
         return ResponseEntity
                 .created(URI.create("https://api.sitesearch.cloud/sites/" + newlyCreatedSite.getSiteId()))
                 .body(newlyCreatedSite);

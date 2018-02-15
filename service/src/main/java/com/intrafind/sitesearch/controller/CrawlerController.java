@@ -57,7 +57,7 @@ import java.util.Properties;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(SitesController.ENDPOINT)
+@RequestMapping(SiteController.ENDPOINT)
 public class CrawlerController {
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerController.class);
     private static final String PROSPECTS_EMAIL_ADDRESS = "Support - Site Search <f518c8ec.intrafind.de@emea.teams.ms>";

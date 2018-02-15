@@ -16,7 +16,7 @@
 
 package com.intrafind.sitesearch.integration;
 
-import com.intrafind.sitesearch.controller.SitesController;
+import com.intrafind.sitesearch.controller.SiteController;
 import com.intrafind.sitesearch.dto.CrawlerJobResult;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,7 +49,7 @@ public class CrawlerTest {
     @Test
     public void crawlExampleViaHttp() {
         final ResponseEntity<CrawlerJobResult> request = caller
-                .postForEntity(SitesController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET
+                .postForEntity(SiteController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET
                                 + "&url=http://example.com&token=" + UUID.randomUUID()
                                 + "&email=" + TEST_EMAIL_ADDRESS,
                         RequestEntity.EMPTY, CrawlerJobResult.class);
@@ -63,7 +63,7 @@ public class CrawlerTest {
     @Test
     public void crawlHttp() {
         final ResponseEntity<CrawlerJobResult> request = caller
-                .postForEntity(SitesController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET
+                .postForEntity(SiteController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET
                                 + "&url=" + "http://example.de&token=" + UUID.randomUUID()
                                 + "&email=" + TEST_EMAIL_ADDRESS,
                         RequestEntity.EMPTY, CrawlerJobResult.class);
@@ -77,7 +77,7 @@ public class CrawlerTest {
     @Test
     public void crawlSiteSearchViaHttps() {
         final ResponseEntity<CrawlerJobResult> request = caller
-                .postForEntity(SitesController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET
+                .postForEntity(SiteController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET
                                 + "&url=" + "https://sitesearch.cloud&token=" + UUID.randomUUID()
                                 + "&email=" + TEST_EMAIL_ADDRESS,
                         RequestEntity.EMPTY, CrawlerJobResult.class);
@@ -91,7 +91,7 @@ public class CrawlerTest {
     @Test
     public void crawlHttps() {
         final ResponseEntity<CrawlerJobResult> request = caller
-                .postForEntity(SitesController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET
+                .postForEntity(SiteController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET
                                 + "&url=" + "https://api.sitesearch.cloud&token=" + UUID.randomUUID()
                                 + "&email=" + TEST_EMAIL_ADDRESS,
                         RequestEntity.EMPTY, CrawlerJobResult.class);

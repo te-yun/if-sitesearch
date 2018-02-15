@@ -34,7 +34,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController
-@RequestMapping(SitesController.ENDPOINT)
+@RequestMapping(SiteController.ENDPOINT)
 public class EmailController {
     private static final Logger LOG = LoggerFactory.getLogger(EmailController.class);
     private static final AtomicInteger HARD_ABUSE_LIMIT = new AtomicInteger(0);

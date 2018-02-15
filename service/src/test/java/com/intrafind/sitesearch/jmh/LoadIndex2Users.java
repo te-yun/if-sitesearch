@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package com.intrafind.sitesearch.jmh;
 
-import com.intrafind.sitesearch.controller.SitesController;
+import com.intrafind.sitesearch.controller.SiteController;
 import com.intrafind.sitesearch.dto.FetchedPage;
 import com.intrafind.sitesearch.dto.Page;
 import org.openjdk.jmh.annotations.*;
@@ -55,7 +55,7 @@ public class LoadIndex2Users {
         final Page pageToIndex = buildPage(loremIpsumText);
 
         final ResponseEntity<FetchedPage> actual = LoadTest.CALLER.exchange(
-                LoadTest.LOAD_TARGET + SitesController.ENDPOINT + "/" + SEARCH_SITE_ID + "/pages?siteSecret=" + SEARCH_SITE_SECRET,
+                LoadTest.LOAD_TARGET + SiteController.ENDPOINT + "/" + SEARCH_SITE_ID + "/pages?siteSecret=" + SEARCH_SITE_SECRET,
                 HttpMethod.PUT,
                 new HttpEntity<>(pageToIndex),
                 FetchedPage.class
@@ -77,7 +77,7 @@ public class LoadIndex2Users {
         pageToIndex.setUrl("https://example.com/0fe5463c-a134-495d-bee1-8e2e0044e57e");
 
         final ResponseEntity<Page> actual = LoadTest.CALLER.exchange(
-                LoadTest.LOAD_TARGET + SitesController.ENDPOINT
+                LoadTest.LOAD_TARGET + SiteController.ENDPOINT
                         + "/c281b015-09af-4868-8185-3fd8db41d6cb/pages/url/" + URLEncoder.encode(pageToIndex.getUrl(), "UTF-8")
                         + "?siteSecret=92d957f6-956e-4ee9-8f48-de434a728ab3",
                 HttpMethod.PUT,
@@ -103,7 +103,7 @@ public class LoadIndex2Users {
         final Page pageToIndex = buildPage(loremIpsumText);
 
         final ResponseEntity<Page> actual = LoadTest.CALLER.exchange(
-                LoadTest.LOAD_TARGET + SitesController.ENDPOINT
+                LoadTest.LOAD_TARGET + SiteController.ENDPOINT
                         + "/cdcfdeef-86a2-4672-890f-e952e465fe01/pages/7ca861451227886cd575cda73ae4f1255a3039ee2cef5868444144e5be4bd32a"
                         + "?siteSecret=4e8afa49-490f-4b0a-a7b7-958405b30c73",
                 HttpMethod.PUT,

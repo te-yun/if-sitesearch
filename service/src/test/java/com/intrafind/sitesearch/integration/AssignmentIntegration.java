@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package com.intrafind.sitesearch.integration;
 
 import com.intrafind.sitesearch.controller.AssignmentController;
-import com.intrafind.sitesearch.controller.SitesController;
+import com.intrafind.sitesearch.controller.SiteController;
 import com.intrafind.sitesearch.dto.SiteCreation;
 import com.intrafind.sitesearch.dto.TenantOverview;
 import com.intrafind.sitesearch.dto.TenantSiteAssignment;
@@ -45,7 +45,7 @@ public class AssignmentIntegration {
     private TestRestTemplate caller;
 
     private SiteCreation newSite() {
-        ResponseEntity<SiteCreation> site = caller.exchange(SitesController.ENDPOINT, HttpMethod.POST, HttpEntity.EMPTY, SiteCreation.class);
+        ResponseEntity<SiteCreation> site = caller.exchange(SiteController.ENDPOINT, HttpMethod.POST, HttpEntity.EMPTY, SiteCreation.class);
 
         assertEquals(HttpStatus.CREATED, site.getStatusCode());
         assertNotNull(site.getBody());
