@@ -63,10 +63,10 @@ public class CrawlerService {
         controller.addSeed(url);
 
         if (clearIndex(siteId, siteSecret)) {
-            CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory<>(siteId, siteSecret, URI.create(url));
+            CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url));
             controller.startNonBlocking(factory, CRAWLER_THREADS);
 
-//            controller.waitUntilFinish();
+            controller.waitUntilFinish();
             controller.shutdown();
 
             return new CrawlerJobResult(
