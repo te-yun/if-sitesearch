@@ -21,7 +21,6 @@ import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLTextAreaElement
 import org.w3c.dom.events.Event
-import org.w3c.dom.url.URL
 import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
 import kotlin.browser.window
@@ -56,7 +55,8 @@ fun triggerFirstUsageOwnership() {
         overrideSite(siteId)
         document.dispatchEvent(Event("sis.triggerFirstUsageOwnershipEvent"))
     }
-    xhr.send(JSON.stringify(SiteProfileCreation(hashSetOf(URL(url.value)), email.value)))
+    xhr.setRequestHeader("content-type", "application/json")
+    xhr.send(JSON.stringify(SiteProfileCreation(setOf(url.value), email.value)))
 }
 
 @JsName("overrideSite")
@@ -69,10 +69,10 @@ lateinit var captchaResult: String
 
 private lateinit var integrationCode: HTMLTextAreaElement
 private lateinit var siteIdContainer: HTMLDivElement
-private lateinit var siteIdContainerSuper: HTMLDivElement
-private lateinit var captcha: HTMLDivElement
+private lateinit var siteIdBox: HTMLDivElement
+private lateinit var siteSecretContainer: HTMLDivElement
 private lateinit var siteSecretBox: HTMLDivElement
-private lateinit var siteSecretContainer: HTMLInputElement
+private lateinit var captcha: HTMLDivElement
 private lateinit var emailContainer: HTMLDivElement
 private lateinit var websiteUrlContainer: HTMLDivElement
 private lateinit var siteSearchSetupUrl: HTMLDivElement
@@ -85,8 +85,8 @@ fun showInitCode() {
     url = document.getElementById("url") as HTMLInputElement
     integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
     siteIdContainer = document.getElementById("siteId") as HTMLDivElement
-    siteSecretContainer = document.getElementById("siteSecret") as HTMLInputElement
-    siteIdContainerSuper = document.getElementById("siteId-container") as HTMLDivElement
+    siteSecretContainer = document.getElementById("siteSecret") as HTMLDivElement
+    siteIdBox = document.getElementById("siteId-container") as HTMLDivElement
     captcha = document.getElementById("captcha") as HTMLDivElement
     siteSecretBox = document.getElementById("siteSecret-container") as HTMLDivElement
     emailContainer = document.getElementById("email-container") as HTMLDivElement
@@ -179,7 +179,7 @@ private fun applyQueryOverrides() {
         captcha.style.display = "none"
         siteSecretBox.style.display = "none"
         emailContainer.style.display = "none"
-        siteIdContainerSuper.style.display = "none"
+        siteIdBox.style.display = "none"
     }
 }
 
@@ -210,4 +210,4 @@ class SiteSearch {
     }
 }
 
-data class SiteProfileCreation(val urls: Set<URL>, val email: String)
+data class SiteProfileCreation(val urls: Set<String>, val email: String)
