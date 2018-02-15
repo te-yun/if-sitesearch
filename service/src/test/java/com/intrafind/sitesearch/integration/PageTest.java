@@ -85,14 +85,14 @@ public class PageTest {
     }
 
     @Test
-    public void createNewSiteWithProfile() throws Exception {
+    public void createNewSiteWithProfile() {
         final Set<URI> urls = new HashSet<>(Arrays.asList(URI.create("https://example.com"), URI.create("https://subdomain.example.com")));
         final SiteProfileCreation siteProfileCreation = new SiteProfileCreation(
                 urls,
                 CrawlerTest.TEST_EMAIL_ADDRESS
         );
         final SiteCreation createdSiteProfile = createNewSite(siteProfileCreation);
-        TimeUnit.MILLISECONDS.sleep(8_000);
+//        TimeUnit.MILLISECONDS.sleep(8_000);   // TODO consider to reduce this timeout
 
         ResponseEntity<SiteProfile> actual = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() +
                 "/profile?siteSecret=" + createdSiteProfile.getSiteSecret(), HttpMethod.GET, HttpEntity.EMPTY, SiteProfile.class);
