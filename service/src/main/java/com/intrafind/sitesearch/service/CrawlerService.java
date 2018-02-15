@@ -63,11 +63,11 @@ public class CrawlerService {
         controller.addSeed(url);
 
         if (clearIndex(siteId, siteSecret)) {
-            CrawlerControllerFactory factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url));
+            CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory<>(siteId, siteSecret, URI.create(url));
             controller.startNonBlocking(factory, CRAWLER_THREADS);
 
-            controller.waitUntilFinish();
-            controller.shutdown();     // TODO not tested 
+//            controller.waitUntilFinish();
+            controller.shutdown();
 
             return new CrawlerJobResult(
                     controller.getCrawlersLocalData().isEmpty() ? Collections.emptyList() : (ArrayList) controller.getCrawlersLocalData(),
