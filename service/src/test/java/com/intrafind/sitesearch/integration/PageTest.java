@@ -86,16 +86,27 @@ public class PageTest {
 
     @Test
     public void createNewSiteWithProfile() {
+        final Set<URI> urls = new HashSet<>(Collections.unmodifiableList(Arrays.asList(URI.create("https://example.com"), URI.create("https://subdomain.example.com"))));
         final SiteProfileCreation siteProfileCreation = new SiteProfileCreation(
-                new HashSet<>(Collections.unmodifiableList(Arrays.asList(URI.create("https://example.com"), URI.create("https://subdomain.example.com")))),
+                urls,
                 CrawlerTest.TEST_EMAIL_ADDRESS
-        ); // TODO finalize this test by providing actual, filled siteProfileCreation
-        createNewSite(siteProfileCreation);
+        );
+        final SiteCreation createdSiteProfile = createNewSite(siteProfileCreation);
 
-        // TODO fetch site as regular user
-        // TODO fetch site as admin user
-        // TODO fetch site as unauthorized user
-        // TODO fetch site and assert
+        ResponseEntity<SiteProfile> actual = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() +
+                "/profile?siteSecret=" + createdSiteProfile.getSiteSecret(), HttpMethod.GET, HttpEntity.EMPTY, SiteProfile.class);
+        assertEquals(createdSiteProfile.getSiteId(), actual.getBody().getId());
+        assertEquals(createdSiteProfile.getSiteSecret(), actual.getBody().getSecret());
+        assertEquals(CrawlerTest.TEST_EMAIL_ADDRESS, actual.getBody().getEmail());
+        assertEquals(urls, actual.getBody().getUrls());
+
+        ResponseEntity<SiteProfile> siteProfileWithAdminSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() +
+                "/profile?siteSecret=" + UUID.fromString(System.getenv("ADMIN_SITE_SECRET")), HttpMethod.GET, HttpEntity.EMPTY, SiteProfile.class);
+        assertEquals(HttpStatus.OK, siteProfileWithAdminSecret.getStatusCode());
+
+        ResponseEntity<SiteProfile> siteProfileWithInvalidSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() +
+                "/profile?siteSecret=" + UUID.randomUUID(), HttpMethod.GET, HttpEntity.EMPTY, SiteProfile.class);
+        assertEquals(HttpStatus.NOT_FOUND, siteProfileWithAdminSecret.getStatusCode());
     }
 
     @Test
