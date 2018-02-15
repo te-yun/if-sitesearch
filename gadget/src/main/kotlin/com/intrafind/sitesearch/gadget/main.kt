@@ -51,12 +51,12 @@ fun triggerFirstUsageOwnership() {
     xhr.onload = {
         siteId = JSON.parse<dynamic>(xhr.responseText).siteId as String
         siteSecret = JSON.parse<dynamic>(xhr.responseText).siteSecret as String
-        (document.getElementById("siteId") as HTMLDivElement).textContent = siteId
-        (document.getElementById("siteSecret") as HTMLDivElement).textContent = siteSecret
+        siteIdContainer.textContent = siteId
+        siteSecretContainer.textContent = siteSecret
         overrideSite(siteId)
         document.dispatchEvent(Event("sis.triggerFirstUsageOwnershipEvent"))
     }
-    xhr.send(SiteProfileCreation(hashSetOf(URL(url.value)), email.value))
+    xhr.send(JSON.stringify(SiteProfileCreation(hashSetOf(URL(url.value)), email.value)))
 }
 
 @JsName("overrideSite")
@@ -71,7 +71,8 @@ private lateinit var integrationCode: HTMLTextAreaElement
 private lateinit var siteIdContainer: HTMLDivElement
 private lateinit var siteIdContainerSuper: HTMLDivElement
 private lateinit var captcha: HTMLDivElement
-private lateinit var siteSecretContainer: HTMLDivElement
+private lateinit var siteSecretBox: HTMLDivElement
+private lateinit var siteSecretContainer: HTMLInputElement
 private lateinit var emailContainer: HTMLDivElement
 private lateinit var websiteUrlContainer: HTMLDivElement
 private lateinit var siteSearchSetupUrl: HTMLDivElement
@@ -84,9 +85,10 @@ fun showInitCode() {
     url = document.getElementById("url") as HTMLInputElement
     integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
     siteIdContainer = document.getElementById("siteId") as HTMLDivElement
+    siteSecretContainer = document.getElementById("siteSecret") as HTMLInputElement
     siteIdContainerSuper = document.getElementById("siteId-container") as HTMLDivElement
     captcha = document.getElementById("captcha") as HTMLDivElement
-    siteSecretContainer = document.getElementById("siteSecret-container") as HTMLDivElement
+    siteSecretBox = document.getElementById("siteSecret-container") as HTMLDivElement
     emailContainer = document.getElementById("email-container") as HTMLDivElement
     websiteUrlContainer = document.getElementById("websiteUrl-container") as HTMLDivElement
     siteSearchSetupUrl = document.getElementById("siteSearchSetupUrl") as HTMLDivElement
@@ -175,7 +177,7 @@ private fun applyQueryOverrides() {
         insertSiteIdIntoIntegrationCode()
         triggerButton.style.display = "none"
         captcha.style.display = "none"
-        siteSecretContainer.style.display = "none"
+        siteSecretBox.style.display = "none"
         emailContainer.style.display = "none"
         siteIdContainerSuper.style.display = "none"
     }
