@@ -59,7 +59,12 @@ public class SiteController {
     }
 
     @RequestMapping(path = "{siteId}/profile", method = RequestMethod.GET)
-    ResponseEntity<SiteProfile> fetchSiteProfile(@PathVariable(value = "siteId") UUID siteId) {
+    ResponseEntity<SiteProfile> fetchSiteProfile(
+            @PathVariable(value = "siteId") UUID siteId,
+            @RequestParam(value = "siteSecret") UUID siteSecret
+    ) {
+        // TODO siteSecret can also be a universal admin token
+
         return ResponseEntity.ok(new SiteProfile(UUID.randomUUID(), UUID.randomUUID(),
                 new HashSet<>(Collections.unmodifiableList(Arrays.asList(URI.create("https://example.com")))),
                 "test@example.com"));
