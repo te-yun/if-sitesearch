@@ -42,6 +42,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Service
 public class PageService {
@@ -100,7 +101,10 @@ public class PageService {
 
     private Optional<SiteProfile> fetchSiteProfile(UUID siteId) {
         Optional<Document> siteProfile = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
-        return siteProfile.map(document -> new SiteProfile(siteId, UUID.fromString(document.get("secret")), null, document.get("email")));
+        return siteProfile.map(document -> {
+            Set<URI> urls = document.getAll("urls").stream().map(URI::create).collect(Collectors.toSet());
+            return new SiteProfile(siteId, UUID.fromString(document.get("secret")), urls, document.get("email"));
+        });
     }
 
     private Optional<UUID> fetchSiteSecret(UUID siteId) {

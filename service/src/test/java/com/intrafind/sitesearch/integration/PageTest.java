@@ -19,10 +19,7 @@ package com.intrafind.sitesearch.integration;
 import com.intrafind.sitesearch.SmokeTest;
 import com.intrafind.sitesearch.controller.PageController;
 import com.intrafind.sitesearch.controller.SiteController;
-import com.intrafind.sitesearch.dto.FetchedPage;
-import com.intrafind.sitesearch.dto.Page;
-import com.intrafind.sitesearch.dto.SiteCreation;
-import com.intrafind.sitesearch.dto.SiteIndexSummary;
+import com.intrafind.sitesearch.dto.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,9 +31,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.net.URI;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
@@ -61,7 +57,7 @@ public class PageTest {
     public void init() {
     }
 
-    private SiteCreation createNewSite() {
+    private SiteCreation createNewSite(SiteProfileCreation siteProfileCreation) {
         ResponseEntity<SiteCreation> actual = caller.exchange(SiteController.ENDPOINT, HttpMethod.POST, HttpEntity.EMPTY, SiteCreation.class);
 
         assertEquals(HttpStatus.CREATED, actual.getStatusCode());
@@ -89,8 +85,22 @@ public class PageTest {
     }
 
     @Test
+    private void createNewSiteWithProfile() {
+        final SiteProfileCreation siteProfileCreation = new SiteProfileCreation(
+                new HashSet<>(Collections.unmodifiableList(Arrays.asList(URI.create("https://example.com"), URI.create("https://subdomain.example.com")))),
+                CrawlerTest.TEST_EMAIL_ADDRESS
+        ); // TODO finalize this test by providing actual, filled siteProfileCreation
+        createNewSite(siteProfileCreation);
+
+        // TODO fetch site as regular user
+        // TODO fetch site as admin user
+        // TODO fetch site as unauthorized user
+        // TODO fetch site and assert
+    }
+
+    @Test
     public void updateSiteViaUrl() throws Exception {
-        final SiteCreation newSite = createNewSite();
+        final SiteCreation newSite = createNewSite(null);
         final FetchedPage newPage = createNewPage(newSite.getSiteId(), newSite.getSiteSecret());
         final String updatedBodyContent = "Updated via Hash(siteId, URL)";
         newPage.setBody(updatedBodyContent);
@@ -144,9 +154,9 @@ public class PageTest {
 
     @Test
     public void fetchUpdatedById() throws Exception {
-        final SiteCreation newSiteYing = createNewSite();
+        final SiteCreation newSiteYing = createNewSite(null);
         final FetchedPage ying = createNewPage(newSiteYing.getSiteId(), newSiteYing.getSiteSecret());
-        final SiteCreation newSiteYang = createNewSite();
+        final SiteCreation newSiteYang = createNewSite(null);
         final FetchedPage yang = createNewPage(newSiteYang.getSiteId(), newSiteYang.getSiteSecret());
         TimeUnit.MILLISECONDS.sleep(8_000);
 
@@ -176,7 +186,7 @@ public class PageTest {
 
     @Test
     public void updatedSite() throws Exception {
-        SiteCreation createdSite = createNewSite();
+        SiteCreation createdSite = createNewSite(null);
         FetchedPage createdPage = createNewPage(createdSite.getSiteId(), createdSite.getSiteSecret());
 
         TimeUnit.MILLISECONDS.sleep(8_000);
@@ -364,7 +374,7 @@ public class PageTest {
 
     @Test
     public void indexIntrafindDe() throws Exception {
-        final SiteCreation newSite = createNewSite();
+        final SiteCreation newSite = createNewSite(null);
         List<String> enIndexDocuments = new ArrayList<>();
         enIndexDocuments.add("en/2b4c27b0-6636-4a13-a911-4f495f99b604.xml");
         enIndexDocuments.add("en/32d2557e-7f03-48d9-ad60-bf7c0b70c487.xml");

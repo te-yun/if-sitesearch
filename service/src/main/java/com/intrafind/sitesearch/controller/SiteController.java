@@ -27,7 +27,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(SiteController.ENDPOINT)
@@ -65,10 +67,13 @@ public class SiteController {
     ) {
         final Optional<SiteProfile> siteProfileFetch = pageService.fetchSiteProfile(siteId, siteSecret);
         if (siteProfileFetch.isPresent()) {
-            SiteProfile siteProfile = siteProfileFetch.get();
-            return ResponseEntity.ok(new SiteProfile(siteProfile.getId(), siteProfile.getSecret(),
-                    new HashSet<>(Collections.unmodifiableList(Arrays.asList(URI.create("https://example.com")))),
-                    siteProfile.getEmail()));
+            final SiteProfile siteProfile = siteProfileFetch.get();
+            return ResponseEntity.ok(new SiteProfile(
+                    siteProfile.getId(),
+                    siteProfile.getSecret(),
+                    siteProfile.getUrls(),
+                    siteProfile.getEmail())
+            );
         } else {
             return ResponseEntity.notFound().build();
         }
