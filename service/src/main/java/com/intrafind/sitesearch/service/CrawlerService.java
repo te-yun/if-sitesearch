@@ -66,8 +66,8 @@ public class CrawlerService {
             CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url));
             controller.startNonBlocking(factory, CRAWLER_THREADS);
 
-            controller.waitUntilFinish();
-            controller.shutdown();
+//            controller.waitUntilFinish();
+//            controller.shutdown();
 
             return new CrawlerJobResult(
                     controller.getCrawlersLocalData().isEmpty() ? Collections.emptyList() : (ArrayList) controller.getCrawlersLocalData(),
