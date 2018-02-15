@@ -43,9 +43,9 @@ public class AutocompleteTest {
         final ResponseEntity<Autocomplete> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=Knowledge&siteId=" + SearchTest.SEARCH_SITE_ID, Autocomplete.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
-//        assertNotNull(actual.getBody());
-//        assertEquals(1, actual.getBody().getResults().size());
-//        assertEquals("knowledge graph", actual.getBody().getResults().get(0));
+        assertNotNull(actual.getBody());
+        assertTrue(1 <= actual.getBody().getResults().size());
+        assertEquals("knowledge graph", actual.getBody().getResults().get(0));
     }
 
     @Test
@@ -54,7 +54,7 @@ public class AutocompleteTest {
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertNotNull(actual.getBody());
-//        assertEquals(1, actual.getBody().getResults().size());
+        assertTrue(1 <= actual.getBody().getResults().size());
         assertEquals("knowledge graph", actual.getBody().getResults().get(0));
     }
 
@@ -64,7 +64,7 @@ public class AutocompleteTest {
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertNotNull(actual.getBody());
-//        assertEquals(6, actual.getBody().getResults().size());
+        assertTrue(1 <= actual.getBody().getResults().size());
         actual.getBody().getResults().forEach(term -> {
             LOG.info("term: " + term);
             assertTrue(term.contains("ifinder"));
@@ -77,7 +77,7 @@ public class AutocompleteTest {
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertNotNull(actual.getBody());
-//        assertEquals(6, actual.getBody().getResults().size());
+        assertTrue(1 <= actual.getBody().getResults().size());
         actual.getBody().getResults().forEach(term -> {
             LOG.info("term: " + term);
             assertTrue(term.contains("ifinder"));
@@ -122,7 +122,7 @@ public class AutocompleteTest {
 
     @Test
     public void withoutInvalidSiteId() {
-        final ResponseEntity<Autocomplete> actual = caller.getForEntity("/sites/invalid-siteId" + "/autocomplete?query=not_found", Autocomplete.class);
+        final ResponseEntity<Autocomplete> actual = caller.getForEntity("/sites/invalid-siteId/autocomplete?query=not_found", Autocomplete.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
         assertNotNull(actual.getBody());
