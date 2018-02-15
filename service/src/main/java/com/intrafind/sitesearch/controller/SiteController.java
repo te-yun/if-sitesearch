@@ -47,17 +47,14 @@ public class SiteController {
         this.autocompleteService = autocompleteService;
     }
 
-//    @RequestMapping(method = RequestMethod.POST)
-//    ResponseEntity<SiteCreation> createNewSite() {
-//        final SiteCreation newlyCreatedSite = service.createSite();
-//        return ResponseEntity
-//                .created(URI.create("https://api.sitesearch.cloud/sites/" + newlyCreatedSite.getSiteId()))
-//                .body(newlyCreatedSite);
-//    }
-
     @RequestMapping(method = RequestMethod.POST)
     ResponseEntity<SiteCreation> createNewSite(@RequestBody(required = false) SiteProfileCreation siteProfileCreation) {
-        final SiteCreation newlyCreatedSite = service.createSite();
+        final SiteCreation newlyCreatedSite;
+        if (siteProfileCreation == null) {
+            newlyCreatedSite = service.createSite();
+        } else {
+            newlyCreatedSite = service.createSite(siteProfileCreation.getUrls(), siteProfileCreation.getEmail());
+        }
         return ResponseEntity
                 .created(URI.create("https://api.sitesearch.cloud/sites/" + newlyCreatedSite.getSiteId()))
                 .body(newlyCreatedSite);

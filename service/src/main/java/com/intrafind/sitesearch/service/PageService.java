@@ -43,10 +43,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -113,12 +110,17 @@ public class PageService {
         }
     }
 
-    //    private static void storeSite(UUID siteId, UUID siteSecret, Set<URI> websiteURLs, String email) {
     private static void storeSite(UUID siteId, UUID siteSecret) {
         Document siteConfiguration = new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId);
         siteConfiguration.set("secret", siteSecret);
-//        siteConfiguration.set("websiteURLs", websiteURLs);
-//        siteConfiguration.set("email", email);
+        INDEX_SERVICE.index(siteConfiguration);
+    }
+
+    private static void storeSite(UUID siteId, UUID siteSecret, Set<URI> urls, String email) {
+        Document siteConfiguration = new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId);
+        siteConfiguration.set("secret", siteSecret);
+        siteConfiguration.set("urls", urls);
+        siteConfiguration.set("email", email);
         INDEX_SERVICE.index(siteConfiguration);
     }
 
@@ -178,6 +180,13 @@ public class PageService {
         UUID siteId = UUID.randomUUID();
         UUID siteSecret = UUID.randomUUID();
         storeSite(siteId, siteSecret);
+        return new SiteCreation(siteId, siteSecret);
+    }
+
+    public SiteCreation createSite(Set<URI> urls, String email) {
+        UUID siteId = UUID.randomUUID();
+        UUID siteSecret = UUID.randomUUID();
+        storeSite(siteId, siteSecret, urls, email);
         return new SiteCreation(siteId, siteSecret);
     }
 

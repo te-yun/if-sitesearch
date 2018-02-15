@@ -17,25 +17,26 @@
 package com.intrafind.sitesearch.dto;
 
 import java.net.URI;
+import java.util.Set;
 
 public class SiteProfileCreation {
-    private URI url;
+    private Set<URI> urls;
     private String email;
 
     private SiteProfileCreation() {
     }
 
-    public SiteProfileCreation(URI url, String email) {
-        this.url = url;
+    public SiteProfileCreation(Set<URI> urls, String email) {
+        this.urls = urls;
         this.email = email;
     }
 
-    public URI getUrl() {
-        return url;
+    public Set<URI> getUrls() {
+        return urls;
     }
 
-    public void setUrl(URI url) {
-        this.url = url;
+    public void setUrls(Set<URI> urls) {
+        this.urls = urls;
     }
 
     public String getEmail() {
