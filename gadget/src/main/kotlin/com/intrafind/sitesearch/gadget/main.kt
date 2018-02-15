@@ -21,6 +21,7 @@ import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLTextAreaElement
 import org.w3c.dom.events.Event
+import org.w3c.dom.url.URL
 import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
 import kotlin.browser.window
@@ -55,7 +56,7 @@ fun triggerFirstUsageOwnership() {
         overrideSite(siteId)
         document.dispatchEvent(Event("sis.triggerFirstUsageOwnershipEvent"))
     }
-    xhr.send()
+    xhr.send(SiteProfileCreation(hashSetOf(URL(url.value)), email.value))
 }
 
 @JsName("overrideSite")
@@ -206,3 +207,5 @@ class SiteSearch {
         val captchaSiteKey = "6LflVEQUAAAAANVEkwc63uQX96feH1H_6jDU-Bn5"
     }
 }
+
+data class SiteProfileCreation(val urls: Set<URL>, val email: String)
