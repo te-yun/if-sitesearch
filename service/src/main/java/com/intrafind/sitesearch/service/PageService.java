@@ -23,10 +23,7 @@ import com.intrafind.api.search.Hits;
 import com.intrafind.api.search.Search;
 import com.intrafind.sitesearch.Application;
 import com.intrafind.sitesearch.TrustAllX509TrustManager;
-import com.intrafind.sitesearch.dto.FetchedPage;
-import com.intrafind.sitesearch.dto.Page;
-import com.intrafind.sitesearch.dto.SiteCreation;
-import com.intrafind.sitesearch.dto.SiteIndexSummary;
+import com.intrafind.sitesearch.dto.*;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
@@ -86,8 +83,27 @@ public class PageService {
         return fetchById(id);
     }
 
-    private static Optional<UUID> fetchSiteSecret(UUID siteId) {
-        // TODO make this the only method to fetch siteSecret
+    private static final UUID ADMIN_SITE_SECRET = UUID.fromString(System.getenv("ADMIN_SITE_SECRET"));
+
+    public Optional<SiteProfile> fetchSiteProfile(UUID siteId, UUID siteSecret) {
+        if (ADMIN_SITE_SECRET.equals(siteSecret)) {
+            return fetchSiteProfile(siteId);
+        } else {
+            Optional<UUID> actualSiteSecret = fetchSiteSecret(siteId);
+            if (actualSiteSecret.isPresent() && actualSiteSecret.get().equals(siteSecret)) {
+                return fetchSiteProfile(siteId);
+            } else {
+                return Optional.empty();
+            }
+        }
+    }
+
+    private Optional<SiteProfile> fetchSiteProfile(UUID siteId) {
+        Optional<Document> siteProfile = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
+        return siteProfile.map(document -> new SiteProfile(siteId, UUID.fromString(document.get("secret")), null, document.get("email")));
+    }
+
+    private Optional<UUID> fetchSiteSecret(UUID siteId) {
         Optional<Document> siteConfiguration = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
         return siteConfiguration.map(document -> UUID.fromString(document.get("secret")));
     }
@@ -110,13 +126,13 @@ public class PageService {
         }
     }
 
-    private static void storeSite(UUID siteId, UUID siteSecret) {
+    private void storeSite(UUID siteId, UUID siteSecret) {
         Document siteConfiguration = new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId);
         siteConfiguration.set("secret", siteSecret);
         INDEX_SERVICE.index(siteConfiguration);
     }
 
-    private static void storeSite(UUID siteId, UUID siteSecret, Set<URI> urls, String email) {
+    private void storeSite(UUID siteId, UUID siteSecret, Set<URI> urls, String email) {
         Document siteConfiguration = new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId);
         siteConfiguration.set("secret", siteSecret);
         siteConfiguration.set("urls", urls);

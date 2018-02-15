@@ -21,17 +21,17 @@ import java.util.Set;
 import java.util.UUID;
 
 public class SiteProfile {
-    private UUID siteId;
-    private UUID siteSecret;
+    private UUID id;
+    private UUID secret;
     private Set<URI> urls;
     private String email;
 
     private SiteProfile() {
     }
 
-    public SiteProfile(UUID siteId, UUID siteSecret, Set<URI> urls, String email) {
-        this.siteId = siteId;
-        this.siteSecret = siteSecret;
+    public SiteProfile(UUID id, UUID secret, Set<URI> urls, String email) {
+        this.id = id;
+        this.secret = secret;
         this.urls = urls;
         this.email = email;
     }
@@ -52,19 +52,19 @@ public class SiteProfile {
         this.email = email;
     }
 
-    public UUID getSiteId() {
-        return siteId;
+    public UUID getId() {
+        return id;
     }
 
-    public void setSiteId(UUID siteId) {
-        this.siteId = siteId;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
-    public UUID getSiteSecret() {
-        return siteSecret;
+    public UUID getSecret() {
+        return secret;
     }
 
-    public void setSiteSecret(UUID siteSecret) {
-        this.siteSecret = siteSecret;
+    public void setSecret(UUID secret) {
+        this.secret = secret;
     }
 }
