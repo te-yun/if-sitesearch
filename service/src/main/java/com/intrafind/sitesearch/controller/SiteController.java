@@ -58,8 +58,8 @@ public class SiteController {
                 .body(newlyCreatedSite);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    ResponseEntity<SiteProfile> fetchSiteProfile() {
+    @RequestMapping(path = "{siteId}/profile", method = RequestMethod.GET)
+    ResponseEntity<SiteProfile> fetchSiteProfile(@PathVariable(value = "siteId") UUID siteId) {
         return ResponseEntity.ok(new SiteProfile(UUID.randomUUID(), UUID.randomUUID(),
                 new HashSet<>(Collections.unmodifiableList(Arrays.asList(URI.create("https://example.com")))),
                 "test@example.com"));

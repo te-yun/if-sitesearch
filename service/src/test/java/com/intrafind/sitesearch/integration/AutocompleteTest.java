@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ public class AutocompleteTest {
     private TestRestTemplate caller;
 
     @Test
-    public void referenceDeprecated() throws Exception {
+    public void referenceDeprecated() {
         final ResponseEntity<Autocomplete> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=Knowledge&siteId=" + SearchTest.SEARCH_SITE_ID, Autocomplete.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
@@ -49,7 +49,7 @@ public class AutocompleteTest {
     }
 
     @Test
-    public void reference() throws Exception {
+    public void reference() {
         final ResponseEntity<Autocomplete> actual = caller.getForEntity("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=Knowledge", Autocomplete.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
@@ -59,7 +59,7 @@ public class AutocompleteTest {
     }
 
     @Test
-    public void complexPositiveDeprecated() throws Exception {
+    public void complexPositiveDeprecated() {
         final ResponseEntity<Autocomplete> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=ifinder&siteId=" + SearchTest.SEARCH_SITE_ID, Autocomplete.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
@@ -72,7 +72,7 @@ public class AutocompleteTest {
     }
 
     @Test
-    public void complexPositive() throws Exception {
+    public void complexPositive() {
         final ResponseEntity<Autocomplete> actual = caller.getForEntity("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=ifinder", Autocomplete.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
@@ -85,7 +85,7 @@ public class AutocompleteTest {
     }
 
     @Test
-    public void nonExistingDeprecated() throws Exception {
+    public void nonExistingDeprecated() {
         final ResponseEntity<Autocomplete> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=not_found&siteId=" + SearchTest.SEARCH_SITE_ID, Autocomplete.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
@@ -94,7 +94,7 @@ public class AutocompleteTest {
     }
 
     @Test
-    public void nonExisting() throws Exception {
+    public void nonExisting() {
         final ResponseEntity<Autocomplete> actual = caller.getForEntity("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=not_found", Autocomplete.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
@@ -103,7 +103,7 @@ public class AutocompleteTest {
     }
 
     @Test
-    public void withoutSiteIdDeprecated() throws Exception {
+    public void withoutSiteIdDeprecated() {
         final ResponseEntity<Autocomplete> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=not_found", Autocomplete.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
@@ -111,17 +111,17 @@ public class AutocompleteTest {
     }
 
     @Test
-    public void withoutSiteId() throws Exception {
+    public void withoutSiteId() {
         final ResponseEntity<Autocomplete> actual = caller.getForEntity("/sites/" + "/autocomplete?query=not_found", Autocomplete.class);
         assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
 
         final ResponseEntity<Autocomplete> response = caller.getForEntity("/sites" + "?query=not_found", Autocomplete.class);
         assertEquals(HttpStatus.METHOD_NOT_ALLOWED, response.getStatusCode());
-//        assertNotNull(actual.getBody());  // TODO reenable once legacy hack for searchbar is removed
+        assertNotNull(actual.getBody());  // TODO reenable once legacy hack for searchbar is removed
     }
 
     @Test
-    public void withoutInvalidSiteId() throws Exception {
+    public void withoutInvalidSiteId() {
         final ResponseEntity<Autocomplete> actual = caller.getForEntity("/sites/invalid-siteId" + "/autocomplete?query=not_found", Autocomplete.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
