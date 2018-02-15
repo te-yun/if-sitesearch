@@ -25,6 +25,7 @@ to the `config` folder inside this project.
 
 Required environment variables:
 
+    * RECAPTCHA_SITE_SECRET
     * SECURITY_OAUTH2_CLIENT_CLIENT_SECRET
     * SECURITY_USER_PASSWORD # for iFinder Core access 
     * GITHUB_PUBLIC_ACCESS_TOKEN="your long living GitHub token"
