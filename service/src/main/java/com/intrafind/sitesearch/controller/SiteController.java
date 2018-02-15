@@ -27,9 +27,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping(SiteController.ENDPOINT)
@@ -58,6 +56,13 @@ public class SiteController {
         return ResponseEntity
                 .created(URI.create("https://api.sitesearch.cloud/sites/" + newlyCreatedSite.getSiteId()))
                 .body(newlyCreatedSite);
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    ResponseEntity<SiteProfile> fetchSiteProfile() {
+        return ResponseEntity.ok(new SiteProfile(UUID.randomUUID(), UUID.randomUUID(),
+                new HashSet<>(Collections.unmodifiableList(Arrays.asList(URI.create("https://example.com")))),
+                "test@example.com"));
     }
 
     @RequestMapping(path = "{siteId}/pages", method = RequestMethod.GET)
