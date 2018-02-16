@@ -168,7 +168,8 @@ public class CrawlerController {
     ResponseEntity<SitesCrawlStatus> recrawlSites(
             @RequestParam(value = "serviceSecret") UUID serviceSecret
     ) {
-        final Optional<SitesCrawlStatus> sitesCrawlStatus = pageService.recrawlSites(serviceSecret);
+        // TODO refactor code so `crawlerService` does not need to be passed as argument
+        final Optional<SitesCrawlStatus> sitesCrawlStatus = pageService.recrawlSites(serviceSecret, crawlerService);
         if (sitesCrawlStatus.isPresent()) {
             return ResponseEntity.ok(sitesCrawlStatus.get());
         } else {

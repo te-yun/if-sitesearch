@@ -374,7 +374,7 @@ public class PageService {
         }
     }
 
-    public Optional<SitesCrawlStatus> recrawlSites(UUID serviceSecret) {
+    public Optional<SitesCrawlStatus> recrawlSites(UUID serviceSecret, CrawlerService crawlerService) {
         if (ADMIN_SITE_SECRET.equals(serviceSecret)) {
             final Optional<SitesCrawlStatus> sitesCrawlStatus = fetchSitesCrawlStatus();
             if (sitesCrawlStatus.isPresent()) {
@@ -388,18 +388,23 @@ public class PageService {
                             Optional<UUID> fetchedSiteSecret = fetchSiteSecret(crawlStatus.getSiteId());
                             if (fetchedSiteSecret.isPresent()) {
                                 final UUID siteSecret = fetchedSiteSecret.get();
-                                // TODO using this siteSecret trigger a regular crawl
+                                // TODO using this siteSecret trigger a regular crawl X
                                 // TODO after crawl succeeds, update lastCrawl timestamp in the siteId crawl whitelist X
-                                updateCrawlStatus(crawlStatus.getSiteId());
+                                final Optional<SiteProfile> siteProfile = fetchSiteProfile(crawlStatus.getSiteId(), siteSecret);
+                                if (siteProfile.isPresent()) {
+                                    Optional<URI> siteUrl = siteProfile.get().getUrls().stream().findFirst();
+                                    if (siteUrl.isPresent()) {
+                                        final CrawlerJobResult crawlerJobResult = crawlerService.crawl(siteUrl.get().toString(), crawlStatus.getSiteId(), siteSecret);
+                                        updateCrawlStatus(crawlStatus.getSiteId());
+                                        LOG.info("siteId: " + crawlStatus.getSiteId() + " - siteUrl: " + siteUrl.get().toString() + " - pageCount: " + crawlerJobResult.getPageCount()); // TODO add pattern to logstash
+                                    }
+                                }
                             }
                         });
+                return fetchSitesCrawlStatus();
             }
-            return Optional.of(new SitesCrawlStatus(Arrays.asList(
-                    new CrawlStatus(UUID.fromString("a2e8d60b-0696-47ea-bc48-982598ee35bd"), Instant.now())
-            )));
-        } else {
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
     public Optional<SitesCrawlStatus> storeCrawlStatus(UUID serviceSecret, SitesCrawlStatus sitesCrawlStatus) {
