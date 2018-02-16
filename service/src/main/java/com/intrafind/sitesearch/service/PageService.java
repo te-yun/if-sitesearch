@@ -355,4 +355,12 @@ public class PageService {
             return false;
         }
     }
+
+    public Optional<SitesCrawlStatus> recrawlSites(UUID serviceSecret) {
+        if (ADMIN_SITE_SECRET.equals(serviceSecret)) {
+            return Optional.of(new SitesCrawlStatus(null));
+        } else {
+            return Optional.empty();
+        }
+    }
 }

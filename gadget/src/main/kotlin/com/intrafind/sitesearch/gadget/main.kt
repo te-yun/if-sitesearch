@@ -128,7 +128,6 @@ fun showInitCode() {
 
 private fun fixUrlWithoutProtocol() {
     url.addEventListener("blur", {
-        console.warn(url.value)
         if (!url.value.startsWith("http") || !url.value.startsWith("https")) {
             url.value = "https://${url.value}"
         }
@@ -169,7 +168,6 @@ private fun applyQueryOverrides() {
                 .substring(0, document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).indexOf(";")) // relies on cookie-setting code in embedding iframe container
         else -> ""
     }
-    console.warn(websiteUrl)
     if (siteId.isNotEmpty()) {
         url.value = websiteUrl
         url.readOnly = true
@@ -198,7 +196,7 @@ fun startCrawler() {
             crawlerPageCount = JSON.parse<dynamic>(xhr.responseText).pageCount as Int
             document.dispatchEvent(Event("sis.crawlerFinishedEvent"))
         } else {
-            console.warn("Request failed")
+            console.warn("startCrawler failed")
         }
     }
     xhr.send()

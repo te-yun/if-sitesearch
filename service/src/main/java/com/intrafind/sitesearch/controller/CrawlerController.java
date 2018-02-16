@@ -32,6 +32,7 @@ import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.Message;
 import com.intrafind.sitesearch.dto.CaptchaVerification;
 import com.intrafind.sitesearch.dto.CrawlerJobResult;
+import com.intrafind.sitesearch.dto.SitesCrawlStatus;
 import com.intrafind.sitesearch.service.CrawlerService;
 import com.intrafind.sitesearch.service.PageService;
 import com.intrafind.sitesearch.service.SiteCrawler;
@@ -51,10 +52,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.*;
 import java.net.URI;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping(SiteController.ENDPOINT)
@@ -149,7 +147,7 @@ public class CrawlerController {
                         email,
                         "Evaluation Information - Site Search",
                         "\nHello," +
-                                "\nYou are just a few steps away from adding Site Search to your website." +
+                                "\n\nyou are just a few steps away from adding Site Search to your website." +
                                 "\nBelow you should find everything you need to evaluate Site Search for your website." +
                                 "\n\tWebsite URL: " + url +
                                 "\n\tSite ID: " + siteId +
@@ -165,6 +163,24 @@ public class CrawlerController {
     public static void main(String[] args) throws Exception {
         sendSetupInfoEmail(UUID.randomUUID(), UUID.randomUUID(), URI.create("https://example.com"), PROSPECTS_EMAIL_ADDRESS);
     }
+
+    @RequestMapping(path = "crawl", method = RequestMethod.POST)
+    ResponseEntity<SitesCrawlStatus> recrawlSites(
+            @RequestParam(value = "serviceSecret") UUID serviceSecret
+    ) {
+        final Optional<SitesCrawlStatus> sitesCrawlStatus = pageService.recrawlSites(serviceSecret);
+        // TODO get a whitelist of siteIDs to recrawl
+        // TODO filter siteId whitelist according to lastCrawl timestamp
+        // TODO foreach siteId get /profile's siteSecret
+        // TODO using this siteSecret trigger a regular crawl
+        // TODO after crawl succeeds, update lastCrawl timestamp in the siteId crawl whitelist
+        if (sitesCrawlStatus.isPresent()) {
+            return ResponseEntity.ok(sitesCrawlStatus.get());
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 
     @RequestMapping(path = "{siteId}/crawl", method = RequestMethod.POST)
     ResponseEntity<CrawlerJobResult> crawl(

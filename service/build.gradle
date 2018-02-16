@@ -50,7 +50,6 @@ dependencies {
     compile files("../libs/if-api-1.3.0.79-47216.jar")
 
     compile "org.springframework.boot:spring-boot-starter-hateoas:$spring_boot_version"
-//    compile "org.springframework.boot:spring-boot-starter-jetty:$spring_boot_version"
     compile "org.springframework.boot:spring-boot-starter-undertow:$spring_boot_version"
 
     runtime "org.springframework.boot:spring-boot-devtools:$spring_boot_version"
