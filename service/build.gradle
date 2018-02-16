@@ -63,9 +63,11 @@ dependencies {
     testCompile "org.openjdk.jmh:jmh-generator-annprocess:1.20"
     testCompile "org.springframework.boot:spring-boot-starter-test:$spring_boot_version"
 
+    runtime "org.springframework.boot:spring-boot-devtools:$spring_boot_version"
+
     compile "com.squareup.okhttp3:okhttp:3.9.1" // downgrade to test scope, once crawler4j is removed
     
-    compile "org.mnode.mstor:mstor:0.9.13"
+    compile "org.mnode.mstor:mstor:1.0.0"
 //    compile "com.google.api-client:google-api-client:1.23.0"
     compile "com.google.oauth-client:google-oauth-client-jetty:1.23.0"
     compile "com.google.apis:google-api-services-gmail:v1-rev81-1.23.0"
