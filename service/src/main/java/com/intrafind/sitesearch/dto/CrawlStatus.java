@@ -16,16 +16,17 @@
 
 package com.intrafind.sitesearch.dto;
 
+import java.time.Instant;
 import java.util.UUID;
 
 public class CrawlStatus {
     private UUID siteId;
-    private String crawled;
+    private Instant crawled;
 
     private CrawlStatus() {
     }
 
-    public CrawlStatus(UUID siteId, String crawled) {
+    public CrawlStatus(UUID siteId, Instant crawled) {
         this.siteId = siteId;
         this.crawled = crawled;
     }
@@ -34,11 +35,11 @@ public class CrawlStatus {
         return siteId;
     }
 
-    public String getCrawled() {
+    public Instant getCrawled() {
         return crawled;
     }
 
-    public void setCrawled(String crawled) {
+    public void setCrawled(Instant crawled) {
         this.crawled = crawled;
     }
 }

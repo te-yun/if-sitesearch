@@ -185,12 +185,7 @@ public class CrawlerController {
     ResponseEntity<SitesCrawlStatus> updateCrawlStatus(
             @RequestParam(value = "serviceSecret") UUID serviceSecret
     ) {
-        final Optional<SitesCrawlStatus> sitesCrawlStatus = pageService.recrawlSites(serviceSecret);
-        // TODO get a whitelist of siteIDs to recrawl
-        // TODO filter siteId whitelist according to lastCrawl timestamp
-        // TODO foreach siteId get /profile's siteSecret
-        // TODO using this siteSecret trigger a regular crawl
-        // TODO after crawl succeeds, update lastCrawl timestamp in the siteId crawl whitelist
+        final Optional<SitesCrawlStatus> sitesCrawlStatus = pageService.storeCrawlStatus(serviceSecret, sitesCrawlStatus);
         if (sitesCrawlStatus.isPresent()) {
             return ResponseEntity.ok(sitesCrawlStatus.get());
         } else {
@@ -202,12 +197,7 @@ public class CrawlerController {
     ResponseEntity<SitesCrawlStatus> fetchCrawlStatus(
             @RequestParam(value = "serviceSecret") UUID serviceSecret
     ) {
-        final Optional<SitesCrawlStatus> sitesCrawlStatus = pageService.recrawlSites(serviceSecret);
-        // TODO get a whitelist of siteIDs to recrawl
-        // TODO filter siteId whitelist according to lastCrawl timestamp
-        // TODO foreach siteId get /profile's siteSecret
-        // TODO using this siteSecret trigger a regular crawl
-        // TODO after crawl succeeds, update lastCrawl timestamp in the siteId crawl whitelist
+        final Optional<SitesCrawlStatus> sitesCrawlStatus = pageService.fetchCrawlStatus(serviceSecret);
         if (sitesCrawlStatus.isPresent()) {
             return ResponseEntity.ok(sitesCrawlStatus.get());
         } else {

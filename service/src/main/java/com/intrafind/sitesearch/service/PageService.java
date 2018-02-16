@@ -145,6 +145,16 @@ public class PageService {
         INDEX_SERVICE.index(siteConfiguration);
     }
 
+    private void storeCrawlStatus(SitesCrawlStatus sitesCrawlStatus) {
+        final Document crawlStatus = new Document("crawl-status");
+        sitesCrawlStatus.getSites()
+                .forEach(siteCrawlStatus -> {
+                    crawlStatus.set(siteCrawlStatus.getSiteId().toString(), siteCrawlStatus.getCrawled());
+                });
+
+        INDEX_SERVICE.index(crawlStatus);
+    }
+
     public Optional<FetchedPage> fetchById(String id) {
         Optional<Document> found = INDEX_SERVICE.fetch(Index.ALL, id).stream().findAny();
 
@@ -360,7 +370,27 @@ public class PageService {
     public Optional<SitesCrawlStatus> recrawlSites(UUID serviceSecret) {
         if (ADMIN_SITE_SECRET.equals(serviceSecret)) {
             return Optional.of(new SitesCrawlStatus(Arrays.asList(
-                    new CrawlStatus(UUID.fromString("a2e8d60b-0696-47ea-bc48-982598ee35bd"), Instant.now().toString())
+                    new CrawlStatus(UUID.fromString("a2e8d60b-0696-47ea-bc48-982598ee35bd"), Instant.now())
+            )));
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public Optional<SitesCrawlStatus> storeCrawlStatus(UUID serviceSecret, SitesCrawlStatus sitesCrawlStatus) {
+        if (ADMIN_SITE_SECRET.equals(serviceSecret)) {
+            storeCrawlStatus(sitesCrawlStatus);
+            return Optional.of(sitesCrawlStatus);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    public Optional<SitesCrawlStatus> fetchCrawlStatus(UUID serviceSecret) {
+        if (ADMIN_SITE_SECRET.equals(serviceSecret)) {
+            // TODO fetch crawl status
+            return Optional.of(new SitesCrawlStatus(Arrays.asList(
+                    new CrawlStatus(UUID.fromString("a2e8d60b-0696-47ea-bc48-982598ee35bd"), Instant.now())
             )));
         } else {
             return Optional.empty();
