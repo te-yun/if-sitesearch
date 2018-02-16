@@ -181,6 +181,40 @@ public class CrawlerController {
         }
     }
 
+    @RequestMapping(path = "crawl/status", method = RequestMethod.PUT)
+    ResponseEntity<SitesCrawlStatus> updateCrawlStatus(
+            @RequestParam(value = "serviceSecret") UUID serviceSecret
+    ) {
+        final Optional<SitesCrawlStatus> sitesCrawlStatus = pageService.recrawlSites(serviceSecret);
+        // TODO get a whitelist of siteIDs to recrawl
+        // TODO filter siteId whitelist according to lastCrawl timestamp
+        // TODO foreach siteId get /profile's siteSecret
+        // TODO using this siteSecret trigger a regular crawl
+        // TODO after crawl succeeds, update lastCrawl timestamp in the siteId crawl whitelist
+        if (sitesCrawlStatus.isPresent()) {
+            return ResponseEntity.ok(sitesCrawlStatus.get());
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @RequestMapping(path = "crawl/status", method = RequestMethod.GET)
+    ResponseEntity<SitesCrawlStatus> fetchCrawlStatus(
+            @RequestParam(value = "serviceSecret") UUID serviceSecret
+    ) {
+        final Optional<SitesCrawlStatus> sitesCrawlStatus = pageService.recrawlSites(serviceSecret);
+        // TODO get a whitelist of siteIDs to recrawl
+        // TODO filter siteId whitelist according to lastCrawl timestamp
+        // TODO foreach siteId get /profile's siteSecret
+        // TODO using this siteSecret trigger a regular crawl
+        // TODO after crawl succeeds, update lastCrawl timestamp in the siteId crawl whitelist
+        if (sitesCrawlStatus.isPresent()) {
+            return ResponseEntity.ok(sitesCrawlStatus.get());
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 
     @RequestMapping(path = "{siteId}/crawl", method = RequestMethod.POST)
     ResponseEntity<CrawlerJobResult> crawl(

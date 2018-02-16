@@ -16,20 +16,29 @@
 
 package com.intrafind.sitesearch.dto;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.UUID;
 
-public class SitesCrawlStatus {
-    private List<CrawlStatus> sites = Collections.emptyList();
+public class CrawlStatus {
+    private UUID siteId;
+    private String crawled;
 
-    private SitesCrawlStatus() {
+    private CrawlStatus() {
     }
 
-    public SitesCrawlStatus(List<CrawlStatus> sites) {
-        this.sites = sites;
+    public CrawlStatus(UUID siteId, String crawled) {
+        this.siteId = siteId;
+        this.crawled = crawled;
     }
 
-    public List<CrawlStatus> getSites() {
-        return sites;
+    public UUID getSiteId() {
+        return siteId;
+    }
+
+    public String getCrawled() {
+        return crawled;
+    }
+
+    public void setCrawled(String crawled) {
+        this.crawled = crawled;
     }
 }

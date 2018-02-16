@@ -40,6 +40,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.URI;
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -358,7 +359,9 @@ public class PageService {
 
     public Optional<SitesCrawlStatus> recrawlSites(UUID serviceSecret) {
         if (ADMIN_SITE_SECRET.equals(serviceSecret)) {
-            return Optional.of(new SitesCrawlStatus(null));
+            return Optional.of(new SitesCrawlStatus(Arrays.asList(
+                    new CrawlStatus(UUID.fromString("a2e8d60b-0696-47ea-bc48-982598ee35bd"), Instant.now().toString())
+            )));
         } else {
             return Optional.empty();
         }
