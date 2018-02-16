@@ -41,6 +41,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.URI;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -149,10 +150,15 @@ public class PageService {
     private void storeCrawlStatus(SitesCrawlStatus sitesCrawlStatus) {
         final Document crawlStatus = new Document(CRAWL_STATUS_SINGLETON_DOCUMENT);
         sitesCrawlStatus.getSites()
-                .forEach(siteCrawlStatus -> {
-                    crawlStatus.set(siteCrawlStatus.getSiteId().toString(), siteCrawlStatus.getCrawled());
-                });
+                .forEach(siteCrawlStatus ->
+                        crawlStatus.set(siteCrawlStatus.getSiteId().toString(), siteCrawlStatus.getCrawled()));
 
+        INDEX_SERVICE.index(crawlStatus);
+    }
+
+    private void updateCrawlStatus(UUID siteId) {
+        final Document crawlStatus = new Document(CRAWL_STATUS_SINGLETON_DOCUMENT);
+        crawlStatus.set(siteId.toString(), Instant.now().toString());
         INDEX_SERVICE.index(crawlStatus);
     }
 
@@ -370,6 +376,24 @@ public class PageService {
 
     public Optional<SitesCrawlStatus> recrawlSites(UUID serviceSecret) {
         if (ADMIN_SITE_SECRET.equals(serviceSecret)) {
+            final Optional<SitesCrawlStatus> sitesCrawlStatus = fetchSitesCrawlStatus();
+            if (sitesCrawlStatus.isPresent()) {
+                final Instant oneDayAgo = Instant.now().minus(1, ChronoUnit.DAYS);
+                sitesCrawlStatus.get().getSites().stream()
+                        .filter(crawlStatus -> Instant.parse(crawlStatus.getCrawled()).isBefore(oneDayAgo))
+                        .forEach(crawlStatus -> {
+                            // TODO get a whitelist of siteIDs to recrawl  X
+                            // TODO filter siteId whitelist according to lastCrawl timestamp X
+                            // TODO foreach siteId get /profile's siteSecret X
+                            Optional<UUID> fetchedSiteSecret = fetchSiteSecret(crawlStatus.getSiteId());
+                            if (fetchedSiteSecret.isPresent()) {
+                                final UUID siteSecret = fetchedSiteSecret.get();
+                                // TODO using this siteSecret trigger a regular crawl
+                                // TODO after crawl succeeds, update lastCrawl timestamp in the siteId crawl whitelist X
+                                updateCrawlStatus(crawlStatus.getSiteId());
+                            }
+                        });
+            }
             return Optional.of(new SitesCrawlStatus(Arrays.asList(
                     new CrawlStatus(UUID.fromString("a2e8d60b-0696-47ea-bc48-982598ee35bd"), Instant.now())
             )));
@@ -389,16 +413,19 @@ public class PageService {
 
     public Optional<SitesCrawlStatus> fetchCrawlStatus(UUID serviceSecret) {
         if (ADMIN_SITE_SECRET.equals(serviceSecret)) {
-            final SitesCrawlStatus sitesCrawlStatus = new SitesCrawlStatus(Collections.emptyList());
-            Optional<Document> crawlStatus = INDEX_SERVICE.fetch(Index.ALL, CRAWL_STATUS_SINGLETON_DOCUMENT).stream().findAny();
-            if (crawlStatus.isPresent()) {
-                crawlStatus.get().getFields().forEach((uuid, timestamp) -> {
-                    sitesCrawlStatus.getSites().add(new CrawlStatus(UUID.fromString(uuid), Instant.parse(timestamp.get(0))));
-                });
-            }
-        } else {
-            return Optional.empty();
+            return fetchSitesCrawlStatus();
         }
         return Optional.empty();
+    }
+
+    private Optional<SitesCrawlStatus> fetchSitesCrawlStatus() {
+        final List<CrawlStatus> sitesCrawlStatus = new ArrayList<>();
+        final Optional<Document> crawlStatus = INDEX_SERVICE.fetch(Index.ALL, CRAWL_STATUS_SINGLETON_DOCUMENT).stream().findAny();
+        crawlStatus.ifPresent(document -> document.getFields().forEach((uuidKey, crawledTimestamp) -> {
+            if (!uuidKey.startsWith("_")) {
+                sitesCrawlStatus.add(new CrawlStatus(UUID.fromString(uuidKey), Instant.parse(crawledTimestamp.get(0))));
+            }
+        }));
+        return Optional.of(new SitesCrawlStatus(sitesCrawlStatus));
     }
 }

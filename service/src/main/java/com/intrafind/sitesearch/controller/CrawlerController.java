@@ -169,11 +169,6 @@ public class CrawlerController {
             @RequestParam(value = "serviceSecret") UUID serviceSecret
     ) {
         final Optional<SitesCrawlStatus> sitesCrawlStatus = pageService.recrawlSites(serviceSecret);
-        // TODO get a whitelist of siteIDs to recrawl
-        // TODO filter siteId whitelist according to lastCrawl timestamp
-        // TODO foreach siteId get /profile's siteSecret
-        // TODO using this siteSecret trigger a regular crawl
-        // TODO after crawl succeeds, update lastCrawl timestamp in the siteId crawl whitelist
         if (sitesCrawlStatus.isPresent()) {
             return ResponseEntity.ok(sitesCrawlStatus.get());
         } else {
@@ -238,7 +233,7 @@ public class CrawlerController {
 
         if (captchaPassed) {
             final CrawlerJobResult crawlerJobResult = crawlerService.crawl(url.toString(), siteId, siteSecret);
-            String emailAddress = determineEmailAddress(email);
+            final String emailAddress = determineEmailAddress(email);
             try {
                 sendSetupInfoEmail(siteId, siteSecret, url, emailAddress);
             } catch (Exception e) {

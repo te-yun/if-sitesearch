@@ -35,11 +35,11 @@ public class CrawlStatus {
         return siteId;
     }
 
-    public Instant getCrawled() {
-        return crawled;
+    public String getCrawled() {
+        return crawled.toString();
     }
 
-    public void setCrawled(Instant crawled) {
-        this.crawled = crawled;
+    public void setCrawled(String crawled) {
+        this.crawled = Instant.parse(crawled);
     }
 }
