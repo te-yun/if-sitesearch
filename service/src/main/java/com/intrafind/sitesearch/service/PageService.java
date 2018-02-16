@@ -51,6 +51,7 @@ public class PageService {
 
     private static final Index INDEX_SERVICE = IfinderCoreClient.newHessianClient(Index.class, Application.IFINDER_CORE + "/index");
     private static final String SITE_CONFIGURATION_DOCUMENT_PREFIX = "site-configuration-";
+    private static final String CRAWL_STATUS_SINGLETON_DOCUMENT = "crawl-status";
 
     public Optional<FetchedPage> indexExistingPage(String id, UUID siteId, UUID siteSecret, Page page) {
         if (siteId != null && siteSecret != null) { // credentials are provided as a tuple only
@@ -146,7 +147,7 @@ public class PageService {
     }
 
     private void storeCrawlStatus(SitesCrawlStatus sitesCrawlStatus) {
-        final Document crawlStatus = new Document("crawl-status");
+        final Document crawlStatus = new Document(CRAWL_STATUS_SINGLETON_DOCUMENT);
         sitesCrawlStatus.getSites()
                 .forEach(siteCrawlStatus -> {
                     crawlStatus.set(siteCrawlStatus.getSiteId().toString(), siteCrawlStatus.getCrawled());
@@ -388,12 +389,16 @@ public class PageService {
 
     public Optional<SitesCrawlStatus> fetchCrawlStatus(UUID serviceSecret) {
         if (ADMIN_SITE_SECRET.equals(serviceSecret)) {
-            // TODO fetch crawl status
-            return Optional.of(new SitesCrawlStatus(Arrays.asList(
-                    new CrawlStatus(UUID.fromString("a2e8d60b-0696-47ea-bc48-982598ee35bd"), Instant.now())
-            )));
+            final SitesCrawlStatus sitesCrawlStatus = new SitesCrawlStatus(Collections.emptyList());
+            Optional<Document> crawlStatus = INDEX_SERVICE.fetch(Index.ALL, CRAWL_STATUS_SINGLETON_DOCUMENT).stream().findAny();
+            if (crawlStatus.isPresent()) {
+                crawlStatus.get().getFields().forEach((uuid, timestamp) -> {
+                    sitesCrawlStatus.getSites().add(new CrawlStatus(UUID.fromString(uuid), Instant.parse(timestamp.get(0))));
+                });
+            }
         } else {
             return Optional.empty();
         }
+        return Optional.empty();
     }
 }

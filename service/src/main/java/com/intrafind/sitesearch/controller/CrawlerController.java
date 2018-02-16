@@ -183,9 +183,10 @@ public class CrawlerController {
 
     @RequestMapping(path = "crawl/status", method = RequestMethod.PUT)
     ResponseEntity<SitesCrawlStatus> updateCrawlStatus(
-            @RequestParam(value = "serviceSecret") UUID serviceSecret
+            @RequestParam(value = "serviceSecret") UUID serviceSecret,
+            @RequestBody SitesCrawlStatus sitesCrawlStatusUpdate
     ) {
-        final Optional<SitesCrawlStatus> sitesCrawlStatus = pageService.storeCrawlStatus(serviceSecret, sitesCrawlStatus);
+        final Optional<SitesCrawlStatus> sitesCrawlStatus = pageService.storeCrawlStatus(serviceSecret, sitesCrawlStatusUpdate);
         if (sitesCrawlStatus.isPresent()) {
             return ResponseEntity.ok(sitesCrawlStatus.get());
         } else {
