@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package com.intrafind.sitesearch.controller;
 
 import com.intrafind.sitesearch.dto.FetchedPage;
-import com.intrafind.sitesearch.service.PageService;
+import com.intrafind.sitesearch.service.SiteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +34,10 @@ import java.util.Optional;
 public class PageController {
     public static final String ENDPOINT = "/pages";
     private static final Logger LOG = LoggerFactory.getLogger(PageController.class);
-    private final PageService service;
+    private final SiteService service;
 
     @Autowired
-    private PageController(PageService service) {
+    private PageController(SiteService service) {
         this.service = service;
     }
 

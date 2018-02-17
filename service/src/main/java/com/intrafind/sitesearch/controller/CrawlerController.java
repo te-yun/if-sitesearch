@@ -34,8 +34,8 @@ import com.intrafind.sitesearch.dto.CaptchaVerification;
 import com.intrafind.sitesearch.dto.CrawlerJobResult;
 import com.intrafind.sitesearch.dto.SitesCrawlStatus;
 import com.intrafind.sitesearch.service.CrawlerService;
-import com.intrafind.sitesearch.service.PageService;
 import com.intrafind.sitesearch.service.SiteCrawler;
+import com.intrafind.sitesearch.service.SiteService;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -59,12 +59,12 @@ import java.util.*;
 public class CrawlerController {
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerController.class);
     private static final String PROSPECTS_EMAIL_ADDRESS = "Support - Site Search <f518c8ec.intrafind.de@emea.teams.ms>";
-    private final PageService pageService;
+    private final SiteService siteService;
     private final CrawlerService crawlerService;
 
     @Autowired
-    private CrawlerController(PageService pageService, CrawlerService crawlerService) {
-        this.pageService = pageService;
+    private CrawlerController(SiteService siteService, CrawlerService crawlerService) {
+        this.siteService = siteService;
         this.crawlerService = crawlerService;
     }
 
@@ -169,7 +169,7 @@ public class CrawlerController {
             @RequestParam(value = "serviceSecret") UUID serviceSecret
     ) {
         // TODO refactor code so `crawlerService` does not need to be passed as argument
-        final Optional<SitesCrawlStatus> sitesCrawlStatus = pageService.recrawlSites(serviceSecret, crawlerService);
+        final Optional<SitesCrawlStatus> sitesCrawlStatus = siteService.recrawlSites(serviceSecret, crawlerService);
         if (sitesCrawlStatus.isPresent()) {
             return ResponseEntity.ok(sitesCrawlStatus.get());
         } else {
@@ -182,7 +182,7 @@ public class CrawlerController {
             @RequestParam(value = "serviceSecret") UUID serviceSecret,
             @RequestBody SitesCrawlStatus sitesCrawlStatusUpdate
     ) {
-        final Optional<SitesCrawlStatus> sitesCrawlStatus = pageService.storeCrawlStatus(serviceSecret, sitesCrawlStatusUpdate);
+        final Optional<SitesCrawlStatus> sitesCrawlStatus = siteService.storeCrawlStatus(serviceSecret, sitesCrawlStatusUpdate);
         if (sitesCrawlStatus.isPresent()) {
             return ResponseEntity.ok(sitesCrawlStatus.get());
         } else {
@@ -194,7 +194,7 @@ public class CrawlerController {
     ResponseEntity<SitesCrawlStatus> fetchCrawlStatus(
             @RequestParam(value = "serviceSecret") UUID serviceSecret
     ) {
-        final Optional<SitesCrawlStatus> sitesCrawlStatus = pageService.fetchCrawlStatus(serviceSecret);
+        final Optional<SitesCrawlStatus> sitesCrawlStatus = siteService.fetchCrawlStatus(serviceSecret);
         if (sitesCrawlStatus.isPresent()) {
             return ResponseEntity.ok(sitesCrawlStatus.get());
         } else {
@@ -211,7 +211,7 @@ public class CrawlerController {
             @RequestParam(value = "email") String email,
             @RequestParam(value = "token") String captchaToken
     ) {
-        if (!pageService.isAllowedToModify(siteId, siteSecret)) {
+        if (!siteService.isAllowedToModify(siteId, siteSecret)) {
             return ResponseEntity.notFound().build();
         }
 

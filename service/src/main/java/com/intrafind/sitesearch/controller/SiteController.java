@@ -18,8 +18,8 @@ package com.intrafind.sitesearch.controller;
 
 import com.intrafind.sitesearch.dto.*;
 import com.intrafind.sitesearch.service.AutocompleteService;
-import com.intrafind.sitesearch.service.PageService;
 import com.intrafind.sitesearch.service.SearchService;
+import com.intrafind.sitesearch.service.SiteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,13 +36,13 @@ import java.util.UUID;
 public class SiteController {
     public static final String ENDPOINT = "/sites";
     private static final Logger LOG = LoggerFactory.getLogger(SiteController.class);
-    private final PageService pageService;
+    private final SiteService siteService;
     private final SearchService searchService;
     private final AutocompleteService autocompleteService;
 
     @Autowired
-    private SiteController(PageService pageService, SearchService searchService, AutocompleteService autocompleteService) {
-        this.pageService = pageService;
+    private SiteController(SiteService siteService, SearchService searchService, AutocompleteService autocompleteService) {
+        this.siteService = siteService;
         this.searchService = searchService;
         this.autocompleteService = autocompleteService;
     }
@@ -51,9 +51,9 @@ public class SiteController {
     ResponseEntity<SiteCreation> createNewSite(@RequestBody(required = false) SiteProfileCreation siteProfileCreation) {
         final SiteCreation newlyCreatedSite;
         if (siteProfileCreation == null) {
-            newlyCreatedSite = pageService.createSite();
+            newlyCreatedSite = siteService.createSite();
         } else {
-            newlyCreatedSite = pageService.createSite(siteProfileCreation.getUrls(), siteProfileCreation.getEmail());
+            newlyCreatedSite = siteService.createSite(siteProfileCreation.getUrls(), siteProfileCreation.getEmail());
         }
         return ResponseEntity
                 .created(URI.create("https://api.sitesearch.cloud/sites/" + newlyCreatedSite.getSiteId()))
@@ -65,7 +65,7 @@ public class SiteController {
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "siteSecret") UUID siteSecret
     ) {
-        final Optional<SiteProfile> siteProfileFetch = pageService.fetchSiteProfile(siteId, siteSecret);
+        final Optional<SiteProfile> siteProfileFetch = siteService.fetchSiteProfile(siteId, siteSecret);
         if (siteProfileFetch.isPresent()) {
             final SiteProfile siteProfile = siteProfileFetch.get();
             return ResponseEntity.ok(new SiteProfile(
@@ -86,7 +86,7 @@ public class SiteController {
     ) {
         String pageId = Page.hashPageId(siteId, url);
 
-        Optional<FetchedPage> fetched = pageService.fetchById(pageId);
+        Optional<FetchedPage> fetched = siteService.fetchById(pageId);
         if (fetched.isPresent()) {
             return ResponseEntity.ok(fetched.get());
         } else {
@@ -104,7 +104,7 @@ public class SiteController {
         // TODO use SiteUpdate DTO with NO siteId & NO siteSecret provided
 
         // TODO make sure that an existing page is actually updated
-        Optional<FetchedPage> indexed = pageService.indexExistingPage(pageId, siteId, siteSecret, page);
+        Optional<FetchedPage> indexed = siteService.indexExistingPage(pageId, siteId, siteSecret, page);
         if (indexed.isPresent()) {
             return ResponseEntity.ok(indexed.get());
         } else {
@@ -125,7 +125,7 @@ public class SiteController {
         // TODO use SiteUpdate DTO with NO siteId & NO siteSecret provided
 
         // TODO make sure that an existing page is actually updated
-        Optional<FetchedPage> indexed = pageService.indexExistingPage(pageId, siteId, siteSecret, page);
+        Optional<FetchedPage> indexed = siteService.indexExistingPage(pageId, siteId, siteSecret, page);
         if (indexed.isPresent()) {
             return ResponseEntity.ok(indexed.get());
         } else {
@@ -137,7 +137,7 @@ public class SiteController {
     ResponseEntity<List<String>> fetchAll(
             @PathVariable(value = "siteId") UUID siteId
     ) {
-        Optional<List<String>> allDocumentsOfTenant = pageService.fetchAllDocuments(siteId);
+        Optional<List<String>> allDocumentsOfTenant = siteService.fetchAllDocuments(siteId);
         if (allDocumentsOfTenant.isPresent()) {
             return ResponseEntity.ok(allDocumentsOfTenant.get());
         } else {
@@ -175,7 +175,7 @@ public class SiteController {
     }
 
     private ResponseEntity<SiteIndexSummary> indexAsRssFeed(UUID siteId, UUID siteSecret, URI feedUrl, Boolean stripHtmlTags, Boolean isGeneric, Boolean clearIndex) {
-        Optional<SiteIndexSummary> siteCreatedInfo = pageService.indexFeed(feedUrl, siteId, siteSecret, stripHtmlTags, isGeneric, clearIndex);
+        Optional<SiteIndexSummary> siteCreatedInfo = siteService.indexFeed(feedUrl, siteId, siteSecret, stripHtmlTags, isGeneric, clearIndex);
         if (siteCreatedInfo.isPresent()) {
             return ResponseEntity.ok(siteCreatedInfo.get());
         } else {
@@ -190,7 +190,7 @@ public class SiteController {
             @RequestParam(name = "siteSecret") UUID siteSecret
     ) {
         LOG.info("delete-event" + pageId);
-        if (pageService.delete(siteId, siteSecret, pageId)) {
+        if (siteService.delete(siteId, siteSecret, pageId)) {
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build(); // do not return UNAUTHORIZED/FORBIDDEN as those could be miss-used for brute force attacks
@@ -213,7 +213,7 @@ public class SiteController {
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(name = "siteSecret") UUID siteSecret
     ) {
-        if (pageService.clearSite(siteId, siteSecret)) {
+        if (siteService.clearSite(siteId, siteSecret)) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.noContent().build();

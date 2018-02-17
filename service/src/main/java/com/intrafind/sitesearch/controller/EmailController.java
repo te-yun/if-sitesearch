@@ -17,8 +17,8 @@
 package com.intrafind.sitesearch.controller;
 
 import com.intrafind.sitesearch.dto.CaptchaVerification;
-import com.intrafind.sitesearch.service.PageService;
 import com.intrafind.sitesearch.service.SiteCrawler;
+import com.intrafind.sitesearch.service.SiteService;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -38,11 +38,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class EmailController {
     private static final Logger LOG = LoggerFactory.getLogger(EmailController.class);
     private static final AtomicInteger HARD_ABUSE_LIMIT = new AtomicInteger(0);
-    private final PageService pageService;
+    private final SiteService siteService;
 
     @Autowired
-    private EmailController(PageService pageService) {
-        this.pageService = pageService;
+    private EmailController(SiteService siteService) {
+        this.siteService = siteService;
     }
 
     @RequestMapping(path = "{siteId}/email/setup-info", method = RequestMethod.POST)
@@ -55,7 +55,7 @@ public class EmailController {
             return ResponseEntity.badRequest().body("E-mail limit exceeded.");
         }
 
-        if (!pageService.isAllowedToModify(siteId, siteSecret)) {
+        if (!siteService.isAllowedToModify(siteId, siteSecret)) {
             return ResponseEntity.notFound().build();
         }
 

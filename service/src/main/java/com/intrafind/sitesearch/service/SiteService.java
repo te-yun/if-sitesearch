@@ -47,8 +47,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
-public class PageService {
-    private static final Logger LOG = LoggerFactory.getLogger(PageService.class);
+public class SiteService {
+    private static final Logger LOG = LoggerFactory.getLogger(SiteService.class);
 
     private static final Index INDEX_SERVICE = IfinderCoreClient.newHessianClient(Index.class, Application.IFINDER_CORE + "/index");
     private static final String SITE_CONFIGURATION_DOCUMENT_PREFIX = "site-configuration-";
@@ -380,19 +380,14 @@ public class PageService {
             if (sitesCrawlStatus.isPresent()) {
                 final Instant oneDayAgo = Instant.now().minus(1, ChronoUnit.DAYS);
                 sitesCrawlStatus.get().getSites().stream()
-                        .filter(crawlStatus -> Instant.parse(crawlStatus.getCrawled()).isBefore(oneDayAgo))
+//                        .filter(crawlStatus -> Instant.parse(crawlStatus.getCrawled()).isBefore(oneDayAgo)) // TODO filter to achieve crawling distribution across the entire day
                         .forEach(crawlStatus -> {
-                            // TODO get a whitelist of siteIDs to recrawl  X
-                            // TODO filter siteId whitelist according to lastCrawl timestamp X
-                            // TODO foreach siteId get /profile's siteSecret X
-                            Optional<UUID> fetchedSiteSecret = fetchSiteSecret(crawlStatus.getSiteId());
+                            final Optional<UUID> fetchedSiteSecret = fetchSiteSecret(crawlStatus.getSiteId());
                             if (fetchedSiteSecret.isPresent()) {
                                 final UUID siteSecret = fetchedSiteSecret.get();
-                                // TODO using this siteSecret trigger a regular crawl X
-                                // TODO after crawl succeeds, update lastCrawl timestamp in the siteId crawl whitelist X
-                                final Optional<SiteProfile> siteProfile = fetchSiteProfile(crawlStatus.getSiteId(), siteSecret);
+                                final Optional<SiteProfile> siteProfile = fetchSiteProfile(crawlStatus.getSiteId());
                                 if (siteProfile.isPresent()) {
-                                    Optional<URI> siteUrl = siteProfile.get().getUrls().stream().findFirst();
+                                    final Optional<URI> siteUrl = siteProfile.get().getUrls().stream().findFirst();
                                     if (siteUrl.isPresent()) {
                                         final CrawlerJobResult crawlerJobResult = crawlerService.crawl(siteUrl.get().toString(), crawlStatus.getSiteId(), siteSecret);
                                         updateCrawlStatus(crawlStatus.getSiteId());
