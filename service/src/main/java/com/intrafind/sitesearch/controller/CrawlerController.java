@@ -166,10 +166,11 @@ public class CrawlerController {
 
     @RequestMapping(path = "crawl", method = RequestMethod.POST)
     ResponseEntity<SitesCrawlStatus> recrawlSites(
-            @RequestParam(value = "serviceSecret") UUID serviceSecret
+            @RequestParam(value = "serviceSecret") UUID serviceSecret,
+            @RequestParam(required = false, value = "allSitesCrawl") boolean allSitesCrawl
     ) {
         // TODO refactor code so `crawlerService` does not need to be passed as argument
-        final Optional<SitesCrawlStatus> sitesCrawlStatus = siteService.recrawlSites(serviceSecret, crawlerService);
+        final Optional<SitesCrawlStatus> sitesCrawlStatus = siteService.recrawlSites(serviceSecret, crawlerService, allSitesCrawl);
         if (sitesCrawlStatus.isPresent()) {
             return ResponseEntity.ok(sitesCrawlStatus.get());
         } else {
