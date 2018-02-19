@@ -375,12 +375,11 @@ public class SiteService {
     }
 
     // TODO refactor code so `crawlerService` does not need to be passed as argument
-    public Optional<SitesCrawlStatus> recrawlSites(UUID serviceSecret, CrawlerService crawlerService, boolean allSiteCrawl) {
+    public Optional<SitesCrawlStatus> recrawlSites(UUID serviceSecret, CrawlerService crawlerService, SitesCrawlStatus sitesCrawlStatusUpdate, boolean allSiteCrawl) {
         if (ADMIN_SITE_SECRET.equals(serviceSecret)) {
-            final Optional<SitesCrawlStatus> sitesCrawlStatus = fetchSitesCrawlStatus();
-            if (sitesCrawlStatus.isPresent()) {
+//            final Optional<SitesCrawlStatus> sitesCrawlStatus = fetchSitesCrawlStatus();
                 final Instant oneDayAgo = Instant.now().minus(1, ChronoUnit.DAYS);
-                sitesCrawlStatus.get().getSites().stream()
+            sitesCrawlStatusUpdate.getSites().stream()
                         .filter(crawlStatus -> Instant.parse(crawlStatus.getCrawled()).isBefore(oneDayAgo) || allSiteCrawl) // TODO filter to achieve crawling distribution across the entire day
                         .forEach(crawlStatus -> {
                             final Optional<UUID> fetchedSiteSecret = fetchSiteSecret(crawlStatus.getSiteId());
@@ -398,7 +397,6 @@ public class SiteService {
                             }
                         });
                 return fetchSitesCrawlStatus();
-            }
         }
         return Optional.empty();
     }
@@ -428,5 +426,18 @@ public class SiteService {
             }
         }));
         return Optional.of(new SitesCrawlStatus(sitesCrawlStatus));
+    }
+
+    public Optional<SiteProfile> updateSiteProfile(UUID siteId, UUID siteSecret, SiteProfileCreation siteProfileUpdate) {
+        if (ADMIN_SITE_SECRET.equals(siteSecret)) {
+            final Optional<UUID> fetchedSiteSecret = fetchSiteSecret(siteId);
+            if (fetchedSiteSecret.isPresent()) {
+                if (fetchedSiteSecret.get().equals(siteSecret)) {
+                    storeSite(siteId, siteSecret, siteProfileUpdate.getUrls(), siteProfileUpdate.getEmail());
+                }
+            }
+            return Optional.of(new SiteProfile(siteId, siteSecret, siteProfileUpdate.getUrls(), siteProfileUpdate.getEmail()));
+        }
+        return Optional.empty();
     }
 }

@@ -79,6 +79,26 @@ public class SiteController {
         }
     }
 
+    @RequestMapping(path = "{siteId}/profile", method = RequestMethod.PUT)
+    ResponseEntity<SiteProfile> upadteSiteProfile(
+            @PathVariable(value = "siteId") UUID siteId,
+            @RequestParam(value = "siteSecret") UUID siteSecret,
+            @RequestBody SiteProfileCreation siteProfileUpdate
+    ) {
+        final Optional<SiteProfile> siteProfileUpdated = siteService.updateSiteProfile(siteId, siteSecret, siteProfileUpdate);
+        if (siteProfileUpdated.isPresent()) {
+            final SiteProfile siteProfile = siteProfileUpdated.get();
+            return ResponseEntity.ok(new SiteProfile(
+                    siteProfile.getId(),
+                    siteProfile.getSecret(),
+                    siteProfile.getUrls(),
+                    siteProfile.getEmail())
+            );
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @RequestMapping(path = "{siteId}/pages", method = RequestMethod.GET)
     ResponseEntity<FetchedPage> fetchViaUrl(
             @PathVariable(value = "siteId") UUID siteId,
