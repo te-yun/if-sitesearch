@@ -18,8 +18,8 @@ package com.intrafind.sitesearch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intrafind.sitesearch.dto.*;
-import com.intrafind.sitesearch.integration.PageTest;
 import com.intrafind.sitesearch.integration.SearchTest;
+import com.intrafind.sitesearch.integration.SiteTest;
 import com.intrafind.sitesearch.jmh.LoadIndex2Users;
 import okhttp3.*;
 import org.junit.Test;
@@ -283,7 +283,7 @@ public class SmokeTest {
     @Test
     public void updatePage() throws Exception {
         String entropyToCheckInUpdate = "https://example.com/" + UUID.randomUUID();
-        final Page pageToUpdate = PageTest.buildPage();
+        final Page pageToUpdate = SiteTest.buildPage();
         pageToUpdate.setUrl(entropyToCheckInUpdate);
         Request request = new Request.Builder()
                 .url(SITES_API + LoadIndex2Users.SEARCH_SITE_ID + "/pages?siteSecret=" + LoadIndex2Users.SEARCH_SITE_SECRET)

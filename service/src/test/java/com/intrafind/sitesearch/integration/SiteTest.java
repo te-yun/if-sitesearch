@@ -39,8 +39,8 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class PageTest {
-    private final static Logger LOG = LoggerFactory.getLogger(PageTest.class);
+public class SiteTest {
+    private final static Logger LOG = LoggerFactory.getLogger(SiteTest.class);
     @Autowired
     private TestRestTemplate caller;
 
