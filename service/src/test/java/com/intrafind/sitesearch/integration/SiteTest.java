@@ -135,7 +135,7 @@ public class SiteTest {
         final SiteProfileUpdate siteProfileUpdateWithSecret = new SiteProfileUpdate(newSiteSecret, urls, "update." + CrawlerTest.TEST_EMAIL_ADDRESS);
         final ResponseEntity<SiteProfileUpdate> updatedSiteWithSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + createdSiteProfile.getSiteSecret(),
                 HttpMethod.PUT, new HttpEntity<>(siteProfileUpdateWithSecret), SiteProfileUpdate.class);
-        assertEquals(createdSiteProfile.getSiteSecret(), updatedSiteWithSecret.getBody().getSecret());
+        assertEquals(newSiteSecret, updatedSiteWithSecret.getBody().getSecret());
         assertEquals("update." + CrawlerTest.TEST_EMAIL_ADDRESS, updatedSiteWithSecret.getBody().getEmail());
         assertEquals(urls, updatedSiteWithSecret.getBody().getUrls());
         assertEquals(urls.size(), updatedSiteWithSecret.getBody().getUrls().size());
