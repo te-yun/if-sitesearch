@@ -88,12 +88,23 @@ public class SiteTest {
 
     @Test
     public void fetchAndUpdateCrawlStatus() {
-        ResponseEntity<SitesCrawlStatus> crawlStatus = caller.exchange(SiteController.ENDPOINT + "/crawl/status" +
+        ResponseEntity<SitesCrawlStatus> crawlStatus = caller.exchange(SiteController.ENDPOINT + "/crawl/status?serviceSecret=" +
                 ADMIN_SITE_SECRET, HttpMethod.GET, HttpEntity.EMPTY, SitesCrawlStatus.class);
         assertEquals(HttpStatus.OK, crawlStatus.getStatusCode());
         assertTrue(1 <= crawlStatus.getBody().getSites().size());
         assertNotNull(crawlStatus.getBody().getSites().get(0).getSiteId());
         assertTrue(Instant.now().isAfter(Instant.parse(crawlStatus.getBody().getSites().get(0).getCrawled())));
+
+        // TODO update site crawl status
+//        SitesCrawlStatus updatedCrawlStatus=  crawlStatus.getBody();
+//        Instant now = Instant.now();
+////        updatedCrawlStatus.getSites()// TODO determin test SiteID
+//        ResponseEntity<SitesCrawlStatus> crawlStatusUpdate = caller.exchange(SiteController.ENDPOINT + "/crawl/status" +
+//                ADMIN_SITE_SECRET, HttpMethod.PUT, new HttpEntity<>(updatedCrawlStatus), SitesCrawlStatus.class);
+//        assertEquals(HttpStatus.OK, crawlStatus.getStatusCode());
+//        assertTrue(1 <= crawlStatus.getBody().getSites().size());
+//        assertNotNull(crawlStatus.getBody().getSites().get(0).getSiteId());
+//        assertTrue(Instant.now().isAfter(Instant.parse(crawlStatus.getBody().getSites().get(0).getCrawled())));
     }
 
     @Test
