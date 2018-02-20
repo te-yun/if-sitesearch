@@ -32,6 +32,7 @@ import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.net.URI;
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -83,6 +84,16 @@ public class SiteTest {
         assertFalse(newlyCreatedPage.getBody().getUrl().isEmpty());
 
         return newlyCreatedPage.getBody();
+    }
+
+    @Test
+    public void fetchAndUpdateCrawlStatus() {
+        ResponseEntity<SitesCrawlStatus> crawlStatus = caller.exchange(SiteController.ENDPOINT + "/crawl/status" +
+                ADMIN_SITE_SECRET, HttpMethod.GET, HttpEntity.EMPTY, SitesCrawlStatus.class);
+        assertEquals(HttpStatus.OK, crawlStatus.getStatusCode());
+        assertTrue(1 <= crawlStatus.getBody().getSites().size());
+        assertNotNull(crawlStatus.getBody().getSites().get(0).getSiteId());
+        assertTrue(Instant.now().isAfter(Instant.parse(crawlStatus.getBody().getSites().get(0).getCrawled())));
     }
 
     @Test
