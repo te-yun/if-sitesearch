@@ -168,7 +168,7 @@ public class CrawlerController {
     ResponseEntity<SitesCrawlStatus> recrawlSites(
             @RequestParam(value = "serviceSecret") UUID serviceSecret,
             @RequestBody SitesCrawlStatus sitesCrawlStatusUpdate,
-            @RequestParam(required = false, value = "allSitesCrawl") boolean allSitesCrawl
+            @RequestParam(required = false, value = "allSitesCrawl", defaultValue = "false") boolean allSitesCrawl
     ) {
         // TODO refactor code so `crawlerService` does not need to be passed as argument
         final Optional<SitesCrawlStatus> sitesCrawlStatus = siteService.recrawlSites(serviceSecret, crawlerService, sitesCrawlStatusUpdate, allSitesCrawl);

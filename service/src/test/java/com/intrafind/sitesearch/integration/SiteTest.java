@@ -115,7 +115,7 @@ public class SiteTest {
         assertEquals(HttpStatus.OK, crawlStatusUpdated.getStatusCode());
         assertEquals(initSize, crawlStatusUpdated.getBody().getSites().size());
         assertNotNull(findSearchSiteCrawlStatus(crawlStatusUpdated.getBody()).getSiteId());
-        assertTrue(now.isAfter(Instant.parse(findSearchSiteCrawlStatus(crawlStatusUpdated.getBody()).getCrawled())));
+        assertTrue(now.equals(Instant.parse(findSearchSiteCrawlStatus(crawlStatusUpdated.getBody()).getCrawled())));
     }
 
     private CrawlStatus findSearchSiteCrawlStatus(SitesCrawlStatus sitesCrawlStatus) {
