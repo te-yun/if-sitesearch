@@ -41,6 +41,7 @@ import static org.junit.Assert.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SiteTest {
     private final static Logger LOG = LoggerFactory.getLogger(SiteTest.class);
+    private static final UUID ADMIN_SITE_SECRET = UUID.fromString(System.getenv("ADMIN_SITE_SECRET"));
     @Autowired
     private TestRestTemplate caller;
 
@@ -102,7 +103,7 @@ public class SiteTest {
         assertEquals(urls, actual.getBody().getUrls());
 
         ResponseEntity<SiteProfile> siteProfileWithAdminSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() +
-                "/profile?siteSecret=" + UUID.fromString(System.getenv("ADMIN_SITE_SECRET")), HttpMethod.GET, HttpEntity.EMPTY, SiteProfile.class);
+                "/profile?siteSecret=" + ADMIN_SITE_SECRET, HttpMethod.GET, HttpEntity.EMPTY, SiteProfile.class);
         assertEquals(HttpStatus.OK, siteProfileWithAdminSecret.getStatusCode());
 
         ResponseEntity<SiteProfile> siteProfileWithInvalidSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() +
@@ -111,6 +112,7 @@ public class SiteTest {
 
         // update site profile
         urls.add(URI.create("https://update.example.com"));
+
         final SiteProfileUpdate siteProfileUpdate = new SiteProfileUpdate(createdSiteProfile.getSiteSecret(), urls, "update." + CrawlerTest.TEST_EMAIL_ADDRESS);
         final ResponseEntity<SiteProfileUpdate> updatedSite = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + createdSiteProfile.getSiteSecret(),
                 HttpMethod.PUT, new HttpEntity<>(siteProfileUpdate), SiteProfileUpdate.class);
@@ -118,10 +120,37 @@ public class SiteTest {
         assertEquals("update." + CrawlerTest.TEST_EMAIL_ADDRESS, updatedSite.getBody().getEmail());
         assertEquals(urls, updatedSite.getBody().getUrls());
         assertEquals(urls.size(), updatedSite.getBody().getUrls().size());
-        // TODO do not update as ADMIN
-        // TODO do update as NON-ADMIN
-        // TODO do update without secret
-        // TODO do update with secret
+
+        // assure site profile is impossible with wrong site secret
+        final ResponseEntity<SiteProfileUpdate> updatedSiteWithInvalidSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + UUID.randomUUID(),
+                HttpMethod.PUT, new HttpEntity<>(siteProfileUpdate), SiteProfileUpdate.class);
+        assertEquals(HttpStatus.NOT_FOUND, updatedSiteWithInvalidSecret.getStatusCode());
+
+        final ResponseEntity<SiteProfileUpdate> updatedSiteWithAdminSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + ADMIN_SITE_SECRET,
+                HttpMethod.PUT, new HttpEntity<>(siteProfileUpdate), SiteProfileUpdate.class);
+        assertEquals(HttpStatus.NOT_FOUND, updatedSiteWithAdminSecret.getStatusCode());
+
+        // update site profile's secret
+        final UUID newSiteSecret = UUID.randomUUID();
+        final SiteProfileUpdate siteProfileUpdateWithSecret = new SiteProfileUpdate(newSiteSecret, urls, "update." + CrawlerTest.TEST_EMAIL_ADDRESS);
+        final ResponseEntity<SiteProfileUpdate> updatedSiteWithSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + createdSiteProfile.getSiteSecret(),
+                HttpMethod.PUT, new HttpEntity<>(siteProfileUpdateWithSecret), SiteProfileUpdate.class);
+        assertEquals(createdSiteProfile.getSiteSecret(), updatedSiteWithSecret.getBody().getSecret());
+        assertEquals("update." + CrawlerTest.TEST_EMAIL_ADDRESS, updatedSiteWithSecret.getBody().getEmail());
+        assertEquals(urls, updatedSiteWithSecret.getBody().getUrls());
+        assertEquals(urls.size(), updatedSiteWithSecret.getBody().getUrls().size());
+        assertEquals(newSiteSecret, updatedSiteWithSecret.getBody().getSecret());
+
+        // fetching profile with update site secret works
+        final ResponseEntity<SiteProfileUpdate> fetchSiteProfileWithNewSiteSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + newSiteSecret,
+                HttpMethod.GET, new HttpEntity<>(siteProfileUpdateWithSecret), SiteProfileUpdate.class);
+        assertEquals(HttpStatus.OK, fetchSiteProfileWithNewSiteSecret.getStatusCode());
+        assertEquals(newSiteSecret, fetchSiteProfileWithNewSiteSecret.getBody().getSecret());
+
+        // fetching profile with old site secret does not work
+        final ResponseEntity<SiteProfileUpdate> fetchSiteProfileWithOldSiteSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + createdSiteProfile.getSiteSecret(),
+                HttpMethod.GET, new HttpEntity<>(siteProfileUpdateWithSecret), SiteProfileUpdate.class);
+        assertEquals(HttpStatus.NOT_FOUND, fetchSiteProfileWithOldSiteSecret.getStatusCode());
     }
 
     @Test
