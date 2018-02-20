@@ -20,6 +20,7 @@ import java.net.URI;
 import java.util.Set;
 import java.util.UUID;
 
+// TODO consolidate with SiteProfileUpdate?
 public class SiteProfile {
     private UUID id;
     private UUID secret;

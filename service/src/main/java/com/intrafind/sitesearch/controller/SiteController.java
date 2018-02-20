@@ -48,7 +48,7 @@ public class SiteController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity<SiteCreation> createNewSite(@RequestBody(required = false) SiteProfileCreation siteProfileCreation) {
+    ResponseEntity<SiteCreation> createNewSite(@RequestBody(required = false) SiteProfileUpdate siteProfileCreation) {
         final SiteCreation newlyCreatedSite;
         if (siteProfileCreation == null) {
             newlyCreatedSite = siteService.createSite();
@@ -83,7 +83,7 @@ public class SiteController {
     ResponseEntity<SiteProfile> upadteSiteProfile(
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "siteSecret") UUID siteSecret,
-            @RequestBody SiteProfileCreation siteProfileUpdate
+            @RequestBody SiteProfileUpdate siteProfileUpdate
     ) {
         final Optional<SiteProfile> siteProfileUpdated = siteService.updateSiteProfile(siteId, siteSecret, siteProfileUpdate);
         if (siteProfileUpdated.isPresent()) {

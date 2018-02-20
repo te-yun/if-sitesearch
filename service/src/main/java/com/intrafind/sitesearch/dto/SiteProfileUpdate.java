@@ -18,17 +18,34 @@ package com.intrafind.sitesearch.dto;
 
 import java.net.URI;
 import java.util.Set;
+import java.util.UUID;
 
-public class SiteProfileCreation {
+// TODO consolidate with SiteProfile?
+public class SiteProfileUpdate {
+    private UUID secret;
     private Set<URI> urls;
     private String email;
 
-    private SiteProfileCreation() {
+    private SiteProfileUpdate() {
     }
 
-    public SiteProfileCreation(Set<URI> urls, String email) {
+    public SiteProfileUpdate(UUID secret, Set<URI> urls, String email) {
+        this.secret = secret;
         this.urls = urls;
         this.email = email;
+    }
+
+    public SiteProfileUpdate(Set<URI> urls, String email) {
+        this.urls = urls;
+        this.email = email;
+    }
+
+    public UUID getSecret() {
+        return secret;
+    }
+
+    public void setSecret(UUID secret) {
+        this.secret = secret;
     }
 
     public Set<URI> getUrls() {

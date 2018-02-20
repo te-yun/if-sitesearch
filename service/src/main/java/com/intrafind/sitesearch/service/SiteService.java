@@ -428,15 +428,13 @@ public class SiteService {
         return Optional.of(new SitesCrawlStatus(sitesCrawlStatus));
     }
 
-    public Optional<SiteProfile> updateSiteProfile(UUID siteId, UUID siteSecret, SiteProfileCreation siteProfileUpdate) {
-        if (ADMIN_SITE_SECRET.equals(siteSecret)) {
-            final Optional<UUID> fetchedSiteSecret = fetchSiteSecret(siteId);
+    public Optional<SiteProfile> updateSiteProfile(UUID siteId, UUID siteSecret, SiteProfileUpdate siteProfileUpdate) {
+        final Optional<UUID> fetchedSiteSecret = fetchSiteSecret(siteId);
             if (fetchedSiteSecret.isPresent()) {
                 if (fetchedSiteSecret.get().equals(siteSecret)) {
-                    storeSite(siteId, siteSecret, siteProfileUpdate.getUrls(), siteProfileUpdate.getEmail());
+                    storeSite(siteId, siteProfileUpdate.getSecret(), siteProfileUpdate.getUrls(), siteProfileUpdate.getEmail());
+                    return Optional.of(new SiteProfile(siteId, siteProfileUpdate.getSecret(), siteProfileUpdate.getUrls(), siteProfileUpdate.getEmail()));
                 }
-            }
-            return Optional.of(new SiteProfile(siteId, siteSecret, siteProfileUpdate.getUrls(), siteProfileUpdate.getEmail()));
         }
         return Optional.empty();
     }

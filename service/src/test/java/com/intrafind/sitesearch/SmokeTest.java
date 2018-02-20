@@ -52,6 +52,7 @@ public class SmokeTest {
     public static final String SITES_API = "https://api.sitesearch.cloud/sites/";
     private static final UUID BW_BANK_SITE_ID = UUID.fromString("269b0538-120b-44b1-a365-488c2f3fcc15");
     private static final int HEADER_SIZE = 399;
+    public static final MediaType JSON_MEDIA_TYPE = MediaType.parse("application/json");
 
     @Autowired
     private TestRestTemplate caller;
@@ -288,7 +289,7 @@ public class SmokeTest {
         Request request = new Request.Builder()
                 .url(SITES_API + LoadIndex2Users.SEARCH_SITE_ID + "/pages?siteSecret=" + LoadIndex2Users.SEARCH_SITE_SECRET)
                 .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
-                .put(RequestBody.create(MediaType.parse("application/json"), MAPPER.writeValueAsBytes(pageToUpdate)))
+                .put(RequestBody.create(JSON_MEDIA_TYPE, MAPPER.writeValueAsBytes(pageToUpdate)))
                 .build();
         final Response response = HTTP_CLIENT.newCall(request).execute();
 

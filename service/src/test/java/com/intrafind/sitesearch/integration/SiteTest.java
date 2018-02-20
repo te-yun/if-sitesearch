@@ -57,7 +57,7 @@ public class SiteTest {
     public void init() {
     }
 
-    private SiteCreation createNewSite(SiteProfileCreation siteProfileCreation) {
+    private SiteCreation createNewSite(SiteProfileUpdate siteProfileCreation) {
         ResponseEntity<SiteCreation> actual = caller.exchange(SiteController.ENDPOINT, HttpMethod.POST, new HttpEntity<>(siteProfileCreation), SiteCreation.class);
 
         assertEquals(HttpStatus.CREATED, actual.getStatusCode());
@@ -87,7 +87,7 @@ public class SiteTest {
     @Test
     public void createNewSiteWithProfile() {
         final Set<URI> urls = new HashSet<>(Arrays.asList(URI.create("https://example.com"), URI.create("https://subdomain.example.com")));
-        final SiteProfileCreation siteProfileCreation = new SiteProfileCreation(
+        final SiteProfileUpdate siteProfileCreation = new SiteProfileUpdate(
                 urls,
                 CrawlerTest.TEST_EMAIL_ADDRESS
         );
@@ -108,6 +108,20 @@ public class SiteTest {
         ResponseEntity<SiteProfile> siteProfileWithInvalidSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() +
                 "/profile?siteSecret=" + UUID.randomUUID(), HttpMethod.GET, HttpEntity.EMPTY, SiteProfile.class);
         assertEquals(HttpStatus.NOT_FOUND, siteProfileWithInvalidSecret.getStatusCode());
+
+        // update site profile
+        urls.add(URI.create("https://update.example.com"));
+        final SiteProfileUpdate siteProfileUpdate = new SiteProfileUpdate(createdSiteProfile.getSiteSecret(), urls, "update." + CrawlerTest.TEST_EMAIL_ADDRESS);
+        final ResponseEntity<SiteProfileUpdate> updatedSite = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + createdSiteProfile.getSiteSecret(),
+                HttpMethod.PUT, new HttpEntity<>(siteProfileUpdate), SiteProfileUpdate.class);
+        assertEquals(createdSiteProfile.getSiteSecret(), updatedSite.getBody().getSecret());
+        assertEquals("update." + CrawlerTest.TEST_EMAIL_ADDRESS, updatedSite.getBody().getEmail());
+        assertEquals(urls, updatedSite.getBody().getUrls());
+        assertEquals(urls.size(), updatedSite.getBody().getUrls().size());
+        // TODO do not update as ADMIN
+        // TODO do update as NON-ADMIN
+        // TODO do update without secret
+        // TODO do update with secret
     }
 
     @Test
