@@ -92,6 +92,7 @@ public class SiteTest {
                 ADMIN_SITE_SECRET, HttpMethod.GET, HttpEntity.EMPTY, SitesCrawlStatus.class);
         assertEquals(HttpStatus.OK, crawlStatus.getStatusCode());
         assertTrue(1 <= crawlStatus.getBody().getSites().size());
+        int initSize = crawlStatus.getBody().getSites().size();
         assertNotNull(findSearchSiteCrawlStatus(crawlStatus.getBody()).getSiteId());
         assertTrue(Instant.now().isAfter(Instant.parse(findSearchSiteCrawlStatus(crawlStatus.getBody()).getCrawled())));
 
@@ -101,10 +102,10 @@ public class SiteTest {
         final CrawlStatus searchSiteCrawlStatus = findSearchSiteCrawlStatus(updatedCrawlStatus);
         assertFalse(now.toString().equals(searchSiteCrawlStatus.getCrawled()));
         searchSiteCrawlStatus.setCrawled(now.toString());
+        updatedCrawlStatus.getSites().add(searchSiteCrawlStatus);
         final ResponseEntity<SitesCrawlStatus> crawlStatusUpdate = caller.exchange(SiteController.ENDPOINT + "/crawl/status?serviceSecret=" +
-                ADMIN_SITE_SECRET, HttpMethod.PUT, new HttpEntity<>(searchSiteCrawlStatus), SitesCrawlStatus.class);
+                ADMIN_SITE_SECRET, HttpMethod.PUT, new HttpEntity<>(updatedCrawlStatus), SitesCrawlStatus.class);
         assertEquals(HttpStatus.OK, crawlStatus.getStatusCode());
-        assertTrue(1 <= crawlStatus.getBody().getSites().size());
         assertNotNull(findSearchSiteCrawlStatus(crawlStatusUpdate.getBody()).getSiteId());
         assertTrue(Instant.now().equals(Instant.parse(findSearchSiteCrawlStatus(crawlStatusUpdate.getBody()).getCrawled())));
 
@@ -112,13 +113,13 @@ public class SiteTest {
         final ResponseEntity<SitesCrawlStatus> crawlStatusUpdated = caller.exchange(SiteController.ENDPOINT + "/crawl/status?serviceSecret=" +
                 ADMIN_SITE_SECRET, HttpMethod.GET, HttpEntity.EMPTY, SitesCrawlStatus.class);
         assertEquals(HttpStatus.OK, crawlStatusUpdated.getStatusCode());
-        assertTrue(1 <= crawlStatusUpdated.getBody().getSites().size());
+        assertEquals(initSize, crawlStatusUpdated.getBody().getSites().size());
         assertNotNull(findSearchSiteCrawlStatus(crawlStatusUpdated.getBody()).getSiteId());
         assertTrue(Instant.now().isAfter(Instant.parse(findSearchSiteCrawlStatus(crawlStatusUpdated.getBody()).getCrawled())));
     }
 
-    private CrawlStatus findSearchSiteCrawlStatus(SitesCrawlStatus updatedCrawlStatus) {
-        return updatedCrawlStatus.getSites().stream().filter(siteStatus -> siteStatus.getSiteId().equals(SearchTest.SEARCH_SITE_ID)).findAny().get();
+    private CrawlStatus findSearchSiteCrawlStatus(SitesCrawlStatus sitesCrawlStatus) {
+        return sitesCrawlStatus.getSites().stream().filter(siteStatus -> siteStatus.getSiteId().equals(SearchTest.SEARCH_SITE_ID)).findAny().get();
     }
 
     @Test
