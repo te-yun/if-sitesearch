@@ -88,7 +88,7 @@ public class SiteTest {
 
     @Test
     public void fetchAndUpdateCrawlStatus() {
-        ResponseEntity<SitesCrawlStatus> crawlStatus = caller.exchange(SiteController.ENDPOINT + "/crawl/status?serviceSecret=" +
+        final ResponseEntity<SitesCrawlStatus> crawlStatus = caller.exchange(SiteController.ENDPOINT + "/crawl/status?serviceSecret=" +
                 ADMIN_SITE_SECRET, HttpMethod.GET, HttpEntity.EMPTY, SitesCrawlStatus.class);
         assertEquals(HttpStatus.OK, crawlStatus.getStatusCode());
         assertTrue(1 <= crawlStatus.getBody().getSites().size());
@@ -101,13 +101,20 @@ public class SiteTest {
         final CrawlStatus searchSiteCrawlStatus = findSearchSiteCrawlStatus(updatedCrawlStatus);
         assertFalse(now.toString().equals(searchSiteCrawlStatus.getCrawled()));
         searchSiteCrawlStatus.setCrawled(now.toString());
-        // verify crawl status of a specific site
         final ResponseEntity<SitesCrawlStatus> crawlStatusUpdate = caller.exchange(SiteController.ENDPOINT + "/crawl/status?serviceSecret=" +
                 ADMIN_SITE_SECRET, HttpMethod.PUT, new HttpEntity<>(searchSiteCrawlStatus), SitesCrawlStatus.class);
         assertEquals(HttpStatus.OK, crawlStatus.getStatusCode());
         assertTrue(1 <= crawlStatus.getBody().getSites().size());
         assertNotNull(findSearchSiteCrawlStatus(crawlStatusUpdate.getBody()).getSiteId());
         assertTrue(Instant.now().equals(Instant.parse(findSearchSiteCrawlStatus(crawlStatusUpdate.getBody()).getCrawled())));
+
+        // verify crawl status of a specific site
+        final ResponseEntity<SitesCrawlStatus> crawlStatusUpdated = caller.exchange(SiteController.ENDPOINT + "/crawl/status?serviceSecret=" +
+                ADMIN_SITE_SECRET, HttpMethod.GET, HttpEntity.EMPTY, SitesCrawlStatus.class);
+        assertEquals(HttpStatus.OK, crawlStatusUpdated.getStatusCode());
+        assertTrue(1 <= crawlStatusUpdated.getBody().getSites().size());
+        assertNotNull(findSearchSiteCrawlStatus(crawlStatusUpdated.getBody()).getSiteId());
+        assertTrue(Instant.now().isAfter(Instant.parse(findSearchSiteCrawlStatus(crawlStatusUpdated.getBody()).getCrawled())));
     }
 
     private CrawlStatus findSearchSiteCrawlStatus(SitesCrawlStatus updatedCrawlStatus) {
