@@ -109,6 +109,7 @@ public class CrawlerTest {
 
     @Test
     public void recrawl() {
+        // TODO use findSearchSiteCrawlStatus where appropriate to validate only the test site ID
         final SitesCrawlStatus freshlyCrawledSiteStatus = new SitesCrawlStatus(Collections.singletonList(new CrawlStatus(CRAWL_SITE_SECRET, Instant.now())));
 
         // not authenticated crawl
@@ -117,7 +118,6 @@ public class CrawlerTest {
                         new HttpEntity<>(freshlyCrawledSiteStatus), SitesCrawlStatus.class);
         assertEquals(HttpStatus.BAD_REQUEST, recrawlNotAuthenticated.getStatusCode());
 
-        // TODO test crawling new sites => w/o allSitesCrawl marker 200 but old timestamp
         // crawl freshly crawled site
         final ResponseEntity<SitesCrawlStatus> recrawlFreshSite = caller
                 .postForEntity(SiteController.ENDPOINT + "/crawl?serviceSecret=" + SiteTest.ADMIN_SITE_SECRET,
@@ -126,7 +126,10 @@ public class CrawlerTest {
         final SitesCrawlStatus freshCrawlStatus = recrawlFreshSite.getBody();
         assertEquals(1, freshCrawlStatus.getSites().size());
         assertEquals(CRAWL_SITE_ID, freshCrawlStatus.getSites().get(0).getSiteId());
-        assertEquals(freshlyCrawledSiteStatus.getSites().get(0).getCrawled(), freshCrawlStatus.getSites().get(0).getCrawled());
+        assertTrue(Instant.parse(
+                freshlyCrawledSiteStatus.getSites().get(0).getCrawled())
+                .isAfter(Instant.parse(
+                        freshCrawlStatus.getSites().get(0).getCrawled())));
 
         // crawl all sites
         final ResponseEntity<SitesCrawlStatus> recrawl = caller
@@ -139,14 +142,13 @@ public class CrawlerTest {
         assertEquals(CRAWL_SITE_ID, sitesCrawlStatus.getSites().get(0).getSiteId());
         assertTrue(Instant.now().isAfter(Instant.parse(sitesCrawlStatus.getSites().get(0).getCrawled())));
 
-        // TODO test crawling old sites => w/o allSitesCrawl marker 200 but new timestamp
         // crawl stale site
         final SitesCrawlStatus staleSiteStatus = new SitesCrawlStatus(Collections.singletonList(new CrawlStatus(CRAWL_SITE_SECRET, Instant.now().minus(1, ChronoUnit.DAYS))));
         final ResponseEntity<SitesCrawlStatus> recrawlStaleSite = caller
                 .postForEntity(SiteController.ENDPOINT + "/crawl?serviceSecret=" + SiteTest.ADMIN_SITE_SECRET,
                         new HttpEntity<>(staleSiteStatus), SitesCrawlStatus.class);
-        assertEquals(HttpStatus.OK, recrawlFreshSite.getStatusCode());
-        final SitesCrawlStatus staleCrawlStatus = recrawlFreshSite.getBody();
+        assertEquals(HttpStatus.OK, recrawlStaleSite.getStatusCode());
+        final SitesCrawlStatus staleCrawlStatus = recrawlStaleSite.getBody();
         assertEquals(1, staleCrawlStatus.getSites().size());
         assertEquals(CRAWL_SITE_ID, staleCrawlStatus.getSites().get(0).getSiteId());
         assertTrue(Instant.parse(
