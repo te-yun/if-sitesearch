@@ -107,12 +107,17 @@ h3 .tipsy {
 
 .form-inline input[type="text"] {
     width: calc(100% - 66px);
+    height: 20px;
     padding: 10px 12px;
     border: 1px solid #e3e3e3;
     outline: 0;
     background-color: #fdfdfd;
     font-size: 14px;
     color: #767676;
+}
+
+.form-inline input[type="text"]:focus {
+    font-size: 16px;
 }
 
 button:disabled {
