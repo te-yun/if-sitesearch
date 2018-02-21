@@ -109,7 +109,6 @@ public class CrawlerTest {
 
     @Test
     public void recrawl() {
-        // TODO use findSearchSiteCrawlStatus where appropriate to validate only the test site ID
         final SitesCrawlStatus freshlyCrawledSiteStatus = new SitesCrawlStatus(Collections.singletonList(new CrawlStatus(CRAWL_SITE_SECRET, Instant.now())));
 
         // not authenticated crawl
@@ -126,6 +125,7 @@ public class CrawlerTest {
         final SitesCrawlStatus freshCrawlStatus = recrawlFreshSite.getBody();
         assertEquals(1, freshCrawlStatus.getSites().size());
         assertEquals(CRAWL_SITE_ID, freshCrawlStatus.getSites().get(0).getSiteId());
+        // TODO use findSearchSiteCrawlStatus where appropriate to validate only the test site ID
         assertTrue(Instant.parse(
                 freshlyCrawledSiteStatus.getSites().get(0).getCrawled())
                 .isAfter(Instant.parse(
