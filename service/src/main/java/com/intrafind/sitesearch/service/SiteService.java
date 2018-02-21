@@ -105,8 +105,21 @@ public class SiteService {
     private Optional<SiteProfile> fetchSiteProfile(UUID siteId) {
         Optional<Document> siteProfile = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
         return siteProfile.map(document -> {
-            Set<URI> urls = document.getAll("urls").stream().map(URI::create).collect(Collectors.toSet());
-            return new SiteProfile(siteId, UUID.fromString(document.get("secret")), urls, document.get("email"));
+            final Set<URI> urls;
+            if (document.getAll("urls") == null) {
+                urls = Collections.emptySet();
+            } else {
+                urls = document.getAll("urls").stream().map(URI::create).collect(Collectors.toSet());
+            }
+
+            final String email;
+            if (document.get("email") == null) {
+                email = "";
+            } else {
+                email = document.get("email");
+            }
+
+            return new SiteProfile(siteId, UUID.fromString(document.get("secret")), urls, email);
         });
     }
 

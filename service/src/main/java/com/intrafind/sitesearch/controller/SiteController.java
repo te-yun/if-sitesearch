@@ -80,7 +80,7 @@ public class SiteController {
     }
 
     @RequestMapping(path = "{siteId}/profile", method = RequestMethod.PUT)
-    ResponseEntity<SiteProfile> upadteSiteProfile(
+    ResponseEntity<SiteProfile> updateSiteProfile(
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "siteSecret") UUID siteSecret,
             @RequestBody SiteProfileUpdate siteProfileUpdate

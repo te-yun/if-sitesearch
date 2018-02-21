@@ -42,7 +42,7 @@ import static org.junit.Assert.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SiteTest {
     private final static Logger LOG = LoggerFactory.getLogger(SiteTest.class);
-    private static final UUID ADMIN_SITE_SECRET = UUID.fromString(System.getenv("ADMIN_SITE_SECRET"));
+    static final UUID ADMIN_SITE_SECRET = UUID.fromString(System.getenv("ADMIN_SITE_SECRET"));
     @Autowired
     private TestRestTemplate caller;
 

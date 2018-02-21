@@ -17,7 +17,9 @@
 package com.intrafind.sitesearch.integration;
 
 import com.intrafind.sitesearch.controller.SiteController;
+import com.intrafind.sitesearch.dto.CrawlStatus;
 import com.intrafind.sitesearch.dto.CrawlerJobResult;
+import com.intrafind.sitesearch.dto.SitesCrawlStatus;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -25,15 +27,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -100,6 +105,51 @@ public class CrawlerTest {
         assertNotNull(request.getBody());
         assertEquals(7, request.getBody().getPageCount());
         assertEquals(8, request.getBody().getUrls().size());
+    }
+
+    @Test
+    public void recrawl() {
+        // crawl all sites
+        final SitesCrawlStatus freshlyCrawledSiteStatus = new SitesCrawlStatus(Collections.singletonList(new CrawlStatus(CRAWL_SITE_SECRET, Instant.now())));
+        final ResponseEntity<SitesCrawlStatus> recrawl = caller
+                .postForEntity(SiteController.ENDPOINT + "/crawl?serviceSecret=" + SiteTest.ADMIN_SITE_SECRET + "&allSitesCrawl=true",
+                        new HttpEntity<>(freshlyCrawledSiteStatus), SitesCrawlStatus.class);
+
+        assertEquals(HttpStatus.OK, recrawl.getStatusCode());
+        final SitesCrawlStatus sitesCrawlStatus = recrawl.getBody();
+        assertEquals(1, sitesCrawlStatus.getSites().size());
+        assertEquals(CRAWL_SITE_ID, sitesCrawlStatus.getSites().get(0).getSiteId());
+        assertTrue(Instant.now().isAfter(Instant.parse(sitesCrawlStatus.getSites().get(0).getCrawled())));
+
+        // TODO test not authenticated
+        final ResponseEntity<SitesCrawlStatus> recrawlNotAuthenticated = caller
+                .postForEntity(SiteController.ENDPOINT + "/crawl?serviceSecret=" + UUID.randomUUID(),
+                        new HttpEntity<>(freshlyCrawledSiteStatus), SitesCrawlStatus.class);
+        assertEquals(HttpStatus.BAD_REQUEST, recrawl.getStatusCode());
+
+        // TODO test crawling new sites => w/o allSitesCrawl marker 200 but old timestamp
+        final ResponseEntity<SitesCrawlStatus> recrawlFreshSite = caller
+                .postForEntity(SiteController.ENDPOINT + "/crawl?serviceSecret=" + SiteTest.ADMIN_SITE_SECRET,
+                        new HttpEntity<>(freshlyCrawledSiteStatus), SitesCrawlStatus.class);
+        assertEquals(HttpStatus.OK, recrawlFreshSite.getStatusCode());
+        final SitesCrawlStatus freshCrawlStatus = recrawlFreshSite.getBody();
+        assertEquals(1, freshCrawlStatus.getSites().size());
+        assertEquals(CRAWL_SITE_ID, freshCrawlStatus.getSites().get(0).getSiteId());
+        assertEquals(freshlyCrawledSiteStatus.getSites().get(0).getCrawled(), sitesCrawlStatus.getSites().get(0).getCrawled());
+
+        // TODO test crawling old sites => w/o allSitesCrawl marker 200 but new timestamp
+        final SitesCrawlStatus staleSiteStatus = new SitesCrawlStatus(Collections.singletonList(new CrawlStatus(CRAWL_SITE_SECRET, Instant.now().minus(1, ChronoUnit.DAYS))));
+        final ResponseEntity<SitesCrawlStatus> recrawlStaleSite = caller
+                .postForEntity(SiteController.ENDPOINT + "/crawl?serviceSecret=" + SiteTest.ADMIN_SITE_SECRET,
+                        new HttpEntity<>(staleSiteStatus), SitesCrawlStatus.class);
+        assertEquals(HttpStatus.OK, recrawlFreshSite.getStatusCode());
+        final SitesCrawlStatus staleCrawlStatus = recrawlFreshSite.getBody();
+        assertEquals(1, staleCrawlStatus.getSites().size());
+        assertEquals(CRAWL_SITE_ID, staleCrawlStatus.getSites().get(0).getSiteId());
+        assertTrue(Instant.parse(
+                staleSiteStatus.getSites().get(0).getCrawled())
+                .isBefore(Instant.parse(
+                        staleCrawlStatus.getSites().get(0).getCrawled())));
     }
 }
 
