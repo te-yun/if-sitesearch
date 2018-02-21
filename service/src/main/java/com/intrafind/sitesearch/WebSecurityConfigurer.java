@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,6 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         http
                 .antMatcher("/**")
                 .csrf().disable()
-//                .cors().and() // TODO check if Swagger can be called in a local client // TODO check if this is the only required CORS enabler, and if the CORS enabler bean in the Application class can be removed
                 .authorizeRequests()
                 .antMatchers(
                         "/**",
