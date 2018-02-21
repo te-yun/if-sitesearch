@@ -61,7 +61,7 @@ public class BaseConfig {
                     }
                 })
                 .select()
-                .paths(Predicates.not(PathSelectors.regex("/sites/crawl/.*")))
+                .paths(Predicates.not(PathSelectors.regex("/sites/crawl.*")))
                 .paths(Predicates.not(PathSelectors.regex("/error")))
                 .paths(Predicates.not(PathSelectors.regex("/login.*")))
                 .paths(Predicates.not(PathSelectors.regex("/subscriptions")))

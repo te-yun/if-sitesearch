@@ -89,7 +89,7 @@ public class LoadTest {
                 .include(LoadTest.class.getSimpleName())
 //                .warmupIterations(5)
 //                .measurementIterations(20)
-                .forks(1)
+                .forks(3)
                 .threads(200)
                 .mode(Mode.Throughput)
                 .resultFormat(ResultFormatType.JSON)
