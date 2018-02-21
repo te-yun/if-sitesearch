@@ -109,17 +109,7 @@ public class CrawlerTest {
 
     @Test
     public void recrawl() {
-        // crawl all sites
         final SitesCrawlStatus freshlyCrawledSiteStatus = new SitesCrawlStatus(Collections.singletonList(new CrawlStatus(CRAWL_SITE_SECRET, Instant.now())));
-        final ResponseEntity<SitesCrawlStatus> recrawl = caller
-                .postForEntity(SiteController.ENDPOINT + "/crawl?serviceSecret=" + SiteTest.ADMIN_SITE_SECRET + "&allSitesCrawl=true",
-                        new HttpEntity<>(freshlyCrawledSiteStatus), SitesCrawlStatus.class);
-
-        assertEquals(HttpStatus.OK, recrawl.getStatusCode());
-        final SitesCrawlStatus sitesCrawlStatus = recrawl.getBody();
-        assertEquals(1, sitesCrawlStatus.getSites().size());
-        assertEquals(CRAWL_SITE_ID, sitesCrawlStatus.getSites().get(0).getSiteId());
-        assertTrue(Instant.now().isAfter(Instant.parse(sitesCrawlStatus.getSites().get(0).getCrawled())));
 
         // not authenticated crawl
         final ResponseEntity<SitesCrawlStatus> recrawlNotAuthenticated = caller
@@ -137,6 +127,17 @@ public class CrawlerTest {
         assertEquals(1, freshCrawlStatus.getSites().size());
         assertEquals(CRAWL_SITE_ID, freshCrawlStatus.getSites().get(0).getSiteId());
         assertEquals(freshlyCrawledSiteStatus.getSites().get(0).getCrawled(), freshCrawlStatus.getSites().get(0).getCrawled());
+
+        // crawl all sites
+        final ResponseEntity<SitesCrawlStatus> recrawl = caller
+                .postForEntity(SiteController.ENDPOINT + "/crawl?serviceSecret=" + SiteTest.ADMIN_SITE_SECRET + "&allSitesCrawl=true",
+                        new HttpEntity<>(freshlyCrawledSiteStatus), SitesCrawlStatus.class);
+
+        assertEquals(HttpStatus.OK, recrawl.getStatusCode());
+        final SitesCrawlStatus sitesCrawlStatus = recrawl.getBody();
+        assertEquals(1, sitesCrawlStatus.getSites().size());
+        assertEquals(CRAWL_SITE_ID, sitesCrawlStatus.getSites().get(0).getSiteId());
+        assertTrue(Instant.now().isAfter(Instant.parse(sitesCrawlStatus.getSites().get(0).getCrawled())));
 
         // TODO test crawling old sites => w/o allSitesCrawl marker 200 but new timestamp
         // crawl stale site
