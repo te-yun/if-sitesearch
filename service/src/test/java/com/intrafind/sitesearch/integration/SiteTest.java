@@ -121,7 +121,7 @@ public class SiteTest {
     }
 
     private CrawlStatus findSearchSiteCrawlStatus(SitesCrawlStatus sitesCrawlStatus) {
-        return sitesCrawlStatus.getSites().stream().filter(siteStatus -> siteStatus.getSiteId().equals(SearchTest.SEARCH_SITE_ID)).findAny().get();
+        return sitesCrawlStatus.getSites().stream().filter(siteStatus -> siteStatus.getSiteId().equals(CrawlerTest.CRAWL_SITE_ID)).findAny().get();
     }
 
     @Test

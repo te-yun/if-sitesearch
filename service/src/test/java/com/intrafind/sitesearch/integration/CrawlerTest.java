@@ -43,7 +43,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CrawlerTest {
-    private static final UUID CRAWL_SITE_ID = UUID.fromString("a2e8d60b-0696-47ea-bc48-982598ee35bd");
+    static final UUID CRAWL_SITE_ID = UUID.fromString("a2e8d60b-0696-47ea-bc48-982598ee35bd");
     private static final UUID CRAWL_SITE_SECRET = UUID.fromString("04a0afc6-d89a-45c9-8ba8-41d393d8d2f8");
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerTest.class);
     static final String TEST_EMAIL_ADDRESS = "DevOps - Site Search <6752dd9c.intrafind.de@emea.teams.ms>";
@@ -122,12 +122,14 @@ public class CrawlerTest {
         assertTrue(Instant.now().isAfter(Instant.parse(sitesCrawlStatus.getSites().get(0).getCrawled())));
 
         // TODO test not authenticated
+        // not authenticated crawl
         final ResponseEntity<SitesCrawlStatus> recrawlNotAuthenticated = caller
                 .postForEntity(SiteController.ENDPOINT + "/crawl?serviceSecret=" + UUID.randomUUID(),
                         new HttpEntity<>(freshlyCrawledSiteStatus), SitesCrawlStatus.class);
-        assertEquals(HttpStatus.BAD_REQUEST, recrawl.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, recrawlNotAuthenticated.getStatusCode());
 
         // TODO test crawling new sites => w/o allSitesCrawl marker 200 but old timestamp
+        // crawl freshly crawled site
         final ResponseEntity<SitesCrawlStatus> recrawlFreshSite = caller
                 .postForEntity(SiteController.ENDPOINT + "/crawl?serviceSecret=" + SiteTest.ADMIN_SITE_SECRET,
                         new HttpEntity<>(freshlyCrawledSiteStatus), SitesCrawlStatus.class);
@@ -138,6 +140,7 @@ public class CrawlerTest {
         assertEquals(freshlyCrawledSiteStatus.getSites().get(0).getCrawled(), sitesCrawlStatus.getSites().get(0).getCrawled());
 
         // TODO test crawling old sites => w/o allSitesCrawl marker 200 but new timestamp
+        // crawl stale site
         final SitesCrawlStatus staleSiteStatus = new SitesCrawlStatus(Collections.singletonList(new CrawlStatus(CRAWL_SITE_SECRET, Instant.now().minus(1, ChronoUnit.DAYS))));
         final ResponseEntity<SitesCrawlStatus> recrawlStaleSite = caller
                 .postForEntity(SiteController.ENDPOINT + "/crawl?serviceSecret=" + SiteTest.ADMIN_SITE_SECRET,
