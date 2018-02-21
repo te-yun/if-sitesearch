@@ -5,7 +5,7 @@ docker_redirect_image=router
 docker_tag=latest
 
 cd docker-${docker_redirect_image}
-docker build --tag intrafind/${docker_redirect_image}:${docker_tag} .
+docker build --pull --tag intrafind/${docker_redirect_image}:${docker_tag} .
 docker rm -f $docker_redirect_image
 docker run -d --name $docker_redirect_image \
     -p 80:80 \
