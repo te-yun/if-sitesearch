@@ -121,7 +121,6 @@ public class CrawlerTest {
         assertEquals(CRAWL_SITE_ID, sitesCrawlStatus.getSites().get(0).getSiteId());
         assertTrue(Instant.now().isAfter(Instant.parse(sitesCrawlStatus.getSites().get(0).getCrawled())));
 
-        // TODO test not authenticated
         // not authenticated crawl
         final ResponseEntity<SitesCrawlStatus> recrawlNotAuthenticated = caller
                 .postForEntity(SiteController.ENDPOINT + "/crawl?serviceSecret=" + UUID.randomUUID(),
@@ -137,7 +136,7 @@ public class CrawlerTest {
         final SitesCrawlStatus freshCrawlStatus = recrawlFreshSite.getBody();
         assertEquals(1, freshCrawlStatus.getSites().size());
         assertEquals(CRAWL_SITE_ID, freshCrawlStatus.getSites().get(0).getSiteId());
-        assertEquals(freshlyCrawledSiteStatus.getSites().get(0).getCrawled(), sitesCrawlStatus.getSites().get(0).getCrawled());
+        assertEquals(freshlyCrawledSiteStatus.getSites().get(0).getCrawled(), freshCrawlStatus.getSites().get(0).getCrawled());
 
         // TODO test crawling old sites => w/o allSitesCrawl marker 200 but new timestamp
         // crawl stale site
