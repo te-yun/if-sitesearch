@@ -119,7 +119,14 @@ public class SiteService {
                 email = document.get("email");
             }
 
-            return new SiteProfile(siteId, UUID.fromString(document.get("secret")), urls, email, (List) document.getAll("pages"));
+            final List<URI> pages;
+            if (document.getAll("pages") == null) {
+                pages = Collections.emptyList();
+            } else {
+                pages = (List) document.getAll("pages");
+            }
+
+            return new SiteProfile(siteId, UUID.fromString(document.get("secret")), urls, email, pages);
         });
     }
 
@@ -147,19 +154,19 @@ public class SiteService {
     }
 
     private void initSite(UUID siteId, UUID siteSecret) {
-        Document siteConfiguration = new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId);
+        final Document siteConfiguration = new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId);
         siteConfiguration.set("secret", siteSecret);
         INDEX_SERVICE.index(siteConfiguration);
     }
 
     private void storeSite(UUID siteId, UUID siteSecret, Set<URI> urls, String email) {
         Optional<Document> siteConfiguration = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
-        siteConfiguration.ifPresent(document -> {
-            document.set("secret", siteSecret);
-            document.set("urls", urls);
-            document.set("email", email);
-            INDEX_SERVICE.index(document);
-        });
+        final Document document;
+        document = siteConfiguration.orElseGet(() -> new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId));
+        document.set("secret", siteSecret);
+        document.set("urls", urls);
+        document.set("email", email);
+        INDEX_SERVICE.index(document);
     }
 
     private void updateSiteProfile(UUID siteId, Set<URI> pages) {
