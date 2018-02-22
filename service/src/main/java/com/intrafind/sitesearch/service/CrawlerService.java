@@ -31,8 +31,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.UUID;
 
 @Service
@@ -68,9 +68,8 @@ public class CrawlerService {
 
 //            controller.waitUntilFinish();
 //            controller.shutdown();
-
             return new CrawlerJobResult(
-                    controller.getCrawlersLocalData().isEmpty() ? Collections.emptyList() : (ArrayList) controller.getCrawlersLocalData(),
+                    controller.getCrawlersLocalData().isEmpty() ? Collections.emptySet() : new HashSet(controller.getCrawlersLocalData()),
                     controller.getCustomData() == null ? 0 : (int) controller.getCustomData()
             );
         }

@@ -17,19 +17,19 @@
 package com.intrafind.sitesearch.dto;
 
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
 public class SitesCrawlStatus {
-    private List<CrawlStatus> sites = Collections.emptyList();
+    private Set<CrawlStatus> sites = Collections.emptySet();
 
     private SitesCrawlStatus() {
     }
 
-    public SitesCrawlStatus(List<CrawlStatus> sites) {
+    public SitesCrawlStatus(Set<CrawlStatus> sites) {
         this.sites = sites;
     }
 
-    public List<CrawlStatus> getSites() {
+    public Set<CrawlStatus> getSites() {
         return sites;
     }
 }

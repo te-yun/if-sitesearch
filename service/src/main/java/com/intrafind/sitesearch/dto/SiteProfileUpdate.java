@@ -17,6 +17,7 @@
 package com.intrafind.sitesearch.dto;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -24,6 +25,7 @@ import java.util.UUID;
 public class SiteProfileUpdate {
     private UUID secret;
     private Set<URI> urls;
+    private List<URI> pages;
     private String email;
 
     private SiteProfileUpdate() {
@@ -38,6 +40,10 @@ public class SiteProfileUpdate {
     public SiteProfileUpdate(Set<URI> urls, String email) {
         this.urls = urls;
         this.email = email;
+    }
+
+    public List<URI> getPages() {
+        return pages;
     }
 
     public UUID getSecret() {

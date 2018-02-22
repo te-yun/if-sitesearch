@@ -72,7 +72,9 @@ public class SiteController {
                     siteProfile.getId(),
                     siteProfile.getSecret(),
                     siteProfile.getUrls(),
-                    siteProfile.getEmail())
+                            siteProfile.getEmail(),
+                            siteProfile.getPages()
+                    )
             );
         } else {
             return ResponseEntity.notFound().build();
@@ -92,7 +94,9 @@ public class SiteController {
                     siteProfile.getId(),
                     siteProfile.getSecret(),
                     siteProfile.getUrls(),
-                    siteProfile.getEmail())
+                            siteProfile.getEmail(),
+                            siteProfile.getPages()
+                    )
             );
         } else {
             return ResponseEntity.notFound().build();

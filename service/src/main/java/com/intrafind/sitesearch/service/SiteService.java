@@ -119,7 +119,7 @@ public class SiteService {
                 email = document.get("email");
             }
 
-            return new SiteProfile(siteId, UUID.fromString(document.get("secret")), urls, email);
+            return new SiteProfile(siteId, UUID.fromString(document.get("secret")), urls, email, (List) document.getAll("pages"));
         });
     }
 
@@ -147,17 +147,29 @@ public class SiteService {
     }
 
     private void storeSite(UUID siteId, UUID siteSecret) {
-        Document siteConfiguration = new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId);
-        siteConfiguration.set("secret", siteSecret);
-        INDEX_SERVICE.index(siteConfiguration);
+        Optional<Document> siteConfiguration = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
+        siteConfiguration.ifPresent(document -> {
+            document.set("secret", siteSecret);
+            INDEX_SERVICE.index(document);
+        });
     }
 
     private void storeSite(UUID siteId, UUID siteSecret, Set<URI> urls, String email) {
-        Document siteConfiguration = new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId);
-        siteConfiguration.set("secret", siteSecret);
-        siteConfiguration.set("urls", urls);
-        siteConfiguration.set("email", email);
-        INDEX_SERVICE.index(siteConfiguration);
+        Optional<Document> siteConfiguration = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
+        siteConfiguration.ifPresent(document -> {
+            document.set("secret", siteSecret);
+            document.set("urls", urls);
+            document.set("email", email);
+            INDEX_SERVICE.index(document);
+        });
+    }
+
+    private void updateSiteProfile(UUID siteId, Set<URI> pages) {
+        Optional<Document> siteConfiguration = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
+        siteConfiguration.ifPresent(document -> {
+            document.set("pages", pages);
+            INDEX_SERVICE.index(document);
+        });
     }
 
     private void storeCrawlStatus(SitesCrawlStatus sitesCrawlStatus) {
@@ -390,25 +402,26 @@ public class SiteService {
     // TODO refactor code so `crawlerService` does not need to be passed as argument
     public Optional<SitesCrawlStatus> recrawlSites(UUID serviceSecret, CrawlerService crawlerService, SitesCrawlStatus sitesCrawlStatusUpdate, boolean allSiteCrawl) {
         if (ADMIN_SITE_SECRET.equals(serviceSecret)) {
-                final Instant oneDayAgo = Instant.now().minus(1, ChronoUnit.DAYS);
+            final Instant oneDayAgo = Instant.now().minus(1, ChronoUnit.DAYS);
             sitesCrawlStatusUpdate.getSites().stream()
-                        .filter(crawlStatus -> Instant.parse(crawlStatus.getCrawled()).isBefore(oneDayAgo) || allSiteCrawl) // TODO filter to achieve crawling distribution across the entire day
-                        .forEach(crawlStatus -> {
-                            final Optional<UUID> fetchedSiteSecret = fetchSiteSecret(crawlStatus.getSiteId());
-                            if (fetchedSiteSecret.isPresent()) {
-                                final UUID siteSecret = fetchedSiteSecret.get();
-                                final Optional<SiteProfile> siteProfile = fetchSiteProfile(crawlStatus.getSiteId());
-                                if (siteProfile.isPresent()) {
-                                    final Optional<URI> siteUrl = siteProfile.get().getUrls().stream().findFirst();
-                                    if (siteUrl.isPresent()) {
-                                        final CrawlerJobResult crawlerJobResult = crawlerService.crawl(siteUrl.get().toString(), crawlStatus.getSiteId(), siteSecret);
-                                        updateCrawlStatus(crawlStatus.getSiteId());
-                                        LOG.info("siteId: " + crawlStatus.getSiteId() + " - siteUrl: " + siteUrl.get().toString() + " - pageCount: " + crawlerJobResult.getPageCount()); // TODO add pattern to logstash
-                                    }
+                    .filter(crawlStatus -> Instant.parse(crawlStatus.getCrawled()).isBefore(oneDayAgo) || allSiteCrawl) // TODO filter to achieve crawling distribution across the entire day
+                    .forEach(crawlStatus -> {
+                        final Optional<UUID> fetchedSiteSecret = fetchSiteSecret(crawlStatus.getSiteId());
+                        if (fetchedSiteSecret.isPresent()) {
+                            final UUID siteSecret = fetchedSiteSecret.get();
+                            final Optional<SiteProfile> siteProfile = fetchSiteProfile(crawlStatus.getSiteId());
+                            if (siteProfile.isPresent()) {
+                                final Optional<URI> siteUrl = siteProfile.get().getUrls().stream().findFirst();
+                                if (siteUrl.isPresent()) {
+                                    final CrawlerJobResult crawlerJobResult = crawlerService.crawl(siteUrl.get().toString(), crawlStatus.getSiteId(), siteSecret);
+                                    updateSiteProfile(siteProfile.get().getId(), crawlerJobResult.getUrls());
+                                    updateCrawlStatus(crawlStatus.getSiteId());
+                                    LOG.info("siteId: " + crawlStatus.getSiteId() + " - siteUrl: " + siteUrl.get().toString() + " - pageCount: " + crawlerJobResult.getPageCount()); // TODO add pattern to logstash
                                 }
                             }
-                        });
-                return fetchSitesCrawlStatus();
+                        }
+                    });
+            return fetchSitesCrawlStatus();
         }
         return Optional.empty();
     }
@@ -430,7 +443,7 @@ public class SiteService {
     }
 
     private Optional<SitesCrawlStatus> fetchSitesCrawlStatus() {
-        final List<CrawlStatus> sitesCrawlStatus = new ArrayList<>();
+        final Set<CrawlStatus> sitesCrawlStatus = new HashSet<>();
         final Optional<Document> crawlStatus = INDEX_SERVICE.fetch(Index.ALL, CRAWL_STATUS_SINGLETON_DOCUMENT).stream().findAny();
         crawlStatus.ifPresent(document -> document.getFields().forEach((uuidKey, crawledTimestamp) -> {
             if (!uuidKey.startsWith("_")) {
@@ -442,11 +455,11 @@ public class SiteService {
 
     public Optional<SiteProfile> updateSiteProfile(UUID siteId, UUID siteSecret, SiteProfileUpdate siteProfileUpdate) {
         final Optional<UUID> fetchedSiteSecret = fetchSiteSecret(siteId);
-            if (fetchedSiteSecret.isPresent()) {
-                if (fetchedSiteSecret.get().equals(siteSecret)) {
-                    storeSite(siteId, siteProfileUpdate.getSecret(), siteProfileUpdate.getUrls(), siteProfileUpdate.getEmail());
-                    return Optional.of(new SiteProfile(siteId, siteProfileUpdate.getSecret(), siteProfileUpdate.getUrls(), siteProfileUpdate.getEmail()));
-                }
+        if (fetchedSiteSecret.isPresent()) {
+            if (fetchedSiteSecret.get().equals(siteSecret)) {
+                storeSite(siteId, siteProfileUpdate.getSecret(), siteProfileUpdate.getUrls(), siteProfileUpdate.getEmail());
+                return fetchSiteProfile(siteId);
+            }
         }
         return Optional.empty();
     }
