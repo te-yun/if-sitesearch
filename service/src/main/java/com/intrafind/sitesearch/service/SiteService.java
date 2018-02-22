@@ -146,12 +146,10 @@ public class SiteService {
         }
     }
 
-    private void storeSite(UUID siteId, UUID siteSecret) {
-        Optional<Document> siteConfiguration = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
-        siteConfiguration.ifPresent(document -> {
-            document.set("secret", siteSecret);
-            INDEX_SERVICE.index(document);
-        });
+    private void initSite(UUID siteId, UUID siteSecret) {
+        Document siteConfiguration = new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId);
+        siteConfiguration.set("secret", siteSecret);
+        INDEX_SERVICE.index(siteConfiguration);
     }
 
     private void storeSite(UUID siteId, UUID siteSecret, Set<URI> urls, String email) {
@@ -230,7 +228,7 @@ public class SiteService {
         } else { // consider request as first-usage-ownership-granting request (early binding), create new index
             UUID newSiteId = UUID.randomUUID();
             UUID newSiteSecret = UUID.randomUUID();
-            storeSite(newSiteId, newSiteSecret);
+            initSite(newSiteId, newSiteSecret);
             if (isGeneric) {
                 return Optional.empty();
             } else {
@@ -242,7 +240,7 @@ public class SiteService {
     public SiteCreation createSite() {
         UUID siteId = UUID.randomUUID();
         UUID siteSecret = UUID.randomUUID();
-        storeSite(siteId, siteSecret);
+        initSite(siteId, siteSecret);
         return new SiteCreation(siteId, siteSecret);
     }
 
