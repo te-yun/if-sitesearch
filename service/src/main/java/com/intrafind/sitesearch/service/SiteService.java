@@ -443,7 +443,7 @@ public class SiteService {
     }
 
     private Optional<SitesCrawlStatus> fetchSitesCrawlStatus() {
-        final Set<CrawlStatus> sitesCrawlStatus = new HashSet<>();
+        final List<CrawlStatus> sitesCrawlStatus = new ArrayList<>();
         final Optional<Document> crawlStatus = INDEX_SERVICE.fetch(Index.ALL, CRAWL_STATUS_SINGLETON_DOCUMENT).stream().findAny();
         crawlStatus.ifPresent(document -> document.getFields().forEach((uuidKey, crawledTimestamp) -> {
             if (!uuidKey.startsWith("_")) {
