@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -107,24 +107,28 @@ h3 .tipsy {
 
 .form-inline input[type="text"] {
     width: calc(100% - 66px);
+    height: 20px;
     padding: 10px 12px;
     border: 1px solid #e3e3e3;
     outline: 0;
     background-color: #fdfdfd;
-    font-size: 13px;
+    font-size: 14px;
     color: #767676;
 }
 
 .form-inline input[type="text"]:focus {
-    padding: 9px 12px;
     font-size: 16px;
+}
+
+button:disabled {
+    background: rgba(0, 174, 239, 0.3);
 }
 
 .form-inline .output {
     width: calc(100% - 66px);
     padding: 10px 14px;
     border-bottom: 1px solid #e3e3e3;
-    font-size: 13px;
+    font-size: 14px;
     color: #767676;
 }
 
