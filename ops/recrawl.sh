@@ -12,3 +12,7 @@ curl -X POST \
     "https://api.sitesearch.cloud/sites/crawl?serviceSecret=$ADMIN_SITE_SECRET" \
     -H 'content-type: application/json' \
     -T $SITE_CRAWL_STATUS_FILE
+
+cat $SITE_CRAWL_STATUS_FILE
+rm $SITE_CRAWL_STATUS_FILE
+cat $SITE_CRAWL_STATUS_FILE
