@@ -18,5 +18,5 @@ cat $SITE_CRAWL_STATUS_FILE | grep date -I
 if [ `cat $SITE_CRAWL_STATUS_FILE` = *`date -I`* ]; then
     echo CRAWLED
 fi
-rm $SITE_CRAWL_STATUS_FILE
+#rm $SITE_CRAWL_STATUS_FILE
 cat $SITE_CRAWL_STATUS_FILE
