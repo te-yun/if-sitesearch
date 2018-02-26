@@ -160,7 +160,7 @@ public class SiteService {
     }
 
     private void storeSite(UUID siteId, UUID siteSecret, Set<URI> urls, String email) {
-        Optional<Document> siteConfiguration = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
+        final Optional<Document> siteConfiguration = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
         final Document document;
         document = siteConfiguration.orElseGet(() -> new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId));
         document.set("secret", siteSecret);
@@ -170,7 +170,7 @@ public class SiteService {
     }
 
     private void updateSiteProfile(UUID siteId, Set<URI> pages) {
-        Optional<Document> siteConfiguration = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
+        final Optional<Document> siteConfiguration = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
         siteConfiguration.ifPresent(document -> {
             document.set("pages", pages);
             INDEX_SERVICE.index(document);
@@ -193,7 +193,7 @@ public class SiteService {
     }
 
     public Optional<FetchedPage> fetchById(String id) {
-        Optional<Document> found = INDEX_SERVICE.fetch(Index.ALL, id).stream().findAny();
+        final Optional<Document> found = INDEX_SERVICE.fetch(Index.ALL, id).stream().findAny();
 
         if (found.isPresent()) {
             Document foundDocument = found.get();
