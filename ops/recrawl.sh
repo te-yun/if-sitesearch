@@ -13,11 +13,11 @@ curl -X POST \
     -H 'content-type: application/json' \
     -T $SITE_CRAWL_STATUS_FILE
 
-cat $SITE_CRAWL_STATUS_FILE
-echo "===" -n
 cat $SITE_CRAWL_STATUS_FILE | grep date -I
 if [ `cat $SITE_CRAWL_STATUS_FILE` = *`date -I`* ]; then
     echo CRAWLED
+else
+    echo NOT_FOUND
 fi
 #rm $SITE_CRAWL_STATUS_FILE
 cat $SITE_CRAWL_STATUS_FILE
