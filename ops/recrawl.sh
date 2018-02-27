@@ -18,8 +18,9 @@ curl -X GET \
     "https://api.sitesearch.cloud/sites/crawl/status?serviceSecret=$ADMIN_SITE_SECRET" \
     -o $SITE_CRAWL_STATUS_FILE
 
+# TODO additionally introduce check for site ID
 if grep -q `date -I` $SITE_CRAWL_STATUS_FILE; then
-    echo CRAWLED
+    echo CRAWLING_SUCCESS
 else
-    echo NOT_FOUND
+    echo CRAWLING_FAILED
 fi

@@ -22,6 +22,8 @@ import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
 import okhttp3.*;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,6 +96,13 @@ public class SiteCrawler extends WebCrawler {
             }
             String title = htmlParseData.getTitle();
             Set<WebURL> links = htmlParseData.getOutgoingUrls();
+
+            /////////////////
+            String html = "<p>An <a href='http://example.com/'><b>example</b></a> link.</p>";
+            Document doc = Jsoup.parse(html);
+
+            String text1 = doc.body().text(); // "An example link"
+            /////////////////
 
             com.intrafind.sitesearch.dto.Page sitePage = new com.intrafind.sitesearch.dto.Page(
                     title,
