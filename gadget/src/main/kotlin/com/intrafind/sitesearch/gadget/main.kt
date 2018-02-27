@@ -131,7 +131,7 @@ private fun fixUrlWithoutProtocol() {
         console.warn(url.value)
         console.warn(url.value.startsWith("http"))
         console.warn(url.value.startsWith("https"))
-        if (!url.value.startsWith("http") || !url.value.startsWith("https")) {
+        if (!(url.value.startsWith("http") || url.value.startsWith("https"))) {
             url.value = "https://${url.value}"
         }
     })
