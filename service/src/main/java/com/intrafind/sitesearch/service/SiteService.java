@@ -407,9 +407,9 @@ public class SiteService {
     // TODO refactor code so `crawlerService` does not need to be passed as argument
     public Optional<SitesCrawlStatus> recrawlSites(UUID serviceSecret, CrawlerService crawlerService, SitesCrawlStatus sitesCrawlStatusUpdate, boolean allSiteCrawl) {
         if (ADMIN_SITE_SECRET.equals(serviceSecret)) {
-            final Instant oneDayAgo = Instant.now().minus(1, ChronoUnit.DAYS);
+            final Instant halfDayAgo = Instant.now().minus(1, ChronoUnit.HALF_DAYS);
             sitesCrawlStatusUpdate.getSites().stream()
-                    .filter(crawlStatus -> Instant.parse(crawlStatus.getCrawled()).isBefore(oneDayAgo) || allSiteCrawl) // TODO filter to achieve crawling distribution across the entire day
+                    .filter(crawlStatus -> Instant.parse(crawlStatus.getCrawled()).isBefore(halfDayAgo) || allSiteCrawl) // TODO filter to achieve crawling distribution across the entire day
                     .forEach(crawlStatus -> {
                         final Optional<UUID> fetchedSiteSecret = fetchSiteSecret(crawlStatus.getSiteId());
                         if (fetchedSiteSecret.isPresent()) {

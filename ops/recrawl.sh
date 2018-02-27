@@ -13,10 +13,13 @@ curl -X POST \
     -H 'content-type: application/json' \
     -T $SITE_CRAWL_STATUS_FILE
 
+# update local crawl status
+curl -X GET \
+    "https://api.sitesearch.cloud/sites/crawl/status?serviceSecret=$ADMIN_SITE_SECRET" \
+    -o $SITE_CRAWL_STATUS_FILE
+
 if grep -q `date -I` $SITE_CRAWL_STATUS_FILE; then
     echo CRAWLED
 else
     echo NOT_FOUND
 fi
-
-rm $SITE_CRAWL_STATUS_FILE
