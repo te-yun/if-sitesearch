@@ -128,6 +128,9 @@ fun showInitCode() {
 
 private fun fixUrlWithoutProtocol() {
     url.addEventListener("blur", {
+        console.warn(url.value)
+        console.warn(url.value.startsWith("http"))
+        console.warn(url.value.startsWith("https"))
         if (!url.value.startsWith("http") || !url.value.startsWith("https")) {
             url.value = "https://${url.value}"
         }
@@ -168,6 +171,8 @@ private fun applyQueryOverrides() {
                 .substring(0, document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).indexOf(";")) // relies on cookie-setting code in embedding iframe container
         else -> ""
     }
+    console.warn(siteId)
+    console.warn(websiteUrl)
     if (siteId.isNotEmpty()) {
         url.value = websiteUrl
         url.readOnly = true
