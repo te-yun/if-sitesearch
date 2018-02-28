@@ -87,6 +87,18 @@ server {
 server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
+    server_name crawler.sitesearch.cloud;
+
+    include /etc/nginx/snippets/ssl.conf;
+
+    location / {
+        proxy_pass http://if-app-crawler:8090;
+    }
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
     server_name blue.sitesearch.cloud;
 
     include /etc/nginx/snippets/ssl.conf;
