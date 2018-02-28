@@ -138,7 +138,7 @@ public class CrawlerController {
                 .build();
     }
 
-    private static void sendSetupInfoEmail(UUID siteId, UUID siteSecret, URI url, String email) throws Exception {
+    private static void sendSetupInfoEmail(UUID siteId, UUID siteSecret, URI url, String email, int pageCount) throws Exception {
         final Gmail service = initGmailService();
         LOG.debug("servicePath: " + service.getServicePath());
 
@@ -150,6 +150,7 @@ public class CrawlerController {
                                 "\n\nyou are just a few steps away from adding Site Search to your website." +
                                 "\nBelow you should find everything you need to evaluate Site Search for your website." +
                                 "\n\tWebsite URL: " + url +
+                                "\n\t\tPages crawled: " + pageCount +
                                 "\n\tSite ID: " + siteId +
                                 "\n\tSite Secret: " + siteSecret +
                                 "\n\tSite Search Evaluation URL: https://sitesearch.cloud/getting-started/?siteId=" + siteId + "&siteSecret=" + siteSecret + "&url=" + url +
@@ -161,7 +162,7 @@ public class CrawlerController {
     }
 
     public static void main(String[] args) throws Exception {
-        sendSetupInfoEmail(UUID.randomUUID(), UUID.randomUUID(), URI.create("https://example.com"), PROSPECTS_EMAIL_ADDRESS);
+        sendSetupInfoEmail(UUID.randomUUID(), UUID.randomUUID(), URI.create("https://example.com"), PROSPECTS_EMAIL_ADDRESS, 10);
     }
 
     @RequestMapping(path = "crawl", method = RequestMethod.POST)
@@ -238,7 +239,7 @@ public class CrawlerController {
             final CrawlerJobResult crawlerJobResult = crawlerService.crawl(url.toString(), siteId, siteSecret);
             final String emailAddress = determineEmailAddress(email);
             try {
-                sendSetupInfoEmail(siteId, siteSecret, url, emailAddress);
+                sendSetupInfoEmail(siteId, siteSecret, url, emailAddress, crawlerJobResult.getPageCount());
             } catch (Exception e) {
                 LOG.error(e.getMessage());
             }
