@@ -11,6 +11,7 @@ sudo certbot certonly --webroot -w /etc/letsencrypt --expand \
     -d main.sitesearch.cloud \
     -d test.sitesearch.cloud \
     -d ci.sitesearch.cloud \
+    -d crawler.sitesearch.cloud \
     -d api.sitesearch.cloud \
     -d dev.sitesearch.cloud \
     -d cdn.sitesearch.cloud \

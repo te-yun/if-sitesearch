@@ -259,7 +259,7 @@ public class SmokeTest {
         final Response response = HTTP_CLIENT.newCall(request).execute();
         assertEquals(HttpStatus.OK.value(), response.code());
         Autocomplete result = MAPPER.readValue(response.body().bytes(), Autocomplete.class);
-        assertTrue(1 < result.getResults().size());
+        assertTrue(3 < result.getResults().size());
         assureCorsHeaders(response.headers(), HEADER_SIZE);
     }
 
