@@ -92,7 +92,7 @@ server {
     include /etc/nginx/snippets/ssl.conf;
 
     location / {
-        proxy_pass http://if-app-crawler:8090;
+        proxy_pass http://if-app-webcrawler:8090;
     }
 }
 
