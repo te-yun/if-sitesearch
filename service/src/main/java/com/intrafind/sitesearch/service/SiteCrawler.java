@@ -95,23 +95,13 @@ public class SiteCrawler extends WebCrawler {
                 body = text;
             }
             String title = htmlParseData.getTitle();
-            Set<WebURL> links = htmlParseData.getOutgoingUrls();
+            final Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
-            /////////////////
-            String html = "<p>An <a href='http://example.com/'><b>example</b></a> link.</p>";
-            Document doc = Jsoup.parse(html);
-
-            String text1 = doc.body().text(); // "An example link"
-            /////////////////
+            final String bodyWithoutHtml = extractTextFromMixedHtml(body);
 
             com.intrafind.sitesearch.dto.Page sitePage = new com.intrafind.sitesearch.dto.Page(
                     title,
-                    body
-                            .replaceAll("(?s)<!--.+//-->", "")
-                            .replaceAll("(?s)<script.+</script>", "")
-                            .replaceAll("(?s)<style>.*</style>", "")
-                            .replaceAll("(?s)/\\* <!\\[CDATA\\[.+]]> \\*/", "")
-                            .replaceAll("^\\s+|\\s+$", "").trim(),
+                    bodyWithoutHtml,
                     url
             );
 
@@ -140,5 +130,10 @@ public class SiteCrawler extends WebCrawler {
 
         this.getMyController().setCustomData(pages.get());
         this.getMyController().getCrawlersLocalData().add(url);
+    }
+
+    private String extractTextFromMixedHtml(String body) {
+        final Document docPage = Jsoup.parse(body);
+        return docPage.body().text();
     }
 }

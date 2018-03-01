@@ -31,7 +31,7 @@
     <orderEntry type="library" name="Gradle: io.springfox:springfox-swagger2:2.8.0" level="project" />
     <orderEntry type="library" name="Gradle: io.springfox:springfox-swagger-ui:2.8.0" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.security.oauth:spring-security-oauth2:2.2.1.RELEASE" level="project" />
-    <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:3.9.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:3.10.0" level="project" />
     <orderEntry type="library" name="Gradle: org.mnode.mstor:mstor:1.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.oauth-client:google-oauth-client-jetty:1.23.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.apis:google-api-services-gmail:v1-rev82-1.23.0" level="project" />
@@ -97,7 +97,7 @@
     <orderEntry type="library" name="Gradle: org.apache.poi:poi:3.15" level="project" />
     <orderEntry type="library" name="Gradle: commons-codec:commons-codec:1.10" level="project" />
     <orderEntry type="library" name="Gradle: org.codehaus.jackson:jackson-mapper-asl:1.9.13" level="project" />
-    <orderEntry type="library" name="Gradle: com.squareup.okio:okio:1.13.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okio:okio:1.14.0" level="project" />
     <orderEntry type="library" name="Gradle: com.healthmarketscience.jackcess:jackcess-encrypt:2.1.1" level="project" />
     <orderEntry type="library" name="Gradle: com.healthmarketscience.jackcess:jackcess:2.1.4" level="project" />
     <orderEntry type="library" name="Gradle: commons-lang:commons-lang:2.6" level="project" />

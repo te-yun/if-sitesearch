@@ -133,6 +133,23 @@ private fun fixUrlWithoutProtocol() {
         console.warn(url.value.startsWith("https"))
         if (!(url.value.startsWith("http") || url.value.startsWith("https"))) {
             url.value = "https://${url.value}"
+            ///// TODO DELETE later on
+            val xhr = XMLHttpRequest()
+            xhr.open("GET", url.value)
+            xhr.onload = {
+                console.warn(xhr.responseText)
+                console.warn(xhr.status)
+            }
+            xhr.send()
+
+            val xhr1 = XMLHttpRequest()
+            xhr1.open("HEAD", url.value)
+            xhr1.onload = {
+                console.warn(xhr1.responseText)
+                console.warn(xhr1.status)
+            }
+            xhr1.send()
+            ///////  /DELETE later on
         }
     })
 }
