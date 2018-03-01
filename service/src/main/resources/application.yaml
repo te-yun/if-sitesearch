@@ -19,10 +19,13 @@ logging:
     org.springframework.web: INFO
     com.intrafind: INFO
 
+spring:
+  security:
+    user:
+      name: ${security.user.password}
+      password: ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=
+
 security:
-  user:
-    name: ${security.user.password}
-    password: ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=
   oauth2:
     client:
       clientId: ${random.uuid}

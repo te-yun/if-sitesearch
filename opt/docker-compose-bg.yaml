@@ -35,7 +35,7 @@ services:
     container_name: if-sitesearch-blue
     restart: on-failure
     environment:  # TODO in case it is not working, check alternative notations here: https://docs.docker.com/compose/environment-variables/
-      - SECURITY_USER_PASSWORD
+      - SPRING_SECURITY_USER_PASSWORD
       - BUILD_NUMBER
       - SCM_HASH
       - SECURITY_OAUTH2_CLIENT_CLIENT_SECRET
@@ -51,7 +51,7 @@ services:
     container_name: if-sitesearch-green
     restart: on-failure
     environment:  # TODO in case it is not working, check alternative notations here: https://docs.docker.com/compose/environment-variables/
-      - SECURITY_USER_PASSWORD
+      - SPRING_SECURITY_USER_PASSWORD
       - BUILD_NUMBER
       - SCM_HASH
       - SECURITY_OAUTH2_CLIENT_CLIENT_SECRET

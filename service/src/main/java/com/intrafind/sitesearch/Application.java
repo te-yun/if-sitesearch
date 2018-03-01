@@ -37,7 +37,7 @@ import java.net.URI;
 @EnableSwagger2
 public class Application {
     private final static Logger LOG = LoggerFactory.getLogger(Application.class);
-    public static final URI IFINDER_CORE = URI.create("https://" + System.getenv("SECURITY_USER_PASSWORD") + ":" + System.getenv("SECURITY_USER_PASSWORD") + "@main.sitesearch.cloud/hessian");
+    public static final URI IFINDER_CORE = URI.create("https://" + System.getenv("SPRING_SECURITY_USER_PASSWORD") + ":" + System.getenv("SPRING_SECURITY_USER_PASSWORD") + "@main.sitesearch.cloud/hessian");
 
 //    @Bean   // incompatible with Spring Boot v2
 //    public ErrorAttributes overrideDefaultErrorReporting() {

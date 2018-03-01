@@ -47,7 +47,7 @@ import static org.junit.Assert.*;
 public class SmokeTest {
     private static final Logger LOG = LoggerFactory.getLogger(SmokeTest.class);
     private static final String SEARCH_SERVICE_DOMAIN = "@main.sitesearch.cloud/";
-    private static final String INVALID_CREDENTIALS = "https://" + System.getenv("SECURITY_USER_PASSWORD") + "invalid:" + System.getenv("SECURITY_USER_PASSWORD");
+    private static final String INVALID_CREDENTIALS = "https://" + System.getenv("SPRING_SECURITY_USER_PASSWORD") + "invalid:" + System.getenv("SPRING_SECURITY_USER_PASSWORD");
     public static final String API_FRONTPAGE_MARKER = "<title>Site Search</title>";
     public static final String SITES_API = "https://api.sitesearch.cloud/sites/";
     private static final UUID BW_BANK_SITE_ID = UUID.fromString("269b0538-120b-44b1-a365-488c2f3fcc15");

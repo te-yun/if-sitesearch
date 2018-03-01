@@ -28,7 +28,7 @@ Required environment variables:
     * ADMIN_SITE_SECRET
     * RECAPTCHA_SITE_SECRET
     * SECURITY_OAUTH2_CLIENT_CLIENT_SECRET
-    * SECURITY_USER_PASSWORD # for iFinder Core access 
+    * SPRING_SECURITY_USER_PASSWORD # for iFinder Core access 
     * GITHUB_PUBLIC_ACCESS_TOKEN="your long living GitHub token"
     * DEV_SKIP_FLAG="true" # skip some oAuth2 checks in integration tests to enable additional test scenarios   
 
@@ -67,7 +67,7 @@ Required environment variables:
     * GITHUB_PUBLIC_ACCESS_TOKEN="your long living GitHub token"
     * DEV_SKIP_FLAG="true" # skip some oAuth2 checks in integration tests to enable additional test scenarios
     * SCM_HASH="Git commit hash, extracted from CI"
-    * SECURITY_USER_PASSWORD="Basic Auth password" # for iFinder Core access   
+    * SPRING_SECURITY_USER_PASSWORD="Basic Auth password" # for iFinder Core access   
     
 # Attribution
 * Made with ♥ in Munich

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 public class SecurityTest {
     private static final Logger LOG = LoggerFactory.getLogger(SecurityTest.class);
     private static final String SEARCH_SERVICE_DOMAIN = "@main.sitesearch.cloud/";
-    private static final String INVALID_CREDENTIALS = "https://" + System.getenv("SECURITY_USER_PASSWORD") + "invalid:" + System.getenv("SECURITY_USER_PASSWORD");
+    private static final String INVALID_CREDENTIALS = "https://" + System.getenv("SPRING_SECURITY_USER_PASSWORD") + "invalid:" + System.getenv("SPRING_SECURITY_USER_PASSWORD");
 
     @Autowired
     private TestRestTemplate caller;
@@ -57,7 +57,7 @@ public class SecurityTest {
     private MockMvc mockMvc;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         this.mockMvc = webAppContextSetup(webApplicationContext).build();
     }
 
@@ -86,7 +86,7 @@ public class SecurityTest {
 //    }
 
     @Test
-    public void assureSiteSearchServiceBasicAuthProtectionForJsonPost() throws Exception {
+    public void assureSiteSearchServiceBasicAuthProtectionForJsonPost() {
         final ResponseEntity<String> secureEndpointJson = caller.postForEntity(URI.create(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "json/index?method=index"), HttpEntity.EMPTY, String.class);
         assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJson.getStatusCode());
         assertNull(secureEndpointJson.getBody());
