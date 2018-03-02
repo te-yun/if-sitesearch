@@ -153,7 +153,7 @@ public class CrawlerTest {
         assertEquals(2, staleCrawlStatus.getSites().size());
         assertEquals(CRAWL_SITE_ID, staleCrawlStatus.getSites().get(crawlSiteIdIndex).getSiteId());
         assertTrue(Instant.parse(
-                staleSiteStatus.getSites().get(crawlSiteIdIndex).getCrawled())
+                staleSiteStatus.getSites().get(0).getCrawled())
                 .isBefore(Instant.parse(
                         staleCrawlStatus.getSites().get(crawlSiteIdIndex).getCrawled())));
     }
