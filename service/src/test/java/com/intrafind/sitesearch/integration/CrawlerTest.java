@@ -128,7 +128,7 @@ public class CrawlerTest {
         assertEquals(CRAWL_SITE_ID, freshCrawlStatus.getSites().get(crawlSiteIdIndex).getSiteId());
         // TODO use findSearchSiteCrawlStatus where appropriate to validate only the test site ID
         assertTrue(Instant.parse(
-                freshlyCrawledSiteStatus.getSites().get(crawlSiteIdIndex).getCrawled())
+                freshlyCrawledSiteStatus.getSites().get(0).getCrawled())
                 .isAfter(Instant.parse(
                         freshCrawlStatus.getSites().get(crawlSiteIdIndex).getCrawled())));
 
