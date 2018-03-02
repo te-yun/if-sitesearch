@@ -54,7 +54,7 @@ public class SiteService {
     private static final String SITE_CONFIGURATION_DOCUMENT_PREFIX = "site-configuration-";
     private static final String CRAWL_STATUS_SINGLETON_DOCUMENT = "crawl-status";
 
-    public Optional<FetchedPage> indexExistingPage(String id, UUID siteId, UUID siteSecret, Page page) {
+    public Optional<FetchedPage> indexExistingPage(String id, UUID siteId, UUID siteSecret, SitePage page) {
         if (siteId != null && siteSecret != null) { // credentials are provided as a tuple only
             final Optional<UUID> fetchedSiteSecret = fetchSiteSecret(siteId);
             if (!fetchedSiteSecret.isPresent()) { // site does not exist
@@ -67,7 +67,7 @@ public class SiteService {
         } else if (siteId == null ^ siteSecret == null) { // it does not make any sense if only one of the parameters is set
             return Optional.empty();
         } else { // consider request as first-usage-ownership-granting request, create new index
-            return indexDocument(Page.hashPageId(UUID.randomUUID(), page.getUrl()), UUID.randomUUID(), page);
+            return indexDocument(SitePage.hashPageId(UUID.randomUUID(), page.getUrl()), UUID.randomUUID(), page);
         }
     }
 
@@ -76,7 +76,7 @@ public class SiteService {
         return fetchedSiteSecret.isPresent() && siteSecret.equals(fetchedSiteSecret.get());
     }
 
-    private Optional<FetchedPage> indexDocument(String id, UUID siteId, Page page) {
+    private Optional<FetchedPage> indexDocument(String id, UUID siteId, SitePage page) {
         Document doc = new Document(id);
         doc.set(Fields.BODY, page.getBody());
         doc.set(Fields.TITLE, page.getTitle());
@@ -266,7 +266,7 @@ public class SiteService {
         String title = null;
         String body = null;
         String url = null;
-        Page toIndex;
+        SitePage toIndex;
         for (int count = 0; count < nodeList.getLength(); count++) {
             Node tempNode = nodeList.item(count);
             if (tempNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -285,14 +285,14 @@ public class SiteService {
                 }
 
                 if (tempNode.hasChildNodes()) {
-                    toIndex = new Page(
+                    toIndex = new SitePage(
                             title,
                             body,
                             url
                     );
 
                     if (toIndex.getTitle() != null && toIndex.getBody() != null && toIndex.getUrl() != null) {
-                        final String pageId = Page.hashPageId(siteId, url);
+                        final String pageId = SitePage.hashPageId(siteId, url);
 
                         Optional<FetchedPage> indexed = indexDocument(pageId, siteId, toIndex);
                         if (indexed.isPresent()) {
@@ -357,12 +357,12 @@ public class SiteService {
                 }
 
                 String url = entry.getLink();
-                Page toIndex = new Page(
+                SitePage toIndex = new SitePage(
                         entry.getTitle(),
                         body,
                         url
                 );
-                final String pageId = Page.hashPageId(siteId, url);
+                final String pageId = SitePage.hashPageId(siteId, url);
                 Optional<FetchedPage> indexed = indexDocument(pageId, siteId, toIndex);
                 if (indexed.isPresent()) {
                     successfullyIndexed.incrementAndGet();

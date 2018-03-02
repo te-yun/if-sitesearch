@@ -17,6 +17,7 @@
 package com.intrafind.sitesearch.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.intrafind.sitesearch.dto.SitePage;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
@@ -82,7 +83,7 @@ public class SiteCrawler extends WebCrawler {
             final String title = htmlParseData.getTitle();
             final Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
-            com.intrafind.sitesearch.dto.Page sitePage = new com.intrafind.sitesearch.dto.Page(
+            final SitePage sitePage = new SitePage(
                     title,
                     htmlStrippedBody,
                     url

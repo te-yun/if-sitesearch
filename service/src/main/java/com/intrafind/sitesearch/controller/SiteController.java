@@ -108,7 +108,7 @@ public class SiteController {
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "url") String url
     ) {
-        String pageId = Page.hashPageId(siteId, url);
+        String pageId = SitePage.hashPageId(siteId, url);
 
         Optional<FetchedPage> fetched = siteService.fetchById(pageId);
         if (fetched.isPresent()) {
@@ -122,9 +122,9 @@ public class SiteController {
     ResponseEntity<FetchedPage> addPageToSiteIndex(
             @PathVariable(name = "siteId") UUID siteId,
             @RequestParam(name = "siteSecret") UUID siteSecret,
-            @RequestBody Page page
+            @RequestBody SitePage page
     ) {
-        String pageId = Page.hashPageId(siteId, page.getUrl());
+        String pageId = SitePage.hashPageId(siteId, page.getUrl());
         // TODO use SiteUpdate DTO with NO siteId & NO siteSecret provided
 
         // TODO make sure that an existing page is actually updated
@@ -137,7 +137,7 @@ public class SiteController {
             @PathVariable(name = "siteId") UUID siteId,
             @PathVariable("pageId") String pageId,
             @RequestParam(name = "siteSecret") UUID siteSecret,
-            @RequestBody Page page
+            @RequestBody SitePage page
     ) {
         if (pageId.length() != 64) { // just good enough but not sufficient to guarantee a valid, collision-safe GLOBAL pageId
             return ResponseEntity.badRequest().build();
@@ -223,7 +223,7 @@ public class SiteController {
             @RequestParam(value = "url") String url,
             @RequestParam(name = "siteSecret") UUID siteSecret
     ) {
-        String pageId = Page.hashPageId(siteId, url);
+        String pageId = SitePage.hashPageId(siteId, url);
 
         return deleteById(siteId, pageId, siteSecret);
     }

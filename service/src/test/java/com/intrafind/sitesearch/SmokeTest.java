@@ -284,7 +284,7 @@ public class SmokeTest {
     @Test
     public void updatePage() throws Exception {
         String entropyToCheckInUpdate = "https://example.com/" + UUID.randomUUID();
-        final Page pageToUpdate = SiteTest.buildPage();
+        final SitePage pageToUpdate = SiteTest.buildPage();
         pageToUpdate.setUrl(entropyToCheckInUpdate);
         Request request = new Request.Builder()
                 .url(SITES_API + LoadIndex2Users.SEARCH_SITE_ID + "/pages?siteSecret=" + LoadIndex2Users.SEARCH_SITE_SECRET)
