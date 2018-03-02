@@ -15,7 +15,7 @@ then
 fi
 
 echo "*	Creating new container $SERVICE_NAME"
-echo "* Updaing image docker-registry.sitesearch.cloud/$DOCKER_IMAGE"
+echo "*	Updating image docker-registry.sitesearch.cloud/$DOCKER_IMAGE"
 
 docker pull docker-registry.sitesearch.cloud/$DOCKER_IMAGE
 
