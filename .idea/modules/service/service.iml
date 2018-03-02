@@ -26,6 +26,7 @@
     <orderEntry type="library" name="Gradle: org.apache.tika:tika-parsers:1.14" level="project" />
     <orderEntry type="library" name="Gradle: com.rometools:rome:1.9.0" level="project" />
     <orderEntry type="library" name="Gradle: com.caucho:hessian:4.0.51" level="project" />
+    <orderEntry type="library" name="Gradle: javax.xml.bind:jaxb-api:2.3.0" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-properties-migrator:2.0.0.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-hateoas:2.0.0.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-undertow:2.0.0.RELEASE" level="project" />
