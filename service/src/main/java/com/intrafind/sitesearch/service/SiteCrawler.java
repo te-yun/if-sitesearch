@@ -77,31 +77,13 @@ public class SiteCrawler extends WebCrawler {
 
         if (page.getParseData() instanceof HtmlParseData) {
             HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
-            String text = htmlParseData.getText();
-            String body;
-            if (
-                    text.contains(" ö") ||
-                            text.contains(" ä") ||
-                            text.contains(" ü") ||
-                            text.contains(" ß")
-                    ) {
-                body = text
-                        .replaceAll(" ö", "ö")
-                        .replaceAll(" ä", "ä")
-                        .replaceAll(" ü", "ü")
-                        .replaceAll(" ß", "ß")
-                ;
-            } else {
-                body = text;
-            }
-            String title = htmlParseData.getTitle();
+            final String htmlStrippedBody = extractTextFromMixedHtml(htmlParseData.getHtml());
+            final String title = htmlParseData.getTitle();
             final Set<WebURL> links = htmlParseData.getOutgoingUrls();
-
-            final String bodyWithoutHtml = extractTextFromMixedHtml(body);
 
             com.intrafind.sitesearch.dto.Page sitePage = new com.intrafind.sitesearch.dto.Page(
                     title,
-                    bodyWithoutHtml,
+                    htmlStrippedBody,
                     url
             );
 

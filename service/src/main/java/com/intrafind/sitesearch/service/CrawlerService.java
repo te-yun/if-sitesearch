@@ -78,7 +78,7 @@ public class CrawlerService {
 
     private boolean clearIndex(UUID siteId, UUID siteSecret) {
         try {
-            Request request = new Request.Builder()
+            final Request request = new Request.Builder()
                     .url("https://api.sitesearch.cloud/sites/" + siteId + "?siteSecret=" + siteSecret)
                     .delete()
                     .build();
