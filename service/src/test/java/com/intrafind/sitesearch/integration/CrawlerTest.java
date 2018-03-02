@@ -139,7 +139,7 @@ public class CrawlerTest {
 
         assertEquals(HttpStatus.OK, recrawl.getStatusCode());
         final SitesCrawlStatus sitesCrawlStatus = recrawl.getBody();
-        assertEquals(1, sitesCrawlStatus.getSites().size());
+        assertEquals(2, sitesCrawlStatus.getSites().size());
         assertEquals(CRAWL_SITE_ID, sitesCrawlStatus.getSites().get(crawlSiteIdIndex).getSiteId());
         assertTrue(Instant.now().isAfter(Instant.parse(sitesCrawlStatus.getSites().get(crawlSiteIdIndex).getCrawled())));
 
@@ -150,7 +150,7 @@ public class CrawlerTest {
                         new HttpEntity<>(staleSiteStatus), SitesCrawlStatus.class);
         assertEquals(HttpStatus.OK, recrawlStaleSite.getStatusCode());
         final SitesCrawlStatus staleCrawlStatus = recrawlStaleSite.getBody();
-        assertEquals(1, staleCrawlStatus.getSites().size());
+        assertEquals(2, staleCrawlStatus.getSites().size());
         assertEquals(CRAWL_SITE_ID, staleCrawlStatus.getSites().get(crawlSiteIdIndex).getSiteId());
         assertTrue(Instant.parse(
                 staleSiteStatus.getSites().get(crawlSiteIdIndex).getCrawled())
