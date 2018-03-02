@@ -11,10 +11,13 @@ if [ $(docker ps -a -f="name=$SERVICE_NAME" -q | wc -c) -gt 0 ]
 then
 	echo "*	Container already exists"
 	echo "*	Killing container"
-	docker rm -f $SERVICE_NAME > nul
+	docker rm -f $SERVICE_NAME > /dev/nul
 fi
 
 echo "*	Creating new container $SERVICE_NAME"
+echo "* Updaing image docker-registry.sitesearch.cloud/$DOCKER_IMAGE"
+
+docker pull docker-registry.sitesearch.cloud/$DOCKER_IMAGE
 
 docker run --name $SERVICE_NAME \
 	-d --network $NETWORK_NAME  \
