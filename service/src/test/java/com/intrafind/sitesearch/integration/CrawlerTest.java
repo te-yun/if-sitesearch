@@ -123,7 +123,7 @@ public class CrawlerTest {
                         new HttpEntity<>(freshlyCrawledSiteStatus), SitesCrawlStatus.class);
         assertEquals(HttpStatus.OK, recrawlFreshSite.getStatusCode());
         final SitesCrawlStatus freshCrawlStatus = recrawlFreshSite.getBody();
-        assertEquals(1, freshCrawlStatus.getSites().size());
+        assertEquals(2, freshCrawlStatus.getSites().size());
         assertEquals(CRAWL_SITE_ID, freshCrawlStatus.getSites().get(0).getSiteId());
         // TODO use findSearchSiteCrawlStatus where appropriate to validate only the test site ID
         assertTrue(Instant.parse(
