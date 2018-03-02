@@ -129,11 +129,7 @@ public class SiteController {
 
         // TODO make sure that an existing page is actually updated
         Optional<FetchedPage> indexed = siteService.indexExistingPage(pageId, siteId, siteSecret, page);
-        if (indexed.isPresent()) {
-            return ResponseEntity.ok(indexed.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return indexed.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @RequestMapping(path = "{siteId}/pages/{pageId}", method = RequestMethod.PUT)
