@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
 
@@ -81,7 +82,7 @@ public class CrawlerTest {
     }
 
     @Test
-    public void crawlSiteSearchViaHttps() {
+    public void crawlSiteSearchViaHttps() throws Exception {
         Instant beforeOperation = Instant.now();
         final ResponseEntity<CrawlerJobResult> request = caller
                 .postForEntity(SiteController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET
@@ -98,6 +99,8 @@ public class CrawlerTest {
         final Set<URI> crawledPage = request.getBody().getUrls();
         assertNotNull(crawledPage);
         final URI crawledPageUrl = new ArrayList<>(request.getBody().getUrls()).get(0);
+
+        TimeUnit.MILLISECONDS.sleep(3_000);
         final ResponseEntity<FetchedPage> fetchedCrawledPage = caller.exchange(SiteController.ENDPOINT
                         + "/" + CRAWL_SITE_ID + "/pages?url=" + crawledPageUrl,
                 HttpMethod.GET, HttpEntity.EMPTY, FetchedPage.class);
