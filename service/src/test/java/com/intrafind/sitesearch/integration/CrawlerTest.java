@@ -106,6 +106,8 @@ public class CrawlerTest {
                         + "/" + CRAWL_SITE_ID + "/pages?url=" + crawledPageUrl,
                 HttpMethod.GET, HttpEntity.EMPTY, FetchedPage.class);
         assertEquals(HttpStatus.OK, fetchedCrawledPage.getStatusCode());
+        LOG.warn(fetchedCrawledPage.getBody() + "1<<<<<<<<<<<<<<<<<<");
+        LOG.warn(fetchedCrawledPage.getBody().getUrl() + "2<<<<<<<<<<<<<<<<<<");
         final Instant crawledAndIndexedPage = Instant.parse(fetchedCrawledPage.getBody().getTimestamp());
         assertTrue(crawledAndIndexedPage.isAfter(beforeOperation));
         assertTrue(crawledAndIndexedPage.isBefore(Instant.now()));
