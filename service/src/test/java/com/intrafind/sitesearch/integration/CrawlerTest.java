@@ -98,7 +98,7 @@ public class CrawlerTest {
         // assert correct timestamp after crawling & indexing
         final Set<URI> crawledPage = request.getBody().getUrls();
         assertNotNull(crawledPage);
-        final URI crawledPageUrl = new ArrayList<>(request.getBody().getUrls()).get(0);
+        final URI crawledPageUrl = new ArrayList<>(request.getBody().getUrls()).get(1);
 
         TimeUnit.MILLISECONDS.sleep(18_000);
         LOG.info(crawledPageUrl + ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
