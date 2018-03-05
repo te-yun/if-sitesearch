@@ -37,8 +37,10 @@ import java.net.URI;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
 
@@ -97,7 +99,9 @@ public class CrawlerTest {
 
         // assert correct timestamp after crawling & indexing
         final Set<URI> crawledPage = request.getBody().getUrls();
-//        final Optional<URI> crawledPage = request.getBody().getUrls().stream().findAny();
+        assertNotNull(crawledPage);
+        final Stream<URI> crawledPage1 = request.getBody().getUrls().stream();
+        final Optional<URI> crawledPage2 = request.getBody().getUrls().stream().findAny();
 //        assertTrue(crawledPage.isPresent());
 //        crawledPage.ifPresent(crawledPageUrl -> {
 //            final ResponseEntity<FetchedPage> fetchedCrawledPage = caller.exchange(SiteController.ENDPOINT
