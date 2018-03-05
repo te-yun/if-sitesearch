@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,15 +23,15 @@ import java.nio.charset.Charset;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Page {
+public class SitePage {
     private String title;
     private String body;
     private String url;
 
-    private Page() {
+    private SitePage() {
     }
 
-    public Page(String title, String body, String url) {
+    public SitePage(String title, String body, String url) {
         this.title = title;
         this.body = body;
         this.url = url;
@@ -73,7 +73,7 @@ public class Page {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Page page = (Page) o;
+        SitePage page = (SitePage) o;
         return Objects.equals(title, page.title) &&
                 Objects.equals(body, page.body) &&
                 Objects.equals(url, page.url);

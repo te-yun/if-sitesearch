@@ -123,13 +123,14 @@ public class CrawlerTest {
                         new HttpEntity<>(freshlyCrawledSiteStatus), SitesCrawlStatus.class);
         assertEquals(HttpStatus.OK, recrawlFreshSite.getStatusCode());
         final SitesCrawlStatus freshCrawlStatus = recrawlFreshSite.getBody();
-        assertEquals(1, freshCrawlStatus.getSites().size());
-        assertEquals(CRAWL_SITE_ID, freshCrawlStatus.getSites().get(0).getSiteId());
+        assertEquals(2, freshCrawlStatus.getSites().size());
+        final int crawlSiteIdIndex = 1;
+        assertEquals(CRAWL_SITE_ID, freshCrawlStatus.getSites().get(crawlSiteIdIndex).getSiteId());
         // TODO use findSearchSiteCrawlStatus where appropriate to validate only the test site ID
         assertTrue(Instant.parse(
                 freshlyCrawledSiteStatus.getSites().get(0).getCrawled())
                 .isAfter(Instant.parse(
-                        freshCrawlStatus.getSites().get(0).getCrawled())));
+                        freshCrawlStatus.getSites().get(crawlSiteIdIndex).getCrawled())));
 
         // crawl all sites
         final ResponseEntity<SitesCrawlStatus> recrawl = caller
@@ -138,9 +139,9 @@ public class CrawlerTest {
 
         assertEquals(HttpStatus.OK, recrawl.getStatusCode());
         final SitesCrawlStatus sitesCrawlStatus = recrawl.getBody();
-        assertEquals(1, sitesCrawlStatus.getSites().size());
-        assertEquals(CRAWL_SITE_ID, sitesCrawlStatus.getSites().get(0).getSiteId());
-        assertTrue(Instant.now().isAfter(Instant.parse(sitesCrawlStatus.getSites().get(0).getCrawled())));
+        assertEquals(2, sitesCrawlStatus.getSites().size());
+        assertEquals(CRAWL_SITE_ID, sitesCrawlStatus.getSites().get(crawlSiteIdIndex).getSiteId());
+        assertTrue(Instant.now().isAfter(Instant.parse(sitesCrawlStatus.getSites().get(crawlSiteIdIndex).getCrawled())));
 
         // crawl stale site
         final SitesCrawlStatus staleSiteStatus = new SitesCrawlStatus(Collections.singletonList(new CrawlStatus(CRAWL_SITE_SECRET, Instant.now().minus(1, ChronoUnit.DAYS))));
@@ -149,12 +150,12 @@ public class CrawlerTest {
                         new HttpEntity<>(staleSiteStatus), SitesCrawlStatus.class);
         assertEquals(HttpStatus.OK, recrawlStaleSite.getStatusCode());
         final SitesCrawlStatus staleCrawlStatus = recrawlStaleSite.getBody();
-        assertEquals(1, staleCrawlStatus.getSites().size());
-        assertEquals(CRAWL_SITE_ID, staleCrawlStatus.getSites().get(0).getSiteId());
+        assertEquals(2, staleCrawlStatus.getSites().size());
+        assertEquals(CRAWL_SITE_ID, staleCrawlStatus.getSites().get(crawlSiteIdIndex).getSiteId());
         assertTrue(Instant.parse(
                 staleSiteStatus.getSites().get(0).getCrawled())
                 .isBefore(Instant.parse(
-                        staleCrawlStatus.getSites().get(0).getCrawled())));
+                        staleCrawlStatus.getSites().get(crawlSiteIdIndex).getCrawled())));
     }
 }
 

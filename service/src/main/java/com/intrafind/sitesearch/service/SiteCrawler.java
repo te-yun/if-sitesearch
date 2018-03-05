@@ -17,6 +17,7 @@
 package com.intrafind.sitesearch.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.intrafind.sitesearch.dto.SitePage;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
@@ -35,6 +36,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
 public class SiteCrawler extends WebCrawler {
+    public static final MediaType JSON_MEDIA_TYPE = MediaType.parse("application/json");
     private final static Logger LOG = LoggerFactory.getLogger(SiteCrawler.class);
     private static final Pattern BLACKLIST = Pattern.compile(".*(\\.(css|js|gif|jpg|png|mp3|mp4|zip|gz|xml))$");
     //    private static final Pattern WHITELIST= Pattern.compile(".*(\\.(html|htm|txt|pdf))$");
@@ -60,7 +62,7 @@ public class SiteCrawler extends WebCrawler {
 
     @Override
     public boolean shouldVisit(Page referringPage, WebURL webUrl) {
-        String href = webUrl.getURL().toLowerCase();
+        final String href = webUrl.getURL().toLowerCase();
         return !BLACKLIST.matcher(href).matches()
                 && href.startsWith(url.toString())
                 && noQueryParameter(webUrl)
@@ -73,15 +75,15 @@ public class SiteCrawler extends WebCrawler {
 
     @Override
     public void visit(Page page) {
-        String url = page.getWebURL().getURL();
+        final String url = page.getWebURL().getURL();
 
         if (page.getParseData() instanceof HtmlParseData) {
-            HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
+            final HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
             final String htmlStrippedBody = extractTextFromMixedHtml(htmlParseData.getHtml());
             final String title = htmlParseData.getTitle();
             final Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
-            com.intrafind.sitesearch.dto.Page sitePage = new com.intrafind.sitesearch.dto.Page(
+            final SitePage sitePage = new SitePage(
                     title,
                     htmlStrippedBody,
                     url
@@ -91,7 +93,7 @@ public class SiteCrawler extends WebCrawler {
                 // TODO move this to CrawlerService
                 Request request = new Request.Builder()
                         .url("https://api.sitesearch.cloud/sites/" + siteId + "/pages?siteSecret=" + siteSecret)
-                        .put(RequestBody.create(MediaType.parse("application/json"), MAPPER.writeValueAsBytes(sitePage)))
+                        .put(RequestBody.create(JSON_MEDIA_TYPE, MAPPER.writeValueAsBytes(sitePage)))
                         .build();
                 final Response response = HTTP_CLIENT.newCall(request).execute();
                 if (response.code() != 200) {

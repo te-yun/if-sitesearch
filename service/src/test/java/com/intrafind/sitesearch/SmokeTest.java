@@ -21,6 +21,7 @@ import com.intrafind.sitesearch.dto.*;
 import com.intrafind.sitesearch.integration.SearchTest;
 import com.intrafind.sitesearch.integration.SiteTest;
 import com.intrafind.sitesearch.jmh.LoadIndex2Users;
+import com.intrafind.sitesearch.service.SiteCrawler;
 import okhttp3.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,7 +53,6 @@ public class SmokeTest {
     public static final String SITES_API = "https://api.sitesearch.cloud/sites/";
     private static final UUID BW_BANK_SITE_ID = UUID.fromString("269b0538-120b-44b1-a365-488c2f3fcc15");
     private static final int HEADER_SIZE = 399;
-    public static final MediaType JSON_MEDIA_TYPE = MediaType.parse("application/json");
 
     @Autowired
     private TestRestTemplate caller;
@@ -284,12 +284,12 @@ public class SmokeTest {
     @Test
     public void updatePage() throws Exception {
         String entropyToCheckInUpdate = "https://example.com/" + UUID.randomUUID();
-        final Page pageToUpdate = SiteTest.buildPage();
+        final SitePage pageToUpdate = SiteTest.buildPage();
         pageToUpdate.setUrl(entropyToCheckInUpdate);
         Request request = new Request.Builder()
                 .url(SITES_API + LoadIndex2Users.SEARCH_SITE_ID + "/pages?siteSecret=" + LoadIndex2Users.SEARCH_SITE_SECRET)
                 .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
-                .put(RequestBody.create(JSON_MEDIA_TYPE, MAPPER.writeValueAsBytes(pageToUpdate)))
+                .put(RequestBody.create(SiteCrawler.JSON_MEDIA_TYPE, MAPPER.writeValueAsBytes(pageToUpdate)))
                 .build();
         final Response response = HTTP_CLIENT.newCall(request).execute();
 
