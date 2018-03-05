@@ -1,4 +1,4 @@
-FROM openjdk:9-jre
+FROM openjdk:9-jre-slim
 
 MAINTAINER Alexander Orlov <alexander.orlov@intrafind.de>
 
