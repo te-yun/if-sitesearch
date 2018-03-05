@@ -62,7 +62,7 @@ public class SiteCrawler extends WebCrawler {
 
     @Override
     public boolean shouldVisit(Page referringPage, WebURL webUrl) {
-        String href = webUrl.getURL().toLowerCase();
+        final String href = webUrl.getURL().toLowerCase();
         return !BLACKLIST.matcher(href).matches()
                 && href.startsWith(url.toString())
                 && noQueryParameter(webUrl)

@@ -49,7 +49,7 @@ public class CrawlerService {
         config.setMaxOutgoingLinksToFollow(1_000);
         config.setMaxPagesToFetch(500);
 
-        PageFetcher pageFetcher = new PageFetcher(config);
+        final PageFetcher pageFetcher = new PageFetcher(config);
         RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
         RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
         CrawlController controller;
