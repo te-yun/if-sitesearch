@@ -305,12 +305,16 @@ public class SiteTest {
         createdPage.setTitle("updated title");
         createdPage.setBody("updated body");
         createdPage.setUrl("https://example.com/updated");
+        final Instant beforePageUpdate = Instant.now();
         final ResponseEntity<FetchedPage> updated = caller.exchange(SiteController.ENDPOINT + "/" + createdSite.getSiteId()
                         + "/pages/" + createdPage.getId() + "?siteSecret=" + createdSite.getSiteSecret(),
                 HttpMethod.PUT, new HttpEntity<>(createdPage), FetchedPage.class);
         assertEquals(HttpStatus.OK, updated.getStatusCode());
         assertEquals(createdPage, updated.getBody());
         assertEquals("updated body", updated.getBody().getBody());
+        // assert correct timestamp update
+        assertTrue(beforePageUpdate.isBefore(Instant.parse(updated.getBody().getTimestamp())));
+        assertTrue(Instant.now().isAfter(Instant.parse(updated.getBody().getTimestamp())));
 
         final ResponseEntity<SitePage> updateWithInvalidPageId = caller.exchange(SiteController.ENDPOINT + "/" + createdSite.getSiteId()
                         + "/pages/" + "invalidSomething" + "?siteSecret=" + createdSite.getSiteSecret(),
