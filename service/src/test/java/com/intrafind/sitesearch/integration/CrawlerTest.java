@@ -100,7 +100,8 @@ public class CrawlerTest {
         assertNotNull(crawledPage);
         final URI crawledPageUrl = new ArrayList<>(request.getBody().getUrls()).get(0);
 
-        TimeUnit.MILLISECONDS.sleep(8_000);
+        TimeUnit.MILLISECONDS.sleep(18_000);
+        LOG.info(crawledPageUrl + ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         final ResponseEntity<FetchedPage> fetchedCrawledPage = caller.exchange(SiteController.ENDPOINT
                         + "/" + CRAWL_SITE_ID + "/pages?url=" + crawledPageUrl,
                 HttpMethod.GET, HttpEntity.EMPTY, FetchedPage.class);
