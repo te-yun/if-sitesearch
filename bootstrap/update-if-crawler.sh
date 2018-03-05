@@ -7,18 +7,18 @@ NETWORK_NAME="sitesearch"
 
 echo "Updating $SERVICE_NAME:"
 
-if [ $(sudo docker ps -a -f="name=$SERVICE_NAME" -q | wc -c) -gt 0 ]
+if [ $(docker ps -a -f="name=$SERVICE_NAME" -q | wc -c) -gt 0 ]
 then
 	echo "*	Container already exists"
 	echo "*	Killing container"
-	sudo docker rm -f $SERVICE_NAME > /dev/null
+	docker rm -f $SERVICE_NAME > /dev/null
 fi
 
 echo "*	Creating new container $SERVICE_NAME"
 echo "*	Updating image docker-registry.sitesearch.cloud/$DOCKER_IMAGE"
 
-sudo docker pull docker-registry.sitesearch.cloud/$DOCKER_IMAGE
+docker pull docker-registry.sitesearch.cloud/$DOCKER_IMAGE
 
-sudo docker run --name $SERVICE_NAME \
+docker run --name $SERVICE_NAME \
 	-d --network $NETWORK_NAME  \
 	docker-registry.sitesearch.cloud/$DOCKER_IMAGE > /dev/null
