@@ -32,6 +32,7 @@ import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -101,13 +102,15 @@ public class CrawlerTest {
         final URI crawledPageUrl = new ArrayList<>(request.getBody().getUrls()).get(1);
 
         TimeUnit.MILLISECONDS.sleep(18_000);
-        LOG.info(crawledPageUrl + ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         final ResponseEntity<FetchedPage> fetchedCrawledPage = caller.exchange(SiteController.ENDPOINT
-                        + "/" + CRAWL_SITE_ID + "/pages?url=" + crawledPageUrl,
+                        + "/" + CRAWL_SITE_ID + "/pages?url=" + crawledPageUrl.toURL(),
                 HttpMethod.GET, HttpEntity.EMPTY, FetchedPage.class);
         assertEquals(HttpStatus.OK, fetchedCrawledPage.getStatusCode());
         LOG.warn(fetchedCrawledPage.getBody() + "1<<<<<<<<<<<<<<<<<<");
         LOG.warn(fetchedCrawledPage.getBody().getUrl() + "2<<<<<<<<<<<<<<<<<<");
+        LOG.warn(URLEncoder.encode(fetchedCrawledPage.getBody().getUrl()) + "3<<<<<<<<<<<<<<<<<<");
+        LOG.warn(URLEncoder.encode(crawledPageUrl.toString()) + "4<<<<<<<<<<<<<<<<<<");
+        LOG.warn(crawledPageUrl.toURL() + "5<<<<<<<<<<<<<<<<<<");
         final Instant crawledAndIndexedPage = Instant.parse(fetchedCrawledPage.getBody().getTimestamp());
         assertTrue(crawledAndIndexedPage.isAfter(beforeOperation));
         assertTrue(crawledAndIndexedPage.isBefore(Instant.now()));
