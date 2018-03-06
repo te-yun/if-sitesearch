@@ -34,10 +34,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.net.URI;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -97,14 +94,14 @@ public class CrawlerTest {
         // assert correct timestamp after crawling & indexing
         final Set<URI> crawledPage = request.getBody().getUrls();
         assertNotNull(crawledPage);
-        final Optional<URI> crawledPageUrl = request.getBody().getUrls().stream().filter(uri -> uri != null).findAny();
+        final Optional<URI> crawledPageUrl = request.getBody().getUrls().stream().filter(Objects::nonNull).findAny();
         assertTrue(crawledPageUrl.isPresent());
         crawledPageUrl.ifPresent(uri -> {
             final ResponseEntity<FetchedPage> fetchedCrawledPage = caller.exchange(SiteController.ENDPOINT
                             + "/" + CRAWL_SITE_ID + "/pages?url=" + uri,
                     HttpMethod.GET, HttpEntity.EMPTY, FetchedPage.class);
             assertEquals(HttpStatus.OK, fetchedCrawledPage.getStatusCode());
-            final Instant crawledAndIndexedPage = Instant.parse(fetchedCrawledPage.getBody().getTimestamp());
+            final Instant crawledAndIndexedPage = Instant.parse(Objects.requireNonNull(fetchedCrawledPage.getBody()).getTimestamp());
             assertTrue(crawledAndIndexedPage.isAfter(beforeOperation));
             assertTrue(crawledAndIndexedPage.isBefore(Instant.now()));
         });
