@@ -201,8 +201,8 @@ public class SiteService {
         final Optional<Document> found = INDEX_SERVICE.fetch(Index.ALL, id).stream().findAny();
 
         if (found.isPresent()) {
-            Document foundDocument = found.get();
-            FetchedPage representationOfFoundDocument = new FetchedPage(
+            final Document foundDocument = found.get();
+            final FetchedPage representationOfFoundDocument = new FetchedPage(
                     UUID.fromString(foundDocument.get(Fields.TENANT)),
                     foundDocument.getId(),
                     foundDocument.get(Fields.TITLE),
