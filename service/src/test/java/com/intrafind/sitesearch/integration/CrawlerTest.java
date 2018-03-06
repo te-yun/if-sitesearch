@@ -103,14 +103,14 @@ public class CrawlerTest {
 
         TimeUnit.MILLISECONDS.sleep(18_000);
         final ResponseEntity<FetchedPage> fetchedCrawledPage = caller.exchange(SiteController.ENDPOINT
-                        + "/" + CRAWL_SITE_ID + "/pages?url=" + crawledPageUrl.toURL(),
+                        + "/" + CRAWL_SITE_ID + "/pages?url=" + crawledPageUrl,
                 HttpMethod.GET, HttpEntity.EMPTY, FetchedPage.class);
         assertEquals(HttpStatus.OK, fetchedCrawledPage.getStatusCode());
         LOG.warn(fetchedCrawledPage.getBody() + "1<<<<<<<<<<<<<<<<<<");
         LOG.warn(fetchedCrawledPage.getBody().getUrl() + "2<<<<<<<<<<<<<<<<<<");
         LOG.warn(URLEncoder.encode(fetchedCrawledPage.getBody().getUrl()) + "3<<<<<<<<<<<<<<<<<<");
         LOG.warn(URLEncoder.encode(crawledPageUrl.toString()) + "4<<<<<<<<<<<<<<<<<<");
-        LOG.warn(crawledPageUrl.toURL() + "5<<<<<<<<<<<<<<<<<<");
+        LOG.warn(fetchedCrawledPage.getBody().getTimestamp() + "7<<<<<<<<<<<<<<<<<<");
         final Instant crawledAndIndexedPage = Instant.parse(fetchedCrawledPage.getBody().getTimestamp());
         assertTrue(crawledAndIndexedPage.isAfter(beforeOperation));
         assertTrue(crawledAndIndexedPage.isBefore(Instant.now()));
