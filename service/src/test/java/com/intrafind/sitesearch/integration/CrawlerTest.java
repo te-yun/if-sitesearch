@@ -32,14 +32,12 @@ import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.net.URI;
-import java.net.URLEncoder;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
 
@@ -83,7 +81,7 @@ public class CrawlerTest {
     }
 
     @Test
-    public void crawlSiteSearchViaHttps() throws Exception {
+    public void crawlSiteSearchViaHttps() {
         Instant beforeOperation = Instant.now();
         final ResponseEntity<CrawlerJobResult> request = caller
                 .postForEntity(SiteController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET
@@ -99,21 +97,17 @@ public class CrawlerTest {
         // assert correct timestamp after crawling & indexing
         final Set<URI> crawledPage = request.getBody().getUrls();
         assertNotNull(crawledPage);
-        final URI crawledPageUrl = new ArrayList<>(request.getBody().getUrls()).get(1);
-
-        TimeUnit.MILLISECONDS.sleep(18_000);
-        final ResponseEntity<FetchedPage> fetchedCrawledPage = caller.exchange(SiteController.ENDPOINT
-                        + "/" + CRAWL_SITE_ID + "/pages?url=" + crawledPageUrl,
-                HttpMethod.GET, HttpEntity.EMPTY, FetchedPage.class);
-        assertEquals(HttpStatus.OK, fetchedCrawledPage.getStatusCode());
-        LOG.warn(fetchedCrawledPage.getBody() + "1<<<<<<<<<<<<<<<<<<");
-        LOG.warn(fetchedCrawledPage.getBody().getUrl() + "2<<<<<<<<<<<<<<<<<<");
-        LOG.warn(URLEncoder.encode(fetchedCrawledPage.getBody().getUrl()) + "3<<<<<<<<<<<<<<<<<<");
-        LOG.warn(URLEncoder.encode(crawledPageUrl.toString()) + "4<<<<<<<<<<<<<<<<<<");
-        LOG.warn(fetchedCrawledPage.getBody().getTimestamp() + "7<<<<<<<<<<<<<<<<<<");
-        final Instant crawledAndIndexedPage = Instant.parse(fetchedCrawledPage.getBody().getTimestamp());
-        assertTrue(crawledAndIndexedPage.isAfter(beforeOperation));
-        assertTrue(crawledAndIndexedPage.isBefore(Instant.now()));
+        final Optional<URI> crawledPageUrl = request.getBody().getUrls().stream().filter(uri -> uri != null).findAny();
+        assertTrue(crawledPageUrl.isPresent());
+        crawledPageUrl.ifPresent(uri -> {
+            final ResponseEntity<FetchedPage> fetchedCrawledPage = caller.exchange(SiteController.ENDPOINT
+                            + "/" + CRAWL_SITE_ID + "/pages?url=" + uri,
+                    HttpMethod.GET, HttpEntity.EMPTY, FetchedPage.class);
+            assertEquals(HttpStatus.OK, fetchedCrawledPage.getStatusCode());
+            final Instant crawledAndIndexedPage = Instant.parse(fetchedCrawledPage.getBody().getTimestamp());
+            assertTrue(crawledAndIndexedPage.isAfter(beforeOperation));
+            assertTrue(crawledAndIndexedPage.isBefore(Instant.now()));
+        });
     }
 
     @Test
