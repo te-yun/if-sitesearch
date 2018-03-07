@@ -133,16 +133,18 @@ private fun fixUrlWithoutProtocol() {
         if (!(url.value.startsWith("http") || url.value.startsWith("https"))) {
             url.value = "https://${url.value}"
         }
+        validateDomain()
     })
 
     url.addEventListener("keyup", {
-        isValidDomain(url.value)
+        console.warn(it)
+        validateDomain()
     })
 }
 
-private fun isValidDomain(url: String) {
+private fun validateDomain() {
     val xhr = XMLHttpRequest()
-    xhr.open("GET", "https://api.muctool.de/curl?url=$url")
+    xhr.open("GET", "https://api.muctool.de/curl?url=${url.value}")
     xhr.send()
     xhr.onload = {
         if (xhr.status.equals(200) && (JSON.parse<dynamic>(xhr.responseText).code as Short).equals(200))
@@ -156,11 +158,11 @@ private var isValidSetup: Boolean = false
 private fun classifyUrlAsValid(isValid: Boolean) {
     if (isValid) {
         url.addClass("validUrl")
-        url.style.background = "rgba(99, 199, 99, .5)"
+        url.style.background = "rgba(99, 199, 99, .4)"
         isValidSetup = true
     } else {
         url.removeClass("validUrl")
-        url.style.background = "rgba(199, 99, 99, .5)"
+        url.style.background = "rgba(199, 99, 99, .4)"
         isValidSetup = false
     }
 }
