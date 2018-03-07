@@ -38,10 +38,19 @@
             });
         };
     </script>
+    <style>
+        .validUrl {
+            background: green;
+        }
+    </style>
 </head>
 
 <body>
-
+<style>
+    .validUrl {
+        background: green;
+    }
+</style>
 <h2>Site Search Gadget</h2>
 <p>
     This gadget is <strong>all you need, to get up and running with Site Search</strong>.
@@ -58,6 +67,7 @@
         </label>
         <div class="tipsy-container">
             <input type="text" id="url"
+                   class="validUrl"
                    placeholder="Website URL, e.g. https://sitesearch.cloud"
                    value="https://sitesearch.cloud">
             <div class="tipsy"

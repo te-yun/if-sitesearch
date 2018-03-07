@@ -24,7 +24,6 @@ buildscript {
 plugins {
     id "java"
     id "idea"
-//    id "org.springframework.boot" version "1.5.10.RELEASE"
     id "org.springframework.boot" version "2.0.0.RELEASE"
     id "io.spring.dependency-management" version "1.0.4.RELEASE"
     id "io.morethan.jmhreport" version "0.7.0"
@@ -53,8 +52,6 @@ dependencies {
 
     compile 'javax.xml.bind:jaxb-api:2.3.0'
     // https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.0-Migration-Guide
-//    compile 'org.springframework.boot:spring-boot-properties-migrator:2.0.0.RELEASE'
-    // TODO remove once migration to Spring Boot v2 finished
 
     compile "org.springframework.boot:spring-boot-starter-hateoas:$spring_boot_version"
     compile "org.springframework.boot:spring-boot-starter-undertow:$spring_boot_version"
@@ -102,7 +99,3 @@ tasks.withType(JavaCompile) {
     options.fork = true
     options.incremental = true
 }
-
-//bootRun {
-//
-//}

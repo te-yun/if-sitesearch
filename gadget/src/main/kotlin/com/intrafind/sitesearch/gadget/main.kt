@@ -24,6 +24,8 @@ import org.w3c.dom.events.Event
 import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
 import kotlin.browser.window
+import kotlin.dom.addClass
+import kotlin.dom.removeClass
 
 fun main(args: Array<String>) {
     window.addEventListener("DOMContentLoaded", {
@@ -128,30 +130,39 @@ fun showInitCode() {
 
 private fun fixUrlWithoutProtocol() {
     url.addEventListener("blur", {
-        console.warn(url.value)
-        console.warn(url.value.startsWith("http"))
-        console.warn(url.value.startsWith("https"))
         if (!(url.value.startsWith("http") || url.value.startsWith("https"))) {
             url.value = "https://${url.value}"
-            ///// TODO DELETE later on
-            val xhr = XMLHttpRequest()
-            xhr.open("GET", url.value)
-            xhr.onload = {
-                console.warn(xhr.responseText)
-                console.warn(xhr.status)
-            }
-            xhr.send()
-
-            val xhr1 = XMLHttpRequest()
-            xhr1.open("HEAD", url.value)
-            xhr1.onload = {
-                console.warn(xhr1.responseText)
-                console.warn(xhr1.status)
-            }
-            xhr1.send()
-            ///////  /DELETE later on
         }
     })
+
+    url.addEventListener("keyup", {
+        isValidDomain(url.value)
+    })
+}
+
+private fun isValidDomain(url: String) {
+    val xhr = XMLHttpRequest()
+    xhr.open("GET", "https://api.muctool.de/curl?url=$url")
+    xhr.send()
+    xhr.onload = {
+        if (xhr.status.equals(200) && (JSON.parse<dynamic>(xhr.responseText).code as Short).equals(200))
+            classifyUrlAsValid(true)
+        else
+            classifyUrlAsValid(false)
+    }
+}
+
+private var isValidSetup: Boolean = false
+private fun classifyUrlAsValid(isValid: Boolean) {
+    if (isValid) {
+        url.addClass("validUrl")
+        url.style.background = "rgba(99, 199, 99, .5)"
+        isValidSetup = true
+    } else {
+        url.removeClass("validUrl")
+        url.style.background = "rgba(199, 99, 99, .5)"
+        isValidSetup = false
+    }
 }
 
 //fun showDisabledCookiesWarning() {
