@@ -22,7 +22,7 @@ sudo certbot certonly --webroot -w /etc/letsencrypt --expand \
     -d blue.sitesearch.cloud \
     -d green.sitesearch.cloud \
     -d tagger.analyzelaw.com \
-    -d al.analyzelaw.com
+    -d api.analyzelaw.com
 
 #    -d sitesearch.cloud \
 #    -d www.sitesearch.cloud \
