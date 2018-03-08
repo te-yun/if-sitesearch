@@ -13,7 +13,6 @@ sudo certbot certonly --webroot -w /etc/letsencrypt --expand \
     -d ci.sitesearch.cloud \
     -d crawler.sitesearch.cloud \
     -d api.sitesearch.cloud \
-    -d al.sitesearch.cloud \
     -d dev.sitesearch.cloud \
     -d cdn.sitesearch.cloud \
     -d doc.sitesearch.cloud \
@@ -21,6 +20,9 @@ sudo certbot certonly --webroot -w /etc/letsencrypt --expand \
     -d docker-registry.sitesearch.cloud \
     -d team.sitesearch.cloud \
     -d blue.sitesearch.cloud \
-    -d green.sitesearch.cloud
+    -d green.sitesearch.cloud \
+    -d tagger.analyzelaw.com \
+    -d al.analyzelaw.com
+
 #    -d sitesearch.cloud \
 #    -d www.sitesearch.cloud \

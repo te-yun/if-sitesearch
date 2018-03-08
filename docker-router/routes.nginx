@@ -99,12 +99,12 @@ server {
 server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
-    server_name al.sitesearch.cloud;
+    server_name tagger.analyzelaw.com;
 
     include /etc/nginx/snippets/ssl.conf;
 
     location / {
-        proxy_pass http://if-app-webcrawler:9603;
+        proxy_pass http://if-tagging-service:9603;
     }
 }
 
