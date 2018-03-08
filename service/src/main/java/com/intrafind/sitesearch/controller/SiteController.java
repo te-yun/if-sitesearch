@@ -150,11 +150,7 @@ public class SiteController {
             @PathVariable(value = "siteId") UUID siteId
     ) {
         Optional<List<String>> allDocumentsOfTenant = siteService.fetchAllDocuments(siteId);
-        if (allDocumentsOfTenant.isPresent()) {
-            return ResponseEntity.ok(allDocumentsOfTenant.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return allDocumentsOfTenant.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @RequestMapping(path = "{siteId}/xml", method = RequestMethod.PUT)
@@ -188,11 +184,7 @@ public class SiteController {
 
     private ResponseEntity<SiteIndexSummary> indexAsRssFeed(UUID siteId, UUID siteSecret, URI feedUrl, Boolean stripHtmlTags, Boolean isGeneric, Boolean clearIndex) {
         Optional<SiteIndexSummary> siteCreatedInfo = siteService.indexFeed(feedUrl, siteId, siteSecret, stripHtmlTags, isGeneric, clearIndex);
-        if (siteCreatedInfo.isPresent()) {
-            return ResponseEntity.ok(siteCreatedInfo.get());
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
+        return siteCreatedInfo.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @RequestMapping(path = "{siteId}/pages/{pageId}", method = RequestMethod.DELETE)

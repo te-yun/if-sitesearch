@@ -162,10 +162,6 @@ public class CrawlerController {
         );
     }
 
-    public static void main(String[] args) throws Exception {
-        sendSetupInfoEmail(UUID.randomUUID(), UUID.randomUUID(), URI.create("https://example.com"), PROSPECTS_EMAIL_ADDRESS, 10);
-    }
-
     @RequestMapping(path = "crawl", method = RequestMethod.POST)
     ResponseEntity<SitesCrawlStatus> recrawlSites(
             @RequestParam(value = "serviceSecret") UUID serviceSecret,
@@ -174,11 +170,7 @@ public class CrawlerController {
     ) {
         // TODO refactor code so `crawlerService` does not need to be passed as argument
         final Optional<SitesCrawlStatus> sitesCrawlStatus = siteService.recrawlSites(serviceSecret, crawlerService, sitesCrawlStatusUpdate, allSitesCrawl);
-        if (sitesCrawlStatus.isPresent()) {
-            return ResponseEntity.ok(sitesCrawlStatus.get());
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
+        return sitesCrawlStatus.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @RequestMapping(path = "crawl/status", method = RequestMethod.PUT)
@@ -187,11 +179,7 @@ public class CrawlerController {
             @RequestBody SitesCrawlStatus sitesCrawlStatusUpdate
     ) {
         final Optional<SitesCrawlStatus> sitesCrawlStatus = siteService.storeCrawlStatus(serviceSecret, sitesCrawlStatusUpdate);
-        if (sitesCrawlStatus.isPresent()) {
-            return ResponseEntity.ok(sitesCrawlStatus.get());
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
+        return sitesCrawlStatus.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @RequestMapping(path = "crawl/status", method = RequestMethod.GET)
@@ -199,11 +187,7 @@ public class CrawlerController {
             @RequestParam(value = "serviceSecret") UUID serviceSecret
     ) {
         final Optional<SitesCrawlStatus> sitesCrawlStatus = siteService.fetchCrawlStatus(serviceSecret);
-        if (sitesCrawlStatus.isPresent()) {
-            return ResponseEntity.ok(sitesCrawlStatus.get());
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
+        return sitesCrawlStatus.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
 

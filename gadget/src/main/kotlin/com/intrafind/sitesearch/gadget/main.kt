@@ -125,7 +125,6 @@ fun showInitCode() {
     })
 
     applyQueryOverrides()
-//    showDisabledCookiesWarning()
 }
 
 private fun fixUrlWithoutProtocol() {
@@ -166,14 +165,6 @@ private fun classifyUrlAsValid(isValid: Boolean) {
         isValidSetup = false
     }
 }
-
-//fun showDisabledCookiesWarning() {
-//    if (!document.cookie.contains("override-site")) {
-//        val cookieWarning = document.getElementById("sis.warning") as HTMLParagraphElement
-//        cookieWarning.textContent = "Cookies are disabled, please permit cookies for this site, to fully leverage this gadget."
-//        cookieWarning.style.display = "inline"
-//    }
-//}
 
 @JsName("verifyCallback")
 private fun verifyCallback(token: String) {
@@ -231,7 +222,7 @@ fun startCrawler() {
             crawlerPageCount = JSON.parse<dynamic>(xhr.responseText).pageCount as Int
             document.dispatchEvent(Event("sis.crawlerFinishedEvent"))
         } else {
-            console.warn("startCrawler failed")
+            console.error("startCrawler failed")
         }
     }
     xhr.send()
