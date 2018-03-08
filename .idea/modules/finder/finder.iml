@@ -3,6 +3,7 @@
   <component name="FacetManager">
     <facet type="kotlin-language" name="Kotlin">
       <configuration version="3" platform="JavaScript " useProjectSettings="false">
+        <productionOutputPath>$MODULE_DIR$/../../../finder/build/classes/kotlin/main/finder.js</productionOutputPath>
         <testOutputPath>$MODULE_DIR$/../../../finder/build/classes/kotlin/test/finder_test.js</testOutputPath>
         <compilerSettings />
         <compilerArguments>
@@ -40,7 +41,7 @@
       <excludeFolder url="file://$MODULE_DIR$/../../../finder/build" />
       <excludeFolder url="file://$MODULE_DIR$/../../../finder/out" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="Kotlin SDK" jdkType="KotlinSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-test-js:1.2.30" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-js:1.2.30" level="project" />

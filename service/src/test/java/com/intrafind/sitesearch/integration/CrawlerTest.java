@@ -19,6 +19,7 @@ package com.intrafind.sitesearch.integration;
 import com.intrafind.sitesearch.controller.SiteController;
 import com.intrafind.sitesearch.dto.CrawlStatus;
 import com.intrafind.sitesearch.dto.CrawlerJobResult;
+import com.intrafind.sitesearch.dto.FetchedPage;
 import com.intrafind.sitesearch.dto.SitesCrawlStatus;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,16 +28,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.net.URI;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Collections;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -81,6 +79,7 @@ public class CrawlerTest {
 
     @Test
     public void crawlSiteSearchViaHttps() {
+        Instant beforeOperation = Instant.now();
         final ResponseEntity<CrawlerJobResult> request = caller
                 .postForEntity(SiteController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET
                                 + "&url=" + "https://sitesearch.cloud&token=" + UUID.randomUUID()
@@ -91,6 +90,21 @@ public class CrawlerTest {
         assertNotNull(request.getBody());
         assertEquals(15, request.getBody().getPageCount());
         assertEquals(16, request.getBody().getUrls().size());
+
+        // assert correct timestamp after crawling & indexing
+        final Set<URI> crawledPage = request.getBody().getUrls();
+        assertNotNull(crawledPage);
+        final Optional<URI> crawledPageUrl = request.getBody().getUrls().stream().filter(Objects::nonNull).findAny();
+        assertTrue(crawledPageUrl.isPresent());
+        crawledPageUrl.ifPresent(uri -> {
+            final ResponseEntity<FetchedPage> fetchedCrawledPage = caller.exchange(SiteController.ENDPOINT
+                            + "/" + CRAWL_SITE_ID + "/pages?url=" + uri,
+                    HttpMethod.GET, HttpEntity.EMPTY, FetchedPage.class);
+            assertEquals(HttpStatus.OK, fetchedCrawledPage.getStatusCode());
+            final Instant crawledAndIndexedPage = Instant.parse(Objects.requireNonNull(fetchedCrawledPage.getBody()).getTimestamp());
+            assertTrue(crawledAndIndexedPage.isAfter(beforeOperation));
+            assertTrue(crawledAndIndexedPage.isBefore(Instant.now()));
+        });
     }
 
     @Test

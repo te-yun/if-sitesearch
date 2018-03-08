@@ -24,6 +24,8 @@ import org.w3c.dom.events.Event
 import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
 import kotlin.browser.window
+import kotlin.dom.addClass
+import kotlin.dom.removeClass
 
 fun main(args: Array<String>) {
     window.addEventListener("DOMContentLoaded", {
@@ -123,44 +125,46 @@ fun showInitCode() {
     })
 
     applyQueryOverrides()
-//    showDisabledCookiesWarning()
 }
 
 private fun fixUrlWithoutProtocol() {
     url.addEventListener("blur", {
-        console.warn(url.value)
-        console.warn(url.value.startsWith("http"))
-        console.warn(url.value.startsWith("https"))
         if (!(url.value.startsWith("http") || url.value.startsWith("https"))) {
             url.value = "https://${url.value}"
-            ///// TODO DELETE later on
-            val xhr = XMLHttpRequest()
-            xhr.open("GET", url.value)
-            xhr.onload = {
-                console.warn(xhr.responseText)
-                console.warn(xhr.status)
-            }
-            xhr.send()
-
-            val xhr1 = XMLHttpRequest()
-            xhr1.open("HEAD", url.value)
-            xhr1.onload = {
-                console.warn(xhr1.responseText)
-                console.warn(xhr1.status)
-            }
-            xhr1.send()
-            ///////  /DELETE later on
         }
+        validateDomain()
+    })
+
+    url.addEventListener("keyup", {
+        console.warn(it)
+        validateDomain()
     })
 }
 
-//fun showDisabledCookiesWarning() {
-//    if (!document.cookie.contains("override-site")) {
-//        val cookieWarning = document.getElementById("sis.warning") as HTMLParagraphElement
-//        cookieWarning.textContent = "Cookies are disabled, please permit cookies for this site, to fully leverage this gadget."
-//        cookieWarning.style.display = "inline"
-//    }
-//}
+private fun validateDomain() {
+    val xhr = XMLHttpRequest()
+    xhr.open("GET", "https://api.muctool.de/curl?url=${url.value}")
+    xhr.send()
+    xhr.onload = {
+        if (xhr.status.equals(200) && (JSON.parse<dynamic>(xhr.responseText).code as Short).equals(200))
+            classifyUrlAsValid(true)
+        else
+            classifyUrlAsValid(false)
+    }
+}
+
+private var isValidSetup: Boolean = false
+private fun classifyUrlAsValid(isValid: Boolean) {
+    if (isValid) {
+        url.addClass("validUrl")
+        url.style.background = "rgba(99, 199, 99, .4)"
+        isValidSetup = true
+    } else {
+        url.removeClass("validUrl")
+        url.style.background = "rgba(199, 99, 99, .4)"
+        isValidSetup = false
+    }
+}
 
 @JsName("verifyCallback")
 private fun verifyCallback(token: String) {
@@ -218,7 +222,7 @@ fun startCrawler() {
             crawlerPageCount = JSON.parse<dynamic>(xhr.responseText).pageCount as Int
             document.dispatchEvent(Event("sis.crawlerFinishedEvent"))
         } else {
-            console.warn("startCrawler failed")
+            console.error("startCrawler failed")
         }
     }
     xhr.send()
