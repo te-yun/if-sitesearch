@@ -58,6 +58,24 @@ public class SmokeTest {
     private TestRestTemplate caller;
 
     @Test
+    public void assureCrawlerProtection() throws Exception {
+        final Request request = new Request.Builder()
+                .url("https://crawler.sitesearch.cloud")
+                .build();
+        final Response response = HTTP_CLIENT.newCall(request).execute();
+        assertEquals(HttpStatus.UNAUTHORIZED.value(), response.code());
+    }
+
+    @Test
+    public void assureTaggerProtection() throws Exception {
+        final Request request = new Request.Builder()
+                .url("https://tagger.analyzelaw.com")
+                .build();
+        final Response response = HTTP_CLIENT.newCall(request).execute();
+        assertEquals(HttpStatus.UNAUTHORIZED.value(), response.code());
+    }
+
+    @Test
     public void assureSiteSearchServiceBasicAuthProtectionForJsonPost() {
         final ResponseEntity<String> secureEndpointJson = caller.postForEntity(URI.create(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "json/index?method=index"), HttpEntity.EMPTY, String.class);
         assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJson.getStatusCode());
