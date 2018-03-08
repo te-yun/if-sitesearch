@@ -22,6 +22,9 @@ docker start if-sitesearch-blue-1
 docker start consul
 docker start router
 
+docker start if-tagging-service
+docker start if-app-webcrawler
+
 sudo sysctl -w vm.max_map_count=262144 # required for ELK's Elasticsearch
 docker-compose --file opt/docker-compose-elk.yaml -p tmp up -d
 docker-compose --file opt/docker-compose-bg.yaml -p tmp up -d
