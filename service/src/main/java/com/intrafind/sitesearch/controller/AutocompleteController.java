@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,7 +49,7 @@ public class AutocompleteController {
         // override siteId with cookie value for debugging & speed up the getting started experience
         if (cookieSite != null) siteId = cookieSite;
 
-        Optional<Autocomplete> result = service.autocomplete(query, siteId);
+        final Optional<Autocomplete> result = service.autocomplete(query, siteId);
         if (result.isPresent()) {
             final Autocomplete autocomplete = result.get();
             LOG.info("siteId: " + siteId + " - query-fragment: " + query + " - autocompletes: " + autocomplete.getResults().size());

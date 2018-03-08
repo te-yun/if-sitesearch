@@ -53,6 +53,10 @@ public class SiteService {
     private static final Index INDEX_SERVICE = IfinderCoreClient.newHessianClient(Index.class, Application.IFINDER_CORE + "/index");
     private static final String SITE_CONFIGURATION_DOCUMENT_PREFIX = "site-configuration-";
     private static final String CRAWL_STATUS_SINGLETON_DOCUMENT = "crawl-status";
+    /**
+     * Field is updated whenever a document is (re-)indexed.
+     */
+    private static final String PAGE_TIMESTAMP = "timestamp";
 
     public Optional<FetchedPage> indexExistingPage(String id, UUID siteId, UUID siteSecret, SitePage page) {
         if (siteId != null && siteSecret != null) { // credentials are provided as a tuple only
@@ -82,6 +86,7 @@ public class SiteService {
         doc.set(Fields.TITLE, page.getTitle());
         doc.set(Fields.URL, page.getUrl());
         doc.set(Fields.TENANT, siteId);
+        doc.set(PAGE_TIMESTAMP, Instant.now());
         INDEX_SERVICE.index(doc);
         LOG.info("siteId: " + siteId + " - bodySize: " + page.getBody().length() + " - titleSize: " + page.getTitle().length() + " - URL: " + page.getUrl());
         return fetchById(id);
@@ -196,13 +201,14 @@ public class SiteService {
         final Optional<Document> found = INDEX_SERVICE.fetch(Index.ALL, id).stream().findAny();
 
         if (found.isPresent()) {
-            Document foundDocument = found.get();
-            FetchedPage representationOfFoundDocument = new FetchedPage(
+            final Document foundDocument = found.get();
+            final FetchedPage representationOfFoundDocument = new FetchedPage(
                     UUID.fromString(foundDocument.get(Fields.TENANT)),
                     foundDocument.getId(),
                     foundDocument.get(Fields.TITLE),
                     foundDocument.get(Fields.BODY),
-                    foundDocument.get(Fields.URL)
+                    foundDocument.get(Fields.URL),
+                    foundDocument.get(PAGE_TIMESTAMP)
             );
             return Optional.of(representationOfFoundDocument);
         } else {

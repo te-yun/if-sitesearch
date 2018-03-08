@@ -36,7 +36,6 @@ import com.intrafind.sitesearch.dto.SitesCrawlStatus;
 import com.intrafind.sitesearch.service.CrawlerService;
 import com.intrafind.sitesearch.service.SiteCrawler;
 import com.intrafind.sitesearch.service.SiteService;
-import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.codec.binary.Base64;
@@ -53,6 +52,8 @@ import javax.mail.internet.MimeMessage;
 import java.io.*;
 import java.net.URI;
 import java.util.*;
+
+import static com.intrafind.sitesearch.service.SiteCrawler.JSON_MEDIA_TYPE;
 
 @RestController
 @RequestMapping(SiteController.ENDPOINT)
@@ -161,10 +162,6 @@ public class CrawlerController {
         );
     }
 
-    public static void main(String[] args) throws Exception {
-        sendSetupInfoEmail(UUID.randomUUID(), UUID.randomUUID(), URI.create("https://example.com"), PROSPECTS_EMAIL_ADDRESS, 10);
-    }
-
     @RequestMapping(path = "crawl", method = RequestMethod.POST)
     ResponseEntity<SitesCrawlStatus> recrawlSites(
             @RequestParam(value = "serviceSecret") UUID serviceSecret,
@@ -173,11 +170,7 @@ public class CrawlerController {
     ) {
         // TODO refactor code so `crawlerService` does not need to be passed as argument
         final Optional<SitesCrawlStatus> sitesCrawlStatus = siteService.recrawlSites(serviceSecret, crawlerService, sitesCrawlStatusUpdate, allSitesCrawl);
-        if (sitesCrawlStatus.isPresent()) {
-            return ResponseEntity.ok(sitesCrawlStatus.get());
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
+        return sitesCrawlStatus.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @RequestMapping(path = "crawl/status", method = RequestMethod.PUT)
@@ -186,11 +179,7 @@ public class CrawlerController {
             @RequestBody SitesCrawlStatus sitesCrawlStatusUpdate
     ) {
         final Optional<SitesCrawlStatus> sitesCrawlStatus = siteService.storeCrawlStatus(serviceSecret, sitesCrawlStatusUpdate);
-        if (sitesCrawlStatus.isPresent()) {
-            return ResponseEntity.ok(sitesCrawlStatus.get());
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
+        return sitesCrawlStatus.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @RequestMapping(path = "crawl/status", method = RequestMethod.GET)
@@ -198,11 +187,7 @@ public class CrawlerController {
             @RequestParam(value = "serviceSecret") UUID serviceSecret
     ) {
         final Optional<SitesCrawlStatus> sitesCrawlStatus = siteService.fetchCrawlStatus(serviceSecret);
-        if (sitesCrawlStatus.isPresent()) {
-            return ResponseEntity.ok(sitesCrawlStatus.get());
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
+        return sitesCrawlStatus.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
 
@@ -222,7 +207,7 @@ public class CrawlerController {
         try {
             Request request = new Request.Builder()
                     .url("https://www.google.com/recaptcha/api/siteverify?secret=" + System.getenv("RECAPTCHA_SITE_SECRET") + "&response=" + captchaToken)
-                    .post(okhttp3.RequestBody.create(MediaType.parse("applications/json"), ""))
+                    .post(okhttp3.RequestBody.create(JSON_MEDIA_TYPE, ""))
                     .build();
             final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
             final CaptchaVerification captchaVerification = MAPPER.readValue(response.body().bytes(), CaptchaVerification.class);

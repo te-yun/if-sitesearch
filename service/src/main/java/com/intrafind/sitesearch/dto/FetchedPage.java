@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ public class FetchedPage implements Serializable {
     private String title;
     private String body;
     private String url;
+    private String timestamp;
 
     private FetchedPage() {
     }
@@ -36,6 +37,23 @@ public class FetchedPage implements Serializable {
         this.url = url;
         this.siteId = siteId;
         this.id = id;
+    }
+
+    public FetchedPage(UUID siteId, String id, String title, String body, String url, String timestamp) {
+        this.title = title;
+        this.body = body;
+        this.url = url;
+        this.siteId = siteId;
+        this.id = id;
+        this.timestamp = timestamp;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 
     public UUID getSiteId() {

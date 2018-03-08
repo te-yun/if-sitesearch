@@ -19,7 +19,6 @@ package com.intrafind.sitesearch.controller;
 import com.intrafind.sitesearch.dto.CaptchaVerification;
 import com.intrafind.sitesearch.service.SiteCrawler;
 import com.intrafind.sitesearch.service.SiteService;
-import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.slf4j.Logger;
@@ -32,6 +31,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static com.intrafind.sitesearch.service.SiteCrawler.JSON_MEDIA_TYPE;
 
 @RestController
 @RequestMapping(SiteController.ENDPOINT)
@@ -76,7 +77,7 @@ public class EmailController {
         try {
             Request request = new Request.Builder()
                     .url("https://www.google.com/recaptcha/api/siteverify?secret=" + System.getenv("RECAPTCHA_SITE_SECRET") + "&response=" + payload)
-                    .post(okhttp3.RequestBody.create(MediaType.parse("applications/json"), ""))
+                    .post(okhttp3.RequestBody.create(JSON_MEDIA_TYPE, ""))
                     .build();
             final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
             final CaptchaVerification captchaVerification = CrawlerController.MAPPER.readValue(response.body().bytes(), CaptchaVerification.class);
