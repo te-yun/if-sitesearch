@@ -1,7 +1,12 @@
 #!/usr/bin/env sh
 
 
-SERVICE_NAME=if-app-webcrawler
+SERVICE_NAME=$1
+if [ $# -eq 0 ]; then
+	echo 'Takes 1 argument: SERVICE_NAME'
+	exit 0
+fi
+
 DOCKER_IMAGE="intrafind/$SERVICE_NAME:latest"
 NETWORK_NAME="sitesearch"
 
