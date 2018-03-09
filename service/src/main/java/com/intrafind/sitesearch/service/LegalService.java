@@ -16,6 +16,11 @@
 
 package com.intrafind.sitesearch.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -26,10 +31,27 @@ import java.net.URI;
 public class LegalService {
     private static final Logger LOG = LoggerFactory.getLogger(LegalService.class);
 
-    private static final URI LEGAL_SERVICE_URI = URI.create("https://" + System.getenv("SPRING_SECURITY_USER_PASSWORD") + ":" + System.getenv("SPRING_SECURITY_USER_PASSWORD") + "@tagger.analyzelaw.com/json");
-
+    private static final URI LEGAL_SERVICE_URI = URI.create("https://" + System.getenv("PASSWORD") + ":" + System.getenv("PASSWORD") + "@tagger.analyzelaw.com/json");
+    private static final OkHttpClient HTTP_CLIENT = new OkHttpClient();
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public Object analyze(Object o) {
-        return o;
+        final Request request;
+        final Response response;
+        String result;
+        try {
+            request = new Request.Builder()
+                    .url(LEGAL_SERVICE_URI.toString() + "/tagger?method=tag&param0=test")
+                    .put(RequestBody.create(SiteCrawler.JSON_MEDIA_TYPE, MAPPER.writeValueAsBytes(o)))
+                    .build();
+
+            response = HTTP_CLIENT.newCall(request).execute();
+            result = response.body().string();
+            response.close();
+        } catch (Exception e) {
+            result = "";
+            LOG.warn(e.getMessage());
+        }
+        return result;
     }
 }

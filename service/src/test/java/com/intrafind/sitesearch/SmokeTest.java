@@ -40,6 +40,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
 
@@ -140,8 +141,9 @@ public class SmokeTest {
         assertEquals(HttpStatus.MOVED_PERMANENTLY, response.getStatusCode());
     }
 
-    public static final ObjectMapper MAPPER = new ObjectMapper();
-    public static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
+            .connectTimeout(10, TimeUnit.SECONDS)
             .followRedirects(false)
             .followSslRedirects(false)
             .build();

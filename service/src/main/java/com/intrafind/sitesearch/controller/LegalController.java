@@ -38,12 +38,15 @@ public class LegalController {
     }
 
     @RequestMapping(path = "{tenant}/contract", method = RequestMethod.PUT)
-    ResponseEntity<Object> updateCrawlStatus(
+    ResponseEntity<Object> analyze(
             @RequestParam(value = "tenant") UUID tenant,
             @RequestParam(value = "content") String content,
             @RequestBody Object contract
     ) {
+        LOG.info(tenant.toString());
+
         final Object test = legalService.analyze(contract);
+
         return ResponseEntity.ok(test);
     }
 }
