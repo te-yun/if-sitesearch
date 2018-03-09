@@ -46,7 +46,6 @@ public class LegalService {
                     .build();
 
             response = HTTP_CLIENT.newCall(request).execute();
-            response.close();
             return Optional.of(response.body().string());
         } catch (Exception e) {
             LOG.warn(e.getMessage());
