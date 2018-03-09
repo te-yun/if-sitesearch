@@ -39,7 +39,7 @@ public class LegalController {
 
     @RequestMapping(path = "{tenant}/contract", method = RequestMethod.PUT)
     ResponseEntity<Object> analyze(
-            @RequestParam(value = "tenant") UUID tenant,
+            @PathVariable(value = "tenant") UUID tenant,
             @RequestParam(value = "content") String content,
             @RequestBody Object contract
     ) {

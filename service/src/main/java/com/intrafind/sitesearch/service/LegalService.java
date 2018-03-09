@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
+import java.util.Optional;
 
 @Service
 public class LegalService {
@@ -35,10 +36,9 @@ public class LegalService {
     private static final OkHttpClient HTTP_CLIENT = new OkHttpClient();
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    public Object analyze(Object o) {
+    public Optional<Object> analyze(Object o) {
         final Request request;
         final Response response;
-        String result;
         try {
             request = new Request.Builder()
                     .url(LEGAL_SERVICE_URI.toString() + "/tagger?method=tag&param0=test")
@@ -46,12 +46,11 @@ public class LegalService {
                     .build();
 
             response = HTTP_CLIENT.newCall(request).execute();
-            result = response.body().string();
             response.close();
+            return Optional.of(response.body().string());
         } catch (Exception e) {
-            result = "";
             LOG.warn(e.getMessage());
         }
-        return result;
+        return Optional.empty();
     }
 }
