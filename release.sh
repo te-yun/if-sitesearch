@@ -11,13 +11,13 @@ img_fqn=docker-registry.sitesearch.cloud/intrafind/${docker_image_name}:${docker
 cp -r /home/alexander_orlov/docker-build-data/api-sitesearch/service .
 cd service
 docker build --tag intrafind/${docker_image_name}:${docker_tag} .
-#docker rm -f ${docker_image_name}
+docker rm -f ${docker_image_name}
 cd ..
 
 docker run -d --name ${docker_image_name} \
     --log-driver=gelf \
     --log-opt gelf-address=udp://localhost:12201 \
-    --env BASIC_HASH_PASSWORD=$BASIC_HASH_PASSWORD \
+    --env BASIC_HASH_PASSWORD=TEST \
     --env ADMIN_SITE_SECRET=$ADMIN_SITE_SECRET \
     --env RECAPTCHA_SITE_SECRET=$RECAPTCHA_SITE_SECRET \
     --env SPRING_SECURITY_USER_PASSWORD=$SPRING_SECURITY_USER_PASSWORD \
@@ -27,7 +27,7 @@ docker run -d --name ${docker_image_name} \
     --network $docker_network \
     intrafind/${docker_image_name}:${docker_tag}
 
-docker push ${img_fqn}:${docker_tag}
+docker push ${img_fqn}
 
 danglingImages=$(docker images -f "dangling=true" -q)
 if [ "$danglingImages" ]; then
