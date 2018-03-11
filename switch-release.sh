@@ -25,7 +25,7 @@ runService() {
     docker run -d --name $1 \
         --log-driver=gelf \
         --log-opt gelf-address=udp://localhost:12201 \
-        --env BASIC_HASH_PASSWORD=TEST \
+        --env BASIC_HASH_PASSWORD="$BASIC_HASH_PASSWORD" \
         --env ADMIN_SITE_SECRET=$ADMIN_SITE_SECRET \
         --env RECAPTCHA_SITE_SECRET=$RECAPTCHA_SITE_SECRET \
         --env SPRING_SECURITY_USER_PASSWORD=$SPRING_SECURITY_USER_PASSWORD \
