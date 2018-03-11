@@ -17,10 +17,13 @@
 package com.intrafind.sitesearch.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.intrafind.sitesearch.dto.AnalyzedContract;
+import com.intrafind.sitesearch.dto.Contract;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.apache.http.HttpHeaders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -32,21 +35,23 @@ import java.util.Optional;
 public class LegalService {
     private static final Logger LOG = LoggerFactory.getLogger(LegalService.class);
 
-    private static final URI LEGAL_SERVICE_URI = URI.create("https://" + System.getenv("PASSWORD") + ":" + System.getenv("PASSWORD") + "@tagger.analyzelaw.com/json");
+    private static final URI LEGAL_SERVICE_URI = URI.create("https://tagger.analyzelaw.com/json/tagger");
     private static final OkHttpClient HTTP_CLIENT = new OkHttpClient();
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    public Optional<Object> analyze(Object o) {
+    public Optional<AnalyzedContract> analyze(Contract contract) {
         final Request request;
         final Response response;
         try {
             request = new Request.Builder()
-                    .url(LEGAL_SERVICE_URI.toString() + "/tagger?method=tag&param0=test")
-                    .put(RequestBody.create(SiteCrawler.JSON_MEDIA_TYPE, MAPPER.writeValueAsBytes(o)))
+                    .url(LEGAL_SERVICE_URI.toString() + "?method=tag&param0=" + contract.getTitle())
+                    .header(HttpHeaders.AUTHORIZATION, System.getenv("BASIC_HASH_PASSWORD"))
+                    .post(RequestBody.create(SiteCrawler.JSON_MEDIA_TYPE, ""))
                     .build();
 
             response = HTTP_CLIENT.newCall(request).execute();
-            return Optional.of(response.body().string());
+            final AnalyzedContract analyzedContract = MAPPER.readValue(response.body().bytes(), AnalyzedContract.class);
+            return Optional.of(analyzedContract);
         } catch (Exception e) {
             LOG.warn(e.getMessage());
         }

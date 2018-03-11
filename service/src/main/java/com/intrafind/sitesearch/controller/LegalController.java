@@ -16,6 +16,8 @@
 
 package com.intrafind.sitesearch.controller;
 
+import com.intrafind.sitesearch.dto.AnalyzedContract;
+import com.intrafind.sitesearch.dto.Contract;
 import com.intrafind.sitesearch.service.LegalService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -38,15 +41,12 @@ public class LegalController {
     }
 
     @RequestMapping(path = "{tenant}/contract", method = RequestMethod.PUT)
-    ResponseEntity<Object> analyze(
+    ResponseEntity<AnalyzedContract> analyze(
             @PathVariable(value = "tenant") UUID tenant,
             @RequestParam(value = "content") String content,
-            @RequestBody Object contract
+            @RequestBody Contract contract
     ) {
-        LOG.info(tenant.toString());
-
-        final Object test = legalService.analyze(contract);
-
-        return ResponseEntity.ok(test);
+        final Optional<AnalyzedContract> analyzedContract = legalService.analyze(contract);
+        return analyzedContract.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 }
