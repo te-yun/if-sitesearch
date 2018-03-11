@@ -11,7 +11,7 @@ img_fqn=docker-registry.sitesearch.cloud/intrafind/${docker_image_name}:${docker
 cp -r /home/alexander_orlov/docker-build-data/api-sitesearch/service .
 cd service
 docker build --tag intrafind/${docker_image_name}:${docker_tag} .
-#docker rm -f ${docker_image_name}
+docker rm -f ${docker_image_name}
 cd ..
 
 docker run -d --name ${docker_image_name} \
