@@ -24,8 +24,13 @@ import org.w3c.dom.events.Event
 import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
 import kotlin.browser.window
+import kotlin.coroutines.experimental.Continuation
+import kotlin.coroutines.experimental.EmptyCoroutineContext
+import kotlin.coroutines.experimental.startCoroutine
+import kotlin.coroutines.experimental.suspendCoroutine
 import kotlin.dom.addClass
 import kotlin.dom.removeClass
+import kotlin.js.*
 
 fun main(args: Array<String>) {
     window.addEventListener("DOMContentLoaded", {
@@ -108,7 +113,7 @@ fun showInitCode() {
         (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = "$crawlerPageCount pages from \"${url.value}\" have been crawled. Consider that it takes around a minute before you can find here everything we have found."
     })
 
-    fixUrlWithoutProtocol()
+    enableProactiveValidation()
 
     val waitWhileCrawlerIsRunningMsg = "Crawler is running... please give us just a minute or two."
     document.addEventListener("sis.triggerFirstUsageOwnershipEvent", {
@@ -127,7 +132,7 @@ fun showInitCode() {
     applyQueryOverrides()
 }
 
-private fun fixUrlWithoutProtocol() {
+private suspend fun enableProactiveValidation() {
     url.addEventListener("blur", {
         if (!(url.value.startsWith("http") || url.value.startsWith("https"))) {
             url.value = "https://${url.value}"
@@ -136,7 +141,6 @@ private fun fixUrlWithoutProtocol() {
     })
 
     url.addEventListener("keyup", {
-        console.warn(it)
         validateDomain()
     })
 }
@@ -146,10 +150,11 @@ private fun validateDomain() {
     xhr.open("GET", "https://api.muctool.de/curl?url=${url.value}")
     xhr.send()
     xhr.onload = {
-        if (xhr.status.equals(200) && (JSON.parse<dynamic>(xhr.responseText).code as Short).equals(200))
+        if (xhr.status.equals(200) && (JSON.parse<dynamic>(xhr.responseText).code as Short).equals(200)) {
             classifyUrlAsValid(true)
-        else
+        } else {
             classifyUrlAsValid(false)
+        }
     }
 }
 
@@ -176,7 +181,6 @@ private fun verifyCallback(token: String) {
 private fun preserveSearchSetup() {
     document.execCommand("copy")
 }
-
 
 @JsName("applyQueryOverrides")
 private fun applyQueryOverrides() {
@@ -231,6 +235,38 @@ fun startCrawler() {
 class SiteSearch {
     companion object {
         val captchaSiteKey = "6LflVEQUAAAAANVEkwc63uQX96feH1H_6jDU-Bn5"
+    }
+}
+
+suspend fun httpGet(url: String): String = suspendCoroutine { c ->
+    val xhr = XMLHttpRequest()
+    xhr.onreadystatechange = {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            if (xhr.status / 100 == 2) {
+                c.resume(xhr.response as String)
+            } else {
+                c.resumeWithException(RuntimeException("HTTP error: ${xhr.status}"))
+            }
+        }
+        null
+    }
+    xhr.open("GET", url)
+    xhr.send()
+}
+
+fun <T> async(x: suspend () -> T): Promise<T> {
+    return Promise { resolve, reject ->
+        x.startCoroutine(object : Continuation<T> {
+            override val context = EmptyCoroutineContext
+
+            override fun resume(value: T) {
+                resolve(value)
+            }
+
+            override fun resumeWithException(exception: Throwable) {
+                reject(exception)
+            }
+        })
     }
 }
 
