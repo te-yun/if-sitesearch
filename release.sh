@@ -27,7 +27,7 @@ docker run -d --name ${docker_image_name} \
     --network $docker_network \
     intrafind/${docker_image_name}:${docker_tag}
 
-docker push $img_fqn
+docker push ${img_fqn}:${docker_tag}
 
 danglingImages=$(docker images -f "dangling=true" -q)
 if [ "$danglingImages" ]; then
