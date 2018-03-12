@@ -16,6 +16,11 @@
 
 package com.intrafind.legal.gadget
 
+import org.w3c.dom.HTMLDivElement
+import org.w3c.dom.HTMLTextAreaElement
+import org.w3c.dom.events.Event
+import org.w3c.xhr.XMLHttpRequest
+import kotlin.browser.document
 import kotlin.browser.window
 
 fun main(args: Array<String>) {
@@ -33,6 +38,20 @@ private val serviceUrl: String = if (window.location.hostname.equals("localhost"
 fun showInitCode() {
 
 
+}
+
+fun analyze() {
+    val xhr = XMLHttpRequest()
+    xhr.open("PUT", "$serviceUrl/legal/37abd346-261b-11e8-989a-63440ea45232/contract/gist")
+    xhr.onload = {
+        console.warn(xhr.responseText)
+        console.warn(JSON.parse<dynamic>(xhr.responseText).tags)
+        val s = JSON.stringify(JSON.parse<dynamic>(xhr.responseText).tags)
+        (document.getElementById("result") as HTMLDivElement).textContent = s
+        document.dispatchEvent(Event("sis.contract.analyze"))
+    }
+    xhr.setRequestHeader("content-type", "application/json")
+    xhr.send((document.getElementById("contract") as HTMLTextAreaElement).value)
 }
 
 class Legal {
