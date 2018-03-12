@@ -40,10 +40,9 @@ public class LegalController {
         this.legalService = legalService;
     }
 
-    @RequestMapping(path = "{tenant}/contract", method = RequestMethod.PUT)
+    @RequestMapping(path = "{tenant}/contract/gist", method = RequestMethod.PUT)
     ResponseEntity<AnalyzedContract> analyze(
             @PathVariable(value = "tenant") UUID tenant,
-            @RequestParam(value = "content") String content,
             @RequestBody Contract contract
     ) {
         final Optional<AnalyzedContract> analyzedContract = legalService.analyze(contract);
