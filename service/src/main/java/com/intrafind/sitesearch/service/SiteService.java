@@ -57,6 +57,7 @@ public class SiteService {
      * Field is updated whenever a document is (re-)indexed.
      */
     private static final String PAGE_TIMESTAMP = "timestamp";
+    private static final String PAGE_LABELS = "sisLabels";
 
     public Optional<FetchedPage> indexExistingPage(String id, UUID siteId, UUID siteSecret, SitePage page) {
         if (siteId != null && siteSecret != null) { // credentials are provided as a tuple only
@@ -86,6 +87,7 @@ public class SiteService {
         doc.set(Fields.TITLE, page.getTitle());
         doc.set(Fields.URL, page.getUrl());
         doc.set(Fields.TENANT, siteId);
+        doc.set(PAGE_LABELS, Collections.emptyList()); // TODO implement tests, expose via API for both indexing & search
         doc.set(PAGE_TIMESTAMP, Instant.now());
         INDEX_SERVICE.index(doc);
         LOG.info("siteId: " + siteId + " - bodySize: " + page.getBody().length() + " - titleSize: " + page.getTitle().length() + " - URL: " + page.getUrl());
@@ -166,19 +168,19 @@ public class SiteService {
 
     private void storeSite(UUID siteId, UUID siteSecret, Set<URI> urls, String email) {
         final Optional<Document> siteConfiguration = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
-        final Document document;
-        document = siteConfiguration.orElseGet(() -> new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId));
-        document.set("secret", siteSecret);
-        document.set("urls", urls);
-        document.set("email", email);
-        INDEX_SERVICE.index(document);
+        final Document siteConfigDoc;
+        siteConfigDoc = siteConfiguration.orElseGet(() -> new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId));
+        siteConfigDoc.set("secret", siteSecret);
+        siteConfigDoc.set("urls", urls);
+        siteConfigDoc.set("email", email);
+        INDEX_SERVICE.index(siteConfigDoc);
     }
 
     private void updateSiteProfile(UUID siteId, Set<URI> pages) {
         final Optional<Document> siteConfiguration = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
-        siteConfiguration.ifPresent(document -> {
-            document.set("pages", pages);
-            INDEX_SERVICE.index(document);
+        siteConfiguration.ifPresent(siteConfigDoc -> {
+            siteConfigDoc.set("pages", pages);
+            INDEX_SERVICE.index(siteConfigDoc);
         });
     }
 
