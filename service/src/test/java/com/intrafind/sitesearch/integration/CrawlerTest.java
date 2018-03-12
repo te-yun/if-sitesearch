@@ -88,8 +88,8 @@ public class CrawlerTest {
 
         assertEquals(HttpStatus.OK, request.getStatusCode());
         assertNotNull(request.getBody());
-        assertEquals(15, request.getBody().getPageCount());
-        assertEquals(16, request.getBody().getUrls().size());
+        assertEquals(18, request.getBody().getPageCount());
+        assertEquals(19, request.getBody().getUrls().size());
 
         // assert correct timestamp after crawling & indexing
         final Set<URI> crawledPage = request.getBody().getUrls();
