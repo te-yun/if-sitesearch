@@ -138,8 +138,8 @@ public class CrawlerTest {
         assertEquals(HttpStatus.OK, currentlyRecrawled.getStatusCode());
         assertTrue(2 <= currentlyRecrawled.getBody().getSites().size());
 
-        freshlyCrawledSiteStatus.getSites().addAll(currentlyRecrawled.getBody().getSites());
-        assertTrue(2 <= freshlyCrawledSiteStatus.getSites().size());
+//        freshlyCrawledSiteStatus.getSites().addAll(currentlyRecrawled.getBody().getSites());
+//        assertTrue(2 <= freshlyCrawledSiteStatus.getSites().size());
 
         // crawl freshly crawled site
         final ResponseEntity<SitesCrawlStatus> recrawlFreshSite = caller
