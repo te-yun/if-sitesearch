@@ -91,8 +91,8 @@ public class SiteTest {
         final ResponseEntity<SitesCrawlStatus> crawlStatus = caller.exchange(SiteController.ENDPOINT + "/crawl/status?serviceSecret=" +
                 ADMIN_SITE_SECRET, HttpMethod.GET, HttpEntity.EMPTY, SitesCrawlStatus.class);
         assertEquals(HttpStatus.OK, crawlStatus.getStatusCode());
-        assertTrue(1 <= crawlStatus.getBody().getSites().size());
         int initSize = crawlStatus.getBody().getSites().size();
+        assertTrue(1 <= initSize);
         assertNotNull(findSearchSiteCrawlStatus(crawlStatus.getBody()).getSiteId());
         assertTrue(Instant.now().isAfter(Instant.parse(findSearchSiteCrawlStatus(crawlStatus.getBody()).getCrawled())));
 

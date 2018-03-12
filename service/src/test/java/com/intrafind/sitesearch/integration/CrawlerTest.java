@@ -131,13 +131,23 @@ public class CrawlerTest {
                         new HttpEntity<>(freshlyCrawledSiteStatus), SitesCrawlStatus.class);
         assertEquals(HttpStatus.BAD_REQUEST, recrawlNotAuthenticated.getStatusCode());
 
+        // fetch recrawled sites set
+        final ResponseEntity<SitesCrawlStatus> currentlyRecrawled = caller
+                .getForEntity(SiteController.ENDPOINT + "/crawl?serviceSecret=" + UUID.randomUUID(),
+                        SitesCrawlStatus.class);
+        assertEquals(HttpStatus.OK, currentlyRecrawled.getStatusCode());
+        assertTrue(2 <= currentlyRecrawled.getBody().getSites().size());
+
+        freshlyCrawledSiteStatus.getSites().addAll(currentlyRecrawled.getBody().getSites());
+        assertTrue(2 <= freshlyCrawledSiteStatus.getSites().size());
+
         // crawl freshly crawled site
         final ResponseEntity<SitesCrawlStatus> recrawlFreshSite = caller
                 .postForEntity(SiteController.ENDPOINT + "/crawl?serviceSecret=" + SiteTest.ADMIN_SITE_SECRET,
                         new HttpEntity<>(freshlyCrawledSiteStatus), SitesCrawlStatus.class);
         assertEquals(HttpStatus.OK, recrawlFreshSite.getStatusCode());
         final SitesCrawlStatus freshCrawlStatus = recrawlFreshSite.getBody();
-        assertEquals(2, freshCrawlStatus.getSites().size());
+        assertTrue(2 <= freshCrawlStatus.getSites().size());
         final int crawlSiteIdIndex = 1;
         assertEquals(CRAWL_SITE_ID, freshCrawlStatus.getSites().get(crawlSiteIdIndex).getSiteId());
         // TODO use findSearchSiteCrawlStatus where appropriate to validate only the test site ID
