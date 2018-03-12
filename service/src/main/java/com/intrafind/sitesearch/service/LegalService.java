@@ -19,16 +19,14 @@ package com.intrafind.sitesearch.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intrafind.sitesearch.dto.AnalyzedContract;
 import com.intrafind.sitesearch.dto.Contract;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import okhttp3.*;
 import org.apache.http.HttpHeaders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.Optional;
 
 @Service
@@ -36,7 +34,9 @@ public class LegalService {
     private static final Logger LOG = LoggerFactory.getLogger(LegalService.class);
 
     private static final URI LEGAL_SERVICE_URI = URI.create("https://tagger.analyzelaw.com/json/tagger");
-    private static final OkHttpClient HTTP_CLIENT = new OkHttpClient();
+    private static final OkHttpClient HTTP_CLIENT = new OkHttpClient().newBuilder()
+            .protocols(Collections.singletonList(Protocol.HTTP_1_1)) // required due to an OkHttp bug for HTTP2
+            .build();
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public Optional<AnalyzedContract> analyze(Contract contract) {

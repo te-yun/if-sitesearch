@@ -43,9 +43,10 @@ public class LegalController {
     @RequestMapping(path = "{tenant}/contract/gist", method = RequestMethod.PUT)
     ResponseEntity<AnalyzedContract> analyze(
             @PathVariable(value = "tenant") UUID tenant,
-            @RequestBody Contract contract
+            @RequestBody String contract
     ) {
-        final Optional<AnalyzedContract> analyzedContract = legalService.analyze(contract);
+        LOG.info("tenant: " + tenant + " - contractSize: " + contract.length());
+        final Optional<AnalyzedContract> analyzedContract = legalService.analyze(new Contract(contract));
         return analyzedContract.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 }
