@@ -133,7 +133,7 @@ public class CrawlerTest {
 
         // fetch recrawled sites set
         final ResponseEntity<SitesCrawlStatus> currentlyRecrawled = caller
-                .getForEntity(SiteController.ENDPOINT + "/crawl?serviceSecret=" + UUID.randomUUID(),
+                .getForEntity(SiteController.ENDPOINT + "/crawl/status?serviceSecret=" + UUID.randomUUID(),
                         SitesCrawlStatus.class);
         assertEquals(HttpStatus.OK, currentlyRecrawled.getStatusCode());
         assertTrue(2 <= currentlyRecrawled.getBody().getSites().size());
