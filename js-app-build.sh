@@ -2,6 +2,7 @@
 
 ./gradlew \
     :gadget:clean :gadget:build \
+    :legal:clean :legal:build \
     --parallel --continuous \
     $1
 #    :finder:build \
