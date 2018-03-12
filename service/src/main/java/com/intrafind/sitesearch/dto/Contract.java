@@ -16,14 +16,26 @@
 
 package com.intrafind.sitesearch.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Contract {
     private String title;
+    private String content;
 
     private Contract() {
     }
 
-    public Contract(String title) {
-        this.title = title;
+    public Contract(String content) {
+        this.content = content;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public String getTitle() {
