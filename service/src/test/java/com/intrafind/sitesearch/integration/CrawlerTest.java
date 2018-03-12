@@ -123,7 +123,7 @@ public class CrawlerTest {
 
     @Test
     public void recrawl() {
-        final SitesCrawlStatus freshlyCrawledSiteStatus = new SitesCrawlStatus(Collections.singletonList(new CrawlStatus(CRAWL_SITE_SECRET, Instant.now())));
+        final SitesCrawlStatus freshlyCrawledSiteStatus = new SitesCrawlStatus(Arrays.asList(new CrawlStatus(CRAWL_SITE_SECRET, Instant.now())));
 
         // not authenticated crawl
         final ResponseEntity<SitesCrawlStatus> recrawlNotAuthenticated = caller
