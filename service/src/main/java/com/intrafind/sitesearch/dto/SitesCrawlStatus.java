@@ -16,11 +16,11 @@
 
 package com.intrafind.sitesearch.dto;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SitesCrawlStatus {
-    private List<CrawlStatus> sites = Collections.emptyList();
+    private List<CrawlStatus> sites = new ArrayList<>();
 
     private SitesCrawlStatus() {
     }
