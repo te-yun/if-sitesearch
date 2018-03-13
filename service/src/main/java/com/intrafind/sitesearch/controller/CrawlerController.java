@@ -166,10 +166,11 @@ public class CrawlerController {
     ResponseEntity<SitesCrawlStatus> recrawlSites(
             @RequestParam(value = "serviceSecret") UUID serviceSecret,
             @RequestBody SitesCrawlStatus sitesCrawlStatusUpdate,
-            @RequestParam(required = false, value = "allSitesCrawl", defaultValue = "false") boolean allSitesCrawl
+            @RequestParam(required = false, value = "allSitesCrawl", defaultValue = "false") boolean allSitesCrawl,
+            @RequestParam(required = false, value = "isThrottled", defaultValue = "true") boolean isThrottled
     ) {
         // TODO refactor code so `crawlerService` does not need to be passed as argument
-        final Optional<SitesCrawlStatus> sitesCrawlStatus = siteService.recrawlSites(serviceSecret, crawlerService, sitesCrawlStatusUpdate, allSitesCrawl);
+        final Optional<SitesCrawlStatus> sitesCrawlStatus = siteService.recrawlSites(serviceSecret, crawlerService, sitesCrawlStatusUpdate, allSitesCrawl, isThrottled);
         return sitesCrawlStatus.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
@@ -221,7 +222,7 @@ public class CrawlerController {
         }
 
         if (captchaPassed) {
-            final CrawlerJobResult crawlerJobResult = crawlerService.crawl(url.toString(), siteId, siteSecret);
+            final CrawlerJobResult crawlerJobResult = crawlerService.crawl(url.toString(), siteId, siteSecret, true);
             final String emailAddress = determineEmailAddress(email);
             try {
                 sendSetupInfoEmail(siteId, siteSecret, url, emailAddress, crawlerJobResult.getPageCount());

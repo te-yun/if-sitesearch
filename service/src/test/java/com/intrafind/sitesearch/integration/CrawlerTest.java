@@ -145,13 +145,12 @@ public class CrawlerTest {
         assertEquals(HttpStatus.OK, recrawlFreshSite.getStatusCode());
         final SitesCrawlStatus freshCrawlStatus = recrawlFreshSite.getBody();
         assertTrue(2 <= freshCrawlStatus.getSites().size());
-        final int crawlSiteIdIndex = 1;
-        assertEquals(CRAWL_SITE_ID, freshCrawlStatus.getSites().get(crawlSiteIdIndex).getSiteId());
+        assertTrue(containsUpdatedSiteId(freshCrawlStatus));
         // TODO use findSearchSiteCrawlStatus where appropriate to validate only the test site ID
         assertTrue(Instant.parse(
                 freshlyCrawledSiteStatus.getSites().get(0).getCrawled())
                 .isAfter(Instant.parse(
-                        freshCrawlStatus.getSites().get(crawlSiteIdIndex).getCrawled())));
+                        getCrawlStatusWithUpdatedSiteId(freshCrawlStatus).getCrawled())));
 
         // crawl all sites
         final ResponseEntity<SitesCrawlStatus> recrawl = caller
@@ -161,8 +160,8 @@ public class CrawlerTest {
         assertEquals(HttpStatus.OK, recrawl.getStatusCode());
         final SitesCrawlStatus sitesCrawlStatus = recrawl.getBody();
         assertEquals(2, sitesCrawlStatus.getSites().size());
-        assertEquals(CRAWL_SITE_ID, sitesCrawlStatus.getSites().get(crawlSiteIdIndex).getSiteId());
-        assertTrue(Instant.now().isAfter(Instant.parse(sitesCrawlStatus.getSites().get(crawlSiteIdIndex).getCrawled())));
+        assertTrue(containsUpdatedSiteId(sitesCrawlStatus));
+        assertTrue(Instant.now().isAfter(Instant.parse(getCrawlStatusWithUpdatedSiteId(sitesCrawlStatus).getCrawled())));
 
         // crawl stale site
         final SitesCrawlStatus staleSiteStatus = new SitesCrawlStatus(Collections.singletonList(new CrawlStatus(CRAWL_SITE_SECRET, Instant.now().minus(1, ChronoUnit.DAYS))));
@@ -172,11 +171,30 @@ public class CrawlerTest {
         assertEquals(HttpStatus.OK, recrawlStaleSite.getStatusCode());
         final SitesCrawlStatus staleCrawlStatus = recrawlStaleSite.getBody();
         assertEquals(2, staleCrawlStatus.getSites().size());
-        assertEquals(CRAWL_SITE_ID, staleCrawlStatus.getSites().get(crawlSiteIdIndex).getSiteId());
+        assertTrue(containsUpdatedSiteId(staleCrawlStatus));
         assertTrue(Instant.parse(
                 staleSiteStatus.getSites().get(0).getCrawled())
                 .isBefore(Instant.parse(
-                        staleCrawlStatus.getSites().get(crawlSiteIdIndex).getCrawled())));
+                        getCrawlStatusWithUpdatedSiteId(staleCrawlStatus).getCrawled())));
+    }
+
+    private CrawlStatus getCrawlStatusWithUpdatedSiteId(SitesCrawlStatus freshCrawlStatus) {
+        for (CrawlStatus crawlStatus : freshCrawlStatus.getSites()) {
+            if (CRAWL_SITE_ID.equals(crawlStatus.getSiteId())) {
+                return crawlStatus;
+            }
+        }
+        return null;
+    }
+
+    private boolean containsUpdatedSiteId(SitesCrawlStatus freshCrawlStatus) {
+        boolean freshCrawlStatusCheck = false;
+        for (CrawlStatus crawlStatus : freshCrawlStatus.getSites()) {
+            if (CRAWL_SITE_ID.equals(crawlStatus.getSiteId())) {
+                freshCrawlStatusCheck = true;
+            }
+        }
+        return freshCrawlStatusCheck;
     }
 }
 
