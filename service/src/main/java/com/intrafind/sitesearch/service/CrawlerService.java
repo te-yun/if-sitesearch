@@ -39,7 +39,7 @@ import java.util.UUID;
 public class CrawlerService {
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerService.class);
     private static final String CRAWLER_STORAGE = "data/crawler";
-    private static final int CRAWLER_THREADS = 7;
+    private static final int CRAWLER_THREADS = 1;
 
     public CrawlerJobResult crawl(String url, UUID siteId, UUID siteSecret, boolean isThrottled) {
         final CrawlConfig config = new CrawlConfig();
