@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 # Should be executed on the host with `~/buildAgent` directory  
 
-version=2017.2.2
+version=2017.2.3
 service_name=teamcity-server
 
 docker rm -f $service_name
@@ -18,8 +18,6 @@ sudo ~/buildAgent/bin/agent.sh stop kill # stop localhost-agent
 #cd ~/buildAgent/bin
 #    ./install.sh https://ci.sitesearch.cloud
 #~/buildAgent/bin/agent.sh run
-
-# TODO fix SiS Gadget does not support query param in WordPress
 
 start_ci_agent() {
     docker rm -f teamcity-agent-$1
