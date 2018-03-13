@@ -39,7 +39,7 @@ private fun main(args: Array<String>) {
 private val serviceUrl: String = if (window.location.hostname.equals("localhost")) {
     "http://localhost:8001"
 } else {
-    "https://api.sitesearch.cloud"
+    window.location.origin
 }
 
 private lateinit var analyzedContractContainer: HTMLDListElement
