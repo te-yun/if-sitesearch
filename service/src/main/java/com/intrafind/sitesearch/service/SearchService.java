@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ public class SearchService {
     static final Search SEARCH_SERVICE = IfinderCoreClient.newHessianClient(Search.class, Application.IFINDER_CORE + "/search");
 
     private static final Logger LOG = LoggerFactory.getLogger(SearchService.class);
-    static final String QUERY_SEPARATOR = ",";
+    private static final String QUERY_SEPARATOR = ",";
     private static final String HIT_TEASER_PREFIX = "hit.teaser.";
 
     public Hits search(String query, UUID siteId) {
@@ -44,6 +44,8 @@ public class SearchService {
 //                Search.RETURN_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL + QUERY_SEPARATOR + Fields.TENANT,
 
                 Search.RETURN_TEASER_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL,
+//                Search.HITS_SORT, "-_date_",
+                Search.HITS_SORT, "_date_",
                 Search.RETURN_TEASER_COUNT, 1,
                 Search.RETURN_TEASER_SIZE, 150,
                 Search.RETURN_TEASER_TAG_PRE, "<span class=\"if-teaser-highlight\">",
