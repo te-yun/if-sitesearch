@@ -159,7 +159,7 @@ public class CrawlerTest {
 
         assertEquals(HttpStatus.OK, recrawl.getStatusCode());
         final SitesCrawlStatus sitesCrawlStatus = recrawl.getBody();
-        assertEquals(2, sitesCrawlStatus.getSites().size());
+        assertTrue(1 < sitesCrawlStatus.getSites().size());
         assertTrue(containsUpdatedSiteId(sitesCrawlStatus));
         assertTrue(Instant.now().isAfter(Instant.parse(getCrawlStatusWithUpdatedSiteId(sitesCrawlStatus).getCrawled())));
 
