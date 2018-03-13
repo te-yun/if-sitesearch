@@ -16,28 +16,26 @@
   -->
 
 <html lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Legal Gadget - Analyze Law</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Legal Gadget - Analyze Law</title>
 
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Open+Sans:100italic,200italic,300italic,400italic,500italic,600italic,700italic,800italic,900italic,100,200,300,400,500,600,700,800,900"
-          media="all">
-    <link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/theme/font/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="main.css">
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Open+Sans:100italic,200italic,300italic,400italic,500italic,600italic,700italic,800italic,900italic,100,200,300,400,500,600,700,800,900"
+      media="all">
+<link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/theme/font/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="main.css">
 
-    <script src="tippy.all.min.js"></script>
-    <script src="/app/runtime/kotlin.js"></script>
-    <script src="/app/legal/legal.js"></script>
-</head>
+<script src="tippy.all.min.js"></script>
+<script src="/app/runtime/kotlin.js"></script>
+<script src="/app/legal/legal.js"></script>
 
-<body>
-<textarea id="contract">Contract</textarea>
+<h1>Contract Excerpt</h1>
+<textarea id="contract" title="Contract Text">The quick brown fox jumps over the lazy dog.
+
+</textarea>
 <button
         onclick="legal.com.intrafind.legal.gadget.analyze()"
 >Analyze!
 </button>
-<div id="result">Contract Excerpt</div>
-</body>
-</html>
+<dl id="analyzedContract"></dl>

@@ -119,6 +119,20 @@ server {
 server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
+    server_name api.analyzelaw.com;
+
+    include /etc/nginx/snippets/ssl.conf;
+
+    location / {
+        include /etc/nginx/snippets/cors-headers.conf;
+
+        proxy_pass http://if-sitesearch:8001;
+    }
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
     server_name blue.sitesearch.cloud;
 
     include /etc/nginx/snippets/ssl.conf;
