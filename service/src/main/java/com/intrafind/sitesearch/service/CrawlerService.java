@@ -51,7 +51,7 @@ public class CrawlerService {
             config.setMaxOutgoingLinksToFollow(1_000);
             config.setMaxPagesToFetch(500);
         } else {
-            crawlerThreads = 7;
+            crawlerThreads = 1;
             config.setUserAgentString("SiteSearch-");
             config.setPolitenessDelay(0);
         }
@@ -71,7 +71,11 @@ public class CrawlerService {
 
         if (clearIndex(siteId, siteSecret)) {
             final CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url));
-            controller.start(factory, crawlerThreads);
+            if (isThrottled) {
+                controller.start(factory, crawlerThreads);
+            } else {
+                controller.startNonBlocking(factory, crawlerThreads);
+            }
 
 //            controller.waitUntilFinish();
 //            controller.shutdown();
