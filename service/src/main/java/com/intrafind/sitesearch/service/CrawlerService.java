@@ -39,17 +39,19 @@ import java.util.UUID;
 public class CrawlerService {
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerService.class);
     private static final String CRAWLER_STORAGE = "data/crawler";
-    private static final int CRAWLER_THREADS = 1;
 
     public CrawlerJobResult crawl(String url, UUID siteId, UUID siteSecret, boolean isThrottled) {
         final CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(CRAWLER_STORAGE);
+        final int crawlerThreads;
         if (isThrottled) {
+            crawlerThreads = 1;
             config.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36");
             config.setPolitenessDelay(200);
             config.setMaxOutgoingLinksToFollow(1_000);
             config.setMaxPagesToFetch(500);
         } else {
+            crawlerThreads = 7;
             config.setUserAgentString("SiteSearch-");
             config.setPolitenessDelay(0);
         }
@@ -69,7 +71,7 @@ public class CrawlerService {
 
         if (clearIndex(siteId, siteSecret)) {
             final CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url));
-            controller.start(factory, CRAWLER_THREADS);
+            controller.start(factory, crawlerThreads);
 
 //            controller.waitUntilFinish();
 //            controller.shutdown();
