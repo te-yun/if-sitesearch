@@ -110,7 +110,12 @@ public class SiteCrawler extends WebCrawler {
                 LOG.error(e.getMessage());
             }
         }
-        final int currentPageCount = PAGE_COUNT.getOrDefault(siteId, new AtomicInteger(2)).incrementAndGet();
+//        final int currentPageCount = PAGE_COUNT.getOrDefault(siteId, new AtomicInteger(0)).incrementAndGet();
+        if (PAGE_COUNT.get(siteId) == null) {
+            PAGE_COUNT.put(siteId, new AtomicInteger(0));
+        }
+        final int currentPageCount = PAGE_COUNT.get(siteId).incrementAndGet();
+//        final int currentPageCount = PAGE_COUNT.get(siteId).incrementAndGet();
         LOG.info("siteId: " + siteId + " - pageCount: " + currentPageCount);
 
         this.getMyController().setCustomData(currentPageCount);
