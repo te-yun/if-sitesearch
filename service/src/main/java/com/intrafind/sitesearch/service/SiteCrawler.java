@@ -30,7 +30,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
@@ -40,7 +39,7 @@ public class SiteCrawler extends WebCrawler {
     private final static Logger LOG = LoggerFactory.getLogger(SiteCrawler.class);
     private static final Pattern BLACKLIST = Pattern.compile(".*(\\.(css|js|gif|jpg|png|mp3|mp4|zip|gz|xml))$");
     //    private static final Pattern WHITELIST= Pattern.compile(".*(\\.(html|htm|txt|pdf))$");
-    private final AtomicInteger pages = new AtomicInteger(0);
+    private static final AtomicInteger PAGE_COUNT = new AtomicInteger(0);
     public static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
             .followRedirects(false)
             .followSslRedirects(false)
@@ -81,7 +80,6 @@ public class SiteCrawler extends WebCrawler {
             final HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
             final String htmlStrippedBody = extractTextFromMixedHtml(htmlParseData.getHtml());
             final String title = htmlParseData.getTitle();
-            final Set<WebURL> links = htmlParseData.getOutgoingUrls();
 
             final SitePage sitePage = new SitePage(
                     title,
@@ -91,29 +89,29 @@ public class SiteCrawler extends WebCrawler {
 
             try {
                 // TODO move this to CrawlerService
-                Request request = new Request.Builder()
+                final Request request = new Request.Builder()
                         .url("https://api.sitesearch.cloud/sites/" + siteId + "/pages?siteSecret=" + siteSecret)
                         .put(RequestBody.create(JSON_MEDIA_TYPE, MAPPER.writeValueAsBytes(sitePage)))
                         .build();
-                final Response response = HTTP_CLIENT.newCall(request).execute();
-                if (response.code() != 200) {
-                    LOG.warn("siteId: " + siteId + " - URL: " + url + " - responseCode: " + response.code());
-                    response.close();
-                    this.getMyController().getCrawlersLocalData().add("FAILED: " + url);
-                    throw new RuntimeException("Error while adding page to index");
-                }
-                response.close();
+                HTTP_CLIENT.newCall(request).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        LOG.warn("siteId: " + siteId + " - URL: " + url + " - exception: " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) {
+                        LOG.debug("siteId: " + siteId + " - URL: " + url + " - responseCode: " + response.code());
+                    }
+                });
             } catch (IOException e) {
                 LOG.error(e.getMessage());
             }
-
-            LOG.debug("sitePage: " + sitePage);
-            LOG.debug("outgoingURLs: " + links.size());
         }
-        LOG.info("siteId: " + siteId + " - pageCount: " + pages.incrementAndGet());
+        final int currentPageCount = PAGE_COUNT.incrementAndGet();
+        LOG.info("siteId: " + siteId + " - pageCount: " + currentPageCount);
 
-        this.getMyController().setCustomData(pages.get());
-        this.getMyController().getCrawlersLocalData().add(url);
+        this.getMyController().setCustomData(currentPageCount);
     }
 
     private String extractTextFromMixedHtml(String body) {

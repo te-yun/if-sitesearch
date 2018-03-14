@@ -192,9 +192,19 @@ public class SiteService {
     }
 
     private void updateCrawlStatus(UUID siteId) {
-        final Document crawlStatus = new Document(CRAWL_STATUS_SINGLETON_DOCUMENT);
-        crawlStatus.set(siteId.toString(), Instant.now().toString());
-        INDEX_SERVICE.index(crawlStatus);
+        final Optional<SitesCrawlStatus> fetchSitesCrawlStatus = fetchSitesCrawlStatus();
+        fetchSitesCrawlStatus.ifPresent(sitesCrawlStatus -> {
+            sitesCrawlStatus.getSites().forEach(crawlStatus -> {
+                if (siteId.equals(crawlStatus.getSiteId())) {
+                    crawlStatus.setCrawled(Instant.now().toString());
+                }
+            });
+
+            final Document updatedCrawlStatusDoc = new Document(CRAWL_STATUS_SINGLETON_DOCUMENT);
+            sitesCrawlStatus.getSites()
+                    .forEach(updatedCrawlStatus -> updatedCrawlStatusDoc.set(updatedCrawlStatus.toString(), updatedCrawlStatus.getCrawled()));
+            INDEX_SERVICE.index(updatedCrawlStatusDoc);
+        });
     }
 
     public Optional<FetchedPage> fetchById(String id) {
@@ -423,7 +433,6 @@ public class SiteService {
                                 final Optional<URI> siteUrl = profile.getUrls().stream().findFirst();
                                 siteUrl.ifPresent(uri -> {
                                     final CrawlerJobResult crawlerJobResult = crawlerService.crawl(uri.toString(), crawlStatus.getSiteId(), siteSecret, isThrottled, clearIndex);
-//                                    updateSiteProfile(profile.getId(), crawlerJobResult.getUrls()); // TODO do not provide URLs for profile
                                     updateCrawlStatus(crawlStatus.getSiteId()); // TODO fix PATCH update instead of a regular PUT
                                     LOG.info("siteId: " + crawlStatus.getSiteId() + " - siteUrl: " + uri.toString() + " - pageCount: " + crawlerJobResult.getPageCount()); // TODO add pattern to logstash
                                 });

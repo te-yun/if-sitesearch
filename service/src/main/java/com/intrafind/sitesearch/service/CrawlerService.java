@@ -49,8 +49,8 @@ public class CrawlerService {
             config.setMaxOutgoingLinksToFollow(1_000);
             config.setMaxPagesToFetch(500);
         } else {
-            crawlerThreads = 1;
-            config.setUserAgentString("SiteSearch-");
+            crawlerThreads = 7;
+            config.setUserAgentString("SiteSearch");
             config.setPolitenessDelay(0);
         }
 
