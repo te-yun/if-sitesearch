@@ -30,6 +30,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
@@ -39,7 +41,7 @@ public class SiteCrawler extends WebCrawler {
     private final static Logger LOG = LoggerFactory.getLogger(SiteCrawler.class);
     private static final Pattern BLACKLIST = Pattern.compile(".*(\\.(css|js|gif|jpg|png|mp3|mp4|zip|gz|xml))$");
     //    private static final Pattern WHITELIST= Pattern.compile(".*(\\.(html|htm|txt|pdf))$");
-    private static final AtomicInteger PAGE_COUNT = new AtomicInteger(0);
+    static final Map<UUID, AtomicInteger> PAGE_COUNT = new HashMap<>();
     public static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
             .followRedirects(false)
             .followSslRedirects(false)
@@ -108,7 +110,7 @@ public class SiteCrawler extends WebCrawler {
                 LOG.error(e.getMessage());
             }
         }
-        final int currentPageCount = PAGE_COUNT.incrementAndGet();
+        final int currentPageCount = PAGE_COUNT.getOrDefault(siteId, new AtomicInteger()).incrementAndGet();
         LOG.info("siteId: " + siteId + " - pageCount: " + currentPageCount);
 
         this.getMyController().setCustomData(currentPageCount);

@@ -77,6 +77,7 @@ public class CrawlerService {
         } else {
             controller.startNonBlocking(factory, crawlerThreads);
         }
+        SiteCrawler.PAGE_COUNT.remove(siteId);
 
 //            controller.waitUntilFinish();
 //            controller.shutdown();
