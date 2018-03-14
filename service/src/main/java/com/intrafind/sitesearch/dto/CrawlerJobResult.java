@@ -16,15 +16,10 @@
 
 package com.intrafind.sitesearch.dto;
 
-import java.net.URI;
-import java.util.Set;
-
 public class CrawlerJobResult {
-    private Set<URI> urls;
     private int pageCount;
 
-    public CrawlerJobResult(Set<URI> urls, int pageCount) {
-        this.urls = urls;
+    public CrawlerJobResult(int pageCount) {
         this.pageCount = pageCount;
     }
 
@@ -33,13 +28,5 @@ public class CrawlerJobResult {
 
     public int getPageCount() {
         return pageCount;
-    }
-
-    public Set<URI> getUrls() {
-        return urls;
-    }
-
-    public void setUrls(Set<URI> urls) {
-        this.urls = urls;
     }
 }

@@ -139,7 +139,6 @@ public class SiteTest {
         assertEquals(createdSiteProfile.getSiteId(), actual.getBody().getId());
         assertEquals(createdSiteProfile.getSiteSecret(), actual.getBody().getSecret());
         assertEquals(CrawlerTest.TEST_EMAIL_ADDRESS, actual.getBody().getEmail());
-        assertTrue(actual.getBody().getPages().isEmpty());
         assertEquals(urls, actual.getBody().getUrls());
 
         ResponseEntity<SiteProfile> siteProfileWithAdminSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() +
