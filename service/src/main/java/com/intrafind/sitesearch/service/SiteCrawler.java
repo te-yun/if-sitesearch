@@ -110,7 +110,7 @@ public class SiteCrawler extends WebCrawler {
                 LOG.error(e.getMessage());
             }
         }
-        final int currentPageCount = PAGE_COUNT.getOrDefault(siteId, new AtomicInteger(0)).incrementAndGet();
+        final int currentPageCount = PAGE_COUNT.getOrDefault(siteId, new AtomicInteger(2)).incrementAndGet();
         LOG.info("siteId: " + siteId + " - pageCount: " + currentPageCount);
 
         this.getMyController().setCustomData(currentPageCount);
