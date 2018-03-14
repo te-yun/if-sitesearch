@@ -409,7 +409,7 @@ public class SiteService {
     }
 
     // TODO refactor code so `crawlerService` does not need to be passed as argument
-    public Optional<SitesCrawlStatus> recrawlSites(UUID serviceSecret, CrawlerService crawlerService, SitesCrawlStatus sitesCrawlStatusUpdate, boolean allSiteCrawl, boolean isThrottled) {
+    public Optional<SitesCrawlStatus> recrawlSites(UUID serviceSecret, CrawlerService crawlerService, SitesCrawlStatus sitesCrawlStatusUpdate, boolean allSiteCrawl, boolean isThrottled, boolean clearIndex) {
         if (ADMIN_SITE_SECRET.equals(serviceSecret)) {
             final Instant halfDayAgo = Instant.now().minus(1, ChronoUnit.HALF_DAYS);
             sitesCrawlStatusUpdate.getSites().stream()
@@ -422,7 +422,7 @@ public class SiteService {
                             siteProfile.ifPresent(siteProfile1 -> {
                                 final Optional<URI> siteUrl = siteProfile1.getUrls().stream().findFirst();
                                 siteUrl.ifPresent(uri -> {
-                                    final CrawlerJobResult crawlerJobResult = crawlerService.crawl(uri.toString(), crawlStatus.getSiteId(), siteSecret, isThrottled);
+                                    final CrawlerJobResult crawlerJobResult = crawlerService.crawl(uri.toString(), crawlStatus.getSiteId(), siteSecret, isThrottled, clearIndex);
                                     updateSiteProfile(siteProfile1.getId(), crawlerJobResult.getUrls());
                                     updateCrawlStatus(crawlStatus.getSiteId());
                                     LOG.info("siteId: " + crawlStatus.getSiteId() + " - siteUrl: " + uri.toString() + " - pageCount: " + crawlerJobResult.getPageCount()); // TODO add pattern to logstash

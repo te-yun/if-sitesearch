@@ -40,7 +40,7 @@ public class CrawlerService {
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerService.class);
     private static final String CRAWLER_STORAGE = "data/crawler";
 
-    public CrawlerJobResult crawl(String url, UUID siteId, UUID siteSecret, boolean isThrottled) {
+    public CrawlerJobResult crawl(String url, UUID siteId, UUID siteSecret, boolean isThrottled, boolean clearIndex) {
         final CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(CRAWLER_STORAGE);
         final int crawlerThreads;
@@ -69,7 +69,10 @@ public class CrawlerService {
 
         controller.addSeed(url);
 
-        if (clearIndex(siteId, siteSecret)) {
+        if (clearIndex && !clearIndex(siteId, siteSecret)) {
+            return null;
+        }
+
             final CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url));
             if (isThrottled) {
                 controller.start(factory, crawlerThreads);
@@ -83,8 +86,6 @@ public class CrawlerService {
                     controller.getCrawlersLocalData().isEmpty() ? Collections.emptySet() : new HashSet(controller.getCrawlersLocalData()),
                     controller.getCustomData() == null ? 0 : (int) controller.getCustomData()
             );
-        }
-        return null;
     }
 
     private boolean clearIndex(UUID siteId, UUID siteSecret) {

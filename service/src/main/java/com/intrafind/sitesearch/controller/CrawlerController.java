@@ -167,10 +167,11 @@ public class CrawlerController {
             @RequestParam(value = "serviceSecret") UUID serviceSecret,
             @RequestBody SitesCrawlStatus sitesCrawlStatusUpdate,
             @RequestParam(required = false, value = "allSitesCrawl", defaultValue = "false") boolean allSitesCrawl,
-            @RequestParam(required = false, value = "isThrottled", defaultValue = "true") boolean isThrottled
+            @RequestParam(required = false, value = "isThrottled", defaultValue = "true") boolean isThrottled,
+            @RequestParam(required = false, value = "clearIndex", defaultValue = "true") boolean clearIndex
     ) {
         // TODO refactor code so `crawlerService` does not need to be passed as argument
-        final Optional<SitesCrawlStatus> sitesCrawlStatus = siteService.recrawlSites(serviceSecret, crawlerService, sitesCrawlStatusUpdate, allSitesCrawl, isThrottled);
+        final Optional<SitesCrawlStatus> sitesCrawlStatus = siteService.recrawlSites(serviceSecret, crawlerService, sitesCrawlStatusUpdate, allSitesCrawl, isThrottled, clearIndex);
         return sitesCrawlStatus.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
@@ -222,7 +223,7 @@ public class CrawlerController {
         }
 
         if (captchaPassed) {
-            final CrawlerJobResult crawlerJobResult = crawlerService.crawl(url.toString(), siteId, siteSecret, true);
+            final CrawlerJobResult crawlerJobResult = crawlerService.crawl(url.toString(), siteId, siteSecret, true, false);
             final String emailAddress = determineEmailAddress(email);
             try {
                 sendSetupInfoEmail(siteId, siteSecret, url, emailAddress, crawlerJobResult.getPageCount());
