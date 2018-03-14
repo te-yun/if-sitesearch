@@ -340,7 +340,7 @@ public class SiteTest {
                 HttpMethod.POST, HttpEntity.EMPTY, SiteIndexSummary.class);
         final SiteIndexSummary creation = validateTenantSummary(exchange, 25);
 
-        TimeUnit.MILLISECONDS.sleep(13_000);
+        TimeUnit.MILLISECONDS.sleep(8_000);
         LOG.info("siteId: " + creation.getSiteId());
         LOG.info("siteSecret: " + creation.getSiteSecret());
         validateUpdatedSites(creation);
@@ -349,7 +349,7 @@ public class SiteTest {
                 HttpMethod.DELETE, HttpEntity.EMPTY, Object.class);
         assertNull(clearSite.getBody());
         assertEquals(HttpStatus.OK, clearSite.getStatusCode());
-        TimeUnit.MILLISECONDS.sleep(18_000);
+        TimeUnit.MILLISECONDS.sleep(8_000);
         assureClearedSite(creation);
     }
 
