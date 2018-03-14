@@ -77,13 +77,13 @@ public class CrawlerService {
         } else {
             controller.startNonBlocking(factory, crawlerThreads);
         }
+
+        final int pageCount = controller.getCustomData() == null ? 0 : (int) controller.getCustomData();
         SiteCrawler.PAGE_COUNT.remove(siteId);
 
 //            controller.waitUntilFinish();
 //            controller.shutdown();
-        return new CrawlerJobResult(
-                controller.getCustomData() == null ? 0 : (int) controller.getCustomData()
-        );
+        return new CrawlerJobResult(pageCount);
     }
 
     private boolean clearIndex(UUID siteId, UUID siteSecret) {
