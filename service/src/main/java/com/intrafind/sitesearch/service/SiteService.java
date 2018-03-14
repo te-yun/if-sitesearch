@@ -202,7 +202,7 @@ public class SiteService {
 
             final Document updatedCrawlStatusDoc = new Document(CRAWL_STATUS_SINGLETON_DOCUMENT);
             sitesCrawlStatus.getSites()
-                    .forEach(updatedCrawlStatus -> updatedCrawlStatusDoc.set(updatedCrawlStatus.toString(), updatedCrawlStatus.getCrawled()));
+                    .forEach(updatedCrawlStatus -> updatedCrawlStatusDoc.set(updatedCrawlStatus.getSiteId().toString(), updatedCrawlStatus.getCrawled()));
             INDEX_SERVICE.index(updatedCrawlStatusDoc);
         });
     }
