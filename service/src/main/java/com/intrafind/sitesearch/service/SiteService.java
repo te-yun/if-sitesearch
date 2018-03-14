@@ -82,7 +82,7 @@ public class SiteService {
     }
 
     private Optional<FetchedPage> indexDocument(String id, UUID siteId, SitePage page) {
-        Document doc = new Document(id);
+        final Document doc = new Document(id);
         doc.set(Fields.BODY, page.getBody());
         doc.set(Fields.TITLE, page.getTitle());
         doc.set(Fields.URL, page.getUrl());
@@ -153,9 +153,7 @@ public class SiteService {
             return Optional.empty();
         } else {
             List<String> documents = new ArrayList<>();
-            documentWithSiteSecret.getDocuments().forEach(document -> {
-                documents.add(document.getId());
-            });
+            documentWithSiteSecret.getDocuments().forEach(document -> documents.add(document.getId()));
             return Optional.of(documents);
         }
     }
@@ -226,9 +224,7 @@ public class SiteService {
             } else if (siteSecret.equals(fetchedSiteSecret.get())) { // authorized
                 if (clearIndex) {
                     Optional<List<String>> allPages = fetchAllDocuments(siteId);
-                    allPages.ifPresent(pages -> {
-                        INDEX_SERVICE.delete(pages.toArray(new String[]{}));
-                    });
+                    allPages.ifPresent(pages -> INDEX_SERVICE.delete(pages.toArray(new String[]{})));
                 }
                 if (isGeneric) {
                     return updateIndexGenerically(feedUrl, siteId, siteSecret, stripHtmlTags);
@@ -420,19 +416,19 @@ public class SiteService {
                     .filter(crawlStatus -> Instant.parse(crawlStatus.getCrawled()).isBefore(halfDayAgo) || allSiteCrawl) // TODO filter to achieve crawling distribution across the entire day
                     .forEach(crawlStatus -> {
                         final Optional<UUID> fetchedSiteSecret = fetchSiteSecret(crawlStatus.getSiteId());
-                        if (fetchedSiteSecret.isPresent()) {
-                            final UUID siteSecret = fetchedSiteSecret.get();
+                        fetchedSiteSecret.ifPresent(uuid -> {
+                            final UUID siteSecret = uuid;
                             final Optional<SiteProfile> siteProfile = fetchSiteProfile(crawlStatus.getSiteId());
-                            if (siteProfile.isPresent()) {
-                                final Optional<URI> siteUrl = siteProfile.get().getUrls().stream().findFirst();
-                                if (siteUrl.isPresent()) {
-                                    final CrawlerJobResult crawlerJobResult = crawlerService.crawl(siteUrl.get().toString(), crawlStatus.getSiteId(), siteSecret, isThrottled);
-                                    updateSiteProfile(siteProfile.get().getId(), crawlerJobResult.getUrls());
+                            siteProfile.ifPresent(siteProfile1 -> {
+                                final Optional<URI> siteUrl = siteProfile1.getUrls().stream().findFirst();
+                                siteUrl.ifPresent(uri -> {
+                                    final CrawlerJobResult crawlerJobResult = crawlerService.crawl(uri.toString(), crawlStatus.getSiteId(), siteSecret, isThrottled);
+                                    updateSiteProfile(siteProfile1.getId(), crawlerJobResult.getUrls());
                                     updateCrawlStatus(crawlStatus.getSiteId());
-                                    LOG.info("siteId: " + crawlStatus.getSiteId() + " - siteUrl: " + siteUrl.get().toString() + " - pageCount: " + crawlerJobResult.getPageCount()); // TODO add pattern to logstash
-                                }
-                            }
-                        }
+                                    LOG.info("siteId: " + crawlStatus.getSiteId() + " - siteUrl: " + uri.toString() + " - pageCount: " + crawlerJobResult.getPageCount()); // TODO add pattern to logstash
+                                });
+                            });
+                        });
                     });
             return fetchSitesCrawlStatus();
         }

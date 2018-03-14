@@ -74,8 +74,8 @@ public class CrawlerController {
     private static final String SERVICE_CONFIG_PATH = "config/";
     private static final File DATA_STORE_DIR = new File(SERVICE_CONFIG_PATH + "gmail-api");
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
-    private static FileDataStoreFactory DATA_STORE_FACTORY;
-    private static HttpTransport HTTP_TRANSPORT;
+    private static final FileDataStoreFactory DATA_STORE_FACTORY;
+    private static final HttpTransport HTTP_TRANSPORT;
 
     static {
         try {

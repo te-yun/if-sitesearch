@@ -143,8 +143,7 @@ public class Application {
         SpringApplication.exit(SpringApplication.run(Application.class, args));
 
         final ConfigurableApplicationContext run = SpringApplication.run(Application.class, args);
-        run.addApplicationListener((ApplicationListener<ContextClosedEvent>) event -> {
-            LOG.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Close Event triggered");
-        });
+        run.addApplicationListener((ApplicationListener<ContextClosedEvent>) event ->
+                LOG.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Close Event triggered"));
     }
 }

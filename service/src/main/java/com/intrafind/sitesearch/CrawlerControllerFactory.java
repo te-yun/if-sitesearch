@@ -25,9 +25,9 @@ import java.util.UUID;
 
 public class CrawlerControllerFactory<T extends WebCrawler> implements CrawlController.WebCrawlerFactory {
 
-    private UUID siteId;
-    private UUID siteSecret;
-    private URI url;
+    private final UUID siteId;
+    private final UUID siteSecret;
+    private final URI url;
 
     public CrawlerControllerFactory(UUID siteId, UUID siteSecret, URI url) {
         this.siteId = siteId;

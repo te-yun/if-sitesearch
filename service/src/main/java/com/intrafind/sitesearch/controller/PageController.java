@@ -44,10 +44,6 @@ public class PageController {
     @RequestMapping(method = RequestMethod.GET, path = "{id}")
     ResponseEntity<FetchedPage> fetchById(@PathVariable("id") String id) {
         Optional<FetchedPage> fetched = service.fetchById(id);
-        if (fetched.isPresent()) {
-            return ResponseEntity.ok(fetched.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return fetched.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

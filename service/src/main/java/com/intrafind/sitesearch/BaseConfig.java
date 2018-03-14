@@ -32,14 +32,6 @@ import java.util.Collections;
 @Configuration
 public class BaseConfig {
 
-//    @Bean
-//    public EmbeddedServletContainerFactory servletContainer() {
-//        UndertowEmbeddedServletContainerFactory factory = new UndertowEmbeddedServletContainerFactory();
-//        factory.addBuilderCustomizers(builder -> builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true));
-//
-//        return factory;
-//    }
-
     @Bean
     public Docket hideApi(ServletContext servletContext) {
         return new Docket(DocumentationType.SWAGGER_2)

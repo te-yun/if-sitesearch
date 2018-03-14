@@ -136,7 +136,7 @@ public class CrawlerTest {
                 .getForEntity(SiteController.ENDPOINT + "/crawl/status?serviceSecret=" + SiteTest.ADMIN_SITE_SECRET,
                         SitesCrawlStatus.class);
         assertEquals(HttpStatus.OK, currentlyRecrawled.getStatusCode());
-        assertTrue(2 <= currentlyRecrawled.getBody().getSites().size());
+        assertTrue(1 < currentlyRecrawled.getBody().getSites().size());
 
         // crawl freshly crawled site
         final ResponseEntity<SitesCrawlStatus> recrawlFreshSite = caller
@@ -144,7 +144,7 @@ public class CrawlerTest {
                         new HttpEntity<>(freshlyCrawledSiteStatus), SitesCrawlStatus.class);
         assertEquals(HttpStatus.OK, recrawlFreshSite.getStatusCode());
         final SitesCrawlStatus freshCrawlStatus = recrawlFreshSite.getBody();
-        assertTrue(2 <= freshCrawlStatus.getSites().size());
+        assertTrue(1 < freshCrawlStatus.getSites().size());
         assertTrue(containsUpdatedSiteId(freshCrawlStatus));
         // TODO use findSearchSiteCrawlStatus where appropriate to validate only the test site ID
         assertTrue(Instant.parse(
