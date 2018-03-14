@@ -72,8 +72,7 @@ public class SiteController {
                     siteProfile.getId(),
                     siteProfile.getSecret(),
                     siteProfile.getUrls(),
-                            siteProfile.getEmail(),
-                            siteProfile.getPages()
+                    siteProfile.getEmail()
                     )
             );
         } else {
@@ -94,8 +93,7 @@ public class SiteController {
                     siteProfile.getId(),
                     siteProfile.getSecret(),
                     siteProfile.getUrls(),
-                            siteProfile.getEmail(),
-                            siteProfile.getPages()
+                    siteProfile.getEmail()
                     )
             );
         } else {

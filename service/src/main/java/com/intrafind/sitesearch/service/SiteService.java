@@ -133,7 +133,7 @@ public class SiteService {
                 pages = (List) document.getAll("pages");
             }
 
-            return new SiteProfile(siteId, UUID.fromString(document.get("secret")), urls, email, pages);
+            return new SiteProfile(siteId, UUID.fromString(document.get("secret")), urls, email);
         });
     }
 
@@ -174,13 +174,13 @@ public class SiteService {
         INDEX_SERVICE.index(siteConfigDoc);
     }
 
-    private void updateSiteProfile(UUID siteId, Set<URI> pages) {
-        final Optional<Document> siteConfiguration = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
-        siteConfiguration.ifPresent(siteConfigDoc -> {
-            siteConfigDoc.set("pages", pages);
-            INDEX_SERVICE.index(siteConfigDoc);
-        });
-    }
+//    private void updateSiteProfile(UUID siteId, Set<URI> pages) {
+//        final Optional<Document> siteConfiguration = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
+//        siteConfiguration.ifPresent(siteConfigDoc -> {
+//            siteConfigDoc.set("pages", pages);
+//            INDEX_SERVICE.index(siteConfigDoc);
+//        });
+//    }
 
     private void storeCrawlStatus(SitesCrawlStatus sitesCrawlStatus) {
         final Document crawlStatus = new Document(CRAWL_STATUS_SINGLETON_DOCUMENT);
@@ -409,7 +409,7 @@ public class SiteService {
     }
 
     // TODO refactor code so `crawlerService` does not need to be passed as argument
-    public Optional<SitesCrawlStatus> recrawlSites(UUID serviceSecret, CrawlerService crawlerService, SitesCrawlStatus sitesCrawlStatusUpdate, boolean allSiteCrawl, boolean isThrottled, boolean clearIndex) {
+    public Optional<SitesCrawlStatus> crawlSite(UUID serviceSecret, CrawlerService crawlerService, SitesCrawlStatus sitesCrawlStatusUpdate, boolean allSiteCrawl, boolean isThrottled, boolean clearIndex) {
         if (ADMIN_SITE_SECRET.equals(serviceSecret)) {
             final Instant halfDayAgo = Instant.now().minus(1, ChronoUnit.HALF_DAYS);
             sitesCrawlStatusUpdate.getSites().stream()
@@ -419,12 +419,12 @@ public class SiteService {
                         fetchedSiteSecret.ifPresent(uuid -> {
                             final UUID siteSecret = uuid;
                             final Optional<SiteProfile> siteProfile = fetchSiteProfile(crawlStatus.getSiteId());
-                            siteProfile.ifPresent(siteProfile1 -> {
-                                final Optional<URI> siteUrl = siteProfile1.getUrls().stream().findFirst();
+                            siteProfile.ifPresent(profile -> {
+                                final Optional<URI> siteUrl = profile.getUrls().stream().findFirst();
                                 siteUrl.ifPresent(uri -> {
                                     final CrawlerJobResult crawlerJobResult = crawlerService.crawl(uri.toString(), crawlStatus.getSiteId(), siteSecret, isThrottled, clearIndex);
-                                    updateSiteProfile(siteProfile1.getId(), crawlerJobResult.getUrls());
-                                    updateCrawlStatus(crawlStatus.getSiteId());
+//                                    updateSiteProfile(profile.getId(), crawlerJobResult.getUrls()); // TODO do not provide URLs for profile
+                                    updateCrawlStatus(crawlStatus.getSiteId()); // TODO fix PATCH update instead of a regular PUT
                                     LOG.info("siteId: " + crawlStatus.getSiteId() + " - siteUrl: " + uri.toString() + " - pageCount: " + crawlerJobResult.getPageCount()); // TODO add pattern to logstash
                                 });
                             });

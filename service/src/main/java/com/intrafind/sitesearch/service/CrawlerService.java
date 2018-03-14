@@ -73,19 +73,19 @@ public class CrawlerService {
             return null;
         }
 
-            final CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url));
-            if (isThrottled) {
-                controller.start(factory, crawlerThreads);
-            } else {
-                controller.startNonBlocking(factory, crawlerThreads);
-            }
+        final CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url));
+        if (isThrottled) {
+            controller.start(factory, crawlerThreads);
+        } else {
+            controller.startNonBlocking(factory, crawlerThreads);
+        }
 
 //            controller.waitUntilFinish();
 //            controller.shutdown();
-            return new CrawlerJobResult(
-                    controller.getCrawlersLocalData().isEmpty() ? Collections.emptySet() : new HashSet(controller.getCrawlersLocalData()),
-                    controller.getCustomData() == null ? 0 : (int) controller.getCustomData()
-            );
+        return new CrawlerJobResult(
+                controller.getCrawlersLocalData().isEmpty() ? Collections.emptySet() : new HashSet(controller.getCrawlersLocalData()),
+                controller.getCustomData() == null ? 0 : (int) controller.getCustomData()
+        );
     }
 
     private boolean clearIndex(UUID siteId, UUID siteSecret) {

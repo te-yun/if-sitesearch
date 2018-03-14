@@ -171,7 +171,7 @@ public class CrawlerController {
             @RequestParam(required = false, value = "clearIndex", defaultValue = "true") boolean clearIndex
     ) {
         // TODO refactor code so `crawlerService` does not need to be passed as argument
-        final Optional<SitesCrawlStatus> sitesCrawlStatus = siteService.recrawlSites(serviceSecret, crawlerService, sitesCrawlStatusUpdate, allSitesCrawl, isThrottled, clearIndex);
+        final Optional<SitesCrawlStatus> sitesCrawlStatus = siteService.crawlSite(serviceSecret, crawlerService, sitesCrawlStatusUpdate, allSitesCrawl, isThrottled, clearIndex);
         return sitesCrawlStatus.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 

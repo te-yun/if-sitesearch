@@ -17,7 +17,6 @@
 package com.intrafind.sitesearch.dto;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -26,22 +25,16 @@ public class SiteProfile {
     private UUID id;
     private UUID secret;
     private Set<URI> urls;
-    private List<URI> pages;
     private String email;
 
     private SiteProfile() {
     }
 
-    public SiteProfile(UUID id, UUID secret, Set<URI> urls, String email, List<URI> pages) {
+    public SiteProfile(UUID id, UUID secret, Set<URI> urls, String email) {
         this.id = id;
         this.secret = secret;
         this.urls = urls;
         this.email = email;
-        this.pages = pages;
-    }
-
-    public List<URI> getPages() {
-        return pages;
     }
 
     public Set<URI> getUrls() {
