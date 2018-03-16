@@ -53,6 +53,7 @@ public class BaseConfig {
                     }
                 })
                 .select()
+                .paths(Predicates.not(PathSelectors.regex("/legal/.*")))
                 .paths(Predicates.not(PathSelectors.regex("/sites/crawl.*")))
                 .paths(Predicates.not(PathSelectors.regex("/error")))
                 .paths(Predicates.not(PathSelectors.regex("/login.*")))
