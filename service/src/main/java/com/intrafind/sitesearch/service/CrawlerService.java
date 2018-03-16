@@ -41,8 +41,8 @@ public class CrawlerService {
     public CrawlerJobResult crawl(String url, UUID siteId, UUID siteSecret, boolean isThrottled, boolean clearIndex) {
         final CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(CRAWLER_STORAGE);
-        config.setThreadMonitoringDelaySeconds(0); // TODO not tested
-        config.setThreadShutdownDelaySeconds(0);   // TODO not tested
+//        config.setThreadMonitoringDelaySeconds(0); // TODO not tested
+//        config.setThreadShutdownDelaySeconds(0);   // TODO not tested
         final int crawlerThreads;
         if (isThrottled) {
             crawlerThreads = 2;
