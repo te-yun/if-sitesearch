@@ -104,6 +104,7 @@ public class SiteCrawler extends WebCrawler {
                     @Override
                     public void onResponse(Call call, Response response) {
                         LOG.debug("siteId: " + siteId + " - URL: " + url + " - responseCode: " + response.code());
+                        response.close();
                     }
                 });
             } catch (IOException e) {

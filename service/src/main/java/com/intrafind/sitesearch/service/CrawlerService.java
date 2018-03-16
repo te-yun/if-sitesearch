@@ -41,12 +41,13 @@ public class CrawlerService {
     public CrawlerJobResult crawl(String url, UUID siteId, UUID siteSecret, boolean isThrottled, boolean clearIndex) {
         final CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(CRAWLER_STORAGE);
+        config.setThreadMonitoringDelaySeconds(0); // TODO not tested
+        config.setThreadShutdownDelaySeconds(0);   // TODO not tested
         final int crawlerThreads;
         if (isThrottled) {
             crawlerThreads = 2;
             config.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36");
-            config.setPolitenessDelay(200);
-            config.setMaxOutgoingLinksToFollow(1_000);
+            config.setPolitenessDelay(200); // to avoid being blocked by crawled websites
             config.setMaxPagesToFetch(500);
         } else {
             crawlerThreads = 7;
@@ -57,11 +58,12 @@ public class CrawlerService {
         final PageFetcher pageFetcher = new PageFetcher(config);
         final RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
         final RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
+
         final CrawlController controller;
         try {
             controller = new CrawlController(config, pageFetcher, robotstxtServer);
-        } catch (Exception e) {
-            LOG.error("Controller init fail: " + e.getMessage());
+        } catch (final Exception e) {
+            LOG.error("Crawler initialization fail: " + e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
 
