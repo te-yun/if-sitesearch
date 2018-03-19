@@ -80,7 +80,6 @@ public class CrawlerTest {
 
     @Test
     public void crawlSiteSearchViaHttps() {
-        Instant beforeOperation = Instant.now();
         final ResponseEntity<CrawlerJobResult> request = caller
                 .postForEntity(SiteController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET
                                 + "&url=" + "https://sitesearch.cloud&token=" + UUID.randomUUID()
@@ -103,6 +102,30 @@ public class CrawlerTest {
         assertEquals(HttpStatus.OK, request.getStatusCode());
         assertNotNull(request.getBody());
         assertEquals(7, request.getBody().getPageCount());
+    }
+
+    @Test
+    public void considerNoindexWhileCrawlingWww() {
+        final SitesCrawlStatus siteToCrawl = new SitesCrawlStatus(Arrays.asList(new CrawlStatus(UUID.fromString("8e0af062-cb74-4529-9b7b-47ca1c101ae8"), Instant.now())));
+        final ResponseEntity<CrawlerJobResult> request = caller
+                .postForEntity(SiteController.ENDPOINT + "/crawl?siteSecret=" + SiteTest.ADMIN_SITE_SECRET
+                                + "&url=" + "https://www.migrosbank.ch/de&clearIndex=true&isThrottled=true",
+                        new HttpEntity<>(siteToCrawl), CrawlerJobResult.class);
+
+        assertEquals(HttpStatus.OK, request.getStatusCode());
+        assertEquals(154, request.getBody().getPageCount());
+    }
+
+    @Test
+    public void considerNoindexWhileCrawlingBlog() {
+        final SitesCrawlStatus siteToCrawl = new SitesCrawlStatus(Arrays.asList(new CrawlStatus(UUID.fromString("f771eb6b-80d6-4e9f-a660-22c9972a8e06"), Instant.now())));
+        final ResponseEntity<CrawlerJobResult> request = caller
+                .postForEntity(SiteController.ENDPOINT + "/crawl?siteSecret=" + SiteTest.ADMIN_SITE_SECRET
+                                + "&url=" + "https://blog.migrosbank.ch/de&clearIndex=true&isThrottled=true",
+                        new HttpEntity<>(siteToCrawl), CrawlerJobResult.class);
+
+        assertEquals(HttpStatus.OK, request.getStatusCode());
+        assertEquals(374, request.getBody().getPageCount());
     }
 
     @Test

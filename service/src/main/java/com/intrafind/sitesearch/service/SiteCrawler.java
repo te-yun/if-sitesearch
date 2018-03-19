@@ -80,6 +80,9 @@ public class SiteCrawler extends WebCrawler {
 
         if (page.getParseData() instanceof HtmlParseData) {
             final HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
+            if (isNoindexPage(htmlParseData)) {
+                return;
+            }
             final String htmlStrippedBody = extractTextFromMixedHtml(htmlParseData.getHtml());
             final String title = htmlParseData.getTitle();
 
@@ -118,6 +121,10 @@ public class SiteCrawler extends WebCrawler {
         LOG.info("siteId: " + siteId + " - pageCount: " + currentPageCount);
 
         this.getMyController().setCustomData(currentPageCount);
+    }
+
+    private boolean isNoindexPage(HtmlParseData htmlParseData) {
+        return htmlParseData.getMetaTags().get("robots") != null && htmlParseData.getMetaTags().get("robots").contains("noindex");
     }
 
     private String extractTextFromMixedHtml(String body) {
