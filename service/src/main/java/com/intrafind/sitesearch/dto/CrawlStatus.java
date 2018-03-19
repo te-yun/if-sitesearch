@@ -22,17 +22,23 @@ import java.util.UUID;
 public class CrawlStatus {
     private UUID siteId;
     private Instant crawled;
+    private long pageCount;
 
     private CrawlStatus() {
     }
 
-    public CrawlStatus(UUID siteId, Instant crawled) {
+    public CrawlStatus(UUID siteId, Instant crawled, long pageCount) {
         this.siteId = siteId;
         this.crawled = crawled;
+        this.pageCount = pageCount;
     }
 
     public UUID getSiteId() {
         return siteId;
+    }
+
+    public long getPageCount() {
+        return pageCount;
     }
 
     public String getCrawled() {
@@ -41,5 +47,9 @@ public class CrawlStatus {
 
     public void setCrawled(String crawled) {
         this.crawled = Instant.parse(crawled);
+    }
+
+    public void setPageCount(long pageCount) {
+        this.pageCount = pageCount;
     }
 }

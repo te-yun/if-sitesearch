@@ -114,7 +114,7 @@
 <div id="captcha"></div>
 <div class="button-wrapper">
     <button id="index" class="button-wrapper" title="Extract content from website"
-            onclick="gadget.com.intrafind.sitesearch.gadget.triggerFirstUsageOwnership()"
+            onclick="gadget.com.intrafind.sitesearch.gadget.triggerFirstUsageOwnership(); gtag_report_conversion();"
             disabled>
         Enable Search
     </button>
@@ -140,7 +140,7 @@
            title="Leave it blank if you do not know what this means."
            placeholder="Site ID to use for all Site Search requests" style="width: 306px;">
     <button
-            onclick="gadget.com.intrafind.sitesearch.gadget.overrideSite(document.getElementById('overrideSiteId').value); gtag_report_conversion();"
+            onclick="gadget.com.intrafind.sitesearch.gadget.overrideSite(document.getElementById('overrideSiteId').value);"
             title="Site ID Cookie overrides the Site ID which is specified in the initialization code for all requests to Site Search."
             style="width: 217px;">
         Override with Site ID Cookie
