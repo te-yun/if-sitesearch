@@ -109,8 +109,8 @@ public class CrawlerTest {
         final UUID siteId = UUID.fromString("8e0af062-cb74-4529-9b7b-47ca1c101ae8");
         final SitesCrawlStatus siteToCrawl = new SitesCrawlStatus(Arrays.asList(new CrawlStatus(siteId, Instant.now(), -1)));
         final ResponseEntity<SitesCrawlStatus> request = caller
-                .postForEntity(SiteController.ENDPOINT + "/crawl?siteSecret=" + SiteTest.ADMIN_SITE_SECRET
-                                + "&clearIndex=true&isThrottled=true&allSitesCrawl=true",
+                .postForEntity(SiteController.ENDPOINT + "/crawl?serviceSecret=" + SiteTest.ADMIN_SITE_SECRET
+                                + "&isThrottled=true&clearIndex=true&allSitesCrawl=true",
                         new HttpEntity<>(siteToCrawl), SitesCrawlStatus.class);
 
         assertEquals(HttpStatus.OK, request.getStatusCode());
@@ -124,7 +124,7 @@ public class CrawlerTest {
         final UUID siteId = UUID.fromString("f771eb6b-80d6-4e9f-a660-22c9972a8e06");
         final SitesCrawlStatus siteToCrawl = new SitesCrawlStatus(Arrays.asList(new CrawlStatus(siteId, Instant.now(), -1)));
         final ResponseEntity<SitesCrawlStatus> request = caller
-                .postForEntity(SiteController.ENDPOINT + "/crawl?siteSecret=" + SiteTest.ADMIN_SITE_SECRET
+                .postForEntity(SiteController.ENDPOINT + "/crawl?serviceSecret=" + SiteTest.ADMIN_SITE_SECRET
                                 + "&clearIndex=true&isThrottled=true&allSitesCrawl=true",
                         new HttpEntity<>(siteToCrawl), SitesCrawlStatus.class);
 

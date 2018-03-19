@@ -126,12 +126,12 @@ public class SiteService {
                 email = document.get("email");
             }
 
-            final List<URI> pages;
-            if (document.getAll("pages") == null) {
-                pages = Collections.emptyList();
-            } else {
-                pages = (List) document.getAll("pages");
-            }
+//            final List<URI> pages;
+//            if (document.getAll("pages") == null) {
+//                pages = Collections.emptyList();
+//            } else {
+//                pages = (List) document.getAll("pages");
+//            }
 
             return new SiteProfile(siteId, UUID.fromString(document.get("secret")), urls, email);
         });
