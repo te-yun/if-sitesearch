@@ -88,7 +88,7 @@ public class CrawlerTest {
 
         assertEquals(HttpStatus.OK, request.getStatusCode());
         assertNotNull(request.getBody());
-        assertEquals(18, request.getBody().getPageCount());
+        assertEquals(12, request.getBody().getPageCount());
     }
 
     @Test
@@ -109,7 +109,7 @@ public class CrawlerTest {
         final SitesCrawlStatus siteToCrawl = new SitesCrawlStatus(Arrays.asList(new CrawlStatus(UUID.fromString("8e0af062-cb74-4529-9b7b-47ca1c101ae8"), Instant.now())));
         final ResponseEntity<CrawlerJobResult> request = caller
                 .postForEntity(SiteController.ENDPOINT + "/crawl?siteSecret=" + SiteTest.ADMIN_SITE_SECRET
-                                + "&url=" + "https://www.migrosbank.ch/de&clearIndex=true&isThrottled=true",
+                                + "&clearIndex=true&isThrottled=true",
                         new HttpEntity<>(siteToCrawl), CrawlerJobResult.class);
 
         assertEquals(HttpStatus.OK, request.getStatusCode());
@@ -121,7 +121,7 @@ public class CrawlerTest {
         final SitesCrawlStatus siteToCrawl = new SitesCrawlStatus(Arrays.asList(new CrawlStatus(UUID.fromString("f771eb6b-80d6-4e9f-a660-22c9972a8e06"), Instant.now())));
         final ResponseEntity<CrawlerJobResult> request = caller
                 .postForEntity(SiteController.ENDPOINT + "/crawl?siteSecret=" + SiteTest.ADMIN_SITE_SECRET
-                                + "&url=" + "https://blog.migrosbank.ch/de&clearIndex=true&isThrottled=true",
+                                + "&clearIndex=true&isThrottled=true",
                         new HttpEntity<>(siteToCrawl), CrawlerJobResult.class);
 
         assertEquals(HttpStatus.OK, request.getStatusCode());
