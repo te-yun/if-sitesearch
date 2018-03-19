@@ -23,6 +23,7 @@ import com.intrafind.sitesearch.integration.SiteTest;
 import com.intrafind.sitesearch.jmh.LoadIndex2Users;
 import com.intrafind.sitesearch.service.SiteCrawler;
 import okhttp3.*;
+import org.apache.commons.codec.binary.Base64;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -36,7 +37,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.File;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -74,6 +79,34 @@ public class SmokeTest {
                 .build();
         final Response response = HTTP_CLIENT.newCall(request).execute();
         assertEquals(HttpStatus.UNAUTHORIZED.value(), response.code());
+    }
+    
+    @Test
+    public void assureTaggerContent() throws Exception {
+        //The credentials need to be supplied as either
+        // * a one lined file "credentials/tagger-credentials" in the base of the project or
+        // * an environment variable
+        // -> in the form of "username:password"
+        String unencodedCredentials;
+        try {
+            Path path = new File("../credentials/tagger-credentials").toPath();
+            unencodedCredentials= Files.readAllLines(path).get(0);
+        }
+        catch(NoSuchFileException nsfe){
+            //No credentials file provided. Checking environment variables.
+            unencodedCredentials=System.getenv("TAGGER_CREDENTIALS");
+        }
+        //Testing if credentials were provided
+        //TODO SHOULD THIS BE A SEPARATE TEST?
+        assertNotNull(unencodedCredentials);
+
+        String encodedCredentials = new String(Base64.encodeBase64(unencodedCredentials.getBytes()));
+        final Request request = new Request.Builder()
+                .header("Authorization","Basic "+encodedCredentials)
+                .url("https://tagger.analyzelaw.com")
+                .build();
+        final Response response = HTTP_CLIENT.newCall(request).execute();
+        assertEquals(HttpStatus.OK.value(), response.code());
     }
 
     @Test
