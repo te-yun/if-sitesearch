@@ -130,7 +130,7 @@ public class CrawlerTest {
 
         assertEquals(HttpStatus.OK, request.getStatusCode());
         request.getBody().getSites().stream().filter(crawlStatus -> crawlStatus.getSiteId().equals(siteId)).forEach(crawlStatus -> {
-            assertEquals(374, crawlStatus.getPageCount());
+            assertEquals(254, crawlStatus.getPageCount());
         });
     }
 
