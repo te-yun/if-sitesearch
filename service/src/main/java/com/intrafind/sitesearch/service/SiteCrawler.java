@@ -92,27 +92,7 @@ public class SiteCrawler extends WebCrawler {
                     url
             );
 
-            try {
-                // TODO move this to CrawlerService
-                final Request request = new Request.Builder()
-                        .url("https://api.sitesearch.cloud/sites/" + siteId + "/pages?siteSecret=" + siteSecret)
-                        .put(RequestBody.create(JSON_MEDIA_TYPE, MAPPER.writeValueAsBytes(sitePage)))
-                        .build();
-                HTTP_CLIENT.newCall(request).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        LOG.warn("siteId: " + siteId + " - URL: " + url + " - exception: " + e.getMessage());
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) {
-                        LOG.debug("siteId: " + siteId + " - URL: " + url + " - responseCode: " + response.code());
-                        response.close();
-                    }
-                });
-            } catch (IOException e) {
-                LOG.error(e.getMessage());
-            }
+            indexPage(sitePage);
         }
         if (PAGE_COUNT.get(siteId) == null) {
             PAGE_COUNT.put(siteId, new AtomicInteger());
@@ -121,6 +101,30 @@ public class SiteCrawler extends WebCrawler {
         LOG.info("siteId: " + siteId + " - pageCount: " + currentPageCount);
 
         this.getMyController().setCustomData(currentPageCount);
+    }
+
+    private void indexPage(SitePage sitePage) {
+        try {
+            // TODO move this to CrawlerService
+            final Request request = new Request.Builder()
+                    .url("https://api.sitesearch.cloud/sites/" + siteId + "/pages?siteSecret=" + siteSecret)
+                    .put(RequestBody.create(JSON_MEDIA_TYPE, MAPPER.writeValueAsBytes(sitePage)))
+                    .build();
+            HTTP_CLIENT.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    LOG.warn("siteId: " + siteId + " - URL: " + sitePage.getUrl() + " - exception: " + e.getMessage());
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) {
+                    LOG.debug("siteId: " + siteId + " - URL: " + sitePage.getUrl() + " - responseCode: " + response.code());
+                    response.close();
+                }
+            });
+        } catch (IOException e) {
+            LOG.error(e.getMessage());
+        }
     }
 
     private boolean isNoindexPage(HtmlParseData htmlParseData) {
