@@ -2,4 +2,3 @@ User-agent: *
 Disallow: /tmp
 Disallow: /searchbar
 Disallow: /test
-Allow: /
