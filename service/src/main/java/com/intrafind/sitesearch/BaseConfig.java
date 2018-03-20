@@ -33,7 +33,7 @@ import java.util.Collections;
 public class BaseConfig {
 
     @Bean
-    public Docket hideApi(ServletContext servletContext) {
+    public Docket hideApi(final ServletContext servletContext) {
         return new Docket(DocumentationType.SWAGGER_2)
                 .host("api.sitesearch.cloud")
                 .apiInfo(new ApiInfo(
