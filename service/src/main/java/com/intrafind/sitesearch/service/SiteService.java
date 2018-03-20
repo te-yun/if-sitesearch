@@ -425,8 +425,7 @@ public class SiteService {
                             final UUID siteSecret = uuid;
                             final Optional<SiteProfile> siteProfile = fetchSiteProfile(crawlStatus.getSiteId());
                             siteProfile.ifPresent(profile -> {
-                                final Optional<URI> siteUrl = profile.getUrls().stream().findFirst();
-                                siteUrl.ifPresent(uri -> {
+                                profile.getUrls().stream().forEach(uri -> {
                                     final CrawlerJobResult crawlerJobResult = crawlerService.crawl(uri.toString(), crawlStatus.getSiteId(), siteSecret, isThrottled, clearIndex);
                                     sitesCrawlStatusOverall.getSites().add(new CrawlStatus(profile.getId(), Instant.now(), crawlerJobResult.getPageCount()));
                                     final Optional<SitesCrawlStatus> sitesCrawlStatus = updateCrawlStatus(crawlStatus.getSiteId());// TODO fix PATCH update instead of a regular PUT   // rename to updateCrawlStatusInShedule
