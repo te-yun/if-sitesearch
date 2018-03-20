@@ -183,7 +183,7 @@ public class SiteService {
         INDEX_SERVICE.index(crawlStatus);
     }
 
-    private Optional<SitesCrawlStatus> updateCrawlStatus(UUID siteId) {
+    private Optional<SitesCrawlStatus> updateCrawlStatusInShedule(UUID siteId) {
         final Optional<SitesCrawlStatus> fetchSitesCrawlStatus = fetchSitesCrawlStatus();
         fetchSitesCrawlStatus.ifPresent(sitesCrawlStatus -> {
             sitesCrawlStatus.getSites().forEach(crawlStatus -> {
@@ -425,10 +425,10 @@ public class SiteService {
                             final UUID siteSecret = uuid;
                             final Optional<SiteProfile> siteProfile = fetchSiteProfile(crawlStatus.getSiteId());
                             siteProfile.ifPresent(profile -> {
-                                profile.getUrls().stream().forEach(uri -> {
+                                profile.getUrls().forEach(uri -> {
                                     final CrawlerJobResult crawlerJobResult = crawlerService.crawl(uri.toString(), crawlStatus.getSiteId(), siteSecret, isThrottled, clearIndex);
                                     sitesCrawlStatusOverall.getSites().add(new CrawlStatus(profile.getId(), Instant.now(), crawlerJobResult.getPageCount()));
-                                    final Optional<SitesCrawlStatus> sitesCrawlStatus = updateCrawlStatus(crawlStatus.getSiteId());// TODO fix PATCH update instead of a regular PUT   // rename to updateCrawlStatusInShedule
+                                    final Optional<SitesCrawlStatus> sitesCrawlStatus = updateCrawlStatusInShedule(crawlStatus.getSiteId());// TODO fix PATCH update instead of a regular PUT   // rename to updateCrawlStatusInShedule
                                     sitesCrawlStatus.ifPresent(element -> sitesCrawlStatusOverall.getSites().addAll(element.getSites()));
                                     LOG.info("siteId: " + crawlStatus.getSiteId() + " - siteUrl: " + uri.toString() + " - pageCount: " + crawlerJobResult.getPageCount()); // TODO add pattern to logstash
                                 });
