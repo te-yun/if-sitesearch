@@ -65,6 +65,8 @@ public class BaseConfig {
                 .paths(Predicates.not(PathSelectors.regex("/sites/rss")))
                 .paths(Predicates.not(PathSelectors.regex("/sites/.+/pages/.*")))
                 .paths(Predicates.not(PathSelectors.regex("/sites/.+/email.*")))
+                .paths(Predicates.not(PathSelectors.regex("/sites/.+/xml")))
+                .paths(Predicates.not(PathSelectors.regex("/sites/.+/rss")))
                 .paths(Predicates.not(PathSelectors.regex("/sites/.+/crawl")))
                 .paths(Predicates.not(PathSelectors.regex("/sites/.+/crawling")))
                 .paths(Predicates.not(PathSelectors.regex("/authentication-providers.*")))
