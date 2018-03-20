@@ -102,20 +102,20 @@ public class CrawlerTest {
         assertEquals(7, request.getBody().getPageCount());
     }
 
-    @Test
-    public void considerNoindexWhileCrawlingWww() {
-        final UUID siteId = UUID.fromString("8e0af062-cb74-4529-9b7b-47ca1c101ae8");
-        final SitesCrawlStatus siteToCrawl = new SitesCrawlStatus(new HashSet<>(Arrays.asList(new CrawlStatus(siteId, Instant.now(), -1))));
-        final ResponseEntity<SitesCrawlStatus> request = caller
-                .postForEntity(SiteController.ENDPOINT + "/crawl?serviceSecret=" + SiteTest.ADMIN_SITE_SECRET
-                                + "&isThrottled=true&clearIndex=true&allSitesCrawl=true",
-                        new HttpEntity<>(siteToCrawl), SitesCrawlStatus.class);
-
-        assertEquals(HttpStatus.OK, request.getStatusCode());
-        request.getBody().getSites().stream().filter(crawlStatus -> crawlStatus.getSiteId().equals(siteId)).forEach(crawlStatus -> {
-            assertEquals(154, crawlStatus.getPageCount());
-        });
-    }
+//    @Test
+//    public void considerNoindexWhileCrawlingWww() {
+//        final UUID siteId = UUID.fromString("8e0af062-cb74-4529-9b7b-47ca1c101ae8");
+//        final SitesCrawlStatus siteToCrawl = new SitesCrawlStatus(new HashSet<>(Arrays.asList(new CrawlStatus(siteId, Instant.now(), -1))));
+//        final ResponseEntity<SitesCrawlStatus> request = caller
+//                .postForEntity(SiteController.ENDPOINT + "/crawl?serviceSecret=" + SiteTest.ADMIN_SITE_SECRET
+//                                + "&isThrottled=true&clearIndex=true&allSitesCrawl=true",
+//                        new HttpEntity<>(siteToCrawl), SitesCrawlStatus.class);
+//
+//        assertEquals(HttpStatus.OK, request.getStatusCode());
+//        request.getBody().getSites().stream().filter(crawlStatus -> crawlStatus.getSiteId().equals(siteId)).forEach(crawlStatus -> {
+//            assertEquals(154, crawlStatus.getPageCount());
+//        });
+//    }
 
     @Test
     public void considerNoindexWhileCrawlingBlog() {
