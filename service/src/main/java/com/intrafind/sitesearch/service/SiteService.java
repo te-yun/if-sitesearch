@@ -44,6 +44,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @Service
@@ -425,9 +426,10 @@ public class SiteService {
                             final UUID siteSecret = uuid;
                             final Optional<SiteProfile> siteProfile = fetchSiteProfile(crawlStatus.getSiteId());
                             siteProfile.ifPresent(profile -> {
+                                final AtomicLong pageCount = new AtomicLong();
                                 profile.getUrls().forEach(uri -> {
                                     final CrawlerJobResult crawlerJobResult = crawlerService.crawl(uri.toString(), crawlStatus.getSiteId(), siteSecret, isThrottled, clearIndex);
-                                    sitesCrawlStatusOverall.getSites().add(new CrawlStatus(profile.getId(), Instant.now(), crawlerJobResult.getPageCount()));
+                                    sitesCrawlStatusOverall.getSites().add(new CrawlStatus(profile.getId(), Instant.now(), pageCount.addAndGet(crawlerJobResult.getPageCount())));
                                     final Optional<SitesCrawlStatus> sitesCrawlStatus = updateCrawlStatusInShedule(crawlStatus.getSiteId());// TODO fix PATCH update instead of a regular PUT   // rename to updateCrawlStatusInShedule
                                     sitesCrawlStatus.ifPresent(element -> sitesCrawlStatusOverall.getSites().addAll(element.getSites()));
                                     LOG.info("siteId: " + crawlStatus.getSiteId() + " - siteUrl: " + uri.toString() + " - pageCount: " + crawlerJobResult.getPageCount()); // TODO add pattern to logstash
