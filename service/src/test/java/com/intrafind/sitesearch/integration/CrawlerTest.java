@@ -156,7 +156,7 @@ public class CrawlerTest {
         assertEquals(HttpStatus.OK, recrawlFreshSite.getStatusCode());
         final SitesCrawlStatus freshCrawlStatus = recrawlFreshSite.getBody();
         assertTrue(1 < freshCrawlStatus.getSites().size());
-        assertTrue(containsUpdatedSiteId(freshCrawlStatus, 7));
+        assertTrue(containsUpdatedSiteId(freshCrawlStatus));
         // TODO use findSearchSiteCrawlStatus where appropriate to validate only the test site ID
         assertTrue(Instant.parse(
                 new ArrayList<>(freshlyCrawledSiteStatus.getSites()).get(0).getCrawled())
@@ -171,7 +171,7 @@ public class CrawlerTest {
         assertEquals(HttpStatus.OK, recrawl.getStatusCode());
         final SitesCrawlStatus sitesCrawlStatus = recrawl.getBody();
         assertTrue(1 < sitesCrawlStatus.getSites().size());
-        assertTrue(containsUpdatedSiteId(sitesCrawlStatus, 7));
+        assertTrue(containsUpdatedSiteId(sitesCrawlStatus));
         assertTrue(Instant.now().isAfter(Instant.parse(getCrawlStatusWithUpdatedSiteId(sitesCrawlStatus).getCrawled())));
 
         // crawl stale site
@@ -182,7 +182,7 @@ public class CrawlerTest {
         assertEquals(HttpStatus.OK, recrawlStaleSite.getStatusCode());
         final SitesCrawlStatus staleCrawlStatus = recrawlStaleSite.getBody();
         assertTrue(1 < staleCrawlStatus.getSites().size());
-        assertTrue(containsUpdatedSiteId(staleCrawlStatus, 7));
+        assertTrue(containsUpdatedSiteId(staleCrawlStatus));
         assertTrue(Instant.parse(
                 new ArrayList<>(staleSiteStatus.getSites()).get(0).getCrawled())
                 .isBefore(Instant.parse(
@@ -198,10 +198,10 @@ public class CrawlerTest {
         return null;
     }
 
-    private boolean containsUpdatedSiteId(SitesCrawlStatus freshCrawlStatus, long pageCount) {
+    private boolean containsUpdatedSiteId(SitesCrawlStatus freshCrawlStatus) {
         boolean freshCrawlStatusCheck = false;
         for (CrawlStatus crawlStatus : freshCrawlStatus.getSites()) {
-            if (CRAWL_SITE_ID.equals(crawlStatus.getSiteId())) {
+            if (CRAWL_SITE_ID.equals(crawlStatus.getSiteId()) && 7 == crawlStatus.getPageCount()) {
                 freshCrawlStatusCheck = true;
             }
         }
