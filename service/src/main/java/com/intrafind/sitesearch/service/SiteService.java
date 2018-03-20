@@ -184,13 +184,13 @@ public class SiteService {
         INDEX_SERVICE.index(crawlStatus);
     }
 
-    private Optional<SitesCrawlStatus> updateCrawlStatusInShedule(UUID siteId) {
+    private Optional<SitesCrawlStatus> updateCrawlStatusInShedule(UUID siteId, long pageCount) {
         final Optional<SitesCrawlStatus> fetchSitesCrawlStatus = fetchSitesCrawlStatus();
         fetchSitesCrawlStatus.ifPresent(sitesCrawlStatus -> {
             sitesCrawlStatus.getSites().forEach(crawlStatus -> {
                 if (siteId.equals(crawlStatus.getSiteId())) {
                     crawlStatus.setCrawled(Instant.now().toString());
-                    crawlStatus.setPageCount(crawlStatus.getPageCount());
+                    crawlStatus.setPageCount(pageCount);
                 }
             });
 
@@ -429,11 +429,12 @@ public class SiteService {
                                 final AtomicLong pageCount = new AtomicLong();
                                 profile.getUrls().forEach(uri -> {
                                     final CrawlerJobResult crawlerJobResult = crawlerService.crawl(uri.toString(), crawlStatus.getSiteId(), siteSecret, isThrottled, clearIndex);
-                                    sitesCrawlStatusOverall.getSites().add(new CrawlStatus(profile.getId(), Instant.now(), pageCount.addAndGet(crawlerJobResult.getPageCount())));
-                                    final Optional<SitesCrawlStatus> sitesCrawlStatus = updateCrawlStatusInShedule(crawlStatus.getSiteId());// TODO fix PATCH update instead of a regular PUT   // rename to updateCrawlStatusInShedule
+                                    pageCount.addAndGet(crawlerJobResult.getPageCount());
+                                    final Optional<SitesCrawlStatus> sitesCrawlStatus = updateCrawlStatusInShedule(crawlStatus.getSiteId(), pageCount.get());// TODO fix PATCH update instead of a regular PUT   // rename to updateCrawlStatusInShedule
                                     sitesCrawlStatus.ifPresent(element -> sitesCrawlStatusOverall.getSites().addAll(element.getSites()));
                                     LOG.info("siteId: " + crawlStatus.getSiteId() + " - siteUrl: " + uri.toString() + " - pageCount: " + crawlerJobResult.getPageCount()); // TODO add pattern to logstash
                                 });
+                                sitesCrawlStatusOverall.getSites().add(new CrawlStatus(profile.getId(), Instant.now(), pageCount.get()));
                             });
                         });
                     });
