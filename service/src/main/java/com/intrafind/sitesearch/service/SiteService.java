@@ -414,7 +414,7 @@ public class SiteService {
 
     // TODO refactor code so `crawlerService` does not need to be passed as argument
     public Optional<SitesCrawlStatus> crawlSite(UUID serviceSecret, CrawlerService crawlerService, SitesCrawlStatus sitesCrawlStatusUpdate, boolean allSiteCrawl, boolean isThrottled, boolean clearIndex) {
-        final SitesCrawlStatus sitesCrawlStatusOverall = new SitesCrawlStatus(new ArrayList<>());
+        final SitesCrawlStatus sitesCrawlStatusOverall = new SitesCrawlStatus(new HashSet<>());
         if (ADMIN_SITE_SECRET.equals(serviceSecret)) {
             final Instant halfDayAgo = Instant.now().minus(1, ChronoUnit.HALF_DAYS);
             sitesCrawlStatusUpdate.getSites().stream()
@@ -458,7 +458,7 @@ public class SiteService {
     }
 
     private Optional<SitesCrawlStatus> fetchSitesCrawlStatus() {
-        final List<CrawlStatus> sitesCrawlStatus = new ArrayList<>();
+        final Set<CrawlStatus> sitesCrawlStatus = new HashSet<>();
         final Optional<Document> crawlStatus = INDEX_SERVICE.fetch(Index.ALL, CRAWL_STATUS_SINGLETON_DOCUMENT).stream().findAny();
         crawlStatus.ifPresent(document -> document.getFields().forEach((uuidKey, crawledTimestamp) -> {
             if (!uuidKey.startsWith("_")) {

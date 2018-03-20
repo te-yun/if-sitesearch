@@ -56,7 +56,7 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-hateoas:$spring_boot_version"
     compile "org.springframework.boot:spring-boot-starter-undertow:$spring_boot_version"
 
-    runtime "org.springframework.boot:spring-boot-devtools:$spring_boot_version"
+//    runtime "org.springframework.boot:spring-boot-devtools:$spring_boot_version"
 
     compile "io.springfox:springfox-swagger2:$swagger_version"
     compile "io.springfox:springfox-swagger-ui:$swagger_version"

@@ -17,6 +17,7 @@
 package com.intrafind.sitesearch.dto;
 
 import java.time.Instant;
+import java.util.Objects;
 import java.util.UUID;
 
 public class CrawlStatus {
@@ -51,5 +52,18 @@ public class CrawlStatus {
 
     public void setPageCount(long pageCount) {
         this.pageCount = pageCount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CrawlStatus that = (CrawlStatus) o;
+        return Objects.equals(siteId, that.siteId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(siteId);
     }
 }
