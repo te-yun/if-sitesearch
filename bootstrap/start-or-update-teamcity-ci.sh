@@ -30,6 +30,9 @@ start_ci_agent() {
 
     docker exec teamcity-agent-$1 apt update -y
     docker exec teamcity-agent-$1 apt remove -y openjdk-8-jdk
+    docker exec teamcity-agent-$1 apt remove -y openjdk-8-jdk-headless
+    docker exec teamcity-agent-$1 apt remove -y openjdk-8-jre
+    docker exec teamcity-agent-$1 apt remove -y openjdk-8-jre-headless
     docker exec teamcity-agent-$1 apt autoremove -y
     docker exec teamcity-agent-$1 apt install -y openjdk-9-jdk-headless
 }
