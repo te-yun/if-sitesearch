@@ -74,7 +74,7 @@ public class LoadTest {
 
     static {
         AUTOCOMPLETE_QUERIES.put("hyp", 1L);
-        AUTOCOMPLETE_QUERIES.put("geld", 3L);
+        AUTOCOMPLETE_QUERIES.put("geld", 1L);
         AUTOCOMPLETE_QUERIES.put("bank", 3L);
         AUTOCOMPLETE_QUERIES.put("fond", 3L);
         QUERY_LIST_AUTOCOMPLETE = new ArrayList<>(AUTOCOMPLETE_QUERIES.keySet());
