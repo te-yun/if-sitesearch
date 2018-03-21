@@ -70,7 +70,7 @@ public class SmokeTest {
     @Test
     public void assureTaggerProtection() throws Exception {
         final Request request = new Request.Builder()
-                .url("https://tagger.analyzelaw.com")
+                .url("https://tagger.analyzelaw.com/json/tagger?method=tag&param0=test")
                 .build();
         final Response response = HTTP_CLIENT.newCall(request).execute();
         assertEquals(HttpStatus.UNAUTHORIZED.value(), response.code());

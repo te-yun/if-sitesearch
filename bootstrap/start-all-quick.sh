@@ -22,7 +22,7 @@ docker start if-sitesearch-blue-1
 docker start consul
 docker start router
 
-docker start if-tagging-service
+docker start if-tagging-service # might required to call `bootstrap/update-if-service.sh` if this does not work
 docker start if-app-webcrawler
 
 sudo sysctl -w vm.max_map_count=262144 # required for ELK's Elasticsearch
