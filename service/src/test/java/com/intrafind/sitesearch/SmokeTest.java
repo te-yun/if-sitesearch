@@ -55,7 +55,7 @@ public class SmokeTest {
     private static final Logger LOG = LoggerFactory.getLogger(SmokeTest.class);
     private static final String SEARCH_SERVICE_DOMAIN = "@main.sitesearch.cloud/";
     private static final String INVALID_CREDENTIALS = "https://" + System.getenv("SPRING_SECURITY_USER_PASSWORD") + "invalid:" + System.getenv("SPRING_SECURITY_USER_PASSWORD");
-    private static final String BASIC_TAGGER_PASSWORD = System.getenv("BASIC_TAGGER_PASSWORD");
+    private static final String BASIC_ENCODED_PASSWORD = System.getenv("BASIC_ENCODED_PASSWORD");
     public static final String API_FRONTPAGE_MARKER = "<title>Site Search</title>";
     public static final String SITES_API = "https://api.sitesearch.cloud/sites/";
     private static final UUID BW_BANK_SITE_ID = UUID.fromString("269b0538-120b-44b1-a365-488c2f3fcc15");
@@ -85,35 +85,7 @@ public class SmokeTest {
     @Test
     public void assureTaggerContent() throws Exception {
         final Request request = new Request.Builder()
-                .header("Authorization",BASIC_TAGGER_PASSWORD)
-                .url("https://tagger.analyzelaw.com")
-                .build();
-        final Response response = HTTP_CLIENT.newCall(request).execute();
-        assertEquals(HttpStatus.OK.value(), response.code());
-    }
-
-    @Test
-    public void assureTaggerContent() throws Exception {
-        //The credentials need to be supplied as either
-        // * a one lined file "credentials/tagger-credentials" in the base of the project or
-        // * an environment variable
-        // -> in the form of "username:password"
-        String unencodedCredentials;
-        try {
-            Path path = new File("../credentials/tagger-credentials").toPath();
-            unencodedCredentials= Files.readAllLines(path).get(0);
-        }
-        catch(NoSuchFileException nsfe){
-            //No credentials file provided. Checking environment variables.
-            unencodedCredentials=
-        }
-        //Testing if credentials were provided
-        //TODO SHOULD THIS BE A SEPARATE TEST?
-        assertNotNull(unencodedCredentials);
-
-        String encodedCredentials = new String(Base64.encodeBase64(unencodedCredentials.getBytes()));
-        final Request request = new Request.Builder()
-                .header("Authorization","Basic "+encodedCredentials)
+                .header("Authorization",BASIC_ENCODED_PASSWORD)
                 .url("https://tagger.analyzelaw.com")
                 .build();
         final Response response = HTTP_CLIENT.newCall(request).execute();
