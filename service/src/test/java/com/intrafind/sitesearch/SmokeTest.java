@@ -23,7 +23,6 @@ import com.intrafind.sitesearch.integration.SiteTest;
 import com.intrafind.sitesearch.jmh.LoadIndex2Users;
 import com.intrafind.sitesearch.service.SiteCrawler;
 import okhttp3.*;
-import org.apache.commons.codec.binary.Base64;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -37,11 +36,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.File;
 import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -76,7 +71,7 @@ public class SmokeTest {
     @Test
     public void assureTaggerProtection() throws Exception {
         final Request request = new Request.Builder()
-                .url("https://tagger.analyzelaw.com/json/tagger?method=tag&param0=test")
+                .url("https://tagger.analyzelaw.com")
                 .build();
         final Response response = HTTP_CLIENT.newCall(request).execute();
         assertEquals(HttpStatus.UNAUTHORIZED.value(), response.code());
@@ -85,8 +80,8 @@ public class SmokeTest {
     @Test
     public void assureTaggerContent() throws Exception {
         final Request request = new Request.Builder()
-                .header("Authorization",BASIC_ENCODED_PASSWORD)
-                .url("https://tagger.analyzelaw.com")
+                .header("Authorization", BASIC_ENCODED_PASSWORD)
+                .url("https://tagger.analyzelaw.com/json/tagger?method=tag&param0=test")
                 .build();
         final Response response = HTTP_CLIENT.newCall(request).execute();
         assertEquals(HttpStatus.OK.value(), response.code());
