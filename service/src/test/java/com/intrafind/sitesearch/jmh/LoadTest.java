@@ -73,10 +73,10 @@ public class LoadTest {
     static final Map<String, Long> AUTOCOMPLETE_QUERIES = new ConcurrentHashMap<>();
 
     static {
-        AUTOCOMPLETE_QUERIES.put("hyp", 0L);
-        AUTOCOMPLETE_QUERIES.put("geld", 5L);
-        AUTOCOMPLETE_QUERIES.put("bank", 5L);
-        AUTOCOMPLETE_QUERIES.put("fond", 5L);
+        AUTOCOMPLETE_QUERIES.put("hyp", 1L);
+        AUTOCOMPLETE_QUERIES.put("geld", 3L);
+        AUTOCOMPLETE_QUERIES.put("bank", 3L);
+        AUTOCOMPLETE_QUERIES.put("fond", 3L);
         QUERY_LIST_AUTOCOMPLETE = new ArrayList<>(AUTOCOMPLETE_QUERIES.keySet());
     }
 
@@ -179,7 +179,6 @@ public class LoadTest {
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         final long queryResultCount = AUTOCOMPLETE_QUERIES.get(query);
-        LOG.warn(queryResultCount + "<<<<<");
         assertTrue(queryResultCount < actual.getBody().getResults().size());
     }
 }
