@@ -53,7 +53,7 @@ public class LoadTest {
     static final TestRestTemplate CALLER = new TestRestTemplate();
     static final Random PSEUDO_ENTROPY = new Random();
 
-    private static final List<UUID> TENANTS = Arrays.asList(
+    static final List<UUID> TENANTS = Arrays.asList(
             SearchTest.SEARCH_SITE_ID,
             UUID.fromString("4bcccea2-8bcf-4280-88c7-8736e9c3d15c"),
             UUID.fromString("1a6715d9-119f-48d1-9329-e8763273bbea")
@@ -61,7 +61,7 @@ public class LoadTest {
 
     static final Map<String, Long> SEARCH_QUERIES = new HashMap<>();
     static final List<String> QUERY_LIST_SEARCH = new ArrayList<>(SEARCH_QUERIES.keySet());
-    private static final Map<String, Long> AUTOCOMPLETE_QUERIES = new ConcurrentHashMap<>();
+    static final Map<String, Long> AUTOCOMPLETE_QUERIES = new ConcurrentHashMap<>();
 
     static {
         SEARCH_QUERIES.put("bank", 47L);
