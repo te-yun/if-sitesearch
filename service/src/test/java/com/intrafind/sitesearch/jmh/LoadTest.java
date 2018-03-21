@@ -123,11 +123,10 @@ public class LoadTest {
     }
 
     private void assureCorrectness(ResponseEntity<Hits> actual, long queryResultCount) {
+        assertEquals(HttpStatus.OK, actual.getStatusCode());
         if (queryResultCount == 0) {
-            assertEquals(HttpStatus.OK, actual.getStatusCode());
             assertNotNull(actual.getBody());
         } else {
-            assertEquals(HttpStatus.OK, actual.getStatusCode());
             assertTrue(queryResultCount < actual.getBody().getResults().size());
         }
     }

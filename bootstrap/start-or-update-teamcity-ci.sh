@@ -27,6 +27,11 @@ start_ci_agent() {
         -v ~/srv/teamcity-agent-$1:/data/teamcity_agent/conf \
         --network sitesearch \
         jetbrains/teamcity-agent:${version}
+
+    docker exec teamcity-agent-$1 apt update -y
+    docker exec teamcity-agent-$1 apt remove -y openjdk-8-jdk
+    docker exec teamcity-agent-$1 apt autoremove -y
+    docker exec teamcity-agent-$1 apt install -y openjdk-9-jdk-headless
 }
 
 start_ci_agent merkur
