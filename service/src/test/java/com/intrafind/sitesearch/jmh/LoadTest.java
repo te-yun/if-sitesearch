@@ -53,29 +53,29 @@ public class LoadTest {
     static final TestRestTemplate CALLER = new TestRestTemplate();
     static final Random PSEUDO_ENTROPY = new Random();
 
-    static final List<UUID> TENANTS = Arrays.asList(
+    static final List<String> QUERY_LIST_SEARCH = new ArrayList<>(SEARCH_QUERIES.keySet());
+
+    static final Map<String, Long> SEARCH_QUERIES = new HashMap<>();
+    static final Map<String, Long> AUTOCOMPLETE_QUERIES = new ConcurrentHashMap<>();
+    private static final List<UUID> TENANTS = Arrays.asList(
             SearchTest.SEARCH_SITE_ID,
             UUID.fromString("4bcccea2-8bcf-4280-88c7-8736e9c3d15c"),
             UUID.fromString("1a6715d9-119f-48d1-9329-e8763273bbea")
     );
 
-    static final Map<String, Long> SEARCH_QUERIES = new HashMap<>();
-    static final List<String> QUERY_LIST_SEARCH = new ArrayList<>(SEARCH_QUERIES.keySet());
-    static final Map<String, Long> AUTOCOMPLETE_QUERIES = new ConcurrentHashMap<>();
-
     static {
-        SEARCH_QUERIES.put("bank", 1L);
+        SEARCH_QUERIES.put("bank", 47L);
         SEARCH_QUERIES.put("fonds", 1L);
-        SEARCH_QUERIES.put("finanzen", 1L);
-        SEARCH_QUERIES.put("geld", 3L);
+        SEARCH_QUERIES.put("finanzen", 12L);
+        SEARCH_QUERIES.put("geld", 34L);
         SEARCH_QUERIES.put("\uD83E\uDD84", 0L);
     }
 
     static {
-        AUTOCOMPLETE_QUERIES.put("hyp", 1L);
-        AUTOCOMPLETE_QUERIES.put("geld", 1L);
-        AUTOCOMPLETE_QUERIES.put("bank", 1L);
-        AUTOCOMPLETE_QUERIES.put("fond", 1L);
+        AUTOCOMPLETE_QUERIES.put("hyp", 0L);
+        AUTOCOMPLETE_QUERIES.put("geld", 5L);
+        AUTOCOMPLETE_QUERIES.put("bank", 7L);
+        AUTOCOMPLETE_QUERIES.put("fond", 10L);
         QUERY_LIST_AUTOCOMPLETE = new ArrayList<>(AUTOCOMPLETE_QUERIES.keySet());
     }
 
@@ -119,15 +119,12 @@ public class LoadTest {
         );
 
         final long queryResultCount = LoadTest.SEARCH_QUERIES.get(query);
-        assureCorrectness(actual, queryResultCount);
-    }
-
-    private void assureCorrectness(ResponseEntity<Hits> actual, long queryResultCount) {
-        assertEquals(HttpStatus.OK, actual.getStatusCode());
         if (queryResultCount == 0) {
+            assertEquals(HttpStatus.OK, actual.getStatusCode());
             assertNotNull(actual.getBody());
         } else {
-            assertTrue(queryResultCount <= actual.getBody().getResults().size());
+            assertEquals(HttpStatus.OK, actual.getStatusCode());
+            assertEquals(queryResultCount, actual.getBody().getResults().size());
         }
     }
 
@@ -143,7 +140,13 @@ public class LoadTest {
         );
 
         final long queryResultCount = LoadTest.SEARCH_QUERIES.get(query);
-        assureCorrectness(actual, queryResultCount);
+        if (queryResultCount == 0) {
+            assertEquals(HttpStatus.OK, actual.getStatusCode());
+            assertNotNull(actual.getBody());
+        } else {
+            assertEquals(HttpStatus.OK, actual.getStatusCode());
+            assertEquals(queryResultCount, actual.getBody().getResults().size());
+        }
     }
 
     @Benchmark
@@ -159,6 +162,7 @@ public class LoadTest {
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         final long queryResultCount = AUTOCOMPLETE_QUERIES.get(query);
+//        assertEquals(queryResultCount, actual.getBody().getResults().size());
         assertTrue(queryResultCount <= actual.getBody().getResults().size());
     }
 
@@ -175,6 +179,7 @@ public class LoadTest {
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         final long queryResultCount = AUTOCOMPLETE_QUERIES.get(query);
+//        assertEquals(queryResultCount, actual.getBody().getResults().size());
         assertTrue(queryResultCount <= actual.getBody().getResults().size());
     }
 }
