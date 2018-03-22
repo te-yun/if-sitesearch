@@ -54,7 +54,6 @@ public class LoadTest {
     static final Random PSEUDO_ENTROPY = new Random();
 
     static final Map<String, Long> SEARCH_QUERIES = new HashMap<>();
-    static final List<String> QUERY_LIST_SEARCH = new ArrayList<>(SEARCH_QUERIES.keySet());
     static final Map<String, Long> AUTOCOMPLETE_QUERIES = new ConcurrentHashMap<>();
     private static final List<UUID> TENANTS = Arrays.asList(
             SearchTest.SEARCH_SITE_ID,
@@ -69,6 +68,8 @@ public class LoadTest {
         SEARCH_QUERIES.put("geld", 34L);
         SEARCH_QUERIES.put("\uD83E\uDD84", 0L);
     }
+
+    static final List<String> QUERY_LIST_SEARCH = new ArrayList<>(SEARCH_QUERIES.keySet());
 
     static {
         AUTOCOMPLETE_QUERIES.put("hyp", 0L);
