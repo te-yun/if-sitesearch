@@ -29,14 +29,16 @@ import kotlin.dom.addClass
 import kotlin.dom.removeClass
 import kotlin.js.*
 
-fun main(args: Array<String>) {
+suspend fun main(args: Array<String>) {
     window.addEventListener("DOMContentLoaded", {
         showInitCode()
         js("    IFS.eventbus.addEventListener(IFS.constants.events.SEARCHBAR_RENDERED_INITIALLY, function () {" +
-                "        document.getElementById('ifs-sb-searchfield').setAttribute('placeholder', 'Search for \\\"knowledge\\\" on www.intrafind.de');" +
+                "        document.getElementById('ifs-sb-searchfield').setAttribute('placeholder', 'Search...');" +
                 "    });"
         )
     })
+
+//    tests()
 }
 
 private var siteId: String = ""
