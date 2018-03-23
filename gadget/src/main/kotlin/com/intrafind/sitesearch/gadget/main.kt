@@ -44,11 +44,12 @@ suspend fun main(args: Array<String>) {
 private var siteId: String = ""
 private var siteSecret: String = ""
 private var websiteUrl: String = ""
-private val serviceUrl: String = if (window.location.hostname.equals("localhost")) {
-    "http://localhost:8001"
-} else {
-    window.location.origin
-}
+private val serviceUrl: String = window.location.origin
+//private val serviceUrl: String = if (window.location.hostname.equals("localhost")) {
+//    "http://localhost:8001"
+//} else {
+//    window.location.origin
+//}
 
 fun triggerFirstUsageOwnership() {
     val xhr = XMLHttpRequest()
@@ -198,8 +199,6 @@ private fun applyQueryOverrides() {
                 .substring(0, document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).indexOf(";")) // relies on cookie-setting code in embedding iframe container
         else -> ""
     }
-    console.warn(siteId)
-    console.warn(websiteUrl)
     if (siteId.isNotEmpty()) {
         url.value = websiteUrl
         url.readOnly = true
