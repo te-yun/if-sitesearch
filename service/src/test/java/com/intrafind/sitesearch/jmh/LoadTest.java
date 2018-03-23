@@ -108,27 +108,6 @@ public class LoadTest {
     }
 
     @Benchmark
-    public void searchComplexDeprecated() {
-        final int queryIndex = LoadTest.PSEUDO_ENTROPY.nextInt(LoadTest.SEARCH_QUERIES.size());
-        final String query = LoadTest.QUERY_LIST_SEARCH.get(queryIndex);
-
-        final ResponseEntity<Hits> actual = CALLER.getForEntity(
-                LoadTest.LOAD_TARGET + SearchController.ENDPOINT
-                        + "?query=" + query + "&siteId=" + LOAD_SITE_ID,
-                Hits.class
-        );
-
-        final long queryResultCount = LoadTest.SEARCH_QUERIES.get(query);
-        if (queryResultCount == 0) {
-            assertEquals(HttpStatus.OK, actual.getStatusCode());
-            assertNotNull(actual.getBody());
-        } else {
-            assertEquals(HttpStatus.OK, actual.getStatusCode());
-            assertEquals(queryResultCount, actual.getBody().getResults().size());
-        }
-    }
-
-    @Benchmark
     public void search() {
         final int queryIndex = LoadTest.PSEUDO_ENTROPY.nextInt(LoadTest.SEARCH_QUERIES.size());
         final String query = LoadTest.QUERY_LIST_SEARCH.get(queryIndex);
@@ -150,23 +129,6 @@ public class LoadTest {
     }
 
     @Benchmark
-    public void autocompleteDeprecated() {
-        final int queryIndex = LoadTest.PSEUDO_ENTROPY.nextInt(LoadTest.AUTOCOMPLETE_QUERIES.size());
-        final String query = LoadTest.QUERY_LIST_AUTOCOMPLETE.get(queryIndex);
-
-        final ResponseEntity<Autocomplete> actual = CALLER.getForEntity(
-                LOAD_TARGET + AutocompleteController.ENDPOINT
-                        + "?query=" + query + "&siteId=" + LOAD_SITE_ID,
-                Autocomplete.class
-        );
-
-        assertEquals(HttpStatus.OK, actual.getStatusCode());
-        final long queryResultCount = AUTOCOMPLETE_QUERIES.get(query);
-//        assertEquals(queryResultCount, actual.getBody().getResults().size());
-        assertTrue(queryResultCount <= actual.getBody().getResults().size());
-    }
-
-    @Benchmark
     public void autocomplete() {
         final int queryIndex = LoadTest.PSEUDO_ENTROPY.nextInt(LoadTest.AUTOCOMPLETE_QUERIES.size());
         final String query = LoadTest.QUERY_LIST_AUTOCOMPLETE.get(queryIndex);
@@ -179,7 +141,6 @@ public class LoadTest {
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         final long queryResultCount = AUTOCOMPLETE_QUERIES.get(query);
-//        assertEquals(queryResultCount, actual.getBody().getResults().size());
         assertTrue(queryResultCount <= actual.getBody().getResults().size());
     }
 }
