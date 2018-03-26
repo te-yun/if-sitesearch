@@ -374,8 +374,8 @@ public class SiteService {
                     body = entry.getDescription().getValue();
                 }
 
-                String url = entry.getLink();
-                SitePage toIndex = new SitePage(
+                final String url = entry.getLink();
+                final SitePage toIndex = new SitePage(
                         entry.getTitle(),
                         body,
                         url
