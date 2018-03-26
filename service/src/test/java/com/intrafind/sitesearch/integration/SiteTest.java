@@ -309,15 +309,16 @@ public class SiteTest {
 
         TimeUnit.MILLISECONDS.sleep(8_000);
 
+        final int pageChecksum = 923522;
         final ResponseEntity<SitePage> updateWithSiteIdOnly = caller.exchange(SiteController.ENDPOINT + "/" + createdSite.getSiteId()
                 + "/pages/" + createdPage.getId(), HttpMethod.PUT, new HttpEntity<>(createdPage), SitePage.class);
         assertEquals("only valid siteId is provided", HttpStatus.BAD_REQUEST, updateWithSiteIdOnly.getStatusCode());
-        assertEquals(29791, updateWithSiteIdOnly.getBody().hashCode());
+        assertEquals(pageChecksum, updateWithSiteIdOnly.getBody().hashCode());
 
         final ResponseEntity<SitePage> updateWithSiteSecretOnly = caller.exchange(SiteController.ENDPOINT + "/" + createdPage.getSiteId()
                 + "/pages/" + createdPage.getId(), HttpMethod.PUT, new HttpEntity<>(createdPage), SitePage.class);
         assertEquals("only valid siteSecret is provided", HttpStatus.BAD_REQUEST, updateWithSiteSecretOnly.getStatusCode());
-        assertEquals(29791, updateWithSiteSecretOnly.getBody().hashCode());
+        assertEquals(pageChecksum, updateWithSiteSecretOnly.getBody().hashCode());
 
         final ResponseEntity<SitePage> updateWithWrongSiteSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSite.getSiteId()
                         + "/pages/" + createdPage.getId() + "?siteSecret=" + UUID.randomUUID(),

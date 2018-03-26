@@ -19,7 +19,12 @@ package com.intrafind.sitesearch.jmh;
 import com.intrafind.sitesearch.controller.SiteController;
 import com.intrafind.sitesearch.dto.FetchedPage;
 import com.intrafind.sitesearch.dto.SitePage;
-import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Threads;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -28,9 +33,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.net.URLEncoder;
+import java.util.Arrays;
 import java.util.UUID;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 @Threads(2)
 @BenchmarkMode(Mode.Throughput)
@@ -93,7 +101,8 @@ public class LoadIndex2Users {
         return new SitePage(
                 loremIpsumText.substring(0, 42),
                 loremIpsumText,
-                "https://example.com/" + UUID.randomUUID()
+                "https://example.com/" + UUID.randomUUID(),
+                Arrays.asList("Fruits", "vegetables")
         );
     }
 
