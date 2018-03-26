@@ -24,7 +24,11 @@ import java.util.UUID;
 public class SiteProfile {
     private UUID id;
     private UUID secret;
+    /**
+     * @Deprecated use Set<Config> instead
+     */
     private Set<URI> urls;
+    private Set<Config> config;
     private String email;
 
     private SiteProfile() {
@@ -67,5 +71,10 @@ public class SiteProfile {
 
     public void setSecret(UUID secret) {
         this.secret = secret;
+    }
+
+    private class Config {
+        private URI url;
+        private String bodyQuerySelector;
     }
 }
