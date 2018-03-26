@@ -6,7 +6,8 @@ services:
     restart: always
     depends_on:
       - ops-elasticsearch
-      - ops-elasticsearch-alt
+      - ops-elasticsearch-yang
+      - ops-elasticsearch-ying
       - ops-logstash
     environment:
 #      SERVER_NAME: ops-elasticsearch
@@ -37,21 +38,39 @@ services:
     networks:
       - sitesearch
       
-  ops-elasticsearch-alt:
+  ops-elasticsearch-ying:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.2.3
-    container_name: ops-elasticsearch-opt
+    container_name: ops-elasticsearch-ying
     restart: always
     environment:
       - cluster.name=sitesearch-ops-cluster
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms2G -Xmx2G"
-      - "discovery.zen.ping.unicast.hosts=ops-elasticsearch"
+      - "discovery.zen.ping.unicast.hosts=['ops-elasticsearch', 'ops-elasticsearch-yang', 'ops-elasticsearch-ying']"
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
       - ops-elk-alt:/usr/share/elasticsearch/data
+    networks:
+      - sitesearch
+
+  ops-elasticsearch-yang:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.2.3
+    container_name: ops-elasticsearch-yang
+    restart: always
+    environment:
+      - cluster.name=sitesearch-ops-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms2G -Xmx2G"
+      - "discovery.zen.ping.unicast.hosts=['ops-elasticsearch', 'ops-elasticsearch-yang', 'ops-elasticsearch-ying']"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - /srv/ops-elasticsearch-yang:/usr/share/elasticsearch/data
     networks:
       - sitesearch
 
