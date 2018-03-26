@@ -94,8 +94,8 @@ public class SiteTest {
     }
 
     private FetchedPage createNewPage(UUID siteId, UUID siteSecret) {
-        SitePage simple = buildPage();
-        ResponseEntity<FetchedPage> newlyCreatedPage = caller.exchange(SiteController.ENDPOINT + "/" + siteId + "/pages?siteSecret=" + siteSecret, HttpMethod.PUT, new HttpEntity<>(simple), FetchedPage.class);
+        final SitePage simple = buildPage();
+        final ResponseEntity<FetchedPage> newlyCreatedPage = caller.exchange(SiteController.ENDPOINT + "/" + siteId + "/pages?siteSecret=" + siteSecret, HttpMethod.PUT, new HttpEntity<>(simple), FetchedPage.class);
         assertEquals(HttpStatus.OK, newlyCreatedPage.getStatusCode());
         assertNotNull(newlyCreatedPage.getBody());
         assertNotNull(newlyCreatedPage.getBody().getBody());
@@ -104,6 +104,8 @@ public class SiteTest {
         assertFalse(newlyCreatedPage.getBody().getTitle().isEmpty());
         assertNotNull(newlyCreatedPage.getBody().getUrl());
         assertFalse(newlyCreatedPage.getBody().getUrl().isEmpty());
+        assertFalse(newlyCreatedPage.getBody().getSisLabels().isEmpty());
+        assertEquals(Arrays.asList("mars", "Venus"), newlyCreatedPage.getBody().getSisLabels());
 
         return newlyCreatedPage.getBody();
     }

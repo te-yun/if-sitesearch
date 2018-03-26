@@ -103,7 +103,7 @@ public class SiteService {
         doc.set(Fields.TITLE, page.getTitle());
         doc.set(Fields.URL, page.getUrl());
         doc.set(Fields.TENANT, siteId);
-        doc.set(PAGE_LABELS, page.getLabels()); // TODO implement tests, expose via API for both indexing & search
+        doc.set(PAGE_LABELS, page.getSisLabels()); // TODO implement tests, expose via API for both indexing & search
         doc.set(PAGE_TIMESTAMP, Instant.now());
         INDEX_SERVICE.index(doc);
         LOG.info("siteId: " + siteId + " - bodySize: " + page.getBody().length() + " - titleSize: " + page.getTitle().length() + " - URL: " + page.getUrl());

@@ -29,7 +29,7 @@ public class SitePage {
     private String title;
     private String body;
     private String url;
-    private List<String> labels = new ArrayList<>();
+    private List<String> sisLabels = new ArrayList<>();
 
     private SitePage() {
     }
@@ -40,19 +40,19 @@ public class SitePage {
         this.url = url;
     }
 
-    public SitePage(String title, String body, String url, List<String> labels) {
+    public SitePage(String title, String body, String url, List<String> sisLabels) {
         this.title = title;
         this.body = body;
         this.url = url;
-        this.labels = labels;
+        this.sisLabels = sisLabels;
     }
 
-    public List<String> getLabels() {
-        return labels;
+    public List<String> getSisLabels() {
+        return sisLabels;
     }
 
-    public void setLabels(List<String> labels) {
-        this.labels = labels;
+    public void setSisLabels(List<String> sisLabels) {
+        this.sisLabels = sisLabels;
     }
 
     public String getTitle() {
