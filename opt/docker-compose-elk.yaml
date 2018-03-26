@@ -7,7 +7,7 @@ services:
     depends_on:
       - ops-elasticsearch
       - ops-elasticsearch-yang
-      - ops-elasticsearch-opt
+      - ops-elasticsearch-ying
       - ops-logstash
     environment:
 #      SERVER_NAME: ops-elasticsearch
@@ -30,31 +30,32 @@ services:
       - bootstrap.memory_lock=true
       - node.name=ops-elasticsearch
       - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
-      - "discovery.zen.ping.unicast.hosts=ops-elasticsearch,ops-elasticsearch-yang,ops-elasticsearch-opt"
+      - discovery.zen.ping.unicast.hosts=ops-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
-      - ops-elk:/usr/share/elasticsearch/data
+      - ops-elk:/usr/share/elasticsearch/data:rw
     networks:
       - sitesearch
       
-  ops-elasticsearch-opt:
+  ops-elasticsearch-ying:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.2.3
-    container_name: ops-elasticsearch-opt
+    container_name: ops-elasticsearch-ying
     restart: always
     environment:
       - cluster.name=sitesearch-ops-cluster
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
-      - "discovery.zen.ping.unicast.hosts=ops-elasticsearch,ops-elasticsearch-yang,ops-elasticsearch-opt"
+      - node.name=ops-elasticsearch-ying
+      - discovery.zen.ping.unicast.hosts=ops-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
-      - ops-elk-alt:/usr/share/elasticsearch/data
+      - /srv/ops-elasticsearch-ying/data:/usr/share/elasticsearch/data:rw
     networks:
       - sitesearch
 
@@ -66,13 +67,14 @@ services:
       - cluster.name=sitesearch-ops-cluster
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
-      - "discovery.zen.ping.unicast.hosts=ops-elasticsearch,ops-elasticsearch-yang,ops-elasticsearch-opt"
+      - node.name=ops-elasticsearch-yang
+      - discovery.zen.ping.unicast.hosts=ops-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
-      - /srv/ops-elasticsearch-yang/data:/usr/share/elasticsearch/data
+      - /srv/ops-elasticsearch-yang/data:/usr/share/elasticsearch/data:rw
     networks:
       - sitesearch
 
