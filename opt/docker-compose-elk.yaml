@@ -28,7 +28,7 @@ services:
     environment:
       - cluster.name=sitesearch-ops-cluster
       - bootstrap.memory_lock=true
-      - ES_JAVA_OPTS: "-Xms3G -Xmx3G"
+      - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
       - "discovery.zen.ping.unicast.hosts=['ops-elasticsearch', 'ops-elasticsearch-yang', 'ops-elasticsearch-ying']"
     ulimits:
       memlock:
@@ -46,7 +46,7 @@ services:
     environment:
       - cluster.name=sitesearch-ops-cluster
       - bootstrap.memory_lock=true
-      - ES_JAVA_OPTS: "-Xms3G -Xmx3G"
+      - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
       - "discovery.zen.ping.unicast.hosts=['ops-elasticsearch', 'ops-elasticsearch-yang', 'ops-elasticsearch-ying']"
     ulimits:
       memlock:
@@ -64,7 +64,7 @@ services:
     environment:
       - cluster.name=sitesearch-ops-cluster
       - bootstrap.memory_lock=true
-      - ES_JAVA_OPTS: "-Xms3G -Xmx3G"
+      - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
       - "discovery.zen.ping.unicast.hosts=['ops-elasticsearch', 'ops-elasticsearch-yang', 'ops-elasticsearch-ying']"
     ulimits:
       memlock:
