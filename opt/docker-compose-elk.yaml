@@ -27,7 +27,7 @@ services:
     environment:
       - cluster.name=sitesearch-ops-cluster
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx2g"
     ulimits:
       memlock:
         soft: -1
@@ -44,7 +44,7 @@ services:
     environment:
       - cluster.name=sitesearch-ops-cluster
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx2g"
       - "discovery.zen.ping.unicast.hosts=ops-elasticsearch"
     ulimits:
       memlock:
