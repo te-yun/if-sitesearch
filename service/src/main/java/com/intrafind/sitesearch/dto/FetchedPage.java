@@ -16,12 +16,11 @@
 
 package com.intrafind.sitesearch.dto;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public class FetchedPage implements Serializable {
+public class FetchedPage {
     private String id;
     private UUID siteId;
     private String title;
@@ -33,21 +32,14 @@ public class FetchedPage implements Serializable {
     private FetchedPage() {
     }
 
-    public FetchedPage(UUID siteId, String id, String title, String body, String url) {
-        this.title = title;
-        this.body = body;
-        this.url = url;
-        this.siteId = siteId;
-        this.id = id;
-    }
-
-    public FetchedPage(UUID siteId, String id, String title, String body, String url, String timestamp) {
+    public FetchedPage(UUID siteId, String id, String title, String body, String url, String timestamp, List<String> sisLabels) {
         this.title = title;
         this.body = body;
         this.url = url;
         this.siteId = siteId;
         this.id = id;
         this.timestamp = timestamp;
+        this.sisLabels = sisLabels;
     }
 
     public List<String> getSisLabels() {

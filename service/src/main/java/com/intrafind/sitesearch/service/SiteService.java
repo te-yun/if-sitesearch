@@ -221,7 +221,8 @@ public class SiteService {
                     foundDocument.get(Fields.TITLE),
                     foundDocument.get(Fields.BODY),
                     foundDocument.get(Fields.URL),
-                    foundDocument.get(PAGE_TIMESTAMP)
+                    foundDocument.get(PAGE_TIMESTAMP),
+                    foundDocument.getAll(PAGE_LABELS)
             );
             return Optional.of(representationOfFoundDocument);
         } else {
