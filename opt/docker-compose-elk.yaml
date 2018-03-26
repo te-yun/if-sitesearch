@@ -7,7 +7,7 @@ services:
     depends_on:
       - ops-elasticsearch
       - ops-elasticsearch-yang
-      - ops-elasticsearch-ying
+      - ops-elasticsearch-opt
       - ops-logstash
     environment:
 #      SERVER_NAME: ops-elasticsearch
@@ -30,7 +30,7 @@ services:
       - bootstrap.memory_lock=true
       - node.name=ops-elasticsearch
       - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
-      - "discovery.zen.ping.unicast.hosts=ops-elasticsearch,ops-elasticsearch-yang,ops-elasticsearch-ying"
+      - "discovery.zen.ping.unicast.hosts=ops-elasticsearch,ops-elasticsearch-yang,ops-elasticsearch-opt"
     ulimits:
       memlock:
         soft: -1
@@ -40,15 +40,15 @@ services:
     networks:
       - sitesearch
       
-  ops-elasticsearch-ying:
+  ops-elasticsearch-opt:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.2.3
-    container_name: ops-elasticsearch-ying
+    container_name: ops-elasticsearch-opt
     restart: always
     environment:
       - cluster.name=sitesearch-ops-cluster
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
-      - "discovery.zen.ping.unicast.hosts=ops-elasticsearch,ops-elasticsearch-yang,ops-elasticsearch-ying"
+      - "discovery.zen.ping.unicast.hosts=ops-elasticsearch,ops-elasticsearch-yang,ops-elasticsearch-opt"
     ulimits:
       memlock:
         soft: -1
@@ -66,7 +66,7 @@ services:
       - cluster.name=sitesearch-ops-cluster
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
-      - "discovery.zen.ping.unicast.hosts=ops-elasticsearch,ops-elasticsearch-yang,ops-elasticsearch-ying"
+      - "discovery.zen.ping.unicast.hosts=ops-elasticsearch,ops-elasticsearch-yang,ops-elasticsearch-opt"
     ulimits:
       memlock:
         soft: -1
