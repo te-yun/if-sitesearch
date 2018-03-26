@@ -19,7 +19,14 @@ package com.intrafind.sitesearch.integration;
 import com.intrafind.sitesearch.SmokeTest;
 import com.intrafind.sitesearch.controller.PageController;
 import com.intrafind.sitesearch.controller.SiteController;
-import com.intrafind.sitesearch.dto.*;
+import com.intrafind.sitesearch.dto.CrawlStatus;
+import com.intrafind.sitesearch.dto.FetchedPage;
+import com.intrafind.sitesearch.dto.SiteCreation;
+import com.intrafind.sitesearch.dto.SiteIndexSummary;
+import com.intrafind.sitesearch.dto.SitePage;
+import com.intrafind.sitesearch.dto.SiteProfile;
+import com.intrafind.sitesearch.dto.SiteProfileUpdate;
+import com.intrafind.sitesearch.dto.SitesCrawlStatus;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,15 +35,29 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.net.URI;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -51,7 +72,8 @@ public class SiteTest {
         return new SitePage(
                 "Cloud Solution",
                 "Site Search is IntraFind's on-demand solution for site search.",
-                url
+                url,
+                Arrays.asList("mars", "Venus")
         );
     }
 
@@ -311,6 +333,7 @@ public class SiteTest {
         assertEquals(HttpStatus.OK, updated.getStatusCode());
         assertEquals(createdPage, updated.getBody());
         assertEquals("updated body", updated.getBody().getBody());
+        assertEquals(Arrays.asList("mars", "Venus"), updated.getBody().getSisLabels());
         // assert correct timestamp update
         assertTrue(beforePageUpdate.isBefore(Instant.parse(updated.getBody().getTimestamp())));
         assertTrue(Instant.now().isAfter(Instant.parse(updated.getBody().getTimestamp())));

@@ -20,6 +20,7 @@ import com.google.common.hash.Hashing;
 
 import java.net.URI;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -28,7 +29,7 @@ public class SitePage {
     private String title;
     private String body;
     private String url;
-    private List<String> labels;
+    private List<String> labels = new ArrayList<>();
 
     private SitePage() {
     }

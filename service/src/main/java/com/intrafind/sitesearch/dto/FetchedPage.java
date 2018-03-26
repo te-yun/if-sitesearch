@@ -17,6 +17,7 @@
 package com.intrafind.sitesearch.dto;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -27,6 +28,7 @@ public class FetchedPage implements Serializable {
     private String body;
     private String url;
     private String timestamp;
+    private List<String> sisLabels;
 
     private FetchedPage() {
     }
@@ -46,6 +48,10 @@ public class FetchedPage implements Serializable {
         this.siteId = siteId;
         this.id = id;
         this.timestamp = timestamp;
+    }
+
+    public List<String> getSisLabels() {
+        return sisLabels;
     }
 
     public String getTimestamp() {

@@ -27,7 +27,7 @@ import kotlin.browser.window
 import kotlin.coroutines.experimental.suspendCoroutine
 import kotlin.dom.addClass
 import kotlin.dom.removeClass
-import kotlin.js.*
+import kotlin.js.Promise
 
 suspend fun main(args: Array<String>) {
     window.addEventListener("DOMContentLoaded", {
@@ -45,11 +45,6 @@ private var siteId: String = ""
 private var siteSecret: String = ""
 private var websiteUrl: String = ""
 private val serviceUrl: String = window.location.origin
-//private val serviceUrl: String = if (window.location.hostname.equals("localhost")) {
-//    "http://localhost:8001"
-//} else {
-//    window.location.origin
-//}
 
 fun triggerFirstUsageOwnership() {
     val xhr = XMLHttpRequest()
@@ -110,7 +105,7 @@ fun showInitCode() {
     document.addEventListener("sis.crawlerFinishedEvent", {
         triggerButton.textContent = "Enable Search"
         triggerButton.disabled = false
-        (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = "$crawlerPageCount pages from \"${url.value}\" have been crawled. Consider that it takes around a minute before you can find here everything we have found."
+        (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = "$crawlerPageCount pages from ${url.value} have been crawled. Consider that it takes around a minute before you can find here everything we have found."
     })
 
     enableProactiveValidation()

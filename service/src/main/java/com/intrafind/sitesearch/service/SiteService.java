@@ -23,7 +23,15 @@ import com.intrafind.api.search.Hits;
 import com.intrafind.api.search.Search;
 import com.intrafind.sitesearch.Application;
 import com.intrafind.sitesearch.TrustAllX509TrustManager;
-import com.intrafind.sitesearch.dto.*;
+import com.intrafind.sitesearch.dto.CrawlStatus;
+import com.intrafind.sitesearch.dto.CrawlerJobResult;
+import com.intrafind.sitesearch.dto.FetchedPage;
+import com.intrafind.sitesearch.dto.SiteCreation;
+import com.intrafind.sitesearch.dto.SiteIndexSummary;
+import com.intrafind.sitesearch.dto.SitePage;
+import com.intrafind.sitesearch.dto.SiteProfile;
+import com.intrafind.sitesearch.dto.SiteProfileUpdate;
+import com.intrafind.sitesearch.dto.SitesCrawlStatus;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
@@ -42,7 +50,14 @@ import java.io.IOException;
 import java.net.URI;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
@@ -88,7 +103,7 @@ public class SiteService {
         doc.set(Fields.TITLE, page.getTitle());
         doc.set(Fields.URL, page.getUrl());
         doc.set(Fields.TENANT, siteId);
-        doc.set(PAGE_LABELS, Collections.emptyList()); // TODO implement tests, expose via API for both indexing & search
+        doc.set(PAGE_LABELS, page.getLabels()); // TODO implement tests, expose via API for both indexing & search
         doc.set(PAGE_TIMESTAMP, Instant.now());
         INDEX_SERVICE.index(doc);
         LOG.info("siteId: " + siteId + " - bodySize: " + page.getBody().length() + " - titleSize: " + page.getTitle().length() + " - URL: " + page.getUrl());
@@ -126,13 +141,6 @@ public class SiteService {
             } else {
                 email = document.get("email");
             }
-
-//            final List<URI> pages;
-//            if (document.getAll("pages") == null) {
-//                pages = Collections.emptyList();
-//            } else {
-//                pages = (List) document.getAll("pages");
-//            }
 
             return new SiteProfile(siteId, UUID.fromString(document.get("secret")), urls, email);
         });
@@ -350,7 +358,7 @@ public class SiteService {
 
     private Optional<SiteIndexSummary> updateIndex(URI feedUrl, UUID siteId, UUID siteSecret, Boolean stripHtmlTags) {
         LOG.info("URL-received: " + feedUrl);
-        final AtomicInteger successfullyIndexed = new AtomicInteger(0);
+        final AtomicInteger successfullyIndexed = new AtomicInteger();
         final List<String> documents = new ArrayList<>();
         List<String> failedToIndex = new ArrayList<>();
         try {
