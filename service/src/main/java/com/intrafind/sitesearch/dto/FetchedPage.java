@@ -16,6 +16,7 @@
 
 package com.intrafind.sitesearch.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -27,7 +28,7 @@ public class FetchedPage {
     private String body;
     private String url;
     private String timestamp;
-    private List<String> sisLabels;
+    private List<String> sisLabels = new ArrayList<>();
 
     private FetchedPage() {
     }
@@ -98,14 +99,16 @@ public class FetchedPage {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        FetchedPage site = (FetchedPage) o;
-        return Objects.equals(title, site.title) &&
-                Objects.equals(body, site.body) &&
-                Objects.equals(url, site.url);
+        FetchedPage that = (FetchedPage) o;
+        return Objects.equals(title, that.title) &&
+                Objects.equals(body, that.body) &&
+                Objects.equals(url, that.url) &&
+                Objects.equals(sisLabels, that.sisLabels);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, body, url);
+
+        return Objects.hash(title, body, url, sisLabels);
     }
 }

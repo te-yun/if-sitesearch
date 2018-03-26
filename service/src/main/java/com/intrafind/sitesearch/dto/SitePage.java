@@ -91,15 +91,17 @@ public class SitePage {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SitePage page = (SitePage) o;
-        return Objects.equals(title, page.title) &&
-                Objects.equals(body, page.body) &&
-                Objects.equals(url, page.url);
+        SitePage sitePage = (SitePage) o;
+        return Objects.equals(title, sitePage.title) &&
+                Objects.equals(body, sitePage.body) &&
+                Objects.equals(url, sitePage.url) &&
+                Objects.equals(sisLabels, sitePage.sisLabels);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, body, url);
+
+        return Objects.hash(title, body, url, sisLabels);
     }
 
     @Override
@@ -108,6 +110,7 @@ public class SitePage {
                 "\"title\":\"" + title + "\"," +
                 "\"body\":\"" + body + "\"," +
                 "\"url\":\"" + url + "\"" +
+                "\"sisLabels\":\"" + sisLabels + "\"" +
                 "}";
     }
 }
