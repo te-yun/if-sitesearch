@@ -75,8 +75,9 @@ public class LoadTest {
     static final Map<String, Long> AUTOCOMPLETE_QUERIES = new ConcurrentHashMap<>();
     private static final List<UUID> TENANTS = Arrays.asList(
             SearchTest.SEARCH_SITE_ID,
-            UUID.fromString("4bcccea2-8bcf-4280-88c7-8736e9c3d15c"),
-            UUID.fromString("1a6715d9-119f-48d1-9329-e8763273bbea")
+            UUID.fromString("14689bfd-61a4-438b-8625-28c23d334f81"), // https://www.migrosbank.ch/it/
+            UUID.fromString("b40ddad3-e0bc-453e-a98a-87b83d4f9cd3"), // https://www.migrosbank.ch/fr/
+            UUID.fromString("8e0af062-cb74-4529-9b7b-47ca1c101ae8") // https://www.migrosbank.ch/de/
     );
 
     static {
