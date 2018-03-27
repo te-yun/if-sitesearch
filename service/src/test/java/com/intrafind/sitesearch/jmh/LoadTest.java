@@ -148,6 +148,7 @@ public class LoadTest {
         } else {
             final Hits result = MAPPER.readValue(response.body().bytes(), Hits.class);
             assertTrue(queryResultCount <= result.getResults().size());
+            response.close();
         }
     }
 
