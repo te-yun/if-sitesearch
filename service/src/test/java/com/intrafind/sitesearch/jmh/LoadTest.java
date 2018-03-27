@@ -19,6 +19,7 @@ package com.intrafind.sitesearch.jmh;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intrafind.sitesearch.controller.AutocompleteController;
 import com.intrafind.sitesearch.controller.SearchController;
+import com.intrafind.sitesearch.dto.Autocomplete;
 import com.intrafind.sitesearch.dto.Hits;
 import com.intrafind.sitesearch.integration.SearchTest;
 import okhttp3.OkHttpClient;
@@ -165,7 +166,7 @@ public class LoadTest {
 
         assertEquals(HttpStatus.OK.value(), response.code());
         final long queryResultCount = AUTOCOMPLETE_QUERIES.get(randomQuery);
-        final Hits result = MAPPER.readValue(response.body().bytes(), Hits.class);
+        final Autocomplete result = MAPPER.readValue(response.body().bytes(), Autocomplete.class);
         assertTrue(queryResultCount <= result.getResults().size());
     }
 }
