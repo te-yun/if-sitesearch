@@ -92,9 +92,9 @@ public class LoadTest {
 
     static {
         AUTOCOMPLETE_QUERIES.put("hyp", 0L);
-        AUTOCOMPLETE_QUERIES.put("swiss", 1L);
-        AUTOCOMPLETE_QUERIES.put("migros", 1L);
-        AUTOCOMPLETE_QUERIES.put("invest", 1L);
+        AUTOCOMPLETE_QUERIES.put("swiss", 0L);
+        AUTOCOMPLETE_QUERIES.put("migros", 0L);
+        AUTOCOMPLETE_QUERIES.put("invest", 0L);
         QUERY_LIST_AUTOCOMPLETE = new ArrayList<>(AUTOCOMPLETE_QUERIES.keySet());
     }
 
