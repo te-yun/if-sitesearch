@@ -130,10 +130,10 @@ public class LoadTest {
 
     @Benchmark
     public void search() throws Exception {
-        final int randomSiteIndex = LoadTest.PSEUDO_ENTROPY.nextInt(SITES.size());
+        final int randomSiteIndex = PSEUDO_ENTROPY.nextInt(SITES.size());
         final UUID randomSite = SITES.get(randomSiteIndex);
-        final int randomQueryIndex = LoadTest.PSEUDO_ENTROPY.nextInt(SEARCH_QUERIES.size());
-        final String randomQuery = LoadTest.QUERY_LIST_SEARCH.get(randomQueryIndex);
+        final int randomQueryIndex = PSEUDO_ENTROPY.nextInt(SEARCH_QUERIES.size());
+        final String randomQuery = QUERY_LIST_SEARCH.get(randomQueryIndex);
 
         final Request request = new Request.Builder()
                 .url(LOAD_TARGET + "/sites/" + randomSite + SearchController.ENDPOINT + "?query=" + randomQuery)
@@ -148,16 +148,16 @@ public class LoadTest {
         } else {
             final Hits result = MAPPER.readValue(response.body().bytes(), Hits.class);
             assertTrue(queryResultCount <= result.getResults().size());
-            response.close();
         }
+        response.close();
     }
 
     @Benchmark
     public void autocomplete() throws Exception {
-        final int randomSiteIndex = LoadTest.PSEUDO_ENTROPY.nextInt(SITES.size());
+        final int randomSiteIndex = PSEUDO_ENTROPY.nextInt(SITES.size());
         final UUID randomSite = SITES.get(randomSiteIndex);
-        final int randomQueryIndex = LoadTest.PSEUDO_ENTROPY.nextInt(LoadTest.AUTOCOMPLETE_QUERIES.size());
-        final String randomQuery = LoadTest.QUERY_LIST_AUTOCOMPLETE.get(randomQueryIndex);
+        final int randomQueryIndex = PSEUDO_ENTROPY.nextInt(LoadTest.AUTOCOMPLETE_QUERIES.size());
+        final String randomQuery = QUERY_LIST_AUTOCOMPLETE.get(randomQueryIndex);
 
         final Request request = new Request.Builder()
                 .url(LOAD_TARGET + "/sites/" + randomSite + AutocompleteController.ENDPOINT + "?query=" + randomQuery)
