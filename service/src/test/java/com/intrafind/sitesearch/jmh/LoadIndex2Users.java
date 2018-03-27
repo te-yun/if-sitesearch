@@ -16,8 +16,6 @@
 
 package com.intrafind.sitesearch.jmh;
 
-import com.intrafind.sitesearch.controller.SiteController;
-import com.intrafind.sitesearch.dto.FetchedPage;
 import com.intrafind.sitesearch.dto.SitePage;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -27,18 +25,9 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Threads;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
-import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.UUID;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 @Threads(2)
 @BenchmarkMode(Mode.Throughput)
@@ -62,39 +51,39 @@ public class LoadIndex2Users {
         final String loremIpsumText = generateLoremIpsum();
         final SitePage pageToIndex = buildPage(loremIpsumText);
 
-        final ResponseEntity<FetchedPage> actual = LoadTest.CALLER.exchange(
-                LoadTest.LOAD_TARGET + SiteController.ENDPOINT + "/" + SEARCH_SITE_ID + "/pages?siteSecret=" + SEARCH_SITE_SECRET,
-                HttpMethod.PUT,
-                new HttpEntity<>(pageToIndex),
-                FetchedPage.class
-        );
-
-        assertEquals(HttpStatus.CREATED, actual.getStatusCode());
-        assertNotNull(actual.getHeaders().getLocation());
-        assertNotNull(actual.getBody().getSiteId());
-        assertNotNull(actual.getBody().getId());
-        assertNotNull(actual.getBody().getTitle());
-        assertNotNull(actual.getBody().getBody());
-        assertNotNull(actual.getBody().getUrl());
+//        final ResponseEntity<FetchedPage> actual = LoadTest.CALLER.exchange(
+//                LoadTest.LOAD_TARGET + SiteController.ENDPOINT + "/" + SEARCH_SITE_ID + "/pages?siteSecret=" + SEARCH_SITE_SECRET,
+//                HttpMethod.PUT,
+//                new HttpEntity<>(pageToIndex),
+//                FetchedPage.class
+//        );
+//
+//        assertEquals(HttpStatus.CREATED, actual.getStatusCode());
+//        assertNotNull(actual.getHeaders().getLocation());
+//        assertNotNull(actual.getBody().getSiteId());
+//        assertNotNull(actual.getBody().getId());
+//        assertNotNull(actual.getBody().getTitle());
+//        assertNotNull(actual.getBody().getBody());
+//        assertNotNull(actual.getBody().getUrl());
     }
 
     @Benchmark
-    public void updatePageViaUrl() throws Exception {
+    public void updatePageViaUrl() {
         final String loremIpsumText = generateLoremIpsum();
         final SitePage pageToIndex = buildPage(loremIpsumText);
         pageToIndex.setUrl("https://example.com/0fe5463c-a134-495d-bee1-8e2e0044e57e");
 
-        final ResponseEntity<SitePage> actual = LoadTest.CALLER.exchange(
-                LoadTest.LOAD_TARGET + SiteController.ENDPOINT
-                        + "/c281b015-09af-4868-8185-3fd8db41d6cb/pages/url/" + URLEncoder.encode(pageToIndex.getUrl(), "UTF-8")
-                        + "?siteSecret=92d957f6-956e-4ee9-8f48-de434a728ab3",
-                HttpMethod.PUT,
-                new HttpEntity<>(pageToIndex),
-                SitePage.class
-        );
-
-        assertEquals(HttpStatus.OK, actual.getStatusCode());
-        assertNull(actual.getHeaders().getLocation());
+//        final ResponseEntity<SitePage> actual = LoadTest.CALLER.exchange(
+//                LoadTest.LOAD_TARGET + SiteController.ENDPOINT
+//                        + "/c281b015-09af-4868-8185-3fd8db41d6cb/pages/url/" + URLEncoder.encode(pageToIndex.getUrl(), "UTF-8")
+//                        + "?siteSecret=92d957f6-956e-4ee9-8f48-de434a728ab3",
+//                HttpMethod.PUT,
+//                new HttpEntity<>(pageToIndex),
+//                SitePage.class
+//        );
+//
+//        assertEquals(HttpStatus.OK, actual.getStatusCode());
+//        assertNull(actual.getHeaders().getLocation());
     }
 
     private SitePage buildPage(String loremIpsumText) {
@@ -111,16 +100,16 @@ public class LoadIndex2Users {
         final String loremIpsumText = generateLoremIpsum();
         final SitePage pageToIndex = buildPage(loremIpsumText);
 
-        final ResponseEntity<SitePage> actual = LoadTest.CALLER.exchange(
-                LoadTest.LOAD_TARGET + SiteController.ENDPOINT
-                        + "/cdcfdeef-86a2-4672-890f-e952e465fe01/pages/7ca861451227886cd575cda73ae4f1255a3039ee2cef5868444144e5be4bd32a"
-                        + "?siteSecret=4e8afa49-490f-4b0a-a7b7-958405b30c73",
-                HttpMethod.PUT,
-                new HttpEntity<>(pageToIndex),
-                SitePage.class
-        );
-
-        assertEquals(HttpStatus.OK, actual.getStatusCode());
-        assertNull(actual.getHeaders().getLocation());
+//        final ResponseEntity<SitePage> actual = LoadTest.CALLER.exchange(
+//                LoadTest.LOAD_TARGET + SiteController.ENDPOINT
+//                        + "/cdcfdeef-86a2-4672-890f-e952e465fe01/pages/7ca861451227886cd575cda73ae4f1255a3039ee2cef5868444144e5be4bd32a"
+//                        + "?siteSecret=4e8afa49-490f-4b0a-a7b7-958405b30c73",
+//                HttpMethod.PUT,
+//                new HttpEntity<>(pageToIndex),
+//                SitePage.class
+//        );
+//
+//        assertEquals(HttpStatus.OK, actual.getStatusCode());
+//        assertNull(actual.getHeaders().getLocation());
     }
 }
