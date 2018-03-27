@@ -68,6 +68,8 @@ public class LoadTest {
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
+            .pingInterval(1, TimeUnit.SECONDS)
+            .retryOnConnectionFailure(true)
             .followRedirects(false)
             .followSslRedirects(false)
             .build();
@@ -197,8 +199,10 @@ public class LoadTest {
                 assertEquals(HttpStatus.OK.value(), response.code());
                 assertEquals(HttpStatus.OK.value(), response.code());
                 final long queryResultCount = AUTOCOMPLETE_QUERIES.get(randomQuery);
-                final Autocomplete result = MAPPER.readValue(response.body().bytes(), Autocomplete.class);
+                final byte[] body = new byte[]{};
+                final int responseSize = response.body().byteStream().read(body);
                 response.close();
+                final Autocomplete result = MAPPER.readValue(body, Autocomplete.class);
                 assertTrue(queryResultCount <= result.getResults().size());
             }
         });
