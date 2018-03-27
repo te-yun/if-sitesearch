@@ -73,11 +73,12 @@ public class LoadTest {
 
     static final Map<String, Long> SEARCH_QUERIES = new HashMap<>();
     static final Map<String, Long> AUTOCOMPLETE_QUERIES = new ConcurrentHashMap<>();
-    private static final List<UUID> TENANTS = Arrays.asList(
+    private static final List<UUID> SITES = Arrays.asList(
             SearchTest.SEARCH_SITE_ID,
             UUID.fromString("14689bfd-61a4-438b-8625-28c23d334f81"), // https://www.migrosbank.ch/it/
             UUID.fromString("b40ddad3-e0bc-453e-a98a-87b83d4f9cd3"), // https://www.migrosbank.ch/fr/
-            UUID.fromString("8e0af062-cb74-4529-9b7b-47ca1c101ae8") // https://www.migrosbank.ch/de/
+            UUID.fromString("8e0af062-cb74-4529-9b7b-47ca1c101ae8"), // https://www.migrosbank.ch/de/
+            LOAD_SITE_ID // https://www.migrosbank.ch/de, https://blog.migrosbank.ch/de
     );
 
     static {
@@ -129,16 +130,18 @@ public class LoadTest {
 
     @Benchmark
     public void search() throws Exception {
-        final int queryIndex = LoadTest.PSEUDO_ENTROPY.nextInt(LoadTest.SEARCH_QUERIES.size());
-        final String query = LoadTest.QUERY_LIST_SEARCH.get(queryIndex);
+        final int randomSiteIndex = LoadTest.PSEUDO_ENTROPY.nextInt(SITES.size());
+        final UUID randomSite = SITES.get(randomSiteIndex);
+        final int randomQueryIndex = LoadTest.PSEUDO_ENTROPY.nextInt(SEARCH_QUERIES.size());
+        final String randomQuery = LoadTest.QUERY_LIST_SEARCH.get(randomQueryIndex);
 
         final Request request = new Request.Builder()
-                .url(LOAD_TARGET + "/sites/" + LOAD_SITE_ID + SearchController.ENDPOINT + "?query=" + query)
+                .url(LOAD_TARGET + "/sites/" + randomSite + SearchController.ENDPOINT + "?query=" + randomQuery)
                 .build();
         final Response response = CALLER.newCall(request).execute();
         assertEquals(HttpStatus.OK.value(), response.code());
 
-        final long queryResultCount = LoadTest.SEARCH_QUERIES.get(query);
+        final long queryResultCount = LoadTest.SEARCH_QUERIES.get(randomQuery);
         assertEquals(HttpStatus.OK.value(), response.code());
         if (queryResultCount == 0) {
             assertNotNull(response.body());
@@ -150,17 +153,19 @@ public class LoadTest {
 
     @Benchmark
     public void autocomplete() throws Exception {
-        final int queryIndex = LoadTest.PSEUDO_ENTROPY.nextInt(LoadTest.AUTOCOMPLETE_QUERIES.size());
-        final String query = LoadTest.QUERY_LIST_AUTOCOMPLETE.get(queryIndex);
+        final int randomSiteIndex = LoadTest.PSEUDO_ENTROPY.nextInt(SITES.size());
+        final UUID randomSite = SITES.get(randomSiteIndex);
+        final int randomQueryIndex = LoadTest.PSEUDO_ENTROPY.nextInt(LoadTest.AUTOCOMPLETE_QUERIES.size());
+        final String randomQuery = LoadTest.QUERY_LIST_AUTOCOMPLETE.get(randomQueryIndex);
 
         final Request request = new Request.Builder()
-                .url(LOAD_TARGET + "/sites/" + LOAD_SITE_ID + AutocompleteController.ENDPOINT + "?query=" + query)
+                .url(LOAD_TARGET + "/sites/" + randomSite + AutocompleteController.ENDPOINT + "?query=" + randomQuery)
                 .build();
         final Response response = CALLER.newCall(request).execute();
         assertEquals(HttpStatus.OK.value(), response.code());
 
         assertEquals(HttpStatus.OK.value(), response.code());
-        final long queryResultCount = AUTOCOMPLETE_QUERIES.get(query);
+        final long queryResultCount = AUTOCOMPLETE_QUERIES.get(randomQuery);
         final Hits result = MAPPER.readValue(response.body().bytes(), Hits.class);
         assertTrue(queryResultCount <= result.getResults().size());
     }
