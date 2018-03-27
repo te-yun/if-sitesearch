@@ -133,7 +133,7 @@ public class LoadTest {
             assertNotNull(actual.getBody());
         } else {
             assertEquals(HttpStatus.OK, actual.getStatusCode());
-            assertEquals(queryResultCount, actual.getBody().getResults().size());
+            assertTrue(queryResultCount <= actual.getBody().getResults().size());
         }
     }
 
