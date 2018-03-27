@@ -22,6 +22,8 @@ import com.intrafind.sitesearch.controller.SearchController;
 import com.intrafind.sitesearch.dto.Autocomplete;
 import com.intrafind.sitesearch.dto.Hits;
 import com.intrafind.sitesearch.integration.SearchTest;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -39,6 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -117,19 +120,27 @@ public class LoadTest {
     }
 
     @Benchmark
-    public void staticFiles() throws Exception {
+    public void staticFiles() {
         final Request request = new Request.Builder()
                 .url(LOAD_TARGET)
                 .build();
-        final Response staticFile = CALLER.newCall(request).execute();
-        assertEquals(HttpStatus.OK.value(), staticFile.code());
+        CALLER.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LOG.error(e.getMessage());
+            }
 
-        assertEquals(HttpStatus.OK.value(), staticFile.code());
-        assertNotNull(staticFile.body());
+            @Override
+            public void onResponse(Call call, Response response) {
+                assertEquals(HttpStatus.OK.value(), response.code());
+                assertNotNull(response.body());
+                response.close();
+            }
+        });
     }
 
     @Benchmark
-    public void search() throws Exception {
+    public void search() {
         final int randomSiteIndex = PSEUDO_ENTROPY.nextInt(SITES.size());
         final UUID randomSite = SITES.get(randomSiteIndex);
         final int randomQueryIndex = PSEUDO_ENTROPY.nextInt(SEARCH_QUERIES.size());
@@ -138,22 +149,30 @@ public class LoadTest {
         final Request request = new Request.Builder()
                 .url(LOAD_TARGET + "/sites/" + randomSite + SearchController.ENDPOINT + "?query=" + randomQuery)
                 .build();
-        final Response response = CALLER.newCall(request).execute();
-        assertEquals(HttpStatus.OK.value(), response.code());
+        CALLER.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LOG.error(e.getMessage());
+            }
 
-        final long queryResultCount = LoadTest.SEARCH_QUERIES.get(randomQuery);
-        assertEquals(HttpStatus.OK.value(), response.code());
-        if (queryResultCount == 0) {
-            assertNotNull(response.body());
-        } else {
-            final Hits result = MAPPER.readValue(response.body().bytes(), Hits.class);
-            assertTrue(queryResultCount <= result.getResults().size());
-        }
-        response.close();
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                assertEquals(HttpStatus.OK.value(), response.code());
+                final long queryResultCount = LoadTest.SEARCH_QUERIES.get(randomQuery);
+                assertEquals(HttpStatus.OK.value(), response.code());
+                if (queryResultCount == 0) {
+                    assertNotNull(response.body());
+                } else {
+                    final Hits result = MAPPER.readValue(response.body().bytes(), Hits.class);
+                    assertTrue(queryResultCount <= result.getResults().size());
+                }
+                response.close();
+            }
+        });
     }
 
     @Benchmark
-    public void autocomplete() throws Exception {
+    public void autocomplete() {
         final int randomSiteIndex = PSEUDO_ENTROPY.nextInt(SITES.size());
         final UUID randomSite = SITES.get(randomSiteIndex);
         final int randomQueryIndex = PSEUDO_ENTROPY.nextInt(LoadTest.AUTOCOMPLETE_QUERIES.size());
@@ -162,12 +181,21 @@ public class LoadTest {
         final Request request = new Request.Builder()
                 .url(LOAD_TARGET + "/sites/" + randomSite + AutocompleteController.ENDPOINT + "?query=" + randomQuery)
                 .build();
-        final Response response = CALLER.newCall(request).execute();
-        assertEquals(HttpStatus.OK.value(), response.code());
+        CALLER.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LOG.error(e.getMessage());
+            }
 
-        assertEquals(HttpStatus.OK.value(), response.code());
-        final long queryResultCount = AUTOCOMPLETE_QUERIES.get(randomQuery);
-        final Autocomplete result = MAPPER.readValue(response.body().bytes(), Autocomplete.class);
-        assertTrue(queryResultCount <= result.getResults().size());
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                assertEquals(HttpStatus.OK.value(), response.code());
+                assertEquals(HttpStatus.OK.value(), response.code());
+                final long queryResultCount = AUTOCOMPLETE_QUERIES.get(randomQuery);
+                final Autocomplete result = MAPPER.readValue(response.body().bytes(), Autocomplete.class);
+                response.close();
+                assertTrue(queryResultCount <= result.getResults().size());
+            }
+        });
     }
 }
