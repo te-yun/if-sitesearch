@@ -45,7 +45,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
@@ -72,7 +71,7 @@ public class LoadTest {
     static final Random PSEUDO_ENTROPY = new Random();
 
     static final Map<String, Long> SEARCH_QUERIES = new HashMap<>();
-    static final Map<String, Long> AUTOCOMPLETE_QUERIES = new ConcurrentHashMap<>();
+    static final Map<String, Long> AUTOCOMPLETE_QUERIES = new HashMap<>();
     private static final List<UUID> SITES = Arrays.asList(
             SearchTest.SEARCH_SITE_ID,
             UUID.fromString("14689bfd-61a4-438b-8625-28c23d334f81"), // https://www.migrosbank.ch/it/
@@ -93,9 +92,9 @@ public class LoadTest {
 
     static {
         AUTOCOMPLETE_QUERIES.put("hyp", 0L);
-        AUTOCOMPLETE_QUERIES.put("geld", 1L);
-        AUTOCOMPLETE_QUERIES.put("bank", 1L);
-        AUTOCOMPLETE_QUERIES.put("fond", 1L);
+        AUTOCOMPLETE_QUERIES.put("swiss", 1L);
+        AUTOCOMPLETE_QUERIES.put("migros", 1L);
+        AUTOCOMPLETE_QUERIES.put("invest", 1L);
         QUERY_LIST_AUTOCOMPLETE = new ArrayList<>(AUTOCOMPLETE_QUERIES.keySet());
     }
 
