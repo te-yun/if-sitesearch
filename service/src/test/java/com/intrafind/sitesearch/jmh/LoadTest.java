@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intrafind.sitesearch.controller.AutocompleteController;
 import com.intrafind.sitesearch.controller.SearchController;
 import com.intrafind.sitesearch.dto.Autocomplete;
+import com.intrafind.sitesearch.dto.Hits;
 import com.intrafind.sitesearch.integration.SearchTest;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -164,7 +165,7 @@ public class LoadTest {
                 } else {
                     final byte[] body = new byte[]{};
                     response.body().byteStream().read(body);
-//                    final Hits result = MAPPER.readValue(body, Hits.class);
+                    final Hits result = MAPPER.readValue(body, Hits.class);
 //                    assertTrue(queryResultCount <= result.getResults().size());
                 }
                 response.close();
