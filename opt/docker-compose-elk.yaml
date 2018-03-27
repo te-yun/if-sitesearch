@@ -5,13 +5,13 @@ services:
     container_name: ops-kibana
     restart: always
     depends_on:
-      - ops-elasticsearch
+      - elk-elasticsearch
       - ops-elasticsearch-yang
       - ops-elasticsearch-ying
       - ops-logstash
     environment:
 #      SERVER_NAME: ops-elasticsearch
-      ELASTICSEARCH_URL: http://ops-elasticsearch:9200
+      ELASTICSEARCH_URL: http://elk-elasticsearch:9200
     #      KIBANA_DEFAULTAPPID: kibana.defaultAppId
     #      XPACK_MONITORING_ENABLED: xpack.monitoring.enabled
     #
@@ -21,22 +21,22 @@ services:
     networks:
       - sitesearch
 
-  ops-elasticsearch:
+  elk-elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.2.3
-    container_name: ops-elasticsearch
+    container_name: elk-elasticsearch
     restart: always
     environment:
       - cluster.name=sitesearch-ops-cluster
       - bootstrap.memory_lock=true
-      - node.name=ops-elasticsearch
+      - node.name=elk-elasticsearch
       - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
-      - discovery.zen.ping.unicast.hosts=ops-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
+      - discovery.zen.ping.unicast.hosts=elk-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
-      - ops-elk:/usr/share/elasticsearch/data:rw
+      - /srv/elk-elasticsearch/data:/usr/share/elasticsearch/data:rw
     networks:
       - sitesearch
       
@@ -49,7 +49,7 @@ services:
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
       - node.name=ops-elasticsearch-ying
-      - discovery.zen.ping.unicast.hosts=ops-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
+      - discovery.zen.ping.unicast.hosts=elk-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
     ulimits:
       memlock:
         soft: -1
@@ -68,7 +68,7 @@ services:
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
       - node.name=ops-elasticsearch-yang
-      - discovery.zen.ping.unicast.hosts=ops-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
+      - discovery.zen.ping.unicast.hosts=elk-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
     ulimits:
       memlock:
         soft: -1
