@@ -155,14 +155,16 @@ public class LoadTest {
             }
 
             @Override
-            public void onResponse(Call call, Response response) {
+            public void onResponse(Call call, Response response) throws IOException {
                 assertEquals(HttpStatus.OK.value(), response.code());
                 final long queryResultCount = SEARCH_QUERIES.get(randomQuery);
                 assertEquals(HttpStatus.OK.value(), response.code());
                 if (queryResultCount == 0) {
                     assertNotNull(response.body());
                 } else {
-//                    final Hits result = MAPPER.readValue(response.body().bytes(), Hits.class);
+                    final byte[] body = new byte[]{};
+                    response.body().byteStream().read(body);
+//                    final Hits result = MAPPER.readValue(body, Hits.class);
 //                    assertTrue(queryResultCount <= result.getResults().size());
                 }
                 response.close();
