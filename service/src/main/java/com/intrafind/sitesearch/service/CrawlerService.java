@@ -31,20 +31,22 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Random;
 import java.util.UUID;
 
 @Service
 public class CrawlerService {
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerService.class);
     private static final String CRAWLER_STORAGE = "data/crawler";
-
+    private static final Random RANDOM_VERSION = new Random();
+   
     public CrawlerJobResult crawl(String url, UUID siteId, UUID siteSecret, boolean isThrottled, boolean clearIndex) {
         final CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(CRAWLER_STORAGE);
         final int crawlerThreads;         
         if (isThrottled) {
             crawlerThreads = 2;
-            config.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36");
+            config.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0." + RANDOM_VERSION.nextInt(9999) + ".94 Safari/537.36");
             config.setPolitenessDelay(200); // to avoid being blocked by crawled websites
             config.setMaxPagesToFetch(500);
         } else {
@@ -61,7 +63,7 @@ public class CrawlerService {
         try {
             controller = new CrawlController(config, pageFetcher, robotstxtServer);
         } catch (final Exception e) {
-            LOG.error("Crawler initialization fail: " + e.getMessage());
+            LOG.error("CRAWLER_INITIALIZATION_FAILURE: " + e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
 
@@ -96,11 +98,11 @@ public class CrawlerService {
             if (response.code() == 204 || response.code() == 200) {
                 return true;
             } else {
-                LOG.error("Clear Index result: " + response.code());
+                LOG.error("CLEAR_INDEX_RESULT: " + response.code());
                 return false;
             }
         } catch (IOException e) {
-            LOG.error("Clear Index call fail: " + e.getMessage());
+            LOG.error("CLEAR_INDEX_RESULT_FAILURE " + e.getMessage());
             return false;
         }
     }
