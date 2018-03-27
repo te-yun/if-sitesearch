@@ -17,12 +17,20 @@
 package com.intrafind.sitesearch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.intrafind.sitesearch.dto.*;
+import com.intrafind.sitesearch.dto.Autocomplete;
+import com.intrafind.sitesearch.dto.FetchedPage;
+import com.intrafind.sitesearch.dto.FoundPage;
+import com.intrafind.sitesearch.dto.Hits;
+import com.intrafind.sitesearch.dto.SitePage;
 import com.intrafind.sitesearch.integration.SearchTest;
 import com.intrafind.sitesearch.integration.SiteTest;
 import com.intrafind.sitesearch.jmh.LoadIndex2Users;
 import com.intrafind.sitesearch.service.SiteCrawler;
-import okhttp3.*;
+import okhttp3.Headers;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -42,7 +50,11 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -172,7 +184,7 @@ public class SmokeTest {
 
     @Test
     public void apiFrontpageContent() throws Exception {
-        Request request = new Request.Builder()
+        final Request request = new Request.Builder()
                 .url("https://api.sitesearch.cloud")
                 .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
                 .build();

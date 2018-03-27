@@ -16,11 +16,14 @@
 
 package com.intrafind.sitesearch.jmh;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intrafind.sitesearch.controller.AutocompleteController;
 import com.intrafind.sitesearch.controller.SearchController;
-import com.intrafind.sitesearch.dto.Autocomplete;
 import com.intrafind.sitesearch.dto.Hits;
 import com.intrafind.sitesearch.integration.SearchTest;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.Scope;
@@ -30,11 +33,10 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
+import org.openjdk.jmh.runner.options.TimeValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,9 +46,9 @@ import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -59,7 +61,14 @@ public class LoadTest {
 
     static final List<String> QUERY_LIST_AUTOCOMPLETE;
     static final String LOAD_TARGET = "https://api.sitesearch.cloud";
-    static final TestRestTemplate CALLER = new TestRestTemplate();
+    static final OkHttpClient CALLER = new OkHttpClient.Builder()
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .followRedirects(false)
+            .followSslRedirects(false)
+            .build();
+    static final ObjectMapper MAPPER = new ObjectMapper();
     static final Random PSEUDO_ENTROPY = new Random();
 
     static final Map<String, Long> SEARCH_QUERIES = new HashMap<>();
@@ -90,13 +99,10 @@ public class LoadTest {
 
     public static void main(String... args) throws RunnerException {
         Options options = new OptionsBuilder()
-//                .timeout(TimeValue.seconds(60))
-//                .timeout(TimeValue.seconds(5))
+                .timeout(TimeValue.seconds(60))
 //                .include(".*")
 //                .include(LoadIndex2Users.class.getSimpleName())
                 .include(LoadTest.class.getSimpleName())
-//                .warmupIterations(5)
-//                .measurementIterations(20)
                 .forks(2)
                 .threads(200)
                 .mode(Mode.Throughput)
@@ -109,47 +115,52 @@ public class LoadTest {
     }
 
     @Benchmark
-    public void staticFiles() {
-        final ResponseEntity<String> staticFile = CALLER.getForEntity(LOAD_TARGET, String.class);
+    public void staticFiles() throws Exception {
+        final Request request = new Request.Builder()
+                .url(LOAD_TARGET)
+                .build();
+        final Response staticFile = CALLER.newCall(request).execute();
+        assertEquals(HttpStatus.OK.value(), staticFile.code());
 
-        assertEquals(HttpStatus.OK, staticFile.getStatusCode());
-        assertFalse(staticFile.getBody().isEmpty());
+        assertEquals(HttpStatus.OK.value(), staticFile.code());
+        assertNotNull(staticFile.body());
     }
 
     @Benchmark
-    public void search() {
+    public void search() throws Exception {
         final int queryIndex = LoadTest.PSEUDO_ENTROPY.nextInt(LoadTest.SEARCH_QUERIES.size());
         final String query = LoadTest.QUERY_LIST_SEARCH.get(queryIndex);
 
-        final ResponseEntity<Hits> actual = CALLER.getForEntity(
-                LoadTest.LOAD_TARGET + "/sites/" + LOAD_SITE_ID + SearchController.ENDPOINT
-                        + "?query=" + query,
-                Hits.class
-        );
+        final Request request = new Request.Builder()
+                .url(LOAD_TARGET + "/sites/" + LOAD_SITE_ID + SearchController.ENDPOINT + "?query=" + query)
+                .build();
+        final Response response = CALLER.newCall(request).execute();
+        assertEquals(HttpStatus.OK.value(), response.code());
 
         final long queryResultCount = LoadTest.SEARCH_QUERIES.get(query);
+        assertEquals(HttpStatus.OK.value(), response.code());
         if (queryResultCount == 0) {
-            assertEquals(HttpStatus.OK, actual.getStatusCode());
-            assertNotNull(actual.getBody());
+            assertNotNull(response.body());
         } else {
-            assertEquals(HttpStatus.OK, actual.getStatusCode());
-            assertTrue(queryResultCount <= actual.getBody().getResults().size());
+            final Hits result = MAPPER.readValue(response.body().bytes(), Hits.class);
+            assertTrue(queryResultCount <= result.getResults().size());
         }
     }
 
     @Benchmark
-    public void autocomplete() {
+    public void autocomplete() throws Exception {
         final int queryIndex = LoadTest.PSEUDO_ENTROPY.nextInt(LoadTest.AUTOCOMPLETE_QUERIES.size());
         final String query = LoadTest.QUERY_LIST_AUTOCOMPLETE.get(queryIndex);
 
-        final ResponseEntity<Autocomplete> actual = CALLER.getForEntity(
-                LOAD_TARGET + "/sites/" + LOAD_SITE_ID + AutocompleteController.ENDPOINT
-                        + "?query=" + query,
-                Autocomplete.class
-        );
+        final Request request = new Request.Builder()
+                .url(LOAD_TARGET + "/sites/" + LOAD_SITE_ID + AutocompleteController.ENDPOINT + "?query=" + query)
+                .build();
+        final Response response = CALLER.newCall(request).execute();
+        assertEquals(HttpStatus.OK.value(), response.code());
 
-        assertEquals(HttpStatus.OK, actual.getStatusCode());
+        assertEquals(HttpStatus.OK.value(), response.code());
         final long queryResultCount = AUTOCOMPLETE_QUERIES.get(query);
-        assertTrue(queryResultCount <= actual.getBody().getResults().size());
+        final Hits result = MAPPER.readValue(response.body().bytes(), Hits.class);
+        assertTrue(queryResultCount <= result.getResults().size());
     }
 }
