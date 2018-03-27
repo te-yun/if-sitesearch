@@ -164,9 +164,11 @@ public class LoadTest {
                     assertNotNull(response.body());
                 } else {
                     final byte[] body = new byte[]{};
-                    response.body().byteStream().read(body);
-                    final Hits result = MAPPER.readValue(body, Hits.class);
-//                    assertTrue(queryResultCount <= result.getResults().size());
+                    final int responseSize = response.body().byteStream().read(body);
+                    if (-1 != responseSize) {
+                        final Hits result = MAPPER.readValue(body, Hits.class);
+                        assertTrue(queryResultCount <= result.getResults().size());
+                    }
                 }
                 response.close();
             }
