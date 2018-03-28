@@ -16,7 +16,14 @@
 
 package com.intrafind.sitesearch.controller;
 
-import com.intrafind.sitesearch.dto.*;
+import com.intrafind.sitesearch.dto.Autocomplete;
+import com.intrafind.sitesearch.dto.FetchedPage;
+import com.intrafind.sitesearch.dto.Hits;
+import com.intrafind.sitesearch.dto.SiteCreation;
+import com.intrafind.sitesearch.dto.SiteIndexSummary;
+import com.intrafind.sitesearch.dto.SitePage;
+import com.intrafind.sitesearch.dto.SiteProfile;
+import com.intrafind.sitesearch.dto.SiteProfileUpdate;
 import com.intrafind.sitesearch.service.AutocompleteService;
 import com.intrafind.sitesearch.service.SearchService;
 import com.intrafind.sitesearch.service.SiteService;
@@ -24,7 +31,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.util.List;
@@ -258,7 +271,7 @@ public class SiteController {
             siteId = cookieSite;
         }
 
-        Hits searchResult = searchService.search(query, siteId);
+        final Hits searchResult = searchService.search(query, siteId);
         LOG.info("siteId: " + siteId + " - query: " + query + " - results: " + searchResult.getResults().size());
         return ResponseEntity.ok(searchResult);
     }
