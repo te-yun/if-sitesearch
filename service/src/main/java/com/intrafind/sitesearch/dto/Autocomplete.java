@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,14 @@
 
 package com.intrafind.sitesearch.dto;
 
-import java.io.Serializable;
-import java.util.Collections;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public class Autocomplete implements Serializable {
-    private List<String> results = Collections.emptyList();
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Autocomplete {
+    private List<String> results = new ArrayList<>();
 
     private Autocomplete() {
     }
