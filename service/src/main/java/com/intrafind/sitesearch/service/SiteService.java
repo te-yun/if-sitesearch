@@ -363,7 +363,7 @@ public class SiteService {
         final List<String> documents = new ArrayList<>();
         List<String> failedToIndex = new ArrayList<>();
         try {
-            SyndFeed feed = new SyndFeedInput().build(new XmlReader(feedUrl.toURL()));
+            final SyndFeed feed = new SyndFeedInput().build(new XmlReader(feedUrl.toURL()));
 
             feed.getEntries().forEach(entry -> {
                 final String body;

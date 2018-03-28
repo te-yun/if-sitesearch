@@ -22,7 +22,13 @@ import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
-import okhttp3.*;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
@@ -53,6 +59,13 @@ public class SiteCrawler extends WebCrawler {
     private URI url;
 
     private SiteCrawler() {
+//        try {
+//            new SiteMap(URI.create("").toURL()).getSiteMapUrls().forEach(siteMapURL -> {
+//                siteMapURL.getUrl();
+//            });
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public SiteCrawler(UUID siteId, UUID siteSecret, URI url) {

@@ -44,7 +44,7 @@ configurations {
 
 dependencies {
     compile "edu.uci.ics:crawler4j:4.4.0"
-//    compile "edu.uci.ics:crawler4j:4.3"
+    compile "com.github.crawler-commons:crawler-commons:0.9"
 
     compile "com.rometools:rome:1.9.0"
 

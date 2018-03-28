@@ -49,7 +49,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -65,13 +64,13 @@ public class LoadTest {
     static final List<String> QUERY_LIST_AUTOCOMPLETE;
     static final String LOAD_TARGET = "https://api.sitesearch.cloud";
     static final OkHttpClient CALLER = new OkHttpClient.Builder()
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
-            .pingInterval(1, TimeUnit.SECONDS)
-            .retryOnConnectionFailure(true)
-            .followRedirects(false)
-            .followSslRedirects(false)
+//            .connectTimeout(60, TimeUnit.SECONDS)
+//            .readTimeout(60, TimeUnit.SECONDS)
+//            .writeTimeout(60, TimeUnit.SECONDS)
+//            .pingInterval(1, TimeUnit.SECONDS)
+//            .retryOnConnectionFailure(true)
+//            .followRedirects(false)
+//            .followSslRedirects(false)
             .build();
     static final ObjectMapper MAPPER = new ObjectMapper();
     static final Random PSEUDO_ENTROPY = new Random();
@@ -111,7 +110,7 @@ public class LoadTest {
 //                .include(LoadIndex2Users.class.getSimpleName())
                 .include(LoadTest.class.getSimpleName())
                 .forks(1)
-                .threads(200)
+                .threads(100)
                 .mode(Mode.Throughput)
                 .resultFormat(ResultFormatType.JSON)
                 .result("build/jmh-result.json")
