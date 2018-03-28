@@ -22,8 +22,6 @@ import com.intrafind.sitesearch.controller.SearchController;
 import com.intrafind.sitesearch.dto.Autocomplete;
 import com.intrafind.sitesearch.dto.Hits;
 import com.intrafind.sitesearch.integration.SearchTest;
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -105,6 +103,7 @@ public class LoadTest {
 
     public static void main(String... args) throws RunnerException {
         Options options = new OptionsBuilder()
+                .warmupIterations(1)
                 .timeout(TimeValue.seconds(60))
 //                .include(".*")
 //                .include(LoadIndex2Users.class.getSimpleName())
@@ -121,27 +120,18 @@ public class LoadTest {
     }
 
     @Benchmark
-    public void staticFiles() {
+    public void staticFiles() throws IOException {
         final Request request = new Request.Builder()
                 .url(LOAD_TARGET)
                 .build();
-        CALLER.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                LOG.error(e.getMessage());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) {
-                assertEquals(HttpStatus.OK.value(), response.code());
-                assertNotNull(response.body());
-                response.close();
-            }
-        });
+        final Response response = CALLER.newCall(request).execute();
+        assertEquals(HttpStatus.OK.value(), response.code());
+        assertNotNull(response.body());
+        response.close();
     }
 
     @Benchmark
-    public void search() {
+    public void search() throws IOException {
         final int randomSiteIndex = PSEUDO_ENTROPY.nextInt(SITES.size());
         final UUID randomSite = SITES.get(randomSiteIndex);
         final int randomQueryIndex = PSEUDO_ENTROPY.nextInt(SEARCH_QUERIES.size());
@@ -150,33 +140,24 @@ public class LoadTest {
         final Request request = new Request.Builder()
                 .url(LOAD_TARGET + "/sites/" + randomSite + SearchController.ENDPOINT + "?query=" + randomQuery)
                 .build();
-        CALLER.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                LOG.error(e.getMessage());
+        final Response response = CALLER.newCall(request).execute();
+        assertEquals(HttpStatus.OK.value(), response.code());
+        final long queryResultCount = SEARCH_QUERIES.get(randomQuery);
+        if (queryResultCount == 0) {
+            assertNotNull(response.body());
+        } else {
+            final byte[] body = new byte[]{};
+            final int responseSize = response.body().byteStream().read(body);
+            if (0 < responseSize) {
+                final Hits result = MAPPER.readValue(body, Hits.class);
+                assertTrue(queryResultCount < result.getResults().size());
             }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                assertEquals(HttpStatus.OK.value(), response.code());
-                final long queryResultCount = SEARCH_QUERIES.get(randomQuery);
-                if (queryResultCount == 0) {
-                    assertNotNull(response.body());
-                } else {
-                    final byte[] body = new byte[]{};
-                    final int responseSize = response.body().byteStream().read(body);
-                    if (0 < responseSize) {
-                        final Hits result = MAPPER.readValue(body, Hits.class);
-                        assertTrue(queryResultCount < result.getResults().size());
-                    }
-                }
-                response.close();
-            }
-        });
+        }
+        response.close();
     }
 
     @Benchmark
-    public void autocomplete() {
+    public void autocomplete() throws IOException {
         final int randomSiteIndex = PSEUDO_ENTROPY.nextInt(SITES.size());
         final UUID randomSite = SITES.get(randomSiteIndex);
         final int randomQueryIndex = PSEUDO_ENTROPY.nextInt(LoadTest.AUTOCOMPLETE_QUERIES.size());
@@ -185,24 +166,15 @@ public class LoadTest {
         final Request request = new Request.Builder()
                 .url(LOAD_TARGET + "/sites/" + randomSite + AutocompleteController.ENDPOINT + "?query=" + randomQuery)
                 .build();
-        CALLER.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                LOG.error(e.getMessage());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                assertEquals(HttpStatus.OK.value(), response.code());
-                final long queryResultCount = AUTOCOMPLETE_QUERIES.get(randomQuery);
-                final byte[] body = new byte[]{};
-                final int responseSize = response.body().byteStream().read(body);
-                if (0 < responseSize) {
-                    final Autocomplete result = MAPPER.readValue(body, Autocomplete.class);
-                    assertTrue(queryResultCount <= result.getResults().size());
-                }
-                response.close();
-            }
-        });
+        final Response response = CALLER.newCall(request).execute();
+        assertEquals(HttpStatus.OK.value(), response.code());
+        final long queryResultCount = AUTOCOMPLETE_QUERIES.get(randomQuery);
+        final byte[] body = new byte[]{};
+        final int responseSize = response.body().byteStream().read(body);
+        if (0 < responseSize) {
+            final Autocomplete result = MAPPER.readValue(body, Autocomplete.class);
+            assertTrue(queryResultCount <= result.getResults().size());
+        }
+        response.close();
     }
 }
