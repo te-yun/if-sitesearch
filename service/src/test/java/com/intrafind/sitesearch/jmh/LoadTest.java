@@ -104,6 +104,7 @@ public class LoadTest {
     public static void main(String... args) throws RunnerException {
         Options options = new OptionsBuilder()
                 .warmupIterations(1)
+                .measurementIterations(5)
                 .timeout(TimeValue.seconds(60))
 //                .include(".*")
 //                .include(LoadIndex2Users.class.getSimpleName())
