@@ -168,7 +168,7 @@ public class LoadTest {
                     final byte[] body = new byte[]{};
                     final int responseSize = response.body().byteStream().read(body);
                     assertTrue("" + responseSize, 0 < responseSize);
-                    if (0 < responseSize) {
+                    if (0 <= responseSize) {
                         final Hits result = MAPPER.readValue(body, Hits.class);
                         assertTrue(queryResultCount <= result.getResults().size());
                     }
@@ -205,8 +205,8 @@ public class LoadTest {
                     final Autocomplete result = MAPPER.readValue(body, Autocomplete.class);
                     assertTrue(queryResultCount <= result.getResults().size());
                 }
-//                response.close();
-                response.body().byteStream().close();
+                response.close();
+//                response.body().byteStream().close();
             }
         });
     }
