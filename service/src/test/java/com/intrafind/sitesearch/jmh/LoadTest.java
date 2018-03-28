@@ -97,7 +97,7 @@ public class LoadTest {
 
     public static void main(String... args) throws RunnerException {
         Options options = new OptionsBuilder()
-                .warmupIterations(1)
+                .warmupIterations(0)
                 .measurementIterations(5)
 //                .include(".*")
 //                .include(LoadIndex2Users.class.getSimpleName())
