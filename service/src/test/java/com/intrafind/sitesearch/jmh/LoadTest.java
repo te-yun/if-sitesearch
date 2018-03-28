@@ -81,7 +81,7 @@ public class LoadTest {
         SEARCH_QUERIES.put("investieren", 50);
         SEARCH_QUERIES.put("\uD83E\uDD84", 0);
 
-        AUTOCOMPLETE_QUERIES.put("hyp", 0);
+        AUTOCOMPLETE_QUERIES.put("hyp", -1);
         AUTOCOMPLETE_QUERIES.put("swi", 7);
         AUTOCOMPLETE_QUERIES.put("mig", 1);
         AUTOCOMPLETE_QUERIES.put("inv", 8);
