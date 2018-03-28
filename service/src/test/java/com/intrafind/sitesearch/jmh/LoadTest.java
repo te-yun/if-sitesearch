@@ -19,9 +19,11 @@ package com.intrafind.sitesearch.jmh;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intrafind.sitesearch.controller.AutocompleteController;
 import com.intrafind.sitesearch.controller.SearchController;
+import com.intrafind.sitesearch.controller.SiteController;
 import com.intrafind.sitesearch.dto.Autocomplete;
 import com.intrafind.sitesearch.dto.Hits;
-import com.intrafind.sitesearch.integration.SearchTest;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -39,17 +41,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 @State(Scope.Benchmark)
 public class LoadTest {
@@ -58,7 +56,6 @@ public class LoadTest {
     static final String[] LOREM_IPSUM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras viverra enim vitae malesuada placerat. Nam auctor pellentesque libero, et venenatis enim molestie vel. Duis est metus, congue quis orci id, tincidunt mattis turpis. In fringilla ultricies sapien ultrices accumsan. Sed mattis tellus lacus, quis scelerisque turpis hendrerit et. In iaculis malesuada ipsum, ac rhoncus mauris auctor quis. Proin varius, ex vestibulum condimentum lacinia, ligula est finibus ligula, id consectetur nisi enim ut velit. Sed aliquet gravida justo ac condimentum. In malesuada sed elit vitae vestibulum. Mauris vitae congue lacus. Quisque vitae tincidunt orci. Donec viverra enim a lacinia pulvinar. Sed vel ullamcorper est. Vestibulum vel urna at nisl tincidunt blandit. Donec purus leo, interdum in diam in, posuere varius tellus. Quisque eleifend nulla at nulla vestibulum ullamcorper. Praesent interdum vehicula cursus. Morbi vitae nunc et urna rhoncus semper aliquam nec velit. Quisque aliquet et velit ut mollis. Sed mattis eleifend tristique. Praesent pharetra, eros eget viverra tempus, nisi turpis molestie metus, nec tristique nulla dolor a mauris. Nullam cursus finibus erat, in pretium urna fermentum ac. In hac habitasse platea dictumst. Cras id velit id nisi euismod eleifend. Duis vehicula gravida bibendum. Cras rhoncus, massa et accumsan euismod, metus arcu rutrum orci, eu porttitor lacus tellus sed quam. Morbi tincidunt est sit amet sem convallis porta in nec nisi. Sed ex enim, fringilla nec diam in, luctus pulvinar enim. Suspendisse potenti. Quisque ut pellentesque erat. In tincidunt metus id sem fringilla sagittis. Interdum et malesuada fames ac ante ipsum primis in faucibus. Proin erat nunc, pharetra sit amet iaculis nec, malesuada eu dui. Nullam sagittis ut arcu vitae convallis. Mauris molestie gravida lectus, eu commodo quam bibendum aliquam. Donec laoreet sed dolor eu consectetur."
             .split("\\s");
 
-    static final List<String> QUERY_LIST_AUTOCOMPLETE;
     static final String LOAD_TARGET = "https://api.sitesearch.cloud";
     static final OkHttpClient CALLER = new OkHttpClient.Builder()
 //            .connectTimeout(60, TimeUnit.SECONDS)
@@ -72,45 +69,44 @@ public class LoadTest {
     static final ObjectMapper MAPPER = new ObjectMapper();
     static final Random PSEUDO_ENTROPY = new Random();
 
-    static final Map<String, Long> SEARCH_QUERIES = new HashMap<>();
-    static final Map<String, Long> AUTOCOMPLETE_QUERIES = new HashMap<>();
-    private static final List<UUID> SITES = Arrays.asList(
-            SearchTest.SEARCH_SITE_ID,
-            UUID.fromString("14689bfd-61a4-438b-8625-28c23d334f81"), // https://www.migrosbank.ch/it/
-            UUID.fromString("b40ddad3-e0bc-453e-a98a-87b83d4f9cd3"), // https://www.migrosbank.ch/fr/
-            UUID.fromString("8e0af062-cb74-4529-9b7b-47ca1c101ae8"), // https://www.migrosbank.ch/de/
-            LOAD_SITE_ID // https://www.migrosbank.ch/de, https://blog.migrosbank.ch/de
-    );
+    static final Map<String, Integer> SEARCH_QUERIES = new HashMap<>();
+    static final Map<String, Integer> AUTOCOMPLETE_QUERIES = new HashMap<>();
+    static final Map<UUID, Map<String, Integer>> SEARCH_DATA = new HashMap<>();
+    static final Map<UUID, Map<String, Integer>> AUTOCOMPLETE_DATA = new HashMap<>();
 
     static {
-        SEARCH_QUERIES.put("bank", 47L);
-        SEARCH_QUERIES.put("fonds", 1L);
-        SEARCH_QUERIES.put("finanzen", 12L);
-        SEARCH_QUERIES.put("geld", 34L);
-        SEARCH_QUERIES.put("\uD83E\uDD84", 0L);
-    }
+        SEARCH_QUERIES.put("hypothek", 50);
+        SEARCH_QUERIES.put("swiss", 40);
+        SEARCH_QUERIES.put("migros", 50);
+        SEARCH_QUERIES.put("investieren", 50);
+        SEARCH_QUERIES.put("\uD83E\uDD84", 0);
 
-    static final List<String> QUERY_LIST_SEARCH = new ArrayList<>(SEARCH_QUERIES.keySet());
+        AUTOCOMPLETE_QUERIES.put("hyp", 1);
+        AUTOCOMPLETE_QUERIES.put("swi", 9);
+        AUTOCOMPLETE_QUERIES.put("mig", 3);
+        AUTOCOMPLETE_QUERIES.put("inv", 10);
+        AUTOCOMPLETE_QUERIES.put("bank", 4);
+        AUTOCOMPLETE_QUERIES.put("fond", 9);
+        AUTOCOMPLETE_QUERIES.put("welt", 10);
+        AUTOCOMPLETE_QUERIES.put("\uD83E\uDD84", 0);
 
-    static {
-        AUTOCOMPLETE_QUERIES.put("hyp", 0L);
-        AUTOCOMPLETE_QUERIES.put("swiss", 0L);
-        AUTOCOMPLETE_QUERIES.put("migros", 0L);
-        AUTOCOMPLETE_QUERIES.put("invest", 0L);
-        QUERY_LIST_AUTOCOMPLETE = new ArrayList<>(AUTOCOMPLETE_QUERIES.keySet());
+//        SEARCH_DATA.put(UUID.fromString("91cbbd1c-aa40-4c67-9036-d5d03f3e9f83"), SEARCH_QUERIES); // microsoft.com
+//        SEARCH_DATA.put(UUID.fromString("63cff678-02f8-493e-a783-47c3eb76af70"), SEARCH_QUERIES); // jusmeum.de
+//        SEARCH_DATA.put(UUID.fromString("8e0af062-cb74-4529-9b7b-47ca1c101ae8"), SEARCH_QUERIES); // www.migrosbank.ch/de/
+        SEARCH_DATA.put(LOAD_SITE_ID, SEARCH_QUERIES); // https://www.migrosbank.ch/de, https://blog.migrosbank.ch/de
+        AUTOCOMPLETE_DATA.put(LOAD_SITE_ID, AUTOCOMPLETE_QUERIES); // https://www.migrosbank.ch/de, https://blog.migrosbank.ch/de
     }
 
     public static void main(String... args) throws RunnerException {
         Options options = new OptionsBuilder()
                 .warmupIterations(1)
                 .measurementIterations(5)
-                .syncIterations(false)
-//                .timeout(TimeValue.seconds(60))
+                .syncIterations(true)
 //                .include(".*")
 //                .include(LoadIndex2Users.class.getSimpleName())
                 .include(LoadTest.class.getSimpleName())
                 .forks(0)
-                .threads(100)
+                .threads(200)
                 .mode(Mode.Throughput)
                 .resultFormat(ResultFormatType.JSON)
                 .result("build/jmh-result.json")
@@ -133,55 +129,84 @@ public class LoadTest {
     }
 
     @Benchmark
+    public void staticFilesAsync() {
+        final Request request = new Request.Builder()
+                .url(LOAD_TARGET)
+                .build();
+        CALLER.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LOG.error(e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) {
+                assertEquals(HttpStatus.OK.value(), response.code());
+                assertNotNull(response.body());
+                response.close();
+            }
+        });
+    }
+
+    @Benchmark
+    public void staticFilesAsyncAlt() {
+        final Request request = new Request.Builder()
+                .url(LOAD_TARGET)
+                .build();
+        CALLER.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LOG.error(e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) {
+                assertEquals(HttpStatus.OK.value(), response.code());
+                assertNotNull(response.body());
+                response.close();
+            }
+        });
+    }
+
+    @Benchmark
     public void search() throws IOException {
-        final int randomSiteIndex = PSEUDO_ENTROPY.nextInt(SITES.size());
-        final UUID randomSite = SITES.get(randomSiteIndex);
+        final int randomSiteIndex = PSEUDO_ENTROPY.nextInt(SEARCH_DATA.size());
+        final UUID randomSiteId = (UUID) SEARCH_DATA.keySet().toArray()[randomSiteIndex];
+        final Map<String, Integer> randomSite = SEARCH_DATA.get(randomSiteId);
         final int randomQueryIndex = PSEUDO_ENTROPY.nextInt(SEARCH_QUERIES.size());
-        final String randomQuery = QUERY_LIST_SEARCH.get(randomQueryIndex);
+        final String randomQuery = (String) randomSite.keySet().toArray()[randomQueryIndex];
+        final int queryHits = randomSite.get(randomQuery);
 
         final Request request = new Request.Builder()
-                .url(LOAD_TARGET + "/sites/" + randomSite + SearchController.ENDPOINT + "?query=" + randomQuery)
+                .url(LOAD_TARGET + SiteController.ENDPOINT + "/" + randomSiteId + SearchController.ENDPOINT + "?query=" + randomQuery)
                 .build();
         final Response response = CALLER.newCall(request).execute();
         assertEquals(HttpStatus.OK.value(), response.code());
-        final long queryResultCount = SEARCH_QUERIES.get(randomQuery);
-        LOG.warn(queryResultCount + "-------");
-        if (queryResultCount == 0) {
+        if (queryHits == 0) {
             assertNotNull(response.body());
         } else {
-            final byte[] body = new byte[]{};
-            final int responseSize = response.body().byteStream().read(body);
-            LOG.warn("<<<< " + responseSize);
-            if (0 < responseSize) {
-                final Hits result = MAPPER.readValue(body, Hits.class);
-                assertTrue(queryResultCount < result.getResults().size());
-                LOG.warn(">>>> " + result.getResults().get(0));
-            }
+            final Hits result = MAPPER.readValue(response.body().charStream(), Hits.class);
+            assertEquals(queryHits, result.getResults().size());
         }
         response.close();
     }
 
     @Benchmark
     public void autocomplete() throws IOException {
-        final int randomSiteIndex = PSEUDO_ENTROPY.nextInt(SITES.size());
-        final UUID randomSite = SITES.get(randomSiteIndex);
-        final int randomQueryIndex = PSEUDO_ENTROPY.nextInt(LoadTest.AUTOCOMPLETE_QUERIES.size());
-        final String randomQuery = QUERY_LIST_AUTOCOMPLETE.get(randomQueryIndex);
+        final int randomSiteIndex = PSEUDO_ENTROPY.nextInt(SEARCH_DATA.size());
+        final UUID randomSiteId = (UUID) AUTOCOMPLETE_DATA.keySet().toArray()[randomSiteIndex];
+        final Map<String, Integer> randomSite = AUTOCOMPLETE_DATA.get(randomSiteId);
+        final int randomQueryIndex = PSEUDO_ENTROPY.nextInt(AUTOCOMPLETE_QUERIES.size());
+        final String randomQuery = (String) randomSite.keySet().toArray()[randomQueryIndex];
+        final int queryHits = randomSite.get(randomQuery);
 
         final Request request = new Request.Builder()
-                .url(LOAD_TARGET + "/sites/" + randomSite + AutocompleteController.ENDPOINT + "?query=" + randomQuery)
+                .url(LOAD_TARGET + SiteController.ENDPOINT + "/" + randomSiteId + AutocompleteController.ENDPOINT + "?query=" + randomQuery)
                 .build();
         final Response response = CALLER.newCall(request).execute();
         assertEquals(HttpStatus.OK.value(), response.code());
-        final long queryResultCount = AUTOCOMPLETE_QUERIES.get(randomQuery);
-        final byte[] body = new byte[]{};
-        final int responseSize = response.body().byteStream().read(body);
-        LOG.warn("<<<< " + responseSize);
-        if (0 < responseSize) {
-            final Autocomplete result = MAPPER.readValue(body, Autocomplete.class);
-            assertTrue(queryResultCount <= result.getResults().size());
-            LOG.warn(">>>> " + result.getResults().get(0));
-        }
+        final Autocomplete result = MAPPER.readValue(response.body().charStream(), Autocomplete.class);
+        assertEquals(queryHits, result.getResults().size());
         response.close();
     }
 }
