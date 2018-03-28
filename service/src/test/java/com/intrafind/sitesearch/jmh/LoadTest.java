@@ -161,7 +161,6 @@ public class LoadTest {
             public void onResponse(Call call, Response response) throws IOException {
                 assertEquals(HttpStatus.OK.value(), response.code());
                 final long queryResultCount = SEARCH_QUERIES.get(randomQuery);
-                assertEquals(HttpStatus.OK.value(), response.code());
                 if (queryResultCount == 0) {
                     assertNotNull(response.body());
                 } else {
@@ -199,13 +198,11 @@ public class LoadTest {
                 final long queryResultCount = AUTOCOMPLETE_QUERIES.get(randomQuery);
                 final byte[] body = new byte[]{};
                 final int responseSize = response.body().byteStream().read(body);
-                assertTrue(">>>>>>>>>" + randomSite + ">>>>>>>>>>> " + randomQuery + "<<<<" + responseSize, 0 <= responseSize);
-                if (1 <= responseSize) {
+                if (0 < responseSize) {
                     final Autocomplete result = MAPPER.readValue(body, Autocomplete.class);
                     assertTrue(queryResultCount <= result.getResults().size());
                 }
                 response.close();
-//                response.body().byteStream().close();
             }
         });
     }
