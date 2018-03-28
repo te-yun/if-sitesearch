@@ -21,8 +21,6 @@ import com.intrafind.api.search.Search;
 import com.intrafind.sitesearch.Application;
 import com.intrafind.sitesearch.dto.FoundPage;
 import com.intrafind.sitesearch.dto.Hits;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,12 +30,10 @@ import java.util.UUID;
 @Service
 public class SearchService {
     static final Search SEARCH_SERVICE = IfinderCoreClient.newHessianClient(Search.class, Application.IFINDER_CORE + "/search");
-
-    private static final Logger LOG = LoggerFactory.getLogger(SearchService.class);
     private static final String QUERY_SEPARATOR = ",";
     private static final String HIT_TEASER_PREFIX = "hit.teaser.";
 
-    public Hits search(String query, UUID siteId) {
+    public Hits search(final String query, final UUID siteId) {
         com.intrafind.api.search.Hits hits = SEARCH_SERVICE.search(
 //                query + " AND " + Fields.TENANT + ":" + siteId,
                 query, Search.FILTER_QUERY, Fields.TENANT + ":" + siteId,
@@ -54,15 +50,15 @@ public class SearchService {
                 Search.HITS_LIST_SIZE, 50 // max total results
         );
 
-        List<FoundPage> siteDocuments = new ArrayList<>();
+        final List<FoundPage> siteDocuments = new ArrayList<>();
         hits.getDocuments().forEach(document -> {
-            FoundPage site = new FoundPage(
+            final FoundPage site = new FoundPage(
                     document.get(HIT_TEASER_PREFIX + Fields.TITLE),
                     document.get(HIT_TEASER_PREFIX + Fields.BODY),
                     document.get(HIT_TEASER_PREFIX + Fields.URL),
-                    document.get(Fields.URL)
+                    document.get(Fields.URL),
+                    document.getAll(SiteService.PAGE_LABELS)
             );
-            // TODO remove tenant INFO as it is not relevant here, consider separate DTO
             siteDocuments.add(site);
         });
 

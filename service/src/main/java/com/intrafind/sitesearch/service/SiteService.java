@@ -73,7 +73,7 @@ public class SiteService {
      * Field is updated whenever a document is (re-)indexed.
      */
     private static final String PAGE_TIMESTAMP = "timestamp";
-    private static final String PAGE_LABELS = "sisLabels";
+    static final String PAGE_LABELS = "sisLabels";
 
     public Optional<FetchedPage> indexExistingPage(String id, UUID siteId, UUID siteSecret, SitePage page) {
         if (siteId != null && siteSecret != null) { // credentials are provided as a tuple only

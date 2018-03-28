@@ -168,7 +168,7 @@ public class LoadTest {
                     final int responseSize = response.body().byteStream().read(body);
                     if (0 < responseSize) {
                         final Hits result = MAPPER.readValue(body, Hits.class);
-                        assertTrue(queryResultCount <= result.getResults().size());
+                        assertTrue(queryResultCount < result.getResults().size());
                     }
                 }
                 response.close();
