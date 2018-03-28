@@ -201,7 +201,7 @@ public class LoadTest {
                 final byte[] body = new byte[]{};
                 final int responseSize = response.body().byteStream().read(body);
                 assertTrue(">>>>>>>>>" + randomSite + ">>>>>>>>>>> " + randomQuery + "<<<<" + responseSize, 0 <= responseSize);
-                if (0 <= responseSize) {
+                if (1 <= responseSize) {
                     final Autocomplete result = MAPPER.readValue(body, Autocomplete.class);
                     assertTrue(queryResultCount <= result.getResults().size());
                 }
