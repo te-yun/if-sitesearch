@@ -34,7 +34,6 @@ import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
-import org.openjdk.jmh.runner.options.TimeValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -105,7 +104,8 @@ public class LoadTest {
         Options options = new OptionsBuilder()
                 .warmupIterations(1)
                 .measurementIterations(5)
-                .timeout(TimeValue.seconds(60))
+                .syncIterations(false)
+//                .timeout(TimeValue.seconds(60))
 //                .include(".*")
 //                .include(LoadIndex2Users.class.getSimpleName())
                 .include(LoadTest.class.getSimpleName())
@@ -115,6 +115,7 @@ public class LoadTest {
                 .resultFormat(ResultFormatType.JSON)
                 .result("build/jmh-result.json")
                 .shouldFailOnError(true)
+                .jvmArgs("")
                 .build();
 
         new Runner(options).run();
