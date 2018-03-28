@@ -22,8 +22,6 @@ import com.intrafind.sitesearch.controller.SearchController;
 import com.intrafind.sitesearch.controller.SiteController;
 import com.intrafind.sitesearch.dto.Autocomplete;
 import com.intrafind.sitesearch.dto.Hits;
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -81,14 +79,14 @@ public class LoadTest {
         SEARCH_QUERIES.put("investieren", 50);
         SEARCH_QUERIES.put("\uD83E\uDD84", 0);
 
-        AUTOCOMPLETE_QUERIES.put("hyp", -1);
+        AUTOCOMPLETE_QUERIES.put("hyp", 0);
         AUTOCOMPLETE_QUERIES.put("swi", 7);
-        AUTOCOMPLETE_QUERIES.put("mig", 1);
+        AUTOCOMPLETE_QUERIES.put("mig", 2);
         AUTOCOMPLETE_QUERIES.put("inv", 8);
-        AUTOCOMPLETE_QUERIES.put("bank", 2);
-        AUTOCOMPLETE_QUERIES.put("fond", 7);
-        AUTOCOMPLETE_QUERIES.put("welt", 8);
-        AUTOCOMPLETE_QUERIES.put("\uD83E\uDD84", 0);
+        AUTOCOMPLETE_QUERIES.put("bank", 5);
+        AUTOCOMPLETE_QUERIES.put("fond", 6);
+        AUTOCOMPLETE_QUERIES.put("welt", 7);
+        AUTOCOMPLETE_QUERIES.put("\uD83E\uDD84", -1);
 
 //        SEARCH_DATA.put(UUID.fromString("91cbbd1c-aa40-4c67-9036-d5d03f3e9f83"), SEARCH_QUERIES); // microsoft.com
 //        SEARCH_DATA.put(UUID.fromString("63cff678-02f8-493e-a783-47c3eb76af70"), SEARCH_QUERIES); // jusmeum.de
@@ -101,12 +99,11 @@ public class LoadTest {
         Options options = new OptionsBuilder()
                 .warmupIterations(1)
                 .measurementIterations(5)
-                .syncIterations(true)
 //                .include(".*")
 //                .include(LoadIndex2Users.class.getSimpleName())
                 .include(LoadTest.class.getSimpleName())
-                .forks(0)
-                .threads(50)
+                .forks(1)
+                .threads(1)
                 .mode(Mode.Throughput)
                 .resultFormat(ResultFormatType.JSON)
                 .result("build/jmh-result.json")
@@ -128,45 +125,25 @@ public class LoadTest {
         response.close();
     }
 
-    @Benchmark
-    public void staticFilesAsync() {
-        final Request request = new Request.Builder()
-                .url(LOAD_TARGET)
-                .build();
-        CALLER.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                LOG.error(e.getMessage());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) {
-                assertEquals(HttpStatus.OK.value(), response.code());
-                assertNotNull(response.body());
-                response.close();
-            }
-        });
-    }
-
-    @Benchmark
-    public void staticFilesAsyncAlt() {
-        final Request request = new Request.Builder()
-                .url(LOAD_TARGET)
-                .build();
-        CALLER.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                LOG.error(e.getMessage());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) {
-                assertEquals(HttpStatus.OK.value(), response.code());
-                assertNotNull(response.body());
-                response.close();
-            }
-        });
-    }
+//    @Benchmark
+//    public void staticFilesAsync() {
+//        final Request request = new Request.Builder()
+//                .url(LOAD_TARGET)
+//                .build();
+//        CALLER.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                LOG.error(e.getMessage());
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) {
+//                assertEquals(HttpStatus.OK.value(), response.code());
+//                assertNotNull(response.body());
+//                response.close();
+//            }
+//        });
+//    }
 
     @Benchmark
     public void search() throws IOException {
