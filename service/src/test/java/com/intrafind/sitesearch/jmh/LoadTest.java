@@ -111,7 +111,7 @@ public class LoadTest {
 //                .include(LoadIndex2Users.class.getSimpleName())
                 .include(LoadTest.class.getSimpleName())
                 .forks(1)
-                .threads(150)
+                .threads(200)
                 .mode(Mode.Throughput)
                 .resultFormat(ResultFormatType.JSON)
                 .result("build/jmh-result.json")

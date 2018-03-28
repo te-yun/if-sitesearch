@@ -16,7 +16,7 @@
 
 package com.intrafind.sitesearch.dto;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,7 +25,7 @@ public class FoundPage {
     private String body;
     private String url;
     private String urlRaw;
-    private List<String> sisLabels = Collections.emptyList();
+    private List<String> sisLabels = new ArrayList<>();
 
     private FoundPage() {
     }
