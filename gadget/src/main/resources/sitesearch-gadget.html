@@ -121,31 +121,6 @@
 </div>
 <div id="siteSearchSetupUrl"
      title="The copied URL contains all information you need, to resume your evaluation or setup the search on your website"></div>
-<!--<input-->
-<!--style="width:1px"-->
-<!--type="text" id="searchSetupUrl" readonly title="Site Search Setup URL"-->
-<!--&gt;-->
-<!--<input id="preserveSearchSetup"-->
-<!--type="button"-->
-<!--onclick="gadget.com.intrafind.sitesearch.gadget.preserveSearchSetup()"-->
-<!--title="The copied URL contains all information you need, to resume your evaluation or setup the search on your website"-->
-<!--style="width: 275px;"-->
-<!--value="Copy search setup URL to evaluate it later"-->
-<!--disabled-->
-<!--&gt;-->
-<!--<br>-->
-
-<div style="display: none;">
-    <input id="overrideSiteId"
-           title="Leave it blank if you do not know what this means."
-           placeholder="Site ID to use for all Site Search requests" style="width: 306px;">
-    <button
-            onclick="gadget.com.intrafind.sitesearch.gadget.overrideSite(document.getElementById('overrideSiteId').value);"
-            title="Site ID Cookie overrides the Site ID which is specified in the initialization code for all requests to Site Search."
-            style="width: 217px;">
-        Override with Site ID Cookie
-    </button>
-</div>
 
 <h3 id="search">
     Search your website
@@ -220,11 +195,9 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-991250257"></script>
 <script>
     window.dataLayer = window.dataLayer || [];
-
     function gtag() {
         dataLayer.push(arguments);
     }
-
     gtag('js', new Date());
     gtag('config', 'AW-991250257');
 </script>
@@ -235,12 +208,10 @@
                 window.location = url;
             }
         };
-
         gtag('event', 'conversion', {
             'send_to': 'AW-991250257/fYASCIjQj38Q0Y7V2AM',
             'event_callback': callback
         });
-
         return false;
     }
 </script>
