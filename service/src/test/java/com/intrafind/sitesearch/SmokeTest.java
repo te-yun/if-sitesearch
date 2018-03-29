@@ -81,13 +81,13 @@ public class SmokeTest {
     private TestRestTemplate caller;
 
     @BeforeClass
-    public static void setUp() throws Exception {
-        JETTY_CLIENT.start();
+    public static void setUp() {
+//        JETTY_CLIENT.start();
     }
 
     @AfterClass
-    public static void tearDown() throws Exception {
-        JETTY_CLIENT.stop();
+    public static void tearDown() {
+//        JETTY_CLIENT.stop();
     }
 
     @Test
@@ -345,6 +345,9 @@ public class SmokeTest {
 
     @Test
     public void dockerRegistryIsUp() throws Exception {
+        LOG.error(JETTY_CLIENT.isStarted() + "<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+        JETTY_CLIENT.start();
+        
         final ContentResponse response = JETTY_CLIENT.newRequest("https://docker-registry.sitesearch.cloud")
                 .header(HttpHeader.AUTHORIZATION, BASIC_ENCODED_PASSWORD)
                 .send();

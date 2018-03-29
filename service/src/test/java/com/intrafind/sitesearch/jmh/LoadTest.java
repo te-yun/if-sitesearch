@@ -22,8 +22,6 @@ import com.intrafind.sitesearch.controller.SearchController;
 import com.intrafind.sitesearch.controller.SiteController;
 import com.intrafind.sitesearch.dto.Autocomplete;
 import com.intrafind.sitesearch.dto.Hits;
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -33,7 +31,6 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.results.format.ResultFormatType;
 import org.openjdk.jmh.runner.Runner;
-import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.slf4j.Logger;
@@ -97,15 +94,15 @@ public class LoadTest {
         AUTOCOMPLETE_DATA.put(LOAD_SITE_ID, AUTOCOMPLETE_QUERIES); // https://www.migrosbank.ch/de, https://blog.migrosbank.ch/de
     }
 
-    public static void main(String... args) throws RunnerException {
-        Options options = new OptionsBuilder()
+    public static void main(String... args) throws Exception {
+        final Options options = new OptionsBuilder()
                 .warmupIterations(0)
                 .measurementIterations(5)
 //                .include(".*")
 //                .include(LoadIndex2Users.class.getSimpleName())
                 .include(LoadTest.class.getSimpleName())
-                .forks(0)
-                .threads(50)
+                .forks(1)
+                .threads(1)
                 .mode(Mode.Throughput)
                 .resultFormat(ResultFormatType.JSON)
                 .result("build/jmh-result.json")
@@ -127,25 +124,45 @@ public class LoadTest {
         response.close();
     }
 
-    @Benchmark
-    public void staticFilesAsync() {
-        final Request request = new Request.Builder()
-                .url(LOAD_TARGET)
-                .build();
-        CALLER.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                LOG.error(e.getMessage());
-            }
+//    @Benchmark
+//    public void searchViaJettyClient() throws Exception{
+//        final int randomSiteIndex = PSEUDO_ENTROPY.nextInt(SEARCH_DATA.size());
+//        final UUID randomSiteId = (UUID) SEARCH_DATA.keySet().toArray()[randomSiteIndex];
+//        final Map<String, Integer> randomSite = SEARCH_DATA.get(randomSiteId);
+//        final int randomQueryIndex = PSEUDO_ENTROPY.nextInt(SEARCH_QUERIES.size());
+//        final String randomQuery = (String) randomSite.keySet().toArray()[randomQueryIndex];
+//        final int queryHits = randomSite.get(randomQuery);
+//
+//        final ContentResponse response = HTTP_CLIENT.GET(LOAD_TARGET + SiteController.ENDPOINT + "/" + randomSiteId + SearchController.ENDPOINT + "?query=" + randomQuery);
+//        assertEquals(HttpStatus.OK.value(), response.getStatus());
+//        if (queryHits == 0) {
+//            assertNotNull(response.getContent());
+//        } else {
+//            final Hits result = MAPPER.readValue(response.getContent(), Hits.class);
+//            assertEquals(queryHits, result.getResults().size());
+//            assertEquals(randomQuery, result.getQuery());
+//        }
+//    }
 
-            @Override
-            public void onResponse(Call call, Response response) {
-                assertEquals(HttpStatus.OK.value(), response.code());
-                assertNotNull(response.body());
-                response.close();
-            }
-        });
-    }
+//    @Benchmark
+//    public void staticFilesAsync() {
+//        final Request request = new Request.Builder()
+//                .url(LOAD_TARGET)
+//                .build();
+//        CALLER.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                LOG.error(e.getMessage());
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) {
+//                assertEquals(HttpStatus.OK.value(), response.code());
+//                assertNotNull(response.body());
+//                response.close();
+//            }
+//        });
+//    }
 
     @Benchmark
     public void search() throws IOException {
@@ -166,6 +183,7 @@ public class LoadTest {
         } else {
             final Hits result = MAPPER.readValue(response.body().charStream(), Hits.class);
             assertEquals(queryHits, result.getResults().size());
+            assertEquals(randomQuery, result.getQuery());
         }
         response.close();
     }
