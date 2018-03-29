@@ -22,6 +22,8 @@ import com.intrafind.sitesearch.controller.SearchController;
 import com.intrafind.sitesearch.controller.SiteController;
 import com.intrafind.sitesearch.dto.Autocomplete;
 import com.intrafind.sitesearch.dto.Hits;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -125,25 +127,25 @@ public class LoadTest {
         response.close();
     }
 
-//    @Benchmark
-//    public void staticFilesAsync() {
-//        final Request request = new Request.Builder()
-//                .url(LOAD_TARGET)
-//                .build();
-//        CALLER.newCall(request).enqueue(new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                LOG.error(e.getMessage());
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) {
-//                assertEquals(HttpStatus.OK.value(), response.code());
-//                assertNotNull(response.body());
-//                response.close();
-//            }
-//        });
-//    }
+    @Benchmark
+    public void staticFilesAsync() {
+        final Request request = new Request.Builder()
+                .url(LOAD_TARGET)
+                .build();
+        CALLER.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LOG.error(e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) {
+                assertEquals(HttpStatus.OK.value(), response.code());
+                assertNotNull(response.body());
+                response.close();
+            }
+        });
+    }
 
     @Benchmark
     public void search() throws IOException {
