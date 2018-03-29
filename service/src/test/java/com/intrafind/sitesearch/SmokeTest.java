@@ -31,6 +31,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.eclipse.jetty.client.HttpClient;
+import org.eclipse.jetty.client.api.ContentResponse;
+import org.eclipse.jetty.http.HttpHeader;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -68,8 +74,21 @@ public class SmokeTest {
     private static final UUID BW_BANK_SITE_ID = UUID.fromString("269b0538-120b-44b1-a365-488c2f3fcc15");
     private static final int HEADER_SIZE = 399;
 
+    private static final SslContextFactory SSL_CONTEXT_FACTORY = new SslContextFactory();
+    private static final HttpClient JETTY_CLIENT = new HttpClient(SSL_CONTEXT_FACTORY);
+
     @Autowired
     private TestRestTemplate caller;
+
+    @BeforeClass
+    public void setUp() throws Exception {
+        JETTY_CLIENT.start();
+    }
+
+    @AfterClass
+    public void tearDown() throws Exception {
+        JETTY_CLIENT.stop();
+    }
 
     @Test
     public void assureCrawlerProtection() throws Exception {
@@ -92,7 +111,7 @@ public class SmokeTest {
     @Test
     public void assureTaggerContent() throws Exception {
         final Request request = new Request.Builder()
-                .header("Authorization", BASIC_ENCODED_PASSWORD)
+                .header(HttpHeader.AUTHORIZATION.asString(), BASIC_ENCODED_PASSWORD)
                 .url("https://tagger.analyzelaw.com/json/tagger?method=tag&param0=test")
                 .build();
         final Response response = HTTP_CLIENT.newCall(request).execute();
@@ -316,12 +335,21 @@ public class SmokeTest {
     }
 
     @Test
-    public void dockerRegistryUpAndSecure() throws Exception {
+    public void dockerRegistryIsSecure() throws Exception {
         Request request = new Request.Builder()
                 .url("https://docker-registry.sitesearch.cloud")
                 .build();
         final Response response = HTTP_CLIENT.newCall(request).execute();
         assertEquals(HttpStatus.UNAUTHORIZED.value(), response.code());
+    }
+
+    @Test
+    public void dockerRegistryIsUp() throws Exception {
+        final ContentResponse response = JETTY_CLIENT.newRequest("https://docker-registry.sitesearch.cloud")
+                .header(HttpHeader.AUTHORIZATION, BASIC_ENCODED_PASSWORD)
+                .send();
+
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
     }
 
     @Test
