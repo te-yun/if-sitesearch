@@ -104,7 +104,6 @@ public class LoadTest {
                 .include(LoadTest.class.getSimpleName())
                 .forks(0)
                 .threads(50)
-                .threadGroups()
                 .mode(Mode.Throughput)
                 .resultFormat(ResultFormatType.JSON)
                 .result("build/jmh-result.json")
