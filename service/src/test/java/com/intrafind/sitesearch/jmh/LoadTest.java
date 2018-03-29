@@ -96,7 +96,7 @@ public class LoadTest {
 
     public static void main(String... args) throws Exception {
         final Options options = new OptionsBuilder()
-                .warmupIterations(0)
+                .warmupIterations(1)
                 .measurementIterations(5)
 //                .include(".*")
 //                .include(LoadIndex2Users.class.getSimpleName())
@@ -123,26 +123,6 @@ public class LoadTest {
         assertNotNull(response.body());
         response.close();
     }
-
-//    @Benchmark
-//    public void searchViaJettyClient() throws Exception{
-//        final int randomSiteIndex = PSEUDO_ENTROPY.nextInt(SEARCH_DATA.size());
-//        final UUID randomSiteId = (UUID) SEARCH_DATA.keySet().toArray()[randomSiteIndex];
-//        final Map<String, Integer> randomSite = SEARCH_DATA.get(randomSiteId);
-//        final int randomQueryIndex = PSEUDO_ENTROPY.nextInt(SEARCH_QUERIES.size());
-//        final String randomQuery = (String) randomSite.keySet().toArray()[randomQueryIndex];
-//        final int queryHits = randomSite.get(randomQuery);
-//
-//        final ContentResponse response = HTTP_CLIENT.GET(LOAD_TARGET + SiteController.ENDPOINT + "/" + randomSiteId + SearchController.ENDPOINT + "?query=" + randomQuery);
-//        assertEquals(HttpStatus.OK.value(), response.getStatus());
-//        if (queryHits == 0) {
-//            assertNotNull(response.getContent());
-//        } else {
-//            final Hits result = MAPPER.readValue(response.getContent(), Hits.class);
-//            assertEquals(queryHits, result.getResults().size());
-//            assertEquals(randomQuery, result.getQuery());
-//        }
-//    }
 
 //    @Benchmark
 //    public void staticFilesAsync() {

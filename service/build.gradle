@@ -45,8 +45,6 @@ configurations {
 dependencies {
     compile "edu.uci.ics:crawler4j:4.4.0"
     compile "com.github.crawler-commons:crawler-commons:0.9"
-    testCompile "org.eclipse.jetty:jetty-client:9.3.23.v20180228"
-    testCompile "org.eclipse.jetty:jetty-util:9.3.23.v20180228"
 
     compile "com.rometools:rome:1.9.0"
 

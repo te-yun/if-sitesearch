@@ -31,12 +31,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import org.eclipse.jetty.client.HttpClient;
-import org.eclipse.jetty.client.api.ContentResponse;
-import org.eclipse.jetty.http.HttpHeader;
-import org.eclipse.jetty.util.ssl.SslContextFactory;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -45,6 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -74,21 +69,8 @@ public class SmokeTest {
     private static final UUID BW_BANK_SITE_ID = UUID.fromString("269b0538-120b-44b1-a365-488c2f3fcc15");
     private static final int HEADER_SIZE = 399;
 
-    private static final SslContextFactory SSL_CONTEXT_FACTORY = new SslContextFactory();
-    private static final HttpClient JETTY_CLIENT = new HttpClient(SSL_CONTEXT_FACTORY);
-
     @Autowired
     private TestRestTemplate caller;
-
-    @BeforeClass
-    public static void setUp() {
-//        JETTY_CLIENT.start();
-    }
-
-    @AfterClass
-    public static void tearDown() {
-//        JETTY_CLIENT.stop();
-    }
 
     @Test
     public void assureCrawlerProtection() throws Exception {
@@ -111,7 +93,7 @@ public class SmokeTest {
     @Test
     public void assureTaggerContent() throws Exception {
         final Request request = new Request.Builder()
-                .header(HttpHeader.AUTHORIZATION.asString(), BASIC_ENCODED_PASSWORD)
+                .header(HttpHeaders.AUTHORIZATION, BASIC_ENCODED_PASSWORD)
                 .url("https://tagger.analyzelaw.com/json/tagger?method=tag&param0=test")
                 .build();
         final Response response = HTTP_CLIENT.newCall(request).execute();
@@ -345,14 +327,12 @@ public class SmokeTest {
 
     @Test
     public void dockerRegistryIsUp() throws Exception {
-        LOG.error(JETTY_CLIENT.isStarted() + "<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-        JETTY_CLIENT.start();
-        
-        final ContentResponse response = JETTY_CLIENT.newRequest("https://docker-registry.sitesearch.cloud")
-                .header(HttpHeader.AUTHORIZATION, BASIC_ENCODED_PASSWORD)
-                .send();
-
-        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Request request = new Request.Builder()
+                .header(HttpHeaders.AUTHORIZATION, BASIC_ENCODED_PASSWORD)
+                .url("https://docker-registry.sitesearch.cloud")
+                .build();
+        final Response response = HTTP_CLIENT.newCall(request).execute();
+        assertEquals(HttpStatus.OK.value(), response.code());
     }
 
     @Test
@@ -368,7 +348,7 @@ public class SmokeTest {
         final Response response = HTTP_CLIENT.newCall(request).execute();
 
         assertEquals(HttpStatus.OK.value(), response.code());
-        assertNull(response.headers().get("Location"));
+        assertNull(response.headers().get(HttpHeaders.LOCATION));
         assureCorsHeaders(response.headers(), HEADER_SIZE);
         FetchedPage fetchedPage = MAPPER.readValue(response.body().byteStream(), FetchedPage.class);
         assertEquals(entropyToCheckInUpdate, fetchedPage.getUrl());
