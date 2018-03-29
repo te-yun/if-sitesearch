@@ -81,12 +81,12 @@ public class SmokeTest {
     private TestRestTemplate caller;
 
     @BeforeClass
-    public void setUp() throws Exception {
+    public static void setUp() throws Exception {
         JETTY_CLIENT.start();
     }
 
     @AfterClass
-    public void tearDown() throws Exception {
+    public static void tearDown() throws Exception {
         JETTY_CLIENT.stop();
     }
 
@@ -367,7 +367,7 @@ public class SmokeTest {
         assertEquals(HttpStatus.OK.value(), response.code());
         assertNull(response.headers().get("Location"));
         assureCorsHeaders(response.headers(), HEADER_SIZE);
-        FetchedPage fetchedPage = MAPPER.readValue(response.body().bytes(), FetchedPage.class);
+        FetchedPage fetchedPage = MAPPER.readValue(response.body().byteStream(), FetchedPage.class);
         assertEquals(entropyToCheckInUpdate, fetchedPage.getUrl());
         assertFalse(fetchedPage.getBody().isEmpty());
         assertFalse(fetchedPage.getTitle().isEmpty());
