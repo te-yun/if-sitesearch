@@ -107,7 +107,7 @@ public class LoadTest {
                 .resultFormat(ResultFormatType.JSON)
                 .result("build/jmh-result.json")
                 .shouldFailOnError(true)
-                .jvmArgs("")
+//                .jvmArgs("")
                 .build();
 
         new Runner(options).run();
