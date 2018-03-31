@@ -82,7 +82,7 @@ public class LoadTest {
         AUTOCOMPLETE_QUERIES.put("swi", 7);
         AUTOCOMPLETE_QUERIES.put("mig", 2);
         AUTOCOMPLETE_QUERIES.put("inv", 8);
-        AUTOCOMPLETE_QUERIES.put("bank", 5);
+        AUTOCOMPLETE_QUERIES.put("bank", 3);
         AUTOCOMPLETE_QUERIES.put("fond", 6);
         AUTOCOMPLETE_QUERIES.put("welt", 7);
         AUTOCOMPLETE_QUERIES.put("\uD83E\uDD84", -1);
