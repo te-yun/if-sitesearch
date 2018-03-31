@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ compileKotlin2Js {
     kotlinOptions.target = "v5"
     kotlinOptions.noStdlib = true
     kotlinOptions.friendModulesDisabled = false
-    kotlinOptions.sourceMapEmbedSources = "inlining"
+    kotlinOptions.sourceMapEmbedSources = "always"
     kotlinOptions.typedArrays = false
 }
 

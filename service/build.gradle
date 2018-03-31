@@ -34,7 +34,7 @@ targetCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
     jcenter()
-    maven { url "https://plugins.gradle.org/m2" }
+//    maven { url "https://plugins.gradle.org/m2" }
 }
 
 configurations {
