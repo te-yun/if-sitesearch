@@ -107,7 +107,7 @@ public class LoadTest {
                 .resultFormat(ResultFormatType.JSON)
                 .result("build/jmh-result.json")
                 .shouldFailOnError(true)
-                .jvmArgs("-Dfile.encoding=UTF-8 -Duser.country=US -Duser.language=en -Duser.variant") // by default, uses OS-specific configuration
+//                .jvmArgs("-Dfile.encoding=UTF-8 -Duser.country=US -Duser.language=en -Duser.variant") // by default, uses OS-specific configuration
                 .build();
 
         new Runner(options).run();
