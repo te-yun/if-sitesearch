@@ -107,7 +107,7 @@ public class LoadTest {
                 .resultFormat(ResultFormatType.JSON)
                 .result("build/jmh-result.json")
                 .shouldFailOnError(true)
-//                .jvmArgs("")
+                .jvmArgs("-Dfile.encoding=UTF-8 -Duser.country=US -Duser.language=en -Duser.variant") // by default, uses OS-specific configuration
                 .build();
 
         new Runner(options).run();
@@ -183,7 +183,7 @@ public class LoadTest {
         final Response response = CALLER.newCall(request).execute();
         assertEquals(HttpStatus.OK.value(), response.code());
         final Autocomplete result = MAPPER.readValue(response.body().charStream(), Autocomplete.class);
-        assertTrue(queryHits < result.getResults().size());
+        assertTrue(queryHits + " - " + result.getResults().size(), queryHits < result.getResults().size());
         response.close();
     }
 }
