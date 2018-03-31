@@ -101,13 +101,12 @@ public class LoadTest {
 //                .include(".*")
 //                .include(LoadIndex2Users.class.getSimpleName())
                 .include(LoadTest.class.getSimpleName())
-                .forks(2)
-                .threads(1)
+                .forks(1)
+                .threads(50)
                 .mode(Mode.Throughput)
                 .resultFormat(ResultFormatType.JSON)
                 .result("build/jmh-result.json")
                 .shouldFailOnError(true)
-//                .jvmArgs("-Dfile.encoding=UTF-8 -Duser.country=US -Duser.language=en -Duser.variant") // by default, uses OS-specific configuration
                 .build();
 
         new Runner(options).run();
