@@ -51,9 +51,6 @@ h3 {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
     margin-bottom: 40px;
 }
 
@@ -71,6 +68,7 @@ h3 {
 
 .form-inline > label {
     width: 150px;
+    margin-top: 8px;
     font-size: 16px;
     color: #777;
     line-height: 1.66em;
@@ -116,6 +114,28 @@ h3 .tipsy {
     color: #767676;
 }
 
+.form-inline.defaultValidity input[type="text"] {
+    background: #c4e9c2;
+}
+
+.form-inline.invalidUrl input[type="text"] {
+    background: #eac2c0;
+}
+
+.form-inline .error {
+    margin: 5px 40px 0 10px;
+    color: #f1172b;
+    font-weight: bold;
+}
+
+.form-inline.defaultValidity .error {
+    display: none;
+}
+
+.form-inline.invalidUrl .error {
+    display: block;
+}
+
 .form-inline input[type="text"]:focus {
     font-size: 16px;
 }
@@ -133,9 +153,7 @@ button:disabled {
 }
 
 .form-inline .subline {
-    position: absolute;
-    right: 40px;
-    bottom: -20px;
+    margin: 5px 40px 0 10px;
     font-size: 12px;
     color: #767676;
 }
