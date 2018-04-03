@@ -114,7 +114,7 @@ h3 .tipsy {
     color: #767676;
 }
 
-.form-inline.validUrl input[type="text"] {
+.form-inline.defaultValidity input[type="text"] {
     background: #c4e9c2;
 }
 
@@ -125,9 +125,10 @@ h3 .tipsy {
 .form-inline .error {
     margin: 5px 40px 0 10px;
     color: #f1172b;
+    font-weight: bold;
 }
 
-.form-inline.validUrl .error {
+.form-inline.defaultValidity .error {
     display: none;
 }
 
