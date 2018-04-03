@@ -155,12 +155,12 @@ private fun allowedToCrawl(xhr: XMLHttpRequest) =
 private var isValidSetup: Boolean = false
 private fun classifyUrlAsValid(isValid: Boolean) {
     if (isValid) {
-        url.addClass("validUrl")
-        url.style.background = "rgba(99, 199, 99, .4)"
+        websiteUrlContainer.addClass("validUrl")
+        websiteUrlContainer.removeClass("invalidUrl")
         isValidSetup = true
     } else {
-        url.removeClass("validUrl")
-        url.style.background = "rgba(199, 99, 99, .4)"
+        websiteUrlContainer.removeClass("validUrl")
+        websiteUrlContainer.addClass("invalidUrl")
         isValidSetup = false
     }
 }
