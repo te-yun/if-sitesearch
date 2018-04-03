@@ -44,14 +44,28 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.UUID;
 
 import static com.intrafind.sitesearch.service.SiteCrawler.JSON_MEDIA_TYPE;
 
@@ -60,6 +74,8 @@ import static com.intrafind.sitesearch.service.SiteCrawler.JSON_MEDIA_TYPE;
 public class CrawlerController {
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerController.class);
     private static final String PROSPECTS_EMAIL_ADDRESS = "Support - Site Search <f518c8ec.intrafind.de@emea.teams.ms>";
+    private static final String RECAPTCHA_SITE_SECRET = System.getenv("RECAPTCHA_SITE_SECRET");
+    private static final String DEV_SKIP_FLAG = System.getenv("DEV_SKIP_FLAG");
     private final SiteService siteService;
     private final CrawlerService crawlerService;
 
@@ -163,7 +179,7 @@ public class CrawlerController {
     }
 
     @RequestMapping(path = "crawl", method = RequestMethod.POST)
-    ResponseEntity<SitesCrawlStatus> recrawlSites(
+    ResponseEntity<SitesCrawlStatus> recrawl(
             @RequestParam(value = "serviceSecret") UUID serviceSecret,
             @RequestBody SitesCrawlStatus sitesCrawlStatusUpdate,
             @RequestParam(required = false, value = "allSitesCrawl", defaultValue = "false") boolean allSitesCrawl,
@@ -199,7 +215,8 @@ public class CrawlerController {
             @RequestParam(value = "siteSecret") UUID siteSecret,
             @RequestParam(value = "url") URI url,
             @RequestParam(value = "email") String email,
-            @RequestParam(value = "token") String captchaToken
+            @RequestParam(value = "token") String captchaToken,
+            @RequestParam(value = "sitemapsOnly", required = false, defaultValue = "false") boolean sitemapsOnly
     ) {
         if (!siteService.isAllowedToModify(siteId, siteSecret)) {
             return ResponseEntity.notFound().build();
@@ -208,22 +225,22 @@ public class CrawlerController {
         boolean captchaPassed = false;
         try {
             Request request = new Request.Builder()
-                    .url("https://www.google.com/recaptcha/api/siteverify?secret=" + System.getenv("RECAPTCHA_SITE_SECRET") + "&response=" + captchaToken)
+                    .url("https://www.google.com/recaptcha/api/siteverify?secret=" + RECAPTCHA_SITE_SECRET + "&response=" + captchaToken)
                     .post(okhttp3.RequestBody.create(JSON_MEDIA_TYPE, ""))
                     .build();
             final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
-            final CaptchaVerification captchaVerification = MAPPER.readValue(response.body().bytes(), CaptchaVerification.class);
+            final CaptchaVerification captchaVerification = MAPPER.readValue(response.body().byteStream(), CaptchaVerification.class);
 
-            if (captchaVerification.getSuccess() || "true".equals(System.getenv("DEV_SKIP_FLAG"))) {
+            if (captchaVerification.getSuccess() || "true".equals(DEV_SKIP_FLAG)) {
                 captchaPassed = true;
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             LOG.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
         if (captchaPassed) {
-            final CrawlerJobResult crawlerJobResult = crawlerService.crawl(url.toString(), siteId, siteSecret, true, false);
+            final CrawlerJobResult crawlerJobResult = crawlerService.crawl(url.toString(), siteId, siteSecret, true, false, sitemapsOnly);
             final String emailAddress = determineEmailAddress(email);
             try {
                 sendSetupInfoEmail(siteId, siteSecret, url, emailAddress, crawlerJobResult.getPageCount());

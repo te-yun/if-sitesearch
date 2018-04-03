@@ -437,7 +437,7 @@ public class SiteService {
                             siteProfile.ifPresent(profile -> {
                                 final AtomicLong pageCount = new AtomicLong();
                                 profile.getUrls().forEach(uri -> {
-                                    final CrawlerJobResult crawlerJobResult = crawlerService.crawl(uri.toString(), crawlStatus.getSiteId(), siteSecret, isThrottled, clearIndex);
+                                    final CrawlerJobResult crawlerJobResult = crawlerService.crawl(uri.toString(), crawlStatus.getSiteId(), siteSecret, isThrottled, clearIndex, false);
                                     pageCount.addAndGet(crawlerJobResult.getPageCount());
                                     final Optional<SitesCrawlStatus> sitesCrawlStatus = updateCrawlStatusInShedule(crawlStatus.getSiteId(), pageCount.get());// TODO fix PATCH update instead of a regular PUT   // rename to updateCrawlStatusInShedule
                                     sitesCrawlStatus.ifPresent(element -> sitesCrawlStatusOverall.getSites().addAll(element.getSites()));

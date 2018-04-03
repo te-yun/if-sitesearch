@@ -18,6 +18,7 @@ package com.intrafind.sitesearch.service;
 
 import com.intrafind.sitesearch.CrawlerControllerFactory;
 import com.intrafind.sitesearch.dto.CrawlerJobResult;
+import crawlercommons.sitemaps.SiteMap;
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.fetcher.PageFetcher;
@@ -39,8 +40,8 @@ public class CrawlerService {
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerService.class);
     private static final String CRAWLER_STORAGE = "data/crawler";
     private static final Random RANDOM_VERSION = new Random();
-   
-    public CrawlerJobResult crawl(String url, UUID siteId, UUID siteSecret, boolean isThrottled, boolean clearIndex) {
+
+    public CrawlerJobResult crawl(String url, UUID siteId, UUID siteSecret, boolean isThrottled, boolean clearIndex, boolean sitemapsOnly) {
         final CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(CRAWLER_STORAGE);
         final int crawlerThreads;         
@@ -67,7 +68,14 @@ public class CrawlerService {
             throw new RuntimeException(e.getMessage());
         }
 
-        controller.addSeed(url);
+        if (sitemapsOnly) {
+            final SiteMap siteMap = new SiteMap(url + "/sitemap.xml");
+            siteMap.getSiteMapUrls().stream().forEach(siteMapUrl -> {
+                controller.addSeed(siteMapUrl.getUrl().toString());
+            });
+        } else {
+            controller.addSeed(url);
+        }
 
         if (clearIndex && !clearIndex(siteId, siteSecret)) {
             return null;
@@ -102,7 +110,7 @@ public class CrawlerService {
                 return false;
             }
         } catch (IOException e) {
-            LOG.error("CLEAR_INDEX_RESULT_FAILURE " + e.getMessage());
+            LOG.error("CLEAR_INDEX_RESULT_FAILURE: " + e.getMessage());
             return false;
         }
     }
