@@ -25,31 +25,32 @@ import java.util.UUID;
 public class SiteProfile {
     private UUID id;
     private UUID secret;
-    /**
-     * @deprecated use Set<Config> instead
-     */
-    private Set<URI> urls;
+    //    /**
+//     * @deprecated use Set<Config> instead
+//     */
+//    private Set<URI> urls;
     private Set<Config> configs;
     private String email;
 
     private SiteProfile() {
     }
 
-    public SiteProfile(UUID id, UUID secret, Set<URI> urls, String email, Set<Config> configs) {
+    //    public SiteProfile(UUID id, UUID secret, Set<URI> urls, String email, Set<Config> configs) {
+    public SiteProfile(UUID id, UUID secret, String email, Set<Config> configs) {
         this.id = id;
         this.secret = secret;
-        this.urls = urls;
+//        this.urls = urls;
         this.email = email;
         this.configs = configs;
     }
 
-    public Set<URI> getUrls() {
-        return urls;
-    }
-
-    public void setUrls(Set<URI> urls) {
-        this.urls = urls;
-    }
+//    public Set<URI> getUrls() {
+//        return urls;
+//    }
+//
+//    public void setUrls(Set<URI> urls) {
+//        this.urls = urls;
+//    }
 
     public String getEmail() {
         return email;
@@ -80,11 +81,12 @@ public class SiteProfile {
     }
 
     public static class Config {
+        public static final String DEFAULT_PAGE_BODY_CSS_SELECTOR = "body";
         private URI url;
         /**
          * Defaults to "body", overridable with any other CSS selector.
          */
-        private String pageBodyCssSelector = "body";
+        private String pageBodyCssSelector = DEFAULT_PAGE_BODY_CSS_SELECTOR;
         private boolean sitemapsOnly = false;
 
         private Config() {
@@ -97,7 +99,8 @@ public class SiteProfile {
         }
 
         public String getPageBodyCssSelector() {
-            return pageBodyCssSelector;
+            // Empty strings cannot be saved by the search service. Hence a non-empty default is required.
+            return pageBodyCssSelector.isEmpty() ? DEFAULT_PAGE_BODY_CSS_SELECTOR : pageBodyCssSelector;
         }
 
         public URI getUrl() {
@@ -120,7 +123,6 @@ public class SiteProfile {
 
         @Override
         public int hashCode() {
-
             return Objects.hash(url, pageBodyCssSelector, sitemapsOnly);
         }
     }

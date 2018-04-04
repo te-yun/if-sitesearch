@@ -125,7 +125,7 @@ public class SiteService {
     }
 
     private Optional<SiteProfile> fetchSiteProfile(UUID siteId) {
-        Optional<Document> siteProfile = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
+        final Optional<Document> siteProfile = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
         return siteProfile.map(document -> {
             final Set<URI> urls;
             if (document.getAll("urls") == null) {
@@ -142,12 +142,16 @@ public class SiteService {
             }
 
             final Set<SiteProfile.Config> configs = new HashSet<>();
-            urls.stream().forEach(configUrl -> {
+            urls.forEach(configUrl -> {
                 final List<String> config = document.getAll(configUrl.toString());
-                configs.add(new SiteProfile.Config(configUrl, config.get(0), Boolean.valueOf(config.get(1))));
+                if (config != null && config.size() > 1) {
+                    configs.add(new SiteProfile.Config(configUrl, config.get(0), Boolean.valueOf(config.get(1))));
+                } else {
+                    configs.add(new SiteProfile.Config(configUrl, SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false));
+                }
             });
 
-            return new SiteProfile(siteId, UUID.fromString(document.get("secret")), urls, email, configs);
+            return new SiteProfile(siteId, UUID.fromString(document.get("secret")), email, configs);
         });
     }
 
@@ -178,13 +182,13 @@ public class SiteService {
         INDEX_SERVICE.index(siteConfiguration);
     }
 
-    private void storeSite(UUID siteId, UUID siteSecret, Set<URI> urls, String email) {
-        final Set<SiteProfile.Config> configs = new HashSet<>();
-        urls.forEach(siteUrl -> {
-            configs.add(new SiteProfile.Config(siteUrl, "", false));
-        });
-        storeSite(siteId, siteSecret, email, configs);
-    }
+//    private void storeSite(UUID siteId, UUID siteSecret, Set<URI> urls, String email) {
+//        final Set<SiteProfile.Config> configs = new HashSet<>();
+//        urls.forEach(siteUrl -> {
+//            configs.add(new SiteProfile.Config(siteUrl, SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false));
+//        });
+//        storeSite(siteId, siteSecret, email, configs);
+//    }
 
     private void storeSite(UUID siteId, UUID siteSecret, String email, Set<SiteProfile.Config> configs) {
         final Optional<Document> siteConfiguration = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
@@ -194,7 +198,7 @@ public class SiteService {
         siteConfigDoc.set("email", email);
         configs.forEach(config -> {
             siteConfigDoc.add("urls", config.getUrl());
-            siteConfigDoc.set(config.getUrl().toString(), config.getPageBodyCssSelector(), Boolean.toString(config.isSitemapsOnly()));
+            siteConfigDoc.set(config.getUrl().toString(), Arrays.asList(config.getPageBodyCssSelector(), Boolean.toString(config.isSitemapsOnly())));
         });
         INDEX_SERVICE.index(siteConfigDoc);
     }
@@ -285,10 +289,10 @@ public class SiteService {
         return new SiteCreation(siteId, siteSecret);
     }
 
-    public SiteCreation createSite(Set<URI> urls, String email) {
+    public SiteCreation createSite(String email, Set<SiteProfile.Config> configs) {
         UUID siteId = UUID.randomUUID();
         UUID siteSecret = UUID.randomUUID();
-        storeSite(siteId, siteSecret, urls, email);
+        storeSite(siteId, siteSecret, email, configs);
         return new SiteCreation(siteId, siteSecret);
     }
 
@@ -452,12 +456,12 @@ public class SiteService {
                             final Optional<SiteProfile> siteProfile = fetchSiteProfile(crawlStatus.getSiteId());
                             siteProfile.ifPresent(profile -> {
                                 final AtomicLong pageCount = new AtomicLong();
-                                profile.getUrls().forEach(uri -> {
-                                    final CrawlerJobResult crawlerJobResult = crawlerService.crawl(uri.toString(), crawlStatus.getSiteId(), siteSecret, isThrottled, clearIndex, false, CrawlerService.READ_pageBodyCssSelector_FROM_SITE_PROFILE);
+                                profile.getConfigs().forEach(configUrl -> {
+                                    final CrawlerJobResult crawlerJobResult = crawlerService.crawl(configUrl.getUrl().toString(), crawlStatus.getSiteId(), siteSecret, isThrottled, clearIndex, false, CrawlerService.READ_pageBodyCssSelector_FROM_SITE_PROFILE);
                                     pageCount.addAndGet(crawlerJobResult.getPageCount());
                                     final Optional<SitesCrawlStatus> sitesCrawlStatus = updateCrawlStatusInShedule(crawlStatus.getSiteId(), pageCount.get());// TODO fix PATCH update instead of a regular PUT   // rename to updateCrawlStatusInShedule
                                     sitesCrawlStatus.ifPresent(element -> sitesCrawlStatusOverall.getSites().addAll(element.getSites()));
-                                    LOG.info("siteId: " + crawlStatus.getSiteId() + " - siteUrl: " + uri.toString() + " - pageCount: " + crawlerJobResult.getPageCount()); // TODO add pattern to logstash
+                                    LOG.info("siteId: " + crawlStatus.getSiteId() + " - siteUrl: " + configUrl.getUrl().toString() + " - pageCount: " + crawlerJobResult.getPageCount()); // TODO add pattern to logstash
                                 });
                                 sitesCrawlStatusOverall.getSites().add(new CrawlStatus(profile.getId(), Instant.now(), pageCount.get()));
                             });

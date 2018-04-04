@@ -66,7 +66,7 @@ public class SiteController {
         if (siteProfileCreation == null) {
             newlyCreatedSite = siteService.createSite();
         } else {
-            newlyCreatedSite = siteService.createSite(siteProfileCreation.getUrls(), siteProfileCreation.getEmail());
+            newlyCreatedSite = siteService.createSite(siteProfileCreation.getEmail(), siteProfileCreation.getConfigs());
         }
         return ResponseEntity
                 .created(URI.create("https://api.sitesearch.cloud/sites/" + newlyCreatedSite.getSiteId()))
