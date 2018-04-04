@@ -57,21 +57,16 @@ public class SiteCrawler extends WebCrawler {
     private UUID siteId;
     private UUID siteSecret;
     private URI url;
+    private String pageBodyCssSelector;
 
     private SiteCrawler() {
-//        try {
-//            new SiteMap(URI.create("").toURL()).getSiteMapUrls().forEach(siteMapURL -> {
-//                siteMapURL.getUrl();
-//            });
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        }
     }
 
-    public SiteCrawler(UUID siteId, UUID siteSecret, URI url) {
+    public SiteCrawler(UUID siteId, UUID siteSecret, URI url, String pageBodyCssSelector) {
         this.siteId = siteId;
         this.siteSecret = siteSecret;
         this.url = url;
+        this.pageBodyCssSelector = pageBodyCssSelector;
     }
 
     @Override
@@ -96,7 +91,7 @@ public class SiteCrawler extends WebCrawler {
             if (isNoindexPage(htmlParseData)) {
                 return;
             }
-            final String htmlStrippedBody = extractTextFromMixedHtml(htmlParseData.getHtml());
+            final String htmlStrippedBody = extractTextFromMixedHtml(htmlParseData.getHtml(), pageBodyCssSelector);
             final String title = htmlParseData.getTitle();
 
             final SitePage sitePage = new SitePage(
@@ -144,8 +139,12 @@ public class SiteCrawler extends WebCrawler {
         return htmlParseData.getMetaTags().get("robots") != null && htmlParseData.getMetaTags().get("robots").contains("noindex");
     }
 
-    private String extractTextFromMixedHtml(String body) {
+    private String extractTextFromMixedHtml(String body, String pageBodyCssSelector) {
         final Document docPage = Jsoup.parse(body);
-        return docPage.body().text();
+        final String extractedPageBody = docPage.body().selectFirst(pageBodyCssSelector).text();
+        final String rawPageBody = docPage.body().text();
+        LOG.debug("extractedPageBody: " + extractedPageBody);
+        LOG.debug("rawPageBody == extractedPageBody: " + rawPageBody.equals(extractedPageBody));
+        return rawPageBody;
     }
 }

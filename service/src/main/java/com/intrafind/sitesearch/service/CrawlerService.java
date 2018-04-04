@@ -49,8 +49,9 @@ public class CrawlerService {
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerService.class);
     private static final String CRAWLER_STORAGE = "data/crawler";
     private static final Random RANDOM_VERSION = new Random();
+    static final String READ_pageBodyCssSelector_FROM_SITE_PROFILE = "body";
 
-    public CrawlerJobResult crawl(String url, UUID siteId, UUID siteSecret, boolean isThrottled, boolean clearIndex, boolean sitemapsOnly) {
+    public CrawlerJobResult crawl(String url, UUID siteId, UUID siteSecret, boolean isThrottled, boolean clearIndex, boolean sitemapsOnly, String pageBodyCssSelector) {
         final CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(CRAWLER_STORAGE);
         final int crawlerThreads;
@@ -92,7 +93,7 @@ public class CrawlerService {
             return null;
         }
 
-        final CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url));
+        final CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url), pageBodyCssSelector);
         if (isThrottled) {
             controller.start(factory, crawlerThreads);
         } else {

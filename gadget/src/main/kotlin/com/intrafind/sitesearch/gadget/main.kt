@@ -54,7 +54,7 @@ fun triggerFirstUsageOwnership() {
         document.dispatchEvent(Event("sis.triggerFirstUsageOwnershipEvent"))
     }
     xhr.setRequestHeader("content-type", "application/json")
-    xhr.send(JSON.stringify(SiteProfileCreation(setOf(url.value), email.value)))
+    xhr.send(JSON.stringify(SiteProfileCreation(setOf(url.value), email.value, !sitemapsIgnore.checked)))
 }
 
 @JsName("overrideSite")
@@ -210,7 +210,6 @@ private fun insertSiteIdIntoIntegrationCode() {
 external fun encodeURIComponent(str: String): String
 private var crawlerPageCount: Int = 0
 fun startCrawler() {
-    console.warn("sitemapsOnly: ${!sitemapsIgnore.checked}")
     val xhr = XMLHttpRequest()
     xhr.open("POST", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(url.value)}&token=$captchaResult&email=${email.value}&sitemapsOnly=${!sitemapsIgnore.checked}")
     xhr.onload = {
@@ -231,4 +230,4 @@ class SiteSearch {
     }
 }
 
-data class SiteProfileCreation(val urls: Set<String>, val email: String)
+data class SiteProfileCreation(val urls: Set<String>, val email: String, val sitemapsOnly: Boolean)

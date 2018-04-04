@@ -61,7 +61,7 @@ public class SiteController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity<SiteCreation> createNewSite(@RequestBody(required = false) SiteProfileUpdate siteProfileCreation) {
+    ResponseEntity<SiteCreation> createNewSite(@RequestBody(required = false) SiteProfile siteProfileCreation) {
         final SiteCreation newlyCreatedSite;
         if (siteProfileCreation == null) {
             newlyCreatedSite = siteService.createSite();

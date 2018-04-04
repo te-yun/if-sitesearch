@@ -216,7 +216,8 @@ public class CrawlerController {
             @RequestParam(value = "url") URI url,
             @RequestParam(value = "email") String email,
             @RequestParam(value = "token") String captchaToken,
-            @RequestParam(value = "sitemapsOnly", required = false, defaultValue = "false") boolean sitemapsOnly
+            @RequestParam(value = "sitemapsOnly", required = false, defaultValue = "false") boolean sitemapsOnly,
+            @RequestParam(value = "pageBodyCssSelector", required = false, defaultValue = "body") String pageBodyCssSelector
     ) {
         if (!siteService.isAllowedToModify(siteId, siteSecret)) {
             return ResponseEntity.notFound().build();
@@ -240,7 +241,7 @@ public class CrawlerController {
         }
 
         if (captchaPassed) {
-            final CrawlerJobResult crawlerJobResult = crawlerService.crawl(url.toString(), siteId, siteSecret, true, false, sitemapsOnly);
+            final CrawlerJobResult crawlerJobResult = crawlerService.crawl(url.toString(), siteId, siteSecret, true, false, sitemapsOnly, pageBodyCssSelector);
             final String emailAddress = determineEmailAddress(email);
             try {
                 sendSetupInfoEmail(siteId, siteSecret, url, emailAddress, crawlerJobResult.getPageCount());

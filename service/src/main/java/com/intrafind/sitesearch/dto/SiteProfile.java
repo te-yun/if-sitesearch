@@ -78,18 +78,18 @@ public class SiteProfile {
         /**
          * Defaults to "body", overridable with any other CSS selector.
          */
-        private String bodyQuerySelector = "body";
+        private String pageBodyCssSelector = "body";
 
         private Config() {
         }
 
-        public Config(URI url, String bodyQuerySelector) {
+        public Config(URI url, String pageBodyCssSelector) {
             this.url = url;
-            this.bodyQuerySelector = bodyQuerySelector;
+            this.pageBodyCssSelector = pageBodyCssSelector;
         }
 
         public String getBodyQuerySelector() {
-            return bodyQuerySelector;
+            return pageBodyCssSelector;
         }
     }
 }
