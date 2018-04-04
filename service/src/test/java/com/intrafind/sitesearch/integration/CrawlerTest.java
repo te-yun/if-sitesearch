@@ -70,16 +70,17 @@ public class CrawlerTest {
     }
 
     @Test
-    public void crawlHttp() {
+    public void crawlUsingSitemapsOnly() {
         final ResponseEntity<CrawlerJobResult> request = caller
                 .postForEntity(SiteController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET
-                                + "&url=" + "http://example.de&token=" + UUID.randomUUID()
-                                + "&email=" + TEST_EMAIL_ADDRESS,
+                                + "&url=https://www.sitemaps.org&token=" + UUID.randomUUID()
+                                + "&email=" + TEST_EMAIL_ADDRESS
+                                + "&sitemapsOnly=true",
                         RequestEntity.EMPTY, CrawlerJobResult.class);
 
         assertEquals(HttpStatus.OK, request.getStatusCode());
         assertNotNull(request.getBody());
-        assertEquals(15, request.getBody().getPageCount());
+        assertEquals(84, request.getBody().getPageCount());
     }
 
     @Test
