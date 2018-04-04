@@ -79,8 +79,10 @@ private lateinit var triggerButton: HTMLButtonElement
 private lateinit var url: HTMLInputElement
 private lateinit var email: HTMLInputElement
 private lateinit var sitemapsIgnore: HTMLInputElement
+private lateinit var sitemapContainer: HTMLDivElement
 
 fun showInitCode() {
+    sitemapContainer = document.getElementById("sitemapContainer") as HTMLDivElement
     sitemapsIgnore = document.getElementById("sitemapsIgnore") as HTMLInputElement
     email = document.getElementById("email") as HTMLInputElement
     url = document.getElementById("url") as HTMLInputElement
@@ -201,6 +203,7 @@ private fun applyQueryOverrides() {
         siteSecretBox.style.display = "none"
         emailContainer.style.display = "none"
         siteIdBox.style.display = "none"
+        sitemapContainer.style.display = "none"
     }
 }
 
@@ -231,7 +234,6 @@ class SiteSearch {
     }
 }
 
-//data class SiteProfileCreation(val urls: Set<String>, val email: String, val sitemapsOnly: Boolean)
 data class SiteProfileConfig(val url: String, val pageBodyCssSelector: String = "body", val sitemapsOnly: Boolean = false)
 
 data class SiteProfileCreation(val configs: Set<SiteProfileConfig> = emptySet(), val email: String = "")
