@@ -118,14 +118,20 @@ public class CrawlerService {
         return seedUrls;
     }
 
-    private void walkSiteMap(final AbstractSiteMap abstractSiteMap, final List<URL> seedUrls) {
+    private void walkSiteMap(final AbstractSiteMap abstractSiteMap, final List<URL> seedUrls) throws UnknownFormatException, IOException {
         if (abstractSiteMap.isIndex()) {
             final Collection<AbstractSiteMap> siteMaps = ((SiteMapIndex) abstractSiteMap).getSitemaps();
             siteMaps.stream().forEach(siteMapIndex -> {
-                walkSiteMap(siteMapIndex, seedUrls);
+                try {
+                    walkSiteMap(siteMapIndex, seedUrls);
+                } catch (UnknownFormatException | IOException e) {
+                    LOG.error(e.getMessage());
+                }
             });
         } else {
-            final Collection<SiteMapURL> siteMapUrls = ((SiteMap) abstractSiteMap).getSiteMapUrls();
+            final SiteMapParser siteMapParser = new SiteMapParser(false, true);
+            final SiteMap siteMap = (SiteMap) siteMapParser.parseSiteMap(abstractSiteMap.getUrl());
+            final Collection<SiteMapURL> siteMapUrls = siteMap.getSiteMapUrls();
             siteMapUrls.stream().forEach(siteMapUrl -> {
                 seedUrls.add(siteMapUrl.getUrl());
             });
