@@ -25,32 +25,18 @@ import java.util.UUID;
 public class SiteProfile {
     private UUID id;
     private UUID secret;
-    //    /**
-//     * @deprecated use Set<Config> instead
-//     */
-//    private Set<URI> urls;
     private Set<Config> configs;
     private String email;
 
     private SiteProfile() {
     }
 
-    //    public SiteProfile(UUID id, UUID secret, Set<URI> urls, String email, Set<Config> configs) {
     public SiteProfile(UUID id, UUID secret, String email, Set<Config> configs) {
         this.id = id;
         this.secret = secret;
-//        this.urls = urls;
         this.email = email;
         this.configs = configs;
     }
-
-//    public Set<URI> getUrls() {
-//        return urls;
-//    }
-//
-//    public void setUrls(Set<URI> urls) {
-//        this.urls = urls;
-//    }
 
     public String getEmail() {
         return email;
@@ -118,12 +104,12 @@ public class SiteProfile {
             Config config = (Config) o;
             return sitemapsOnly == config.sitemapsOnly &&
                     Objects.equals(url, config.url) &&
-                    Objects.equals(pageBodyCssSelector, config.pageBodyCssSelector);
+                    Objects.equals(getPageBodyCssSelector(), config.pageBodyCssSelector);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(url, pageBodyCssSelector, sitemapsOnly);
+            return Objects.hash(url, getPageBodyCssSelector(), sitemapsOnly);
         }
     }
 }
