@@ -100,13 +100,27 @@ public class CrawlerTest {
     public void crawlHttps() {
         final ResponseEntity<CrawlerJobResult> request = caller
                 .postForEntity(SiteController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET
-                                + "&url=" + "https://api.sitesearch.cloud&token=" + UUID.randomUUID()
+                                + "&url=https://api.sitesearch.cloud&token=" + UUID.randomUUID()
                                 + "&email=" + TEST_EMAIL_ADDRESS,
                         RequestEntity.EMPTY, CrawlerJobResult.class);
 
         assertEquals(HttpStatus.OK, request.getStatusCode());
         assertNotNull(request.getBody());
         assertEquals(7, request.getBody().getPageCount());
+    }
+
+    @Test
+    public void crawlSiteWithSitemap() {
+        final ResponseEntity<CrawlerJobResult> request = caller
+                .postForEntity(SiteController.ENDPOINT + "/" + CRAWL_SITE_ID + "/crawl?siteSecret=" + CRAWL_SITE_SECRET
+                                + "&url=https://api.sitesearch.cloud&token=" + UUID.randomUUID()
+                                + "&email=" + TEST_EMAIL_ADDRESS
+                                + "&sitemapsOnly=true",
+                        RequestEntity.EMPTY, CrawlerJobResult.class);
+
+        assertEquals(HttpStatus.OK, request.getStatusCode());
+        assertNotNull(request.getBody());
+        assertEquals(1, request.getBody().getPageCount());
     }
 
     @Test

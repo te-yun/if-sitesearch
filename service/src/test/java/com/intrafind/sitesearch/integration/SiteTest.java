@@ -124,14 +124,14 @@ public class SiteTest {
         Instant now = Instant.now();
         final SitesCrawlStatus updatedCrawlStatus = crawlStatus.getBody();
         final CrawlStatus searchSiteCrawlStatus = findSearchSiteCrawlStatus(updatedCrawlStatus);
-        assertFalse(now.toString().equals(searchSiteCrawlStatus.getCrawled()));
+        assertNotEquals(now.toString(), searchSiteCrawlStatus.getCrawled());
         searchSiteCrawlStatus.setCrawled(now.toString());
         updatedCrawlStatus.getSites().add(searchSiteCrawlStatus);
         final ResponseEntity<SitesCrawlStatus> crawlStatusUpdate = caller.exchange(SiteController.ENDPOINT + "/crawl/status?serviceSecret=" +
                 ADMIN_SITE_SECRET, HttpMethod.PUT, new HttpEntity<>(updatedCrawlStatus), SitesCrawlStatus.class);
         assertEquals(HttpStatus.OK, crawlStatus.getStatusCode());
         assertNotNull(findSearchSiteCrawlStatus(crawlStatusUpdate.getBody()).getSiteId());
-        assertTrue(now.equals(Instant.parse(findSearchSiteCrawlStatus(crawlStatusUpdate.getBody()).getCrawled())));
+        assertEquals(now, Instant.parse(findSearchSiteCrawlStatus(crawlStatusUpdate.getBody()).getCrawled()));
         assertTrue(Instant.now().isAfter(Instant.parse(findSearchSiteCrawlStatus(crawlStatusUpdate.getBody()).getCrawled())));
 
         // verify crawl status of a specific site
@@ -140,7 +140,7 @@ public class SiteTest {
         assertEquals(HttpStatus.OK, crawlStatusUpdated.getStatusCode());
         assertEquals(initSize, crawlStatusUpdated.getBody().getSites().size());
         assertNotNull(findSearchSiteCrawlStatus(crawlStatusUpdated.getBody()).getSiteId());
-        assertTrue(now.equals(Instant.parse(findSearchSiteCrawlStatus(crawlStatusUpdated.getBody()).getCrawled())));
+        assertEquals(now, Instant.parse(findSearchSiteCrawlStatus(crawlStatusUpdated.getBody()).getCrawled()));
         assertTrue(Instant.now().isAfter(Instant.parse(findSearchSiteCrawlStatus(crawlStatusUpdated.getBody()).getCrawled())));
     }
 
