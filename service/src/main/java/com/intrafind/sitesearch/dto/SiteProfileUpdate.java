@@ -16,28 +16,36 @@
 
 package com.intrafind.sitesearch.dto;
 
-import java.net.URI;
 import java.util.Set;
 import java.util.UUID;
 
 // TODO consolidate with SiteProfile?
 public class SiteProfileUpdate {
     private UUID secret;
-    private Set<URI> urls;
+    //    private Set<URI> urls;
+    private Set<SiteProfile.Config> configs;
     private String email;
 
     private SiteProfileUpdate() {
     }
 
-    public SiteProfileUpdate(UUID secret, Set<URI> urls, String email) {
+    //    public SiteProfileUpdate(UUID secret, Set<URI> urls, String email, Set<SiteProfile.Config> configs) {
+    public SiteProfileUpdate(UUID secret, String email, Set<SiteProfile.Config> configs) {
         this.secret = secret;
-        this.urls = urls;
+//        this.urls = urls;
         this.email = email;
+        this.configs = configs;
     }
 
-    public SiteProfileUpdate(Set<URI> urls, String email) {
-        this.urls = urls;
+    //    public SiteProfileUpdate(Set<URI> urls, String email) {
+    public SiteProfileUpdate(Set<SiteProfile.Config> configs, String email) {
+//        this.urls = urls;
         this.email = email;
+        this.configs = configs;
+    }
+
+    public Set<SiteProfile.Config> getConfigs() {
+        return configs;
     }
 
     public UUID getSecret() {
@@ -48,13 +56,13 @@ public class SiteProfileUpdate {
         this.secret = secret;
     }
 
-    public Set<URI> getUrls() {
-        return urls;
-    }
-
-    public void setUrls(Set<URI> urls) {
-        this.urls = urls;
-    }
+//    public Set<URI> getUrls() {
+//        return urls;
+//    }
+//
+//    public void setUrls(Set<URI> urls) {
+//        this.urls = urls;
+//    }
 
     public String getEmail() {
         return email;

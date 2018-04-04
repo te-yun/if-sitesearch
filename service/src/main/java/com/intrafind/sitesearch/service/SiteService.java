@@ -141,7 +141,13 @@ public class SiteService {
                 email = document.get("email");
             }
 
-            return new SiteProfile(siteId, UUID.fromString(document.get("secret")), urls, email);
+            final Set<SiteProfile.Config> configs = new HashSet<>();
+            urls.stream().forEach(configUrl -> {
+                final List<String> config = document.getAll(configUrl.toString());
+                configs.add(new SiteProfile.Config(configUrl, config.get(0), Boolean.valueOf(config.get(1))));
+            });
+
+            return new SiteProfile(siteId, UUID.fromString(document.get("secret")), urls, email, configs);
         });
     }
 
@@ -173,12 +179,23 @@ public class SiteService {
     }
 
     private void storeSite(UUID siteId, UUID siteSecret, Set<URI> urls, String email) {
+        final Set<SiteProfile.Config> configs = new HashSet<>();
+        urls.forEach(siteUrl -> {
+            configs.add(new SiteProfile.Config(siteUrl, "", false));
+        });
+        storeSite(siteId, siteSecret, email, configs);
+    }
+
+    private void storeSite(UUID siteId, UUID siteSecret, String email, Set<SiteProfile.Config> configs) {
         final Optional<Document> siteConfiguration = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
         final Document siteConfigDoc;
         siteConfigDoc = siteConfiguration.orElseGet(() -> new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId));
         siteConfigDoc.set("secret", siteSecret);
-        siteConfigDoc.set("urls", urls);
         siteConfigDoc.set("email", email);
+        configs.forEach(config -> {
+            siteConfigDoc.add("urls", config.getUrl());
+            siteConfigDoc.set(config.getUrl().toString(), config.getPageBodyCssSelector(), Boolean.toString(config.isSitemapsOnly()));
+        });
         INDEX_SERVICE.index(siteConfigDoc);
     }
 

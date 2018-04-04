@@ -81,13 +81,7 @@ public class SiteController {
         final Optional<SiteProfile> siteProfileFetch = siteService.fetchSiteProfile(siteId, siteSecret);
         if (siteProfileFetch.isPresent()) {
             final SiteProfile siteProfile = siteProfileFetch.get();
-            return ResponseEntity.ok(new SiteProfile(
-                    siteProfile.getId(),
-                    siteProfile.getSecret(),
-                    siteProfile.getUrls(),
-                    siteProfile.getEmail()
-                    )
-            );
+            return ResponseEntity.ok(siteProfile);
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -102,13 +96,7 @@ public class SiteController {
         final Optional<SiteProfile> siteProfileUpdated = siteService.updateSiteProfile(siteId, siteSecret, siteProfileUpdate);
         if (siteProfileUpdated.isPresent()) {
             final SiteProfile siteProfile = siteProfileUpdated.get();
-            return ResponseEntity.ok(new SiteProfile(
-                    siteProfile.getId(),
-                    siteProfile.getSecret(),
-                    siteProfile.getUrls(),
-                    siteProfile.getEmail()
-                    )
-            );
+            return ResponseEntity.ok(siteProfile);
         } else {
             return ResponseEntity.notFound().build();
         }

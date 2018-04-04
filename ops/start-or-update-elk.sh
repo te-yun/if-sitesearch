@@ -10,6 +10,8 @@ docker-compose --file opt/docker-compose-elk.yaml -p tmp down
 docker-compose --file opt/docker-compose-elk.yaml -p tmp up -d --force-recreate
 docker-compose --file opt/docker-compose-elk.yaml -p tmp ps
 
+docker exec -it router nginx -s reload
+
 # Provide Basic License
 #docker exec -it ops-elasticsearch bash
 #vi license-sitesearch.json # paste license
