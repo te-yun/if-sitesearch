@@ -505,7 +505,7 @@ public class SiteService {
         final Optional<UUID> fetchedSiteSecret = fetchSiteSecret(siteId);
         if (fetchedSiteSecret.isPresent()) {
             if (fetchedSiteSecret.get().equals(siteSecret)) {
-                storeSite(siteId, siteProfileUpdate.getSecret(), siteProfileUpdate.getUrls(), siteProfileUpdate.getEmail());
+                storeSite(siteId, siteProfileUpdate.getSecret(), siteProfileUpdate.getEmail(), siteProfileUpdate.getConfigs());
                 return fetchSiteProfile(siteId);
             }
         }
