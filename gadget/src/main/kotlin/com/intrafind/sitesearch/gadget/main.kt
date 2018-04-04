@@ -54,7 +54,8 @@ fun triggerFirstUsageOwnership() {
         document.dispatchEvent(Event("sis.triggerFirstUsageOwnershipEvent"))
     }
     xhr.setRequestHeader("content-type", "application/json")
-    xhr.send(JSON.stringify(SiteProfileCreation(setOf(url.value), email.value, !sitemapsIgnore.checked)))
+//    xhr.send(JSON.stringify(SiteProfileCreation(setOf(url.value), email.value, !sitemapsIgnore.checked)))
+    xhr.send(JSON.stringify(SiteProfileCreation(setOf(SiteProfileConfig(url.value, "", !sitemapsIgnore.checked)), email.value)))
 }
 
 @JsName("overrideSite")
@@ -230,4 +231,7 @@ class SiteSearch {
     }
 }
 
-data class SiteProfileCreation(val urls: Set<String>, val email: String, val sitemapsOnly: Boolean)
+//data class SiteProfileCreation(val urls: Set<String>, val email: String, val sitemapsOnly: Boolean)
+data class SiteProfileConfig(val url: String, val pageBodyCssSelector: String = "body", val sitemapsOnly: Boolean = false)
+
+data class SiteProfileCreation(val configs: Set<SiteProfileConfig> = emptySet(), val email: String = "")

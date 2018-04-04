@@ -104,7 +104,7 @@ public class SiteProfile {
             Config config = (Config) o;
             return sitemapsOnly == config.sitemapsOnly &&
                     Objects.equals(url, config.url) &&
-                    Objects.equals(getPageBodyCssSelector(), config.pageBodyCssSelector);
+                    Objects.equals(getPageBodyCssSelector(), config.getPageBodyCssSelector());
         }
 
         @Override
