@@ -18,7 +18,12 @@ package com.intrafind.sitesearch.service;
 
 import com.intrafind.sitesearch.CrawlerControllerFactory;
 import com.intrafind.sitesearch.dto.CrawlerJobResult;
+import crawlercommons.sitemaps.AbstractSiteMap;
 import crawlercommons.sitemaps.SiteMap;
+import crawlercommons.sitemaps.SiteMapIndex;
+import crawlercommons.sitemaps.SiteMapParser;
+import crawlercommons.sitemaps.SiteMapURL;
+import crawlercommons.sitemaps.UnknownFormatException;
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.fetcher.PageFetcher;
@@ -32,6 +37,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -44,7 +53,7 @@ public class CrawlerService {
     public CrawlerJobResult crawl(String url, UUID siteId, UUID siteSecret, boolean isThrottled, boolean clearIndex, boolean sitemapsOnly) {
         final CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(CRAWLER_STORAGE);
-        final int crawlerThreads;         
+        final int crawlerThreads;
         if (isThrottled) {
             crawlerThreads = 2;
             config.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0." + RANDOM_VERSION.nextInt(9999) + ".94 Safari/537.36");
@@ -69,10 +78,12 @@ public class CrawlerService {
         }
 
         if (sitemapsOnly) {
-            final SiteMap siteMap = new SiteMap(url + "/sitemap.xml");
-            siteMap.getSiteMapUrls().stream().forEach(siteMapUrl -> {
-                controller.addSeed(siteMapUrl.getUrl().toString());
-            });
+            config.setMaxOutgoingLinksToFollow(0);
+            config.setMaxDepthOfCrawling(0);
+            final List<URL> seedUrls = extractSeedUrls(url);
+            for (final URL pageUrl : seedUrls) {
+                controller.addSeed(pageUrl.toString());
+            }
         } else {
             controller.addSeed(url);
         }
@@ -91,9 +102,34 @@ public class CrawlerService {
         final int pageCount = controller.getCustomData() == null ? 0 : (int) controller.getCustomData();
         SiteCrawler.PAGE_COUNT.remove(siteId);
 
-//            controller.waitUntilFinish();
-//            controller.shutdown();
         return new CrawlerJobResult(pageCount);
+    }
+
+    private List<URL> extractSeedUrls(final String url) {
+        final List<URL> seedUrls = new ArrayList<>();
+        final SiteMapParser siteMapParser = new SiteMapParser(false, true);
+        try {
+            final AbstractSiteMap abstractSiteMap = siteMapParser.parseSiteMap(new URL(url + "/sitemap.xml"));
+            walkSiteMap(abstractSiteMap, seedUrls);
+        } catch (UnknownFormatException | IOException e) {
+            LOG.error(e.getMessage());
+        }
+        return seedUrls;
+    }
+
+    private void walkSiteMap(final AbstractSiteMap abstractSiteMap, final List<URL> seedUrls) {
+        if (abstractSiteMap.isIndex()) {
+            final Collection<AbstractSiteMap> siteMaps = ((SiteMapIndex) abstractSiteMap).getSitemaps();
+            siteMaps.stream().forEach(siteMapIndex -> {
+                walkSiteMap(siteMapIndex, seedUrls);
+            });
+        } else {
+            final Collection<SiteMapURL> siteMapUrls = ((SiteMap) abstractSiteMap).getSiteMapUrls();
+            siteMapUrls.stream().forEach(siteMapUrl -> {
+                seedUrls.add(siteMapUrl.getUrl());
+            });
+
+        }
     }
 
     private boolean clearIndex(UUID siteId, UUID siteSecret) {

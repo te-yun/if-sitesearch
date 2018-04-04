@@ -77,8 +77,10 @@ private lateinit var siteSearchSetupUrl: HTMLDivElement
 private lateinit var triggerButton: HTMLButtonElement
 private lateinit var url: HTMLInputElement
 private lateinit var email: HTMLInputElement
+private lateinit var sitemapsIgnore: HTMLInputElement
 
 fun showInitCode() {
+    sitemapsIgnore = document.getElementById("sitemapsIgnore") as HTMLInputElement
     email = document.getElementById("email") as HTMLInputElement
     url = document.getElementById("url") as HTMLInputElement
     integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
@@ -208,8 +210,9 @@ private fun insertSiteIdIntoIntegrationCode() {
 external fun encodeURIComponent(str: String): String
 private var crawlerPageCount: Int = 0
 fun startCrawler() {
+    console.warn("sitemapsOnly: ${!sitemapsIgnore.checked}")
     val xhr = XMLHttpRequest()
-    xhr.open("POST", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(url.value)}&token=$captchaResult&email=${email.value}")
+    xhr.open("POST", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(url.value)}&token=$captchaResult&email=${email.value}&sitemapsOnly=${!sitemapsIgnore.checked}")
     xhr.onload = {
         console.warn(xhr.responseText)
         if (xhr.status.equals(200)) {

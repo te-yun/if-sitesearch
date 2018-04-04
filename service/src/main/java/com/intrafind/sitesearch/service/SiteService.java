@@ -65,6 +65,7 @@ import java.util.stream.Collectors;
 @Service
 public class SiteService {
     private static final Logger LOG = LoggerFactory.getLogger(SiteService.class);
+    private static final UUID ADMIN_SITE_SECRET = UUID.fromString(System.getenv("ADMIN_SITE_SECRET"));
 
     private static final Index INDEX_SERVICE = IfinderCoreClient.newHessianClient(Index.class, Application.IFINDER_CORE + "/index");
     private static final String SITE_CONFIGURATION_DOCUMENT_PREFIX = "site-configuration-";
@@ -109,8 +110,6 @@ public class SiteService {
         LOG.info("siteId: " + siteId + " - bodySize: " + page.getBody().length() + " - titleSize: " + page.getTitle().length() + " - URL: " + page.getUrl());
         return fetchById(id);
     }
-
-    private static final UUID ADMIN_SITE_SECRET = UUID.fromString(System.getenv("ADMIN_SITE_SECRET"));
 
     public Optional<SiteProfile> fetchSiteProfile(UUID siteId, UUID siteSecret) {
         if (ADMIN_SITE_SECRET.equals(siteSecret)) {

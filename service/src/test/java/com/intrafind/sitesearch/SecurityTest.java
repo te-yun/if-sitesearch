@@ -61,8 +61,6 @@ public class SecurityTest {
         this.mockMvc = webAppContextSetup(webApplicationContext).build();
     }
 
-    // TODO add CORS checks
-
     @Test
     public void fetchIndexHtml() throws Exception {
         mockMvc.perform(get("/index.html"))
