@@ -141,7 +141,7 @@ public class LoadTest {
             assertNotNull(response.body());
         } else {
             final Hits result = MAPPER.readValue(response.body().charStream(), Hits.class);
-            assertEquals(queryHits, result.getResults().size());
+            assertTrue(queryHits < result.getResults().size());
             assertEquals(randomQuery, result.getQuery());
         }
         response.close();
