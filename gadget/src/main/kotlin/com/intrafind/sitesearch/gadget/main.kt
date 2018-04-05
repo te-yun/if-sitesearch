@@ -187,12 +187,15 @@ private fun applyQueryOverrides() {
             document.cookie.substring(document.cookie.indexOf("override-site") + 14, document.cookie.indexOf("override-site") + 14 + 36) // relies on cookie-setting code in embedding iframe container
         else -> ""
     }
+    console.warn("window.location ${window.location}")
+    console.warn("document.cookie ${document.cookie}")
     websiteUrl = when {
         window.location.search.indexOf("url=") != -1 -> window.location.search.substring(window.location.search.indexOf("url=") + 4)
         document.cookie.indexOf("sis.websiteUrl") != -1 -> document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15)
                 .substring(0, document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).indexOf(";")) // relies on cookie-setting code in embedding iframe container
-        else -> ""
+        else -> "Valid Site" // just a pseudo message to avoid blank field
     }
+    console.warn("websiteUrl $websiteUrl")
     if (siteId.isNotEmpty()) {
         url.value = websiteUrl
         url.readOnly = true
