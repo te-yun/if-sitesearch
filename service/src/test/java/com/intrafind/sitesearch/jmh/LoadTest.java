@@ -72,11 +72,11 @@ public class LoadTest {
     private static final UUID LOAD_SITE_ID = UUID.fromString("563714f1-96c0-4500-b366-4fc7e734fa1d");
 
     static {
-        SEARCH_QUERIES.put("hypothek", 50);
-        SEARCH_QUERIES.put("swiss", 40);
-        SEARCH_QUERIES.put("migros", 50);
-        SEARCH_QUERIES.put("investieren", 50);
-        SEARCH_QUERIES.put("\uD83E\uDD84", 0);
+        SEARCH_QUERIES.put("hypothek", 40);
+        SEARCH_QUERIES.put("swiss", 30);
+        SEARCH_QUERIES.put("migros", 40);
+        SEARCH_QUERIES.put("investieren", 40);
+        SEARCH_QUERIES.put("\uD83E\uDD84", -1);
 
         AUTOCOMPLETE_QUERIES.put("hyp", 0);
         AUTOCOMPLETE_QUERIES.put("swi", 7);
