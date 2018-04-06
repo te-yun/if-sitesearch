@@ -18,6 +18,10 @@
             IFS.initClient({
                 customConfig: {
                     overwrite: {
+                        "components.searchbar.typeaheadProps.hint": false,
+                        "components.searchbar.resultlist.resulttype.all.hitTemplate": "hit-template",
+                        // Replace "/data/sitesearch.hbs" with actual url to Template
+                        "components.searchbar.templatesUrl": "2018-04-06/config/migros.hbs",
                         "appLang": "en"
                     }
                 },
@@ -30,3 +34,5 @@
         });
     </script>
 </div>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.sitesearch.cloud/searchbar/2018-04-06/config/migros.css">
