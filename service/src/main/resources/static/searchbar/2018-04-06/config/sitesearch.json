@@ -32,6 +32,7 @@
         "autocomplete"
       ],
       "facets": {
+        "facetEntryTemplate": "app/templates/default/facet-entry.hbs",
         "template": "app/templates/default/filters.hbs",
         "visible": false,
         "enabled": false,

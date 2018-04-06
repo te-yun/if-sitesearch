@@ -191,10 +191,12 @@ private fun applyQueryOverrides() {
     console.warn("window.location.href ${window.location.href}")
     console.warn("window.location.search ${window.location.search}")
     console.warn("document.cookie ${document.cookie}")
+    console.warn("document.cookie.indexOf(\"sis.websiteUrl\") ${document.cookie.indexOf("sis.websiteUrl")}")
+    console.warn(document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15))
     websiteUrl = when {
         document.cookie.indexOf("sis.websiteUrl") != -1 -> document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15)
                 .substring(0, document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).indexOf(";")) // relies on cookie-setting code in embedding iframe container
-        window.location.search.indexOf("url=") != -1 -> window.location.search.substring(window.location.search.indexOf("url=") + 4)
+//        window.location.search.indexOf("url=") != -1 -> window.location.search.substring(window.location.search.indexOf("url=") + 4)
         else -> "Valid Site" // just a pseudo message to avoid blank field
     }
     console.warn("websiteUrl $websiteUrl")
