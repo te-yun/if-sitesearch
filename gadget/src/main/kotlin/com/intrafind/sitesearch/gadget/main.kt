@@ -155,7 +155,8 @@ private fun validateDomain() {
 }
 
 private fun allowedToCrawl(xhr: XMLHttpRequest) =
-        xhr.status.equals(200) && ((JSON.parse<dynamic>(xhr.responseText).code as Short).equals(200) || (JSON.parse<dynamic>(xhr.responseText).code as Short).equals(302))
+        xhr.status.equals(200)
+                && ((JSON.parse<dynamic>(xhr.responseText).statusCode as Short).equals(200) || (JSON.parse<dynamic>(xhr.responseText).statusCode as Short).equals(302))
 
 private var isValidSetup: Boolean = false
 private fun classifyUrlAsValid(isValid: Boolean) {
