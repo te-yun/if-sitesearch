@@ -189,6 +189,10 @@ private fun applyQueryOverrides() {
     }
     console.warn(">>>>>> " + document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15)
             .substring(0, document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).indexOf(";")))
+    console.warn(">>>>>>0 " + document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15)
+            .substring(0, document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).indexOf(";")).length)
+    console.warn(">>>>>>1 " + document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15))
+    console.warn(">>>>>>2 " + document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).length)
     websiteUrl = when {
         document.cookie.indexOf("sis.websiteUrl") != -1 -> document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15)
                 .substring(0, document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).indexOf(";")) // relies on cookie-setting code in embedding iframe container
