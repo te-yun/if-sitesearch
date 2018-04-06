@@ -187,15 +187,14 @@ private fun applyQueryOverrides() {
             document.cookie.substring(document.cookie.indexOf("override-site") + 14, document.cookie.indexOf("override-site") + 14 + 36) // relies on cookie-setting code in embedding iframe container
         else -> ""
     }
-    console.warn(">>>>>> " + document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15)
-            .substring(0, document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).indexOf(";")))
-    console.warn(">>>>>>0 " + document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15)
-            .substring(0, document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).indexOf(";")).length)
-    console.warn(">>>>>>1 " + document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15))
-    console.warn(">>>>>>2 " + document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).length)
+    val longExtraction = document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15)
+            .substring(0, document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).indexOf(";"))
+    val shortExtraction = document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15)
+    console.warn("|${longExtraction}|")
+    console.warn("|${shortExtraction}|")
     websiteUrl = when {
-        document.cookie.indexOf("sis.websiteUrl") != -1 -> document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15)
-                .substring(0, document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).indexOf(";")) // relies on cookie-setting code in embedding iframe container
+        longExtraction.isNotEmpty() -> longExtraction // relies on cookie-setting code in embedding iframe container
+        shortExtraction.isNotEmpty() -> shortExtraction // relies on cookie-setting code in embedding iframe container
 //        window.location.search.indexOf("url=") != -1 -> window.location.search.substring(window.location.search.indexOf("url=") + 4)
         else -> "Valid Site" // just a pseudo message to avoid blank field
     }
