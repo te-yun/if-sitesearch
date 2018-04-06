@@ -8,4 +8,4 @@ ENV SPRING_CONFIG_NAME application, prod
 
 EXPOSE 8001
 
-CMD java -jar -Xms64m -Xmx64m service/*.jar
+CMD java -jar -Xms128m -Xmx128m service/*.jar

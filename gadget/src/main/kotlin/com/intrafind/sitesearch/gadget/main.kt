@@ -54,7 +54,6 @@ fun triggerFirstUsageOwnership() {
         document.dispatchEvent(Event("sis.triggerFirstUsageOwnershipEvent"))
     }
     xhr.setRequestHeader("content-type", "application/json")
-//    xhr.send(JSON.stringify(SiteProfileCreation(setOf(url.value), email.value, !sitemapsIgnore.checked)))
     xhr.send(JSON.stringify(SiteProfileCreation(setOf(SiteProfileConfig(url.value, "", !sitemapsIgnore.checked)), email.value)))
 }
 
@@ -189,11 +188,13 @@ private fun applyQueryOverrides() {
         else -> ""
     }
     console.warn("window.location ${window.location}")
+    console.warn("window.location.href ${window.location.href}")
+    console.warn("window.location.search ${window.location.search}")
     console.warn("document.cookie ${document.cookie}")
     websiteUrl = when {
-        window.location.search.indexOf("url=") != -1 -> window.location.search.substring(window.location.search.indexOf("url=") + 4)
         document.cookie.indexOf("sis.websiteUrl") != -1 -> document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15)
                 .substring(0, document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).indexOf(";")) // relies on cookie-setting code in embedding iframe container
+        window.location.search.indexOf("url=") != -1 -> window.location.search.substring(window.location.search.indexOf("url=") + 4)
         else -> "Valid Site" // just a pseudo message to avoid blank field
     }
     console.warn("websiteUrl $websiteUrl")
