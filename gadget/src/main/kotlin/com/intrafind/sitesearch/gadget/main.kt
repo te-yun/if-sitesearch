@@ -187,12 +187,8 @@ private fun applyQueryOverrides() {
             document.cookie.substring(document.cookie.indexOf("override-site") + 14, document.cookie.indexOf("override-site") + 14 + 36) // relies on cookie-setting code in embedding iframe container
         else -> ""
     }
-    console.warn("window.location ${window.location}")
-    console.warn("window.location.href ${window.location.href}")
-    console.warn("window.location.search ${window.location.search}")
-    console.warn("document.cookie ${document.cookie}")
-    console.warn("document.cookie.indexOf(\"sis.websiteUrl\") ${document.cookie.indexOf("sis.websiteUrl")}")
-    console.warn(document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15))
+    console.warn(">>>>>> " + document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15)
+            .substring(0, document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).indexOf(";")))
     websiteUrl = when {
         document.cookie.indexOf("sis.websiteUrl") != -1 -> document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15)
                 .substring(0, document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).indexOf(";")) // relies on cookie-setting code in embedding iframe container
