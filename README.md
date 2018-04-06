@@ -32,7 +32,7 @@ Required environment variables:
     * GITHUB_PUBLIC_ACCESS_TOKEN="your long living GitHub token"
     * DEV_SKIP_FLAG="true" # skip some oAuth2 checks in integration tests to enable additional test scenarios   
 
-An example can be found in set-local-dev-dummy-env.sh
+...set dummy values for these environment variables using `./set-local-dev-dummy-env.sh` to run the service.
 
 # OSS community contributions are appreciated 🤓☺️ 
 
