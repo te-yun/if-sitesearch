@@ -79,12 +79,12 @@ public class LoadTest {
         SEARCH_QUERIES.put("\uD83E\uDD84", -1);
 
         AUTOCOMPLETE_QUERIES.put("hyp", 0);
-        AUTOCOMPLETE_QUERIES.put("swi", 7);
+        AUTOCOMPLETE_QUERIES.put("swi", 6);
         AUTOCOMPLETE_QUERIES.put("mig", 1);
         AUTOCOMPLETE_QUERIES.put("inv", 8);
         AUTOCOMPLETE_QUERIES.put("bank", 1);
         AUTOCOMPLETE_QUERIES.put("fond", 1);
-        AUTOCOMPLETE_QUERIES.put("welt", 7);
+        AUTOCOMPLETE_QUERIES.put("welt", 5);
         AUTOCOMPLETE_QUERIES.put("\uD83E\uDD84", -1);
 
 //        SEARCH_DATA.put(UUID.fromString("91cbbd1c-aa40-4c67-9036-d5d03f3e9f83"), SEARCH_QUERIES); // microsoft.com
