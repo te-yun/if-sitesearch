@@ -58,7 +58,7 @@ public class LoadTest {
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
             .pingInterval(1, TimeUnit.SECONDS)
-            .retryOnConnectionFailure(true)
+//            .retryOnConnectionFailure(true)
             .followRedirects(false)
             .followSslRedirects(false)
             .build();
@@ -87,9 +87,6 @@ public class LoadTest {
         AUTOCOMPLETE_QUERIES.put("welt", 5);
         AUTOCOMPLETE_QUERIES.put("\uD83E\uDD84", -1);
 
-//        SEARCH_DATA.put(UUID.fromString("91cbbd1c-aa40-4c67-9036-d5d03f3e9f83"), SEARCH_QUERIES); // microsoft.com
-//        SEARCH_DATA.put(UUID.fromString("63cff678-02f8-493e-a783-47c3eb76af70"), SEARCH_QUERIES); // jusmeum.de
-//        SEARCH_DATA.put(UUID.fromString("8e0af062-cb74-4529-9b7b-47ca1c101ae8"), SEARCH_QUERIES); // www.migrosbank.ch/de/
         SEARCH_DATA.put(LOAD_SITE_ID, SEARCH_QUERIES); // https://www.migrosbank.ch/de, https://blog.migrosbank.ch/de
         AUTOCOMPLETE_DATA.put(LOAD_SITE_ID, AUTOCOMPLETE_QUERIES); // https://www.migrosbank.ch/de, https://blog.migrosbank.ch/de
     }
@@ -102,7 +99,7 @@ public class LoadTest {
 //                .include(LoadIndex2Users.class.getSimpleName())
                 .include(LoadTest.class.getSimpleName())
                 .forks(1)
-                .threads(200)
+                .threads(150)
                 .mode(Mode.Throughput)
                 .resultFormat(ResultFormatType.JSON)
                 .result("build/jmh-result.json")
