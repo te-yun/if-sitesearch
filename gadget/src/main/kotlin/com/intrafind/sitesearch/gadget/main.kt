@@ -54,7 +54,7 @@ fun triggerFirstUsageOwnership() {
         document.dispatchEvent(Event("sis.triggerFirstUsageOwnershipEvent"))
     }
     xhr.setRequestHeader("content-type", "application/json")
-    xhr.send(JSON.stringify(SiteProfileCreation(setOf(SiteProfileConfig(url.value, "", !sitemapsIgnore.checked)), email.value)))
+    xhr.send(JSON.stringify(SiteProfileCreation(setOf(SiteProfileConfig(url.value, encodeURIComponent(cssSelector.value), !sitemapsIgnore.checked)), email.value)))
 }
 
 @JsName("overrideSite")
@@ -79,8 +79,12 @@ private lateinit var url: HTMLInputElement
 private lateinit var email: HTMLInputElement
 private lateinit var sitemapsIgnore: HTMLInputElement
 private lateinit var sitemapContainer: HTMLDivElement
+private lateinit var cssSelector: HTMLInputElement
+private lateinit var cssSelectorContainer: HTMLDivElement
 
 fun showInitCode() {
+    cssSelectorContainer = document.getElementById("cssSelectorContainer") as HTMLDivElement
+    cssSelector = document.getElementById("cssSelector") as HTMLInputElement
     sitemapContainer = document.getElementById("sitemapContainer") as HTMLDivElement
     sitemapsIgnore = document.getElementById("sitemapsIgnore") as HTMLInputElement
     email = document.getElementById("email") as HTMLInputElement
@@ -210,6 +214,7 @@ private fun applyQueryOverrides() {
         emailContainer.style.display = "none"
         siteIdBox.style.display = "none"
         sitemapContainer.style.display = "none"
+        cssSelectorContainer.style.display = "none"
     }
 }
 
@@ -221,7 +226,7 @@ external fun encodeURIComponent(str: String): String
 private var crawlerPageCount: Int = 0
 fun startCrawler() {
     val xhr = XMLHttpRequest()
-    xhr.open("POST", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(url.value)}&token=$captchaResult&email=${email.value}&sitemapsOnly=${!sitemapsIgnore.checked}")
+    xhr.open("POST", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(url.value)}&token=$captchaResult&email=${email.value}&sitemapsOnly=${!sitemapsIgnore.checked}&pageBodyCssSelector=${encodeURIComponent(cssSelector.value)}")
     xhr.onload = {
         console.warn(xhr.responseText)
         if (xhr.status.equals(200)) {

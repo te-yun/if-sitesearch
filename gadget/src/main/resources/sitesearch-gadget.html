@@ -58,7 +58,14 @@
         <div class="tipsy-container">
             <input type="text" id="url"
                    placeholder="Website URL, e.g. https://sitesearch.cloud"
-                   value="https://sitesearch.cloud">
+                   value="https://sitesearch.cloud"
+                   onclick="ga('send', {
+                     hitType: 'event',
+                     eventCategory: 'GSG',
+                     eventAction: 'click',
+                     eventLabel: 'url'
+                   });"
+            >
             <div class="tipsy"
                  title="Provide the URL of your website to create an initial index for your website.">
             </div>
@@ -73,8 +80,8 @@
             Ignore Sitemaps
         </label>
         <div class="tipsy-container">
-            <input type="checkbox" id="sitemapsIgnore"
-                   checked>
+            <input type="checkbox" id="sitemapsIgnore" class="if-checkbox" checked>
+            <label for="sitemapsIgnore">&nbsp;</label>
             <div class="tipsy"
                  title="Ignore <a href='https://www.sitemaps.org/protocol.html'>Sitemaps</a> while crawling a site.
                  Only crawl pages that are accessible through links on other pages of the crawled site."></div>
@@ -95,20 +102,20 @@
         </div>
     </div>
 
-    <!--<div class="form-inline" id="cssSelector-container">-->
-    <!--<label for="cssSelector">-->
-    <!--<span class="fa fa-cut"></span>-->
-    <!--CSS Content Selector-->
-    <!--</label>-->
-    <!--<div class="tipsy-container">-->
-    <!--<input type="text" id="cssSelector"-->
-    <!--placeholder="#page-content-CSS-element-ID-selector"-->
-    <!--value="body">-->
-    <!--<div class="tipsy"-->
-    <!--title="The CSS selector which is used to match a subdivision of the body and extract its content.-->
-    <!--If nothing is provided, the content is extracted from the body tag."></div>-->
-    <!--</div>-->
-    <!--</div>-->
+    <div class="form-inline" id="cssSelectorContainer">
+        <label for="cssSelector">
+            <span class="fa fa-cut"></span>
+            CSS Content Selector
+        </label>
+        <div class="tipsy-container">
+            <input type="text" id="cssSelector"
+                   placeholder="#page-content-CSS-element-ID-selector"
+                   value="body">
+            <div class="tipsy"
+                 title="The CSS selector which is used to match a subdivision of the body and extract its content.
+    If nothing is provided, the content is extracted from the body tag."></div>
+        </div>
+    </div>
 
     <div class="form-inline" id="siteId-container">
         <label for="siteId">

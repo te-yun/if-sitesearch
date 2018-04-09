@@ -31,6 +31,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -141,10 +142,14 @@ public class SiteCrawler extends WebCrawler {
 
     private String extractTextFromMixedHtml(String body, String pageBodyCssSelector) {
         final Document docPage = Jsoup.parse(body);
-        final String extractedPageBody = docPage.body().selectFirst(pageBodyCssSelector).text();
-        final String rawPageBody = docPage.body().text();
-        LOG.debug("extractedPageBody: " + extractedPageBody);
-        LOG.debug("rawPageBody == extractedPageBody: " + rawPageBody.equals(extractedPageBody));
-        return rawPageBody;
+        final Element selectedBodyFragment = docPage.body().selectFirst(pageBodyCssSelector);
+        if (selectedBodyFragment == null) {
+            return docPage.body().text();
+        }
+        final String extractedPageBody = selectedBodyFragment.text();
+        if (extractedPageBody.isEmpty()) {
+            return docPage.body().text();
+        }
+        return extractedPageBody;
     }
 }

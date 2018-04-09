@@ -138,6 +138,8 @@ public class CrawlerTest {
         });
     }
 
+    // TODO test if sitemapsOnly site profile flag is respected
+    // TODO test if pageBodyCssSelector site profile info is respected
     @Test
     public void recrawl() {
         final SitesCrawlStatus freshlyCrawledSiteStatus = new SitesCrawlStatus(new HashSet<>(Arrays.asList(new CrawlStatus(CRAWL_SITE_ID, Instant.now(), -1))));

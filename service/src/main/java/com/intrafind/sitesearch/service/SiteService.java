@@ -182,14 +182,6 @@ public class SiteService {
         INDEX_SERVICE.index(siteConfiguration);
     }
 
-//    private void storeSite(UUID siteId, UUID siteSecret, Set<URI> urls, String email) {
-//        final Set<SiteProfile.Config> configs = new HashSet<>();
-//        urls.forEach(siteUrl -> {
-//            configs.add(new SiteProfile.Config(siteUrl, SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false));
-//        });
-//        storeSite(siteId, siteSecret, email, configs);
-//    }
-
     private void storeSite(UUID siteId, UUID siteSecret, String email, Set<SiteProfile.Config> configs) {
         final Optional<Document> siteConfiguration = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
         final Document siteConfigDoc;
