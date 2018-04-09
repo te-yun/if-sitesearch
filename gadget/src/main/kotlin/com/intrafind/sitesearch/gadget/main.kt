@@ -16,6 +16,7 @@
 
 package com.intrafind.sitesearch.gadget
 
+import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLButtonElement
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLInputElement
@@ -164,11 +165,19 @@ private fun allowedToCrawl(xhr: XMLHttpRequest) =
 private var isValidSetup: Boolean = false
 private fun classifyUrlAsValid(isValid: Boolean) {
     if (isValid) {
-        websiteUrlContainer.removeClass("invalidUrl")
+        validateField(websiteUrlContainer, true)
         isValidSetup = true
     } else {
-        websiteUrlContainer.addClass("invalidUrl")
+        validateField(websiteUrlContainer, false)
         isValidSetup = false
+    }
+}
+
+private fun validateField(container: HTMLElement, isValid: Boolean) {
+    if (isValid) {
+        container.removeClass("invalidField")
+    } else {
+        container.addClass("invalidField")
     }
 }
 
