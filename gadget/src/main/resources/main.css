@@ -67,7 +67,7 @@ h3 {
 }
 
 .form-inline > label {
-    width: 150px;
+    width: 220px;
     margin-top: 8px;
     font-size: 16px;
     color: #777;
@@ -114,26 +114,27 @@ h3 .tipsy {
     color: #767676;
 }
 
-.form-inline.defaultValidity input[type="text"] {
-    background: #c4e9c2;
-}
-
-.form-inline.invalidUrl input[type="text"] {
+.form-inline.invalidField input[type="text"] {
     background: #eac2c0;
 }
 
 .form-inline .error {
+    display: none;
     margin: 5px 40px 0 10px;
     color: #f1172b;
     font-weight: bold;
 }
 
-.form-inline.defaultValidity .error {
-    display: none;
+.form-inline.invalidField .error {
+    display: block;
 }
 
-.form-inline.invalidUrl .error {
-    display: block;
+.form-inline.defaultValidity input[type="text"] {
+    background: #c4e9c2;
+}
+
+.form-inline.invalidField input[type="text"] {
+    background: #eac2c0;
 }
 
 .form-inline input[type="text"]:focus {
