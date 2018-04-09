@@ -16,9 +16,9 @@
 
 package com.intrafind.sitesearch.gadget
 
-import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLButtonElement
 import org.w3c.dom.HTMLDivElement
+import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLTextAreaElement
 import org.w3c.dom.events.Event
@@ -209,7 +209,7 @@ private fun applyQueryOverrides() {
         longExtraction.isNotEmpty() -> longExtraction // relies on cookie-setting code in embedding iframe container
         shortExtraction.isNotEmpty() -> shortExtraction // relies on cookie-setting code in embedding iframe container
 //        window.location.search.indexOf("url=") != -1 -> window.location.search.substring(window.location.search.indexOf("url=") + 4)
-        else -> "Valid Site" // just a pseudo message to avoid blank field
+        else -> "Site Validation Warning" // just a pseudo message to avoid blank field
     }
     console.warn("websiteUrl $websiteUrl")
     if (siteId.isNotEmpty()) {
