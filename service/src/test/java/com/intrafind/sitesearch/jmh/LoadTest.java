@@ -58,7 +58,6 @@ public class LoadTest {
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
             .pingInterval(1, TimeUnit.SECONDS)
-//            .retryOnConnectionFailure(true)
             .followRedirects(false)
             .followSslRedirects(false)
             .build();

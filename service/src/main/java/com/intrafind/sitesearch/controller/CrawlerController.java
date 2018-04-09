@@ -230,7 +230,7 @@ public class CrawlerController {
                     .post(okhttp3.RequestBody.create(JSON_MEDIA_TYPE, ""))
                     .build();
             final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
-            final CaptchaVerification captchaVerification = MAPPER.readValue(response.body().byteStream(), CaptchaVerification.class);
+            final CaptchaVerification captchaVerification = MAPPER.readValue(response.body().charStream(), CaptchaVerification.class);
 
             if (captchaVerification.getSuccess() || "true".equals(DEV_SKIP_FLAG)) {
                 captchaPassed = true;
