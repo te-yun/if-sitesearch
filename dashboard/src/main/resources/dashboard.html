@@ -28,18 +28,18 @@
 
 <script src="tippy.all.min.js"></script>
 <script src="/app/runtime/kotlin.js"></script>
-<script src="/app/gadget/gadget.js"></script>
+<script src="/app/dashboard/dashboard.js"></script>
 
 <h2>Dashboard</h2>
 
-<div>
+<div class="wrapper">
     <div class="form-inline" id="siteIdContainer">
         <label for="siteId">
             <span class="fa fa-key"></span>
             Site ID
         </label>
         <div class="tipsy-container">
-            <div id="siteId" class="output">Will be generated...</div>
+            <div id="siteId" class="output">...</div>
             <div class="tipsy"
                  title="The <a href='https://sitesearch.cloud/faq'>Site ID</a> is the public identifier that is required by Site Search to provide you with search results, specific to your site.">
             </div>
@@ -51,9 +51,17 @@
             Site Secret
         </label>
         <div class="tipsy-container">
-            <div id="siteSecret" class="output">Will be generated...</div>
+            <div id="siteSecret" class="output">...</div>
             <div class="tipsy"
                  title="The Site Secret is the confidential secret that is required to modify, i.e. update your index and delete pages."></div>
         </div>
     </div>
+
+    <div class="button-wrapper">
+        <button id="index" class="button-wrapper" title="Extract content from website"
+                onclick="dashboard.com.intrafind.sitesearch.dashboard.recrawl();">
+            Recrawl &amp; Reindex Site
+        </button>
+    </div>
+
 </div>

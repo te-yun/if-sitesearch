@@ -46,10 +46,16 @@ fun init() {
 
 fun applyQueryParameters() {
     siteId = window.location.search.substring(window.location.search.indexOf("siteId=") + 7, 44)
-    siteSecret = window.location.search.substring(window.location.search.indexOf("siteSecret=") + 11, 44)
+    val siteSecretIndex = window.location.search.indexOf("siteSecret=") + 11
+    siteSecret = window.location.search.substring(siteSecretIndex, siteSecretIndex + 44)
 
-    console.warn(siteId)
-    console.warn(siteSecret)
+
+    siteIdBox.textContent = siteId
+    siteSecretBox.textContent = siteSecret
+}
+
+fun recrawl() {
+    console.warn(1)
 }
 
 class SiteSearch {
