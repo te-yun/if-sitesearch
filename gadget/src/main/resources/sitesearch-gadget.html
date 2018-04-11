@@ -65,6 +65,12 @@
                      eventAction: 'click',
                      eventLabel: 'url'
                    });"
+                   onchange="ga('send', {
+                                        hitType: 'event',
+                                        eventCategory: 'GSG',
+                                        eventAction: 'urlChanged',
+                                        eventLabel: document.getElementById('url').value
+                                      }); console.warn(1);"
             >
             <div class="tipsy"
                  title="Provide the URL of your website to create an initial index for your website.">

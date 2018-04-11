@@ -30,28 +30,28 @@ private var siteId: String = ""
 private var siteSecret: String = ""
 private val serviceUrl: String = window.location.origin
 
+private lateinit var siteIdElement: HTMLDivElement
 private lateinit var siteIdContainer: HTMLDivElement
-private lateinit var siteIdBox: HTMLDivElement
+private lateinit var siteSecretElement: HTMLDivElement
 private lateinit var siteSecretContainer: HTMLDivElement
-private lateinit var siteSecretBox: HTMLDivElement
 
-fun init() {
-    siteIdContainer = document.getElementById("siteId") as HTMLDivElement
-    siteSecretContainer = document.getElementById("siteSecret") as HTMLDivElement
-    siteIdBox = document.getElementById("siteIdContainer") as HTMLDivElement
-    siteSecretBox = document.getElementById("siteSecretContainer") as HTMLDivElement
+private fun init() {
+    siteIdElement = document.getElementById("siteId") as HTMLDivElement
+    siteSecretElement = document.getElementById("siteSecret") as HTMLDivElement
+    siteIdContainer = document.getElementById("siteIdContainer") as HTMLDivElement
+    siteSecretContainer = document.getElementById("siteSecretContainer") as HTMLDivElement
 
     applyQueryParameters()
 }
 
-fun applyQueryParameters() {
+private fun applyQueryParameters() {
     siteId = window.location.search.substring(window.location.search.indexOf("siteId=") + 7, 44)
     val siteSecretIndex = window.location.search.indexOf("siteSecret=") + 11
     siteSecret = window.location.search.substring(siteSecretIndex, siteSecretIndex + 44)
 
 
-    siteIdBox.textContent = siteId
-    siteSecretBox.textContent = siteSecret
+    siteIdElement.textContent = siteId
+    siteSecretElement.textContent = siteSecret
 }
 
 fun recrawl() {

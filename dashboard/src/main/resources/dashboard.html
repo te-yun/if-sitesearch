@@ -31,7 +31,9 @@
 <script src="/app/dashboard/dashboard.js"></script>
 
 <h2>Dashboard</h2>
-
+<p>
+    Administrative Management Console
+</p>
 <div class="wrapper">
     <div class="form-inline" id="siteIdContainer">
         <label for="siteId">
@@ -39,7 +41,7 @@
             Site ID
         </label>
         <div class="tipsy-container">
-            <div id="siteId" class="output">...</div>
+            <div id="siteId" class="output"></div>
             <div class="tipsy"
                  title="The <a href='https://sitesearch.cloud/faq'>Site ID</a> is the public identifier that is required by Site Search to provide you with search results, specific to your site.">
             </div>
@@ -51,7 +53,7 @@
             Site Secret
         </label>
         <div class="tipsy-container">
-            <div id="siteSecret" class="output">...</div>
+            <div id="siteSecret" class="output"></div>
             <div class="tipsy"
                  title="The Site Secret is the confidential secret that is required to modify, i.e. update your index and delete pages."></div>
         </div>
@@ -63,5 +65,11 @@
             Recrawl &amp; Reindex Site
         </button>
     </div>
-
 </div>
+
+<script>
+    tippy('.tipsy', {
+        arrow: true,
+        trigger: 'click'
+    });
+</script>
