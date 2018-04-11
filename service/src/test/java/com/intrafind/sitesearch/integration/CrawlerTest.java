@@ -52,6 +52,7 @@ public class CrawlerTest {
     private static final UUID CRAWL_SITE_SECRET = UUID.fromString("04a0afc6-d89a-45c9-8ba8-41d393d8d2f8");
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerTest.class);
     static final String TEST_EMAIL_ADDRESS = "DevOps - Site Search <6752dd9c.intrafind.de@emea.teams.ms>";
+    public static final int API_SITE_PAGE_COUNT = 4;
 
     @Autowired
     private TestRestTemplate caller;
@@ -106,7 +107,7 @@ public class CrawlerTest {
 
         assertEquals(HttpStatus.OK, request.getStatusCode());
         assertNotNull(request.getBody());
-        assertEquals(7, request.getBody().getPageCount());
+        assertEquals(API_SITE_PAGE_COUNT, request.getBody().getPageCount());
     }
 
     @Test
@@ -209,7 +210,7 @@ public class CrawlerTest {
     private boolean containsUpdatedSiteId(SitesCrawlStatus freshCrawlStatus) {
         boolean freshCrawlStatusCheck = false;
         for (CrawlStatus crawlStatus : freshCrawlStatus.getSites()) {
-            if (CRAWL_SITE_ID.equals(crawlStatus.getSiteId()) && 7 == crawlStatus.getPageCount()) {
+            if (CRAWL_SITE_ID.equals(crawlStatus.getSiteId()) && API_SITE_PAGE_COUNT == crawlStatus.getPageCount()) {
                 freshCrawlStatusCheck = true;
             }
         }

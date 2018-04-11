@@ -13,7 +13,7 @@ services:
       - elasticsearch_hosts=sitesearch-elasticsearch, sitesearch-elasticsearch-1, sitesearch-elasticsearch-quorum
       - HOSTNAME=sitesearch-search-service
     volumes:
-      - /srv/sitesearch-search-service:/home/app_user/mnt/sitesearch-search-service:rw
+      - /srv/sitesearch-search-service:/home/app_user/sitesearch-search-service:rw
     networks:
       - sitesearch
 
@@ -29,7 +29,7 @@ services:
       - elasticsearch_hosts=sitesearch-elasticsearch, sitesearch-elasticsearch-1, sitesearch-elasticsearch-quorum
       - HOSTNAME=sitesearch-search-service-1
     volumes:
-      - /srv/sitesearch-search-service-1:/home/app_user/mnt/sitesearch-search-service-1:rw
+      - /srv/sitesearch-search-service-1:/home/app_user/sitesearch-search-service:rw
     networks:
       - sitesearch
 
