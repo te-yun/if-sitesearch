@@ -103,14 +103,32 @@ Or what should be the first thing, I need to do, to **get started** with Site Se
     
 * After using the *Site Search Gadget* I get search results that do not correspond to the specified *siteId*.
     * Delete your browser's cookies for *api.sitesearch.cloud* and specifically the "override-site" cookie.
+ 
+* Does Site Search support categories / labels / tags?
+    * Categories as they are supported by Site Search are a flat labels list, i.e. a page can belong to many
+    categories and a category may contain many pages but no subcategories categories. A category is assigned 
+    to a page at indexation time. There many ways to assign a page to a category. Currently we support assigning
+    categories to a page via `robots.txt` declarations. Please reach out to us, to describe us the way, you want to
+    assign categories to pages.
      
 * Who is using Site Search?
     * The following website's search is powered by Site Search
         * [IntraFind Software AG](https://www.intrafind.de)
-        * intrafind.com [coming soon]
-        * analyzelaw.com [coming soon]
+        * [IntraFind Inc.](https://www.intrafind.com)
+        * [Analyze Law](https://www.analyzelaw.com)
+        * ...and many more. Just look at the bottom of [this page](https://sitesearch.cloud).
    
 # Crawler 
+
+* Sitemaps support
+    * The crawler can either crawl a site using its sitemaps or using its links. 
+    Nested sitemaps are supported as well.
+    
+* Content Extraction Selector
+    * This is a feature that gives you the opportunity to provide a CSS selector that is used
+    to extract a page's content. Instead of indexing everything in a page's body, one can limit
+    the content extraction to a subsection of a page. If the selector cannot match anything,
+    the crawling mechanism falls back to page `body` extraction.
 
 * Does the crawler support **dynamic, JavaScript generated content**?
     * Like most (all?) other crawlers, the Site Search crawler cannot extract runtime-generated content.
@@ -118,7 +136,7 @@ Or what should be the first thing, I need to do, to **get started** with Site Se
     
 * Can the crawler access sites or pages that require **authentication**, e.g. Basic Auth protected sites?
     * **Not yet**, but if this feature is frequently requested, we might consider to implement this functionality.
-        
+   
 # Search Bar
 
 * Do I need the **search bar** to use Site Search?

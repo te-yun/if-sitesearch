@@ -51,6 +51,7 @@ private fun init() {
     applyQueryParameters()
     document.addEventListener(crawlerFinishedEvent, {
         recrawl.disabled = false
+        recrawl.textContent = "Recrawl & Reindex Site"
     })
 }
 
@@ -75,9 +76,11 @@ private fun verifyCallback(token: String) {
 
 external fun encodeURIComponent(str: String): String
 fun recrawl() {
+    recrawl.disabled = true
+    recrawl.textContent = "Crawling... please give us a minute or two"
+
     val profileConfig: SiteProfileConfig = profile.configs.asDynamic()[0]
     val xhr = XMLHttpRequest()
-    console.warn(captchaResult)
     xhr.open("POST", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(profileConfig.url)}&token=$captchaResult&email=&sitemapsOnly=${profileConfig.sitemapsOnly}&pageBodyCssSelector=${encodeURIComponent(profileConfig.pageBodyCssSelector)}")
     xhr.send()
 
@@ -96,6 +99,7 @@ private fun fetchProfile() {
     xhr.open("GET", "$serviceUrl/sites/$siteId/profile?siteSecret=$siteSecret")
     xhr.send()
     xhr.onload = {
+        console.warn(xhr.responseText)
         profile = JSON.parse(xhr.responseText)
         ""
     }
