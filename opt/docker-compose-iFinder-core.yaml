@@ -41,7 +41,7 @@ services:
       - unicast_hosts=sitesearch-elasticsearch:9300, sitesearch-elasticsearch-1:9300, sitesearch-elasticsearch-quorum:9300
       - minimum_master_nodes=2
     volumes:
-      - /srv/sitesearch-elasticsearch/data:/srv/data:rw
+      - /srv/sitesearch-elasticsearch/data:/home/app_user/data:rw
     networks:
       - sitesearch
 
@@ -53,7 +53,7 @@ services:
       - unicast_hosts=sitesearch-elasticsearch:9300, sitesearch-elasticsearch-1:9300, sitesearch-elasticsearch-quorum:9300
       - minimum_master_nodes=2
     volumes:
-      - /srv/sitesearch-elasticsearch-1/data:/srv/data:rw
+      - /srv/sitesearch-elasticsearch-1/data:/home/app_user/data:rw
     networks:
       - sitesearch
 
@@ -66,7 +66,7 @@ services:
       - minimum_master_nodes=2
       - ELASTICSEARCH_NODE_DATA=false
     volumes:
-      - /srv/sitesearch-elasticsearch-quorum/data:/srv/data:rw
+      - /srv/sitesearch-elasticsearch-quorum/data:/home/app_user/data:rw
     networks:
       - sitesearch
 
