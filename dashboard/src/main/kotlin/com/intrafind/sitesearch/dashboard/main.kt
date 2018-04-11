@@ -16,7 +16,11 @@
 
 package com.intrafind.sitesearch.dashboard
 
+import com.intrafind.sitesearch.dashboard.SiteSearch.Companion.crawlerFinishedEvent
+import org.w3c.dom.HTMLButtonElement
 import org.w3c.dom.HTMLDivElement
+import org.w3c.dom.events.Event
+import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
 import kotlin.browser.window
 
@@ -34,30 +38,76 @@ private lateinit var siteIdElement: HTMLDivElement
 private lateinit var siteIdContainer: HTMLDivElement
 private lateinit var siteSecretElement: HTMLDivElement
 private lateinit var siteSecretContainer: HTMLDivElement
+private lateinit var recrawl: HTMLButtonElement
+private lateinit var profile: SiteProfile
 
 private fun init() {
     siteIdElement = document.getElementById("siteId") as HTMLDivElement
     siteSecretElement = document.getElementById("siteSecret") as HTMLDivElement
     siteIdContainer = document.getElementById("siteIdContainer") as HTMLDivElement
     siteSecretContainer = document.getElementById("siteSecretContainer") as HTMLDivElement
+    recrawl = document.getElementById("recrawl") as HTMLButtonElement
 
     applyQueryParameters()
+    document.addEventListener(crawlerFinishedEvent, {
+        recrawl.disabled = false
+    })
 }
 
 private fun applyQueryParameters() {
     siteId = window.location.search.substring(window.location.search.indexOf("siteId=") + 7, 44)
     val siteSecretIndex = window.location.search.indexOf("siteSecret=") + 11
     siteSecret = window.location.search.substring(siteSecretIndex, siteSecretIndex + 44)
-
+    fetchProfile()
 
     siteIdElement.textContent = siteId
     siteSecretElement.textContent = siteSecret
 }
 
+@JsName("captchaResult")
+lateinit var captchaResult: String
+
+@JsName("verifyCallback")
+private fun verifyCallback(token: String) {
+    captchaResult = token
+    recrawl.disabled = false
+}
+
+external fun encodeURIComponent(str: String): String
 fun recrawl() {
-    console.warn(1)
+    val profileConfig: SiteProfileConfig = profile.configs.asDynamic()[0]
+    val xhr = XMLHttpRequest()
+    console.warn(captchaResult)
+    xhr.open("POST", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(profileConfig.url)}&token=$captchaResult&email=&sitemapsOnly=${profileConfig.sitemapsOnly}&pageBodyCssSelector=${encodeURIComponent(profileConfig.pageBodyCssSelector)}")
+    xhr.send()
+
+    xhr.onload = {
+        console.warn(xhr.responseText)
+        if (xhr.status.equals(200)) {
+            document.dispatchEvent(Event(crawlerFinishedEvent))
+        } else {
+            console.error("FAILED")
+        }
+    }
+}
+
+private fun fetchProfile() {
+    val xhr = XMLHttpRequest()
+    xhr.open("GET", "$serviceUrl/sites/$siteId/profile?siteSecret=$siteSecret")
+    xhr.send()
+    xhr.onload = {
+        profile = JSON.parse(xhr.responseText)
+        ""
+    }
 }
 
 class SiteSearch {
-    companion object
+    companion object {
+        const val crawlerFinishedEvent = "sis.crawlerFinished"
+        val captchaSiteKey = "6LflVEQUAAAAANVEkwc63uQX96feH1H_6jDU-Bn5"
+    }
 }
+
+data class SiteProfileConfig(val url: String = "", val pageBodyCssSelector: String = "body", val sitemapsOnly: Boolean = false)
+
+data class SiteProfile(val id: String = "", val secret: String = "", val configs: List<SiteProfileConfig> = emptyList(), val email: String = "")
