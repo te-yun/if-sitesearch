@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <meta charset="utf-8">
-<title>Searchbar Test | Site Search</title>
+<title>Searchbar | Site Search</title>
 
 <div id="sitesearch-searchbar" class="searchbar">
-    <link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/searchbar/2018-04-06/app/css/app.css">
+    <link rel="stylesheet" type="text/css" href="2018-04-06/app/css/app.css">
     <div class="container">
         <div id="searchbar" class="ifs-component ifs-sb"></div>
         <div id="resultlist"></div>
     </div>
 
     <!--Place the integration code below, at the very end of your HTML document.-->
-    <script src="https://api.sitesearch.cloud/searchbar/2018-04-06/app/js/app.js"></script>
+    <script src="2018-04-06/app/js/app.js"></script>
     <script>
         IFS.jQuery(document).ready(function ($) {
             IFS.initClient({
@@ -19,19 +19,18 @@
                     overwrite: {
                         "components.searchbar.typeaheadProps.hint": false,
                         "components.searchbar.resultlist.resulttype.all.hitTemplate": "hit-template",
-                        // Replace "/data/sitesearch.hbs" with actual url to Template
                         "components.searchbar.templatesUrl": "2018-04-06/config/migros.hbs",
-                        "appLang": "en"
+                        "appLang": "de"
                     }
                 },
                 sbTarget: "#searchbar",
-                configurl: "https://api.sitesearch.cloud/searchbar/2018-04-06/config/sitesearch-new.json",
+                configurl: "2018-04-06/config/sitesearch.json",
                 sitesearch: true,
                 withCredentials: false,
-                siteId: "3a5dfd07-a463-45f8-863b-dfc3c9f09152"
+                siteId: "563714f1-96c0-4500-b366-4fc7e734fa1d"
             });
         });
     </script>
 </div>
 
-<link rel="stylesheet" type="text/css" href="https://api.sitesearch.cloud/searchbar/2018-04-06/config/migros.css">
+<link rel="stylesheet" type="text/css" href="2018-04-06/config/migros.css">
