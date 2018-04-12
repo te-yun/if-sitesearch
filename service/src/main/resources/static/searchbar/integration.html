@@ -13,17 +13,19 @@
     <!--Place the integration code below, at the very end of your HTML document.-->
     <script src="2018-04-06/app/js/app.js"></script>
     <script>
-        IFS.initClient({
-            customConfig: {
-                overwrite: {
-                    "appLang": "en"
-                }
-            },
-            sbTarget: "#searchbar",
-            configurl: "2018-04-06/config/sitesearch.json",
-            sitesearch: true,
-            withCredentials: false,
-            siteId: "563714f1-96c0-4500-b366-4fc7e734fa1d"
+        IFS.jQuery(document).ready(function ($) {
+            IFS.initClient({
+                customConfig: {
+                    overwrite: {
+                        "appLang": "en"
+                    }
+                },
+                sbTarget: "#searchbar",
+                configurl: "2018-04-06/config/sitesearch.json",
+                sitesearch: true,
+                withCredentials: false,
+                siteId: "563714f1-96c0-4500-b366-4fc7e734fa1d"
+            });
         });
     </script>
 </div>
