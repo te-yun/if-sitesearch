@@ -10,7 +10,7 @@
   },
   "components": {
     "searchbar": {
-      "templatesUrl": "config/sitesearch.hbs",
+      "templatesUrl": "https://cdn.sitesearch.cloud/searchbar/2018-04-06/config/sitesearch.hbs",
       "inputMaxLength": 250,
       "typeaheadProps": {
         "maxItemPerGroup": 4,
@@ -32,47 +32,38 @@
         "autocomplete"
       ],
       "facets": {
-        "template": "app/templates/default/filters.hbs",
         "facetEntryTemplate": "app/templates/default/facet-entry.hbs",
+        "template": "app/templates/default/filters.hbs",
         "visible": false,
         "enabled": false,
-        "expanded": [],
         "searchable": [
         ]
       },
       "searchbar_template": "app/templates/default/searchbar.hbs",
       "group_template": "app/templates/default/groups.hbs",
       "roles": {
-        "url": "config/sitesearch-roles.json"
+        "url": "https://cdn.sitesearch.cloud/searchbar/2018-04-06/config/sitesearch-roles.json"
       },
-      "settings_template": "app/templates/default/searchbar-settings.hbs",
-      "sources_template": "app/templates/default/searchbar-sources.hbs",
+      "indexfields": {
+        "template": "app/templates/default/indexfields.hbs"
+      },
       "resultlist": {
-        "scrollContainer": "#ifs-rl-modal",
-        "cache": {
-          "enabled": false,
-          "maxEntries": 200,
-          "maxAgeInMs": 900000
-        },
-        "scrollReloadsBeforeButtonAppears": 1000,
+        "scrollContainer": "window",
+        "scrollReloadsBeforeButtonAppears": -1,
         "templates": {
-          "resultlistWrapper": "app/templates/sitesearch/resultlist/resultlist-wrapper.hbs",
-          "resultlistContainer": "app/templates/sitesearch/resultlist/resultlist-container.hbs",
+          "resultlistWrapper": "app/templates/default/resultlist/resultlist-wrapper.hbs",
+          "resultlistContainer": "app/templates/default/resultlist/resultlist-container.hbs",
           "resultlistHeader": "app/templates/sitesearch/resultlist/resultlist-header.hbs",
           "didyoumean": "app/templates/default/resultlist/didyoumean.hbs",
-          "noresults": "app/templates/sitesearch/resultlist/noresults.hbs",
+          "noresults": "app/templates/default/resultlist/noresults.hbs",
+          "filterbar": "app/templates/default/filterbar.hbs",
           "modalTemplate": "app/templates/default/previewmodal.hbs",
           "previewContainer": "app/templates/default/preview.hbs",
-          "requestErrors": "app/templates/default/request-error.hbs",
-          "customPreviewContainer": "app/templates/default/custom-preview.hbs",
-          "previewHeader": "app/templates/default/preview-header.hbs",
-          "previewBody": "app/templates/default/preview-body.hbs",
-          "previewFooter": "app/templates/default/preview-footer.hbs",
           "hitMenu": "app/templates/default/resultlist/hit-menu.hbs"
         },
         "initialConnector": "all",
         "multiple": true,
-        "showHeader": false,
+        "showHeader": true,
         "isQuerySharedBetweenTabs": true,
         "connectors": {
           "all": {
@@ -81,13 +72,35 @@
               "filter": {
               }
             }
+          },
+          "websites": {
+            "title": "ifs.category.websites",
+            "query": {
+              "filter": {
+                "++_str.connector": [
+                  "crawler"
+                ]
+              }
+            },
+            "facetWhitelist": [
+              "_facet.author"
+            ]
           }
         },
         "resulttype": {
           "all": {
             "title": "ifs.category.all",
-            "hitTemplate": "app/templates/sitesearch/resultlist/crawler.hbs",
+            "hitTemplate": "facets-template",
             "showMenu": false
+          },
+          "crawler": {
+            "title": "ifs.category.websites",
+            "hitTemplate": "app/templates/default/resultlist/crawler.hbs",
+            "showMenu": true,
+            "menuItems": [
+              "forward",
+              "favorite"
+            ]
           }
         }
       },
@@ -97,7 +110,7 @@
           "autocomplete": {
             "name": "autocomplete",
             "wrapperTemplate": "app/templates/default/swyt/autocomplete-wrapper.hbs",
-            "itemTemplate": "app/templates/sitesearch/swyt/term.hbs",
+            "itemTemplate": "app/templates/default/swyt/term.hbs",
             "display": [
               "term"
             ],
@@ -115,7 +128,7 @@
     "css": [],
     "js": []
   },
-  "langUrlPrefix": "app/data/language/",
+  "langUrlPrefix": "https://cdn.sitesearch.cloud/searchbar/2018-04-06/app/data/language/",
   "iconPath": "searchbar/img/filetypes",
   "lyncIconPath": "searchbar/img/shared/lync",
   "defaultLang": "en",
