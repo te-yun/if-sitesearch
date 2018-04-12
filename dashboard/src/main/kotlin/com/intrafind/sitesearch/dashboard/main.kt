@@ -28,6 +28,11 @@ private suspend fun main(args: Array<String>) {
     window.addEventListener("DOMContentLoaded", {
         init()
     })
+
+    document.addEventListener(crawlerFinishedEvent, {
+        recrawl.disabled = false
+        recrawl.textContent = "Recrawl & Reindex Site"
+    })
 }
 
 private var siteId: String = ""
@@ -49,10 +54,6 @@ private fun init() {
     recrawl = document.getElementById("recrawl") as HTMLButtonElement
 
     applyQueryParameters()
-    document.addEventListener(crawlerFinishedEvent, {
-        recrawl.disabled = false
-        recrawl.textContent = "Recrawl & Reindex Site"
-    })
 }
 
 private fun applyQueryParameters() {

@@ -46,8 +46,11 @@ security:
 #  resource:
 #    userInfoUri: https://api.github.com/user
 
-sitesearch:
-  queryCountEnabled: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 
 server:
   port: 8001
