@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Searchbar | Site Search</title>
+
+<div id="sitesearch-searchbar" class="searchbar">
+    <link rel="stylesheet" type="text/css" href="2018-04-06/app/css/app.css">
+    <div class="container">
+        <div id="searchbar" class="ifs-component ifs-sb"></div>
+        <div id="resultlist"></div>
+    </div>
+
+    <!--Place the integration code below, at the very end of your HTML document.-->
+    <script src="2018-04-06/app/js/app.js"></script>
+    <script>
+        IFS.initClient({
+            customConfig: {
+                overwrite: {
+                    "components.searchbar.typeaheadProps.hint": false,
+                    "components.searchbar.resultlist.resulttype.all.hitTemplate": "hit-template",
+                    "components.searchbar.templatesUrl": "2018-04-06/config/migros.hbs",
+                    "appLang": "de"
+                }
+            },
+            sbTarget: "#searchbar",
+            configurl: "2018-04-06/config/sitesearch.json",
+            sitesearch: true,
+            withCredentials: false,
+            siteId: "563714f1-96c0-4500-b366-4fc7e734fa1d"
+        });
+    </script>
+</div>
+
+<link rel="stylesheet" type="text/css" href="2018-04-06/config/migros.css">
