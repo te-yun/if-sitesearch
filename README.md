@@ -58,6 +58,15 @@ Required environment variables:
 
 ## Release
     ./release.sh
+   
+## Set CDN Metadata
+* gsutil cors set cdn-cors-configuration.json gs://site-search-europe
+* gsutil setmeta  -h "content-encoding"  gs://site-search-europe/searchbar/2018-04-06/app/css/app.css
+* gsutil -m setmeta -r -h "Content-Encoding: gzip"  gs://site-search-europe/test5
+* gsutil -m acl -r ch -u AllUsers:READER gs://site-search-europe/test5
+* gsutil -m iam -r ch allUsers:objectViewer gs://site-search-europe/test5
+* gsutil -m cp -r ./2018-04-06 gs://site-search-europe/test3
+* gsutil -m rm -r gs://site-search-europe/test1
     
 # Attribution
 * Made with ♥ in Munich
