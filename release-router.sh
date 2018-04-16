@@ -11,6 +11,5 @@ docker run -d --name $docker_redirect_image \
     -p 80:80 \
     -p 443:443 \
     -v /etc/letsencrypt:/etc/letsencrypt \
-    -v /srv/sitesearch.cloud:/srv/sitesearch.cloud \
     --network $docker_network \
     intrafind/${docker_redirect_image}:${docker_tag}
