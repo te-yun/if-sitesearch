@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Searchbar | Site Search</title>
+
+<div id="sitesearch-searchbar" class="searchbar">
+    <link rel="stylesheet" type="text/css" href="https://cdn.sitesearch.cloud/searchbar/2018-04-06/app/css/app.css">
+    <div class="container">
+        <div id="searchbar" class="ifs-component ifs-sb"></div>
+        <div id="resultlist"></div>
+    </div>
+
+    <!--Place the integration code below, at the very end of your HTML document.-->
+    <script src="https://cdn.sitesearch.cloud/searchbar/2018-04-06/app/js/app.js"></script>
+    <script>
+        IFS.jQuery(document).ready(function ($) {
+            IFS.initClient({
+                customConfig: {
+                    overwrite: {
+                        "appLang": "en"
+                    }
+                },
+                sbTarget: "#searchbar",
+                configurl: "https://cdn.sitesearch.cloud/searchbar/2018-04-06/config/sitesearch.json",
+                sitesearch: true,
+                withCredentials: false,
+                siteId: "563714f1-96c0-4500-b366-4fc7e734fa1d"
+            });
+        });
+    </script>
+</div>
