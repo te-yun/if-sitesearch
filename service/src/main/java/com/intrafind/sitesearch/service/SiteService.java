@@ -68,7 +68,7 @@ public class SiteService {
     /**
      * Odd workaround because Windows is just broken. Can be removed once Ubuntu@Windows works properly and PowerShell is not required to run the service locally.
      */
-    private static final UUID ADMIN_SITE_SECRET = UUID.fromString(System.getenv("ADMIN_SITE_SECRET") == null ? System.getenv("ADMIN_SITE_SECRET") : System.getenv("ADMIN_SITE_SECRET"));
+    private static final UUID ADMIN_SITE_SECRET = UUID.fromString(System.getenv("ADMIN_SITE_SECRET"));
 
     private static final Index INDEX_SERVICE = IfinderCoreClient.newHessianClient(Index.class, Application.IFINDER_CORE + "/index");
     private static final String SITE_CONFIGURATION_DOCUMENT_PREFIX = "site-configuration-";
