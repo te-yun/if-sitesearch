@@ -36,10 +36,10 @@ repositories {
     jcenter()
 }
 
-//configurations {
-//    compile.exclude module: "spring-boot-starter-tomcat"
-//    compile.exclude module: "undertow-websockets-jsr"
-//}
+configurations {
+    compile.exclude module: "spring-boot-starter-tomcat"
+    compile.exclude module: "undertow-websockets-jsr"
+}
 
 dependencies {
     compile "edu.uci.ics:crawler4j:4.4.0"
@@ -53,9 +53,9 @@ dependencies {
     compile "javax.xml.bind:jaxb-api:2.3.0"
 
 //    compile "org.springframework.boot:spring-boot-starter-hateoas:$spring_boot_version"
-//    compile "org.springframework.boot:spring-boot-starter-undertow:$spring_boot_version"
     compile "org.springframework.boot:spring-boot-starter-web:$spring_boot_version"
-    compile "org.springframework.boot:spring-boot-starter-tomcat:$spring_boot_version"
+    compile "org.springframework.boot:spring-boot-starter-undertow:$spring_boot_version"
+//    compile "org.springframework.boot:spring-boot-starter-tomcat:$spring_boot_version"
 //    compile "org.springframework.boot:spring-boot-starter-jetty:$spring_boot_version"
 
     compile "io.springfox:springfox-swagger2:$swagger_version"
