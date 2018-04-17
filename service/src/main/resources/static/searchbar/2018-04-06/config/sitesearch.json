@@ -10,7 +10,7 @@
   },
   "components": {
     "searchbar": {
-      "templatesUrl": "2018-04-06/config/sitesearch.hbs",
+      "templatesUrl": "https://cdn.sitesearch.cloud/searchbar/2018-04-06/config/sitesearch.hbs",
       "indexfields": {
         "template": "app/templates/default/indexfields.hbs"
       },
@@ -46,10 +46,10 @@
       "searchbar_template": "app/templates/default/searchbar.hbs",
       "group_template": "app/templates/default/groups.hbs",
       "roles": {
-        "url": "2018-04-06/config/sitesearch-roles.json"
+        "url": "https://cdn.sitesearch.cloud/searchbar/2018-04-06/config/sitesearch-roles.json"
       },
       "sources": {
-        "url": "2018-04-06/config/sitesearch-roles.json"
+        "url": "https://cdn.sitesearch.cloud/searchbar/2018-04-06/config/sitesearch-roles.json"
       },
       "settings_template": "app/templates/default/searchbar-settings.hbs",
       "sources_template": "app/templates/default/searchbar-sources.hbs",
@@ -121,7 +121,7 @@
     "css": [],
     "js": []
   },
-  "langUrlPrefix": "2018-04-06/app/data/language/",
+  "langUrlPrefix": "https://cdn.sitesearch.cloud/searchbar/2018-04-06/app/data/language/",
   "iconPath": "searchbar/img/filetypes",
   "lyncIconPath": "searchbar/img/shared/lync",
   "defaultLang": "en",
