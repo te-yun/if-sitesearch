@@ -279,7 +279,6 @@ fun startCrawler() {
     val xhr = XMLHttpRequest()
     xhr.open("POST", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(url.value)}&token=$captchaResult&email=${email.value}&sitemapsOnly=${sitemapsOnly.checked}&pageBodyCssSelector=${encodeURIComponent(cssSelector.value)}")
     xhr.onload = {
-        console.warn(xhr.responseText)
         if (xhr.status.equals(200)) {
             crawlerPageCount = JSON.parse<dynamic>(xhr.responseText).pageCount as Int
             document.dispatchEvent(Event("sis.crawlerFinishedEvent"))

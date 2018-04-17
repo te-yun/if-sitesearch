@@ -40,17 +40,17 @@ private var siteSecret: String = ""
 private val serviceUrl: String = window.location.origin
 
 private lateinit var siteIdElement: HTMLDivElement
-private lateinit var siteIdContainer: HTMLDivElement
+//private lateinit var siteIdContainer: HTMLDivElement
 private lateinit var siteSecretElement: HTMLDivElement
-private lateinit var siteSecretContainer: HTMLDivElement
+//private lateinit var siteSecretContainer: HTMLDivElement
 private lateinit var recrawl: HTMLButtonElement
 private lateinit var profile: SiteProfile
 
 private fun init() {
     siteIdElement = document.getElementById("siteId") as HTMLDivElement
     siteSecretElement = document.getElementById("siteSecret") as HTMLDivElement
-    siteIdContainer = document.getElementById("siteIdContainer") as HTMLDivElement
-    siteSecretContainer = document.getElementById("siteSecretContainer") as HTMLDivElement
+//    siteIdContainer = document.getElementById("siteIdContainer") as HTMLDivElement
+//    siteSecretContainer = document.getElementById("siteSecretContainer") as HTMLDivElement
     recrawl = document.getElementById("recrawl") as HTMLButtonElement
 
     applyQueryParameters()
