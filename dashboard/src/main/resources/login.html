@@ -48,15 +48,18 @@
                     <form class="sis-form">
                         <label class="sis-form-siteid-label"><i class="fas fa-key"></i>Site ID</label>
                         <div class="sis-form-siteid">
-                            <input type="text" autocomplete="siteid" autofocus>
+                            <input id="user" type="text" autocomplete="user" autofocus>
                             <div class="sis-error">Error</div>
                         </div>
                         <label class="sis-form-sitesecret-label"><i class="fas fa-user-secret"></i>Site Secret</label>
                         <div class="sis-form-sitesecret">
-                            <input type="password" autocomplete="current-password">
+                            <input id="password" type="password" autocomplete="current-password">
                             <div class="sis-error">Error</div>
                         </div>
-                        <button type="submit">Login</button>
+                        <button type="submit"
+                                onclick="window.location = 'https://api.sitesearch.cloud/app/dashboard/resources/dashboard.html?siteId='+document.getElementById('user').textContent+'&siteSecret='+document.getElementById('password').textContent">
+                            Login
+                        </button>
                     </form>
                 </div>
             </div>
