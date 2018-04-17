@@ -30,7 +30,7 @@ import kotlin.dom.removeClass
 
 suspend fun main(args: Array<String>) {
     window.addEventListener("DOMContentLoaded", {
-        showInitCode()
+        init()
         js("    IFS.eventbus.addEventListener(IFS.constants.events.SEARCHBAR_RENDERED_INITIALLY, function () {" +
                 "        document.getElementById('ifs-sb-searchfield').setAttribute('placeholder', 'Search...');" +
                 "    });"
@@ -83,7 +83,7 @@ private lateinit var sitemapContainer: HTMLDivElement
 private lateinit var cssSelector: HTMLInputElement
 private lateinit var cssSelectorContainer: HTMLDivElement
 
-fun showInitCode() {
+private fun init() {
     cssSelectorContainer = document.getElementById("cssSelectorContainer") as HTMLDivElement
     cssSelector = document.getElementById("cssSelector") as HTMLInputElement
     sitemapContainer = document.getElementById("sitemapContainer") as HTMLDivElement
@@ -113,6 +113,7 @@ fun showInitCode() {
         (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = "$crawlerPageCount pages from ${url.value} have been crawled. Consider that it takes around a minute before you can find here everything we have found."
     })
 
+    applyAnalytics()
     enableProactiveValidation()
 
     val waitWhileCrawlerIsRunningMsg = "Crawler is running... please give us just a minute or two."
@@ -130,6 +131,53 @@ fun showInitCode() {
     })
 
     applyQueryOverrides()
+}
+
+private fun applyAnalytics() {
+    sitemapsOnly.addEventListener("change", {
+        js("ga('send', {" +
+                "                     hitType: 'event'," +
+                "                     eventCategory: 'GSG'," +
+                "                     eventAction: 'change'," +
+                "                     eventLabel: document.getElementById('sitemapsOnly').checked" +
+                "                   })")
+    })
+
+    cssSelector.addEventListener("change", {
+        js("ga('send', {" +
+                "                     hitType: 'event'," +
+                "                     eventCategory: 'GSG'," +
+                "                     eventAction: 'change'," +
+                "                     eventLabel: document.getElementById('cssSelector').value" +
+                "                   })")
+    })
+
+    email.addEventListener("change", {
+        js("ga('send', {" +
+                "                     hitType: 'event'," +
+                "                     eventCategory: 'GSG'," +
+                "                     eventAction: 'change'," +
+                "                     eventLabel: document.getElementById('email').value" +
+                "                   })")
+    })
+
+    url.addEventListener("change", {
+        js("ga('send', {" +
+                "                     hitType: 'event'," +
+                "                     eventCategory: 'GSG'," +
+                "                     eventAction: 'change'," +
+                "                     eventLabel: document.getElementById('url').value" +
+                "                   })")
+    })
+
+    url.addEventListener("click", {
+        js("ga('send', {" +
+                "                     hitType: 'event'," +
+                "                     eventCategory: 'GSG'," +
+                "                     eventAction: 'click'," +
+                "                     eventLabel: navigator.userAgent" +
+                "                   })")
+    })
 }
 
 private fun enableProactiveValidation() {
