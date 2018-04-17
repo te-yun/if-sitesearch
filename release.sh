@@ -18,7 +18,7 @@ docker run -d --name ${docker_image_name} \
     --log-driver=gelf \
     --log-opt gelf-address=udp://localhost:12201 \
     --env SERVICE_SECRET=$SERVICE_SECRET \
-    --env BASIC_HASH_PASSWORD=$BASIC_HASH_PASSWORD \
+    --env BASIC_HASH_PASSWORD="$BASIC_HASH_PASSWORD" \
     --env ADMIN_SITE_SECRET=$ADMIN_SITE_SECRET \
     --env RECAPTCHA_SITE_SECRET=$RECAPTCHA_SITE_SECRET \
     --env SPRING_SECURITY_USER_PASSWORD=$SPRING_SECURITY_USER_PASSWORD \
