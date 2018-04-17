@@ -1,0 +1,60 @@
+.sis-login {
+    margin: 20px auto;
+    max-width: 600px;
+
+    h2 {
+        margin-bottom: 4rem;
+    }
+
+    .sis-form {
+        display: -ms-grid;
+        -ms-grid-columns: auto 1fr;
+        -ms-grid-rows: auto;
+
+        display: grid;
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto;
+
+        > div {
+            margin-bottom: 4rem;
+        }
+
+        > label {
+            margin-right: 4rem;
+
+            .fas {
+                margin-right: 8px;
+            }
+        }
+
+        .sis-form-siteid-label {
+            -ms-grid-column: 1;
+            -ms-grid-column-span: 1;
+            -ms-grid-row: 1;
+        }
+
+        .sis-form-siteid {
+            -ms-grid-column: 2;
+            -ms-grid-column-span: 1;
+            -ms-grid-row: 1;
+        }
+
+        .sis-form-sitesecret-label {
+            -ms-grid-column: 1;
+            -ms-grid-column-span: 1;
+            -ms-grid-row: 2;
+        }
+
+        .sis-form-sitesecret {
+            -ms-grid-column: 2;
+            -ms-grid-column-span: 1;
+            -ms-grid-row: 2;
+        }
+
+        button {
+            -ms-grid-column: 2;
+            -ms-grid-column-span: 1;
+            -ms-grid-row: 3;
+        }
+    }
+}

@@ -1,0 +1,27 @@
+.sis-form {
+    label {
+        display: block;
+        margin-top: 0.8rem;
+    }
+
+    input[type='text'],
+    input[type='password'] {
+        background-color: $input-bg;
+        border: 1px solid $light-border;
+        outline: 0;
+        padding: 10px 12px;
+        width: 100%;
+    }
+
+    input[type='text']:focus,
+    input[type='password']:focus {
+        border: 1px solid $border;
+    }
+
+    button {
+        @extend button;
+        -ms-grid-column-span: 2;
+        -ms-grid-column: 2;
+        grid-column: 2/3;
+    }
+}

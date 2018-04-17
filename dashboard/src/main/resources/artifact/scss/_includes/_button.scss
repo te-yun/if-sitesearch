@@ -1,0 +1,17 @@
+button {
+    background-color: $blue;
+    border: none;
+    color: $white;
+    cursor: pointer;
+    font-size: 1.4rem;
+    font-weight: 200;
+    outline: none;
+    padding: 1.6rem;
+    text-transform: uppercase;
+}
+
+button:disabled,
+button.sis-disabled {
+    cursor: default;
+    background-color: $lightblue;
+}
