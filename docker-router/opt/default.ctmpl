@@ -88,15 +88,15 @@ http {
 
         include /etc/nginx/snippets/ssl.conf;
 
-        auth_basic "Search Service";
-        auth_basic_user_file /etc/nginx/.htpasswd; # supply this via env vars somehow or as raw file at build time
-
         location /status {
             stub_status on;
             access_log off;
         }
 
         location / {
+            auth_basic "Search Service";
+            auth_basic_user_file /etc/nginx/.htpasswd; # supply this via env vars somehow or as raw file at build time
+
             proxy_pass http://ifinder-search-service;
         }
     }
