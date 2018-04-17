@@ -61,8 +61,8 @@ import static org.junit.Assert.assertTrue;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SmokeTest {
     private static final Logger LOG = LoggerFactory.getLogger(SmokeTest.class);
-    private static final String SEARCH_SERVICE_DOMAIN = "@main.sitesearch.cloud/";
-    private static final String INVALID_CREDENTIALS = "https://" + System.getenv("SPRING_SECURITY_USER_PASSWORD") + "invalid:" + System.getenv("SPRING_SECURITY_USER_PASSWORD");
+    static final String SEARCH_SERVICE_DOMAIN = "@main.sitesearch.cloud/";
+    static final String INVALID_CREDENTIALS = "https://sitesearch:invalid" + System.getenv("SERVICE_SECRET");
     private static final String BASIC_ENCODED_PASSWORD = System.getenv("BASIC_ENCODED_PASSWORD");
     public static final String API_FRONTPAGE_MARKER = "<title>Site Search</title>";
     public static final String SITES_API = "https://api.sitesearch.cloud/sites/";

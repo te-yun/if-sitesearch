@@ -45,8 +45,6 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SecurityTest {
     private static final Logger LOG = LoggerFactory.getLogger(SecurityTest.class);
-    private static final String SEARCH_SERVICE_DOMAIN = "@main.sitesearch.cloud/";
-    private static final String INVALID_CREDENTIALS = "https://" + System.getenv("SPRING_SECURITY_USER_PASSWORD") + "invalid:" + System.getenv("SPRING_SECURITY_USER_PASSWORD");
 
     @Autowired
     private TestRestTemplate caller;
@@ -85,7 +83,7 @@ public class SecurityTest {
 
     @Test
     public void assureSiteSearchServiceBasicAuthProtectionForJsonPost() {
-        final ResponseEntity<String> secureEndpointJson = caller.postForEntity(URI.create(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "json/index?method=index"), HttpEntity.EMPTY, String.class);
+        final ResponseEntity<String> secureEndpointJson = caller.postForEntity(URI.create(SmokeTest.INVALID_CREDENTIALS + SmokeTest.SEARCH_SERVICE_DOMAIN + "json/index?method=index"), HttpEntity.EMPTY, String.class);
         assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJson.getStatusCode());
         assertNull(secureEndpointJson.getBody());
     }

@@ -32,7 +32,7 @@ import java.net.URI;
 @EnableSwagger2
 public class Application {
     private final static Logger LOG = LoggerFactory.getLogger(Application.class);
-    public static final URI IFINDER_CORE = URI.create("https://sitesearch:" + System.getenv("SERVICE_SECRET") + "@blue.sitesearch.cloud/hessian");
+    public static final URI IFINDER_CORE = URI.create("https://sitesearch:" + System.getenv("SERVICE_SECRET") + "@main.sitesearch.cloud/hessian");
 
 //    @RequestMapping(path = "/subscriptions", method = RequestMethod.POST)
 //    ResponseEntity<Object> subscriptions(
