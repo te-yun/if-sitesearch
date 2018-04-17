@@ -31,10 +31,6 @@ import kotlin.dom.removeClass
 suspend fun main(args: Array<String>) {
     window.addEventListener("DOMContentLoaded", {
         init()
-        js("    IFS.eventbus.addEventListener(IFS.constants.events.SEARCHBAR_RENDERED_INITIALLY, function () {" +
-                "        document.getElementById('ifs-sb-searchfield').setAttribute('placeholder', 'Search...');" +
-                "    });"
-        )
     })
 }
 
@@ -101,7 +97,7 @@ private fun init() {
     siteSearchSetupUrl = document.getElementById("siteSearchSetupUrl") as HTMLDivElement
     triggerButton = document.getElementById("index") as HTMLButtonElement
     val enterpriseSearchbar = document.getElementById("sitesearch-searchbar") as HTMLDivElement
-    val searchbarVersion = "2018-01-15" // when updating, update the value in the corresponding HTML container too
+    val searchbarVersion = "2018-04-06" // when updating, update the value in the corresponding HTML container too
     val siteSearchConfig = "https://cdn.sitesearch.cloud/searchbar/$searchbarVersion/config/sitesearch.json"
     val enterpriseSearchbarCode = enterpriseSearchbar.outerHTML
             .replace("/searchbar/$searchbarVersion/config/sitesearch.json", siteSearchConfig)
@@ -251,15 +247,12 @@ private fun applyQueryOverrides() {
     val longExtraction = document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15)
             .substring(0, document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).indexOf(";"))
     val shortExtraction = document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15)
-    console.warn("|${longExtraction}|")
-    console.warn("|${shortExtraction}|")
     websiteUrl = when {
         longExtraction.isNotEmpty() -> longExtraction // relies on cookie-setting code in embedding iframe container
         shortExtraction.isNotEmpty() -> shortExtraction // relies on cookie-setting code in embedding iframe container
 //        window.location.search.indexOf("url=") != -1 -> window.location.search.substring(window.location.search.indexOf("url=") + 4)
         else -> "Site Validation Warning" // just a pseudo message to avoid blank field
     }
-    console.warn("websiteUrl $websiteUrl")
     if (siteId.isNotEmpty()) {
         url.value = websiteUrl
         url.readOnly = true
