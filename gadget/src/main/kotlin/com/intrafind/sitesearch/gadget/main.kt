@@ -97,11 +97,12 @@ private fun init() {
     siteSearchSetupUrl = document.getElementById("siteSearchSetupUrl") as HTMLDivElement
     triggerButton = document.getElementById("index") as HTMLButtonElement
     val enterpriseSearchbar = document.getElementById("sitesearch-searchbar") as HTMLDivElement
-    val searchbarVersion = "2018-04-06" // when updating, update the value in the corresponding HTML container too
-    val siteSearchConfig = "https://cdn.sitesearch.cloud/searchbar/$searchbarVersion/config/sitesearch.json"
-    val enterpriseSearchbarCode = enterpriseSearchbar.outerHTML
-            .replace("/searchbar/$searchbarVersion/config/sitesearch.json", siteSearchConfig)
-    integrationCode.value = enterpriseSearchbarCode
+//    val searchbarVersion = "2018-04-06" // when updating, update the value in the corresponding HTML container too
+//    val siteSearchConfig = "https://cdn.sitesearch.cloud/searchbar/$searchbarVersion/config/sitesearch.json"
+//    val enterpriseSearchbarCode = enterpriseSearchbar.outerHTML
+//            .replace("/searchbar/$searchbarVersion/config/sitesearch.json", siteSearchConfig)
+//    integrationCode.value = enterpriseSearchbarCode
+    integrationCode.value = enterpriseSearchbar.outerHTML
 
     document.addEventListener("sis.crawlerFinishedEvent", {
         triggerButton.textContent = "Enable Search"
