@@ -1,0 +1,38 @@
+.sis-config-container {
+    max-width: 700px;
+    margin: 40px 0 80px 0;
+
+    > div {
+        display: flex;
+        margin-bottom: 40px;
+
+        > label {
+            padding-top: 8px;
+            width: 370px;
+
+            > .fas {
+                margin-right: 8px;
+            }
+        }
+
+        > div {
+            align-items: flex-end;
+            border-bottom: 1px solid $light-border;
+            color: $light-font-color;
+            display: flex;
+            font-size: 1.4rem;
+            padding: 10px 14px;
+            width: 100%;
+        }
+
+        > .sis-config-checkbox-container {
+            border: none;
+            display: block;
+            padding: 0 14px;
+        }
+    }
+}
+
+.sis-captcha-container {
+    margin-bottom: 40px;
+}

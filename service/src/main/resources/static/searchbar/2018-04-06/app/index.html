@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width,initial-scale=1" name="viewport">
+    <link rel="shortcut icon" href="favicon.ico?v=3">
+    <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-57x57.png?v=3">
+    <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-114x114.png?v=3">
+    <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-144x144.png?v=3">
+    <title>Searchbar</title>
+    <link rel="stylesheet" type="text/css" href="css/app.css" media="all"/>
+
+    <style>
+        .ifs-main {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="ifs-main">
+
+    <div id="searchbar" class="ifs-searchbar"></div>
+
+    <div id="ifs-searchareas" class="ifs-searchareas">
+        <ul>
+            <li role="presentation">
+                <a href="javascript:void(0);" id="check1" class="active" data-value="all" data-action="switch-tab">
+                    <i class="ifs-icons ifs-icon-subject"></i>
+                    <span data-globalize="ifs.category.all" data-globalize-target="text"></span>
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="javascript:void(0);" id="check2" data-value="people" data-action="switch-tab">
+                    <i class="ifs-icons ifs-icon-group"></i>
+                    <span data-globalize="ifs.category.people" data-globalize-target="text"></span>
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="javascript:void(0);" id="check3" data-value="documents" data-action="switch-tab">
+                    <i class="ifs-icons ifs-icon-description"></i>
+                    <span data-globalize="ifs.category.documents" data-globalize-target="text"></span>
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="javascript:void(0);" id="check4" data-value="websites" data-action="switch-tab">
+                    <i class="ifs-icons ifs-icon-web"></i>
+                    <span data-globalize="ifs.category.websites" data-globalize-target="text"></span>
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="javascript:void(0);" id="check5" data-value="images" data-action="switch-tab">
+                    <i class="ifs-icons ifs-icon-photo"></i>
+                    <span data-globalize="ifs.category.images" data-globalize-target="text"></span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div id="resultlist"></div>
+
+</div>
+
+<script type="text/javascript" src="js/app.js"></script>
+<script type="text/javascript">
+
+  IFS.jQuery(document).ready(function ($) {
+
+    IFS.initClient({
+      sbTarget: '#searchbar',
+      rlTarget: '#resultlist',
+      configurl: 'data/config.json',
+      sitesearch: false,
+      cors: true,
+      withCredentials: true
+    });
+
+    IFS.jQuery('body').on('click', '[data-action="switch-tab"]', function (e) {
+      e.preventDefault();
+
+      // Cache vars
+      var me = $(this);
+      var parent = me.parent();
+
+      if (!me.hasClass('disabled')) {
+
+        var oldTarget = $('#ifs-searchareas li > a.active').attr('data-value');
+        var newTarget = me.attr('data-value');
+
+        // Reset active state
+        $('#ifs-searchareas a').removeClass('active');
+        // Set active
+        me.addClass('active');
+
+        IFS.eventbus.dispatch(IFS.jQuery.ifs.constants.events.RESULT_TARGET_CHANGED, {
+          oldTarget: oldTarget,
+          newTarget: newTarget
+        });
+
+      }
+    });
+
+    IFS.eventbus.addEventListener(IFS.jQuery.ifs.constants.events.NEW_RESULT_LOADED, function (event) {
+      $('#ifs-searchareas li > a').removeClass('active');
+      $('#ifs-searchareas li > a[data-value="' + event.target.id + '"]').addClass('active');
+    });
+  });
+
+</script>
+
+</body>
+
+</html>

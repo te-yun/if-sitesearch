@@ -18,6 +18,7 @@ package com.intrafind.sitesearch.gadget
 
 import org.w3c.dom.HTMLButtonElement
 import org.w3c.dom.HTMLDivElement
+import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLTextAreaElement
 import org.w3c.dom.events.Event
@@ -27,24 +28,16 @@ import kotlin.browser.window
 import kotlin.dom.addClass
 import kotlin.dom.removeClass
 
-fun main(args: Array<String>) {
+suspend fun main(args: Array<String>) {
     window.addEventListener("DOMContentLoaded", {
-        showInitCode()
-        js("    IFS.eventbus.addEventListener(IFS.constants.events.SEARCHBAR_RENDERED_INITIALLY, function () {" +
-                "        document.getElementById('ifs-sb-searchfield').setAttribute('placeholder', 'Search for \\\"knowledge\\\" on www.intrafind.de');" +
-                "    });"
-        )
+        init()
     })
 }
 
 private var siteId: String = ""
 private var siteSecret: String = ""
 private var websiteUrl: String = ""
-private val serviceUrl: String = if (window.location.hostname.equals("localhost")) {
-    "http://localhost:8001"
-} else {
-    "https://api.sitesearch.cloud"
-}
+private val serviceUrl: String = window.location.origin
 
 fun triggerFirstUsageOwnership() {
     val xhr = XMLHttpRequest()
@@ -58,7 +51,7 @@ fun triggerFirstUsageOwnership() {
         document.dispatchEvent(Event("sis.triggerFirstUsageOwnershipEvent"))
     }
     xhr.setRequestHeader("content-type", "application/json")
-    xhr.send(JSON.stringify(SiteProfileCreation(setOf(url.value), email.value)))
+    xhr.send(JSON.stringify(SiteProfileCreation(setOf(SiteProfileConfig(url.value, encodeURIComponent(cssSelector.value), sitemapsOnly.checked)), email.value)))
 }
 
 @JsName("overrideSite")
@@ -81,8 +74,16 @@ private lateinit var siteSearchSetupUrl: HTMLDivElement
 private lateinit var triggerButton: HTMLButtonElement
 private lateinit var url: HTMLInputElement
 private lateinit var email: HTMLInputElement
+private lateinit var sitemapsOnly: HTMLInputElement
+private lateinit var sitemapContainer: HTMLDivElement
+private lateinit var cssSelector: HTMLInputElement
+private lateinit var cssSelectorContainer: HTMLDivElement
 
-fun showInitCode() {
+private fun init() {
+    cssSelectorContainer = document.getElementById("cssSelectorContainer") as HTMLDivElement
+    cssSelector = document.getElementById("cssSelector") as HTMLInputElement
+    sitemapContainer = document.getElementById("sitemapContainer") as HTMLDivElement
+    sitemapsOnly = document.getElementById("sitemapsOnly") as HTMLInputElement
     email = document.getElementById("email") as HTMLInputElement
     url = document.getElementById("url") as HTMLInputElement
     integrationCode = document.getElementById("integration-code") as HTMLTextAreaElement
@@ -96,19 +97,21 @@ fun showInitCode() {
     siteSearchSetupUrl = document.getElementById("siteSearchSetupUrl") as HTMLDivElement
     triggerButton = document.getElementById("index") as HTMLButtonElement
     val enterpriseSearchbar = document.getElementById("sitesearch-searchbar") as HTMLDivElement
-    val searchbarVersion = "2018-01-15" // when updating, update the value in the corresponding HTML container too
-    val siteSearchConfig = "https://cdn.sitesearch.cloud/searchbar/$searchbarVersion/config/sitesearch.json"
-    val enterpriseSearchbarCode = enterpriseSearchbar.outerHTML
-            .replace("/searchbar/$searchbarVersion/config/sitesearch.json", siteSearchConfig)
-    integrationCode.value = enterpriseSearchbarCode
+//    val searchbarVersion = "2018-04-06" // when updating, update the value in the corresponding HTML container too
+//    val siteSearchConfig = "https://cdn.sitesearch.cloud/searchbar/$searchbarVersion/config/sitesearch.json"
+//    val enterpriseSearchbarCode = enterpriseSearchbar.outerHTML
+//            .replace("/searchbar/$searchbarVersion/config/sitesearch.json", siteSearchConfig)
+//    integrationCode.value = enterpriseSearchbarCode
+    integrationCode.value = enterpriseSearchbar.outerHTML
 
     document.addEventListener("sis.crawlerFinishedEvent", {
         triggerButton.textContent = "Enable Search"
         triggerButton.disabled = false
-        (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = "$crawlerPageCount pages from \"${url.value}\" have been crawled. Consider that it takes around a minute before you can find here everything we have found."
+        (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = "$crawlerPageCount pages from ${url.value} have been crawled. Consider that it takes around a minute before you can find here everything we have found."
     })
 
-    fixUrlWithoutProtocol()
+    applyAnalytics()
+    enableProactiveValidation()
 
     val waitWhileCrawlerIsRunningMsg = "Crawler is running... please give us just a minute or two."
     document.addEventListener("sis.triggerFirstUsageOwnershipEvent", {
@@ -127,7 +130,54 @@ fun showInitCode() {
     applyQueryOverrides()
 }
 
-private fun fixUrlWithoutProtocol() {
+private fun applyAnalytics() {
+    sitemapsOnly.addEventListener("change", {
+        js("ga('send', {" +
+                "                     hitType: 'event'," +
+                "                     eventCategory: 'GSG'," +
+                "                     eventAction: 'change'," +
+                "                     eventLabel: document.getElementById('sitemapsOnly').checked" +
+                "                   })")
+    })
+
+    cssSelector.addEventListener("change", {
+        js("ga('send', {" +
+                "                     hitType: 'event'," +
+                "                     eventCategory: 'GSG'," +
+                "                     eventAction: 'change'," +
+                "                     eventLabel: document.getElementById('cssSelector').value" +
+                "                   })")
+    })
+
+    email.addEventListener("change", {
+        js("ga('send', {" +
+                "                     hitType: 'event'," +
+                "                     eventCategory: 'GSG'," +
+                "                     eventAction: 'change'," +
+                "                     eventLabel: document.getElementById('email').value" +
+                "                   })")
+    })
+
+    url.addEventListener("change", {
+        js("ga('send', {" +
+                "                     hitType: 'event'," +
+                "                     eventCategory: 'GSG'," +
+                "                     eventAction: 'change'," +
+                "                     eventLabel: document.getElementById('url').value" +
+                "                   })")
+    })
+
+    url.addEventListener("click", {
+        js("ga('send', {" +
+                "                     hitType: 'event'," +
+                "                     eventCategory: 'GSG'," +
+                "                     eventAction: 'click'," +
+                "                     eventLabel: navigator.userAgent" +
+                "                   })")
+    })
+}
+
+private fun enableProactiveValidation() {
     url.addEventListener("blur", {
         if (!(url.value.startsWith("http") || url.value.startsWith("https"))) {
             url.value = "https://${url.value}"
@@ -136,7 +186,6 @@ private fun fixUrlWithoutProtocol() {
     })
 
     url.addEventListener("keyup", {
-        console.warn(it)
         validateDomain()
     })
 }
@@ -146,23 +195,34 @@ private fun validateDomain() {
     xhr.open("GET", "https://api.muctool.de/curl?url=${url.value}")
     xhr.send()
     xhr.onload = {
-        if (xhr.status.equals(200) && (JSON.parse<dynamic>(xhr.responseText).code as Short).equals(200))
+        if (allowedToCrawl(xhr)) {
             classifyUrlAsValid(true)
-        else
+        } else {
             classifyUrlAsValid(false)
+        }
     }
 }
+
+private fun allowedToCrawl(xhr: XMLHttpRequest) =
+        xhr.status.equals(200)
+                && ((JSON.parse<dynamic>(xhr.responseText).statusCode as Short).equals(200) || (JSON.parse<dynamic>(xhr.responseText).statusCode as Short).equals(302))
 
 private var isValidSetup: Boolean = false
 private fun classifyUrlAsValid(isValid: Boolean) {
     if (isValid) {
-        url.addClass("validUrl")
-        url.style.background = "rgba(99, 199, 99, .4)"
+        validateField(websiteUrlContainer, true)
         isValidSetup = true
     } else {
-        url.removeClass("validUrl")
-        url.style.background = "rgba(199, 99, 99, .4)"
+        validateField(websiteUrlContainer, false)
         isValidSetup = false
+    }
+}
+
+private fun validateField(container: HTMLElement, isValid: Boolean) {
+    if (isValid) {
+        container.removeClass("invalidField")
+    } else {
+        container.addClass("invalidField")
     }
 }
 
@@ -177,7 +237,6 @@ private fun preserveSearchSetup() {
     document.execCommand("copy")
 }
 
-
 @JsName("applyQueryOverrides")
 private fun applyQueryOverrides() {
     siteId = when {
@@ -186,14 +245,15 @@ private fun applyQueryOverrides() {
             document.cookie.substring(document.cookie.indexOf("override-site") + 14, document.cookie.indexOf("override-site") + 14 + 36) // relies on cookie-setting code in embedding iframe container
         else -> ""
     }
+    val longExtraction = document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15)
+            .substring(0, document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).indexOf(";"))
+    val shortExtraction = document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15)
     websiteUrl = when {
-        window.location.search.indexOf("url=") != -1 -> window.location.search.substring(window.location.search.indexOf("url=") + 4)
-        document.cookie.indexOf("sis.websiteUrl") != -1 -> document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15)
-                .substring(0, document.cookie.substring(document.cookie.indexOf("sis.websiteUrl") + 15).indexOf(";")) // relies on cookie-setting code in embedding iframe container
-        else -> ""
+        longExtraction.isNotEmpty() -> longExtraction // relies on cookie-setting code in embedding iframe container
+        shortExtraction.isNotEmpty() -> shortExtraction // relies on cookie-setting code in embedding iframe container
+//        window.location.search.indexOf("url=") != -1 -> window.location.search.substring(window.location.search.indexOf("url=") + 4)
+        else -> "Site Validation Warning" // just a pseudo message to avoid blank field
     }
-    console.warn(siteId)
-    console.warn(websiteUrl)
     if (siteId.isNotEmpty()) {
         url.value = websiteUrl
         url.readOnly = true
@@ -204,6 +264,8 @@ private fun applyQueryOverrides() {
         siteSecretBox.style.display = "none"
         emailContainer.style.display = "none"
         siteIdBox.style.display = "none"
+        sitemapContainer.style.display = "none"
+        cssSelectorContainer.style.display = "none"
     }
 }
 
@@ -215,9 +277,8 @@ external fun encodeURIComponent(str: String): String
 private var crawlerPageCount: Int = 0
 fun startCrawler() {
     val xhr = XMLHttpRequest()
-    xhr.open("POST", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(url.value)}&token=$captchaResult&email=${email.value}")
+    xhr.open("POST", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(url.value)}&token=$captchaResult&email=${email.value}&sitemapsOnly=${sitemapsOnly.checked}&pageBodyCssSelector=${encodeURIComponent(cssSelector.value)}")
     xhr.onload = {
-        console.warn(xhr.responseText)
         if (xhr.status.equals(200)) {
             crawlerPageCount = JSON.parse<dynamic>(xhr.responseText).pageCount as Int
             document.dispatchEvent(Event("sis.crawlerFinishedEvent"))
@@ -234,4 +295,6 @@ class SiteSearch {
     }
 }
 
-data class SiteProfileCreation(val urls: Set<String>, val email: String)
+data class SiteProfileConfig(val url: String, val pageBodyCssSelector: String = "body", val sitemapsOnly: Boolean = false)
+
+data class SiteProfileCreation(val configs: Set<SiteProfileConfig> = emptySet(), val email: String = "")

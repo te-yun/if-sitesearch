@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright 2018 IntraFind Software AG. All rights reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+    <link rel="icon" type="image/png" href="artifact/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="artifact/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon-precomposed" href="artifact/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon-precomposed" href="artifact/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon-precomposed" href="artifact/apple-touch-icon-144x144.png">
+
+    <title>Site Search</title>
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Open+Sans:100italic,200italic,300italic,400italic,500italic,600italic,700italic,800italic,900italic,100,200,300,400,500,600,700,800,900">
+    <link rel="stylesheet" href="artifact/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="artifact/css/main.css">
+    <script src="/app/runtime/kotlin.js"></script>
+    <script src="/app/dashboard/dashboard.js"></script>
+</head>
+<body>
+<header>
+    <div class="sis-container">
+        <h1>
+            <img src="artifact/img/sitesearch_logo.png" width="164" height="45" alt="Site Search Logo">
+        </h1>
+        <nav>
+            <ul>
+                <li><a href="https://sitesearch.cloud">Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+<div class="sis-main">
+    <div class="sis-container">
+        <h2>Site configuration</h2>
+        <div class="sis-config-container">
+            <div>
+                <label><i class="fas fa-key"></i>Site ID</label>
+                <div id="siteId"></div>
+            </div>
+            <div>
+                <label><i class="fas fa-user-secret"></i>Site Secret</label>
+                <div id="siteSecret"></div>
+            </div>
+        </div>
+        <h2>Configuration</h2>
+        <div class="sis-config-container">
+            <div>
+                <label><i class="fab fa-wordpress"></i>Website URL</label>
+                <div>https://sitesearch.cloud</div>
+            </div>
+            <div>
+                <label><i class="fas fa-sitemap"></i>Use Sitemaps Only</label>
+                <div class="sis-config-checkbox-container">
+                    <input type="checkbox" id="sitemapsOnly" class="sis-checkbox" disabled checked>
+                    <label for="sitemapsOnly">&nbsp;</label>
+                </div>
+            </div>
+            <div>
+                <label><i class="fas fa-cut"></i>Content Extraction Selector</label>
+                <div>CSS Selector</div>
+            </div>
+        </div>
+        <div id="captcha"></div>
+        <button id="recrawl" title="Extract content from website"
+                onclick="dashboard.com.intrafind.sitesearch.dashboard.recrawl();"
+                disabled
+        >
+            Recrawl &amp; Reindex Site
+        </button>
+    </div>
+</div>
+<footer>
+    <div class="sis-container">
+        Copyright 2018. All rights reserved.
+    </div>
+</footer>
+<script src="https://www.google.com/recaptcha/api.js?onload=captchaLoad&render=explicit&hl=en" async defer></script>
+<script>
+    var captchaLoad = function () {
+        captchaWidget = grecaptcha.render("captcha", {
+            "sitekey": dashboard.com.intrafind.sitesearch.dashboard.SiteSearch.Companion.captchaSiteKey,
+            "callback": dashboard.com.intrafind.sitesearch.dashboard.verifyCallback
+        });
+    };
+</script>
+</body>
+</html>

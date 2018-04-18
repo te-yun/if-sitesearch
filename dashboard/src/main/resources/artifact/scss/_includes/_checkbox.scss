@@ -1,0 +1,57 @@
+/* Checkbox */
+.sis-checkbox {
+    position: absolute;
+    right: 10000px;
+    opacity: 0;
+}
+
+.sis-checkbox + label {
+    position: relative;
+    top: 9px;
+    cursor: pointer;
+    padding: 0;
+    user-select: none;
+}
+
+.sis-checkbox + label:before {
+    content: '';
+    display: inline-block;
+    vertical-align: text-bottom;
+    width: 20px;
+    height: 20px;
+    background: $blue;
+}
+
+.sis-checkbox:hover + label:before {
+    background: $blue;
+}
+
+.sis-checkbox:focus + label:before {
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
+}
+
+.sis-checkbox:checked + label:before {
+    background: $blue;
+}
+
+.sis-checkbox:disabled + label {
+    color: #b8b8b8;
+    cursor: auto;
+}
+
+.sis-checkbox:disabled + label:before {
+    box-shadow: none;
+    background: #ddd;
+}
+
+.sis-checkbox:checked + label:after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 8px;
+    background: white;
+    width: 2px;
+    height: 2px;
+    box-shadow: 2px 0 0 white, 4px 0 0 white, 4px -2px 0 white, 4px -4px 0 white, 4px -6px 0 white, 4px -8px 0 white;
+    transform: rotate(45deg);
+}

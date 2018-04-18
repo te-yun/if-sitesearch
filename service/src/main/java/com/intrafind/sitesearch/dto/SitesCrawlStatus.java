@@ -16,20 +16,20 @@
 
 package com.intrafind.sitesearch.dto;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SitesCrawlStatus {
-    private List<CrawlStatus> sites = new ArrayList<>();
+    private Set<CrawlStatus> sites = new HashSet<>();
 
     private SitesCrawlStatus() {
     }
 
-    public SitesCrawlStatus(List<CrawlStatus> sites) {
+    public SitesCrawlStatus(Set<CrawlStatus> sites) {
         this.sites = sites;
     }
 
-    public List<CrawlStatus> getSites() {
+    public Set<CrawlStatus> getSites() {
         return sites;
     }
 }

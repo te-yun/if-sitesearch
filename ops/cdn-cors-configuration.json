@@ -1,11 +1,10 @@
-//gsutil cors set cdn-cors-configuration.json gs://site-search-europe
 [
   {
     "origin": [
       "*"
     ],
     "responseHeader": [
-      "content-type"
+      "Content-Type"
     ],
     "method": [
       "GET",

@@ -17,6 +17,7 @@
 package com.intrafind.sitesearch.dto;
 
 import java.net.URI;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -24,25 +25,17 @@ import java.util.UUID;
 public class SiteProfile {
     private UUID id;
     private UUID secret;
-    private Set<URI> urls;
+    private Set<Config> configs;
     private String email;
 
     private SiteProfile() {
     }
 
-    public SiteProfile(UUID id, UUID secret, Set<URI> urls, String email) {
+    public SiteProfile(UUID id, UUID secret, String email, Set<Config> configs) {
         this.id = id;
         this.secret = secret;
-        this.urls = urls;
         this.email = email;
-    }
-
-    public Set<URI> getUrls() {
-        return urls;
-    }
-
-    public void setUrls(Set<URI> urls) {
-        this.urls = urls;
+        this.configs = configs;
     }
 
     public String getEmail() {
@@ -67,5 +60,56 @@ public class SiteProfile {
 
     public void setSecret(UUID secret) {
         this.secret = secret;
+    }
+
+    public Set<Config> getConfigs() {
+        return configs;
+    }
+
+    public static class Config {
+        public static final String DEFAULT_PAGE_BODY_CSS_SELECTOR = "body";
+        private URI url;
+        /**
+         * Defaults to "body", overridable with any other CSS selector.
+         */
+        private String pageBodyCssSelector = DEFAULT_PAGE_BODY_CSS_SELECTOR;
+        private boolean sitemapsOnly = false;
+
+        private Config() {
+        }
+
+        public Config(URI url, String pageBodyCssSelector, boolean sitemapsOnly) {
+            this.url = url;
+            this.pageBodyCssSelector = pageBodyCssSelector;
+            this.sitemapsOnly = sitemapsOnly;
+        }
+
+        public String getPageBodyCssSelector() {
+            // Empty strings cannot be saved by the search service. Hence a non-empty default is required.
+            return pageBodyCssSelector.isEmpty() ? DEFAULT_PAGE_BODY_CSS_SELECTOR : pageBodyCssSelector;
+        }
+
+        public URI getUrl() {
+            return url;
+        }
+
+        public boolean isSitemapsOnly() {
+            return sitemapsOnly;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Config config = (Config) o;
+            return sitemapsOnly == config.sitemapsOnly &&
+                    Objects.equals(url, config.url) &&
+                    Objects.equals(getPageBodyCssSelector(), config.getPageBodyCssSelector());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(url, getPageBodyCssSelector(), sitemapsOnly);
+        }
     }
 }

@@ -28,15 +28,17 @@ public class CrawlerControllerFactory<T extends WebCrawler> implements CrawlCont
     private final UUID siteId;
     private final UUID siteSecret;
     private final URI url;
+    private final String pageBodyCssSelector;
 
-    public CrawlerControllerFactory(UUID siteId, UUID siteSecret, URI url) {
+    public CrawlerControllerFactory(UUID siteId, UUID siteSecret, URI url, String pageBodyCssSelector) {
         this.siteId = siteId;
         this.siteSecret = siteSecret;
         this.url = url;
+        this.pageBodyCssSelector = pageBodyCssSelector;
     }
 
     @Override
     public SiteCrawler newInstance() {
-        return new SiteCrawler(siteId, siteSecret, url);
+        return new SiteCrawler(siteId, siteSecret, url, pageBodyCssSelector);
     }
 }

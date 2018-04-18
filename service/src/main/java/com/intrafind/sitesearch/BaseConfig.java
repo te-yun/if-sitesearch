@@ -33,7 +33,7 @@ import java.util.Collections;
 public class BaseConfig {
 
     @Bean
-    public Docket hideApi(ServletContext servletContext) {
+    public Docket hideApi(final ServletContext servletContext) {
         return new Docket(DocumentationType.SWAGGER_2)
                 .host("api.sitesearch.cloud")
                 .apiInfo(new ApiInfo(
@@ -65,6 +65,8 @@ public class BaseConfig {
                 .paths(Predicates.not(PathSelectors.regex("/sites/rss")))
                 .paths(Predicates.not(PathSelectors.regex("/sites/.+/pages/.*")))
                 .paths(Predicates.not(PathSelectors.regex("/sites/.+/email.*")))
+                .paths(Predicates.not(PathSelectors.regex("/sites/.+/xml")))
+                .paths(Predicates.not(PathSelectors.regex("/sites/.+/rss")))
                 .paths(Predicates.not(PathSelectors.regex("/sites/.+/crawl")))
                 .paths(Predicates.not(PathSelectors.regex("/sites/.+/crawling")))
                 .paths(Predicates.not(PathSelectors.regex("/authentication-providers.*")))

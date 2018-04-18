@@ -19,12 +19,6 @@ logging:
     org.springframework.web: INFO
     com.intrafind: INFO
 
-spring:
-  security:
-    user:
-      name: ${security.user.password}
-      password: ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=
-
 security:
   oauth2:
     client:
@@ -46,21 +40,14 @@ security:
 #  resource:
 #    userInfoUri: https://api.github.com/user
 
-sitesearch:
-  queryCountEnabled: true
-
 server:
   port: 8001
 
 spring:
-#  kafka:
-#    consumer:
-#      group-id: foo
-#      auto-offset-reset: earliest
-
-#  data:
-#    elasticsearch:
-#      cluster-name: elasticsearch
+  security:
+    user:
+      name: ${spring.security.user.password}
+      password: ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=
   main:
     banner-mode: "off"
   output:

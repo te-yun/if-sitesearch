@@ -1,0 +1,41 @@
+header {
+
+    h1 {
+        margin: 0 80px 0 0;
+
+        > img {
+            display: block;
+        }
+    }
+
+    nav {
+        flex: auto;
+
+        > ul {
+            display: flex;
+
+            a {
+                color: $font-color;
+                font-size: 1.6rem;
+                font-weight: 200;
+                margin-right: 60px;
+                text-decoration: none;
+                user-select: none;
+
+                &:hover,
+                &.sis-active {
+                    color: $blue;
+                }
+            }
+
+            > li:last-child {
+                margin-left: auto;
+
+                > a {
+                    margin-right: 0;
+                }
+            }
+
+        }
+    }
+}

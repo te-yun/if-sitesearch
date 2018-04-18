@@ -41,7 +41,7 @@ compileKotlin2Js {
     kotlinOptions.target = "v5"
     kotlinOptions.noStdlib = true
     kotlinOptions.friendModulesDisabled = false
-    kotlinOptions.sourceMapEmbedSources = "inlining"
+    kotlinOptions.sourceMapEmbedSources = "always"
     kotlinOptions.typedArrays = false
 }
 

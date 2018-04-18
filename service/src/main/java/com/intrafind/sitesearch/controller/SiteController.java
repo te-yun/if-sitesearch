@@ -16,7 +16,14 @@
 
 package com.intrafind.sitesearch.controller;
 
-import com.intrafind.sitesearch.dto.*;
+import com.intrafind.sitesearch.dto.Autocomplete;
+import com.intrafind.sitesearch.dto.FetchedPage;
+import com.intrafind.sitesearch.dto.Hits;
+import com.intrafind.sitesearch.dto.SiteCreation;
+import com.intrafind.sitesearch.dto.SiteIndexSummary;
+import com.intrafind.sitesearch.dto.SitePage;
+import com.intrafind.sitesearch.dto.SiteProfile;
+import com.intrafind.sitesearch.dto.SiteProfileUpdate;
 import com.intrafind.sitesearch.service.AutocompleteService;
 import com.intrafind.sitesearch.service.SearchService;
 import com.intrafind.sitesearch.service.SiteService;
@@ -24,7 +31,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.util.List;
@@ -48,12 +61,12 @@ public class SiteController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity<SiteCreation> createNewSite(@RequestBody(required = false) SiteProfileUpdate siteProfileCreation) {
+    ResponseEntity<SiteCreation> createNewSite(@RequestBody(required = false) SiteProfile siteProfileCreation) {
         final SiteCreation newlyCreatedSite;
         if (siteProfileCreation == null) {
             newlyCreatedSite = siteService.createSite();
         } else {
-            newlyCreatedSite = siteService.createSite(siteProfileCreation.getUrls(), siteProfileCreation.getEmail());
+            newlyCreatedSite = siteService.createSite(siteProfileCreation.getEmail(), siteProfileCreation.getConfigs());
         }
         return ResponseEntity
                 .created(URI.create("https://api.sitesearch.cloud/sites/" + newlyCreatedSite.getSiteId()))
@@ -68,13 +81,7 @@ public class SiteController {
         final Optional<SiteProfile> siteProfileFetch = siteService.fetchSiteProfile(siteId, siteSecret);
         if (siteProfileFetch.isPresent()) {
             final SiteProfile siteProfile = siteProfileFetch.get();
-            return ResponseEntity.ok(new SiteProfile(
-                    siteProfile.getId(),
-                    siteProfile.getSecret(),
-                    siteProfile.getUrls(),
-                    siteProfile.getEmail()
-                    )
-            );
+            return ResponseEntity.ok(siteProfile);
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -89,13 +96,7 @@ public class SiteController {
         final Optional<SiteProfile> siteProfileUpdated = siteService.updateSiteProfile(siteId, siteSecret, siteProfileUpdate);
         if (siteProfileUpdated.isPresent()) {
             final SiteProfile siteProfile = siteProfileUpdated.get();
-            return ResponseEntity.ok(new SiteProfile(
-                    siteProfile.getId(),
-                    siteProfile.getSecret(),
-                    siteProfile.getUrls(),
-                    siteProfile.getEmail()
-                    )
-            );
+            return ResponseEntity.ok(siteProfile);
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -258,7 +259,7 @@ public class SiteController {
             siteId = cookieSite;
         }
 
-        Hits searchResult = searchService.search(query, siteId);
+        final Hits searchResult = searchService.search(query, siteId);
         LOG.info("siteId: " + siteId + " - query: " + query + " - results: " + searchResult.getResults().size());
         return ResponseEntity.ok(searchResult);
     }

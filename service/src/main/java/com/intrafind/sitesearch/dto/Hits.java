@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,10 @@
 
 package com.intrafind.sitesearch.dto;
 
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-public class Hits implements Serializable {
+public class Hits {
     private List<FoundPage> results = Collections.emptyList();
     private String query = "";
 

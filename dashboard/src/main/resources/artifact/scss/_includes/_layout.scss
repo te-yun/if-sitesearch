@@ -1,0 +1,48 @@
+html {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    height: inherit;
+    width: inherit;
+    overflow: hidden;
+}
+
+.sis-container {
+    max-width: 1440px;
+    padding: 0 1rem;
+    margin: 0 auto;
+    height: 100%;
+}
+
+header {
+    border-bottom: 1px solid $border;
+    height: 70px;
+
+    > .sis-container {
+        align-items: center;
+        display: flex;
+    }
+}
+
+.sis-main {
+    height: calc(100% - 70px - 30px);
+    overflow: auto;
+    
+    > .sis-container {
+        padding: 2rem 1rem;
+    }
+}
+
+footer {
+    border-top: 1px solid $border;
+    
+    > .sis-container {
+        align-items: center;
+        display: flex;
+        font-size: 1.2rem;
+        height: 30px;
+        justify-content: flex-end;
+    }
+}

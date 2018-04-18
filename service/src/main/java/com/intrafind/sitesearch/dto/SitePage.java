@@ -20,6 +20,7 @@ import com.google.common.hash.Hashing;
 
 import java.net.URI;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -28,7 +29,7 @@ public class SitePage {
     private String title;
     private String body;
     private String url;
-    private List<String> labels;
+    private List<String> sisLabels = new ArrayList<>();
 
     private SitePage() {
     }
@@ -39,19 +40,19 @@ public class SitePage {
         this.url = url;
     }
 
-    public SitePage(String title, String body, String url, List<String> labels) {
+    public SitePage(String title, String body, String url, List<String> sisLabels) {
         this.title = title;
         this.body = body;
         this.url = url;
-        this.labels = labels;
+        this.sisLabels = sisLabels;
     }
 
-    public List<String> getLabels() {
-        return labels;
+    public List<String> getSisLabels() {
+        return sisLabels;
     }
 
-    public void setLabels(List<String> labels) {
-        this.labels = labels;
+    public void setSisLabels(List<String> sisLabels) {
+        this.sisLabels = sisLabels;
     }
 
     public String getTitle() {
@@ -90,15 +91,16 @@ public class SitePage {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SitePage page = (SitePage) o;
-        return Objects.equals(title, page.title) &&
-                Objects.equals(body, page.body) &&
-                Objects.equals(url, page.url);
+        SitePage sitePage = (SitePage) o;
+        return Objects.equals(title, sitePage.title) &&
+                Objects.equals(body, sitePage.body) &&
+                Objects.equals(url, sitePage.url) &&
+                Objects.equals(sisLabels, sitePage.sisLabels);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, body, url);
+        return Objects.hash(title, body, url, sisLabels);
     }
 
     @Override
@@ -107,6 +109,7 @@ public class SitePage {
                 "\"title\":\"" + title + "\"," +
                 "\"body\":\"" + body + "\"," +
                 "\"url\":\"" + url + "\"" +
+                "\"sisLabels\":\"" + sisLabels + "\"" +
                 "}";
     }
 }

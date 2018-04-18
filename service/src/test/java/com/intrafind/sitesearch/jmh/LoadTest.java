@@ -16,81 +16,89 @@
 
 package com.intrafind.sitesearch.jmh;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intrafind.sitesearch.controller.AutocompleteController;
 import com.intrafind.sitesearch.controller.SearchController;
+import com.intrafind.sitesearch.controller.SiteController;
 import com.intrafind.sitesearch.dto.Autocomplete;
 import com.intrafind.sitesearch.dto.Hits;
-import com.intrafind.sitesearch.integration.SearchTest;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.results.format.ResultFormatType;
 import org.openjdk.jmh.runner.Runner;
-import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 @State(Scope.Benchmark)
 public class LoadTest {
-    private static final Logger LOG = LoggerFactory.getLogger(LoadTest.class);
-    private static final UUID LOAD_SITE_ID = UUID.fromString("8464f91e-df95-4e48-bfe0-f63af81e7346");
     static final String[] LOREM_IPSUM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras viverra enim vitae malesuada placerat. Nam auctor pellentesque libero, et venenatis enim molestie vel. Duis est metus, congue quis orci id, tincidunt mattis turpis. In fringilla ultricies sapien ultrices accumsan. Sed mattis tellus lacus, quis scelerisque turpis hendrerit et. In iaculis malesuada ipsum, ac rhoncus mauris auctor quis. Proin varius, ex vestibulum condimentum lacinia, ligula est finibus ligula, id consectetur nisi enim ut velit. Sed aliquet gravida justo ac condimentum. In malesuada sed elit vitae vestibulum. Mauris vitae congue lacus. Quisque vitae tincidunt orci. Donec viverra enim a lacinia pulvinar. Sed vel ullamcorper est. Vestibulum vel urna at nisl tincidunt blandit. Donec purus leo, interdum in diam in, posuere varius tellus. Quisque eleifend nulla at nulla vestibulum ullamcorper. Praesent interdum vehicula cursus. Morbi vitae nunc et urna rhoncus semper aliquam nec velit. Quisque aliquet et velit ut mollis. Sed mattis eleifend tristique. Praesent pharetra, eros eget viverra tempus, nisi turpis molestie metus, nec tristique nulla dolor a mauris. Nullam cursus finibus erat, in pretium urna fermentum ac. In hac habitasse platea dictumst. Cras id velit id nisi euismod eleifend. Duis vehicula gravida bibendum. Cras rhoncus, massa et accumsan euismod, metus arcu rutrum orci, eu porttitor lacus tellus sed quam. Morbi tincidunt est sit amet sem convallis porta in nec nisi. Sed ex enim, fringilla nec diam in, luctus pulvinar enim. Suspendisse potenti. Quisque ut pellentesque erat. In tincidunt metus id sem fringilla sagittis. Interdum et malesuada fames ac ante ipsum primis in faucibus. Proin erat nunc, pharetra sit amet iaculis nec, malesuada eu dui. Nullam sagittis ut arcu vitae convallis. Mauris molestie gravida lectus, eu commodo quam bibendum aliquam. Donec laoreet sed dolor eu consectetur."
             .split("\\s");
-
-    static final List<String> QUERY_LIST_AUTOCOMPLETE;
     static final String LOAD_TARGET = "https://api.sitesearch.cloud";
-    static final TestRestTemplate CALLER = new TestRestTemplate();
+    static final OkHttpClient CALLER = new OkHttpClient.Builder()
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .pingInterval(1, TimeUnit.SECONDS)
+            .followRedirects(false)
+            .followSslRedirects(false)
+            .build();
+    static final ObjectMapper MAPPER = new ObjectMapper();
     static final Random PSEUDO_ENTROPY = new Random();
-
-    private static final List<UUID> TENANTS = Arrays.asList(
-            SearchTest.SEARCH_SITE_ID,
-            UUID.fromString("4bcccea2-8bcf-4280-88c7-8736e9c3d15c"),
-            UUID.fromString("1a6715d9-119f-48d1-9329-e8763273bbea")
-    );
-
-    static final Map<String, Long> SEARCH_QUERIES = new HashMap<>();
-    static {
-        SEARCH_QUERIES.put("bank", 47L);
-        SEARCH_QUERIES.put("fonds", 1L);
-        SEARCH_QUERIES.put("finanzen", 12L);
-        SEARCH_QUERIES.put("geld", 34L);
-        SEARCH_QUERIES.put("\uD83E\uDD84", 0L);
-    }
-
-    static final List<String> QUERY_LIST_SEARCH = new ArrayList<>(SEARCH_QUERIES.keySet());
-
-    static final Map<String, Long> AUTOCOMPLETE_QUERIES = new ConcurrentHashMap<>();
+    static final Map<String, Integer> SEARCH_QUERIES = new HashMap<>();
+    static final Map<String, Integer> AUTOCOMPLETE_QUERIES = new HashMap<>();
+    static final Map<UUID, Map<String, Integer>> SEARCH_DATA = new HashMap<>();
+    static final Map<UUID, Map<String, Integer>> AUTOCOMPLETE_DATA = new HashMap<>();
+    private static final Logger LOG = LoggerFactory.getLogger(LoadTest.class);
+    private static final UUID LOAD_SITE_ID = UUID.fromString("563714f1-96c0-4500-b366-4fc7e734fa1d");
 
     static {
-        AUTOCOMPLETE_QUERIES.put("hyp", 0L);
-        AUTOCOMPLETE_QUERIES.put("geld", 5L);
-        AUTOCOMPLETE_QUERIES.put("bank", 7L);
-        AUTOCOMPLETE_QUERIES.put("fond", 10L);
-        QUERY_LIST_AUTOCOMPLETE = new ArrayList<>(AUTOCOMPLETE_QUERIES.keySet());
+        SEARCH_QUERIES.put("hypothek", 40);
+        SEARCH_QUERIES.put("swiss", 30);
+        SEARCH_QUERIES.put("migros", 40);
+        SEARCH_QUERIES.put("investieren", 40);
+        SEARCH_QUERIES.put("\uD83E\uDD84", -1);
+
+        AUTOCOMPLETE_QUERIES.put("hyp", 0);
+        AUTOCOMPLETE_QUERIES.put("swi", 6);
+        AUTOCOMPLETE_QUERIES.put("mig", 1);
+        AUTOCOMPLETE_QUERIES.put("inv", 8);
+        AUTOCOMPLETE_QUERIES.put("bank", 1);
+        AUTOCOMPLETE_QUERIES.put("fond", 1);
+        AUTOCOMPLETE_QUERIES.put("welt", 5);
+        AUTOCOMPLETE_QUERIES.put("\uD83E\uDD84", -1);
+
+        SEARCH_DATA.put(LOAD_SITE_ID, SEARCH_QUERIES); // https://www.migrosbank.ch/de, https://blog.migrosbank.ch/de
+        AUTOCOMPLETE_DATA.put(LOAD_SITE_ID, AUTOCOMPLETE_QUERIES); // https://www.migrosbank.ch/de, https://blog.migrosbank.ch/de
     }
 
-    public static void main(String... args) throws RunnerException {
-        Options options = new OptionsBuilder()
-//                .timeout(TimeValue.seconds(60))
-//                .timeout(TimeValue.seconds(5))
+    public static void main(String... args) throws Exception {
+        final Options options = new OptionsBuilder()
+                .warmupIterations(1)
+                .measurementIterations(5)
 //                .include(".*")
 //                .include(LoadIndex2Users.class.getSimpleName())
                 .include(LoadTest.class.getSimpleName())
-//                .warmupIterations(5)
-//                .measurementIterations(20)
-                .forks(2)
-                .threads(200)
+                .forks(1)
+                .threads(150)
                 .mode(Mode.Throughput)
                 .resultFormat(ResultFormatType.JSON)
                 .result("build/jmh-result.json")
@@ -101,86 +109,56 @@ public class LoadTest {
     }
 
     @Benchmark
-    public void staticFiles() {
-        final ResponseEntity<String> staticFile = CALLER.getForEntity(LOAD_TARGET, String.class);
-
-        assertEquals(HttpStatus.OK, staticFile.getStatusCode());
-        assertFalse(staticFile.getBody().isEmpty());
+    public void staticFiles() throws IOException {
+        final Request request = new Request.Builder()
+                .url(LOAD_TARGET)
+                .build();
+        final Response response = CALLER.newCall(request).execute();
+        assertEquals(HttpStatus.OK.value(), response.code());
+        assertNotNull(response.body());
+        response.close();
     }
 
     @Benchmark
-    public void searchComplexDeprecated() {
-        final int queryIndex = LoadTest.PSEUDO_ENTROPY.nextInt(LoadTest.SEARCH_QUERIES.size());
-        final String query = LoadTest.QUERY_LIST_SEARCH.get(queryIndex);
+    public void search() throws IOException {
+        final int randomSiteIndex = PSEUDO_ENTROPY.nextInt(SEARCH_DATA.size());
+        final UUID randomSiteId = (UUID) SEARCH_DATA.keySet().toArray()[randomSiteIndex];
+        final Map<String, Integer> randomSite = SEARCH_DATA.get(randomSiteId);
+        final int randomQueryIndex = PSEUDO_ENTROPY.nextInt(SEARCH_QUERIES.size());
+        final String randomQuery = (String) randomSite.keySet().toArray()[randomQueryIndex];
+        final int queryHits = randomSite.get(randomQuery);
 
-        final ResponseEntity<Hits> actual = CALLER.getForEntity(
-                LoadTest.LOAD_TARGET + SearchController.ENDPOINT
-                        + "?query=" + query + "&siteId=" + LOAD_SITE_ID,
-                Hits.class
-        );
-
-        final long queryResultCount = LoadTest.SEARCH_QUERIES.get(query);
-        if (queryResultCount == 0) {
-            assertEquals(HttpStatus.OK, actual.getStatusCode());
-            assertNotNull(actual.getBody());
+        final Request request = new Request.Builder()
+                .url(LOAD_TARGET + SiteController.ENDPOINT + "/" + randomSiteId + SearchController.ENDPOINT + "?query=" + randomQuery)
+                .build();
+        final Response response = CALLER.newCall(request).execute();
+        assertEquals(HttpStatus.OK.value(), response.code());
+        if (queryHits == 0) {
+            assertNotNull(response.body());
         } else {
-            assertEquals(HttpStatus.OK, actual.getStatusCode());
-            assertEquals(queryResultCount, actual.getBody().getResults().size());
+            final Hits result = MAPPER.readValue(response.body().charStream(), Hits.class);
+            assertTrue(queryHits < result.getResults().size());
+            assertEquals(randomQuery, result.getQuery());
         }
+        response.close();
     }
 
     @Benchmark
-    public void search() {
-        final int queryIndex = LoadTest.PSEUDO_ENTROPY.nextInt(LoadTest.SEARCH_QUERIES.size());
-        final String query = LoadTest.QUERY_LIST_SEARCH.get(queryIndex);
+    public void autocomplete() throws IOException {
+        final int randomSiteIndex = PSEUDO_ENTROPY.nextInt(SEARCH_DATA.size());
+        final UUID randomSiteId = (UUID) AUTOCOMPLETE_DATA.keySet().toArray()[randomSiteIndex];
+        final Map<String, Integer> randomSite = AUTOCOMPLETE_DATA.get(randomSiteId);
+        final int randomQueryIndex = PSEUDO_ENTROPY.nextInt(AUTOCOMPLETE_QUERIES.size());
+        final String randomQuery = (String) randomSite.keySet().toArray()[randomQueryIndex];
+        final int queryHits = randomSite.get(randomQuery);
 
-        final ResponseEntity<Hits> actual = CALLER.getForEntity(
-                LoadTest.LOAD_TARGET + "/sites/" + LOAD_SITE_ID + SearchController.ENDPOINT
-                        + "?query=" + query,
-                Hits.class
-        );
-
-        final long queryResultCount = LoadTest.SEARCH_QUERIES.get(query);
-        if (queryResultCount == 0) {
-            assertEquals(HttpStatus.OK, actual.getStatusCode());
-            assertNotNull(actual.getBody());
-        } else {
-            assertEquals(HttpStatus.OK, actual.getStatusCode());
-            assertEquals(queryResultCount, actual.getBody().getResults().size());
-        }
-    }
-
-    @Benchmark
-    public void autocompleteDeprecated() {
-        final int queryIndex = LoadTest.PSEUDO_ENTROPY.nextInt(LoadTest.AUTOCOMPLETE_QUERIES.size());
-        final String query = LoadTest.QUERY_LIST_AUTOCOMPLETE.get(queryIndex);
-
-        final ResponseEntity<Autocomplete> actual = CALLER.getForEntity(
-                LOAD_TARGET + AutocompleteController.ENDPOINT
-                        + "?query=" + query + "&siteId=" + LOAD_SITE_ID,
-                Autocomplete.class
-        );
-
-        assertEquals(HttpStatus.OK, actual.getStatusCode());
-        final long queryResultCount = AUTOCOMPLETE_QUERIES.get(query);
-//        assertEquals(queryResultCount, actual.getBody().getResults().size());
-        assertTrue(queryResultCount <= actual.getBody().getResults().size());
-    }
-
-    @Benchmark
-    public void autocomplete() {
-        final int queryIndex = LoadTest.PSEUDO_ENTROPY.nextInt(LoadTest.AUTOCOMPLETE_QUERIES.size());
-        final String query = LoadTest.QUERY_LIST_AUTOCOMPLETE.get(queryIndex);
-
-        final ResponseEntity<Autocomplete> actual = CALLER.getForEntity(
-                LOAD_TARGET + "/sites/" + LOAD_SITE_ID + AutocompleteController.ENDPOINT
-                        + "?query=" + query,
-                Autocomplete.class
-        );
-
-        assertEquals(HttpStatus.OK, actual.getStatusCode());
-        final long queryResultCount = AUTOCOMPLETE_QUERIES.get(query);
-//        assertEquals(queryResultCount, actual.getBody().getResults().size());
-        assertTrue(queryResultCount <= actual.getBody().getResults().size());
+        final Request request = new Request.Builder()
+                .url(LOAD_TARGET + SiteController.ENDPOINT + "/" + randomSiteId + AutocompleteController.ENDPOINT + "?query=" + randomQuery)
+                .build();
+        final Response response = CALLER.newCall(request).execute();
+        assertEquals(HttpStatus.OK.value(), response.code());
+        final Autocomplete result = MAPPER.readValue(response.body().charStream(), Autocomplete.class);
+        assertTrue(queryHits + " - " + result.getResults().size(), queryHits < result.getResults().size());
+        response.close();
     }
 }

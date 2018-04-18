@@ -1,0 +1,155 @@
+
+{{# if external}}
+<div class="ifs-filter-all-open-close" data-action="toggle-facets">
+    <i class="ifs-icons ifs-icon-expand_more"></i>
+</div>
+{{/if}}
+
+<div id="ifs-filter-wrapper" class="ifs-filter-wrapper">
+    <div id="ifs-filterbar" class="ifs-rl-filter">
+        <button data-action="close-filter" class="btn-closefilter ifs-closefilter">
+            <i class="ifs-icons ifs-icon-clear"></i>
+        </button>
+        <div class="ifs-filter-header">
+            <h4>Filter</h4>
+        </div>
+        <div class="ifs-facets-hook ifs-filter-section">
+            {{# each state.facetstate}}
+                {{#contains ../allowedFilters facetname}}
+                    <div class="ifs-filter{{#contains ../../this.state.expandedFacets facetname}} open{{/contains}} {{#if expanded}} open {{/if}}"
+                         data-selection-type="multiple" data-filter-category="{{label}}">
+                        <button
+                                type="button"
+                                class="ifs-filterbutton"
+                                data-toggle="if-filterbox"
+                                aria-haspopup="true"
+                                title="{{label}}"
+                                data-facet-name="{{facetname}}"
+                                aria-expanded="false">
+                            <span class="ifs-filterbutton-label">{{label}}</span>
+                            <span class="ifs-enabled-count"></span>
+                            <span class="ifs-triangle"></span>
+                        </button>
+
+                        <div class="ifs-filterbox {{#if searchable}}fixed-height{{/if}}">
+
+                            {{#if searchable}}
+                                <div class="ifs-fi-body">
+                                    <form name="if-search">
+                                        <div class="typeahead__container result hint filter">
+                                            <div class="typeahead__field">
+                                    <span class="typeahead__query">
+                                        <input data-facet-searchbar="{{facetname}}"
+                                               class="ifs-fi-searchable js-typeahead-input"
+                                               name="q" type="search" autocomplete="off"
+                                        />
+                                    </span>
+                                                <div class="typeahead__button">
+                                                    <button type="submit"
+                                                            data-globalize="ifs.btn.search" data-globalize-target="title"
+                                                            title="Search">
+                                                        <i class="ifs-icons ifs-icon-search" aria-hidden="true"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div class="typeahead__container result hint filter ifs-searchable-facet-result"
+                                         data-facet-results="{{facetname}}"/>
+                                    <ul class="ifs-fi-list" data-active-facets-container="{{facetname}}">
+                                        <!-- list all enabled values first -->
+                                        {{#each facets}}
+                                            {{#if enabled}}
+                                                {{> facet-entry }}
+                                            {{/if}}
+                                        {{/each}}
+                                        <!-- then all others -->
+                                        {{#each facets}}
+                                            {{#unless enabled}}
+                                                {{> facet-entry }}
+                                            {{/unless}}
+                                        {{/each}}
+                                    </ul>
+                                </div>
+                            {{/if}}
+
+                            {{#unless searchable}}
+                                <div class="ifs-fi-body">
+                                    <ul class="ifs-fi-list">
+                                        <!-- list all enabled values first -->
+                                        {{#each facets}}
+                                            {{#if enabled}}
+                                                {{> facet-entry }}
+                                            {{/if}}
+                                        {{/each}}
+                                        <!-- then all others -->
+                                        {{#each facets}}
+                                            {{#unless enabled}}
+                                                {{> facet-entry }}
+                                            {{/unless}}
+                                        {{/each}}
+                                    </ul>
+                                </div>
+                            {{/unless}}
+
+                            <div class="ifs-fi-footer{{#if searchable}} active{{/if}}">
+                                <button type="button" data-filter-name="{{facetname}}" data-action="perform">
+                                    {{msg "ifs.filter.accept"}}
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                {{/contains}}
+            {{/each}}
+
+            {{#contains allowedFilters 'daterange'}}
+                {{#if this.showDateRange}}
+                    <div class="ifs-filter{{#contains ../../this.state.expandedFacets 'daterange'}} open{{/contains}} {{#if expanded}} open {{/if}}" data-selection-type="single" data-filter-category="{{msg "ifs.filter.daterange"}}{{#if label}} {{label}}{{/if}}">
+                        <button
+                                type="button"
+                                class="ifs-filterbutton"
+                                data-toggle="if-filterbox"
+                                data-facet-name="daterange"
+                                aria-haspopup="true"
+                                title="{{msg 'ifs.filter.daterange'}}"
+                                aria-expanded="false">
+                            <span class="ifs-filterbutton-label">{{msg "ifs.filter.daterange"}}{{#if label}} {{label}}{{/if}}</span>
+                            <span class="ifs-enabled-count"></span>
+                            <span class="ifs-triangle"></span>
+                        </button>
+                        <div class="ifs-filterbox">
+                            <div class="ifs-fi-body">
+                                <ul class="ifs-fi-list">
+                                    {{#each state.filterstate}}
+                                        <li {{#if enabled}}class="active" {{/if}}data-filter-value="{{@key}}" title="{{@key}}">
+                                            <span class="ifs-facet-label">{{msg label}}</span>
+                                            <i class="ifs-icons ifs-icon-done"></i>
+                                        </li>
+                                        {{# if showDatePicker}}
+                                            <div class="ifs-date-picker-wrapper">
+                                                <div>
+                                                    <input id="ifs-from-date" type="text" class="ifs-fi-daterange" placeholder="{{msg 'ifs.datechooser.from'}}">
+                                                    <i class="ifs-icons ifs-icon-daterange" aria-hidden="true"></i>
+                                                </div>
+                                                <div>
+                                                    <input id="ifs-to-date" type="text" class="ifs-fi-daterange" placeholder="{{msg 'ifs.datechooser.to'}}">
+                                                    <i class="ifs-icons ifs-icon-daterange" aria-hidden="true"></i>
+                                                </div>
+                                            </div>
+                                        {{/if}}
+                                    {{/each}}
+                                </ul>
+                            </div>
+                            <div class="ifs-fi-footer text-center">
+                                <button type="button" data-action="perform" data-filter-name="daterange">
+                                    {{msg "ifs.filter.accept"}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+            {{/contains}}
+        </div>
+    </div>
+</div>

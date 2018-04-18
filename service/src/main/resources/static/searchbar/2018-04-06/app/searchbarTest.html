@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width,initial-scale=1" name="viewport">
+    <link rel="shortcut icon" href="favicon.ico?v=3">
+    <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-57x57.png?v=3">
+    <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-114x114.png?v=3">
+    <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-144x144.png?v=3">
+    <title>Searchbar</title>
+    <link rel="stylesheet" type="text/css" href="css/app.css" media="all"/>
+
+    <style>
+        body {
+            height: 100%;
+            background-color: #f1f4f6;
+        }
+
+        .ifs-main {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding-top: 50px;
+        }
+
+        .jsonData {
+            margin-top: 20px;
+            width: 100%;
+            height: 100%;
+            min-height: 100px;
+            min-width: 100px;
+        }
+
+        .config-buttons {
+            display: flex;
+        }
+
+        .config-button {
+            margin: 3px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="ifs-main">
+
+    <div id="searchbar" class="ifs-searchbar"></div>
+
+
+    <div id="ifs-searchareas" class="ifs-searchareas">
+        <ul>
+            <li role="presentation">
+                <a href="javascript:void(0);" id="check1" class="active" data-value="all" data-action="switch-tab">
+                    <i class="ifs-icons ifs-icon-subject"></i>
+                    <span data-globalize="ifs.category.all" data-globalize-target="text"></span>
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="javascript:void(0);" id="check2" data-value="people" data-action="switch-tab">
+                    <i class="ifs-icons ifs-icon-group"></i>
+                    <span data-globalize="ifs.category.people" data-globalize-target="text"></span>
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="javascript:void(0);" id="check3" data-value="documents" data-action="switch-tab">
+                    <i class="ifs-icons ifs-icon-description"></i>
+                    <span data-globalize="ifs.category.documents" data-globalize-target="text"></span>
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="javascript:void(0);" id="check4" data-value="websites" data-action="switch-tab">
+                    <i class="ifs-icons ifs-icon-web"></i>
+                    <span data-globalize="ifs.category.websites" data-globalize-target="text"></span>
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="javascript:void(0);" id="check5" data-value="images" data-action="switch-tab">
+                    <i class="ifs-icons ifs-icon-photo"></i>
+                    <span data-globalize="ifs.category.images" data-globalize-target="text"></span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+
+    <div id="resultlist" class="ifs-resultlist-wrapper"></div>
+</div>
+
+<div id="utilities">
+    <div>
+        <label>Config-Url:</label>
+        <input id="configurl" type="text" name="configurl" value="/data/config.json" disabled>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <div>
+        <label>IFS.initClient:</label>
+        <textarea id="initClientTextArea" class="jsonData">
+            {
+          sbTarget: '#searchbar',
+          rlTarget: '#resultlist',
+          configurl: 'DO_NOT_TOUCH!_WILL_BE_REPLACED',
+          sitesearch: false,
+          cors: true,
+          withCredentials: true,
+          callbacks: {
+            persistentState: true
+          },
+          preview: {
+            getCustomPreviewUrl: function(hit) {
+              return "http://www.example.com/"
+            },
+            shouldUseCustomPreview: function(hit){
+              return hit.integer === 2;
+            }
+          }
+        }
+        </textarea>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <div>
+        <label>config.json:</label>
+        <textarea id="configTextArea" class="jsonData"></textarea>
+    </div>
+
+    <div class="config-buttons">
+        <button id="btnInitSearchbar" class="config-button" onclick="initSearchbar()">Init Searchbar</button>
+    </div>
+    <div>
+        <p>log: </p>
+        <p id="infoMessage"></p>
+    </div>
+</div>
+
+<script type="text/javascript" src="js/app.js"></script>
+
+<script type="text/javascript">
+  function initSearchbar() {
+
+    var $ = IFS.jQuery;
+
+    $('#btnInitSearchbar').prop("disabled", true);
+
+    try {
+      eval("window.clientOptions = " + $('#initClientTextArea').val());
+      eval("window.configObject = " + $('#configTextArea').val());
+    } catch (e) {
+      var msg = "Could not evaluate clientOptions for IFS.initClient!";
+      document.getElementById('infoMessage').innerText = msg;
+      throw new Error(e);
+    }
+
+    window.clientOptions.configurl = window.configObject;
+    IFS.initClient(window.clientOptions);
+
+
+    IFS.jQuery('body').on('click', '[data-action="switch-tab"]', function (e) {
+      e.preventDefault();
+
+      // Cache vars
+      var me = $(this);
+      var parent = me.parent();
+
+      if (!me.hasClass('disabled')) {
+
+        var oldTarget = $('#ifs-searchareas li > a.active').attr('data-value');
+        var newTarget = me.attr('data-value');
+
+        // Reset active state
+        $('#ifs-searchareas a').removeClass('active');
+        // Set active
+        me.addClass('active');
+
+        IFS.eventbus.dispatch(IFS.jQuery.ifs.constants.events.RESULT_TARGET_CHANGED, {
+          oldTarget: oldTarget,
+          newTarget: newTarget
+        });
+
+      }
+    });
+
+    IFS.eventbus.addEventListener(IFS.jQuery.ifs.constants.events.SEARCHBAR_RENDERED_INITIALLY, function (event) {
+      IFS.jQuery.ajax({
+        url: "http://localhost:3000/config",
+        type: 'DELETE'
+      });
+    });
+
+    IFS.eventbus.addEventListener(IFS.jQuery.ifs.constants.events.NEW_RESULT_LOADED, function (event) {
+      $('#ifs-searchareas li > a').removeClass('active');
+      $('#ifs-searchareas li > a[data-value="' + event.target.id + '"]').addClass('active');
+    });
+  };
+
+  (function ($) {
+    function displayMsg(text) {
+      $('#infoMessage').empty().text(text);
+    }
+
+    function setTextField(data) {
+      var configTextArea = $('#configTextArea');
+      var setData = data;
+      if (typeof setData !== 'string') {
+        setData = JSON.stringify(data, null, 2)
+      }
+      configTextArea.val(setData);
+      configTextArea.text(setData);
+    }
+
+    function loadConfig(configurl) {
+      $.ajax({
+        url: configurl,
+        type: 'GET',
+        crossDomain: true,
+        withCredentials: true
+      })
+        .done(function (data) {
+          setTextField(data);
+          displayMsg("success loading data");
+          if (window.location.href.indexOf('config=true') === -1) {
+            IFS.jQuery('#utilities').hide();
+            initSearchbar();
+          }
+        })
+        .fail(function (err) {
+          displayMsg("error loading data:" + JSON.stringify(err, null, 2));
+        });
+    }
+
+    var configurl = document.getElementById('configurl').value;
+    loadConfig(configurl, $);
+  })(IFS.jQuery);
+</script>
+
+
+</body>
+</html>

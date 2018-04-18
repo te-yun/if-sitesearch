@@ -9,4 +9,11 @@ docker_registry="docker-registry.sitesearch.cloud12"
 
 docker network create $docker_network
 
-docker run -d $docker_registry/$docker_image
+prepare_persistence_directory() {
+    mkdir -p $HOME/$persistence_dir/$1/data
+    sudo chown -R 1000:1000 $HOME/$persistence_dir/$1/data
+    sudo chmod -R 744 $HOME/$persistence_dir/$1/data
+}
+
+prepare_persistence_directory sitesearch-search-service
+prepare_persistence_directory sitesearch-search-service-1

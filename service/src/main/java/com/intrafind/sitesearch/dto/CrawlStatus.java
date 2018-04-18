@@ -17,22 +17,29 @@
 package com.intrafind.sitesearch.dto;
 
 import java.time.Instant;
+import java.util.Objects;
 import java.util.UUID;
 
 public class CrawlStatus {
     private UUID siteId;
     private Instant crawled;
+    private long pageCount;
 
     private CrawlStatus() {
     }
 
-    public CrawlStatus(UUID siteId, Instant crawled) {
+    public CrawlStatus(UUID siteId, Instant crawled, long pageCount) {
         this.siteId = siteId;
         this.crawled = crawled;
+        this.pageCount = pageCount;
     }
 
     public UUID getSiteId() {
         return siteId;
+    }
+
+    public long getPageCount() {
+        return pageCount;
     }
 
     public String getCrawled() {
@@ -41,5 +48,22 @@ public class CrawlStatus {
 
     public void setCrawled(String crawled) {
         this.crawled = Instant.parse(crawled);
+    }
+
+    public void setPageCount(long pageCount) {
+        this.pageCount = pageCount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CrawlStatus that = (CrawlStatus) o;
+        return Objects.equals(siteId, that.siteId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(siteId);
     }
 }

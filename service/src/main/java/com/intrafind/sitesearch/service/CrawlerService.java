@@ -18,6 +18,12 @@ package com.intrafind.sitesearch.service;
 
 import com.intrafind.sitesearch.CrawlerControllerFactory;
 import com.intrafind.sitesearch.dto.CrawlerJobResult;
+import crawlercommons.sitemaps.AbstractSiteMap;
+import crawlercommons.sitemaps.SiteMap;
+import crawlercommons.sitemaps.SiteMapIndex;
+import crawlercommons.sitemaps.SiteMapParser;
+import crawlercommons.sitemaps.SiteMapURL;
+import crawlercommons.sitemaps.UnknownFormatException;
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.fetcher.PageFetcher;
@@ -31,20 +37,27 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 @Service
 public class CrawlerService {
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerService.class);
     private static final String CRAWLER_STORAGE = "data/crawler";
+    private static final Random RANDOM_VERSION = new Random();
+    static final String READ_pageBodyCssSelector_FROM_SITE_PROFILE = "body";
 
-    public CrawlerJobResult crawl(String url, UUID siteId, UUID siteSecret, boolean isThrottled, boolean clearIndex) {
+    public CrawlerJobResult crawl(String url, UUID siteId, UUID siteSecret, boolean isThrottled, boolean clearIndex, boolean sitemapsOnly, String pageBodyCssSelector) {
         final CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(CRAWLER_STORAGE);
-        final int crawlerThreads;         
+        final int crawlerThreads;
         if (isThrottled) {
             crawlerThreads = 2;
-            config.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36");
+            config.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0." + RANDOM_VERSION.nextInt(9999) + ".94 Safari/537.36");
             config.setPolitenessDelay(200); // to avoid being blocked by crawled websites
             config.setMaxPagesToFetch(500);
         } else {
@@ -61,17 +74,26 @@ public class CrawlerService {
         try {
             controller = new CrawlController(config, pageFetcher, robotstxtServer);
         } catch (final Exception e) {
-            LOG.error("Crawler initialization fail: " + e.getMessage());
+            LOG.error("CRAWLER_INITIALIZATION_FAILURE: " + e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
 
-        controller.addSeed(url);
+        if (sitemapsOnly) {
+            config.setMaxOutgoingLinksToFollow(0);
+            config.setMaxDepthOfCrawling(0);
+            final List<URL> seedUrls = extractSeedUrls(url);
+            for (final URL pageUrl : seedUrls) {
+                controller.addSeed(pageUrl.toString());
+            }
+        } else {
+            controller.addSeed(url);
+        }
 
         if (clearIndex && !clearIndex(siteId, siteSecret)) {
             return null;
         }
 
-        final CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url));
+        final CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url), pageBodyCssSelector);
         if (isThrottled) {
             controller.start(factory, crawlerThreads);
         } else {
@@ -81,9 +103,40 @@ public class CrawlerService {
         final int pageCount = controller.getCustomData() == null ? 0 : (int) controller.getCustomData();
         SiteCrawler.PAGE_COUNT.remove(siteId);
 
-//            controller.waitUntilFinish();
-//            controller.shutdown();
         return new CrawlerJobResult(pageCount);
+    }
+
+    private List<URL> extractSeedUrls(final String url) {
+        final List<URL> seedUrls = new ArrayList<>();
+        final SiteMapParser siteMapParser = new SiteMapParser(false, true);
+        try {
+            final AbstractSiteMap abstractSiteMap = siteMapParser.parseSiteMap(new URL(url + "/sitemap.xml"));
+            walkSiteMap(abstractSiteMap, seedUrls);
+        } catch (UnknownFormatException | IOException e) {
+            LOG.error(e.getMessage());
+        }
+        return seedUrls;
+    }
+
+    private void walkSiteMap(final AbstractSiteMap abstractSiteMap, final List<URL> seedUrls) throws UnknownFormatException, IOException {
+        if (abstractSiteMap.isIndex()) {
+            final Collection<AbstractSiteMap> siteMaps = ((SiteMapIndex) abstractSiteMap).getSitemaps();
+            siteMaps.stream().forEach(siteMapIndex -> {
+                try {
+                    walkSiteMap(siteMapIndex, seedUrls);
+                } catch (UnknownFormatException | IOException e) {
+                    LOG.error(e.getMessage());
+                }
+            });
+        } else {
+            final SiteMapParser siteMapParser = new SiteMapParser(false, true);
+            final SiteMap siteMap = (SiteMap) siteMapParser.parseSiteMap(abstractSiteMap.getUrl());
+            final Collection<SiteMapURL> siteMapUrls = siteMap.getSiteMapUrls();
+            siteMapUrls.stream().forEach(siteMapUrl -> {
+                seedUrls.add(siteMapUrl.getUrl());
+            });
+
+        }
     }
 
     private boolean clearIndex(UUID siteId, UUID siteSecret) {
@@ -96,11 +149,11 @@ public class CrawlerService {
             if (response.code() == 204 || response.code() == 200) {
                 return true;
             } else {
-                LOG.error("Clear Index result: " + response.code());
+                LOG.error("CLEAR_INDEX_RESULT: " + response.code());
                 return false;
             }
         } catch (IOException e) {
-            LOG.error("Clear Index call fail: " + e.getMessage());
+            LOG.error("CLEAR_INDEX_RESULT_FAILURE: " + e.getMessage());
             return false;
         }
     }

@@ -2,9 +2,15 @@
 
 sudo sysctl -w vm.max_map_count=262144
 
+sudo chown -R 1000:1000 /srv/elk-elasticsearch
+sudo chown -R 1000:1000 /srv/ops-elasticsearch-ying
+sudo chown -R 1000:1000 /srv/ops-elasticsearch-yang
+
 docker-compose --file opt/docker-compose-elk.yaml -p tmp down
 docker-compose --file opt/docker-compose-elk.yaml -p tmp up -d --force-recreate
 docker-compose --file opt/docker-compose-elk.yaml -p tmp ps
+
+docker exec -it router nginx -s reload
 
 # Provide Basic License
 #docker exec -it ops-elasticsearch bash

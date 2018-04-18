@@ -34,7 +34,7 @@ services:
     image: intrafind/if-sitesearch:latest
     container_name: if-sitesearch-blue
     restart: on-failure
-    environment:  # TODO in case it is not working, check alternative notations here: https://docs.docker.com/compose/environment-variables/
+    environment:  # check alternative notations here: https://docs.docker.com/compose/environment-variables/
       - SPRING_SECURITY_USER_PASSWORD
       - BUILD_NUMBER
       - SCM_HASH
@@ -50,7 +50,7 @@ services:
     image: intrafind/if-sitesearch:latest
     container_name: if-sitesearch-green
     restart: on-failure
-    environment:  # TODO in case it is not working, check alternative notations here: https://docs.docker.com/compose/environment-variables/
+    environment:  # check alternative notations here: https://docs.docker.com/compose/environment-variables/
       - SPRING_SECURITY_USER_PASSWORD
       - BUILD_NUMBER
       - SCM_HASH
@@ -62,9 +62,9 @@ services:
     networks:
       - sitesearch
 
-volumes:
-  ops-consul:
-    driver: local
+#volumes:
+#  ops-consul:
+#    driver: local
 
 networks:
   sitesearch:

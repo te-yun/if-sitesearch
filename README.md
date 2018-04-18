@@ -14,7 +14,6 @@ an on-demand SaaS offering for providing websites with an externally managed sea
 
 * [API](https://api.sitesearch.cloud/swagger-ui.html)
 * [Documentation](https://github.com/intrafind/if-sitesearch/blob/master/docs/faq.md)
-* [Integration](https://github.com/intrafind/if-sitesearch/blob/master/docs/Site%20Search%20Product%20Overview.pdf)
     
 ***> > > [Try out!](https://sitesearch.cloud/getting-started) < < <***    
     
@@ -42,6 +41,7 @@ Required environment variables:
 # Operations
 
 ## Run 
+    ./set-local-dev-dummy-env.sh # to set dummy values for mandatory environment variables 
     ./gradlew build -x test # just upon initial execution 
     ./run.sh
     http://localhost:8001
@@ -58,16 +58,15 @@ Required environment variables:
 
 ## Release
     ./release.sh
-    
-## CI configuration
-Required environment variables:
-
-    * SECURITY_OAUTH2_CLIENT_CLIENT_SECRET
-    * BUILD_NUMBER="extracted from CI"
-    * GITHUB_PUBLIC_ACCESS_TOKEN="your long living GitHub token"
-    * DEV_SKIP_FLAG="true" # skip some oAuth2 checks in integration tests to enable additional test scenarios
-    * SCM_HASH="Git commit hash, extracted from CI"
-    * SPRING_SECURITY_USER_PASSWORD="Basic Auth password" # for iFinder Core access   
+   
+## Set CDN Metadata
+* gsutil cors set cdn-cors-configuration.json gs://site-search-europe
+* gsutil setmeta  -h "content-encoding"  gs://site-search-europe/searchbar/2018-04-06/app/css/app.css
+* gsutil -m setmeta -r -h "Content-Encoding: gzip"  gs://site-search-europe/searchbar/2018-04-06
+* gsutil -m acl -r ch -u AllUsers:READER gs://site-search-europe/searchbar/2018-04-06
+* gsutil -m iam -r ch allUsers:objectViewer gs://site-search-europe/test5
+* gsutil -m cp -r ./2018-04-06 gs://site-search-europe/test3
+* gsutil -m rm -r gs://site-search-europe/test1
     
 # Attribution
 * Made with ♥ in Munich

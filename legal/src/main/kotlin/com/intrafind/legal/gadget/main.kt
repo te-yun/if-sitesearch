@@ -36,11 +36,7 @@ private fun main(args: Array<String>) {
     })
 }
 
-private val serviceUrl: String = if (window.location.hostname.equals("localhost")) {
-    "http://localhost:8001"
-} else {
-    window.location.origin
-}
+private val serviceUrl: String = window.location.origin
 
 private lateinit var analyzedContractContainer: HTMLDListElement
 private lateinit var contractContainer: HTMLTextAreaElement

@@ -23,7 +23,15 @@ import com.intrafind.api.search.Hits;
 import com.intrafind.api.search.Search;
 import com.intrafind.sitesearch.Application;
 import com.intrafind.sitesearch.TrustAllX509TrustManager;
-import com.intrafind.sitesearch.dto.*;
+import com.intrafind.sitesearch.dto.CrawlStatus;
+import com.intrafind.sitesearch.dto.CrawlerJobResult;
+import com.intrafind.sitesearch.dto.FetchedPage;
+import com.intrafind.sitesearch.dto.SiteCreation;
+import com.intrafind.sitesearch.dto.SiteIndexSummary;
+import com.intrafind.sitesearch.dto.SitePage;
+import com.intrafind.sitesearch.dto.SiteProfile;
+import com.intrafind.sitesearch.dto.SiteProfileUpdate;
+import com.intrafind.sitesearch.dto.SitesCrawlStatus;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
@@ -42,13 +50,25 @@ import java.io.IOException;
 import java.net.URI;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @Service
 public class SiteService {
     private static final Logger LOG = LoggerFactory.getLogger(SiteService.class);
+    /**
+     * Odd workaround because Windows is just broken. Can be removed once Ubuntu@Windows works properly and PowerShell is not required to run the service locally.
+     */
+    private static final UUID ADMIN_SITE_SECRET = UUID.fromString(System.getenv("ADMIN_SITE_SECRET"));
 
     private static final Index INDEX_SERVICE = IfinderCoreClient.newHessianClient(Index.class, Application.IFINDER_CORE + "/index");
     private static final String SITE_CONFIGURATION_DOCUMENT_PREFIX = "site-configuration-";
@@ -57,7 +77,7 @@ public class SiteService {
      * Field is updated whenever a document is (re-)indexed.
      */
     private static final String PAGE_TIMESTAMP = "timestamp";
-    private static final String PAGE_LABELS = "sisLabels";
+    static final String PAGE_LABELS = "sisLabels";
 
     public Optional<FetchedPage> indexExistingPage(String id, UUID siteId, UUID siteSecret, SitePage page) {
         if (siteId != null && siteSecret != null) { // credentials are provided as a tuple only
@@ -87,14 +107,12 @@ public class SiteService {
         doc.set(Fields.TITLE, page.getTitle());
         doc.set(Fields.URL, page.getUrl());
         doc.set(Fields.TENANT, siteId);
-        doc.set(PAGE_LABELS, Collections.emptyList()); // TODO implement tests, expose via API for both indexing & search
+        doc.set(PAGE_LABELS, page.getSisLabels()); // TODO implement tests, expose via API for both indexing & search
         doc.set(PAGE_TIMESTAMP, Instant.now());
         INDEX_SERVICE.index(doc);
         LOG.info("siteId: " + siteId + " - bodySize: " + page.getBody().length() + " - titleSize: " + page.getTitle().length() + " - URL: " + page.getUrl());
         return fetchById(id);
     }
-
-    private static final UUID ADMIN_SITE_SECRET = UUID.fromString(System.getenv("ADMIN_SITE_SECRET"));
 
     public Optional<SiteProfile> fetchSiteProfile(UUID siteId, UUID siteSecret) {
         if (ADMIN_SITE_SECRET.equals(siteSecret)) {
@@ -110,7 +128,7 @@ public class SiteService {
     }
 
     private Optional<SiteProfile> fetchSiteProfile(UUID siteId) {
-        Optional<Document> siteProfile = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
+        final Optional<Document> siteProfile = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
         return siteProfile.map(document -> {
             final Set<URI> urls;
             if (document.getAll("urls") == null) {
@@ -126,14 +144,17 @@ public class SiteService {
                 email = document.get("email");
             }
 
-            final List<URI> pages;
-            if (document.getAll("pages") == null) {
-                pages = Collections.emptyList();
-            } else {
-                pages = (List) document.getAll("pages");
-            }
+            final Set<SiteProfile.Config> configs = new HashSet<>();
+            urls.forEach(configUrl -> {
+                final List<String> config = document.getAll(configUrl.toString());
+                if (config != null && config.size() > 1) {
+                    configs.add(new SiteProfile.Config(configUrl, config.get(0), Boolean.valueOf(config.get(1))));
+                } else {
+                    configs.add(new SiteProfile.Config(configUrl, SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false));
+                }
+            });
 
-            return new SiteProfile(siteId, UUID.fromString(document.get("secret")), urls, email);
+            return new SiteProfile(siteId, UUID.fromString(document.get("secret")), email, configs);
         });
     }
 
@@ -164,47 +185,44 @@ public class SiteService {
         INDEX_SERVICE.index(siteConfiguration);
     }
 
-    private void storeSite(UUID siteId, UUID siteSecret, Set<URI> urls, String email) {
+    private void storeSite(UUID siteId, UUID siteSecret, String email, Set<SiteProfile.Config> configs) {
         final Optional<Document> siteConfiguration = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
         final Document siteConfigDoc;
         siteConfigDoc = siteConfiguration.orElseGet(() -> new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId));
         siteConfigDoc.set("secret", siteSecret);
-        siteConfigDoc.set("urls", urls);
         siteConfigDoc.set("email", email);
+        configs.forEach(config -> {
+            siteConfigDoc.add("urls", config.getUrl());
+            siteConfigDoc.set(config.getUrl().toString(), Arrays.asList(config.getPageBodyCssSelector(), Boolean.toString(config.isSitemapsOnly())));
+        });
         INDEX_SERVICE.index(siteConfigDoc);
     }
-
-//    private void updateSiteProfile(UUID siteId, Set<URI> pages) {
-//        final Optional<Document> siteConfiguration = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
-//        siteConfiguration.ifPresent(siteConfigDoc -> {
-//            siteConfigDoc.set("pages", pages);
-//            INDEX_SERVICE.index(siteConfigDoc);
-//        });
-//    }
 
     private void storeCrawlStatus(SitesCrawlStatus sitesCrawlStatus) {
         final Document crawlStatus = new Document(CRAWL_STATUS_SINGLETON_DOCUMENT);
         sitesCrawlStatus.getSites()
                 .forEach(siteCrawlStatus ->
-                        crawlStatus.set(siteCrawlStatus.getSiteId().toString(), siteCrawlStatus.getCrawled()));
+                        crawlStatus.set(siteCrawlStatus.getSiteId().toString(), Arrays.asList(siteCrawlStatus.getCrawled(), siteCrawlStatus.getPageCount())));
 
         INDEX_SERVICE.index(crawlStatus);
     }
 
-    private void updateCrawlStatus(UUID siteId) {
+    private Optional<SitesCrawlStatus> updateCrawlStatusInShedule(UUID siteId, long pageCount) {
         final Optional<SitesCrawlStatus> fetchSitesCrawlStatus = fetchSitesCrawlStatus();
         fetchSitesCrawlStatus.ifPresent(sitesCrawlStatus -> {
             sitesCrawlStatus.getSites().forEach(crawlStatus -> {
                 if (siteId.equals(crawlStatus.getSiteId())) {
                     crawlStatus.setCrawled(Instant.now().toString());
+                    crawlStatus.setPageCount(pageCount);
                 }
             });
 
             final Document updatedCrawlStatusDoc = new Document(CRAWL_STATUS_SINGLETON_DOCUMENT);
             sitesCrawlStatus.getSites()
-                    .forEach(updatedCrawlStatus -> updatedCrawlStatusDoc.set(updatedCrawlStatus.getSiteId().toString(), updatedCrawlStatus.getCrawled()));
+                    .forEach(updatedCrawlStatus -> updatedCrawlStatusDoc.set(updatedCrawlStatus.getSiteId().toString(), Arrays.asList(updatedCrawlStatus.getCrawled(), updatedCrawlStatus.getPageCount())));
             INDEX_SERVICE.index(updatedCrawlStatusDoc);
         });
+        return fetchSitesCrawlStatus;
     }
 
     public Optional<FetchedPage> fetchById(String id) {
@@ -218,7 +236,8 @@ public class SiteService {
                     foundDocument.get(Fields.TITLE),
                     foundDocument.get(Fields.BODY),
                     foundDocument.get(Fields.URL),
-                    foundDocument.get(PAGE_TIMESTAMP)
+                    foundDocument.get(PAGE_TIMESTAMP),
+                    foundDocument.getAll(PAGE_LABELS)
             );
             return Optional.of(representationOfFoundDocument);
         } else {
@@ -265,10 +284,10 @@ public class SiteService {
         return new SiteCreation(siteId, siteSecret);
     }
 
-    public SiteCreation createSite(Set<URI> urls, String email) {
+    public SiteCreation createSite(String email, Set<SiteProfile.Config> configs) {
         UUID siteId = UUID.randomUUID();
         UUID siteSecret = UUID.randomUUID();
-        storeSite(siteId, siteSecret, urls, email);
+        storeSite(siteId, siteSecret, email, configs);
         return new SiteCreation(siteId, siteSecret);
     }
 
@@ -355,11 +374,11 @@ public class SiteService {
 
     private Optional<SiteIndexSummary> updateIndex(URI feedUrl, UUID siteId, UUID siteSecret, Boolean stripHtmlTags) {
         LOG.info("URL-received: " + feedUrl);
-        final AtomicInteger successfullyIndexed = new AtomicInteger(0);
+        final AtomicInteger successfullyIndexed = new AtomicInteger();
         final List<String> documents = new ArrayList<>();
         List<String> failedToIndex = new ArrayList<>();
         try {
-            SyndFeed feed = new SyndFeedInput().build(new XmlReader(feedUrl.toURL()));
+            final SyndFeed feed = new SyndFeedInput().build(new XmlReader(feedUrl.toURL()));
 
             feed.getEntries().forEach(entry -> {
                 final String body;
@@ -370,8 +389,8 @@ public class SiteService {
                     body = entry.getDescription().getValue();
                 }
 
-                String url = entry.getLink();
-                SitePage toIndex = new SitePage(
+                final String url = entry.getLink();
+                final SitePage toIndex = new SitePage(
                         entry.getTitle(),
                         body,
                         url
@@ -420,6 +439,7 @@ public class SiteService {
 
     // TODO refactor code so `crawlerService` does not need to be passed as argument
     public Optional<SitesCrawlStatus> crawlSite(UUID serviceSecret, CrawlerService crawlerService, SitesCrawlStatus sitesCrawlStatusUpdate, boolean allSiteCrawl, boolean isThrottled, boolean clearIndex) {
+        final SitesCrawlStatus sitesCrawlStatusOverall = new SitesCrawlStatus(new HashSet<>());
         if (ADMIN_SITE_SECRET.equals(serviceSecret)) {
             final Instant halfDayAgo = Instant.now().minus(1, ChronoUnit.HALF_DAYS);
             sitesCrawlStatusUpdate.getSites().stream()
@@ -430,16 +450,19 @@ public class SiteService {
                             final UUID siteSecret = uuid;
                             final Optional<SiteProfile> siteProfile = fetchSiteProfile(crawlStatus.getSiteId());
                             siteProfile.ifPresent(profile -> {
-                                final Optional<URI> siteUrl = profile.getUrls().stream().findFirst();
-                                siteUrl.ifPresent(uri -> {
-                                    final CrawlerJobResult crawlerJobResult = crawlerService.crawl(uri.toString(), crawlStatus.getSiteId(), siteSecret, isThrottled, clearIndex);
-                                    updateCrawlStatus(crawlStatus.getSiteId()); // TODO fix PATCH update instead of a regular PUT
-                                    LOG.info("siteId: " + crawlStatus.getSiteId() + " - siteUrl: " + uri.toString() + " - pageCount: " + crawlerJobResult.getPageCount()); // TODO add pattern to logstash
+                                final AtomicLong pageCount = new AtomicLong();
+                                profile.getConfigs().forEach(configUrl -> {
+                                    final CrawlerJobResult crawlerJobResult = crawlerService.crawl(configUrl.getUrl().toString(), crawlStatus.getSiteId(), siteSecret, isThrottled, clearIndex, false, CrawlerService.READ_pageBodyCssSelector_FROM_SITE_PROFILE);
+                                    pageCount.addAndGet(crawlerJobResult.getPageCount());
+                                    final Optional<SitesCrawlStatus> sitesCrawlStatus = updateCrawlStatusInShedule(crawlStatus.getSiteId(), pageCount.get());// TODO fix PATCH update instead of a regular PUT   // rename to updateCrawlStatusInShedule
+                                    sitesCrawlStatus.ifPresent(element -> sitesCrawlStatusOverall.getSites().addAll(element.getSites()));
+                                    LOG.info("siteId: " + crawlStatus.getSiteId() + " - siteUrl: " + configUrl.getUrl().toString() + " - pageCount: " + crawlerJobResult.getPageCount()); // TODO add pattern to logstash
                                 });
+                                sitesCrawlStatusOverall.getSites().add(new CrawlStatus(profile.getId(), Instant.now(), pageCount.get()));
                             });
                         });
                     });
-            return fetchSitesCrawlStatus();
+            return Optional.of(sitesCrawlStatusOverall);
         }
         return Optional.empty();
     }
@@ -461,11 +484,17 @@ public class SiteService {
     }
 
     private Optional<SitesCrawlStatus> fetchSitesCrawlStatus() {
-        final List<CrawlStatus> sitesCrawlStatus = new ArrayList<>();
+        final Set<CrawlStatus> sitesCrawlStatus = new HashSet<>();
         final Optional<Document> crawlStatus = INDEX_SERVICE.fetch(Index.ALL, CRAWL_STATUS_SINGLETON_DOCUMENT).stream().findAny();
         crawlStatus.ifPresent(document -> document.getFields().forEach((uuidKey, crawledTimestamp) -> {
             if (!uuidKey.startsWith("_")) {
-                sitesCrawlStatus.add(new CrawlStatus(UUID.fromString(uuidKey), Instant.parse(crawledTimestamp.get(0))));
+                long pageCount;
+                if (crawledTimestamp.size() == 2) {
+                    pageCount = crawledTimestamp.get(1) == null ? -1 : Long.parseLong(crawledTimestamp.get(1));
+                } else {
+                    pageCount = -1;
+                }
+                sitesCrawlStatus.add(new CrawlStatus(UUID.fromString(uuidKey), Instant.parse(crawledTimestamp.get(0)), pageCount));
             }
         }));
         return Optional.of(new SitesCrawlStatus(sitesCrawlStatus));
@@ -475,7 +504,7 @@ public class SiteService {
         final Optional<UUID> fetchedSiteSecret = fetchSiteSecret(siteId);
         if (fetchedSiteSecret.isPresent()) {
             if (fetchedSiteSecret.get().equals(siteSecret)) {
-                storeSite(siteId, siteProfileUpdate.getSecret(), siteProfileUpdate.getUrls(), siteProfileUpdate.getEmail());
+                storeSite(siteId, siteProfileUpdate.getSecret(), siteProfileUpdate.getEmail(), siteProfileUpdate.getConfigs());
                 return fetchSiteProfile(siteId);
             }
         }

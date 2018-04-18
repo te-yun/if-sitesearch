@@ -10,7 +10,7 @@
           <option name="outputFile" value="$MODULE_DIR$/../../../finder/build/classes/kotlin/main/finder.js" />
           <option name="noStdlib" value="true" />
           <option name="sourceMap" value="true" />
-          <option name="sourceMapEmbedSources" value="inlining" />
+          <option name="sourceMapEmbedSources" value="always" />
           <option name="metaInfo" value="true" />
           <option name="target" value="v5" />
           <option name="moduleKind" value="umd" />
@@ -36,16 +36,15 @@
       <sourceFolder url="file://$MODULE_DIR$/../../../finder/src/main/kotlin" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../../finder/src/test/kotlin" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../../finder/src/main/resources" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/../../../finder/src/test/resources" type="java-test-resource" />
       <excludeFolder url="file://$MODULE_DIR$/../../../finder/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/../../../finder/build" />
       <excludeFolder url="file://$MODULE_DIR$/../../../finder/out" />
     </content>
     <orderEntry type="jdk" jdkName="Kotlin SDK" jdkType="KotlinSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-test-js:1.2.30" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-js:1.2.30" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-test-annotations-common:1.2.30" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.2.30" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-test-js:1.2.31" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-js:1.2.31" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-test-annotations-common:1.2.31" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.2.31" level="project" />
   </component>
 </module>

@@ -17,12 +17,20 @@
 package com.intrafind.sitesearch;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.intrafind.sitesearch.dto.*;
+import com.intrafind.sitesearch.dto.Autocomplete;
+import com.intrafind.sitesearch.dto.FetchedPage;
+import com.intrafind.sitesearch.dto.FoundPage;
+import com.intrafind.sitesearch.dto.Hits;
+import com.intrafind.sitesearch.dto.SitePage;
 import com.intrafind.sitesearch.integration.SearchTest;
 import com.intrafind.sitesearch.integration.SiteTest;
 import com.intrafind.sitesearch.jmh.LoadIndex2Users;
 import com.intrafind.sitesearch.service.SiteCrawler;
-import okhttp3.*;
+import okhttp3.Headers;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -31,6 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,14 +51,19 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SmokeTest {
     private static final Logger LOG = LoggerFactory.getLogger(SmokeTest.class);
-    private static final String SEARCH_SERVICE_DOMAIN = "@main.sitesearch.cloud/";
-    private static final String INVALID_CREDENTIALS = "https://" + System.getenv("SPRING_SECURITY_USER_PASSWORD") + "invalid:" + System.getenv("SPRING_SECURITY_USER_PASSWORD");
+    static final String SEARCH_SERVICE_DOMAIN = "@main.sitesearch.cloud/";
+    static final String INVALID_CREDENTIALS = "https://sitesearch:invalid" + System.getenv("SERVICE_SECRET");
+    private static final String BASIC_ENCODED_PASSWORD = System.getenv("BASIC_ENCODED_PASSWORD");
     public static final String API_FRONTPAGE_MARKER = "<title>Site Search</title>";
     public static final String SITES_API = "https://api.sitesearch.cloud/sites/";
     private static final UUID BW_BANK_SITE_ID = UUID.fromString("269b0538-120b-44b1-a365-488c2f3fcc15");
@@ -77,10 +91,19 @@ public class SmokeTest {
     }
 
     @Test
+    public void assureTaggerContent() throws Exception {
+        final Request request = new Request.Builder()
+                .header(HttpHeaders.AUTHORIZATION, BASIC_ENCODED_PASSWORD)
+                .url("https://tagger.analyzelaw.com/json/tagger?method=tag&param0=test")
+                .build();
+        final Response response = HTTP_CLIENT.newCall(request).execute();
+        assertEquals(HttpStatus.OK.value(), response.code());
+    }
+
+    @Test
     public void assureSiteSearchServiceBasicAuthProtectionForJsonPost() {
         final ResponseEntity<String> secureEndpointJson = caller.postForEntity(URI.create(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "json/index?method=index"), HttpEntity.EMPTY, String.class);
         assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJson.getStatusCode());
-        assertNull(secureEndpointJson.getBody());
     }
 
     private static final String PRODUCT_FRONTPAGE_MARKER = "<title>Site Search - Get the best search results from your Website</title>";
@@ -161,7 +184,7 @@ public class SmokeTest {
 
     @Test
     public void apiFrontpageContent() throws Exception {
-        Request request = new Request.Builder()
+        final Request request = new Request.Builder()
                 .url("https://api.sitesearch.cloud")
                 .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
                 .build();
@@ -293,12 +316,22 @@ public class SmokeTest {
     }
 
     @Test
-    public void dockerRegistryUpAndSecure() throws Exception {
+    public void dockerRegistryIsSecure() throws Exception {
         Request request = new Request.Builder()
                 .url("https://docker-registry.sitesearch.cloud")
                 .build();
         final Response response = HTTP_CLIENT.newCall(request).execute();
         assertEquals(HttpStatus.UNAUTHORIZED.value(), response.code());
+    }
+
+    @Test
+    public void dockerRegistryIsUp() throws Exception {
+        Request request = new Request.Builder()
+                .header(HttpHeaders.AUTHORIZATION, BASIC_ENCODED_PASSWORD)
+                .url("https://docker-registry.sitesearch.cloud")
+                .build();
+        final Response response = HTTP_CLIENT.newCall(request).execute();
+        assertEquals(HttpStatus.OK.value(), response.code());
     }
 
     @Test
@@ -314,9 +347,9 @@ public class SmokeTest {
         final Response response = HTTP_CLIENT.newCall(request).execute();
 
         assertEquals(HttpStatus.OK.value(), response.code());
-        assertNull(response.headers().get("Location"));
+        assertNull(response.headers().get(HttpHeaders.LOCATION));
         assureCorsHeaders(response.headers(), HEADER_SIZE);
-        FetchedPage fetchedPage = MAPPER.readValue(response.body().bytes(), FetchedPage.class);
+        FetchedPage fetchedPage = MAPPER.readValue(response.body().byteStream(), FetchedPage.class);
         assertEquals(entropyToCheckInUpdate, fetchedPage.getUrl());
         assertFalse(fetchedPage.getBody().isEmpty());
         assertFalse(fetchedPage.getTitle().isEmpty());

@@ -22,9 +22,16 @@ import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
-import okhttp3.*;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,14 +58,16 @@ public class SiteCrawler extends WebCrawler {
     private UUID siteId;
     private UUID siteSecret;
     private URI url;
+    private String pageBodyCssSelector;
 
     private SiteCrawler() {
     }
 
-    public SiteCrawler(UUID siteId, UUID siteSecret, URI url) {
+    public SiteCrawler(UUID siteId, UUID siteSecret, URI url, String pageBodyCssSelector) {
         this.siteId = siteId;
         this.siteSecret = siteSecret;
         this.url = url;
+        this.pageBodyCssSelector = pageBodyCssSelector;
     }
 
     @Override
@@ -80,7 +89,10 @@ public class SiteCrawler extends WebCrawler {
 
         if (page.getParseData() instanceof HtmlParseData) {
             final HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
-            final String htmlStrippedBody = extractTextFromMixedHtml(htmlParseData.getHtml());
+            if (isNoindexPage(htmlParseData)) {
+                return;
+            }
+            final String htmlStrippedBody = extractTextFromMixedHtml(htmlParseData.getHtml(), pageBodyCssSelector);
             final String title = htmlParseData.getTitle();
 
             final SitePage sitePage = new SitePage(
@@ -89,27 +101,7 @@ public class SiteCrawler extends WebCrawler {
                     url
             );
 
-            try {
-                // TODO move this to CrawlerService
-                final Request request = new Request.Builder()
-                        .url("https://api.sitesearch.cloud/sites/" + siteId + "/pages?siteSecret=" + siteSecret)
-                        .put(RequestBody.create(JSON_MEDIA_TYPE, MAPPER.writeValueAsBytes(sitePage)))
-                        .build();
-                HTTP_CLIENT.newCall(request).enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-                        LOG.warn("siteId: " + siteId + " - URL: " + url + " - exception: " + e.getMessage());
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) {
-                        LOG.debug("siteId: " + siteId + " - URL: " + url + " - responseCode: " + response.code());
-                        response.close();
-                    }
-                });
-            } catch (IOException e) {
-                LOG.error(e.getMessage());
-            }
+            indexPage(sitePage);
         }
         if (PAGE_COUNT.get(siteId) == null) {
             PAGE_COUNT.put(siteId, new AtomicInteger());
@@ -120,8 +112,44 @@ public class SiteCrawler extends WebCrawler {
         this.getMyController().setCustomData(currentPageCount);
     }
 
-    private String extractTextFromMixedHtml(String body) {
+    private void indexPage(SitePage sitePage) {
+        try {
+            // TODO move this to CrawlerService
+            final Request request = new Request.Builder()
+                    .url("https://api.sitesearch.cloud/sites/" + siteId + "/pages?siteSecret=" + siteSecret)
+                    .put(RequestBody.create(JSON_MEDIA_TYPE, MAPPER.writeValueAsBytes(sitePage)))
+                    .build();
+            HTTP_CLIENT.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    LOG.warn("siteId: " + siteId + " - URL: " + sitePage.getUrl() + " - exception: " + e.getMessage());
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) {
+                    LOG.debug("siteId: " + siteId + " - URL: " + sitePage.getUrl() + " - responseCode: " + response.code());
+                    response.close();
+                }
+            });
+        } catch (IOException e) {
+            LOG.error(e.getMessage());
+        }
+    }
+
+    private boolean isNoindexPage(HtmlParseData htmlParseData) {
+        return htmlParseData.getMetaTags().get("robots") != null && htmlParseData.getMetaTags().get("robots").contains("noindex");
+    }
+
+    private String extractTextFromMixedHtml(String body, String pageBodyCssSelector) {
         final Document docPage = Jsoup.parse(body);
-        return docPage.body().text();
+        final Element selectedBodyFragment = docPage.body().selectFirst(pageBodyCssSelector);
+        if (selectedBodyFragment == null) {
+            return docPage.body().text();
+        }
+        final String extractedPageBody = selectedBodyFragment.text();
+        if (extractedPageBody.isEmpty()) {
+            return docPage.body().text();
+        }
+        return extractedPageBody;
     }
 }

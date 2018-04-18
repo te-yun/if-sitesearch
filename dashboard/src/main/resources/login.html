@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright 2018 IntraFind Software AG. All rights reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+        <link rel="icon" type="image/png" href="artifact/favicon.png">
+        <link rel="apple-touch-icon-precomposed" href="artifact/apple-touch-icon-57x57.png">
+        <link rel="apple-touch-icon-precomposed" href="artifact/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon-precomposed" href="artifact/apple-touch-icon-114x114.png">
+        <link rel="apple-touch-icon-precomposed" href="artifact/apple-touch-icon-144x144.png">
+
+        <title>Site Search</title>
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:100italic,200italic,300italic,400italic,500italic,600italic,700italic,800italic,900italic,100,200,300,400,500,600,700,800,900">
+        <link rel="stylesheet" href="artifact/css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="artifact/css/main.css">
+    </head>
+    <body>
+        <header>
+            <div class="sis-container">
+                <h1>
+                    <img src="artifact/img/sitesearch_logo.png" width="164" height="45" alt="Site Search Logo">
+                </h1>
+            </div>
+        </header>
+        <div class="sis-main">
+            <div class="sis-container">
+                <div class="sis-login">
+                    <h2>Login to Site Search</h2>
+                    <form class="sis-form">
+                        <label class="sis-form-siteid-label"><i class="fas fa-key"></i>Site ID</label>
+                        <div class="sis-form-siteid">
+                            <input id="user" type="text" autocomplete="user" autofocus>
+                            <div class="sis-error">Error</div>
+                        </div>
+                        <label class="sis-form-sitesecret-label"><i class="fas fa-user-secret"></i>Site Secret</label>
+                        <div class="sis-form-sitesecret">
+                            <input id="password" type="password" autocomplete="current-password">
+                            <div class="sis-error">Error</div>
+                        </div>
+                        <button type="submit"
+                                onclick="window.location = 'https://api.sitesearch.cloud/app/dashboard/resources/dashboard.html?siteId='+document.getElementById('user').value+'&siteSecret='+document.getElementById('password').value">
+                            Login
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <div class="sis-container">
+                Copyright 2018. All rights reserved.
+            </div>
+        </footer>
+    </body>
+</html>

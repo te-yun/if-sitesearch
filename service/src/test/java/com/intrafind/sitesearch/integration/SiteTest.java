@@ -19,7 +19,14 @@ package com.intrafind.sitesearch.integration;
 import com.intrafind.sitesearch.SmokeTest;
 import com.intrafind.sitesearch.controller.PageController;
 import com.intrafind.sitesearch.controller.SiteController;
-import com.intrafind.sitesearch.dto.*;
+import com.intrafind.sitesearch.dto.CrawlStatus;
+import com.intrafind.sitesearch.dto.FetchedPage;
+import com.intrafind.sitesearch.dto.SiteCreation;
+import com.intrafind.sitesearch.dto.SiteIndexSummary;
+import com.intrafind.sitesearch.dto.SitePage;
+import com.intrafind.sitesearch.dto.SiteProfile;
+import com.intrafind.sitesearch.dto.SiteProfileUpdate;
+import com.intrafind.sitesearch.dto.SitesCrawlStatus;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,15 +35,29 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.net.URI;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -51,7 +72,8 @@ public class SiteTest {
         return new SitePage(
                 "Cloud Solution",
                 "Site Search is IntraFind's on-demand solution for site search.",
-                url
+                url,
+                Arrays.asList("mars", "Venus")
         );
     }
 
@@ -72,8 +94,8 @@ public class SiteTest {
     }
 
     private FetchedPage createNewPage(UUID siteId, UUID siteSecret) {
-        SitePage simple = buildPage();
-        ResponseEntity<FetchedPage> newlyCreatedPage = caller.exchange(SiteController.ENDPOINT + "/" + siteId + "/pages?siteSecret=" + siteSecret, HttpMethod.PUT, new HttpEntity<>(simple), FetchedPage.class);
+        final SitePage simple = buildPage();
+        final ResponseEntity<FetchedPage> newlyCreatedPage = caller.exchange(SiteController.ENDPOINT + "/" + siteId + "/pages?siteSecret=" + siteSecret, HttpMethod.PUT, new HttpEntity<>(simple), FetchedPage.class);
         assertEquals(HttpStatus.OK, newlyCreatedPage.getStatusCode());
         assertNotNull(newlyCreatedPage.getBody());
         assertNotNull(newlyCreatedPage.getBody().getBody());
@@ -82,6 +104,8 @@ public class SiteTest {
         assertFalse(newlyCreatedPage.getBody().getTitle().isEmpty());
         assertNotNull(newlyCreatedPage.getBody().getUrl());
         assertFalse(newlyCreatedPage.getBody().getUrl().isEmpty());
+        assertFalse(newlyCreatedPage.getBody().getSisLabels().isEmpty());
+        assertEquals(Arrays.asList("mars", "Venus"), newlyCreatedPage.getBody().getSisLabels());
 
         return newlyCreatedPage.getBody();
     }
@@ -100,14 +124,14 @@ public class SiteTest {
         Instant now = Instant.now();
         final SitesCrawlStatus updatedCrawlStatus = crawlStatus.getBody();
         final CrawlStatus searchSiteCrawlStatus = findSearchSiteCrawlStatus(updatedCrawlStatus);
-        assertFalse(now.toString().equals(searchSiteCrawlStatus.getCrawled()));
+        assertNotEquals(now.toString(), searchSiteCrawlStatus.getCrawled());
         searchSiteCrawlStatus.setCrawled(now.toString());
         updatedCrawlStatus.getSites().add(searchSiteCrawlStatus);
         final ResponseEntity<SitesCrawlStatus> crawlStatusUpdate = caller.exchange(SiteController.ENDPOINT + "/crawl/status?serviceSecret=" +
                 ADMIN_SITE_SECRET, HttpMethod.PUT, new HttpEntity<>(updatedCrawlStatus), SitesCrawlStatus.class);
         assertEquals(HttpStatus.OK, crawlStatus.getStatusCode());
         assertNotNull(findSearchSiteCrawlStatus(crawlStatusUpdate.getBody()).getSiteId());
-        assertTrue(now.equals(Instant.parse(findSearchSiteCrawlStatus(crawlStatusUpdate.getBody()).getCrawled())));
+        assertEquals(now, Instant.parse(findSearchSiteCrawlStatus(crawlStatusUpdate.getBody()).getCrawled()));
         assertTrue(Instant.now().isAfter(Instant.parse(findSearchSiteCrawlStatus(crawlStatusUpdate.getBody()).getCrawled())));
 
         // verify crawl status of a specific site
@@ -116,7 +140,7 @@ public class SiteTest {
         assertEquals(HttpStatus.OK, crawlStatusUpdated.getStatusCode());
         assertEquals(initSize, crawlStatusUpdated.getBody().getSites().size());
         assertNotNull(findSearchSiteCrawlStatus(crawlStatusUpdated.getBody()).getSiteId());
-        assertTrue(now.equals(Instant.parse(findSearchSiteCrawlStatus(crawlStatusUpdated.getBody()).getCrawled())));
+        assertEquals(now, Instant.parse(findSearchSiteCrawlStatus(crawlStatusUpdated.getBody()).getCrawled()));
         assertTrue(Instant.now().isAfter(Instant.parse(findSearchSiteCrawlStatus(crawlStatusUpdated.getBody()).getCrawled())));
     }
 
@@ -126,9 +150,11 @@ public class SiteTest {
 
     @Test
     public void createNewSiteWithProfile() {
-        final Set<URI> urls = new HashSet<>(Arrays.asList(URI.create("https://example.com"), URI.create("https://subdomain.example.com")));
+        final Set<SiteProfile.Config> configs = new HashSet<>(Arrays.asList(
+                new SiteProfile.Config(URI.create("https://example.com"), "", false),
+                new SiteProfile.Config(URI.create("https://subdomain.example.com"), "", false)));
         final SiteProfileUpdate siteProfileCreation = new SiteProfileUpdate(
-                urls,
+                configs,
                 CrawlerTest.TEST_EMAIL_ADDRESS
         );
         final SiteCreation createdSiteProfile = createNewSite(siteProfileCreation);
@@ -139,7 +165,7 @@ public class SiteTest {
         assertEquals(createdSiteProfile.getSiteId(), actual.getBody().getId());
         assertEquals(createdSiteProfile.getSiteSecret(), actual.getBody().getSecret());
         assertEquals(CrawlerTest.TEST_EMAIL_ADDRESS, actual.getBody().getEmail());
-        assertEquals(urls, actual.getBody().getUrls());
+        assertEquals(configs, actual.getBody().getConfigs());
 
         ResponseEntity<SiteProfile> siteProfileWithAdminSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() +
                 "/profile?siteSecret=" + ADMIN_SITE_SECRET, HttpMethod.GET, HttpEntity.EMPTY, SiteProfile.class);
@@ -150,15 +176,15 @@ public class SiteTest {
         assertEquals(HttpStatus.NOT_FOUND, siteProfileWithInvalidSecret.getStatusCode());
 
         // update site profile
-        urls.add(URI.create("https://update.example.com"));
+        configs.add(new SiteProfile.Config(URI.create("https://update.example.com"), "", false));
 
-        final SiteProfileUpdate siteProfileUpdate = new SiteProfileUpdate(createdSiteProfile.getSiteSecret(), urls, "update." + CrawlerTest.TEST_EMAIL_ADDRESS);
+        final SiteProfileUpdate siteProfileUpdate = new SiteProfileUpdate(createdSiteProfile.getSiteSecret(), "update." + CrawlerTest.TEST_EMAIL_ADDRESS, configs);
         final ResponseEntity<SiteProfileUpdate> updatedSite = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + createdSiteProfile.getSiteSecret(),
                 HttpMethod.PUT, new HttpEntity<>(siteProfileUpdate), SiteProfileUpdate.class);
         assertEquals(createdSiteProfile.getSiteSecret(), updatedSite.getBody().getSecret());
         assertEquals("update." + CrawlerTest.TEST_EMAIL_ADDRESS, updatedSite.getBody().getEmail());
-        assertEquals(urls, updatedSite.getBody().getUrls());
-        assertEquals(urls.size(), updatedSite.getBody().getUrls().size());
+        assertEquals(configs, updatedSite.getBody().getConfigs());
+        assertEquals(configs.size(), updatedSite.getBody().getConfigs().size());
 
         // assure site profile is impossible with wrong site secret
         final ResponseEntity<SiteProfileUpdate> updatedSiteWithInvalidSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + UUID.randomUUID(),
@@ -171,13 +197,13 @@ public class SiteTest {
 
         // update site profile's secret
         final UUID newSiteSecret = UUID.randomUUID();
-        final SiteProfileUpdate siteProfileUpdateWithSecret = new SiteProfileUpdate(newSiteSecret, urls, "update." + CrawlerTest.TEST_EMAIL_ADDRESS);
+        final SiteProfileUpdate siteProfileUpdateWithSecret = new SiteProfileUpdate(newSiteSecret, "update." + CrawlerTest.TEST_EMAIL_ADDRESS, configs);
         final ResponseEntity<SiteProfileUpdate> updatedSiteWithSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + createdSiteProfile.getSiteSecret(),
                 HttpMethod.PUT, new HttpEntity<>(siteProfileUpdateWithSecret), SiteProfileUpdate.class);
         assertEquals(newSiteSecret, updatedSiteWithSecret.getBody().getSecret());
         assertEquals("update." + CrawlerTest.TEST_EMAIL_ADDRESS, updatedSiteWithSecret.getBody().getEmail());
-        assertEquals(urls, updatedSiteWithSecret.getBody().getUrls());
-        assertEquals(urls.size(), updatedSiteWithSecret.getBody().getUrls().size());
+        assertEquals(configs, updatedSiteWithSecret.getBody().getConfigs());
+        assertEquals(configs.size(), updatedSiteWithSecret.getBody().getConfigs().size());
         assertEquals(newSiteSecret, updatedSiteWithSecret.getBody().getSecret());
 
         // fetching profile with update site secret works
@@ -285,15 +311,16 @@ public class SiteTest {
 
         TimeUnit.MILLISECONDS.sleep(8_000);
 
+        final int pageChecksum = 923522;
         final ResponseEntity<SitePage> updateWithSiteIdOnly = caller.exchange(SiteController.ENDPOINT + "/" + createdSite.getSiteId()
                 + "/pages/" + createdPage.getId(), HttpMethod.PUT, new HttpEntity<>(createdPage), SitePage.class);
         assertEquals("only valid siteId is provided", HttpStatus.BAD_REQUEST, updateWithSiteIdOnly.getStatusCode());
-        assertEquals(29791, updateWithSiteIdOnly.getBody().hashCode());
+        assertEquals(pageChecksum, updateWithSiteIdOnly.getBody().hashCode());
 
         final ResponseEntity<SitePage> updateWithSiteSecretOnly = caller.exchange(SiteController.ENDPOINT + "/" + createdPage.getSiteId()
                 + "/pages/" + createdPage.getId(), HttpMethod.PUT, new HttpEntity<>(createdPage), SitePage.class);
         assertEquals("only valid siteSecret is provided", HttpStatus.BAD_REQUEST, updateWithSiteSecretOnly.getStatusCode());
-        assertEquals(29791, updateWithSiteSecretOnly.getBody().hashCode());
+        assertEquals(pageChecksum, updateWithSiteSecretOnly.getBody().hashCode());
 
         final ResponseEntity<SitePage> updateWithWrongSiteSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSite.getSiteId()
                         + "/pages/" + createdPage.getId() + "?siteSecret=" + UUID.randomUUID(),
@@ -311,6 +338,7 @@ public class SiteTest {
         assertEquals(HttpStatus.OK, updated.getStatusCode());
         assertEquals(createdPage, updated.getBody());
         assertEquals("updated body", updated.getBody().getBody());
+        assertEquals(Arrays.asList("mars", "Venus"), updated.getBody().getSisLabels());
         // assert correct timestamp update
         assertTrue(beforePageUpdate.isBefore(Instant.parse(updated.getBody().getTimestamp())));
         assertTrue(Instant.now().isAfter(Instant.parse(updated.getBody().getTimestamp())));
@@ -536,51 +564,4 @@ public class SiteTest {
 
         return response.getBody();
     }
-
-    //    @Test
-//        public void indexIntrafindDe() throws Exception {
-//            List<String> enIndexDocuments = new ArrayList<>();
-//            enIndexDocuments.add("en/2b4c27b0-6636-4a13-a911-4f495f99b604.xml");
-//            enIndexDocuments.add("en/32d2557e-7f03-48d9-ad60-bf7c0b70c487.xml");
-//            enIndexDocuments.add("en/534706ba-da98-4b45-b920-8ec0486d79fb.xml");
-//            enIndexDocuments.add("en/79f4cd25-39d1-42ad-8b2a-9247aabd7d13.xml");
-//            List<String> deIndexDocuments = new ArrayList<>();
-//            deIndexDocuments.add("de/0b23bbeb-b659-4b79-9cd5-46f06a9d6f46.xml");
-//            deIndexDocuments.add("de/141ba3e5-744c-4ecf-845b-b10046b13106.xml");
-//            deIndexDocuments.add("de/56d4d97a-a796-4899-b2d8-724fd2001a61.xml");
-//            deIndexDocuments.add("de/9b45617d-6050-4eea-8da5-68003db2cf3a.xml");
-//            deIndexDocuments.add("de/df49ea3b-4766-4c86-963c-b811deb307a9.xml");
-//
-//            enIndexDocuments.forEach(indexedDocumentsPage -> {
-//                indexCrawlerPage(indexedDocumentsPage, UUID.fromString("4bcccea2-8bcf-4280-88c7-8736e9c3d15c"),
-//                        null
-//                );
-//            });
-//            deIndexDocuments.forEach(indexedDocumentsPage -> {
-//                indexCrawlerPage(indexedDocumentsPage, UUID.fromString("afe0ba00-e4de-4ea5-8f4a-0bb1c417979c"),
-//                        null
-//                );
-//            });
-//        }
-//
-//        private void indexCrawlerPage(String indexedDocumentsPage, UUID siteId, UUID siteSecret) {
-//            Request request = new Request.Builder()
-//                    .url("https://api.sitesearch.cloud/sites/" + siteId + "/xml" +
-//                            "?xmlUrl=https://raw.githubusercontent.com/intrafind/if-sitesearch/master/service/src/test/resources/intrafind-de/" +
-//                            indexedDocumentsPage + "&siteSecret=" + siteSecret)
-//                    .post(RequestBody.create(MediaType.parse("applications/json"), ""))
-//                    .build();
-//
-//            try {
-//                final Response response = HTTP_CLIENT.newCall(request).execute();
-//                assertEquals(HttpStatus.OK.value(), response.code());
-//                assertNotNull(response.body());
-//                SiteIndexSummary result = MAPPER.readValue(response.body().bytes(), SiteIndexSummary.class);
-//                assertTrue(result.getFailed().isEmpty());
-//                assertFalse(result.getDocuments().isEmpty());
-//                assertTrue(result.getSuccessCount() > 0);
-//            } catch (IOException e) {
-//                LOG.error(e.getMessage());
-//            }
-//        }
 }
