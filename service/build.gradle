@@ -52,11 +52,8 @@ dependencies {
 
     compile "javax.xml.bind:jaxb-api:2.3.0"
 
-//    compile "org.springframework.boot:spring-boot-starter-hateoas:$spring_boot_version"
     compile "org.springframework.boot:spring-boot-starter-web:$spring_boot_version"
     compile "org.springframework.boot:spring-boot-starter-undertow:$spring_boot_version"
-//    compile "org.springframework.boot:spring-boot-starter-tomcat:$spring_boot_version"
-//    compile "org.springframework.boot:spring-boot-starter-jetty:$spring_boot_version"
 
     compile "io.springfox:springfox-swagger2:$swagger_version"
     compile "io.springfox:springfox-swagger-ui:$swagger_version"
@@ -76,7 +73,7 @@ dependencies {
     compile "com.google.oauth-client:google-oauth-client-jetty:1.23.0"
     compile "com.google.apis:google-api-services-gmail:v1-rev82-1.23.0"
 
-    compile "org.jsoup:jsoup:1.11.2"
+    compile "org.jsoup:jsoup:1.11.3"
 }
 
 //test {
