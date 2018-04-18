@@ -2,7 +2,7 @@ version: "2.0"
 services:
 
   sitesearch-search-service:
-    image: docker-registry.sitesearch.cloud/intrafind/sis-searchservice:2.4
+    image: docker-registry.sitesearch.cloud/intrafind/sis-searchservice:2.4.1
     container_name: sitesearch-search-service
     restart: always
     depends_on:
@@ -11,14 +11,13 @@ services:
       - sitesearch-elasticsearch-quorum
     environment:
       - elasticsearch_hosts=sitesearch-elasticsearch, sitesearch-elasticsearch-1, sitesearch-elasticsearch-quorum
-      - HOSTNAME=sitesearch-search-service
     volumes:
       - /srv/sitesearch-search-service:/srv/sitesearch-search-service:rw
     networks:
       - sitesearch
 
   sitesearch-search-service-1:
-    image: docker-registry.sitesearch.cloud/intrafind/sis-searchservice:2.4
+    image: docker-registry.sitesearch.cloud/intrafind/sis-searchservice:2.4.1
     container_name: sitesearch-search-service-1
     restart: always
     depends_on:
@@ -27,7 +26,6 @@ services:
       - sitesearch-elasticsearch-quorum
     environment:
       - elasticsearch_hosts=sitesearch-elasticsearch, sitesearch-elasticsearch-1, sitesearch-elasticsearch-quorum
-      - HOSTNAME=sitesearch-search-service-1
     volumes:
       - /srv/sitesearch-search-service-1:/srv/sitesearch-search-service:rw
     networks:
