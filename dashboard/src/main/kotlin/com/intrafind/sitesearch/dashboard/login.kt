@@ -28,11 +28,11 @@ package com.intrafind.sitesearch.dashboard
 //    siteSecretElement = document.getElementById("password") as HTMLInputElement
 //}
 //
-//fun login(){
-//    console.warn(1)
-////    console.warn("https://api.sitesearch.cloud/app/dashboard/resources/dashboard.html?siteId=${siteIdElement.value}&siteSecret=${siteSecretElement.value}")
-////    console.warn("$serviceUrl/app/dashboard/resources/dashboard.html?siteId=${siteIdElement.value}&siteSecret=${siteSecretElement.value}")
-////    window.location.href = "$serviceUrl/app/dashboard/resources/dashboard.html?siteId=${siteIdElement.value}&siteSecret=${siteSecretElement.value}"
-////    window.location.href = "$serviceUrl/app/dashboard/resources/dashboard.html"
-//}
+fun login() {
+    console.warn(1)
+//    console.warn("https://api.sitesearch.cloud/app/dashboard/resources/dashboard.html?siteId=${siteIdElement.value}&siteSecret=${siteSecretElement.value}")
+//    console.warn("$serviceUrl/app/dashboard/resources/dashboard.html?siteId=${siteIdElement.value}&siteSecret=${siteSecretElement.value}")
+//    window.location.href = "$serviceUrl/app/dashboard/resources/dashboard.html?siteId=${siteIdElement.value}&siteSecret=${siteSecretElement.value}"
+//    window.location.href = "$serviceUrl/app/dashboard/resources/dashboard.html"
+}
 
