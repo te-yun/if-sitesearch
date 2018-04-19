@@ -54,9 +54,6 @@ public class CrawlerService {
     public CrawlerJobResult crawl(String url, UUID siteId, UUID siteSecret, boolean isThrottled, boolean clearIndex, boolean sitemapsOnly, String pageBodyCssSelector) {
         final CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(CRAWLER_STORAGE);
-        config.isFollowRedirects(); // TODO check if true
-        config.isRespectNoIndex(); // TODO check if true
-        config.isRespectNoFollow(); // TODO check if true
         final int crawlerThreads;
         if (isThrottled) {
             crawlerThreads = 2;
