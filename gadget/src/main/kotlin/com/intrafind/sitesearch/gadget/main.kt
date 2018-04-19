@@ -16,6 +16,7 @@
 
 package com.intrafind.sitesearch.gadget
 
+import com.intrafind.sitesearch.gadget.SiteSearch.Companion.serviceUrl
 import org.w3c.dom.HTMLButtonElement
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
@@ -37,7 +38,6 @@ suspend fun main(args: Array<String>) {
 private var siteId: String = ""
 private var siteSecret: String = ""
 private var websiteUrl: String = ""
-private val serviceUrl: String = window.location.origin
 
 fun triggerFirstUsageOwnership() {
     val xhr = XMLHttpRequest()
@@ -204,19 +204,21 @@ private fun validateDomain() {
 }
 
 private fun allowedToCrawl(xhr: XMLHttpRequest): Boolean {
-    val statusCode = JSON.parse<dynamic>(xhr.responseText).statusCode as Short
-    return xhr.status.equals(200)
-            && (statusCode.equals(200) || statusCode.equals(302) || statusCode.equals(301))
+    if (xhr.status.equals(200)) {
+        val statusCode = JSON.parse<dynamic>(xhr.responseText).statusCode as Short
+        return statusCode.equals(200) || statusCode.equals(302) || statusCode.equals(301)
+    }
+    return false
 }
 
 private var isValidSetup: Boolean = false
 private fun classifyUrlAsValid(isValid: Boolean) {
-    if (isValid) {
+    isValidSetup = if (isValid) {
         validateField(websiteUrlContainer, true)
-        isValidSetup = true
+        true
     } else {
         validateField(websiteUrlContainer, false)
-        isValidSetup = false
+        false
     }
 }
 
@@ -294,6 +296,7 @@ fun startCrawler() {
 class SiteSearch {
     companion object {
         val captchaSiteKey = "6LflVEQUAAAAANVEkwc63uQX96feH1H_6jDU-Bn5"
+        internal val serviceUrl: String = window.location.origin
     }
 }
 
