@@ -203,9 +203,11 @@ private fun validateDomain() {
     }
 }
 
-private fun allowedToCrawl(xhr: XMLHttpRequest) =
-        xhr.status.equals(200)
-                && ((JSON.parse<dynamic>(xhr.responseText).statusCode as Short).equals(200) || (JSON.parse<dynamic>(xhr.responseText).statusCode as Short).equals(302))
+private fun allowedToCrawl(xhr: XMLHttpRequest): Boolean {
+    val statusCode = JSON.parse<dynamic>(xhr.responseText).statusCode as Short
+    return xhr.status.equals(200)
+            && (statusCode.equals(200) || statusCode.equals(302) || statusCode.equals(301))
+}
 
 private var isValidSetup: Boolean = false
 private fun classifyUrlAsValid(isValid: Boolean) {
