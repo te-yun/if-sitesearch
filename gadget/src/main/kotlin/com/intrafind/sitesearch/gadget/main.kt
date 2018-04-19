@@ -133,47 +133,47 @@ private fun init() {
 private fun applyAnalytics() {
     sitemapsOnly.addEventListener("change", {
         js("ga('send', {" +
-                "                     hitType: 'event'," +
-                "                     eventCategory: 'GSG'," +
-                "                     eventAction: 'change'," +
-                "                     eventLabel: document.getElementById('sitemapsOnly').checked" +
-                "                   })")
+                "hitType: 'event'," +
+                "eventCategory: 'GSG'," +
+                "eventAction: 'sitemapsChecked'," +
+                "eventLabel: document.getElementById('sitemapsOnly').checked" +
+                "})")
     })
 
     cssSelector.addEventListener("change", {
         js("ga('send', {" +
-                "                     hitType: 'event'," +
-                "                     eventCategory: 'GSG'," +
-                "                     eventAction: 'change'," +
-                "                     eventLabel: document.getElementById('cssSelector').value" +
-                "                   })")
+                "hitType: 'event'," +
+                "eventCategory: 'GSG'," +
+                "eventAction: 'cssSelectorChanged'," +
+                "eventLabel: document.getElementById('cssSelector').value" +
+                "})")
     })
 
     email.addEventListener("change", {
         js("ga('send', {" +
-                "                     hitType: 'event'," +
-                "                     eventCategory: 'GSG'," +
-                "                     eventAction: 'change'," +
-                "                     eventLabel: document.getElementById('email').value" +
-                "                   })")
+                "hitType: 'event'," +
+                "eventCategory: 'GSG'," +
+                "eventAction: 'emailChanged'," +
+                "eventLabel: document.getElementById('email').value" +
+                "})")
     })
 
     url.addEventListener("change", {
         js("ga('send', {" +
-                "                     hitType: 'event'," +
-                "                     eventCategory: 'GSG'," +
-                "                     eventAction: 'change'," +
-                "                     eventLabel: document.getElementById('url').value" +
-                "                   })")
+                "hitType: 'event'," +
+                "eventCategory: 'GSG'," +
+                "eventAction: 'urlChanged'," +
+                "eventLabel: document.getElementById('url').value" +
+                "})")
     })
 
     url.addEventListener("click", {
         js("ga('send', {" +
-                "                     hitType: 'event'," +
-                "                     eventCategory: 'GSG'," +
-                "                     eventAction: 'click'," +
-                "                     eventLabel: navigator.userAgent" +
-                "                   })")
+                "hitType: 'event'," +
+                "eventCategory: 'GSG'," +
+                "eventAction: 'urlClicked'," +
+                "eventLabel: navigator.userAgent" +
+                "})")
     })
 }
 
