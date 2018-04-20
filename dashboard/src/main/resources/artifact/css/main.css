@@ -551,6 +551,9 @@ header nav {
   color: #404040;
   font-size: 1.6rem; }
 
+.sis-page-count {
+  display: none; }
+
 .sis-captcha-container {
   margin-bottom: 40px; }
 
