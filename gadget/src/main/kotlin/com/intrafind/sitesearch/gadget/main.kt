@@ -190,28 +190,26 @@ private fun enableProactiveValidation() {
         validateDomain()
     })
 
+    url.addEventListener("change", {
+        validateDomain()
+    })
+
     cssSelector.addEventListener("blur", {
-        console.warn("blur")
         validateCssSelector()
     })
 
     cssSelector.addEventListener("keyup", {
-        console.warn("keyup")
         validateCssSelector()
     })
 
     cssSelector.addEventListener("change", {
-        console.warn("change")
         validateCssSelector()
     })
 }
 
 private fun validateCssSelector() {
     val pageShadow = document.createElement("html")
-    console.warn(pageBody.length)
     pageShadow.innerHTML = pageBody
-    console.warn(cssSelector.value)
-    console.warn("pageShadow.querySelector(cssSelector.value) ${pageShadow.querySelector(cssSelector.value)}")
     if (pageShadow.querySelector(cssSelector.value) == null) {
         classifyCssSelectorAsValid(false)
     } else {
@@ -222,8 +220,7 @@ private fun validateCssSelector() {
 lateinit var pageBody: String
 private fun validateDomain() {
     val xhr = XMLHttpRequest()
-//    xhr.open("GET", "https://api.muctool.de/curl?url=${url.value}&followRedirects=true")
-    xhr.open("GET", "https://api.muctool.de/curl?url=${url.value}")
+    xhr.open("GET", "https://api.muctool.de/curl?url=${url.value}&followRedirects=true")
     xhr.send()
     xhr.onload = {
         if (allowedToCrawl(xhr)) {
