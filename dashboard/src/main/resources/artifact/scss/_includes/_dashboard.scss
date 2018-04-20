@@ -33,6 +33,18 @@
     }
 }
 
+.sis-info-container {
+    @extend .sis-config-container;
+
+    > div {
+        > div {
+            border-bottom: none;
+            color: $font-color;
+            font-size: 1.6rem;
+        }
+    }
+}
+
 .sis-captcha-container {
     margin-bottom: 40px;
 }

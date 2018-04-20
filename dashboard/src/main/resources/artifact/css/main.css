@@ -522,18 +522,18 @@ header nav {
       -ms-grid-column-span: 1;
       -ms-grid-row: 3; }
 
-.sis-config-container {
+.sis-config-container, .sis-info-container {
   max-width: 700px;
   margin: 40px 0 80px 0; }
-  .sis-config-container > div {
+  .sis-config-container > div, .sis-info-container > div {
     display: flex;
     margin-bottom: 40px; }
-    .sis-config-container > div > label {
+    .sis-config-container > div > label, .sis-info-container > div > label {
       padding-top: 8px;
       width: 370px; }
-      .sis-config-container > div > label > .fas {
+      .sis-config-container > div > label > .fas, .sis-info-container > div > label > .fas {
         margin-right: 8px; }
-    .sis-config-container > div > div {
+    .sis-config-container > div > div, .sis-info-container > div > div {
       align-items: flex-end;
       border-bottom: 1px solid #e3e3e3;
       color: #777777;
@@ -541,10 +541,15 @@ header nav {
       font-size: 1.4rem;
       padding: 10px 14px;
       width: 100%; }
-    .sis-config-container > div > .sis-config-checkbox-container {
+    .sis-config-container > div > .sis-config-checkbox-container, .sis-info-container > div > .sis-config-checkbox-container {
       border: none;
       display: block;
       padding: 0 14px; }
+
+.sis-info-container > div > div {
+  border-bottom: none;
+  color: #404040;
+  font-size: 1.6rem; }
 
 .sis-captcha-container {
   margin-bottom: 40px; }
