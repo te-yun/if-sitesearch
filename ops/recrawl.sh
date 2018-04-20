@@ -9,7 +9,7 @@ curl -X GET \
 
 # apply fetched site status to run the crawler
 curl -X POST \
-    "https://api.sitesearch.cloud/sites/crawl?serviceSecret=$ADMIN_SITE_SECRET&clearIndex=false" \
+    "https://api.sitesearch.cloud/sites/crawl?serviceSecret=$ADMIN_SITE_SECRET&clearIndex=true" \
     -H 'content-type: application/json' \
     -T $SITE_CRAWL_STATUS_FILE
 

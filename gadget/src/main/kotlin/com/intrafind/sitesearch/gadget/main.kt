@@ -112,6 +112,7 @@ private fun init() {
 
     applyAnalytics()
     enableProactiveValidation()
+    validateDomain()
 
     val waitWhileCrawlerIsRunningMsg = "Crawler is running... please give us just a minute or two."
     document.addEventListener("sis.triggerFirstUsageOwnershipEvent", {
@@ -188,15 +189,47 @@ private fun enableProactiveValidation() {
     url.addEventListener("keyup", {
         validateDomain()
     })
+
+    cssSelector.addEventListener("blur", {
+        console.warn("blur")
+        validateCssSelector()
+    })
+
+    cssSelector.addEventListener("keyup", {
+        console.warn("keyup")
+        validateCssSelector()
+    })
+
+    cssSelector.addEventListener("change", {
+        console.warn("change")
+        validateCssSelector()
+    })
 }
 
+private fun validateCssSelector() {
+    val pageShadow = document.createElement("html")
+    console.warn(pageBody.length)
+    pageShadow.innerHTML = pageBody
+    console.warn(cssSelector.value)
+    console.warn("pageShadow.querySelector(cssSelector.value) ${pageShadow.querySelector(cssSelector.value)}")
+    if (pageShadow.querySelector(cssSelector.value) == null) {
+        classifyCssSelectorAsValid(false)
+    } else {
+        classifyCssSelectorAsValid(true)
+    }
+}
+
+lateinit var pageBody: String
 private fun validateDomain() {
     val xhr = XMLHttpRequest()
+//    xhr.open("GET", "https://api.muctool.de/curl?url=${url.value}&followRedirects=true")
     xhr.open("GET", "https://api.muctool.de/curl?url=${url.value}")
     xhr.send()
     xhr.onload = {
         if (allowedToCrawl(xhr)) {
+            pageBody = JSON.parse<dynamic>(xhr.responseText).body as String
             classifyUrlAsValid(true)
+            validateCssSelector()
         } else {
             classifyUrlAsValid(false)
         }
@@ -219,6 +252,14 @@ private fun classifyUrlAsValid(isValid: Boolean) {
     } else {
         validateField(websiteUrlContainer, false)
         false
+    }
+}
+
+private fun classifyCssSelectorAsValid(isValid: Boolean) {
+    if (isValid) {
+        validateField(cssSelectorContainer, true)
+    } else {
+        validateField(cssSelectorContainer, false)
     }
 }
 
