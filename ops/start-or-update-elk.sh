@@ -11,7 +11,7 @@ docker-compose --file opt/docker-compose-elk.yaml -p sitesearch down
 docker-compose --file opt/docker-compose-elk.yaml -p sitesearch up -d --force-recreate
 docker-compose --file opt/docker-compose-elk.yaml -p sitesearch ps
 
-docker exec -it router nginx -s reload
+docker exec router nginx -s reload
 
 # Provide Basic License
 #docker exec -it ops-elasticsearch bash

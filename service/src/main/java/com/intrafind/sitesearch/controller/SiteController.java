@@ -230,6 +230,7 @@ public class SiteController {
             @RequestParam(value = "query", defaultValue = "") String query,
             @PathVariable(value = "siteId") UUID siteId
     ) {
+        final Instant start = Instant.now();
         if (query.isEmpty()) return ResponseEntity.badRequest().build();
 
         // override siteId with cookie value for debugging & speed up the getting started experience
@@ -240,6 +241,9 @@ public class SiteController {
         Optional<Autocomplete> result = autocompleteService.autocomplete(query, siteId);
         if (result.isPresent()) {
             final Autocomplete autocomplete = result.get();
+            final Instant stop = Instant.now();
+            final Instant searchDuration = stop.minusMillis(start.toEpochMilli());
+            LOG.info("siteId: " + siteId + " - testAutocompleteDurationInMs: " + searchDuration.toEpochMilli());
             LOG.info("siteId: " + siteId + " - query-fragment: " + query + " - autocompletes: " + autocomplete.getResults().size());
             return ResponseEntity.ok(autocomplete);
         } else {
