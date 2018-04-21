@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -252,6 +253,7 @@ public class SiteController {
             @RequestParam(value = "query", defaultValue = "") String query,
             @PathVariable(value = "siteId") UUID siteId
     ) {
+        final Instant start = Instant.now();
         if (query.isEmpty()) return ResponseEntity.badRequest().build();
 
         // override siteId with cookie value for debugging & speed up the getting started experience
@@ -260,6 +262,9 @@ public class SiteController {
         }
 
         final Hits searchResult = searchService.search(query, siteId);
+        final Instant stop = Instant.now();
+        final Instant searchDuration = stop.minusMillis(start.toEpochMilli());
+        LOG.info("siteId: " + siteId + " - testSearchDurationInMs: " + searchDuration.toEpochMilli());
         LOG.info("siteId: " + siteId + " - query: " + query + " - results: " + searchResult.getResults().size());
         return ResponseEntity.ok(searchResult);
     }

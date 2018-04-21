@@ -10,7 +10,7 @@ services:
       - ops-elasticsearch-ying
       - ops-logstash
     environment:
-#      SERVER_NAME: ops-elasticsearch
+#      SERVER_NAME: elk-elasticsearch
       ELASTICSEARCH_URL: http://elk-elasticsearch:9200
     #      KIBANA_DEFAULTAPPID: kibana.defaultAppId
     #      XPACK_MONITORING_ENABLED: xpack.monitoring.enabled
@@ -90,19 +90,11 @@ services:
 #    environment:
 #      - "xpack.monitoring.elasticsearch.url=http://ops-elasticsearch:9200"
     volumes:
-      - /srv/ops-logstash:/usr/share/logstash:rw
+      - /srv/ops-logstash/_data:/usr/share/logstash:rw
     ports:
       - 12201:12201/udp
     networks:
       - sitesearch
-
-volumes:
-  ops-elk:
-    driver: local
-  ops-elk-alt:
-    driver: local
-  ops-logstash:
-    driver: local
 
 networks:
   sitesearch:
