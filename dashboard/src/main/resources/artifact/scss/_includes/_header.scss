@@ -13,6 +13,7 @@ header {
 
         > ul {
             display: flex;
+            justify-content: flex-end;
 
             a {
                 color: $font-color;
@@ -29,7 +30,7 @@ header {
             }
 
             > li:last-child {
-                margin-left: auto;
+            //     margin-left: auto; // Activate to place menu items on the left and logout to the right
 
                 > a {
                     margin-right: 0;
