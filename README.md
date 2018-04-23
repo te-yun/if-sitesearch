@@ -5,7 +5,7 @@
 [![TeamCity CI Build Status](https://ci.sitesearch.cloud/app/rest/builds/buildType(id:IntraFind_Oss_Build)/statusIcon)](https://ci.sitesearch.cloud/viewType.html?buildTypeId=IntraFind_Oss_Build)
 
 
-Site Search Dispatcher
+Site Search API Service
 =
 Site Search Dispatcher is an upstream service of [Site Search](https://api.sitesearch.cloud), 
 an on-demand SaaS offering for providing websites with an externally managed search capability. 

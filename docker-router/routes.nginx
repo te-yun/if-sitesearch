@@ -43,6 +43,7 @@ server {
     include /etc/nginx/snippets/ssl.conf;
 
     location / {
+        add_header set-cookie 'affiliate = $arg_affiliate; domain = sitesearch.cloud';
         return 301 https://sitesearch.cloud$request_uri;
     }
 }
@@ -125,7 +126,7 @@ server {
     include /etc/nginx/snippets/ssl.conf;
 
     location / {
-        proxy_pass https://sitesearch.cloud$request_uri$args;
+        proxy_pass http://sitesearch.cloud$request_uri$args;
     }
 }
 
@@ -137,7 +138,7 @@ server {
     include /etc/nginx/snippets/ssl.conf;
 
     location / {
-        proxy_pass https://sitesearch.cloud$request_uri?affiliate=$arg_affiliate;
+        proxy_pass http://sitesearch.cloud$request_uri?affiliate=$arg_affiliate;
     }
 }
 

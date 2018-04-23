@@ -32,6 +32,7 @@ import kotlin.dom.removeClass
 suspend fun main(args: Array<String>) {
     window.addEventListener("DOMContentLoaded", {
         init()
+        console.warn(window.navigator.plugins)
     })
 }
 
