@@ -533,7 +533,9 @@ header nav {
       width: 370px; }
       .sis-config-container > div > label > .fas, .sis-info-container > div > label > .fas {
         margin-right: 8px; }
-    .sis-config-container > div > div, .sis-info-container > div > div {
+    .sis-config-container > div > div, .sis-info-container > div > div,
+    .sis-config-container > div > p,
+    .sis-info-container > div > p {
       align-items: flex-end;
       border-bottom: 1px solid #e3e3e3;
       color: #777777;
@@ -546,7 +548,8 @@ header nav {
       display: block;
       padding: 0 14px; }
 
-.sis-info-container > div > div {
+.sis-info-container > div > div,
+.sis-info-container > div > p {
   border-bottom: none;
   color: #404040;
   font-size: 1.6rem; }
