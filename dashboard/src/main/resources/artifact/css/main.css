@@ -468,7 +468,8 @@ header h1 {
 header nav {
   flex: auto; }
   header nav > ul {
-    display: flex; }
+    display: flex;
+    justify-content: flex-end; }
     header nav > ul a {
       color: #404040;
       font-size: 1.6rem;
@@ -478,10 +479,8 @@ header nav {
       user-select: none; }
       header nav > ul a:hover, header nav > ul a.sis-active {
         color: #00aeef; }
-    header nav > ul > li:last-child {
-      margin-left: auto; }
-      header nav > ul > li:last-child > a {
-        margin-right: 0; }
+    header nav > ul > li:last-child > a {
+      margin-right: 0; }
 
 .sis-login {
   margin: 20px auto;
