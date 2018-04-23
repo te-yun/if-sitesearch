@@ -118,29 +118,29 @@ server {
     }
 }
 
-server {
-    listen 443 ssl http2;
-    listen [::]:443 ssl http2;
-    server_name green.sitesearch.cloud;
-
-    include /etc/nginx/snippets/ssl.conf;
-
-    location / {
-        proxy_pass http://sitesearch.cloud$request_uri$args;
-    }
-}
-
-server {
-    listen 443 ssl http2;
-    listen [::]:443 ssl http2;
-    server_name blue.sitesearch.cloud;
-
-    include /etc/nginx/snippets/ssl.conf;
-
-    location / {
-        proxy_pass http://sitesearch.cloud$request_uri?affiliate=$arg_affiliate;
-    }
-}
+#server {
+#    listen 443 ssl http2;
+#    listen [::]:443 ssl http2;
+#    server_name green.sitesearch.cloud;
+#
+#    include /etc/nginx/snippets/ssl.conf;
+#
+#    location / {
+#        proxy_pass http://sitesearch.cloud$request_uri$args;
+#    }
+#}
+#
+#server {
+#    listen 443 ssl http2;
+#    listen [::]:443 ssl http2;
+#    server_name blue.sitesearch.cloud;
+#
+#    include /etc/nginx/snippets/ssl.conf;
+#
+#    location / {
+#        proxy_pass http://sitesearch.cloud$request_uri?affiliate=$arg_affiliate;
+#    }
+#}
 
 server {
     listen 443 ssl http2;
