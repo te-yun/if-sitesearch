@@ -117,32 +117,29 @@ server {
     }
 }
 
-#server {
-#    listen 443 ssl http2;
-#    listen [::]:443 ssl http2;
-#    server_name green.sitesearch.cloud;
-#
-#    include /etc/nginx/snippets/ssl.conf;
-#
-#    location / {
-#        proxy_pass http://if-sitesearch-green:8001;
-#    }
-#}
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name green.sitesearch.cloud;
 
-#server {
-#    listen 443 ssl http2;
-#    listen [::]:443 ssl http2;
-#    server_name blue.sitesearch.cloud;
-#
-#    include /etc/nginx/snippets/ssl.conf;
-#
-#    auth_basic "Search Service";
-#    auth_basic_user_file /etc/nginx/.htpasswd; # supply this via env vars somehow or as raw file at build time
-#
-#    location / {
-#        proxy_pass https://main.sitesearch.cloud;
-#    }
-#}
+    include /etc/nginx/snippets/ssl.conf;
+
+    location / {
+        proxy_pass https://sitesearch.cloud$request_uri$args;
+    }
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name green.sitesearch.cloud;
+
+    include /etc/nginx/snippets/ssl.conf;
+
+    location / {
+        proxy_pass https://sitesearch.cloud$request_uri?affiliate=$arg_affiliate;
+    }
+}
 
 server {
     listen 443 ssl http2;
