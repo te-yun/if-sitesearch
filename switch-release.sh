@@ -5,12 +5,6 @@ docker_image_name=if-sitesearch
 img_fqn=docker-registry.sitesearch.cloud/intrafind/${docker_image_name}:${docker_tag}
 docker_network=sitesearch
 
-#./gradlew clean build --info -x test
-#cd service
-#docker build --tag intrafind/${docker_image_name}:${docker_tag} .
-#cd ..
-#docker ps
-
 isBlueUp() {
     if [ -f "./blue-green-deployment.lock" ]; then
         rm ./blue-green-deployment.lock

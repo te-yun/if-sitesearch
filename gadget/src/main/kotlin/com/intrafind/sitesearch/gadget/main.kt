@@ -16,6 +16,7 @@
 
 package com.intrafind.sitesearch.gadget
 
+import com.intrafind.sitesearch.gadget.SiteSearch.Companion.serviceUrl
 import org.w3c.dom.HTMLButtonElement
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
@@ -31,13 +32,13 @@ import kotlin.dom.removeClass
 suspend fun main(args: Array<String>) {
     window.addEventListener("DOMContentLoaded", {
         init()
+        console.warn("window.document.referrer ${window.document.referrer}")
     })
 }
 
 private var siteId: String = ""
 private var siteSecret: String = ""
 private var websiteUrl: String = ""
-private val serviceUrl: String = window.location.origin
 
 fun triggerFirstUsageOwnership() {
     val xhr = XMLHttpRequest()
@@ -97,11 +98,12 @@ private fun init() {
     siteSearchSetupUrl = document.getElementById("siteSearchSetupUrl") as HTMLDivElement
     triggerButton = document.getElementById("index") as HTMLButtonElement
     val enterpriseSearchbar = document.getElementById("sitesearch-searchbar") as HTMLDivElement
-    val searchbarVersion = "2018-04-06" // when updating, update the value in the corresponding HTML container too
-    val siteSearchConfig = "https://cdn.sitesearch.cloud/searchbar/$searchbarVersion/config/sitesearch.json"
-    val enterpriseSearchbarCode = enterpriseSearchbar.outerHTML
-            .replace("/searchbar/$searchbarVersion/config/sitesearch.json", siteSearchConfig)
-    integrationCode.value = enterpriseSearchbarCode
+//    val searchbarVersion = "2018-04-06" // when updating, update the value in the corresponding HTML container too
+//    val siteSearchConfig = "https://cdn.sitesearch.cloud/searchbar/$searchbarVersion/config/sitesearch.json"
+//    val enterpriseSearchbarCode = enterpriseSearchbar.outerHTML
+//            .replace("/searchbar/$searchbarVersion/config/sitesearch.json", siteSearchConfig)
+//    integrationCode.value = enterpriseSearchbarCode
+    integrationCode.value = enterpriseSearchbar.outerHTML
 
     document.addEventListener("sis.crawlerFinishedEvent", {
         triggerButton.textContent = "Enable Search"
@@ -111,6 +113,7 @@ private fun init() {
 
     applyAnalytics()
     enableProactiveValidation()
+    validateDomain()
 
     val waitWhileCrawlerIsRunningMsg = "Crawler is running... please give us just a minute or two."
     document.addEventListener("sis.triggerFirstUsageOwnershipEvent", {
@@ -123,56 +126,66 @@ private fun init() {
                 "</a>"
         (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = waitWhileCrawlerIsRunningMsg
         insertSiteIdIntoIntegrationCode()
-        //TODO make crawl requests visible in logs.sis that do not have any email provided
+
+        trackEnabledSearch()
     })
 
     applyQueryOverrides()
 }
 
+private fun trackEnabledSearch() {
+    js("ga('send', {" +
+            "hitType: 'event'," +
+            "eventCategory: 'GSG'," +
+            "eventAction: 'enabledSearch'," +
+            "eventLabel: document.getElementById('siteId').textContent + ' - ' + window.document.referrer" +
+            "})")
+}
+
 private fun applyAnalytics() {
     sitemapsOnly.addEventListener("change", {
         js("ga('send', {" +
-                "                     hitType: 'event'," +
-                "                     eventCategory: 'GSG'," +
-                "                     eventAction: 'change'," +
-                "                     eventLabel: document.getElementById('sitemapsOnly').checked" +
-                "                   })")
+                "hitType: 'event'," +
+                "eventCategory: 'GSG'," +
+                "eventAction: 'sitemapsChecked'," +
+                "eventLabel: document.getElementById('sitemapsOnly').checked" +
+                "})")
     })
 
     cssSelector.addEventListener("change", {
         js("ga('send', {" +
-                "                     hitType: 'event'," +
-                "                     eventCategory: 'GSG'," +
-                "                     eventAction: 'change'," +
-                "                     eventLabel: document.getElementById('cssSelector').value" +
-                "                   })")
+                "hitType: 'event'," +
+                "eventCategory: 'GSG'," +
+                "eventAction: 'cssSelectorChanged'," +
+                "eventLabel: document.getElementById('cssSelector').value" +
+                "})")
     })
 
     email.addEventListener("change", {
         js("ga('send', {" +
-                "                     hitType: 'event'," +
-                "                     eventCategory: 'GSG'," +
-                "                     eventAction: 'change'," +
-                "                     eventLabel: document.getElementById('email').value" +
-                "                   })")
+                "hitType: 'event'," +
+                "eventCategory: 'GSG'," +
+                "eventAction: 'emailChanged'," +
+                "eventLabel: document.getElementById('email').value" +
+                "})")
     })
 
     url.addEventListener("change", {
         js("ga('send', {" +
-                "                     hitType: 'event'," +
-                "                     eventCategory: 'GSG'," +
-                "                     eventAction: 'change'," +
-                "                     eventLabel: document.getElementById('url').value" +
-                "                   })")
+                "hitType: 'event'," +
+                "eventCategory: 'GSG'," +
+                "eventAction: 'urlChanged'," +
+                "eventLabel: document.getElementById('url').value" +
+                "})")
     })
 
     url.addEventListener("click", {
         js("ga('send', {" +
-                "                     hitType: 'event'," +
-                "                     eventCategory: 'GSG'," +
-                "                     eventAction: 'click'," +
-                "                     eventLabel: navigator.userAgent" +
-                "                   })")
+                "hitType: 'event'," +
+                "eventCategory: 'GSG'," +
+                "eventAction: 'urlClicked'," +
+                "eventLabel: navigator.userAgent" +
+                "})")
     })
 }
 
@@ -184,36 +197,71 @@ private fun enableProactiveValidation() {
         validateDomain()
     })
 
-    url.addEventListener("keyup", {
+    url.addEventListener("change", {
         validateDomain()
+    })
+
+    // do not set keypress listeners on both `cssSelector` & `url` until Shadow DOM is not used instead of `document.createElement("html")`
+
+    cssSelector.addEventListener("blur", {
+        validateCssSelector()
+    })
+
+    cssSelector.addEventListener("change", {
+        validateCssSelector()
     })
 }
 
+private fun validateCssSelector() {
+    val pageShadow = document.createElement("html") as HTMLElement
+    pageShadow.innerHTML = pageBody
+    if (pageShadow.querySelector(cssSelector.value) == null) {
+        classifyCssSelectorAsValid(false)
+    } else {
+        classifyCssSelectorAsValid(true)
+    }
+}
+
+lateinit var pageBody: String
 private fun validateDomain() {
     val xhr = XMLHttpRequest()
-    xhr.open("GET", "https://api.muctool.de/curl?url=${url.value}")
+    xhr.open("GET", "https://api.muctool.de/curl?url=${url.value}&followRedirects=true")
     xhr.send()
     xhr.onload = {
         if (allowedToCrawl(xhr)) {
+            pageBody = JSON.parse<dynamic>(xhr.responseText).body as String
             classifyUrlAsValid(true)
+            validateCssSelector()
         } else {
             classifyUrlAsValid(false)
         }
     }
 }
 
-private fun allowedToCrawl(xhr: XMLHttpRequest) =
-        xhr.status.equals(200)
-                && ((JSON.parse<dynamic>(xhr.responseText).statusCode as Short).equals(200) || (JSON.parse<dynamic>(xhr.responseText).statusCode as Short).equals(302))
+private fun allowedToCrawl(xhr: XMLHttpRequest): Boolean {
+    if (xhr.status.equals(200)) {
+        val statusCode = JSON.parse<dynamic>(xhr.responseText).statusCode as Short
+        return statusCode.equals(200) || statusCode.equals(302) || statusCode.equals(301)
+    }
+    return false
+}
 
 private var isValidSetup: Boolean = false
 private fun classifyUrlAsValid(isValid: Boolean) {
-    if (isValid) {
+    isValidSetup = if (isValid) {
         validateField(websiteUrlContainer, true)
-        isValidSetup = true
+        true
     } else {
         validateField(websiteUrlContainer, false)
-        isValidSetup = false
+        false
+    }
+}
+
+private fun classifyCssSelectorAsValid(isValid: Boolean) {
+    if (isValid) {
+        validateField(cssSelectorContainer, true)
+    } else {
+        validateField(cssSelectorContainer, false)
     }
 }
 
@@ -278,7 +326,6 @@ fun startCrawler() {
     val xhr = XMLHttpRequest()
     xhr.open("POST", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(url.value)}&token=$captchaResult&email=${email.value}&sitemapsOnly=${sitemapsOnly.checked}&pageBodyCssSelector=${encodeURIComponent(cssSelector.value)}")
     xhr.onload = {
-        console.warn(xhr.responseText)
         if (xhr.status.equals(200)) {
             crawlerPageCount = JSON.parse<dynamic>(xhr.responseText).pageCount as Int
             document.dispatchEvent(Event("sis.crawlerFinishedEvent"))
@@ -292,6 +339,7 @@ fun startCrawler() {
 class SiteSearch {
     companion object {
         val captchaSiteKey = "6LflVEQUAAAAANVEkwc63uQX96feH1H_6jDU-Bn5"
+        internal val serviceUrl: String = window.location.origin
     }
 }
 

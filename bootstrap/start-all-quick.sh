@@ -25,10 +25,10 @@ docker start router
 docker start if-tagging-service # might required to call `bootstrap/update-if-service.sh` if this does not work # does not work, try with "docker exec -it router nginx -s reload"
 #sh bootstrap/update-if-service.sh if-tagging-service # have not been tested yet
 docker start if-app-webcrawler
-docker exec -it router nginx -s reload
+docker exec router nginx -s reload
 
 sudo sysctl -w vm.max_map_count=262144 # required for ELK's Elasticsearch
-docker-compose --file opt/docker-compose-elk.yaml -p tmp up -d
+docker-compose --file opt/docker-compose-elk.yaml -p sitesearch up -d
 docker-compose --file opt/docker-compose-bg.yaml -p tmp up -d
 echo "/== startup-script =="
 

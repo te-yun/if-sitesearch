@@ -343,7 +343,6 @@ button, .sis-form button {
   color: #ffffff;
   cursor: pointer;
   font-size: 1.4rem;
-  font-weight: 200;
   outline: none;
   padding: 1.6rem;
   text-transform: uppercase; }
@@ -469,7 +468,8 @@ header h1 {
 header nav {
   flex: auto; }
   header nav > ul {
-    display: flex; }
+    display: flex;
+    justify-content: flex-end; }
     header nav > ul a {
       color: #404040;
       font-size: 1.6rem;
@@ -479,10 +479,8 @@ header nav {
       user-select: none; }
       header nav > ul a:hover, header nav > ul a.sis-active {
         color: #00aeef; }
-    header nav > ul > li:last-child {
-      margin-left: auto; }
-      header nav > ul > li:last-child > a {
-        margin-right: 0; }
+    header nav > ul > li:last-child > a {
+      margin-right: 0; }
 
 .sis-login {
   margin: 20px auto;
@@ -523,18 +521,20 @@ header nav {
       -ms-grid-column-span: 1;
       -ms-grid-row: 3; }
 
-.sis-config-container {
+.sis-config-container, .sis-info-container {
   max-width: 700px;
   margin: 40px 0 80px 0; }
-  .sis-config-container > div {
+  .sis-config-container > div, .sis-info-container > div {
     display: flex;
     margin-bottom: 40px; }
-    .sis-config-container > div > label {
+    .sis-config-container > div > label, .sis-info-container > div > label {
       padding-top: 8px;
       width: 370px; }
-      .sis-config-container > div > label > .fas {
+      .sis-config-container > div > label > .fas, .sis-info-container > div > label > .fas {
         margin-right: 8px; }
-    .sis-config-container > div > div {
+    .sis-config-container > div > div, .sis-info-container > div > div,
+    .sis-config-container > div > p,
+    .sis-info-container > div > p {
       align-items: flex-end;
       border-bottom: 1px solid #e3e3e3;
       color: #777777;
@@ -542,10 +542,19 @@ header nav {
       font-size: 1.4rem;
       padding: 10px 14px;
       width: 100%; }
-    .sis-config-container > div > .sis-config-checkbox-container {
+    .sis-config-container > div > .sis-config-checkbox-container, .sis-info-container > div > .sis-config-checkbox-container {
       border: none;
       display: block;
       padding: 0 14px; }
+
+.sis-info-container > div > div,
+.sis-info-container > div > p {
+  border-bottom: none;
+  color: #404040;
+  font-size: 1.6rem; }
+
+.sis-page-count {
+  display: none; }
 
 .sis-captcha-container {
   margin-bottom: 40px; }

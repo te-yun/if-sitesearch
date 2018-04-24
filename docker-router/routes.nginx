@@ -43,6 +43,7 @@ server {
     include /etc/nginx/snippets/ssl.conf;
 
     location / {
+        add_header set-cookie 'affiliate = $arg_affiliate; domain = sitesearch.cloud';
         return 301 https://sitesearch.cloud$request_uri;
     }
 }
@@ -117,29 +118,31 @@ server {
     }
 }
 
-#server {
-#    listen 443 ssl http2;
-#    listen [::]:443 ssl http2;
-#    server_name green.sitesearch.cloud;
-#
-#    include /etc/nginx/snippets/ssl.conf;
-#
-#    location / {
-#        proxy_pass http://if-sitesearch-green:8001;
-#    }
-#}
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name green.sitesearch.cloud;
 
-#server {
-#    listen 443 ssl http2;
-#    listen [::]:443 ssl http2;
-#    server_name blue.sitesearch.cloud;
-#
-#    include /etc/nginx/snippets/ssl.conf;
-#
-#    location / {
-#        proxy_pass http://if-sitesearch-blue:8001;
-#    }
-#}
+    include /etc/nginx/snippets/ssl.conf;
+
+    location / {
+        add_header set-cookie 'affiliate = $arg_affiliate; domain = sitesearch.cloud';
+        return 301 https://sitesearch.cloud$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name blue.sitesearch.cloud;
+
+    include /etc/nginx/snippets/ssl.conf;
+
+    location / {
+        add_header set-cookie 'affiliate = $arg_affiliate; domain = sitesearch.cloud';
+        return 301 https://sitesearch.cloud$request_uri;
+    }
+}
 
 server {
     listen 443 ssl http2;
@@ -162,7 +165,7 @@ server {
 
     include /etc/nginx/snippets/ssl.conf;
 
-    auth_basic "Logs";
+    auth_basic "BI";
     auth_basic_user_file /etc/nginx/.htpasswd; # supply this via env vars somehow or as raw file at build time
 
     location / {

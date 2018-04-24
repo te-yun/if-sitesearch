@@ -19,6 +19,7 @@ package com.intrafind.sitesearch.dashboard
 import com.intrafind.sitesearch.dashboard.SiteSearch.Companion.crawlerFinishedEvent
 import org.w3c.dom.HTMLButtonElement
 import org.w3c.dom.HTMLDivElement
+import org.w3c.dom.HTMLParagraphElement
 import org.w3c.dom.events.Event
 import org.w3c.xhr.XMLHttpRequest
 import kotlin.browser.document
@@ -39,18 +40,16 @@ private var siteId: String = ""
 private var siteSecret: String = ""
 private val serviceUrl: String = window.location.origin
 
+private lateinit var pageCountContainer: HTMLParagraphElement
 private lateinit var siteIdElement: HTMLDivElement
-private lateinit var siteIdContainer: HTMLDivElement
 private lateinit var siteSecretElement: HTMLDivElement
-private lateinit var siteSecretContainer: HTMLDivElement
 private lateinit var recrawl: HTMLButtonElement
 private lateinit var profile: SiteProfile
 
 private fun init() {
+    pageCountContainer = document.getElementById("pageCountContainer") as HTMLParagraphElement
     siteIdElement = document.getElementById("siteId") as HTMLDivElement
     siteSecretElement = document.getElementById("siteSecret") as HTMLDivElement
-    siteIdContainer = document.getElementById("siteIdContainer") as HTMLDivElement
-    siteSecretContainer = document.getElementById("siteSecretContainer") as HTMLDivElement
     recrawl = document.getElementById("recrawl") as HTMLButtonElement
 
     applyQueryParameters()
@@ -89,10 +88,16 @@ fun recrawl() {
         console.warn(xhr.responseText)
         if (xhr.status.equals(200)) {
             document.dispatchEvent(Event(crawlerFinishedEvent))
+            val pageCount = JSON.parse<dynamic>(xhr.responseText).pageCount as Int
+            showPageCount(pageCount)
         } else {
             console.error("FAILED")
         }
     }
+}
+
+private fun showPageCount(pageCount: Int) {
+    pageCountContainer.textContent = "Pages crawled: $pageCount"
 }
 
 private fun fetchProfile() {

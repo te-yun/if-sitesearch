@@ -5,7 +5,7 @@
 [![TeamCity CI Build Status](https://ci.sitesearch.cloud/app/rest/builds/buildType(id:IntraFind_Oss_Build)/statusIcon)](https://ci.sitesearch.cloud/viewType.html?buildTypeId=IntraFind_Oss_Build)
 
 
-Site Search Dispatcher
+Site Search API Service
 =
 Site Search Dispatcher is an upstream service of [Site Search](https://api.sitesearch.cloud), 
 an on-demand SaaS offering for providing websites with an externally managed search capability. 
@@ -20,16 +20,7 @@ an on-demand SaaS offering for providing websites with an externally managed sea
 # Local configuration
 
 Add a [configuration profile](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config-profile-specific-properties) 
-to the `config` folder inside this project.
-
-Required environment variables:
-
-    * ADMIN_SITE_SECRET
-    * RECAPTCHA_SITE_SECRET
-    * SECURITY_OAUTH2_CLIENT_CLIENT_SECRET
-    * SPRING_SECURITY_USER_PASSWORD # for iFinder Core access 
-    * GITHUB_PUBLIC_ACCESS_TOKEN="your long living GitHub token"
-    * DEV_SKIP_FLAG="true" # skip some oAuth2 checks in integration tests to enable additional test scenarios   
+to the `config` folder inside this project.   
 
 # OSS community contributions are appreciated 🤓☺️ 
 
