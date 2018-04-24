@@ -44,6 +44,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class CrawlerService {
@@ -102,10 +103,14 @@ public class CrawlerService {
         }
 
 //        final int pageCount = controller.getCustomData() == null ? 0 : (int) controller.getCustomData();
-        final int pageCount = (int) controller.getCrawlersLocalData().stream().filter(Objects::nonNull).count();
+        final List<String> urls = controller.getCrawlersLocalData().stream()
+                .filter(Objects::nonNull)
+                .map(o -> (String) o)
+                .collect(Collectors.toList());
+        final int pageCount = urls.size();
         SiteCrawler.PAGE_COUNT.remove(siteId);
 
-        return new CrawlerJobResult(pageCount);
+        return new CrawlerJobResult(pageCount, urls);
     }
 
     private List<URL> extractSeedUrls(final String url) {

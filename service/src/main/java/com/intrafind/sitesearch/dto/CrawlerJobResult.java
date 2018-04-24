@@ -16,14 +16,22 @@
 
 package com.intrafind.sitesearch.dto;
 
+import java.util.List;
+
 public class CrawlerJobResult {
     private int pageCount;
+    private List<String> urls;
 
-    public CrawlerJobResult(int pageCount) {
+    public CrawlerJobResult(int pageCount, List<String> urls) {
         this.pageCount = pageCount;
+        this.urls = urls;
     }
 
     private CrawlerJobResult() {
+    }
+
+    public List<String> getUrls() {
+        return urls;
     }
 
     public int getPageCount() {

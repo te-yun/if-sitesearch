@@ -125,6 +125,7 @@ public class SiteCrawler extends WebCrawler {
             HTTP_CLIENT.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
+//                    call.cancel();
                     LOG.warn("siteId: " + siteId + " - URL: " + sitePage.getUrl() + " - exception: " + e.getMessage());
                 }
 
