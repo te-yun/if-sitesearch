@@ -46,7 +46,7 @@ import java.util.regex.Pattern;
 public class SiteCrawler extends WebCrawler {
     public static final MediaType JSON_MEDIA_TYPE = MediaType.parse("application/json");
     private final static Logger LOG = LoggerFactory.getLogger(SiteCrawler.class);
-    private static final Pattern BLACKLIST = Pattern.compile(".*(\\.(css|js|gif|jpg|png|mp3|mp4|zip|gz|xml))$");
+    private static final Pattern BLACKLIST = Pattern.compile(".*(\\.(css|js|gif|jpg|jpeg|png|mp3|mp4|zip|gz|xml|svg))$");
     //    private static final Pattern WHITELIST= Pattern.compile(".*(\\.(html|htm|txt|pdf))$");
     static final Map<UUID, AtomicInteger> PAGE_COUNT = new HashMap<>();
     public static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder()
@@ -59,6 +59,7 @@ public class SiteCrawler extends WebCrawler {
     private UUID siteSecret;
     private URI url;
     private String pageBodyCssSelector;
+    private boolean containsQuery;
 
     private SiteCrawler() {
     }
@@ -68,6 +69,7 @@ public class SiteCrawler extends WebCrawler {
         this.siteSecret = siteSecret;
         this.url = url;
         this.pageBodyCssSelector = pageBodyCssSelector;
+        this.containsQuery = siteId.equals(UUID.fromString("c7d080ff-6eec-496e-a70e-db5ec81948ab")); // mh
     }
 
     @Override
@@ -75,7 +77,7 @@ public class SiteCrawler extends WebCrawler {
         final String href = webUrl.getURL().toLowerCase();
         return !BLACKLIST.matcher(href).matches()
                 && href.startsWith(url.toString())
-                && noQueryParameter(webUrl)
+                && (containsQuery || noQueryParameter(webUrl))
                 ;
     }
 
@@ -109,7 +111,8 @@ public class SiteCrawler extends WebCrawler {
         final int currentPageCount = PAGE_COUNT.get(siteId).incrementAndGet();
         LOG.info("siteId: " + siteId + " - pageCount: " + currentPageCount);
 
-        this.getMyController().setCustomData(currentPageCount);
+//        this.getMyController().setCustomData(currentPageCount);
+        this.getMyController().getCrawlersLocalData().add(url);
     }
 
     private void indexPage(SitePage sitePage) {

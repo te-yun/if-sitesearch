@@ -41,6 +41,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
@@ -100,7 +101,8 @@ public class CrawlerService {
             controller.startNonBlocking(factory, crawlerThreads);
         }
 
-        final int pageCount = controller.getCustomData() == null ? 0 : (int) controller.getCustomData();
+//        final int pageCount = controller.getCustomData() == null ? 0 : (int) controller.getCustomData();
+        final int pageCount = (int) controller.getCrawlersLocalData().stream().filter(Objects::nonNull).count();
         SiteCrawler.PAGE_COUNT.remove(siteId);
 
         return new CrawlerJobResult(pageCount);
