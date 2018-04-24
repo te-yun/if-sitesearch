@@ -66,9 +66,9 @@ import java.util.stream.Collectors;
 public class SiteService {
     private static final Logger LOG = LoggerFactory.getLogger(SiteService.class);
     /**
-     * Odd workaround because Windows is just broken. Can be removed once Ubuntu@Windows works properly and PowerShell is not required to run the service locally.
+     * This env initialization is just broken on Windows.
      */
-    private static final UUID ADMIN_SITE_SECRET = UUID.fromString(System.getenv("ADMIN_SITE_SECRET"));
+    private static final UUID ADMIN_SITE_SECRET = UUID.fromString(System.getenv("ADMIN_SITE_SECRET") == null ? "16608922-43ab-11e8-a399-8fcfb512be3c" : System.getenv("ADMIN_SITE_SECRET"));
 
     private static final Index INDEX_SERVICE = IfinderCoreClient.newHessianClient(Index.class, Application.IFINDER_CORE + "/index");
     private static final String SITE_CONFIGURATION_DOCUMENT_PREFIX = "site-configuration-";
