@@ -45,7 +45,7 @@ public class LegalService {
         try {
             request = new Request.Builder()
                     .url(LEGAL_SERVICE_URI.toString() + "?method=tag&param0=" + contract.getContent())
-                    .header(HttpHeaders.AUTHORIZATION, System.getenv("BASIC_HASH_PASSWORD"))
+                    .header(HttpHeaders.AUTHORIZATION, System.getenv("BASIC_ENCODED_PASSWORD"))
                     .post(RequestBody.create(SiteCrawler.JSON_MEDIA_TYPE, ""))
                     .build();
 
