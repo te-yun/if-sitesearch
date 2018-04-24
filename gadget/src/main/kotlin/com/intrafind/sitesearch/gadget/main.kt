@@ -32,7 +32,7 @@ import kotlin.dom.removeClass
 suspend fun main(args: Array<String>) {
     window.addEventListener("DOMContentLoaded", {
         init()
-        console.warn(window.navigator.plugins)
+        console.warn("window.document.referrer ${window.document.referrer}")
     })
 }
 
@@ -126,10 +126,20 @@ private fun init() {
                 "</a>"
         (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = waitWhileCrawlerIsRunningMsg
         insertSiteIdIntoIntegrationCode()
-        //TODO make crawl requests visible in logs.sis that do not have any email provided
+
+        trackEnabledSearch()
     })
 
     applyQueryOverrides()
+}
+
+private fun trackEnabledSearch() {
+    js("ga('send', {" +
+            "hitType: 'event'," +
+            "eventCategory: 'GSG'," +
+            "eventAction: 'enabledSearch'," +
+            "eventLabel: document.getElementById('siteId').textContent + ' - ' + window.document.referrer" +
+            "})")
 }
 
 private fun applyAnalytics() {
@@ -187,19 +197,13 @@ private fun enableProactiveValidation() {
         validateDomain()
     })
 
-    url.addEventListener("keyup", {
-        validateDomain()
-    })
-
     url.addEventListener("change", {
         validateDomain()
     })
 
-    cssSelector.addEventListener("blur", {
-        validateCssSelector()
-    })
+    // do not set keypress listeners on both `cssSelector` & `url` until Shadow DOM is not used instead of `document.createElement("html")`
 
-    cssSelector.addEventListener("keyup", {
+    cssSelector.addEventListener("blur", {
         validateCssSelector()
     })
 
@@ -209,7 +213,7 @@ private fun enableProactiveValidation() {
 }
 
 private fun validateCssSelector() {
-    val pageShadow = document.createElement("html")
+    val pageShadow = document.createElement("html") as HTMLElement
     pageShadow.innerHTML = pageBody
     if (pageShadow.querySelector(cssSelector.value) == null) {
         classifyCssSelectorAsValid(false)
