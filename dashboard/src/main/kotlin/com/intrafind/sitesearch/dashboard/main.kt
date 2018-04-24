@@ -19,6 +19,8 @@ package com.intrafind.sitesearch.dashboard
 import com.intrafind.sitesearch.dashboard.SiteSearch.Companion.crawlerFinishedEvent
 import org.w3c.dom.HTMLButtonElement
 import org.w3c.dom.HTMLDivElement
+import org.w3c.dom.HTMLInputElement
+import org.w3c.dom.HTMLLabelElement
 import org.w3c.dom.HTMLParagraphElement
 import org.w3c.dom.events.Event
 import org.w3c.xhr.XMLHttpRequest
@@ -40,14 +42,20 @@ private var siteId: String = ""
 private var siteSecret: String = ""
 private val serviceUrl: String = window.location.origin
 
-private lateinit var pageCountContainer: HTMLParagraphElement
+private lateinit var pageBodyCssSelector: HTMLParagraphElement
+private lateinit var sitemapsOnly: HTMLInputElement
+private lateinit var url: HTMLParagraphElement
+private lateinit var pageCountContainer: HTMLLabelElement
 private lateinit var siteIdElement: HTMLDivElement
 private lateinit var siteSecretElement: HTMLDivElement
 private lateinit var recrawl: HTMLButtonElement
 private lateinit var profile: SiteProfile
 
 private fun init() {
-    pageCountContainer = document.getElementById("pageCountContainer") as HTMLParagraphElement
+    pageBodyCssSelector = document.getElementById("pageBodyCssSelector") as HTMLParagraphElement
+    sitemapsOnly = document.getElementById("sitemapsOnly") as HTMLInputElement
+    url = document.getElementById("url") as HTMLParagraphElement
+    pageCountContainer = document.getElementById("pageCountContainer") as HTMLLabelElement
     siteIdElement = document.getElementById("siteId") as HTMLDivElement
     siteSecretElement = document.getElementById("siteSecret") as HTMLDivElement
     recrawl = document.getElementById("recrawl") as HTMLButtonElement
@@ -105,10 +113,16 @@ private fun fetchProfile() {
     xhr.open("GET", "$serviceUrl/sites/$siteId/profile?siteSecret=$siteSecret")
     xhr.send()
     xhr.onload = {
-        console.warn(xhr.responseText)
         profile = JSON.parse(xhr.responseText)
+        showConfiguration()
         ""
     }
+}
+
+private fun showConfiguration() {
+    url.textContent = profile.configs.asDynamic()[0].url
+    sitemapsOnly.checked = profile.configs.asDynamic()[0].sitemapsOnly
+    pageBodyCssSelector.textContent = profile.configs.asDynamic()[0].pageBodyCssSelector
 }
 
 class SiteSearch {
