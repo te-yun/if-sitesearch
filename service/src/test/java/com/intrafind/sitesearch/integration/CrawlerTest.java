@@ -68,6 +68,8 @@ public class CrawlerTest {
         assertEquals(HttpStatus.OK, request.getStatusCode());
         assertNotNull(request.getBody());
         assertEquals(1, request.getBody().getPageCount());
+        assertEquals(1, request.getBody().getUrls().size());
+        assertTrue(request.getBody().getUrls().get(0).contains("example.com"));
     }
 
     @Test
@@ -108,6 +110,8 @@ public class CrawlerTest {
         assertEquals(HttpStatus.OK, request.getStatusCode());
         assertNotNull(request.getBody());
         assertEquals(API_SITE_PAGE_COUNT, request.getBody().getPageCount());
+        assertEquals(API_SITE_PAGE_COUNT, request.getBody().getUrls().size());
+        assertTrue(request.getBody().getUrls().get(0).contains("api.sitesearch.cloud"));
     }
 
     @Test

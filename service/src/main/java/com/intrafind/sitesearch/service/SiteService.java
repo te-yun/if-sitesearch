@@ -451,16 +451,15 @@ public class SiteService {
                             final Optional<SiteProfile> siteProfile = fetchSiteProfile(crawlStatus.getSiteId());
                             siteProfile.ifPresent(profile -> {
                                 final AtomicLong pageCount = new AtomicLong();
-                                profile.getConfigs().forEach(configBundle -> {
-                                    profile.getConfigs().stream().filter(config -> config.getUrl().equals(configBundle.getUrl())).findAny().ifPresent(config -> {
-                                        final String pageBodyCssSelector = config.getPageBodyCssSelector();
-                                        final CrawlerJobResult crawlerJobResult = crawlerService.crawl(configBundle.getUrl().toString(), crawlStatus.getSiteId(), siteSecret, isThrottled, clearIndex, false, pageBodyCssSelector);
-                                        pageCount.addAndGet(crawlerJobResult.getPageCount());
-                                        final Optional<SitesCrawlStatus> sitesCrawlStatus = updateCrawlStatusInShedule(crawlStatus.getSiteId(), pageCount.get());// TODO fix PATCH update instead of a regular PUT   // rename to updateCrawlStatusInShedule
-                                        sitesCrawlStatus.ifPresent(element -> sitesCrawlStatusOverall.getSites().addAll(element.getSites()));
-                                        LOG.info("siteId: " + crawlStatus.getSiteId() + " - siteUrl: " + configBundle.getUrl().toString() + " - pageCount: " + crawlerJobResult.getPageCount()); // TODO add pattern to logstash
-                                    });
-                                });
+                                profile.getConfigs().forEach(configBundle ->
+                                        profile.getConfigs().stream().filter(config -> config.getUrl().equals(configBundle.getUrl())).findAny().ifPresent(config -> {
+                                            final String pageBodyCssSelector = config.getPageBodyCssSelector();
+                                            final CrawlerJobResult crawlerJobResult = crawlerService.crawl(configBundle.getUrl().toString(), crawlStatus.getSiteId(), siteSecret, isThrottled, clearIndex, false, pageBodyCssSelector);
+                                            pageCount.addAndGet(crawlerJobResult.getPageCount());
+                                            final Optional<SitesCrawlStatus> sitesCrawlStatus = updateCrawlStatusInShedule(crawlStatus.getSiteId(), pageCount.get());// TODO fix PATCH update instead of a regular PUT   // rename to updateCrawlStatusInShedule
+                                            sitesCrawlStatus.ifPresent(element -> sitesCrawlStatusOverall.getSites().addAll(element.getSites()));
+                                            LOG.info("siteId: " + crawlStatus.getSiteId() + " - siteUrl: " + configBundle.getUrl().toString() + " - pageCount: " + crawlerJobResult.getPageCount()); // TODO add pattern to logstash
+                                        }));
                                 sitesCrawlStatusOverall.getSites().add(new CrawlStatus(profile.getId(), Instant.now(), pageCount.get()));
                             });
                         });
