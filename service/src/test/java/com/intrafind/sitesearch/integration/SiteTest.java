@@ -175,7 +175,7 @@ public class SiteTest {
         assertEquals(HttpStatus.NOT_FOUND, siteProfileWithInvalidSecret.getStatusCode());
 
         // update site profile
-        configs.add(new SiteProfile.Config(URI.create("https://update.example.com"), "", false));
+        configs.add(new SiteProfile.Config(URI.create("https://update.example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false));
 
         final SiteProfileUpdate siteProfileUpdate = new SiteProfileUpdate(createdSiteProfile.getSiteSecret(), "update." + CrawlerTest.TEST_EMAIL_ADDRESS, configs);
         final ResponseEntity<SiteProfileUpdate> updatedSite = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + createdSiteProfile.getSiteSecret(),
