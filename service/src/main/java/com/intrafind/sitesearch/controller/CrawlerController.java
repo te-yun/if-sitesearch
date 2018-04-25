@@ -209,7 +209,7 @@ public class CrawlerController {
         return sitesCrawlStatus.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
-    @RequestMapping(path = "{siteId}/crawl", method = RequestMethod.POST)
+    @RequestMapping(path = "{siteId}/recrawl", method = RequestMethod.POST)
     ResponseEntity<CrawlerJobResult> recrawl(
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "siteSecret") UUID siteSecret
