@@ -93,9 +93,7 @@ Or what should be the first thing, I need to do, to **get started** with Site Se
     but you can also, use the API right from your browser. 
 
 * What does Site Search cost?
-    * Currently we have no fixed plans as Site Search is still in BETA. 
-    As soon as Site Search meets all our production requirements, we will offer a **free basic plan** 
-    and additional **enterprise offerings**.  
+    * Site Search offers a variety of subscription plans that should fit sites of every size.
 
 * I do not want to use Site Search anymore. Do I have to delete my data?
     * You do not have to do anything. We will automatically delete your indexed data after a certain time of inactivity.
