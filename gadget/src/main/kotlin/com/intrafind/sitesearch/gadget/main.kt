@@ -63,6 +63,7 @@ fun overrideSite(siteId: String) {
 @JsName("captchaResult")
 lateinit var captchaResult: String
 
+private lateinit var termsAccepted: HTMLInputElement
 private lateinit var integrationCode: HTMLTextAreaElement
 private lateinit var siteIdContainer: HTMLDivElement
 private lateinit var siteIdBox: HTMLDivElement
@@ -81,6 +82,7 @@ private lateinit var cssSelector: HTMLInputElement
 private lateinit var cssSelectorContainer: HTMLDivElement
 
 private fun init() {
+//    termsAccepted = document.getElementById("termsAccepted") as HTMLInputElement
     cssSelectorContainer = document.getElementById("cssSelectorContainer") as HTMLDivElement
     cssSelector = document.getElementById("cssSelector") as HTMLInputElement
     sitemapContainer = document.getElementById("sitemapContainer") as HTMLDivElement

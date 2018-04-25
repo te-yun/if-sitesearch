@@ -16,6 +16,7 @@
 
 package com.intrafind.sitesearch.integration;
 
+import com.google.common.collect.Iterables;
 import com.intrafind.sitesearch.SmokeTest;
 import com.intrafind.sitesearch.controller.PageController;
 import com.intrafind.sitesearch.controller.SiteController;
@@ -148,10 +149,10 @@ public class SiteTest {
 
     @Test
     public void createNewSiteWithProfile() {
-        final List<SiteProfile.Config> configs = new ArrayList<>(Arrays.asList(
+        final List<SiteProfile.Config> configs = Arrays.asList(
                 new SiteProfile.Config(URI.create("https://subdomain.example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false),
                 new SiteProfile.Config(URI.create("https://example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false)
-        ));
+        );
         final SiteProfileUpdate siteProfileCreation = new SiteProfileUpdate(
                 configs,
                 CrawlerTest.TEST_EMAIL_ADDRESS
@@ -182,7 +183,8 @@ public class SiteTest {
                 HttpMethod.PUT, new HttpEntity<>(siteProfileUpdate), SiteProfileUpdate.class);
         assertEquals(createdSiteProfile.getSiteSecret(), updatedSite.getBody().getSecret());
         assertEquals("update." + CrawlerTest.TEST_EMAIL_ADDRESS, updatedSite.getBody().getEmail());
-        assertEquals(configs, updatedSite.getBody().getConfigs());
+//        assertEquals(configs, updatedSite.getBody().getConfigs());
+        assertTrue(Iterables.elementsEqual(configs, updatedSite.getBody().getConfigs()));
         assertEquals(configs.size(), updatedSite.getBody().getConfigs().size());
 
         // assure site profile is impossible with wrong site secret
