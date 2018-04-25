@@ -184,8 +184,8 @@ public class SiteTest {
                 HttpMethod.PUT, new HttpEntity<>(siteProfileUpdate), SiteProfileUpdate.class);
         assertEquals(createdSiteProfile.getSiteSecret(), updatedSite.getBody().getSecret());
         assertEquals("update." + CrawlerTest.TEST_EMAIL_ADDRESS, updatedSite.getBody().getEmail());
-        assertEquals(updateSiteProfileConfigs, updatedSite.getBody().getConfigs());
-        assertEquals(updateSiteProfileConfigs.size(), updatedSite.getBody().getConfigs().size());
+        assertEquals(configs, updatedSite.getBody().getConfigs());
+        assertEquals(configs.size(), updatedSite.getBody().getConfigs().size());
 
         // assure site profile is impossible with wrong site secret
         final ResponseEntity<SiteProfileUpdate> updatedSiteWithInvalidSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + UUID.randomUUID(),
