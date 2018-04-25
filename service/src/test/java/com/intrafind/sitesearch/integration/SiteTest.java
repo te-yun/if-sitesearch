@@ -149,8 +149,8 @@ public class SiteTest {
     @Test
     public void createNewSiteWithProfile() {
         final List<SiteProfile.Config> configs = Arrays.asList(
-                new SiteProfile.Config(URI.create("https://example.com"), "", false),
-                new SiteProfile.Config(URI.create("https://subdomain.example.com"), "", false));
+                new SiteProfile.Config(URI.create("https://example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false),
+                new SiteProfile.Config(URI.create("https://subdomain.example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false));
         final SiteProfileUpdate siteProfileCreation = new SiteProfileUpdate(
                 configs,
                 CrawlerTest.TEST_EMAIL_ADDRESS
