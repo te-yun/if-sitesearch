@@ -46,6 +46,7 @@ import java.net.URI;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -203,7 +204,7 @@ public class SiteTest {
                 HttpMethod.PUT, new HttpEntity<>(siteProfileUpdateWithSecret), SiteProfileUpdate.class);
         assertEquals(newSiteSecret, updatedSiteWithSecret.getBody().getSecret());
         assertEquals("update." + CrawlerTest.TEST_EMAIL_ADDRESS, updatedSiteWithSecret.getBody().getEmail());
-        assertEquals(updateSiteProfileConfigs, updatedSiteWithSecret.getBody().getConfigs());
+        assertEquals(new HashSet<>(updateSiteProfileConfigs), new HashSet<>(updatedSiteWithSecret.getBody().getConfigs()));
         assertEquals(updateSiteProfileConfigs.size(), updatedSiteWithSecret.getBody().getConfigs().size());
         assertEquals(newSiteSecret, updatedSiteWithSecret.getBody().getSecret());
 
