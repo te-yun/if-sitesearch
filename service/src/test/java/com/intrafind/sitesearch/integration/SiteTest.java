@@ -46,9 +46,7 @@ import java.net.URI;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -150,9 +148,9 @@ public class SiteTest {
 
     @Test
     public void createNewSiteWithProfile() {
-        final Set<SiteProfile.Config> configs = new HashSet<>(Arrays.asList(
+        final List<SiteProfile.Config> configs = Arrays.asList(
                 new SiteProfile.Config(URI.create("https://example.com"), "", false),
-                new SiteProfile.Config(URI.create("https://subdomain.example.com"), "", false)));
+                new SiteProfile.Config(URI.create("https://subdomain.example.com"), "", false));
         final SiteProfileUpdate siteProfileCreation = new SiteProfileUpdate(
                 configs,
                 CrawlerTest.TEST_EMAIL_ADDRESS

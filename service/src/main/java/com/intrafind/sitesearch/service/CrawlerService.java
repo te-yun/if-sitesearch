@@ -51,7 +51,6 @@ public class CrawlerService {
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerService.class);
     private static final String CRAWLER_STORAGE = "data/crawler";
     private static final Random RANDOM_VERSION = new Random();
-    static final String READ_pageBodyCssSelector_FROM_SITE_PROFILE = "body";
 
     public CrawlerJobResult crawl(String url, UUID siteId, UUID siteSecret, boolean isThrottled, boolean clearIndex, boolean sitemapsOnly, String pageBodyCssSelector) {
         final CrawlConfig config = new CrawlConfig();
@@ -65,7 +64,7 @@ public class CrawlerService {
         } else {
             crawlerThreads = 7;
             config.setUserAgentString("SiteSearch");
-            config.setPolitenessDelay(0);
+            config.setPolitenessDelay(200); // to avoid being blocked by crawled websites
         }
 
         final PageFetcher pageFetcher = new PageFetcher(config);

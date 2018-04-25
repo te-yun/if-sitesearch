@@ -17,21 +17,21 @@
 package com.intrafind.sitesearch.dto;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 
 // TODO consolidate with SiteProfileUpdate?
 public class SiteProfile {
     private UUID id;
     private UUID secret;
-    private Set<Config> configs;
+    private List<Config> configs;
     private String email;
 
     private SiteProfile() {
     }
 
-    public SiteProfile(UUID id, UUID secret, String email, Set<Config> configs) {
+    public SiteProfile(UUID id, UUID secret, String email, List<Config> configs) {
         this.id = id;
         this.secret = secret;
         this.email = email;
@@ -62,7 +62,7 @@ public class SiteProfile {
         this.secret = secret;
     }
 
-    public Set<Config> getConfigs() {
+    public List<Config> getConfigs() {
         return configs;
     }
 

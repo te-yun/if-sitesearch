@@ -32,6 +32,7 @@ import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.Message;
 import com.intrafind.sitesearch.dto.CaptchaVerification;
 import com.intrafind.sitesearch.dto.CrawlerJobResult;
+import com.intrafind.sitesearch.dto.SiteProfile;
 import com.intrafind.sitesearch.dto.SitesCrawlStatus;
 import com.intrafind.sitesearch.service.CrawlerService;
 import com.intrafind.sitesearch.service.SiteCrawler;
@@ -217,7 +218,7 @@ public class CrawlerController {
             @RequestParam(value = "email") String email,
             @RequestParam(value = "token") String captchaToken,
             @RequestParam(value = "sitemapsOnly", required = false, defaultValue = "false") boolean sitemapsOnly,
-            @RequestParam(value = "pageBodyCssSelector", required = false, defaultValue = "body") String pageBodyCssSelector
+            @RequestParam(value = "pageBodyCssSelector", required = false, defaultValue = SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR) String pageBodyCssSelector
     ) {
         if (!siteService.isAllowedToModify(siteId, siteSecret)) {
             return ResponseEntity.notFound().build();

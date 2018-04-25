@@ -144,7 +144,7 @@ public class SiteService {
                 email = document.get("email");
             }
 
-            final Set<SiteProfile.Config> configs = new HashSet<>();
+            final List<SiteProfile.Config> configs = new ArrayList<>();
             urls.forEach(configUrl -> {
                 final List<String> config = document.getAll(configUrl.toString());
                 if (config != null && config.size() > 1) {
@@ -185,7 +185,7 @@ public class SiteService {
         INDEX_SERVICE.index(siteConfiguration);
     }
 
-    private void storeSite(UUID siteId, UUID siteSecret, String email, Set<SiteProfile.Config> configs) {
+    private void storeSite(UUID siteId, UUID siteSecret, String email, List<SiteProfile.Config> configs) {
         final Optional<Document> siteConfiguration = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
         final Document siteConfigDoc;
         siteConfigDoc = siteConfiguration.orElseGet(() -> new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId));
@@ -284,7 +284,7 @@ public class SiteService {
         return new SiteCreation(siteId, siteSecret);
     }
 
-    public SiteCreation createSite(String email, Set<SiteProfile.Config> configs) {
+    public SiteCreation createSite(String email, List<SiteProfile.Config> configs) {
         UUID siteId = UUID.randomUUID();
         UUID siteSecret = UUID.randomUUID();
         storeSite(siteId, siteSecret, email, configs);
@@ -451,12 +451,15 @@ public class SiteService {
                             final Optional<SiteProfile> siteProfile = fetchSiteProfile(crawlStatus.getSiteId());
                             siteProfile.ifPresent(profile -> {
                                 final AtomicLong pageCount = new AtomicLong();
-                                profile.getConfigs().forEach(configUrl -> {
-                                    final CrawlerJobResult crawlerJobResult = crawlerService.crawl(configUrl.getUrl().toString(), crawlStatus.getSiteId(), siteSecret, isThrottled, clearIndex, false, CrawlerService.READ_pageBodyCssSelector_FROM_SITE_PROFILE);
-                                    pageCount.addAndGet(crawlerJobResult.getPageCount());
-                                    final Optional<SitesCrawlStatus> sitesCrawlStatus = updateCrawlStatusInShedule(crawlStatus.getSiteId(), pageCount.get());// TODO fix PATCH update instead of a regular PUT   // rename to updateCrawlStatusInShedule
-                                    sitesCrawlStatus.ifPresent(element -> sitesCrawlStatusOverall.getSites().addAll(element.getSites()));
-                                    LOG.info("siteId: " + crawlStatus.getSiteId() + " - siteUrl: " + configUrl.getUrl().toString() + " - pageCount: " + crawlerJobResult.getPageCount()); // TODO add pattern to logstash
+                                profile.getConfigs().forEach(configBundle -> {
+                                    profile.getConfigs().stream().filter(config -> config.getUrl().equals(configBundle.getUrl())).findAny().ifPresent(config -> {
+                                        final String pageBodyCssSelector = config.getPageBodyCssSelector();
+                                        final CrawlerJobResult crawlerJobResult = crawlerService.crawl(configBundle.getUrl().toString(), crawlStatus.getSiteId(), siteSecret, isThrottled, clearIndex, false, pageBodyCssSelector);
+                                        pageCount.addAndGet(crawlerJobResult.getPageCount());
+                                        final Optional<SitesCrawlStatus> sitesCrawlStatus = updateCrawlStatusInShedule(crawlStatus.getSiteId(), pageCount.get());// TODO fix PATCH update instead of a regular PUT   // rename to updateCrawlStatusInShedule
+                                        sitesCrawlStatus.ifPresent(element -> sitesCrawlStatusOverall.getSites().addAll(element.getSites()));
+                                        LOG.info("siteId: " + crawlStatus.getSiteId() + " - siteUrl: " + configBundle.getUrl().toString() + " - pageCount: " + crawlerJobResult.getPageCount()); // TODO add pattern to logstash
+                                    });
                                 });
                                 sitesCrawlStatusOverall.getSites().add(new CrawlStatus(profile.getId(), Instant.now(), pageCount.get()));
                             });
