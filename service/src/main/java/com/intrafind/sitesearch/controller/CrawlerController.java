@@ -209,6 +209,20 @@ public class CrawlerController {
         return sitesCrawlStatus.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
+    @RequestMapping(path = "{siteId}/crawl", method = RequestMethod.POST)
+    ResponseEntity<CrawlerJobResult> recrawl(
+            @PathVariable(value = "siteId") UUID siteId,
+            @RequestParam(value = "siteSecret") UUID siteSecret
+    ) {
+        if (!siteService.isAllowedToModify(siteId, siteSecret)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        final CrawlerJobResult crawlerJobResult = crawlerService.recrawl(siteId, siteSecret);
+
+        LOG.info("siteId: " + siteId + " - siteSecret: " + siteSecret + " - pageCount: " + crawlerJobResult.getPageCount());
+        return ResponseEntity.ok(crawlerJobResult);
+    }
 
     @RequestMapping(path = "{siteId}/crawl", method = RequestMethod.POST)
     ResponseEntity<CrawlerJobResult> crawl(

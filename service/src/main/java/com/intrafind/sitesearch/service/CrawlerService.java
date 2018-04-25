@@ -52,6 +52,55 @@ public class CrawlerService {
     private static final String CRAWLER_STORAGE = "data/crawler";
     private static final Random RANDOM_VERSION = new Random();
 
+    public CrawlerJobResult recrawl(UUID siteId, UUID siteSecret) {
+        final CrawlConfig config = new CrawlConfig();
+        config.setCrawlStorageFolder(CRAWLER_STORAGE);
+        final int crawlerThreads;
+        crawlerThreads = 2;
+        config.setUserAgentString("SiteSearch");
+        config.setPolitenessDelay(200); // to avoid being blocked by crawled websites
+
+        // TODO read site profile
+        // TODO use site profile for recrawling
+
+        final PageFetcher pageFetcher = new PageFetcher(config);
+        final RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
+        final RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
+
+        final CrawlController controller;
+        try {
+            controller = new CrawlController(config, pageFetcher, robotstxtServer);
+        } catch (final Exception e) {
+            LOG.error("CRAWLER_INITIALIZATION_FAILURE: " + e.getMessage());
+            throw new RuntimeException(e.getMessage());
+        }
+
+//        if (sitemapsOnly) { // TODO read sitemapsOnly from site profile
+//            config.setMaxOutgoingLinksToFollow(0);
+//            config.setMaxDepthOfCrawling(0);
+//            final List<URL> seedUrls = extractSeedUrls(url);
+//            for (final URL pageUrl : seedUrls) {
+//                controller.addSeed(pageUrl.toString());
+//            }
+//        } else {
+//            controller.addSeed(url);
+//        }
+
+        clearIndex(siteId, siteSecret);
+
+//        final CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url), pageBodyCssSelector);
+//            controller.start(factory, crawlerThreads);
+
+        final List<String> urls = controller.getCrawlersLocalData().stream()
+                .filter(Objects::nonNull)
+                .map(o -> (String) o)
+                .collect(Collectors.toList());
+        final int pageCount = urls.size();
+        SiteCrawler.PAGE_COUNT.remove(siteId);
+
+        return new CrawlerJobResult(pageCount, urls);
+    }
+
     public CrawlerJobResult crawl(String url, UUID siteId, UUID siteSecret, boolean isThrottled, boolean clearIndex, boolean sitemapsOnly, String pageBodyCssSelector) {
         final CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(CRAWLER_STORAGE);
