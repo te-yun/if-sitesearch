@@ -125,8 +125,8 @@ public class CrawlerTest {
         assertNotNull(request.getBody());
         assertEquals(5, request.getBody().getPageCount());
         assertEquals(5, request.getBody().getUrls().size());
-        assertTrue(request.getBody().getUrls().contains("api.sitesearch.cloud"));
-        assertTrue(request.getBody().getUrls().contains("dev.sitesearch.cloud"));
+        assertTrue(request.getBody().getUrls().contains("https://api.sitesearch.cloud/index.html"));
+        assertTrue(request.getBody().getUrls().contains("https://dev.sitesearch.cloud/"));
     }
 
     @Test
