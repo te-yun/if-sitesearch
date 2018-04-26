@@ -69,7 +69,7 @@ public class AutocompleteTest {
         assertTrue(1 <= actual.getBody().getResults().size());
         actual.getBody().getResults().forEach(term -> {
             LOG.info("term: " + term);
-            assertTrue(term.contains("ifinder"));
+            assertTrue(term.toLowerCase().contains("ifinder"));
         });
     }
 
@@ -82,7 +82,7 @@ public class AutocompleteTest {
         assertTrue(1 <= actual.getBody().getResults().size());
         actual.getBody().getResults().forEach(term -> {
             LOG.info("term: " + term);
-            assertTrue(term.contains("ifinder"));
+            assertTrue(term.toLowerCase().contains("ifinder"));
         });
     }
 
