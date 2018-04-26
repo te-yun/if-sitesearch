@@ -117,7 +117,7 @@ public class CrawlerTest {
     @Test
     public void recrawlMultiSiteConfig() {
         final ResponseEntity<CrawlerJobResult> request = caller
-                .postForEntity(SiteController.ENDPOINT + "/a9ede989-9d94-41d1-8571-a008318b01db/crawl?siteSecret=fbdc4e70-0141-4127-b95b-f9fd2d5e1b93"
+                .postForEntity(SiteController.ENDPOINT + "/a9ede989-9d94-41d1-8571-a008318b01db/recrawl?siteSecret=fbdc4e70-0141-4127-b95b-f9fd2d5e1b93"
                                 + "&clearIndex=true",
                         RequestEntity.EMPTY, CrawlerJobResult.class);
 
