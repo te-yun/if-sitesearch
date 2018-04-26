@@ -119,7 +119,7 @@ public class CrawlerService {
             config.setPolitenessDelay(200); // to avoid being blocked by crawled websites
             config.setMaxPagesToFetch(500);
         } else {
-            crawlerThreads = 7;
+            crawlerThreads = 5;
             config.setUserAgentString(SITE_SEARCH_USER_AGENT);
             config.setPolitenessDelay(200); // to avoid being blocked by crawled websites
         }
@@ -147,15 +147,15 @@ public class CrawlerService {
         }
 
         final CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url), pageBodyCssSelector);
-        if (isThrottled) {
+//        if (isThrottled) {
+//            controller.start(factory, crawlerThreads);
+//        } else {
             controller.start(factory, crawlerThreads);
-        } else {
-            controller.startNonBlocking(factory, crawlerThreads);
-        }
+//        }
 
         final List<String> urls = controller.getCrawlersLocalData().stream()
                 .filter(Objects::nonNull)
-                .map(o -> (String) o)
+                .map(urlElement -> (String) urlElement)
                 .collect(Collectors.toList());
         final int pageCount = urls.size();
         SiteCrawler.PAGE_COUNT.remove(siteId);

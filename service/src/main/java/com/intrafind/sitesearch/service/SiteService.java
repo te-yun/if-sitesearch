@@ -453,8 +453,14 @@ public class SiteService {
                                 final AtomicLong pageCount = new AtomicLong();
                                 profile.getConfigs().forEach(configBundle ->
                                         profile.getConfigs().stream().filter(config -> config.getUrl().equals(configBundle.getUrl())).findAny().ifPresent(config -> {
-                                            final String pageBodyCssSelector = config.getPageBodyCssSelector();
-                                            final CrawlerJobResult crawlerJobResult = crawlerService.crawl(configBundle.getUrl().toString(), crawlStatus.getSiteId(), siteSecret, isThrottled, clearIndex, false, pageBodyCssSelector);
+                                            final CrawlerJobResult crawlerJobResult = crawlerService.crawl(
+                                                    configBundle.getUrl().toString(),
+                                                    crawlStatus.getSiteId(),
+                                                    siteSecret,
+                                                    isThrottled,
+                                                    clearIndex, configBundle.isSitemapsOnly(),
+                                                    configBundle.getPageBodyCssSelector()
+                                            );
                                             pageCount.addAndGet(crawlerJobResult.getPageCount());
                                             final Optional<SitesCrawlStatus> sitesCrawlStatus = updateCrawlStatusInShedule(crawlStatus.getSiteId(), pageCount.get());// TODO fix PATCH update instead of a regular PUT
                                             sitesCrawlStatus.ifPresent(element -> sitesCrawlStatusOverall.getSites().addAll(element.getSites()));
