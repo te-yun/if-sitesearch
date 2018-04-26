@@ -47,7 +47,7 @@ public class AutocompleteTest {
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertNotNull(actual.getBody());
         assertTrue(1 <= actual.getBody().getResults().size());
-        assertEquals("knowledge graph", actual.getBody().getResults().get(0));
+        assertEquals("knowledge graph", actual.getBody().getResults().get(0).toLowerCase());
     }
 
     @Test
