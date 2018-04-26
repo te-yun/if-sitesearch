@@ -81,7 +81,7 @@
                 <p id="pageBodyCssSelector">CSS Selector</p>
             </div>
         </div>
-        <div id="captcha" class="sis-captcha-container"></div>
+        <!--<div id="captcha" class="sis-captcha-container"></div>-->
         <!--<div class="sis-info-container sis-page-count">-->
         <!--TODO was broken, therefore commented-->
         <div>
@@ -96,7 +96,7 @@
                 onclick="dashboard.com.intrafind.sitesearch.dashboard.recrawl();"
                 disabled
         >
-            Recrawl &amp; Reindex Site
+            Clear Site Index and Recrawl &amp; Reindex Site
         </button>
     </div>
 </div>
@@ -105,14 +105,14 @@
         Copyright 2018. All rights reserved.
     </div>
 </footer>
-<script src="https://www.google.com/recaptcha/api.js?onload=captchaLoad&render=explicit&hl=en" async defer></script>
-<script>
-    var captchaLoad = function () {
-        captchaWidget = grecaptcha.render("captcha", {
-            "sitekey": dashboard.com.intrafind.sitesearch.dashboard.SiteSearch.Companion.captchaSiteKey,
-            "callback": dashboard.com.intrafind.sitesearch.dashboard.verifyCallback
-        });
-    };
-</script>
+<!--<script src="https://www.google.com/recaptcha/api.js?onload=captchaLoad&render=explicit&hl=en" async defer></script>-->
+<!--<script>-->
+<!--var captchaLoad = function () {-->
+<!--captchaWidget = grecaptcha.render("captcha", {-->
+<!--"sitekey": dashboard.com.intrafind.sitesearch.dashboard.SiteSearch.Companion.captchaSiteKey,-->
+<!--"callback": dashboard.com.intrafind.sitesearch.dashboard.verifyCallback-->
+<!--});-->
+<!--};-->
+<!--</script>-->
 </body>
 </html>

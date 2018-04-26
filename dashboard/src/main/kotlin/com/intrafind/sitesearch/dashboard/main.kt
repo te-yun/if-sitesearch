@@ -73,12 +73,12 @@ private fun applyQueryParameters() {
     siteSecretElement.textContent = siteSecret
 }
 
-@JsName("captchaResult")
-lateinit var captchaResult: String
+//@JsName("captchaResult")
+//lateinit var captchaResult: String
 
 @JsName("verifyCallback")
 private fun verifyCallback(token: String) {
-    captchaResult = token
+//    captchaResult = token
     recrawl.disabled = false
 }
 
@@ -128,7 +128,6 @@ private fun showConfiguration() {
 class SiteSearch {
     companion object {
         const val crawlerFinishedEvent = "sis.crawlerFinished"
-        val captchaSiteKey = "6LflVEQUAAAAANVEkwc63uQX96feH1H_6jDU-Bn5"
     }
 }
 
