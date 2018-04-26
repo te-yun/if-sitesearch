@@ -29,7 +29,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -55,7 +57,7 @@ public class AutocompleteTest {
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertNotNull(actual.getBody());
         assertTrue(1 <= actual.getBody().getResults().size());
-        assertEquals("knowledge graph", actual.getBody().getResults().get(0));
+        assertEquals("knowledge graph", actual.getBody().getResults().get(0).toLowerCase());
     }
 
     @Test
