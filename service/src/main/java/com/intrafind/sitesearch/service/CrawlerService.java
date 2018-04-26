@@ -18,6 +18,7 @@ package com.intrafind.sitesearch.service;
 
 import com.intrafind.sitesearch.CrawlerControllerFactory;
 import com.intrafind.sitesearch.dto.CrawlerJobResult;
+import com.intrafind.sitesearch.dto.SiteProfile;
 import crawlercommons.sitemaps.AbstractSiteMap;
 import crawlercommons.sitemaps.SiteMap;
 import crawlercommons.sitemaps.SiteMapIndex;
@@ -52,7 +53,7 @@ public class CrawlerService {
     private static final String CRAWLER_STORAGE = "data/crawler";
     private static final Random RANDOM_VERSION = new Random();
 
-    public CrawlerJobResult recrawl(UUID siteId, UUID siteSecret) {
+    public CrawlerJobResult recrawl(UUID siteId, UUID siteSecret, SiteProfile siteProfile) {
         final CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(CRAWLER_STORAGE);
         final int crawlerThreads;
@@ -60,8 +61,7 @@ public class CrawlerService {
         config.setUserAgentString("SiteSearch");
         config.setPolitenessDelay(200); // to avoid being blocked by crawled websites
 
-        // TODO read site profile
-        // TODO use site profile for recrawling
+        // TODO test with siteId 563714f1-96c0-4500-b366-4fc7e734fa1d
 
         final PageFetcher pageFetcher = new PageFetcher(config);
         final RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
@@ -75,30 +75,37 @@ public class CrawlerService {
             throw new RuntimeException(e.getMessage());
         }
 
-//        if (sitemapsOnly) { // TODO read sitemapsOnly from site profile
-//            config.setMaxOutgoingLinksToFollow(0);
-//            config.setMaxDepthOfCrawling(0);
-//            final List<URL> seedUrls = extractSeedUrls(url);
-//            for (final URL pageUrl : seedUrls) {
-//                controller.addSeed(pageUrl.toString());
-//            }
-//        } else {
-//            controller.addSeed(url);
-//        }
+        final List<String> urls = new ArrayList<>();
+        for (final SiteProfile.Config siteConfig : siteProfile.getConfigs()) {
+            if (siteConfig.isSitemapsOnly()) {
+                useSitemapsOnly(config, controller, siteConfig.getUrl().toString());
+            } else {
+                controller.addSeed(siteConfig.getUrl().toString());
+            }
 
-        clearIndex(siteId, siteSecret);
+            clearIndex(siteId, siteSecret);
 
-//        final CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url), pageBodyCssSelector);
-//            controller.start(factory, crawlerThreads);
+            final CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(siteId, siteSecret, siteConfig.getUrl(), siteConfig.getPageBodyCssSelector());
+            controller.start(factory, crawlerThreads);
 
-        final List<String> urls = controller.getCrawlersLocalData().stream()
-                .filter(Objects::nonNull)
-                .map(o -> (String) o)
-                .collect(Collectors.toList());
-        final int pageCount = urls.size();
-        SiteCrawler.PAGE_COUNT.remove(siteId);
+            final List<String> configUrls = controller.getCrawlersLocalData().stream()
+                    .filter(Objects::nonNull)
+                    .map(o -> (String) o)
+                    .collect(Collectors.toList());
 
-        return new CrawlerJobResult(pageCount, urls);
+            urls.addAll(configUrls);
+        }
+
+        return new CrawlerJobResult(urls.size(), urls);
+    }
+
+    private void useSitemapsOnly(CrawlConfig config, CrawlController controller, String url) {
+        config.setMaxOutgoingLinksToFollow(0);
+        config.setMaxDepthOfCrawling(0);
+        final List<URL> seedUrls = extractSeedUrls(url);
+        for (final URL pageUrl : seedUrls) {
+            controller.addSeed(pageUrl.toString());
+        }
     }
 
     public CrawlerJobResult crawl(String url, UUID siteId, UUID siteSecret, boolean isThrottled, boolean clearIndex, boolean sitemapsOnly, String pageBodyCssSelector) {
@@ -129,12 +136,7 @@ public class CrawlerService {
         }
 
         if (sitemapsOnly) {
-            config.setMaxOutgoingLinksToFollow(0);
-            config.setMaxDepthOfCrawling(0);
-            final List<URL> seedUrls = extractSeedUrls(url);
-            for (final URL pageUrl : seedUrls) {
-                controller.addSeed(pageUrl.toString());
-            }
+            useSitemapsOnly(config, controller, url);
         } else {
             controller.addSeed(url);
         }
@@ -150,7 +152,6 @@ public class CrawlerService {
             controller.startNonBlocking(factory, crawlerThreads);
         }
 
-//        final int pageCount = controller.getCustomData() == null ? 0 : (int) controller.getCustomData();
         final List<String> urls = controller.getCrawlersLocalData().stream()
                 .filter(Objects::nonNull)
                 .map(o -> (String) o)

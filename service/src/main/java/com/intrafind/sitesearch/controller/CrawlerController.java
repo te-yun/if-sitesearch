@@ -217,11 +217,16 @@ public class CrawlerController {
         if (!siteService.isAllowedToModify(siteId, siteSecret)) {
             return ResponseEntity.notFound().build();
         }
+        final Optional<SiteProfile> siteProfile = siteService.fetchSiteProfile(siteId, siteSecret);
+        if (siteProfile.isPresent()) {
+            final CrawlerJobResult crawlerJobResult = crawlerService.recrawl(siteId, siteSecret, siteProfile.get());
 
-        final CrawlerJobResult crawlerJobResult = crawlerService.recrawl(siteId, siteSecret);
+            LOG.info("siteId: " + siteId + " - siteSecret: " + siteSecret + " - pageCount: " + crawlerJobResult.getPageCount());
+            return ResponseEntity.ok(crawlerJobResult);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
 
-        LOG.info("siteId: " + siteId + " - siteSecret: " + siteSecret + " - pageCount: " + crawlerJobResult.getPageCount());
-        return ResponseEntity.ok(crawlerJobResult);
     }
 
     @RequestMapping(path = "{siteId}/crawl", method = RequestMethod.POST)
