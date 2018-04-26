@@ -89,7 +89,7 @@ fun recrawl() {
 
     val profileConfig: SiteProfileConfig = profile.configs.asDynamic()[0]
     val xhr = XMLHttpRequest()
-    xhr.open("POST", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(profileConfig.url)}&token=$captchaResult&email=&sitemapsOnly=${profileConfig.sitemapsOnly}&pageBodyCssSelector=${encodeURIComponent(profileConfig.pageBodyCssSelector)}")
+    xhr.open("POST", "$serviceUrl/sites/$siteId/recrawl?siteSecret=$siteSecret&clearIndex=true")
     xhr.send()
 
     xhr.onload = {

@@ -52,45 +52,45 @@ public class CrawlerService {
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerService.class);
     private static final String CRAWLER_STORAGE = "data/crawler";
     private static final Random RANDOM_VERSION = new Random();
+    private static final String SITE_SEARCH_USER_AGENT = "SiteSearch";
 
-    public CrawlerJobResult recrawl(UUID siteId, UUID siteSecret, SiteProfile siteProfile) {
-        final CrawlConfig config = new CrawlConfig();
-        config.setCrawlStorageFolder(CRAWLER_STORAGE);
-        final int crawlerThreads;
-        crawlerThreads = 2;
-        config.setUserAgentString("SiteSearch");
-        config.setPolitenessDelay(200); // to avoid being blocked by crawled websites
-
-        // TODO test with siteId 563714f1-96c0-4500-b366-4fc7e734fa1d
-
-        final PageFetcher pageFetcher = new PageFetcher(config);
-        final RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
-        final RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
-
-        final CrawlController controller;
-        try {
-            controller = new CrawlController(config, pageFetcher, robotstxtServer);
-        } catch (final Exception e) {
-            LOG.error("CRAWLER_INITIALIZATION_FAILURE: " + e.getMessage());
-            throw new RuntimeException(e.getMessage());
+    public CrawlerJobResult recrawl(UUID siteId, UUID siteSecret, SiteProfile siteProfile, boolean clearIndex) {
+        if (clearIndex) {
+            clearIndex(siteId, siteSecret);
         }
 
         final List<String> urls = new ArrayList<>();
         for (final SiteProfile.Config siteConfig : siteProfile.getConfigs()) {
+            final CrawlConfig config = new CrawlConfig();
+            config.setCrawlStorageFolder(CRAWLER_STORAGE);
+            final int crawlerThreads = 2;
+            config.setUserAgentString(SITE_SEARCH_USER_AGENT);
+            config.setPolitenessDelay(200); // to avoid being blocked by crawled websites
+
+            final PageFetcher pageFetcher = new PageFetcher(config);
+            final RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
+            final RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
+
+            final CrawlController controller;
+            try {
+                controller = new CrawlController(config, pageFetcher, robotstxtServer);
+            } catch (final Exception e) {
+                LOG.error("CRAWLER_INITIALIZATION_FAILURE: " + e.getMessage());
+                throw new RuntimeException(e.getMessage());
+            }
+
             if (siteConfig.isSitemapsOnly()) {
                 useSitemapsOnly(config, controller, siteConfig.getUrl().toString());
             } else {
                 controller.addSeed(siteConfig.getUrl().toString());
             }
 
-            clearIndex(siteId, siteSecret);
-
             final CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(siteId, siteSecret, siteConfig.getUrl(), siteConfig.getPageBodyCssSelector());
             controller.start(factory, crawlerThreads);
 
             final List<String> configUrls = controller.getCrawlersLocalData().stream()
                     .filter(Objects::nonNull)
-                    .map(o -> (String) o)
+                    .map(url -> (String) url)
                     .collect(Collectors.toList());
 
             urls.addAll(configUrls);
@@ -119,7 +119,7 @@ public class CrawlerService {
             config.setMaxPagesToFetch(500);
         } else {
             crawlerThreads = 7;
-            config.setUserAgentString("SiteSearch");
+            config.setUserAgentString(SITE_SEARCH_USER_AGENT);
             config.setPolitenessDelay(200); // to avoid being blocked by crawled websites
         }
 

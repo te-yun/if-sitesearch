@@ -212,21 +212,21 @@ public class CrawlerController {
     @RequestMapping(path = "{siteId}/recrawl", method = RequestMethod.POST)
     ResponseEntity<CrawlerJobResult> recrawl(
             @PathVariable(value = "siteId") UUID siteId,
-            @RequestParam(value = "siteSecret") UUID siteSecret
+            @RequestParam(value = "siteSecret") UUID siteSecret,
+            @RequestParam(value = "clearIndex") boolean clearIndex
     ) {
         if (!siteService.isAllowedToModify(siteId, siteSecret)) {
             return ResponseEntity.notFound().build();
         }
         final Optional<SiteProfile> siteProfile = siteService.fetchSiteProfile(siteId, siteSecret);
         if (siteProfile.isPresent()) {
-            final CrawlerJobResult crawlerJobResult = crawlerService.recrawl(siteId, siteSecret, siteProfile.get());
+            final CrawlerJobResult crawlerJobResult = crawlerService.recrawl(siteId, siteSecret, siteProfile.get(), clearIndex);
 
             LOG.info("siteId: " + siteId + " - siteSecret: " + siteSecret + " - pageCount: " + crawlerJobResult.getPageCount());
             return ResponseEntity.ok(crawlerJobResult);
         } else {
             return ResponseEntity.notFound().build();
         }
-
     }
 
     @RequestMapping(path = "{siteId}/crawl", method = RequestMethod.POST)

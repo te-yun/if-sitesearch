@@ -191,8 +191,8 @@ public class SiteService {
         siteConfigDoc = siteConfiguration.orElseGet(() -> new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId));
         siteConfigDoc.set("secret", siteSecret);
         siteConfigDoc.set("email", email);
+        siteConfigDoc.set("urls", configs.stream().map(config -> config.getUrl().toString()).collect(Collectors.toList()));
         configs.forEach(config -> {
-            siteConfigDoc.add("urls", config.getUrl());
             siteConfigDoc.set(config.getUrl().toString(), Arrays.asList(config.getPageBodyCssSelector(), Boolean.toString(config.isSitemapsOnly())));
         });
         INDEX_SERVICE.index(siteConfigDoc);
