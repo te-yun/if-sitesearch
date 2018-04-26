@@ -456,7 +456,7 @@ public class SiteService {
                                             final String pageBodyCssSelector = config.getPageBodyCssSelector();
                                             final CrawlerJobResult crawlerJobResult = crawlerService.crawl(configBundle.getUrl().toString(), crawlStatus.getSiteId(), siteSecret, isThrottled, clearIndex, false, pageBodyCssSelector);
                                             pageCount.addAndGet(crawlerJobResult.getPageCount());
-                                            final Optional<SitesCrawlStatus> sitesCrawlStatus = updateCrawlStatusInShedule(crawlStatus.getSiteId(), pageCount.get());// TODO fix PATCH update instead of a regular PUT   // rename to updateCrawlStatusInShedule
+                                            final Optional<SitesCrawlStatus> sitesCrawlStatus = updateCrawlStatusInShedule(crawlStatus.getSiteId(), pageCount.get());// TODO fix PATCH update instead of a regular PUT
                                             sitesCrawlStatus.ifPresent(element -> sitesCrawlStatusOverall.getSites().addAll(element.getSites()));
                                             LOG.info("siteId: " + crawlStatus.getSiteId() + " - siteUrl: " + configBundle.getUrl().toString() + " - pageCount: " + crawlerJobResult.getPageCount()); // TODO add pattern to logstash
                                         }));
