@@ -96,6 +96,7 @@ public class CrawlerService {
             urls.addAll(configUrls);
         }
 
+        SiteCrawler.PAGE_COUNT.remove(siteId);
         return new CrawlerJobResult(urls.size(), urls);
     }
 

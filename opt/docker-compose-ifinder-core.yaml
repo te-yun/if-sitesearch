@@ -2,7 +2,6 @@ version: "2.0"
 services:
 
   sitesearch-search-service:
-    # tag "1.7-no-auth" works fine without encryption
     image: docker-registry.sitesearch.cloud/intrafind/sis-search-service:2.4.6.7
     container_name: sitesearch-search-service
     restart: always
@@ -18,7 +17,6 @@ services:
       - sitesearch
 
   sitesearch-search-service-1:
-    # tag "1.7-no-auth" works fine without encryption
     image: docker-registry.sitesearch.cloud/intrafind/sis-search-service:2.4.6.7
     container_name: sitesearch-search-service-1
     restart: always
