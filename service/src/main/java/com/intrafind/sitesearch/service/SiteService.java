@@ -36,6 +36,8 @@ import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -437,6 +439,25 @@ public class SiteService {
         }
     }
 
+    public boolean clearIndex(UUID siteId, UUID siteSecret) {
+        try {
+            final Request request = new Request.Builder()
+                    .url("https://api.sitesearch.cloud/sites/" + siteId + "?siteSecret=" + siteSecret)
+                    .delete()
+                    .build();
+            final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
+            if (response.code() == 204 || response.code() == 200) {
+                return true;
+            } else {
+                LOG.error("CLEAR_INDEX_RESULT: " + response.code());
+                return false;
+            }
+        } catch (IOException e) {
+            LOG.error("CLEAR_INDEX_RESULT_FAILURE: " + e.getMessage());
+            return false;
+        }
+    }
+
     // TODO refactor code so `crawlerService` does not need to be passed as argument
     public Optional<SitesCrawlStatus> crawlSite(UUID serviceSecret, CrawlerService crawlerService, SitesCrawlStatus sitesCrawlStatusUpdate, boolean allSiteCrawl, boolean isThrottled, boolean clearIndex) {
         final SitesCrawlStatus sitesCrawlStatusOverall = new SitesCrawlStatus(new HashSet<>());
@@ -450,6 +471,9 @@ public class SiteService {
                             final UUID siteSecret = uuid;
                             final Optional<SiteProfile> siteProfile = fetchSiteProfile(crawlStatus.getSiteId());
                             siteProfile.ifPresent(profile -> {
+                                if (clearIndex && !clearIndex(profile.getId(), profile.getSecret())) {
+                                    return;
+                                }
                                 final AtomicLong pageCount = new AtomicLong();
                                 profile.getConfigs().forEach(configBundle ->
                                         profile.getConfigs().stream().filter(config -> config.getUrl().equals(configBundle.getUrl())).findAny().ifPresent(config -> {

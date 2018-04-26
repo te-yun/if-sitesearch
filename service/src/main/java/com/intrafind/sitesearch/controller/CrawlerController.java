@@ -220,6 +220,9 @@ public class CrawlerController {
         }
         final Optional<SiteProfile> siteProfile = siteService.fetchSiteProfile(siteId, siteSecret);
         if (siteProfile.isPresent()) {
+            if (clearIndex) {
+                siteService.clearIndex(siteId, siteSecret);
+            }
             final CrawlerJobResult crawlerJobResult = crawlerService.recrawl(siteId, siteSecret, siteProfile.get(), clearIndex);
 
             LOG.info("siteId: " + siteId + " - siteSecret: " + siteSecret + " - pageCount: " + crawlerJobResult.getPageCount());

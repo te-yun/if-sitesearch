@@ -30,8 +30,6 @@ import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.fetcher.PageFetcher;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
-import okhttp3.Request;
-import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -55,9 +53,9 @@ public class CrawlerService {
     private static final String SITE_SEARCH_USER_AGENT = "SiteSearch";
 
     public CrawlerJobResult recrawl(UUID siteId, UUID siteSecret, SiteProfile siteProfile, boolean clearIndex) {
-        if (clearIndex) {
-            clearIndex(siteId, siteSecret);
-        }
+//        if (clearIndex) {
+//            clearIndex(siteId, siteSecret);
+//        }
 
         final List<String> urls = new ArrayList<>();
         for (final SiteProfile.Config siteConfig : siteProfile.getConfigs()) {
@@ -142,16 +140,12 @@ public class CrawlerService {
             controller.addSeed(url);
         }
 
-        if (clearIndex && !clearIndex(siteId, siteSecret)) {
-            return null;
-        }
+//        if (clearIndex && !clearIndex(siteId, siteSecret)) {
+//            return null;
+//        }
 
         final CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url), pageBodyCssSelector);
-//        if (isThrottled) {
-//            controller.start(factory, crawlerThreads);
-//        } else {
             controller.start(factory, crawlerThreads);
-//        }
 
         final List<String> urls = controller.getCrawlersLocalData().stream()
                 .filter(Objects::nonNull)
@@ -193,25 +187,6 @@ public class CrawlerService {
                 seedUrls.add(siteMapUrl.getUrl());
             });
 
-        }
-    }
-
-    private boolean clearIndex(UUID siteId, UUID siteSecret) {
-        try {
-            final Request request = new Request.Builder()
-                    .url("https://api.sitesearch.cloud/sites/" + siteId + "?siteSecret=" + siteSecret)
-                    .delete()
-                    .build();
-            final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
-            if (response.code() == 204 || response.code() == 200) {
-                return true;
-            } else {
-                LOG.error("CLEAR_INDEX_RESULT: " + response.code());
-                return false;
-            }
-        } catch (IOException e) {
-            LOG.error("CLEAR_INDEX_RESULT_FAILURE: " + e.getMessage());
-            return false;
         }
     }
 }
