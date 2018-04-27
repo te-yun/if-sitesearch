@@ -562,7 +562,6 @@ public class SiteService {
             final int num = pagesToDelete.entrySet().size();
             LOG.info("INFO_ABOUT_FEATURE: " + num);
             LOG.warn("WARN_ABOUT_FEATURE: " + num);
-            LOG.error("ERROR_ABOUT_FEATURE: " + num);
             LOG.debug("DEBUG_ABOUT_FEATURE: " + num);
             LOG.trace("TRACE_ABOUT_FEATURE: " + num);
             return Optional.of(new IndexCleanupResult(pagesToDelete.entrySet().size(), new ArrayList<>(pagesToDelete.values())));
