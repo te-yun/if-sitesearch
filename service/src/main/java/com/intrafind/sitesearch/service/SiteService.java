@@ -26,6 +26,7 @@ import com.intrafind.sitesearch.TrustAllX509TrustManager;
 import com.intrafind.sitesearch.dto.CrawlStatus;
 import com.intrafind.sitesearch.dto.CrawlerJobResult;
 import com.intrafind.sitesearch.dto.FetchedPage;
+import com.intrafind.sitesearch.dto.IndexCleanupResult;
 import com.intrafind.sitesearch.dto.SiteCreation;
 import com.intrafind.sitesearch.dto.SiteIndexSummary;
 import com.intrafind.sitesearch.dto.SitePage;
@@ -57,6 +58,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -165,18 +167,20 @@ public class SiteService {
         return siteConfiguration.map(document -> UUID.fromString(document.get("secret")));
     }
 
-    public Optional<List<String>> fetchAllDocuments(UUID siteId) {
-        Hits documentWithSiteSecret = SearchService.SEARCH_SERVICE.search(
+    public Optional<List<String>> fetchAllDocuments(final UUID siteId) {
+        final Hits documentWithSiteSecret = SearchService.SEARCH_SERVICE.search(
                 Fields.TENANT + ":" + siteId.toString(),
                 Search.RETURN_FIELDS, Fields.TENANT,
-                Search.HITS_LIST_SIZE, 1_000
+                Search.HITS_LIST_SIZE, 10_000
         );
 
         if (documentWithSiteSecret.getDocuments().isEmpty()) {
             return Optional.empty();
         } else {
-            List<String> documents = new ArrayList<>();
-            documentWithSiteSecret.getDocuments().forEach(document -> documents.add(document.getId()));
+//            List<String> documents = new ArrayList<>();
+//            documentWithSiteSecret.getDocuments().forEach(document -> documents.add(document.getId()));
+            final List<String> documents = documentWithSiteSecret.getDocuments().stream()
+                    .map(Document::getId).collect(Collectors.toList());
             return Optional.of(documents);
         }
     }
@@ -254,7 +258,7 @@ public class SiteService {
                 return Optional.empty();
             } else if (siteSecret.equals(fetchedSiteSecret.get())) { // authorized
                 if (clearIndex) {
-                    Optional<List<String>> allPages = fetchAllDocuments(siteId);
+                    final Optional<List<String>> allPages = fetchAllDocuments(siteId);
                     allPages.ifPresent(pages -> INDEX_SERVICE.delete(pages.toArray(new String[]{})));
                 }
                 if (isGeneric) {
@@ -541,5 +545,27 @@ public class SiteService {
             }
         }
         return Optional.empty();
+    }
+
+    public Optional<IndexCleanupResult> removeOldSiteIndexContent(final UUID siteId) {
+        final Hits documents = SearchService.SEARCH_SERVICE.search(
+                Fields.TENANT + ":" + siteId.toString(),
+                Search.RETURN_FIELDS, Fields.TENANT + SearchService.QUERY_SEPARATOR + Fields.URL + SearchService.QUERY_SEPARATOR + PAGE_TIMESTAMP,
+                Search.HITS_LIST_SIZE, 10_000
+        );
+
+        if (documents.getDocuments().isEmpty()) {
+            return Optional.empty();
+        } else {
+            final Map<String, String> pagesToDelete = documents.getDocuments().stream()
+                    .collect(Collectors.toMap(Document::getId, value -> value.get(Fields.URL)));
+            final int num = pagesToDelete.entrySet().size();
+            LOG.info("INFO_ABOUT_FEATURE: " + num);
+            LOG.warn("WARN_ABOUT_FEATURE: " + num);
+            LOG.error("ERROR_ABOUT_FEATURE: " + num);
+            LOG.debug("DEBUG_ABOUT_FEATURE: " + num);
+            LOG.trace("TRACE_ABOUT_FEATURE: " + num);
+            return Optional.of(new IndexCleanupResult(pagesToDelete.entrySet().size(), new ArrayList<>(pagesToDelete.values())));
+        }
     }
 }

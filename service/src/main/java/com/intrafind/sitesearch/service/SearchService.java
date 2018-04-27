@@ -30,7 +30,7 @@ import java.util.UUID;
 @Service
 public class SearchService {
     static final Search SEARCH_SERVICE = IfinderCoreClient.newHessianClient(Search.class, Application.IFINDER_CORE + "/search");
-    private static final String QUERY_SEPARATOR = ",";
+    static final String QUERY_SEPARATOR = ",";
     private static final String HIT_TEASER_PREFIX = "hit.teaser.";
 
     public Hits search(final String query, final UUID siteId) {

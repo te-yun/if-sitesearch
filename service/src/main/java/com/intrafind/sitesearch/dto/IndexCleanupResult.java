@@ -18,23 +18,22 @@ package com.intrafind.sitesearch.dto;
 
 import java.util.List;
 
-public class CrawlerJobResult {
-    private int pageCount;
-    private List<String> urls;
+public class IndexCleanupResult extends CrawlerJobResult {
+    //    private int pageCount;
+//    private List<String> urls;
+//
+    public IndexCleanupResult(int pageCount, List<String> urls) {
 
-    public CrawlerJobResult(int pageCount, List<String> urls) {
-        this.pageCount = pageCount;
-        this.urls = urls;
     }
-
-    CrawlerJobResult() {
-    }
-
-    public List<String> getUrls() {
-        return urls;
-    }
-
-    public int getPageCount() {
-        return pageCount;
-    }
+//
+//    private IndexCleanupResult() {
+//    }
+//
+//    public List<String> getUrls() {
+//        return urls;
+//    }
+//
+//    public int getPageCount() {
+//        return pageCount;
+//    }
 }

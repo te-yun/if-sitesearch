@@ -32,6 +32,7 @@ import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.Message;
 import com.intrafind.sitesearch.dto.CaptchaVerification;
 import com.intrafind.sitesearch.dto.CrawlerJobResult;
+import com.intrafind.sitesearch.dto.IndexCleanupResult;
 import com.intrafind.sitesearch.dto.SiteProfile;
 import com.intrafind.sitesearch.dto.SitesCrawlStatus;
 import com.intrafind.sitesearch.service.CrawlerService;
@@ -224,6 +225,11 @@ public class CrawlerController {
                 siteService.clearIndex(siteId, siteSecret);
             }
             final CrawlerJobResult crawlerJobResult = crawlerService.recrawl(siteId, siteSecret, siteProfile.get(), clearIndex);
+
+            final Optional<IndexCleanupResult> indexCleanupResultOptional = siteService.removeOldSiteIndexContent(siteId);
+            indexCleanupResultOptional.ifPresent(indexCleanupResult -> {
+                LOG.info("INFO_ABOUT_FEATURE (REMOVE THIS):  " + "pageCount" + indexCleanupResult.getPageCount() + " - urls: " + indexCleanupResult.getUrls());
+            });
 
             LOG.info("siteId: " + siteId + " - siteSecret: " + siteSecret + " - pageCount: " + crawlerJobResult.getPageCount());
             return ResponseEntity.ok(crawlerJobResult);
