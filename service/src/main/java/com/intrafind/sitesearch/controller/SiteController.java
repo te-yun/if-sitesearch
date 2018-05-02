@@ -243,7 +243,7 @@ public class SiteController {
             final Autocomplete autocomplete = result.get();
             final Instant stop = Instant.now();
             final Instant searchDuration = stop.minusMillis(start.toEpochMilli());
-            LOG.info("siteId: " + siteId + " - durationInMs: " + searchDuration.toEpochMilli());
+            LOG.info("siteId: " + siteId + " - autocompleteDurationInMs: " + searchDuration.toEpochMilli());
             LOG.info("siteId: " + siteId + " - query-fragment: " + query + " - autocompletes: " + autocomplete.getResults().size());
             return ResponseEntity.ok(autocomplete);
         } else {
@@ -268,7 +268,7 @@ public class SiteController {
         final Hits searchResult = searchService.search(query, siteId);
         final Instant stop = Instant.now();
         final Instant searchDuration = stop.minusMillis(start.toEpochMilli());
-        LOG.info("siteId: " + siteId + " - durationInMs: " + searchDuration.toEpochMilli());
+        LOG.info("siteId: " + siteId + " - searchDurationInMs: " + searchDuration.toEpochMilli());
         LOG.info("siteId: " + siteId + " - query: " + query + " - results: " + searchResult.getResults().size());
         return ResponseEntity.ok(searchResult);
     }
