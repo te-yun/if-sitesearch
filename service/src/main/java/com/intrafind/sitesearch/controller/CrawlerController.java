@@ -111,7 +111,7 @@ public class CrawlerController {
 
     private static MimeMessage createEmail(String to, String subject, String bodyText) throws Exception {
         final Properties props = new Properties();
-        Session session = Session.getDefaultInstance(props, null);
+        final Session session = Session.getDefaultInstance(props, null);
 
         final MimeMessage email = new MimeMessage(session);
         email.setFrom(new InternetAddress("team@sitesearch.cloud"));
@@ -179,7 +179,7 @@ public class CrawlerController {
                                 "\n\tSite Secret: " + siteSecret +
                                 "\n\tSite Search Evaluation URL: https://sitesearch.cloud/getting-started/?siteId=" + siteId + "&siteSecret=" + siteSecret + "&url=" + url +
                                 "\n\nPlease do not hesitate to ask us any questions you should encounter during your 14-day evaluation period!" +
-//                                "\n\nUsing the credentials above, you agree with our <a href='https://sitesearch.cloud/terms'>Terms & Conditions</a>." +
+                                "\n\nUsing the credentials above, you agree with our <a href='https://sitesearch.cloud/terms'>Terms & Conditions</a>." +
                                 "\n\nCheers," +
                                 "\nSite Search Team"
                 )
