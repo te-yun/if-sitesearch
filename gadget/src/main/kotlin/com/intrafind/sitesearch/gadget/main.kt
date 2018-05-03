@@ -292,6 +292,7 @@ private fun requireTermsAndConditions() {
     if (!isTermsAccepted) {
         triggerButton.disabled = true
         termsAccepted.style.background = "#911" // TODO Jochen add some invalidity communicating style here instead and additionally show a message like "Accepting T&C is required in order to proceed"
+    } else {
         termsAccepted.readOnly = true
     }
 }
