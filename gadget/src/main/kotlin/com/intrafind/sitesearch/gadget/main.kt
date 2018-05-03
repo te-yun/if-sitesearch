@@ -80,9 +80,12 @@ private lateinit var sitemapsOnly: HTMLInputElement
 private lateinit var sitemapContainer: HTMLDivElement
 private lateinit var cssSelector: HTMLInputElement
 private lateinit var cssSelectorContainer: HTMLDivElement
+private var isValidSetup: Boolean = false
+private var isTermsAccepted: Boolean = false
+private var isCaptchaSolved: Boolean = false
 
 private fun init() {
-//    termsAccepted = document.getElementById("termsAccepted") as HTMLInputElement
+    termsAccepted = document.getElementById("termsAccepted") as HTMLInputElement
     cssSelectorContainer = document.getElementById("cssSelectorContainer") as HTMLDivElement
     cssSelector = document.getElementById("cssSelector") as HTMLInputElement
     sitemapContainer = document.getElementById("sitemapContainer") as HTMLDivElement
@@ -100,17 +103,19 @@ private fun init() {
     siteSearchSetupUrl = document.getElementById("siteSearchSetupUrl") as HTMLDivElement
     triggerButton = document.getElementById("index") as HTMLButtonElement
     val enterpriseSearchbar = document.getElementById("sitesearch-searchbar") as HTMLDivElement
-//    val searchbarVersion = "2018-04-06" // when updating, update the value in the corresponding HTML container too
-//    val siteSearchConfig = "https://cdn.sitesearch.cloud/searchbar/$searchbarVersion/config/sitesearch.json"
-//    val enterpriseSearchbarCode = enterpriseSearchbar.outerHTML
-//            .replace("/searchbar/$searchbarVersion/config/sitesearch.json", siteSearchConfig)
-//    integrationCode.value = enterpriseSearchbarCode
     integrationCode.value = enterpriseSearchbar.outerHTML
 
     document.addEventListener("sis.crawlerFinishedEvent", {
         triggerButton.textContent = "Enable Search"
         triggerButton.disabled = false
         (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = "$crawlerPageCount pages from ${url.value} have been crawled. Consider that it takes around a minute before you can find here everything we have found."
+    })
+
+    termsAccepted.addEventListener("change", {
+        isTermsAccepted = termsAccepted.checked
+        if (isCaptchaSolved) {
+            triggerButton.disabled = false
+        }
     })
 
     applyAnalytics()
@@ -248,7 +253,6 @@ private fun allowedToCrawl(xhr: XMLHttpRequest): Boolean {
     return false
 }
 
-private var isValidSetup: Boolean = false
 private fun classifyUrlAsValid(isValid: Boolean) {
     isValidSetup = if (isValid) {
         validateField(websiteUrlContainer, true)
@@ -277,8 +281,14 @@ private fun validateField(container: HTMLElement, isValid: Boolean) {
 
 @JsName("verifyCallback")
 private fun verifyCallback(token: String) {
+    isCaptchaSolved = true
     captchaResult = token
-    triggerButton.disabled = false
+    if (isTermsAccepted) {
+        triggerButton.disabled = false
+    } else {
+        triggerButton.disabled = true
+        termsAccepted.style.background = "#911" // TODO Jochen add some invalidity communicating style here instead and additionally show a message like "Accepting T&C is required in order to proceed"
+    }
 }
 
 @JsName("preserveSearchSetup")
