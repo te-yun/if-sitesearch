@@ -331,6 +331,8 @@ private fun applyQueryOverrides() {
         siteIdBox.style.display = "none"
         sitemapContainer.style.display = "none"
         cssSelectorContainer.style.display = "none"
+        termsAccepted.checked = true
+        termsAccepted.readOnly = true
     }
 }
 
