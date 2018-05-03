@@ -45,17 +45,21 @@ private val serviceUrl: String = window.location.origin
 private lateinit var pageBodyCssSelector: HTMLParagraphElement
 private lateinit var sitemapsOnly: HTMLInputElement
 private lateinit var url: HTMLParagraphElement
-private lateinit var pageCountContainer: HTMLLabelElement
+private lateinit var pageCountContainer: HTMLDivElement
+private lateinit var pageCount: HTMLParagraphElement
 private lateinit var siteIdElement: HTMLDivElement
 private lateinit var siteSecretElement: HTMLDivElement
 private lateinit var recrawl: HTMLButtonElement
 private lateinit var profile: SiteProfile
 
+private lateinit var check: HTMLDivElement
+
 private fun init() {
     pageBodyCssSelector = document.getElementById("pageBodyCssSelector") as HTMLParagraphElement
     sitemapsOnly = document.getElementById("sitemapsOnly") as HTMLInputElement
     url = document.getElementById("url") as HTMLParagraphElement
-    pageCountContainer = document.getElementById("pageCountContainer") as HTMLLabelElement
+    pageCountContainer = document.getElementById("pageCountContainer") as HTMLDivElement
+    pageCount = document.getElementById("pageCount") as HTMLParagraphElement
     siteIdElement = document.getElementById("siteId") as HTMLDivElement
     siteSecretElement = document.getElementById("siteSecret") as HTMLDivElement
     recrawl = document.getElementById("recrawl") as HTMLButtonElement
@@ -104,8 +108,9 @@ fun recrawl() {
     }
 }
 
-private fun showPageCount(pageCount: Int) {
-    pageCountContainer.textContent = "Pages crawled: $pageCount"
+private fun showPageCount(pagesRecrawled: Int) {
+    pageCount.textContent = "$pagesRecrawled"
+    pageCountContainer.classList.remove("sis-recrawl-container")
 }
 
 private fun fetchProfile() {

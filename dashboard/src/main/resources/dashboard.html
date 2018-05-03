@@ -84,20 +84,18 @@
         <!--<div id="captcha" class="sis-captcha-container"></div>-->
         <!--<div class="sis-info-container sis-page-count">-->
         <!--TODO was broken, therefore commented-->
-        <div>
-            <!--<label id="pageCountContainer">TEST</label>-->
-            <!--<label>Pages Crawled</label>-->
-            <!--<p id="pageCountContainer"></p>-->
-            <!--<label>Pages Crawled</label>-->
-            <label id="pageCountContainer"></label>
-        </div>
-        <!--</div>-->
         <button id="recrawl" title="Extract content from website"
                 onclick="dashboard.com.intrafind.sitesearch.dashboard.recrawl();"
                 disabled
         >
             Clear Site Index and Recrawl &amp; Reindex Site
         </button>
+        <div id="pageCountContainer" class="sis-info-container sis-recrawl-container">
+            <div>
+                <label>Pages crawled</label>
+                <p id="pageCount"></p>
+            </div>
+        </div>
     </div>
 </div>
 <footer>
