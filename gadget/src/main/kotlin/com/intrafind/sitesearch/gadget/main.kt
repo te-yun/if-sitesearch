@@ -114,7 +114,7 @@ private fun init() {
     termsAccepted.addEventListener("change", {
         isTermsAccepted = termsAccepted.checked
         if (isCaptchaSolved) {
-            triggerButton.disabled = false
+            triggerButton.disabled = !isTermsAccepted
         }
     })
 
