@@ -116,6 +116,9 @@ private fun init() {
         if (isCaptchaSolved) {
             triggerButton.disabled = !isTermsAccepted
         }
+        if(!isTermsAccepted){
+            requireTermsAndConditions()
+        }
     })
 
     applyAnalytics()
@@ -286,9 +289,13 @@ private fun verifyCallback(token: String) {
     if (isTermsAccepted) {
         triggerButton.disabled = false
     } else {
-        triggerButton.disabled = true
-        termsAccepted.style.background = "#911" // TODO Jochen add some invalidity communicating style here instead and additionally show a message like "Accepting T&C is required in order to proceed"
+        requireTermsAndConditions()
     }
+}
+
+private fun requireTermsAndConditions() {
+    triggerButton.disabled = true
+    termsAccepted.style.background = "#911" // TODO Jochen add some invalidity communicating style here instead and additionally show a message like "Accepting T&C is required in order to proceed"
 }
 
 @JsName("preserveSearchSetup")
