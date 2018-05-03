@@ -116,9 +116,7 @@ private fun init() {
         if (isCaptchaSolved) {
             triggerButton.disabled = !isTermsAccepted
         }
-        if(!isTermsAccepted){
-            requireTermsAndConditions()
-        }
+        requireTermsAndConditions()
     })
 
     applyAnalytics()
@@ -286,16 +284,15 @@ private fun validateField(container: HTMLElement, isValid: Boolean) {
 private fun verifyCallback(token: String) {
     isCaptchaSolved = true
     captchaResult = token
-    if (isTermsAccepted) {
-        triggerButton.disabled = false
-    } else {
-        requireTermsAndConditions()
-    }
+    triggerButton.disabled = !isTermsAccepted
+    requireTermsAndConditions()
 }
 
 private fun requireTermsAndConditions() {
-    triggerButton.disabled = true
-    termsAccepted.style.background = "#911" // TODO Jochen add some invalidity communicating style here instead and additionally show a message like "Accepting T&C is required in order to proceed"
+    if (!isTermsAccepted) {
+        triggerButton.disabled = true
+        termsAccepted.style.background = "#911" // TODO Jochen add some invalidity communicating style here instead and additionally show a message like "Accepting T&C is required in order to proceed"
+    }
 }
 
 @JsName("preserveSearchSetup")
@@ -364,4 +361,4 @@ class SiteSearch {
 
 data class SiteProfileConfig(val url: String, val pageBodyCssSelector: String = "body", val sitemapsOnly: Boolean = false)
 
-data class SiteProfileCreation(val configs: Set<SiteProfileConfig> = emptySet(), val email: String = "")
+data class SiteProfileCreation(val configs: Set<SiteProfileConfig> = emptySet(), val email: String = "")                                    
