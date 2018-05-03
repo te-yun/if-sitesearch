@@ -31,6 +31,7 @@ import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.Message;
 import com.intrafind.sitesearch.dto.CaptchaVerification;
+import com.intrafind.sitesearch.dto.CrawlStatus;
 import com.intrafind.sitesearch.dto.CrawlerJobResult;
 import com.intrafind.sitesearch.dto.IndexCleanupResult;
 import com.intrafind.sitesearch.dto.SiteProfile;
@@ -63,11 +64,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static com.intrafind.sitesearch.service.SiteCrawler.JSON_MEDIA_TYPE;
 
@@ -186,11 +191,51 @@ public class CrawlerController {
             @RequestBody SitesCrawlStatus sitesCrawlStatusUpdate,
             @RequestParam(required = false, value = "allSitesCrawl", defaultValue = "false") boolean allSitesCrawl,
             @RequestParam(required = false, value = "isThrottled", defaultValue = "true") boolean isThrottled,
-            @RequestParam(required = false, value = "clearIndex", defaultValue = "true") boolean clearIndex
+            @RequestParam(required = false, value = "clearIndex", defaultValue = "false") boolean clearIndex
     ) {
-        // TODO refactor code so `crawlerService` does not need to be passed as argument
-        final Optional<SitesCrawlStatus> sitesCrawlStatus = siteService.crawlSite(serviceSecret, crawlerService, sitesCrawlStatusUpdate, allSitesCrawl, isThrottled, clearIndex);
+        final Optional<SitesCrawlStatus> sitesCrawlStatus = crawlSite(serviceSecret, sitesCrawlStatusUpdate, allSitesCrawl, isThrottled, clearIndex);
         return sitesCrawlStatus.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
+    }
+
+    private Optional<SitesCrawlStatus> crawlSite(UUID serviceSecret, SitesCrawlStatus sitesCrawlStatusUpdate, boolean allSiteCrawl, boolean isThrottled, boolean clearIndex) {
+        final SitesCrawlStatus sitesCrawlStatusOverall = new SitesCrawlStatus(new HashSet<>());
+        if (SiteService.ADMIN_SITE_SECRET.equals(serviceSecret)) {
+            final Instant halfDayAgo = Instant.now().minus(1, ChronoUnit.HALF_DAYS);
+            sitesCrawlStatusUpdate.getSites().stream()
+                    .filter(crawlStatus -> Instant.parse(crawlStatus.getCrawled()).isBefore(halfDayAgo) || allSiteCrawl) // TODO filter to achieve crawling distribution across the entire day
+                    .forEach(crawlStatus -> {
+                        final Optional<UUID> fetchedSiteSecret = siteService.fetchSiteSecret(crawlStatus.getSiteId());
+                        fetchedSiteSecret.ifPresent(uuid -> {
+                            final UUID siteSecret = uuid;
+                            final Optional<SiteProfile> siteProfile = siteService.fetchSiteProfile(crawlStatus.getSiteId());
+                            siteProfile.ifPresent(profile -> {
+                                if (clearIndex && !siteService.clearIndex(profile.getId(), profile.getSecret())) {
+                                    return;
+                                }
+                                final AtomicLong pageCount = new AtomicLong();
+                                profile.getConfigs().forEach(configBundle ->
+                                        profile.getConfigs().stream().filter(config -> config.getUrl().equals(configBundle.getUrl())).findAny().ifPresent(config -> {
+                                            final CrawlerJobResult crawlerJobResult = crawlerService.crawl(
+                                                    configBundle.getUrl().toString(),
+                                                    crawlStatus.getSiteId(),
+                                                    siteSecret,
+                                                    isThrottled,
+                                                    clearIndex, configBundle.isSitemapsOnly(),
+                                                    configBundle.getPageBodyCssSelector()
+                                            );
+                                            pageCount.addAndGet(crawlerJobResult.getPageCount());
+                                            final Optional<SitesCrawlStatus> sitesCrawlStatus = siteService.updateCrawlStatusInShedule(crawlStatus.getSiteId(), pageCount.get());// TODO fix PATCH update instead of a regular PUT
+                                            sitesCrawlStatus.ifPresent(element -> sitesCrawlStatusOverall.getSites().addAll(element.getSites()));
+                                            siteService.removeOldSiteIndexPages(crawlStatus.getSiteId());
+                                            LOG.info("siteId: " + crawlStatus.getSiteId() + " - siteUrl: " + configBundle.getUrl().toString() + " - pageCount: " + crawlerJobResult.getPageCount()); // TODO add pattern to logstash
+                                        }));
+                                sitesCrawlStatusOverall.getSites().add(new CrawlStatus(profile.getId(), Instant.now(), pageCount.get()));
+                            });
+                        });
+                    });
+            return Optional.of(sitesCrawlStatusOverall);
+        }
+        return Optional.empty();
     }
 
     @RequestMapping(path = "crawl/status", method = RequestMethod.PUT)
@@ -226,9 +271,9 @@ public class CrawlerController {
             }
             final CrawlerJobResult crawlerJobResult = crawlerService.recrawl(siteId, siteSecret, siteProfile.get(), clearIndex);
 
-            final Optional<IndexCleanupResult> indexCleanupResultOptional = siteService.removeOldSiteIndexContent(siteId);
+            final Optional<IndexCleanupResult> indexCleanupResultOptional = siteService.removeOldSiteIndexPages(siteId);
             indexCleanupResultOptional.ifPresent(indexCleanupResult -> {
-                LOG.info("siteId: " + siteId + " - deletedPageCount: " + indexCleanupResult.getPageCount()); // TODO consolidate with the LOG.info bellow, add to logstash
+                LOG.info("siteId: " + siteId + " - deletedPageCount: " + indexCleanupResult.getPageCount()); // TODO consolidate with the main&final LOG.info, add to logstash
             });
 
             LOG.info("siteId: " + siteId + " - siteSecret: " + siteSecret + " - pageCount: " + crawlerJobResult.getPageCount()); // TODO remove siteSecret from logs
