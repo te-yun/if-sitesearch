@@ -51,7 +51,7 @@ private lateinit var siteSecretElement: HTMLDivElement
 private lateinit var recrawl: HTMLButtonElement
 private lateinit var profile: SiteProfile
 
-private lateinit var check: HTMLDivElement
+//private lateinit var check: HTMLDivElement // TODO delete
 
 private fun init() {
     pageBodyCssSelector = document.getElementById("pageBodyCssSelector") as HTMLParagraphElement
