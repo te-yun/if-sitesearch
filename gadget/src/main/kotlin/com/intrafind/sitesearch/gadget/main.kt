@@ -361,4 +361,4 @@ class SiteSearch {
 
 data class SiteProfileConfig(val url: String, val pageBodyCssSelector: String = "body", val sitemapsOnly: Boolean = false)
 
-data class SiteProfileCreation(val configs: Set<SiteProfileConfig> = emptySet(), val email: String = "")                                    
+data class SiteProfileCreation(val configs: Set<SiteProfileConfig> = emptySet(), val email: String = "")
