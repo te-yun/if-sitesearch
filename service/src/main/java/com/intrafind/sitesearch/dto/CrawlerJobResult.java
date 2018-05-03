@@ -19,7 +19,7 @@ package com.intrafind.sitesearch.dto;
 import java.util.List;
 
 public class CrawlerJobResult {
-    private int pageCount;
+    protected int pageCount;
     private List<String> urls;
 
     public CrawlerJobResult(int pageCount, List<String> urls) {
@@ -28,6 +28,10 @@ public class CrawlerJobResult {
     }
 
     CrawlerJobResult() {
+    }
+
+    public void setUrls(List<String> urls) {
+        this.urls = urls;
     }
 
     public List<String> getUrls() {

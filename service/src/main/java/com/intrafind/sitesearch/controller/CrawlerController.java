@@ -211,10 +211,10 @@ public class CrawlerController {
     }
 
     @RequestMapping(path = "{siteId}/recrawl", method = RequestMethod.POST)
-    ResponseEntity<CrawlerJobResult> recrawl(
-            @PathVariable(value = "siteId") UUID siteId,
-            @RequestParam(value = "siteSecret") UUID siteSecret,
-            @RequestParam(value = "clearIndex") boolean clearIndex
+    ResponseEntity<CrawlerJobResult> recrawl(     // TODO add test that actually checks if obsolete pages are removed, `recrawlMultiSiteConfig` is currently the only test
+                                                  @PathVariable(value = "siteId") UUID siteId,
+                                                  @RequestParam(value = "siteSecret") UUID siteSecret,
+                                                  @RequestParam(value = "clearIndex", required = false, defaultValue = "false") boolean clearIndex
     ) {
         if (!siteService.isAllowedToModify(siteId, siteSecret)) {
             return ResponseEntity.notFound().build();
@@ -228,10 +228,10 @@ public class CrawlerController {
 
             final Optional<IndexCleanupResult> indexCleanupResultOptional = siteService.removeOldSiteIndexContent(siteId);
             indexCleanupResultOptional.ifPresent(indexCleanupResult -> {
-                LOG.info("INFO_ABOUT_FEATURE (REMOVE THIS):  " + "pageCount" + indexCleanupResult.getPageCount() + " - urls: " + indexCleanupResult.getUrls());
+                LOG.info("siteId: " + siteId + " - deletedPageCount: " + indexCleanupResult.getPageCount()); // TODO consolidate with the LOG.info bellow, add to logstash
             });
 
-            LOG.info("siteId: " + siteId + " - siteSecret: " + siteSecret + " - pageCount: " + crawlerJobResult.getPageCount());
+            LOG.info("siteId: " + siteId + " - siteSecret: " + siteSecret + " - pageCount: " + crawlerJobResult.getPageCount()); // TODO remove siteSecret from logs
             return ResponseEntity.ok(crawlerJobResult);
         } else {
             return ResponseEntity.notFound().build();
@@ -277,7 +277,7 @@ public class CrawlerController {
             } catch (Exception e) {
                 LOG.error(e.getMessage());
             }
-            LOG.info("siteId: " + siteId + " - siteSecret: " + siteSecret + " - siteUrl: " + url + " - pageCount: " + crawlerJobResult.getPageCount() + " - email: " + email);
+            LOG.info("siteId: " + siteId + " - siteSecret: " + siteSecret + " - siteUrl: " + url + " - pageCount: " + crawlerJobResult.getPageCount() + " - email: " + email); // TODO remove siteSecret from logs
             return ResponseEntity.ok(crawlerJobResult);
         } else {
             return ResponseEntity.unprocessableEntity().build();

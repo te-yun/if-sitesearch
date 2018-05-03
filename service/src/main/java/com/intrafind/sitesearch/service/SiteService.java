@@ -443,6 +443,10 @@ public class SiteService {
         }
     }
 
+    private void deleteWithoutFurtherChecks(final String... pageIds) {
+        INDEX_SERVICE.delete(pageIds);
+    }
+
     public boolean clearIndex(UUID siteId, UUID siteSecret) {
         try {
             final Request request = new Request.Builder()
@@ -548,6 +552,7 @@ public class SiteService {
     }
 
     public Optional<IndexCleanupResult> removeOldSiteIndexContent(final UUID siteId) {
+        final Instant obsoletePageThreshold = Instant.now().minus(4, ChronoUnit.HALF_DAYS);
         final Hits documents = SearchService.SEARCH_SERVICE.search(
                 Fields.TENANT + ":" + siteId.toString(),
                 Search.RETURN_FIELDS, Fields.TENANT + SearchService.QUERY_SEPARATOR + Fields.URL + SearchService.QUERY_SEPARATOR + PAGE_TIMESTAMP,
@@ -558,13 +563,11 @@ public class SiteService {
             return Optional.empty();
         } else {
             final Map<String, String> pagesToDelete = documents.getDocuments().stream()
+                    .filter(document -> Instant.parse(document.get(PAGE_TIMESTAMP)).isBefore(obsoletePageThreshold)) // TODO pre-filter it in the service call to search-service
                     .collect(Collectors.toMap(Document::getId, value -> value.get(Fields.URL)));
-            final int num = pagesToDelete.entrySet().size();
-            LOG.info("INFO_ABOUT_FEATURE: " + num);
-            LOG.warn("WARN_ABOUT_FEATURE: " + num);
-            LOG.debug("DEBUG_ABOUT_FEATURE: " + num);
-            LOG.trace("TRACE_ABOUT_FEATURE: " + num);
-            return Optional.of(new IndexCleanupResult(pagesToDelete.entrySet().size(), new ArrayList<>(pagesToDelete.values())));
+            final int numberOfPagesToDelete = pagesToDelete.entrySet().size();
+            deleteWithoutFurtherChecks(pagesToDelete.keySet().toArray(new String[0])); // TODO finish THIS!!!!!!
+            return Optional.of(new IndexCleanupResult(numberOfPagesToDelete, new ArrayList<>(pagesToDelete.values())));
         }
     }
 }

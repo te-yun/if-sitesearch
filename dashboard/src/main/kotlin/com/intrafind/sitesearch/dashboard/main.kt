@@ -20,7 +20,6 @@ import com.intrafind.sitesearch.dashboard.SiteSearch.Companion.crawlerFinishedEv
 import org.w3c.dom.HTMLButtonElement
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLInputElement
-import org.w3c.dom.HTMLLabelElement
 import org.w3c.dom.HTMLParagraphElement
 import org.w3c.dom.events.Event
 import org.w3c.xhr.XMLHttpRequest
@@ -93,7 +92,7 @@ fun recrawl() {
 
     val profileConfig: SiteProfileConfig = profile.configs.asDynamic()[0]
     val xhr = XMLHttpRequest()
-    xhr.open("POST", "$serviceUrl/sites/$siteId/recrawl?siteSecret=$siteSecret&clearIndex=true")
+    xhr.open("POST", "$serviceUrl/sites/$siteId/recrawl?siteSecret=$siteSecret&clearIndex=false")
     xhr.send()
 
     xhr.onload = {

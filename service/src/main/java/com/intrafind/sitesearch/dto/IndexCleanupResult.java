@@ -23,7 +23,8 @@ public class IndexCleanupResult extends CrawlerJobResult {
 //    private List<String> urls;
 //
     public IndexCleanupResult(int pageCount, List<String> urls) {
-
+        this.pageCount = pageCount;
+        this.setUrls(urls);
     }
 //
 //    private IndexCleanupResult() {
