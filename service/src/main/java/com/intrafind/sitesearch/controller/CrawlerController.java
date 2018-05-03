@@ -321,7 +321,7 @@ public class CrawlerController {
             try {
                 sendSetupInfoEmail(siteId, siteSecret, url, emailAddress, crawlerJobResult.getPageCount());
             } catch (Exception e) {
-                LOG.error("EMAIL_FAILURE: " + e.getMessage());
+                LOG.error("EMAIL_FAILURE_EVALUATION: " + e.getMessage());
             }
             LOG.info("siteId: " + siteId + " - siteSecret: " + siteSecret + " - siteUrl: " + url + " - pageCount: " + crawlerJobResult.getPageCount() + " - email: " + email); // TODO remove siteSecret from logs
             return ResponseEntity.ok(crawlerJobResult);
