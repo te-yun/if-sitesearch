@@ -21,7 +21,6 @@ data "template_file" "shutdown_script" {
   }
 }
 
-
 data "template_file" "kubernetes_tagging-service" {
   template = "${file("${path.module}/kubernetes_templates/kube_tagging-service-template.yaml")}"
   vars {

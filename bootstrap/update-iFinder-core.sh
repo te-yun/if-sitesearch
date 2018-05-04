@@ -8,3 +8,5 @@ docker-compose --file ./opt/docker-compose-ifinder-core.yaml -p sitesearch down
 #sudo rm -r /srv/sitesearch-search-service*
 
 docker-compose --file ./opt/docker-compose-ifinder-core.yaml -p sitesearch up -d
+
+docker exec router nginx -s reload

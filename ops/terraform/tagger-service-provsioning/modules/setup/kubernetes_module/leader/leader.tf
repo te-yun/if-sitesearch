@@ -9,7 +9,6 @@ resource "null_resource" "docker_leader" {
     inline = "${data.template_file.shut_down_script.rendered}"
   }
 
-
   connection {
     user = "${var.ssh_user}"
     //Access IP of newly provisioned machine
@@ -21,12 +20,13 @@ resource "null_resource" "docker_leader" {
 
 data "external" "swarm_token_reader" {
   depends_on = [
-    "null_resource.docker_leader"]
+    "null_resource.docker_leader"
+  ]
   #TODO: Export private key file path
   program = [
     "sh",
     "script/get_leader_token.sh",
     "${var.ssh_user}",
     "${var.ip_address}",
-    "/home/bernard/.ssh/id_rsa.pem"]
+    "/srv/minion/.ssh/id_rsa"]
 }
