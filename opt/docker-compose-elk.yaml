@@ -10,6 +10,7 @@ services:
       - ops-elasticsearch-ying
       - ops-logstash
     environment:
+      - xpack.security.enabled=true
       - xpack.monitoring.report_stats=false
       - xpack.monitoring.ui.enabled=false
       - ELASTICSEARCH_URL=http://elk-elasticsearch:9200
