@@ -40,7 +40,9 @@
 <header>
     <div class="sis-container">
         <h1>
-            <img src="artifact/img/sitesearch_logo.png" width="164" height="45" alt="Site Search Logo">
+            <a href="https://sitesearch.cloud">
+                <img src="artifact/img/sitesearch_logo.png" width="164" height="45" alt="Site Search Logo">
+            </a>
         </h1>
         <nav>
             <ul>
@@ -67,23 +69,25 @@
         <div class="sis-config-container">
             <div>
                 <label><i class="fab fa-wordpress"></i>Website URL</label>
-                <p id="url"></p>
+                <input title="Website URL, to be crawled" style="width: 500px;" id="url"/>
             </div>
             <div>
                 <label><i class="fas fa-sitemap"></i>Use Sitemaps Only</label>
                 <div class="sis-config-checkbox-container">
-                    <input type="checkbox" id="sitemapsOnly" class="sis-checkbox" disabled checked>
+                    <input type="checkbox" id="sitemapsOnly" class="sis-checkbox" checked>
                     <label for="sitemapsOnly">&nbsp;</label>
                 </div>
             </div>
             <div>
                 <label><i class="fas fa-cut"></i>Content Extraction CSS Selector</label>
-                <p id="pageBodyCssSelector">CSS Selector</p>
+                <input title="CSS Selector" style="width: 500px;" id="pageBodyCssSelector">
             </div>
         </div>
-        <!--<div id="captcha" class="sis-captcha-container"></div>-->
-        <!--<div class="sis-info-container sis-page-count">-->
-        <!--TODO was broken, therefore commented-->
+        <input type="button" id="updateSiteProfile" title="Update Site Profile"
+               value="Update Site Profile"
+               onclick="dashboard.com.intrafind.sitesearch.dashboard.updateSiteProfile();"
+        >
+        <hr/>
         <button id="recrawl" title="Extract content from website"
                 onclick="dashboard.com.intrafind.sitesearch.dashboard.recrawl();"
         >
@@ -102,14 +106,5 @@
         Copyright 2018. All rights reserved.
     </div>
 </footer>
-<!--<script src="https://www.google.com/recaptcha/api.js?onload=captchaLoad&render=explicit&hl=en" async defer></script>-->
-<!--<script>-->
-<!--var captchaLoad = function () {-->
-<!--captchaWidget = grecaptcha.render("captcha", {-->
-<!--"sitekey": dashboard.com.intrafind.sitesearch.dashboard.SiteSearch.Companion.captchaSiteKey,-->
-<!--"callback": dashboard.com.intrafind.sitesearch.dashboard.verifyCallback-->
-<!--});-->
-<!--};-->
-<!--</script>-->
 </body>
 </html>

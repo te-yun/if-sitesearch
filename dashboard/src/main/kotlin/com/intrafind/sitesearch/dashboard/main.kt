@@ -41,9 +41,10 @@ private var siteId: String = ""
 private var siteSecret: String = ""
 private val serviceUrl: String = window.location.origin
 
-private lateinit var pageBodyCssSelector: HTMLParagraphElement
+private lateinit var updateSiteProfile: HTMLInputElement
+private lateinit var pageBodyCssSelector: HTMLInputElement
 private lateinit var sitemapsOnly: HTMLInputElement
-private lateinit var url: HTMLParagraphElement
+private lateinit var url: HTMLInputElement
 private lateinit var pageCountContainer: HTMLDivElement
 private lateinit var pageCount: HTMLParagraphElement
 private lateinit var siteIdElement: HTMLDivElement
@@ -51,12 +52,11 @@ private lateinit var siteSecretElement: HTMLDivElement
 private lateinit var recrawl: HTMLButtonElement
 private lateinit var profile: SiteProfile
 
-//private lateinit var check: HTMLDivElement // TODO delete
-
 private fun init() {
-    pageBodyCssSelector = document.getElementById("pageBodyCssSelector") as HTMLParagraphElement
+    updateSiteProfile = document.getElementById("updateSiteProfile") as HTMLInputElement
+    pageBodyCssSelector = document.getElementById("pageBodyCssSelector") as HTMLInputElement
     sitemapsOnly = document.getElementById("sitemapsOnly") as HTMLInputElement
-    url = document.getElementById("url") as HTMLParagraphElement
+    url = document.getElementById("url") as HTMLInputElement
     pageCountContainer = document.getElementById("pageCountContainer") as HTMLDivElement
     pageCount = document.getElementById("pageCount") as HTMLParagraphElement
     siteIdElement = document.getElementById("siteId") as HTMLDivElement
@@ -76,13 +76,28 @@ private fun applyQueryParameters() {
     siteSecretElement.textContent = siteSecret
 }
 
-//@JsName("captchaResult")
-//lateinit var captchaResult: String
+//@JsName("verifyCallback")
+//private fun verifyCallback(token: String) {
+//    recrawl.disabled = false
+//}
 
-@JsName("verifyCallback")
-private fun verifyCallback(token: String) {
-//    captchaResult = token
-    recrawl.disabled = false
+fun updateSiteProfile() {
+    val xhr = XMLHttpRequest()
+    xhr.open("PUT", "$serviceUrl/sites/$siteId/profile?siteSecret=$siteSecret")
+    val siteProfileConfigs = listOf(SiteProfileConfig(
+            url = url.value,
+            sitemapsOnly = sitemapsOnly.checked,
+            pageBodyCssSelector = pageBodyCssSelector.value
+    ))
+    val siteProfile = SiteProfile(id = siteId, secret = siteSecret, email = profile.email, configs = siteProfileConfigs)
+    console.warn(siteProfile)
+    console.warn(siteProfileConfigs)
+    xhr.setRequestHeader("content-type", "application/json")
+    xhr.send(JSON.stringify(siteProfile))
+    xhr.onload = {
+        profile = JSON.parse(xhr.responseText)
+        showConfiguration()
+    }
 }
 
 external fun encodeURIComponent(str: String): String
@@ -124,9 +139,13 @@ private fun fetchProfile() {
 }
 
 private fun showConfiguration() {
-    url.textContent = profile.configs.asDynamic()[0].url
+    url.value = profile.configs.asDynamic()[0].url
     sitemapsOnly.checked = profile.configs.asDynamic()[0].sitemapsOnly
-    pageBodyCssSelector.textContent = profile.configs.asDynamic()[0].pageBodyCssSelector
+    pageBodyCssSelector.value = profile.configs.asDynamic()[0].pageBodyCssSelector
+
+    if (profile.configs.asDynamic().length > 1) {
+        updateSiteProfile.disabled = true // TODO remove this precaution, once multi-configuration updates are supported in the UI
+    }
 }
 
 class SiteSearch {
@@ -135,6 +154,6 @@ class SiteSearch {
     }
 }
 
-data class SiteProfileConfig(val url: String = "", val pageBodyCssSelector: String = "body", val sitemapsOnly: Boolean = false)
+data class SiteProfileConfig(val url: String = "", val pageBodyCssSelector: String? = "body", val sitemapsOnly: Boolean = false)
 
 data class SiteProfile(val id: String = "", val secret: String = "", val configs: List<SiteProfileConfig> = emptyList(), val email: String = "")
