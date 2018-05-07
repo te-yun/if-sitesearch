@@ -109,7 +109,7 @@ public class SmokeTest {
     private static final String PRODUCT_FRONTPAGE_MARKER = "<title>Site Search - Get the best search results from your Website</title>";
 
     @Test
-    public void redirectFromHttpNakedDomain() {
+    public void redirectFromHttpNakedDomain() { // fails quite often because of 1&1
         final ResponseEntity<String> response = caller.exchange(
                 "http://sitesearch.cloud",
                 HttpMethod.GET,
@@ -120,7 +120,7 @@ public class SmokeTest {
     }
 
     @Test
-    public void redirectFromUnencryptedWWW() {
+    public void redirectFromUnencryptedWWW() { // fails quite often because of 1&1
         final ResponseEntity<String> response = caller.exchange(
                 "http://www.sitesearch.cloud",
                 HttpMethod.GET,
@@ -131,7 +131,7 @@ public class SmokeTest {
     }
 
     @Test
-    public void redirectFromWWW() {
+    public void redirectFromWWW() { // fails quite often because of 1&1
         final ResponseEntity<String> response = caller.exchange(
                 "https://www.sitesearch.cloud",
                 HttpMethod.GET,

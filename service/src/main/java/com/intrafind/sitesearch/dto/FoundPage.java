@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class FoundPage {
+    private String thumbnail;
     private String title;
     private String body;
     private String url;
@@ -30,6 +31,15 @@ public class FoundPage {
     private FoundPage() {
     }
 
+    public FoundPage(String title, String body, String url, String urlRaw, List<String> sisLabels, String thumbnail) {
+        this.title = title;
+        this.body = body;
+        this.url = url;
+        this.urlRaw = urlRaw;
+        this.sisLabels = sisLabels;
+        this.thumbnail = thumbnail;
+    }
+
     public FoundPage(String title, String body, String url, String urlRaw, List<String> sisLabels) {
         this.title = title;
         this.body = body;
@@ -37,6 +47,10 @@ public class FoundPage {
         this.urlRaw = urlRaw;
         this.sisLabels = sisLabels;
         this.thumbnail = "";
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
     }
 
     public List<String> getSisLabels() {
