@@ -76,11 +76,6 @@ private fun applyQueryParameters() {
     siteSecretElement.textContent = siteSecret
 }
 
-//@JsName("verifyCallback")
-//private fun verifyCallback(token: String) {
-//    recrawl.disabled = false
-//}
-
 fun updateSiteProfile() {
     val xhr = XMLHttpRequest()
     xhr.open("PUT", "$serviceUrl/sites/$siteId/profile?siteSecret=$siteSecret")
