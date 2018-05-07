@@ -36,6 +36,7 @@ public class FoundPage {
         this.url = url;
         this.urlRaw = urlRaw;
         this.sisLabels = sisLabels;
+        this.thumbnail = "";
     }
 
     public List<String> getSisLabels() {
