@@ -22,8 +22,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @RestController
@@ -43,7 +48,7 @@ public class SearchController {
             @RequestParam(value = "query", defaultValue = "") String query,
             @RequestParam(value = "siteId") UUID siteId
     ) {
-
+        final Instant start = Instant.now();
         if (query.isEmpty()) return ResponseEntity.badRequest().build();
 
         // override siteId with cookie value for debugging & speed up the getting started experience
@@ -52,7 +57,9 @@ public class SearchController {
         }
 
         Hits searchResult = service.search(query, siteId);
-        LOG.info("siteId: " + siteId + " - query: " + query + " - results: " + searchResult.getResults().size());
+        final Instant stop = Instant.now();
+        final Instant searchDuration = stop.minusMillis(start.toEpochMilli());
+        LOG.info("siteId: " + siteId + " - query: " + query + " - results: " + searchResult.getResults().size() + " - searchDurationInMs: " + searchDuration.toEpochMilli());
         return ResponseEntity.ok(searchResult);
     }
 

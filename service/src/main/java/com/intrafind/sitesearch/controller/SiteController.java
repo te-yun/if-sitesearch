@@ -268,8 +268,7 @@ public class SiteController {
         final Hits searchResult = searchService.search(query, siteId);
         final Instant stop = Instant.now();
         final Instant searchDuration = stop.minusMillis(start.toEpochMilli());
-        LOG.info("siteId: " + siteId + " - searchDurationInMs: " + searchDuration.toEpochMilli());
-        LOG.info("siteId: " + siteId + " - query: " + query + " - results: " + searchResult.getResults().size());
+        LOG.info("siteId: " + siteId + " - query: " + query + " - results: " + searchResult.getResults().size() + " - searchDurationInMs: " + searchDuration.toEpochMilli());
         return ResponseEntity.ok(searchResult);
     }
 }
