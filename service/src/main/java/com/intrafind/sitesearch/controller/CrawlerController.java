@@ -171,14 +171,15 @@ public class CrawlerController {
                         email,
                         "Evaluation Information - Site Search",
                         "Hello," +
-                                "<br/>you are just a few steps away from adding Site Search to your website." +
+                                "<br/><br/>you are just a few steps away from adding Site Search to your website." +
                                 "<br/>Below you should find everything you need to evaluate Site Search for your website." +
                                 "<dl><dt>Website URL:</dt><dd>" + url +
                                 "</dd><dt>Pages crawled:</dt><dd>" + pageCount +
                                 "</dd><dt>Site ID:</dt><dd>" + siteId +
                                 "</dd><dt>Site Secret:</dt><dd>" + siteSecret +
-                                "</dd><dt>Site Search Evaluation URL:</dt><dd>https://sitesearch.cloud/getting-started/?siteId=" + siteId + "&siteSecret=" + siteSecret + "&url=" + url +
-                                "</dd></dl><br/>Please do not hesitate to ask us any questions you should encounter during your 14-day evaluation period!" +
+                                "</dd></dl>" +
+                                "<a href='" + "https://sitesearch.cloud/getting-started/?siteId=" + siteId + "&siteSecret=" + siteSecret + "&url=" + url + "'>Try Site Search as it would look like on your site, using this evaluation link</a>" +
+                                "<br/>Please do not hesitate to ask us any questions you should encounter during your 14-day evaluation period!" +
                                 "<br/><br/>Using the credentials above, you agree with our <a href='https://sitesearch.cloud/terms'>Terms & Conditions</a>." +
                                 "<br/><br/>Cheers," +
                                 "<br/>Site Search Team"
