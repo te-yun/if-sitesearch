@@ -56,7 +56,7 @@ public class AutocompleteController {
             final Autocomplete autocomplete = result.get();
             final Instant stop = Instant.now();
             final Instant autocompleteDuration = stop.minusMillis(start.toEpochMilli());
-            LOG.info("siteId: " + siteId + " - query-fragment: " + query + " - autocompletes: " + autocomplete.getResults().size() + " - autocompleteDurationInMs" + autocompleteDuration.toEpochMilli());
+            LOG.info("siteId: " + siteId + " - query-fragment: " + query + " - autocompletes: " + autocomplete.getResults().size() + " - autocompleteDurationInMs: " + autocompleteDuration.toEpochMilli());
             return ResponseEntity.ok(autocomplete);
         } else {
             return ResponseEntity.notFound().build();
