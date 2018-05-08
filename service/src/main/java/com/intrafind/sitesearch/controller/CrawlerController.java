@@ -178,7 +178,7 @@ public class CrawlerController {
                                 "</dd><dt>Site ID:</dt><dd>" + siteId +
                                 "</dd><dt>Site Secret:</dt><dd>" + siteSecret +
                                 "</dd></dl>" +
-                                "<a href='" + "https://sitesearch.cloud/getting-started/?siteId=" + siteId + "&siteSecret=" + siteSecret + "&url=" + url + "'>Try Site Search as it would look like on your site, using this evaluation link</a>" +
+                                "<a href='" + "https://sitesearch.cloud/getting-started/?siteId=" + siteId + "&siteSecret=" + siteSecret + "&url=" + url + "'>Try Site Search as it would look like on your site, using this evaluation link.</a>" +
                                 "<br/>Please do not hesitate to ask us any questions you should encounter during your 14-day evaluation period!" +
                                 "<br/><br/>Using the credentials above, you agree with our <a href='https://sitesearch.cloud/terms'>Terms & Conditions</a>." +
                                 "<br/><br/>Cheers," +
