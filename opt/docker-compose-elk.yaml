@@ -17,9 +17,6 @@ services:
     #      KIBANA_DEFAULTAPPID: kibana.defaultAppId
     #      XPACK_MONITORING_ENABLED: xpack.monitoring.enabled
     #
-#    volumes:
-#      - ~/srv/kibana:/usr/share/kibana
-#      - ~/srv/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
     networks:
       - sitesearch
 

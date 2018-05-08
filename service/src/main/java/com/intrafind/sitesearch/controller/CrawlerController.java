@@ -119,7 +119,7 @@ public class CrawlerController {
         email.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(to));
         email.addRecipient(javax.mail.Message.RecipientType.BCC, new InternetAddress(PROSPECTS_EMAIL_ADDRESS));
         email.setSubject(subject);
-        email.setText(bodyText);
+        email.setText(bodyText, "UTF-8", "html");
         return email;
     }
 
