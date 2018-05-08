@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -44,6 +45,7 @@ public class AutocompleteController {
             @RequestParam(value = "query", defaultValue = "") String query,
             @RequestParam(value = "siteId") UUID siteId
     ) {
+        final Instant start = Instant.now();
         if (query.isEmpty()) return ResponseEntity.badRequest().build();
 
         // override siteId with cookie value for debugging & speed up the getting started experience
@@ -52,7 +54,9 @@ public class AutocompleteController {
         final Optional<Autocomplete> result = service.autocomplete(query, siteId);
         if (result.isPresent()) {
             final Autocomplete autocomplete = result.get();
-            LOG.info("siteId: " + siteId + " - query-fragment: " + query + " - autocompletes: " + autocomplete.getResults().size());
+            final Instant stop = Instant.now();
+            final Instant autocompleteDuration = stop.minusMillis(start.toEpochMilli());
+            LOG.info("siteId: " + siteId + " - query-fragment: " + query + " - autocompletes: " + autocomplete.getResults().size() + " - autocompleteDurationInMs: " + autocompleteDuration.toEpochMilli());
             return ResponseEntity.ok(autocomplete);
         } else {
             return ResponseEntity.notFound().build();
