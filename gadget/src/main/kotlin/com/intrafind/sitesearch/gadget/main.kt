@@ -233,7 +233,7 @@ private fun validateCssSelector() {
 lateinit var pageBody: String
 private fun validateDomain() {
     val xhr = XMLHttpRequest()
-    xhr.open("GET", "https://api.muctool.de/curl?url=${url.value}&followRedirects=true")
+    xhr.open("GET", "https://api.muctool.de/curl?url=${url.value}&followRedirects=false")
     xhr.send()
     xhr.onload = {
         if (allowedToCrawl(xhr)) {
