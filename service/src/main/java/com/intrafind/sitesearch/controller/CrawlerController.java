@@ -170,18 +170,18 @@ public class CrawlerController {
                 createEmail(
                         email,
                         "Evaluation Information - Site Search",
-                        "\nHello," +
-                                "\n\nyou are just a few steps away from adding Site Search to your website." +
-                                "\nBelow you should find everything you need to evaluate Site Search for your website." +
-                                "\n\tWebsite URL: " + url +
-                                "\n\t\tPages crawled: " + pageCount +
-                                "\n\tSite ID: " + siteId +
-                                "\n\tSite Secret: " + siteSecret +
-                                "\n\tSite Search Evaluation URL: https://sitesearch.cloud/getting-started/?siteId=" + siteId + "&siteSecret=" + siteSecret + "&url=" + url +
-                                "\n\nPlease do not hesitate to ask us any questions you should encounter during your 14-day evaluation period!" +
-                                "\n\nUsing the credentials above, you agree with our <a href='https://sitesearch.cloud/terms'>Terms & Conditions</a>." +
-                                "\n\nCheers," +
-                                "\nSite Search Team"
+                        "Hello," +
+                                "<br/>you are just a few steps away from adding Site Search to your website." +
+                                "<br/>Below you should find everything you need to evaluate Site Search for your website." +
+                                "<dl><dt>Website URL:</dt><dd>" + url +
+                                "</dd><dt>Pages crawled:</dt><dd>" + pageCount +
+                                "</dd><dt>Site ID:</dt><dd>" + siteId +
+                                "</dd><dt>Site Secret:</dt><dd>" + siteSecret +
+                                "</dd><dt>Site Search Evaluation URL:</dt><dd>https://sitesearch.cloud/getting-started/?siteId=" + siteId + "&siteSecret=" + siteSecret + "&url=" + url +
+                                "</dd></dl><br/>Please do not hesitate to ask us any questions you should encounter during your 14-day evaluation period!" +
+                                "<br/><br/>Using the credentials above, you agree with our <a href='https://sitesearch.cloud/terms'>Terms & Conditions</a>." +
+                                "<br/><br/>Cheers," +
+                                "<br/>Site Search Team"
                 )
         );
     }

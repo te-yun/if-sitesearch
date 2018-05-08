@@ -249,7 +249,7 @@ private fun validateDomain() {
 private fun allowedToCrawl(xhr: XMLHttpRequest): Boolean {
     if (xhr.status.equals(200)) {
         val statusCode = JSON.parse<dynamic>(xhr.responseText).statusCode as Short
-        return statusCode.equals(200) || statusCode.equals(302) || statusCode.equals(301)
+        return statusCode.equals(200) || statusCode.equals(302) // 301 is not supported by the crawler
     }
     return false
 }
