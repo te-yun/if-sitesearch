@@ -529,7 +529,7 @@ header nav {
     margin-bottom: 40px; }
     .sis-config-container > div > label, .sis-info-container > div > label {
       padding-top: 8px;
-      width: 370px; }
+      flex: 0 0 300px; }
       .sis-config-container > div > label > .fas, .sis-info-container > div > label > .fas {
         margin-right: 8px; }
     .sis-config-container > div > div, .sis-info-container > div > div,
@@ -545,7 +545,15 @@ header nav {
     .sis-config-container > div > .sis-config-checkbox-container, .sis-info-container > div > .sis-config-checkbox-container {
       border: none;
       display: block;
-      padding: 0 14px; }
+      padding: 0; }
+    .sis-config-container > div input[type="text"], .sis-info-container > div input[type="text"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #e3e3e3;
+      outline: 0;
+      background-color: #fdfdfd; }
+    .sis-config-container > div input[type='text']:focus, .sis-info-container > div input[type='text']:focus {
+      border: 1px solid #cccccc; }
 
 .sis-info-container > div > div,
 .sis-info-container > div > p {
