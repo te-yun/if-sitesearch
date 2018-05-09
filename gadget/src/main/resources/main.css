@@ -170,6 +170,13 @@ button:disabled {
     margin: 20px 0;
 }
 
+.button-wrapper-large {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin: 40px 0;
+}
+
 button {
     padding: 20px 28px;
     border: none;
