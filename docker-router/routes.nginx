@@ -125,6 +125,19 @@ server {
 server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
+    server_name affiliate.sitesearch.cloud;
+
+    include /etc/nginx/snippets/ssl.conf;
+
+    location / {
+        add_header set-cookie 'affiliate = $arg_affiliate; domain = sitesearch.cloud';
+        return 301 https://sitesearch.cloud$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
     server_name green.sitesearch.cloud;
 
     include /etc/nginx/snippets/ssl.conf;
