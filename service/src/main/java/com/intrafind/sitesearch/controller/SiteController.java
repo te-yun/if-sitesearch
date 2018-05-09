@@ -243,8 +243,7 @@ public class SiteController {
             final Autocomplete autocomplete = result.get();
             final Instant stop = Instant.now();
             final Instant searchDuration = stop.minusMillis(start.toEpochMilli());
-            // LOG.info("siteId: " + siteId + " - autocompleteDurationInMs: " + searchDuration.toEpochMilli());
-            LOG.info("siteId: " + siteId + " - query-fragment: " + query + " - autocompletes: " + autocomplete.getResults().size() + " - autocompleteDurationInMs: " + searchDuration.getEpochSecond());
+            LOG.info("siteId: " + siteId + " - query-fragment: " + query + " - autocompletes: " + autocomplete.getResults().size() + " - autocompleteDurationInMs: " + searchDuration.toEpochMilli());
             return ResponseEntity.ok(autocomplete);
         } else {
             return ResponseEntity.notFound().build();

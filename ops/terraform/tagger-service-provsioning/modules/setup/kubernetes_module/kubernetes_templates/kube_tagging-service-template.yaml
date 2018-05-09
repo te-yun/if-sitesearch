@@ -9,6 +9,7 @@ spec:
   - protocol: TCP
     port: 9603
     targetPort: 9603
+  clusterIP: 10.105.83.185
 ---
 apiVersion: v1
 kind: Pod
