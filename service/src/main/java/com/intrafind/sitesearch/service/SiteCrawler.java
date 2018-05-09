@@ -99,7 +99,7 @@ public class SiteCrawler extends WebCrawler {
             final String htmlStrippedBody = extractTextFromMixedHtml(htmlParseData.getHtml(), pageBodyCssSelector);
             final String title = htmlParseData.getTitle();
             final String thumbnail;
-            if (htmlParseData.getMetaTags().get(PAGE_THUMBNAIL).length() < 100_000) {
+            if (htmlParseData.getMetaTags().get(PAGE_THUMBNAIL) != null && htmlParseData.getMetaTags().get(PAGE_THUMBNAIL).length() < 100_000) {
                 thumbnail = htmlParseData.getMetaTags().get(PAGE_THUMBNAIL);
             } else {
                 thumbnail = "";
