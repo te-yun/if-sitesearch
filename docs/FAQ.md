@@ -4,13 +4,14 @@ FAQ
 # Site Search Service
 
 * What is Site Search?
-    * Site Search is an on-demand SaaS offering from IntraFind Software AG to enable website operators 
-    to provide search functionality for their websites.
+    * Site Search is an on-demand **SaaS** offering from IntraFind Software AG to enable website operators 
+    to provide search functionality for their websites. Hereby Site Search is run and operated by IntraFind 
+    whereas you simply integrate the provided Searchbar into your website to use our service.
 
 * What ist the **advantage of using Site Search** vs using search backends like *Elasticsearch* directly? -
     * Site Search removes Elasticsearch as your direct dependency when introducing a search to a website. 
     In fact Site Search does not only rely on Elasticsearch but on additional components 
-    from *IntraFind AG* that **improve the quality of search results**. Also Site Search is a **managed service** that 
+    from *IntraFind* that **improve the quality of search results**. Also Site Search is a **managed service** that 
     removes the burden of operations from your organization. Site Search provides you with a simple API
     that is **tailored** for the purpose to provide a website search with all its specifics. 
 
