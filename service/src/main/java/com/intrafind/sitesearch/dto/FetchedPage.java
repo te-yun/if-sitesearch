@@ -28,19 +28,25 @@ public class FetchedPage {
     private String body;
     private String url;
     private String timestamp;
+    private String thumbnail;
     private List<String> sisLabels = new ArrayList<>();
 
     private FetchedPage() {
     }
 
-    public FetchedPage(UUID siteId, String id, String title, String body, String url, String timestamp, List<String> sisLabels) {
+    public FetchedPage(UUID siteId, String id, String title, String body, String url, String timestamp, List<String> sisLabels, String thumbnail) {
         this.title = title;
         this.body = body;
         this.url = url;
         this.siteId = siteId;
         this.id = id;
         this.timestamp = timestamp;
+        this.thumbnail = thumbnail;
         this.sisLabels = sisLabels;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
     }
 
     public List<String> getSisLabels() {
@@ -108,7 +114,6 @@ public class FetchedPage {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(title, body, url, sisLabels);
     }
 }

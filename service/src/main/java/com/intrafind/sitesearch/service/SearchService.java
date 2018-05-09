@@ -57,7 +57,8 @@ public class SearchService {
                     document.get(HIT_TEASER_PREFIX + Fields.BODY),
                     document.get(HIT_TEASER_PREFIX + Fields.URL),
                     document.get(Fields.URL),
-                    document.getAll(SiteService.PAGE_LABELS)
+                    document.getAll(SiteService.PAGE_LABELS),
+                    document.get(SiteService.PAGE_THUMBNAIL)
             );
             siteDocuments.add(site);
         });

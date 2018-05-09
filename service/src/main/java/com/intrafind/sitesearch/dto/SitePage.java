@@ -29,15 +29,21 @@ public class SitePage {
     private String title;
     private String body;
     private String url;
+    private String thumbnail;
     private List<String> sisLabels = new ArrayList<>();
 
     private SitePage() {
     }
 
-    public SitePage(String title, String body, String url) {
+    public SitePage(String title, String body, String url, String thumbnail) {
         this.title = title;
         this.body = body;
         this.url = url;
+        this.thumbnail = thumbnail;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
     }
 
     public SitePage(String title, String body, String url, List<String> sisLabels) {

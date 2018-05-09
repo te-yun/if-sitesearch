@@ -43,6 +43,8 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
+import static com.intrafind.sitesearch.service.SiteService.PAGE_THUMBNAIL;
+
 public class SiteCrawler extends WebCrawler {
     public static final MediaType JSON_MEDIA_TYPE = MediaType.parse("application/json");
     private final static Logger LOG = LoggerFactory.getLogger(SiteCrawler.class);
@@ -96,11 +98,18 @@ public class SiteCrawler extends WebCrawler {
             }
             final String htmlStrippedBody = extractTextFromMixedHtml(htmlParseData.getHtml(), pageBodyCssSelector);
             final String title = htmlParseData.getTitle();
+            final String thumbnail;
+            if (htmlParseData.getMetaTags().get(PAGE_THUMBNAIL).length() < 100_000) {
+                thumbnail = htmlParseData.getMetaTags().get(PAGE_THUMBNAIL);
+            } else {
+                thumbnail = "";
+            }
 
             final SitePage sitePage = new SitePage(
                     title,
                     htmlStrippedBody,
-                    url
+                    url,
+                    thumbnail == null ? "" : thumbnail
             );
 
             indexPage(sitePage);
@@ -111,13 +120,11 @@ public class SiteCrawler extends WebCrawler {
         final int currentPageCount = PAGE_COUNT.get(siteId).incrementAndGet();
         LOG.info("siteId: " + siteId + " - pageCount: " + currentPageCount);
 
-//        this.getMyController().setCustomData(currentPageCount);
         this.getMyController().getCrawlersLocalData().add(url);
     }
 
     private void indexPage(SitePage sitePage) {
         try {
-            // TODO move this to CrawlerService
             final Request request = new Request.Builder()
                     .url("https://api.sitesearch.cloud/sites/" + siteId + "/pages?siteSecret=" + siteSecret)
                     .put(RequestBody.create(JSON_MEDIA_TYPE, MAPPER.writeValueAsBytes(sitePage)))
@@ -125,7 +132,7 @@ public class SiteCrawler extends WebCrawler {
             HTTP_CLIENT.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-//                    call.cancel();
+                    call.cancel();
                     LOG.warn("siteId: " + siteId + " - URL: " + sitePage.getUrl() + " - exception: " + e.getMessage());
                 }
 

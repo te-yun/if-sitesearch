@@ -17,11 +17,12 @@
 package com.intrafind.sitesearch.dto;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 public class FoundPage {
-    private String thumbnail;
+    private String thumbnail = "";
     private String title;
     private String body;
     private String url;
@@ -36,18 +37,18 @@ public class FoundPage {
         this.body = body;
         this.url = url;
         this.urlRaw = urlRaw;
-        this.sisLabels = sisLabels;
-        this.thumbnail = thumbnail;
+        this.sisLabels = sisLabels == null ? Collections.emptyList() : sisLabels;
+        this.thumbnail = thumbnail == null ? "" : thumbnail;
     }
 
-    public FoundPage(String title, String body, String url, String urlRaw, List<String> sisLabels) {
-        this.title = title;
-        this.body = body;
-        this.url = url;
-        this.urlRaw = urlRaw;
-        this.sisLabels = sisLabels;
-        this.thumbnail = "";
-    }
+//    public FoundPage(String title, String body, String url, String urlRaw, List<String> sisLabels) {
+//        this.title = title;
+//        this.body = body;
+//        this.url = url;
+//        this.urlRaw = urlRaw;
+//        this.sisLabels = sisLabels;
+//        this.thumbnail = "";
+//    }
 
     public String getThumbnail() {
         return thumbnail;
