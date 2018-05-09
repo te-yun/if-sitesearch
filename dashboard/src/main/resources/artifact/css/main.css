@@ -424,6 +424,12 @@ button.sis-disabled {
   color: #f1172b;
   margin-top: 0.8rem; }
 
+.sis-spacer {
+  background: #cccccc;
+  height: 1px;
+  margin: 20px 0;
+  width: 100%; }
+
 html {
   height: 100%;
   width: 100%; }
