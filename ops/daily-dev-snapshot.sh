@@ -6,14 +6,12 @@
 gcloud auth activate-service-account --key-file=/srv/minion/compute-engine-admin.json
 
 # loop over all disks which in this project included and makes snapshots
-# naming the snapshot: daily-dev-2018-05-11-1526043327
+# naming the snapshot:  imageName-date -> i.e.:dev-2018-05-11-1526043327
 gcloud compute disks list --format='value(name,zone)'| while read DISK_NAME ZONE; do
-  gcloud compute disks snapshot $DISK_NAME --snapshot-names ${DISK_NAME:0:31}-$(date "+%Y-%m-%d-%s") --zone $ZONE
+  gcloud compute disks snapshot $DISK_NAME --snapshot-names daily-${DISK_NAME:0:31}-$(date "+%Y-%m-%d-%s") --zone $ZONE
 done
 
-# removing snapshots older as 30 days
-# remember it removes all snapshots from all disks older as 30 days!!!
-# if you want remove snapshots only of one image, you should include --filter="name~'REGEXP'"
+# removing snapshots of all images older than 30 days
 if [[ $(uname) == "Linux" ]]; then
   from_date=$(date -d "-30 days" "+%Y-%m-%d")
 else
