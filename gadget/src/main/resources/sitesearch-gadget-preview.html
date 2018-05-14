@@ -223,10 +223,19 @@
           title="Integration code to be inserted into your website to include a search bar"></textarea>
 
 <script>
+  $(function() {
+    console.log('========================');
+    var iframe = window.parent.document.getElementById('testframe');
+    var h = document.getElementsByTagName('body')[0];
+    console.log(h.offsetHeight);
+    iframe.style.height = h.offsetHeight + 'px';
+    console.log('========================');
+
     tippy('.tipsy', {
-        arrow: true,
-        trigger: 'click'
+      arrow: true,
+      trigger: 'click'
     });
+  });
 </script>
 <script src="https://www.google.com/recaptcha/api.js?onload=captchaLoad&render=explicit&hl=en" async defer></script>
 
