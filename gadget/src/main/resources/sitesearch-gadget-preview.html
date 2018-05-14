@@ -223,13 +223,10 @@
           title="Integration code to be inserted into your website to include a search bar"></textarea>
 
 <script>
-  $(function() {
-    console.log('========================');
-    var iframe = window.parent.document.getElementById('testframe');
-    var h = document.getElementsByTagName('body')[0];
-    console.log(h.offsetHeight);
-    iframe.style.height = h.offsetHeight + 'px';
-    console.log('========================');
+  jQuery(function() {
+    var iframe = window.parent.document.getElementById('gadgetframe');
+    var frameBody = document.getElementsByTagName('body')[0];
+    iframe.style.height = frameBody.offsetHeight + 'px';
 
     tippy('.tipsy', {
       arrow: true,
