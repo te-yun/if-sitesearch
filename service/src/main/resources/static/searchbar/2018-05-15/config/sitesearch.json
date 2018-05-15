@@ -14,6 +14,11 @@
       "indexfields": {
         "template": "app/templates/default/indexfields.hbs"
       },
+      "tabbar": {
+        "tabbar_template": "app/templates/default/tabbar.hbs",
+        "items": [
+        ]
+      },
       "inputMaxLength": 250,
       "typeaheadProps": {
         "maxItemPerGroup": 4,
