@@ -41,7 +41,7 @@ private var siteId: String = ""
 private var siteSecret: String = ""
 private val serviceUrl: String = window.location.origin
 
-private lateinit var updateSiteProfile: HTMLInputElement
+private lateinit var updateSiteProfile: HTMLButtonElement
 private lateinit var pageBodyCssSelector: HTMLInputElement
 private lateinit var sitemapsOnly: HTMLInputElement
 private lateinit var url: HTMLInputElement
@@ -53,7 +53,7 @@ private lateinit var recrawl: HTMLButtonElement
 private lateinit var profile: SiteProfile
 
 private fun init() {
-    updateSiteProfile = document.getElementById("updateSiteProfile") as HTMLInputElement
+    updateSiteProfile = document.getElementById("updateSiteProfile") as HTMLButtonElement
     pageBodyCssSelector = document.getElementById("pageBodyCssSelector") as HTMLInputElement
     sitemapsOnly = document.getElementById("sitemapsOnly") as HTMLInputElement
     url = document.getElementById("url") as HTMLInputElement
