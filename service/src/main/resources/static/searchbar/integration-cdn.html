@@ -5,31 +5,49 @@
 
 <h1>Searchbar from CDN</h1>
 
-<div id="sitesearch-searchbar" class="searchbar">
-    <link rel="stylesheet" type="text/css" href="https://cdn.sitesearch.cloud/searchbar/2018-04-06/app/css/app.css">
-    <div class="container">
-        <div id="searchbar" class="ifs-component ifs-sb"></div>
-        <div id="resultlist"></div>
-    </div>
+<!--<div id="sitesearch-searchbar" class="searchbar">-->
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.sitesearch.cloud/searchbar/2018-04-06/app/css/app.css">-->
+<!--<div class="container">-->
+<!--<div id="searchbar" class="ifs-component ifs-sb"></div>-->
+<!--<div id="resultlist"></div>-->
+<!--</div>-->
 
-    <!--Place the integration code below, at the very end of your HTML document.-->
-    <script src="https://cdn.sitesearch.cloud/searchbar/2018-04-06/app/js/app.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", event => {
-            IFS.jQuery(document).ready(function ($) {
-                IFS.initClient({
-                    customConfig: {
-                        overwrite: {
-                            "appLang": "en"
-                        }
-                    },
-                    sbTarget: "#searchbar",
-                    configurl: "https://cdn.sitesearch.cloud/searchbar/2018-04-06/config/sitesearch.json",
-                    sitesearch: true,
-                    withCredentials: false,
-                    siteId: "563714f1-96c0-4500-b366-4fc7e734fa1d"
-                });
-            });
-        });
-    </script>
-</div>
+<!--&lt;!&ndash;Place the integration code below, at the very end of your HTML document.&ndash;&gt;-->
+<!--<script src="https://cdn.sitesearch.cloud/searchbar/2018-04-06/app/js/app.js"></script>-->
+<!--<script>-->
+<!--document.addEventListener("DOMContentLoaded", event => {-->
+<!--IFS.jQuery(document).ready(function ($) {-->
+<!--IFS.initClient({-->
+<!--customConfig: {-->
+<!--overwrite: {-->
+<!--"appLang": "en"-->
+<!--}-->
+<!--},-->
+<!--sbTarget: "#searchbar",-->
+<!--configurl: "https://cdn.sitesearch.cloud/searchbar/2018-04-06/config/sitesearch.json",-->
+<!--sitesearch: true,-->
+<!--withCredentials: false,-->
+<!--siteId: "563714f1-96c0-4500-b366-4fc7e734fa1d"-->
+<!--});-->
+<!--});-->
+<!--});-->
+<!--</script>-->
+<!--</div>-->
+
+
+<div id="ifs-searchbar"></div>
+<script type="text/javascript" src="https://cdn.sitesearch.cloud/searchbar/2018-05-15/app/js/app.js"></script>
+<script type="text/javascript">
+    IFS.initClient({
+        customConfig: {
+            overwrite: {
+                "components.searchbar.typeaheadProps.hint": false,
+                "components.searchbar.resultlist.resulttype.all.hitTemplate": "hit-template",
+                "components.searchbar.templatesUrl": "https://cdn.sitesearch.cloud/searchbar/2018-05-15/config/migros.hbs",
+                "appLang": "de"
+            }
+        },
+        siteId: "563714f1-96c0-4500-b366-4fc7e734fa1d"
+    });
+</script>
+<link rel="stylesheet" type="text/css" href="https://cdn.sitesearch.cloud/searchbar/2018-05-15/config/migros.css">
