@@ -54,6 +54,7 @@ public class SiteCrawler extends WebCrawler {
             .followSslRedirects(false)
             .build();
     private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final String SIS_API_SERVICE_URL = System.getenv("SIS_API_SERVICE_URL");
 
     private UUID siteId;
     private UUID siteSecret;
@@ -124,7 +125,7 @@ public class SiteCrawler extends WebCrawler {
     private void indexPage(final SitePage sitePage) {
         try {
             final Request request = new Request.Builder()
-                    .url("https://api.sitesearch.cloud/sites/" + siteId + "/pages?siteSecret=" + siteSecret) // TODO move this to a config property to switch between production and override with local
+                    .url(SIS_API_SERVICE_URL + "/sites/" + siteId + "/pages?siteSecret=" + siteSecret) // TODO move this to a config property to switch between production and override with local
                     .put(RequestBody.create(JSON_MEDIA_TYPE, MAPPER.writeValueAsBytes(sitePage)))
                     .build();
             HTTP_CLIENT.newCall(request).enqueue(new Callback() {

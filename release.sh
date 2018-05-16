@@ -17,6 +17,9 @@ cd ..
 docker run -d --name ${docker_image_name} \
     --log-driver=gelf \
     --log-opt gelf-address=udp://localhost:12201 \
+    --env SIS_API_SERVICE_URL=$SIS_API_SERVICE_URL \
+    --env SERVICE_SECRET=$SERVICE_SECRET \
+    --env SIS_SERVICE_HOST=$SIS_SERVICE_HOST \
     --env BASIC_ENCODED_PASSWORD="$BASIC_ENCODED_PASSWORD" \
     --env ADMIN_SITE_SECRET=$ADMIN_SITE_SECRET \
     --env RECAPTCHA_SITE_SECRET=$RECAPTCHA_SITE_SECRET \

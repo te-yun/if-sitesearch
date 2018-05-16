@@ -2,6 +2,8 @@
 
 # Execute this to set all required environment variables, in order to launch service.
 
+export SIS_API_SERVICE_URL=https://api.sitesearch.cloud
+export SIS_SERVICE_HOST=main.sitesearch.cloud
 export ADMIN_SITE_SECRET=82ba4106-397b-11e8-9155-0a0027000009
 export RECAPTCHA_SITE_SECRET=82ba4106-397b-11e8-9155-0a0027000009
 export SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=82ba4106-397b-11e8-9155-0a0027000009
