@@ -118,8 +118,9 @@ public class CrawlerTest {
 
     @Test
     public void recrawlMultiSiteConfig() {
+        final UUID siteId = UUID.fromString("a9ede989-9d94-41d1-8571-a008318b01db");
         final ResponseEntity<CrawlerJobResult> request = caller
-                .postForEntity(SiteController.ENDPOINT + "/a9ede989-9d94-41d1-8571-a008318b01db/recrawl?siteSecret=fbdc4e70-0141-4127-b95b-f9fd2d5e1b93"
+                .postForEntity(SiteController.ENDPOINT + "/" + siteId + "/recrawl?siteSecret=fbdc4e70-0141-4127-b95b-f9fd2d5e1b93"
                                 + "&clearIndex=false",
                         RequestEntity.EMPTY, CrawlerJobResult.class);
 
@@ -129,6 +130,8 @@ public class CrawlerTest {
         assertEquals(5, request.getBody().getUrls().size());
         assertTrue(request.getBody().getUrls().contains("https://api.sitesearch.cloud/index.html"));
         assertTrue(request.getBody().getUrls().contains("https://dev.sitesearch.cloud/"));
+
+        assertThumnailInPagePayload(siteId);
     }
 
     @Test
@@ -144,13 +147,13 @@ public class CrawlerTest {
         assertNotNull(request.getBody());
         assertEquals(1, request.getBody().getPageCount());
 
-        assertThumnailInPagePayload();
+        assertThumnailInPagePayload(CRAWL_SITE_ID);
     }
 
-    private void assertThumnailInPagePayload() {
+    private void assertThumnailInPagePayload(final UUID siteId) {
         final String pageWithThumbnail = "https://api.sitesearch.cloud/index.html";
         final ResponseEntity<FetchedPage> fetchThumbnailPage = caller.exchange(SiteController.ENDPOINT
-                        + "/" + CRAWL_SITE_ID + "/pages?url=" + pageWithThumbnail,
+                        + "/" + siteId + "/pages?url=" + pageWithThumbnail,
                 HttpMethod.GET, HttpEntity.EMPTY, FetchedPage.class);
         assertEquals(HttpStatus.OK, fetchThumbnailPage.getStatusCode());
         assertEquals(pageWithThumbnail, fetchThumbnailPage.getBody().getUrl());
