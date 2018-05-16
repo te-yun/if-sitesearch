@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="Gradle: org.jetbrains.kotlin:commons-compress-1.14:1.2.41">
+  <library name="Gradle: org.jetbrains.kotlin:kotlin-test-js:1.2.41" type="kotlin.js">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-compress/1.14/7b18320d668ab080758bf5383d6d8fcf750babce/commons-compress-1.14.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-test-js/1.2.41/ecd9ca073cd5264f0b3e5f5b342fba3dbd127bf9/kotlin-test-js-1.2.41.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
