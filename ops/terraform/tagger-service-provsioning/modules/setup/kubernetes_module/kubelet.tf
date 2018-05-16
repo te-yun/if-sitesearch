@@ -61,14 +61,7 @@ resource "null_resource" "Tagging-Service" {
       "cat <<EOT > kube_tagging-service.yaml",
       "${data.template_file.kubernetes_tagging-service.rendered}",
       "EOT",
-      "kubectl apply -f kube_tagging-service.yaml"]
-  }
-
-  provisioner "remote-exec" {
-    when = "destroy"
-    inline = [
-      "export KUBECONFIG=$HOME/admin.conf",
-      "kubectl delete -f kube_tagging-service.yaml --force"]
+      "if [[ $(kubectl get pod if-tagger) ]]; then kubectl replace -f kube_tagging-service.yaml ; else kubectl apply -f kube_tagging-service.yaml; fi"]
   }
 
   connection {
