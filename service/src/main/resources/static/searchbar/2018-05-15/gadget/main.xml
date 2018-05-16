@@ -28,7 +28,7 @@
         <Require feature="dynamic-height"/>
     </ModulePrefs>
 
-    <Content href="https://cdn.sitesearch.cloud/searchbar/latest/gadget/searchbar-gadget.html?siteId=0-0-0-0-0"
+    <Content href="https://cdn.sitesearch.cloud/searchbar/2018-05-15/gadget/searchbar-gadget.html?siteId=0-0-0-0-0"
              type="url"/>
 </Module>
         
