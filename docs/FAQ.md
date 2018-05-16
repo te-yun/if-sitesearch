@@ -182,8 +182,8 @@ Or what should be the first thing, I need to do, to **get started** with Site Se
             </div>  
 
 * I want to change the *tooltips* provided by the search bar. Does the search bar support **i18n / l10n**?
-    * Yes, you need to download the [search bar](https://api.sitesearch.cloud/integration_artifacts/searchbar.zip), adjust the translations inside `searchbar/data/language/` and replace 
-    `https://api.sitesearch.cloud` inside the [configuration folder](https://api.sitesearch.cloud/integration_artifacts/searchbar-config.zip) with your new location. 
+    * Yes, you need to download the [search bar](https://github.com/intrafind/if-sitesearch/tree/master/service/src/main/resources/static/searchbar/2018-05-15), adjust the translations inside `searchbar/data/language/` and replace 
+    `https://api.sitesearch.cloud` inside the [configuration folder](https://github.com/intrafind/if-sitesearch/tree/master/service/src/main/resources/static/searchbar/2018-05-15/config) with your new location. 
     
 * How can I override search bar's *default language selection mechanism*?
     * The below example specifies German as search bar's user interface language. 
