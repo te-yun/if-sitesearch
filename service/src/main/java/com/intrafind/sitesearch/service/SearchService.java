@@ -37,7 +37,7 @@ public class SearchService {
         com.intrafind.api.search.Hits hits = SEARCH_SERVICE.search(
 //                query + " AND " + Fields.TENANT + ":" + siteId,
                 query, Search.FILTER_QUERY, Fields.TENANT + ":" + siteId,
-//                Search.RETURN_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL + QUERY_SEPARATOR + Fields.TENANT,
+//  TODO optimize by not retrieving all fields              Search.RETURN_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL + QUERY_SEPARATOR + Fields.TENANT + QUERY_SEPARATOR + QUERY_SEPARATOR +SiteService.PAGE_THUMBNAIL,
 
                 Search.RETURN_TEASER_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL,
 //                Search.HITS_SORT, "-_date_",

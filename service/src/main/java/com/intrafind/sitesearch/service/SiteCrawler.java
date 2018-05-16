@@ -43,8 +43,6 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
-import static com.intrafind.sitesearch.service.SiteService.PAGE_THUMBNAIL;
-
 public class SiteCrawler extends WebCrawler {
     public static final MediaType JSON_MEDIA_TYPE = MediaType.parse("application/json");
     private final static Logger LOG = LoggerFactory.getLogger(SiteCrawler.class);
@@ -99,8 +97,8 @@ public class SiteCrawler extends WebCrawler {
             final String htmlStrippedBody = extractTextFromMixedHtml(htmlParseData.getHtml(), pageBodyCssSelector);
             final String title = htmlParseData.getTitle();
             final String thumbnail;
-            if (htmlParseData.getMetaTags().get(PAGE_THUMBNAIL) != null && htmlParseData.getMetaTags().get(PAGE_THUMBNAIL).length() < 100_000) {
-                thumbnail = htmlParseData.getMetaTags().get(PAGE_THUMBNAIL);
+            if (htmlParseData.getMetaTags().get(SiteService.PAGE_THUMBNAIL_META_NAME) != null && htmlParseData.getMetaTags().get(SiteService.PAGE_THUMBNAIL_META_NAME).length() < 100_000) {
+                thumbnail = htmlParseData.getMetaTags().get(SiteService.PAGE_THUMBNAIL_META_NAME);
             } else {
                 thumbnail = "";
             }
@@ -109,7 +107,7 @@ public class SiteCrawler extends WebCrawler {
                     title,
                     htmlStrippedBody,
                     url,
-                    thumbnail == null ? "" : thumbnail
+                    thumbnail
             );
 
             indexPage(sitePage);
@@ -123,10 +121,10 @@ public class SiteCrawler extends WebCrawler {
         this.getMyController().getCrawlersLocalData().add(url);
     }
 
-    private void indexPage(SitePage sitePage) {
+    private void indexPage(final SitePage sitePage) {
         try {
             final Request request = new Request.Builder()
-                    .url("https://api.sitesearch.cloud/sites/" + siteId + "/pages?siteSecret=" + siteSecret)
+                    .url("https://api.sitesearch.cloud/sites/" + siteId + "/pages?siteSecret=" + siteSecret) // TODO move this to a config property to switch between production and override with local
                     .put(RequestBody.create(JSON_MEDIA_TYPE, MAPPER.writeValueAsBytes(sitePage)))
                     .build();
             HTTP_CLIENT.newCall(request).enqueue(new Callback() {

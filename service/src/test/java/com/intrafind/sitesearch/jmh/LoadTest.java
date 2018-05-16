@@ -158,7 +158,7 @@ public class LoadTest {
         final Response response = CALLER.newCall(request).execute();
         assertEquals(HttpStatus.OK.value(), response.code());
         final Autocomplete result = MAPPER.readValue(response.body().charStream(), Autocomplete.class);
-        assertTrue(queryHits + " - " + result.getResults().size(), queryHits < result.getResults().size());
+        assertTrue(queryHits + " - " + result.getResults().size(), queryHits <= result.getResults().size());
         response.close();
     }
 }

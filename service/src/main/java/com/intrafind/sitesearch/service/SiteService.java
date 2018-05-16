@@ -79,8 +79,10 @@ public class SiteService {
      * Field is updated whenever a document is (re-)indexed.
      */
     private static final String PAGE_TIMESTAMP = "timestamp";
-    static final String PAGE_LABELS = "sisLabels";
-    static final String PAGE_THUMBNAIL = "thumbnail";
+    static final String PAGE_LABELS = "_store.sisLabels";
+    static final String PAGE_THUMBNAIL_META_NAME = "thumbnail";
+    static final String PAGE_THUMBNAIL = "_store.thumbnail";
+    private static final String PAGE_TIMESTAMP_NEW = "_store.timestamp";
 
     public Optional<FetchedPage> indexExistingPage(String id, UUID siteId, UUID siteSecret, SitePage page) {
         if (siteId != null && siteSecret != null) { // credentials are provided as a tuple only
@@ -111,10 +113,13 @@ public class SiteService {
         doc.set(Fields.URL, page.getUrl());
         doc.set(Fields.TENANT, siteId);
         doc.set(PAGE_LABELS, page.getSisLabels() == null ? Collections.emptyList() : page.getSisLabels()); // TODO implement tests, expose via API for both indexing & search
-        doc.set(PAGE_THUMBNAIL, page.getThumbnail()); 
+        doc.set(PAGE_THUMBNAIL, page.getThumbnail() == null ? "" : page.getThumbnail());
         doc.set(PAGE_TIMESTAMP, Instant.now());
+        doc.set(PAGE_TIMESTAMP_NEW, Instant.now());
         INDEX_SERVICE.index(doc);
+
         LOG.info("siteId: " + siteId + " - bodySize: " + page.getBody().length() + " - titleSize: " + page.getTitle().length() + " - URL: " + page.getUrl());
+
         return fetchById(id);
     }
 
