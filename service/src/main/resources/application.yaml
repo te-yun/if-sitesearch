@@ -44,6 +44,8 @@ server:
   port: 8001
 
 spring:
+  profiles:
+    active: prod
   security:
     user:
       name: ${spring.security.user.password}
