@@ -32,6 +32,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class StaticContentTest {
+    private static final String SEARCHBAR_FILE = "/searchbar/2018-05-15/app/js/app.js";
     @Autowired
     private TestRestTemplate caller;
 
@@ -45,7 +46,7 @@ public class StaticContentTest {
 
     @Test
     public void searchbarPage() {
-        final ResponseEntity<String> staticContent = caller.getForEntity("/searchbar/js/app.js", String.class);
+        final ResponseEntity<String> staticContent = caller.getForEntity(SEARCHBAR_FILE, String.class);
 
         assertEquals(HttpStatus.OK, staticContent.getStatusCode());
         assertTrue(staticContent.getBody().contains("sitesearch"));
@@ -56,8 +57,7 @@ public class StaticContentTest {
      */
     @Test
     public void searchbarConfiguration() {
-        // TODO adjust this test to reference the new structure
-        final ResponseEntity<String> staticContent = caller.getForEntity("/searchbar-config/sitesearch-config.json", String.class);
+        final ResponseEntity<String> staticContent = caller.getForEntity("/2018-05-15/config/sitesearch.json", String.class);
 
         assertEquals(HttpStatus.OK, staticContent.getStatusCode());
         if (System.getenv("PWD") != null) { // assume, it runs on Windows and is not a CI server
@@ -68,8 +68,7 @@ public class StaticContentTest {
 
     @Test
     public void searchbarAppJs() {
-        // TODO adjust this test to reference the new structure
-        final ResponseEntity<String> staticContent = caller.getForEntity("/searchbar/js/app.js", String.class);
+        final ResponseEntity<String> staticContent = caller.getForEntity(SEARCHBAR_FILE, String.class);
 
         assertEquals(HttpStatus.OK, staticContent.getStatusCode());
         assertTrue(staticContent.getBody().contains("if-app-searchbar"));
