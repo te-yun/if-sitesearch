@@ -18,4 +18,4 @@ cp -r ../latest/gadget ../$today
 # check if a ./$today folder is created and delete it, if that is the case
 
 gsutil -m rm -r gs://site-search-europe/searchbar/2018-04-06
-gsutil -m cp -r .\service\src\main\resources\static\searchbar\2018-04-06 gs://site-search-europe/searchbar/
+gsutil -m cp -r ./service/src/main/resources/static/searchbar/2018-05-15 gs://site-search-europe/searchbar/
