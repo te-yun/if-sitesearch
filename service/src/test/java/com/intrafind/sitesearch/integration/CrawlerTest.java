@@ -19,6 +19,7 @@ package com.intrafind.sitesearch.integration;
 import com.intrafind.sitesearch.controller.SiteController;
 import com.intrafind.sitesearch.dto.CrawlStatus;
 import com.intrafind.sitesearch.dto.CrawlerJobResult;
+import com.intrafind.sitesearch.dto.FetchedPage;
 import com.intrafind.sitesearch.dto.SitesCrawlStatus;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -141,6 +143,18 @@ public class CrawlerTest {
         assertEquals(HttpStatus.OK, request.getStatusCode());
         assertNotNull(request.getBody());
         assertEquals(1, request.getBody().getPageCount());
+
+        assertThumnailInPagePayload();
+    }
+
+    private void assertThumnailInPagePayload() {
+        final String pageWithThumbnail = "https://api.sitesearch.cloud/index.html";
+        final ResponseEntity<FetchedPage> fetchThumbnailPage = caller.exchange(SiteController.ENDPOINT
+                        + "/" + CRAWL_SITE_ID + "/pages?url=" + pageWithThumbnail,
+                HttpMethod.GET, HttpEntity.EMPTY, FetchedPage.class);
+        assertEquals(HttpStatus.OK, fetchThumbnailPage.getStatusCode());
+        assertEquals(pageWithThumbnail, fetchThumbnailPage.getBody().getUrl());
+        assertEquals("https://api.sitesearch.cloud/theme/logo.png", fetchThumbnailPage.getBody().getThumbnail());
     }
 
     @Test
