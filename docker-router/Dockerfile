@@ -1,4 +1,4 @@
-FROM nginx:1.13
+FROM nginx:stable
 
 MAINTAINER Alexander Orlov <alexander.orlov@intrafind.de>
 
