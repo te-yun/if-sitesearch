@@ -61,8 +61,8 @@ dependencies {
 
     runtime "net.java.dev.jna:jna:4.5.1"
 
-    testAnnotationProcessor "org.openjdk.jmh:jmh-generator-annprocess:1.20"
-    testCompile "org.openjdk.jmh:jmh-core:1.20"
+    testAnnotationProcessor "org.openjdk.jmh:jmh-generator-annprocess:1.21"
+    testCompile "org.openjdk.jmh:jmh-core:1.21"
     testCompile "org.springframework.boot:spring-boot-starter-test:$spring_boot_version"
 
     runtime "org.springframework.boot:spring-boot-devtools:$spring_boot_version"

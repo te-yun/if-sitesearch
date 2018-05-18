@@ -50,13 +50,9 @@ public class CrawlerService {
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerService.class);
     private static final String CRAWLER_STORAGE = "data/crawler";
     private static final Random RANDOM_VERSION = new Random();
-    private static final String SITE_SEARCH_USER_AGENT = "SiteSearch";
+    private static final String SITE_SEARCH_USER_AGENT = "SiteSearch.cloud";
 
     public CrawlerJobResult recrawl(UUID siteId, UUID siteSecret, SiteProfile siteProfile, boolean clearIndex) {
-//        if (clearIndex) {
-//            clearIndex(siteId, siteSecret);
-//        }
-
         final List<String> urls = new ArrayList<>();
         for (final SiteProfile.Config siteConfig : siteProfile.getConfigs()) {
             final CrawlConfig config = new CrawlConfig();

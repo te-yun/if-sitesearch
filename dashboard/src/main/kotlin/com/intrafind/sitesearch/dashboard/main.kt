@@ -98,7 +98,7 @@ fun updateSiteProfile() {
 external fun encodeURIComponent(str: String): String
 fun recrawl() {
     recrawl.disabled = true
-    recrawl.textContent = "Crawling... please give us a minute or two"
+    recrawl.textContent = "Crawling... please give us a minute or two."
 
     val profileConfig: SiteProfileConfig = profile.configs.asDynamic()[0]
     val xhr = XMLHttpRequest()
