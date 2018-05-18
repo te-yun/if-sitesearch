@@ -18,9 +18,15 @@ curl -X GET \
     "https://api.sitesearch.cloud/sites/crawl/status?serviceSecret=${ADMIN_SITE_SECRET}" \
     -o $SITE_CRAWL_STATUS_FILE
 
-# TODO additionally introduce check for site ID
-if grep -q `date -I` $SITE_CRAWL_STATUS_FILE; then
-    echo CRAWLING_SUCCESS
+failedCrawlStatusList=$(cat $SITE_CRAWL_STATUS_FILE | jq -r '.sites[] | select (.pageCount | length  == 0 )');
+
+# if failedCrawlStatusList not empty give me the siteIDs
+if [ -n "$failedCrawlStatusList" ]; then
+   echo "CRAWLING_FAILED"
+   failedSiteIds=$(cat status.json | jq -r '.sites[] | select (.pageCount | length == 0) | .siteId')
+   echo "SiteIDs: $failedSiteIds"
 else
-    echo CRAWLING_FAILED
+  echo "CRAWLING_SUCCESS"
 fi
+
+cat $SITE_CRAWL_STATUS_FILE | jq .
