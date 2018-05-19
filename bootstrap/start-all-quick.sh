@@ -22,16 +22,17 @@ docker start if-sitesearch-blue-1
 docker start consul
 
 #TODO tagging services causes nginx router not to restart
-docker restart if-tagging-service # might required to call `bootstrap/update-if-service.sh` if this does not work # does not work, try with "docker exec -it router nginx -s reload"
-#sh bootstrap/update-if-service.sh if-tagging-service # have not been tested yet
+docker restart if-tagging-service # TODO this brakes the flawless startup
 
 docker start router
 docker start if-app-webcrawler
-docker exec router nginx -s reload
 
 sudo sysctl -w vm.max_map_count=262144 # required for ELK's Elasticsearch
 docker-compose --file opt/docker-compose-elk.yaml -p sitesearch up -d
 docker-compose --file opt/docker-compose-bg.yaml -p tmp up -d
+
+sleep 30
+docker exec router nginx -s reload
 echo "/== startup-script =="
 
 
