@@ -22,8 +22,8 @@ docker start if-sitesearch-blue-1
 docker start consul
 docker start router
 
-docker start if-tagging-service # might required to call `bootstrap/update-if-service.sh` if this does not work # does not work, try with "docker exec -it router nginx -s reload"
-#sh bootstrap/update-if-service.sh if-tagging-service # have not been tested yet
+#docker start if-tagging-service # might required to call `bootstrap/update-if-service.sh` if this does not work # does not work, try with "docker exec -it router nginx -s reload"
+sh bootstrap/update-if-service.sh if-tagging-service # have not been tested yet
 docker start if-app-webcrawler
 docker exec router nginx -s reload
 
