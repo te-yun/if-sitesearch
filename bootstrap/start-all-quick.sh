@@ -31,6 +31,7 @@ sudo sysctl -w vm.max_map_count=262144 # required for ELK's Elasticsearch
 docker-compose --file opt/docker-compose-elk.yaml -p sitesearch up -d
 docker-compose --file opt/docker-compose-bg.yaml -p tmp up -d
 
+docker exec router nginx -s reload
 sleep 30
 docker exec router nginx -s reload
 echo "/== startup-script =="
