@@ -19,6 +19,7 @@ curl -X GET \
     -o $SITE_CRAWL_STATUS_FILE
 
 sudo apt install -y jq
+apt install -y jq
 failedCrawlStatusList=$(cat $SITE_CRAWL_STATUS_FILE | jq -r '.sites[] | select (.pageCount | length  == 0 )');
 
 # if failedCrawlStatusList not empty give me the siteIDs
