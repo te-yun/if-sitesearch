@@ -1,10 +1,11 @@
+/* Remote State not functioning yet. Fix after ifinder core runs stabily
 terraform {
   backend "gcs" {
     bucket  = "tf-dev"
     prefix  = "terraform/state"
 		project = "sitesearch-195009"
   }
-}
+}*/
 
 module "google" {
 	count="${var.total_vm_count - length(var.ip_pool)}"
