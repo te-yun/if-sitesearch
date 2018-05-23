@@ -21,8 +21,7 @@ docker start if-sitesearch-blue-1
 
 docker start consul
 
-#TODO tagging services causes nginx router not to restart
-docker restart if-tagging-service # TODO this brakes the flawless startup
+docker restart if-tagging-service
 
 docker start router
 docker start if-app-webcrawler

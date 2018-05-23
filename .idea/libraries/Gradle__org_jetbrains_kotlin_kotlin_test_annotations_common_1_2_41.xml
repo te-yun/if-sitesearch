@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="Gradle: org.jetbrains.kotlin:spring-boot-gradle-plugin-2.0.2.RELEASE:1.2.41">
+  <library name="Gradle: org.jetbrains.kotlin:kotlin-test-annotations-common:1.2.41" type="kotlin.common">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-gradle-plugin/2.0.2.RELEASE/b35e0fcf1acca8c38899af0f06269955f1bf553c/spring-boot-gradle-plugin-2.0.2.RELEASE.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-test-annotations-common/1.2.41/ba6355df920e6f7d2fbecb1a018aa76f55e2486f/kotlin-test-annotations-common-1.2.41.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
