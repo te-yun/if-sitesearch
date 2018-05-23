@@ -30,7 +30,7 @@ module "kubernetes" {
 			"secret_name" = "sitesearch-secret"
 	}
 
-	master_node_name = "instance-1"
+	master_node_name = "dev"
 	google_project = "${local.gcloud_project}"
 
 	kube_counts = {
