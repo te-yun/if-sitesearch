@@ -41,7 +41,6 @@ private var siteSecret: String = ""
 private var websiteUrl: String = ""
 
 fun triggerFirstUsageOwnership() {
-//    js("grecaptcha.execute();")
     createSite()
 }
 
