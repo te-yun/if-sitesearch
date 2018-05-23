@@ -46,3 +46,30 @@
    {{/if}}
 </li>
 </script>
+
+
+<script id="thumbnail-result" type="text/x-handlebars-template">
+<div class="ifs-media">
+
+    <div class="ifs-media-left">
+        {{#if thumbnail}}
+        <a href="{{urlRaw}}" target="_blank" style="margin-top: 48px; height: 80px; width: 80px; overflow: hidden; justify-content: center;">
+            <img src="{{thumbnail}}" style="width: auto; height: 100%;">
+        </a>
+        {{/if}}
+    </div>
+
+
+    <div class="ifs-media-body">
+        <div>
+            <a target="_blank" href="{{urlRaw}}" class="ifs-break-all ifs-visited ifs-demi">{{{title}}}</a>
+
+            {{#if body}}
+                <p class="ifs-textbody ifs-break-all">{{{body}}}</p>
+            {{/if}}
+
+            <a target="_blank" href="{{urlRaw}}" title="{{urlRaw}}" class="ifs-media-deepurl truncate pathname ifs-break-all">{{{url}}}</a>
+        </div>
+    </div>
+</div>
+</script>
