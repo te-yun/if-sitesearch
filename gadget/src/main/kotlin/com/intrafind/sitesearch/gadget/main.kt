@@ -41,7 +41,8 @@ private var siteSecret: String = ""
 private var websiteUrl: String = ""
 
 fun triggerFirstUsageOwnership() {
-    js("grecaptcha.execute();")
+//    js("grecaptcha.execute();")
+    createSite()
 }
 
 private fun createSite() {
@@ -281,18 +282,20 @@ private fun validateField(container: HTMLElement, isValid: Boolean) {
 @JsName("verifyCallback")
 private fun verifyCallback(token: String) {
     if (!token.isEmpty()) {
-        triggerButton.disabled = true
+        triggerButton.disabled = false
         isCaptchaSolved = true
         captchaToken = token
-        createSite()
+    } else {
+        // TODO show CAPTCHA error
     }
 }
 
 private fun requireTermsAndConditions() {
     isTermsAccepted = termsAccepted.checked
-    triggerButton.disabled = !isTermsAccepted
+//    triggerButton.disabled = !isTermsAccepted
     if (isTermsAccepted) {
         termsAccepted.disabled = true
+        js("grecaptcha.execute();")
     } else {
         termsAccepted.style.background = "#911" // TODO Jochen add some invalidity communicating style here instead and additionally show a message like "Accepting T&C is required in order to proceed"
     }
