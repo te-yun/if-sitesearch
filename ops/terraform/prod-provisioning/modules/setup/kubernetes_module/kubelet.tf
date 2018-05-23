@@ -5,6 +5,7 @@ module "master"{
 
 	ssh_user="${var.ssh_user}"
 	ssh_private_key="${var.ssh_private_key}"
+	ssh_private_key_path="${var.ssh_private_key_path}"
 	ip_address="${var.ip_address_list[0]}"
 
 	start_up_commands="${var.start_up_commands}"

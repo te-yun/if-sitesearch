@@ -22,6 +22,7 @@ module "kubernetes" {
 	count="${var.total_vm_count}"
 	ip_address_list="${concat(var.ip_pool,module.google.external_ip_address_list)}"
 	ssh_private_key = "${local.ssh_private_key}"
+	ssh_private_key_path = "${local.ssh_private_key_path}"
 	ssh_user = "${local.ssh_user}"
 	docker_registry = {
 			"address" = "${local.docker-address}"
