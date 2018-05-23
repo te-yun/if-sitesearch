@@ -211,13 +211,6 @@
           title="Integration code to be inserted into your website to include a search bar"></textarea>
 
 <script>
-    // fix in-iframe texarea with init code height
-    var iframe = window.parent.document.getElementById('gadgetframe');
-    var frameBody = document.getElementsByTagName('body')[0];
-    if (iframe !== null) {
-        iframe.style.height = frameBody.offsetHeight + 'px';
-    }
-
     tippy('.tipsy', {
         arrow: true,
         trigger: 'click'
