@@ -31,12 +31,6 @@
     <script src="/app/runtime/kotlin.js"></script>
     <script src="/app/gadget/gadget.js"></script>
     <script>
-        // var captchaLoad = function () {
-        //     captchaWidget = grecaptcha.render("captcha", {
-        //         "sitekey": gadget.com.intrafind.sitesearch.gadget.SiteSearch.Companion.captchaSiteKey,
-        //         "callback": gadget.com.intrafind.sitesearch.gadget.verifyCallback
-        //     });
-        // };
         var verifyCallback = gadget.com.intrafind.sitesearch.gadget.verifyCallback;
     </script>
 </head>
@@ -139,9 +133,9 @@
     </div>
 </div>
 
-<!--<div id="captcha"></div>-->
 <script src="https://www.google.com/recaptcha/api.js?hl=en" async defer></script>
 <div id="recaptcha" class="g-recaptcha"
+     data-badge="inline"
      data-sitekey="6Le40VoUAAAAAP2BDcosK1TevOXroafOLWaEMwyo"
      data-callback="verifyCallback"
      data-size="invisible"></div>
