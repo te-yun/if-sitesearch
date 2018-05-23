@@ -291,7 +291,6 @@ private fun verifyCallback(token: String) {
 
 private fun requireTermsAndConditions() {
     isTermsAccepted = termsAccepted.checked
-//    triggerButton.disabled = !isTermsAccepted
     if (isTermsAccepted) {
         termsAccepted.disabled = true
         js("grecaptcha.execute();")
@@ -328,7 +327,6 @@ private fun applyQueryOverrides() {
         overrideSite(siteId)
         insertSiteIdIntoIntegrationCode()
         triggerButton.style.display = "none"
-//        captcha.style.display = "none"
         siteSecretBox.style.display = "none"
         emailContainer.style.display = "none"
         siteIdBox.style.display = "none"
