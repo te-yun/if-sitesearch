@@ -347,7 +347,6 @@ external fun encodeURIComponent(str: String): String
 private var crawlerPageCount: Int = 0
 fun startCrawler() {
     val xhr = XMLHttpRequest()
-    console.warn("captchaToken: $captchaToken")
     xhr.open("POST", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(url.value)}&token=$captchaToken&email=${email.value}&sitemapsOnly=${sitemapsOnly.checked}&pageBodyCssSelector=${encodeURIComponent(cssSelector.value)}")
     xhr.onload = {
         if (xhr.status.equals(200)) {
