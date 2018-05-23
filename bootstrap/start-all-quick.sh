@@ -32,6 +32,7 @@ docker-compose --file opt/docker-compose-bg.yaml -p tmp up -d
 
 docker exec router nginx -s reload
 sleep 30
+docker start router
 docker exec router nginx -s reload
 echo "/== startup-script =="
 
