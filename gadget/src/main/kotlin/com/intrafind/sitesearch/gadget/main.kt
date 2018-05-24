@@ -32,7 +32,6 @@ import kotlin.dom.removeClass
 suspend fun main(args: Array<String>) {
     window.addEventListener("DOMContentLoaded", {
         init()
-        console.warn("window.document.referrer ${window.document.referrer}")
     })
 }
 
