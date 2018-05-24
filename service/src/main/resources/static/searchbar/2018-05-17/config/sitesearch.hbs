@@ -1,10 +1,32 @@
 <script id="thumbnail-result" type="text/x-handlebars-template">
+<style>
+    .ifs-media-left > a {
+        height: 80px;
+        justify-content: center;
+        margin-top: 48px;
+        overflow: hidden;
+        width: 80px;
+    }
+
+    .ifs-media-left > a > img {
+        height: 100%;
+        width: auto !important;
+    }
+
+    @media (max-width: 1024px) {
+        .ifs-media-left > a {
+            height: 60px;
+            margin-top: 48px;
+            width: 60px;
+        }
+    }
+</style>
 <div class="ifs-media">
 
     <div class="ifs-media-left">
         {{#if thumbnail}}
-        <a href="{{urlRaw}}" target="_blank" style="margin-top: 48px; height: 80px; width: 80px; overflow: hidden; justify-content: center;">
-            <img src="{{thumbnail}}" style="width: auto; height: 100%;">
+        <a href="{{urlRaw}}" target="_blank">
+            <img src="{{thumbnail}}">
         </a>
         {{/if}}
     </div>
