@@ -5,6 +5,7 @@ module "master"{
 
 	ssh_user="${var.ssh_user}"
 	ssh_private_key="${var.ssh_private_key}"
+	ssh_private_key_path="${var.ssh_private_key_path}"
 	ip_address="${var.ip_address_list[0]}"
 
 	start_up_commands="${var.start_up_commands}"
@@ -76,7 +77,7 @@ resource "null_resource" "Kubernetes-Metaobjects" {
 						"cat <<EOT > kube_metaobjects.yaml",
 						"${data.template_file.kubernetes_metaobjects.rendered}",
 						"EOT",
-						"if [[ $(kubectl get pv elasticsearch-pv-1) ]]; then kubectl replace -f kube_metaobjects.yaml ; else kubectl apply -f kube_metaobjects.yaml; fi"]
+						"if [[ $(kubectl get pv elasticsearch-pv-1) ]]; then kubectl replace --force=true -f kube_metaobjects.yaml ; else kubectl apply -f kube_metaobjects.yaml; fi"]
 	}
 
 	connection {
@@ -117,6 +118,32 @@ resource "null_resource" "Kubernetes-Metaobjects" {
 #	}
 #}
 
+#Tagging Service
+resource "null_resource" "Tagging-Service"{
+
+	depends_on=["module.master","null_resource.Kubernetes-Metaobjects"]
+
+	triggers = {
+		kubernetes_configuration_hash = "${sha1(file("./modules/setup/kubernetes_module/kubernetes_templates/kube_tagging-service-template.yaml"))}"
+	}
+
+	//turning the rendered template to a file and then executing
+	provisioner "remote-exec" {
+		inline=["export KUBECONFIG=$HOME/admin.conf ",
+						"cat <<EOT > kube_tagging-service.yaml",
+						"${data.template_file.kubernetes_tagging-service.rendered}",
+						"EOT",
+						"if [[ $(kubectl get pod if-tagger) ]]; then kubectl replace --force=true -f kube_tagging-service.yaml ; else kubectl apply -f kube_tagging-service.yaml; fi"]
+	}
+
+	connection {
+			user = "${var.ssh_user}"
+			//Access IP of newly provisioned machine
+			host = "${var.ip_address_list[0]}"
+			type = "ssh"
+			private_key="${var.ssh_private_key}"
+	}
+}
 
 #Elasticsearch
 resource "null_resource" "Sitesearch-Elasticsearch"{

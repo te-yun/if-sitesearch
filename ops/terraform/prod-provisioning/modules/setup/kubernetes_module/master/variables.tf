@@ -1,5 +1,6 @@
 variable "ssh_user"{}
 variable "ssh_private_key"{}
+variable "ssh_private_key_path"{}
 variable "ip_address"{}
 
 variable "start_up_commands" { type = "list" default = []}
