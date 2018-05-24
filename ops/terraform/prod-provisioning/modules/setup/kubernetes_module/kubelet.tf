@@ -77,7 +77,7 @@ resource "null_resource" "Kubernetes-Metaobjects" {
 						"cat <<EOT > kube_metaobjects.yaml",
 						"${data.template_file.kubernetes_metaobjects.rendered}",
 						"EOT",
-						"if [[ $(kubectl get pv elasticsearch-pv-1) ]]; then kubectl replace -f kube_metaobjects.yaml ; else kubectl apply -f kube_metaobjects.yaml; fi"]
+						"if [[ $(kubectl get pv elasticsearch-pv-1) ]]; then kubectl replace --force=true --cascade=true -f kube_metaobjects.yaml ; else kubectl apply -f kube_metaobjects.yaml; fi"]
 	}
 
 	connection {
@@ -133,7 +133,7 @@ resource "null_resource" "Tagging-Service"{
 						"cat <<EOT > kube_tagging-service.yaml",
 						"${data.template_file.kubernetes_tagging-service.rendered}",
 						"EOT",
-						"if [[ $(kubectl get pod if-tagger) ]]; then kubectl replace -f kube_tagging-service.yaml ; else kubectl apply -f kube_tagging-service.yaml; fi"]
+						"if [[ $(kubectl get pod if-tagger) ]]; then kubectl replace --force=true --cascade=true -f kube_tagging-service.yaml ; else kubectl apply -f kube_tagging-service.yaml; fi"]
 	}
 
 	connection {
@@ -161,7 +161,7 @@ resource "null_resource" "Sitesearch-Elasticsearch"{
 						"cat <<EOT > kube_elasticsearch.yaml",
 						"${data.template_file.kubernetes_elasticsearch.rendered}",
 						"EOT",
-						"if [[ $(kubectl get statefulset elasticsearch) ]]; then kubectl replace -f kube_elasticsearch.yaml ; else kubectl apply -f kube_elasticsearch.yaml; fi"]
+						"if [[ $(kubectl get statefulset elasticsearch) ]]; then kubectl replace --force=true --cascade=true -f kube_elasticsearch.yaml ; else kubectl apply -f kube_elasticsearch.yaml; fi"]
 	}
 
 	connection {
@@ -190,7 +190,7 @@ resource "null_resource" "Sitesearch-SearchService"{
 						"cat <<EOT > kube_searchservice.yaml",
 						"${data.template_file.kubernetes_searchservice.rendered}",
 						"EOT",
-						"if [[ $(kubectl get statefulset sitesearch-searchservice) ]]; then kubectl replace -f kube_searchservice.yaml ; else kubectl apply -f kube_searchservice.yaml; fi"]
+						"if [[ $(kubectl get statefulset sitesearch-searchservice) ]]; then kubectl replace --force=true --cascade=true -f kube_searchservice.yaml ; else kubectl apply -f kube_searchservice.yaml; fi"]
 	}
 
 	connection {
