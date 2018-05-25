@@ -47,7 +47,7 @@ spec:
             - name: DNS_SUFFIX
               value: "sitesearch-elasticsearch.default.svc.cluster.local:9300"
             - name: Replace_Trigger
-              value: "REPLACE_TRIGGER_VALUE"
+              value: "REPLACE_TRIGGER_VALUEtrue"
           #This creates a PVC (Persistent Volume Claim) -> this is not the volume, just the claim
           #The volume is declared further down and connected to the claim by (in this case) the name parameter.
           volumeMounts:
