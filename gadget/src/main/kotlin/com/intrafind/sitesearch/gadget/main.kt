@@ -70,7 +70,7 @@ private lateinit var siteIdContainer: HTMLDivElement
 private lateinit var siteIdBox: HTMLDivElement
 private lateinit var siteSecretContainer: HTMLDivElement
 private lateinit var siteSecretBox: HTMLDivElement
-//private lateinit var captcha: HTMLDivElement
+private lateinit var recaptcha: HTMLDivElement
 private lateinit var emailContainer: HTMLDivElement
 private lateinit var websiteUrlContainer: HTMLDivElement
 private lateinit var siteSearchSetupUrl: HTMLDivElement
@@ -97,7 +97,7 @@ private fun init() {
     siteIdContainer = document.getElementById("siteId") as HTMLDivElement
     siteSecretContainer = document.getElementById("siteSecret") as HTMLDivElement
     siteIdBox = document.getElementById("siteId-container") as HTMLDivElement
-//    captcha = document.getElementById("captcha") as HTMLDivElement
+    recaptcha = document.getElementById("recaptcha") as HTMLDivElement
     siteSecretBox = document.getElementById("siteSecret-container") as HTMLDivElement
     emailContainer = document.getElementById("email-container") as HTMLDivElement
     websiteUrlContainer = document.getElementById("websiteUrl-container") as HTMLDivElement
@@ -326,6 +326,7 @@ private fun applyQueryOverrides() {
         overrideSite(siteId)
         insertSiteIdIntoIntegrationCode()
         triggerButton.style.display = "none"
+        recaptcha.style.display = "none"
         siteSecretBox.style.display = "none"
         emailContainer.style.display = "none"
         siteIdBox.style.display = "none"
