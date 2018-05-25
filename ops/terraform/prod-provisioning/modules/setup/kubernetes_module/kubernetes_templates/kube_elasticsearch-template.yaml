@@ -54,6 +54,8 @@ spec:
             #This address suffix is kubernetes standard, the port is elasticsearch specific
             - name: DNS_SUFFIX
               value: "sitesearch-elasticsearch.default.svc.cluster.local:9300"
+            - name: Replace_Trigger
+              value: "REPLACE_TRIGGER_VALUE"
           #for loop in order to have a flexible amount of elasticsearch nodes
           #for breakdown:
           #   for i in range (0..Amount of elasticsearch data nodes)
@@ -66,6 +68,12 @@ spec:
           volumeMounts:
           - name: google-persistent-disk
             mountPath: /home/app_user/data
+          livenessProbe:
+            httpGet:
+              port: 9200
+            initialDelaySeconds: 180
+            periodSeconds: 300
+            failureThreshold: 2
       #This functions like docker login, to pull the image from the correct registry.
       #The following command is needed for this to work:
       #kubectl create secret docker-registry {docker_registry_secret_name} --docker-server={docker_registry_address}
@@ -117,6 +125,8 @@ spec:
             #This address suffix is kubernetes standard, the port is elasticsearch specific
             - name: DNS_SUFFIX
               value: "sitesearch-elasticsearch.default.svc.cluster.local:9300"
+            - name: Replace_Trigger
+              value: "REPLACE_TRIGGER_VALUE"
           #for loop in order to have a flexible amount of elasticsearch nodes
           #for breakdown:
           #   for i in range (0..Amount of elasticsearch data nodes)
@@ -129,6 +139,12 @@ spec:
           volumeMounts:
           - name: google-persistent-disk
             mountPath: /home/app_user/data
+          livenessProbe:
+            httpGet:
+              port: 9200
+            initialDelaySeconds: 180
+            periodSeconds: 300
+            failureThreshold: 2
       #This functions like docker login, to pull the image from the correct registry.
       #The following command is needed for this to work:
       #kubectl create secret docker-registry {docker_registry_secret_name} --docker-server={docker_registry_address}
