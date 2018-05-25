@@ -30,8 +30,21 @@
     <script src="tippy.all.min.js"></script>
     <script src="/app/runtime/kotlin.js"></script>
     <script src="/app/gadget/gadget.js"></script>
+    <!--<script>-->
+    <!--// var captchaLoad = function () {-->
+    <!--//     captchaWidget = grecaptcha.render("captcha", {-->
+    <!--//         "sitekey": gadget.com.intrafind.sitesearch.gadget.SiteSearch.Companion.captchaSiteKey,-->
+    <!--//         "callback": gadget.com.intrafind.sitesearch.gadget.verifyCallback-->
+    <!--//     });-->
+    <!--// };-->
+    <!--</script>-->
     <script>
-        var verifyCallback = gadget.com.intrafind.sitesearch.gadget.verifyCallback;
+        tippy('.tipsy', {
+            arrow: true,
+            trigger: 'click'
+        });
+
+        // var verifyCallback = gadget.com.intrafind.sitesearch.gadget.verifyCallback;
     </script>
 </head>
 
@@ -85,9 +98,9 @@
         </label>
         <div class="tipsy-container">
             <input type="text" id="cssSelector"
-            placeholder="#page-content-CSS-element-ID-selector"
-            value="body">
-             <div class="tipsy"
+                   placeholder="#page-content-CSS-element-ID-selector"
+                   value="body">
+            <div class="tipsy"
                  title="The CSS selector which is used to match just a subdivision of the body and extract its content.
     If nothing is provided, the content is extracted from the 'body' tag. Do not modify the preset value if you are unsure."></div>
             <div class="error">Invalid CSS selector</div>
@@ -133,16 +146,12 @@
     </div>
 </div>
 
-<script src="https://www.google.com/recaptcha/api.js?hl=en" async defer></script>
-<div id="recaptcha" class="g-recaptcha"
-     data-badge="inline"
-     data-sitekey="6Le40VoUAAAAAP2BDcosK1TevOXroafOLWaEMwyo"
-     data-callback="verifyCallback"
-     data-size="invisible"></div>
+<!--<div id="captcha"></div>-->
 
 <div class="form-inline tc-wrapper">
     <label>
-        <a href="https://sitesearch.cloud/terms" title="Terms &amp; Conditions" target="_blank">Accept Terms &amp; Conditions</a>
+        <a href="https://sitesearch.cloud/terms" title="Terms &amp; Conditions" target="_blank">Accept Terms &amp;
+            Conditions</a>
     </label>
     <div>
         <input type="checkbox" id="termsAccepted" class="if-checkbox">
@@ -210,19 +219,22 @@
 <textarea id="integration-code"
           title="Integration code to be inserted into your website to include a search bar"></textarea>
 
-<script>
-    tippy('.tipsy', {
-        arrow: true,
-        trigger: 'click'
-    });
-</script>
+
+<!--<script src="https://www.google.com/recaptcha/api.js?onload=captchaLoad&render=explicit&hl=en" async defer></script>-->
+<script src="https://www.google.com/recaptcha/api.js?hl=en" async defer></script>
+<div id="recaptcha" class="g-recaptcha"
+     data-sitekey="6Le40VoUAAAAAP2BDcosK1TevOXroafOLWaEMwyo"
+     data-callback="gadget.com.intrafind.sitesearch.gadget.verifyCallback"
+     data-size="invisible"></div>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-991250257"></script>
 <script>
     window.dataLayer = window.dataLayer || [];
+
     function gtag() {
         dataLayer.push(arguments);
     }
+
     gtag('js', new Date());
     gtag('config', 'AW-991250257');
 </script>

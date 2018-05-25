@@ -32,7 +32,6 @@ import kotlin.dom.removeClass
 suspend fun main(args: Array<String>) {
     window.addEventListener("DOMContentLoaded", {
         init()
-        console.warn("window.document.referrer ${window.document.referrer}")
     })
 }
 
@@ -41,6 +40,10 @@ private var siteSecret: String = ""
 private var websiteUrl: String = ""
 
 fun triggerFirstUsageOwnership() {
+    createSite()
+}
+
+private fun createSite() {
     val xhr = XMLHttpRequest()
     xhr.open("POST", "$serviceUrl/sites")
     xhr.onload = {
@@ -60,16 +63,14 @@ fun overrideSite(siteId: String) {
     document.cookie = "override-site = $siteId; domain = .sitesearch.cloud; path = /"
 }
 
-@JsName("captchaResult")
-lateinit var captchaResult: String
-
+private lateinit var captchaToken: String
 private lateinit var termsAccepted: HTMLInputElement
 private lateinit var integrationCode: HTMLTextAreaElement
 private lateinit var siteIdContainer: HTMLDivElement
 private lateinit var siteIdBox: HTMLDivElement
 private lateinit var siteSecretContainer: HTMLDivElement
 private lateinit var siteSecretBox: HTMLDivElement
-private lateinit var captcha: HTMLDivElement
+private lateinit var recaptcha: HTMLDivElement
 private lateinit var emailContainer: HTMLDivElement
 private lateinit var websiteUrlContainer: HTMLDivElement
 private lateinit var siteSearchSetupUrl: HTMLDivElement
@@ -96,7 +97,7 @@ private fun init() {
     siteIdContainer = document.getElementById("siteId") as HTMLDivElement
     siteSecretContainer = document.getElementById("siteSecret") as HTMLDivElement
     siteIdBox = document.getElementById("siteId-container") as HTMLDivElement
-    captcha = document.getElementById("captcha") as HTMLDivElement
+    recaptcha = document.getElementById("recaptcha") as HTMLDivElement
     siteSecretBox = document.getElementById("siteSecret-container") as HTMLDivElement
     emailContainer = document.getElementById("email-container") as HTMLDivElement
     websiteUrlContainer = document.getElementById("websiteUrl-container") as HTMLDivElement
@@ -112,10 +113,6 @@ private fun init() {
     })
 
     termsAccepted.addEventListener("change", {
-        isTermsAccepted = termsAccepted.checked
-        if (isCaptchaSolved) {
-            triggerButton.disabled = !isTermsAccepted
-        }
         requireTermsAndConditions()
     })
 
@@ -282,18 +279,22 @@ private fun validateField(container: HTMLElement, isValid: Boolean) {
 
 @JsName("verifyCallback")
 private fun verifyCallback(token: String) {
-    isCaptchaSolved = true
-    captchaResult = token
-    triggerButton.disabled = !isTermsAccepted
-    requireTermsAndConditions()
+    if (!token.isEmpty()) {
+        triggerButton.disabled = false
+        isCaptchaSolved = true
+        captchaToken = token
+    } else {
+        // TODO show CAPTCHA error
+    }
 }
 
 private fun requireTermsAndConditions() {
-    if (!isTermsAccepted) {
-        triggerButton.disabled = true
-        termsAccepted.style.background = "#911" // TODO Jochen add some invalidity communicating style here instead and additionally show a message like "Accepting T&C is required in order to proceed"
-    } else {
+    isTermsAccepted = termsAccepted.checked
+    if (isTermsAccepted) {
         termsAccepted.disabled = true
+        js("grecaptcha.execute();")
+    } else {
+        termsAccepted.style.background = "#911" // TODO Jochen add some invalidity communicating style here instead and additionally show a message like "Accepting T&C is required in order to proceed"
     }
 }
 
@@ -325,7 +326,7 @@ private fun applyQueryOverrides() {
         overrideSite(siteId)
         insertSiteIdIntoIntegrationCode()
         triggerButton.style.display = "none"
-        captcha.style.display = "none"
+        recaptcha.style.display = "none"
         siteSecretBox.style.display = "none"
         emailContainer.style.display = "none"
         siteIdBox.style.display = "none"
@@ -344,7 +345,7 @@ external fun encodeURIComponent(str: String): String
 private var crawlerPageCount: Int = 0
 fun startCrawler() {
     val xhr = XMLHttpRequest()
-    xhr.open("POST", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(url.value)}&token=$captchaResult&email=${email.value}&sitemapsOnly=${sitemapsOnly.checked}&pageBodyCssSelector=${encodeURIComponent(cssSelector.value)}")
+    xhr.open("POST", "$serviceUrl/sites/$siteId/crawl?siteSecret=$siteSecret&url=${encodeURIComponent(url.value)}&token=$captchaToken&email=${email.value}&sitemapsOnly=${sitemapsOnly.checked}&pageBodyCssSelector=${encodeURIComponent(cssSelector.value)}")
     xhr.onload = {
         if (xhr.status.equals(200)) {
             crawlerPageCount = JSON.parse<dynamic>(xhr.responseText).pageCount as Int

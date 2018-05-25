@@ -25,7 +25,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.net.URI;
@@ -76,7 +81,7 @@ public class EmailController {
 
         try {
             Request request = new Request.Builder()
-                    .url("https://www.google.com/recaptcha/api/siteverify?secret=" + System.getenv("RECAPTCHA_SITE_SECRET") + "&response=" + payload)
+                    .url("https://www.google.com/recaptcha/api/siteverify?secret=" + System.getenv("INVISIBLE_RECAPTCHA_SITE_SECRET") + "&response=" + payload)
                     .post(okhttp3.RequestBody.create(JSON_MEDIA_TYPE, ""))
                     .build();
             final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
