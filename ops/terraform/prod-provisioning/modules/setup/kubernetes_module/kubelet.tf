@@ -161,7 +161,7 @@ resource "null_resource" "Sitesearch-Elasticsearch"{
 						"cat <<EOT > kube_elasticsearch.yaml",
 						"${data.template_file.kubernetes_elasticsearch.rendered}",
 						"EOT",
-						"if [[ $(kubectl get statefulset elasticsearch) ]]; then kubectl replace -f kube_elasticsearch.yaml ; else kubectl apply -f kube_elasticsearch.yaml; fi"]
+						"if [[ $(kubectl get statefulset elasticsearch) ]]; then kubectl replace --force=true -f kube_elasticsearch.yaml ; else kubectl apply -f kube_elasticsearch.yaml; fi"]
 	}
 
 	connection {
@@ -190,7 +190,7 @@ resource "null_resource" "Sitesearch-SearchService"{
 						"cat <<EOT > kube_searchservice.yaml",
 						"${data.template_file.kubernetes_searchservice.rendered}",
 						"EOT",
-						"if [[ $(kubectl get statefulset sitesearch-searchservice) ]]; then kubectl replace -f kube_searchservice.yaml ; else kubectl apply -f kube_searchservice.yaml; fi"]
+						"if [[ $(kubectl get statefulset sitesearch-searchservice) ]]; then kubectl replace --force=true -f kube_searchservice.yaml ; else kubectl apply -f kube_searchservice.yaml; fi"]
 	}
 
 	connection {
