@@ -39,8 +39,7 @@ import java.net.URI;
 @EnableSwagger2
 public class Application {
     private final static Logger LOG = LoggerFactory.getLogger(Application.class);
-    public static final URI IFINDER_CORE = URI.create("https://sitesearch:" + System.getenv("SERVICE_SECRET") + "@" + System.getenv("SIS_SERVICE_HOST") + "/json"); // TODO consider trying json endpoint
-//    public static final URI IFINDER_CORE = URI.create("https://sitesearch:" + System.getenv("SERVICE_SECRET") + "@" + System.getenv("SIS_SERVICE_HOST") + "/hessian"); // TODO consider trying json endpoint
+    public static final URI IFINDER_CORE = URI.create("https://sitesearch:" + System.getenv("SERVICE_SECRET") + "@" + System.getenv("SIS_SERVICE_HOST") + "/hessian"); // TODO consider trying json endpoint
 
     @RequestMapping(path = "/subscriptions", method = RequestMethod.POST)
     ResponseEntity<Object> subscribe(

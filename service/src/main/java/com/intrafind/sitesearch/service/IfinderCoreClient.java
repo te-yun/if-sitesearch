@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +20,14 @@ import com.caucho.hessian.client.HessianProxyFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.Authenticator;
 import java.net.MalformedURLException;
-import java.net.PasswordAuthentication;
-import java.net.URL;
 
 /**
- * This class is a helper class for the instantiation of IntraFind's services.
+ * This class is a helper class for the instantiation of IntraFind's core services.
+ * TODO consider trying json endpoint
  */
 public enum IfinderCoreClient {
     ;
-
     private static final Logger LOG = LoggerFactory.getLogger(IfinderCoreClient.class);
     private final static HessianProxyFactory hessianProxyFactory;
 
@@ -41,7 +38,7 @@ public enum IfinderCoreClient {
         hessianProxyFactory.setHessian2Reply(true);
         hessianProxyFactory.setHessian2Request(true);
 
-        initUrlAuthentication();
+//        initUrlAuthentication();
     }
 
     /**
@@ -52,42 +49,43 @@ public enum IfinderCoreClient {
      * If you need to add basic authentication: <code>http://username:password@server:8090/hessian/serviceID</code>
      */
     @SuppressWarnings("unchecked")
-    public static <T> T newHessianClient(Class<T> aInterface, String aUrl) {
+    public static <T> T newHessianClient(final Class<T> anInterface, final String url) {
         try {
-            return (T) hessianProxyFactory.create(aInterface, aUrl);
-        } catch (MalformedURLException exception) {
-            LOG.info(exception.getMessage());
+            return (T) hessianProxyFactory.create(anInterface, url);
+        } catch (final MalformedURLException exception) {
+            LOG.error("HESSIAN_CLIENT_ERROR: " + exception.getMessage());
             throw new RuntimeException(exception);
         }
     }
 
     private static void initHttp() {
-        setEnv("http.maxConnections", "128"); // it might be necessary to change this during JVM startup!
+        System.getProperties().put("http.maxConnections", "128"); // it might be necessary to change this during JVM startup!
+//        setEnv("http.maxConnections", "128"); // it might be necessary to change this during JVM startup!
     }
 
-    private static void initUrlAuthentication() {
-        Authenticator.setDefault(new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return getAuthentication(getRequestingURL());
-            }
-        });
-    }
+//    private static void initUrlAuthentication() {
+//        Authenticator.setDefault(new Authenticator() {
+//            @Override
+//            protected PasswordAuthentication getPasswordAuthentication() {
+//                return getAuthentication(getRequestingURL());
+//            }
+//        });
+//    }
 
-    private static void setEnv(String aKey, String aValue) {
-        System.getProperties().put(aKey, aValue);
-    }
+//    private static void setEnv(final String aKey, String aValue) {
+//        System.getProperties().put(aKey, aValue);
+//    }
 
-    private static PasswordAuthentication getAuthentication(URL aUrl) {
-        String userInfo = aUrl.getUserInfo();
-        if (userInfo == null) return null;
-
-        int index = userInfo.indexOf(':');
-        if (index == -1) return null;
-
-        String user = userInfo.substring(0, index);
-        String pass = userInfo.substring(index + 1);
-
-        return new PasswordAuthentication(user, pass.toCharArray());
-    }
+//    private static PasswordAuthentication getAuthentication(URL aUrl) {
+//        String userInfo = aUrl.getUserInfo();
+//        if (userInfo == null) return null;
+//
+//        int index = userInfo.indexOf(':');
+//        if (index == -1) return null;
+//
+//        String user = userInfo.substring(0, index);
+//        String pass = userInfo.substring(index + 1);
+//
+//        return new PasswordAuthentication(user, pass.toCharArray());
+//    }
 }
