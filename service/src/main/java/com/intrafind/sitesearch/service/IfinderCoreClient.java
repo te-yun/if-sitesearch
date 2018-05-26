@@ -20,11 +20,14 @@ import com.caucho.hessian.client.HessianProxyFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.Authenticator;
 import java.net.MalformedURLException;
+import java.net.PasswordAuthentication;
+import java.net.URL;
 
 /**
  * This class is a helper class for the instantiation of IntraFind's core services.
- * TODO consider trying json endpoint
+ * TODO consider trying JSON endpoint
  */
 public enum IfinderCoreClient {
     ;
@@ -32,13 +35,13 @@ public enum IfinderCoreClient {
     private final static HessianProxyFactory hessianProxyFactory;
 
     static {
-        initHttp();
+        System.getProperties().put("http.maxConnections", "128"); // it might be necessary to change this during JVM startup!
 
         hessianProxyFactory = new HessianProxyFactory();
         hessianProxyFactory.setHessian2Reply(true);
         hessianProxyFactory.setHessian2Request(true);
 
-//        initUrlAuthentication();
+        initUrlAuthentication();
     }
 
     /**
@@ -58,34 +61,25 @@ public enum IfinderCoreClient {
         }
     }
 
-    private static void initHttp() {
-        System.getProperties().put("http.maxConnections", "128"); // it might be necessary to change this during JVM startup!
-//        setEnv("http.maxConnections", "128"); // it might be necessary to change this during JVM startup!
+    private static void initUrlAuthentication() {
+        Authenticator.setDefault(new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return getAuthentication(getRequestingURL());
+            }
+        });
     }
 
-//    private static void initUrlAuthentication() {
-//        Authenticator.setDefault(new Authenticator() {
-//            @Override
-//            protected PasswordAuthentication getPasswordAuthentication() {
-//                return getAuthentication(getRequestingURL());
-//            }
-//        });
-//    }
+    private static PasswordAuthentication getAuthentication(final URL url) {
+        final String userInfo = url.getUserInfo();
+        if (userInfo == null) return null;
 
-//    private static void setEnv(final String aKey, String aValue) {
-//        System.getProperties().put(aKey, aValue);
-//    }
+        final int index = userInfo.indexOf(':');
+        if (index == -1) return null;
 
-//    private static PasswordAuthentication getAuthentication(URL aUrl) {
-//        String userInfo = aUrl.getUserInfo();
-//        if (userInfo == null) return null;
-//
-//        int index = userInfo.indexOf(':');
-//        if (index == -1) return null;
-//
-//        String user = userInfo.substring(0, index);
-//        String pass = userInfo.substring(index + 1);
-//
-//        return new PasswordAuthentication(user, pass.toCharArray());
-//    }
+        final String user = userInfo.substring(0, index);
+        final String pass = userInfo.substring(index + 1);
+
+        return new PasswordAuthentication(user, pass.toCharArray());
+    }
 }
