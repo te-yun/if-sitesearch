@@ -64,6 +64,7 @@ public class CrawlerService {
             final PageFetcher pageFetcher = new PageFetcher(config);
             final RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
             final RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
+            robotstxtConfig.setEnabled(false); // crawler-commons' robots.txt rules interpretation is used later on instead
 
             final CrawlController controller;
             try {
@@ -121,6 +122,7 @@ public class CrawlerService {
         final PageFetcher pageFetcher = new PageFetcher(config);
         final RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
         final RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
+        robotstxtConfig.setEnabled(false); // crawler-commons' robots.txt rules interpretation is used later on instead
 
         final CrawlController controller;
         try {
