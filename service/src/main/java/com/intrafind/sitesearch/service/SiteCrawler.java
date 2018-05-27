@@ -18,6 +18,7 @@ package com.intrafind.sitesearch.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intrafind.sitesearch.dto.SitePage;
+import crawlercommons.robots.BaseRobotRules;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
@@ -44,6 +45,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
 public class SiteCrawler extends WebCrawler {
+
     public static final MediaType JSON_MEDIA_TYPE = MediaType.parse("application/json");
     private final static Logger LOG = LoggerFactory.getLogger(SiteCrawler.class);
     private static final Pattern BLACKLIST = Pattern.compile(".*(\\.(css|js|gif|jpg|jpeg|png|mp3|mp4|zip|gz|xml|svg))$");
@@ -61,16 +63,19 @@ public class SiteCrawler extends WebCrawler {
     private URI url;
     private String pageBodyCssSelector;
     private boolean containsQuery;
+    private BaseRobotRules robotRules;
 
     private SiteCrawler() {
     }
 
-    public SiteCrawler(UUID siteId, UUID siteSecret, URI url, String pageBodyCssSelector) {
+    public SiteCrawler(final UUID siteId, final UUID siteSecret, final URI url, final String pageBodyCssSelector, final BaseRobotRules robotRules) {
         this.siteId = siteId;
         this.siteSecret = siteSecret;
         this.url = url;
         this.pageBodyCssSelector = pageBodyCssSelector;
         this.containsQuery = siteId.equals(UUID.fromString("c7d080ff-6eec-496e-a70e-db5ec81948ab")); // mh
+
+        this.robotRules = robotRules;
     }
 
     @Override
@@ -78,8 +83,13 @@ public class SiteCrawler extends WebCrawler {
         final String href = webUrl.getURL().toLowerCase();
         return !BLACKLIST.matcher(href).matches()
                 && href.startsWith(url.toString())
+                && isAllowedForRobot(webUrl.getURL())
                 && (containsQuery || noQueryParameter(webUrl))
                 ;
+    }
+
+    private boolean isAllowedForRobot(final String url) {
+        return robotRules.isAllowed(url);
     }
 
     private boolean noQueryParameter(WebURL url) {
