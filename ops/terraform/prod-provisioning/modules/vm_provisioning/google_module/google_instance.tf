@@ -9,7 +9,6 @@ provider "google" {
 }
 
 resource "google_compute_instance" "vm" {
-  // TODO do we need this?
 
 	count = "${var.count}"
 	zone = "europe-west3-b"
@@ -18,8 +17,6 @@ resource "google_compute_instance" "vm" {
 
 	service_account {
 		scopes = ["compute-rw"]
-      email = "bernard@sitesearch-195009.iam.gserviceaccount.com"
-      // TODO if we actually need this resource, we need to replace the service account with our service user
 	}
 
 	//Image to boot on
