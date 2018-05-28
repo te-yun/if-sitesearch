@@ -8,18 +8,26 @@ terraform {
 }*/
 
 module "google" {
+	//Module metadata
 	count="${var.total_vm_count - length(var.kubernetes_existing_nodes_ip_pool)}"
 	source="./modules/vm_provisioning/google_module"
-	project = "${local.gcloud_project}"
+
+	//Module variables
+	google_project = "${local.gcloud_project}"
 	credentials = "${local.credentials}"
-	name_machine = "kubernetes-node"
+	google_vm_name = "kubernetes-node"
+	google_vm_type = "n1-standard-2"
+	google_vm_image = "ubuntu-os-cloud/ubuntu-1604-lts"
 }
 
 module "kubernetes" {
-  //depends on google module
+  //This module depends on the "google" module.
+
+	//Module metadata
+	count="${var.total_vm_count}"
 	source="./modules/setup/kubernetes_module"
 
-	count="${var.total_vm_count}"
+	//Module variables
 	ip_address_list="${concat(var.kubernetes_existing_nodes_ip_pool,module.google.external_ip_address_list)}"
 	ssh_private_key = "${local.ssh_private_key}"
 	ssh_private_key_path = "${local.ssh_private_key_path}"

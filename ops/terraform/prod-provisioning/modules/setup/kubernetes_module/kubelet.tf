@@ -1,4 +1,4 @@
-#Kubernetes cluster master node
+//Kubernetes cluster master node
 module "master"{
 
 	source="master"
@@ -24,6 +24,9 @@ module "master"{
 
 }
 
+//TODO insert resource for additional master nodes
+
+//Kubernetes worker node
 resource "null_resource" "kubelet"{
 	depends_on=["module.master"]
 
@@ -61,8 +64,8 @@ resource "null_resource" "kubelet"{
 	}
 }
 
-#Anything needed to get the container structure to work
-#Contains Persistent Volume Claims / Storage Class / Role Bindings / etc.
+//Anything needed to get the container structure to work
+//Contains Persistent Volume Claims / Storage Class / Role Bindings / etc.
 resource "null_resource" "Kubernetes-Metaobjects" {
 
 	depends_on=["module.master"]
@@ -90,35 +93,36 @@ resource "null_resource" "Kubernetes-Metaobjects" {
 
 }
 
-#Sitesearch-API
-#resource "null_resource" "Sitesearch-Api"{
-#
-#	depends_on=["module.master","null_resource.Kubernetes-Metaobjects"]
-#
-#	triggers = {
-#		kubernetes_configuration_hash = "${sha1(file("./modules/setup/kubernetes_module/kubernetes_templates/kube_sitesearch_api-template.yaml"))}"
-#		scale_elasticsearch = "${var.kube_counts["sitesearch"]}"
-#	}
-#
-#	//turning the rendered template to a file and then executing
-#	provisioner "remote-exec" {
-#		inline=["export KUBECONFIG=$HOME/admin.conf ",
-#						"cat <<EOT > kube_sitesearch_api.yaml",
-#						"${data.template_file.kubernetes_sitesearch.rendered}",
-#						"EOT",
-#						"kubectl apply -f kube_sitesearch_api.yaml"]
-#	}
-#
-#	connection {
-#			user = "${var.ssh_user}"
-#			//Access IP of newly provisioned machine
-#			host = "${var.ip_address_list[0]}"
-#			type = "ssh"
-#			private_key="${var.ssh_private_key}"
-#	}
-#}
+/*Sitesearch-API
+resource "null_resource" "Sitesearch-Api"{
 
-#Tagging Service
+	depends_on=["module.master","null_resource.Kubernetes-Metaobjects"]
+
+	triggers = {
+		kubernetes_configuration_hash = "${sha1(file("./modules/setup/kubernetes_module/kubernetes_templates/kube_sitesearch_api-template.yaml"))}"
+		scale_elasticsearch = "${var.kube_counts["sitesearch"]}"
+	}
+
+	//turning the rendered template to a file and then executing
+	provisioner "remote-exec" {
+		inline=["export KUBECONFIG=$HOME/admin.conf ",
+						"cat <<EOT > kube_sitesearch_api.yaml",
+						"${data.template_file.kubernetes_sitesearch.rendered}",
+						"EOT",
+						"kubectl apply -f kube_sitesearch_api.yaml"]
+	}
+
+	connection {
+			user = "${var.ssh_user}"
+			//Access IP of newly provisioned machine
+			host = "${var.ip_address_list[0]}"
+			type = "ssh"
+			private_key="${var.ssh_private_key}"
+	}
+}
+*/
+
+//Tagging Service
 resource "null_resource" "Tagging-Service"{
 
 	depends_on=["module.master","null_resource.Kubernetes-Metaobjects"]
@@ -145,7 +149,7 @@ resource "null_resource" "Tagging-Service"{
 	}
 }
 
-#Elasticsearch
+//Elasticsearch
 resource "null_resource" "Sitesearch-Elasticsearch"{
 
 	depends_on=["module.master","null_resource.Kubernetes-Metaobjects"]
@@ -173,7 +177,7 @@ resource "null_resource" "Sitesearch-Elasticsearch"{
 	}
 }
 
-#Seach Service
+//Seach Service
 resource "null_resource" "Sitesearch-SearchService"{
 
 	depends_on=["null_resource.Sitesearch-Elasticsearch","module.master","null_resource.Kubernetes-Metaobjects"]

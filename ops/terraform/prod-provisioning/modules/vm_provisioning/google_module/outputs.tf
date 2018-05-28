@@ -1,3 +1,5 @@
+//This file makes the internal and external IPs of the Google VMs available to other parts of the code
+
 output "internal_ip_address_list" {
   value = "${google_compute_instance.vm.*.network_interface.0.address}"
 }
