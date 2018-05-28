@@ -39,7 +39,7 @@ spec:
       #Describing containers in the pods. In our case we only have 1 container per pod.
       containers:
         - name: sitesearch-searchservice
-          image: docker-registry.sitesearch.cloud/intrafind/sis-searchservice:2.4.6.7
+          image: docker-registry.sitesearch.cloud/intrafind/sis-search-service:2.4.6.7
           env:
             #The elasticsearch_hosts environment variable points to the service (the reverse proxy)
             - name: elasticsearch_hosts
