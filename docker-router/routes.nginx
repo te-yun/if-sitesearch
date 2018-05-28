@@ -104,8 +104,8 @@ server {
     large_client_header_buffers 4 32k;
 
     location / {
-        #        proxy_pass http://10.105.83.185:9603; # Kubernetes IP address
-        proxy_pass http://if-tagging-service:9603;
+        proxy_pass http://10.105.83.185:9603; # Kubernetes IP address
+        #        proxy_pass http://if-tagging-service:9603;
     }
 }
 
