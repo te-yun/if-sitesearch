@@ -12,6 +12,7 @@ services:
     environment:
       - xpack.security.enabled=false
       - xpack.monitoring.report_stats=false
+      - xpack.monitoring.collection.enabled=true
       - ELASTICSEARCH_URL=http://elk-elasticsearch:9200
 #      SERVER_NAME: elk-elasticsearch
     #      KIBANA_DEFAULTAPPID: kibana.defaultAppId
