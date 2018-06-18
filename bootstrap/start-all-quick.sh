@@ -8,10 +8,10 @@ sudo rm /home/alexander_orlov/buildAgent/logs/buildAgent.properties.lock
 docker start teamcity-agent-venus
 docker start teamcity-agent-merkur
 
-docker start sitesearch-elasticsearch
-docker start sitesearch-elasticsearch-1
-docker start sitesearch-search-service
-docker start sitesearch-search-service-1
+#docker start sitesearch-elasticsearch # replaced by Kubernetes
+#docker start sitesearch-elasticsearch-1 # replaced by Kubernetes
+#docker start sitesearch-search-service # replaced by Kubernetes
+#docker start sitesearch-search-service-1 # replaced by Kubernetes
 
 docker start if-sitesearch
 docker start if-sitesearch-green
@@ -21,10 +21,10 @@ docker start if-sitesearch-blue-1
 
 docker start consul
 
-docker restart if-tagging-service
+#docker restart if-tagging-service # replaced by Kubernetes
 
 docker start router
-docker start if-app-webcrawler
+#docker start if-app-webcrawler # removed/deprecated for good
 
 sudo sysctl -w vm.max_map_count=262144 # required for ELK's Elasticsearch
 docker-compose --file opt/docker-compose-elk.yaml -p sitesearch up -d
