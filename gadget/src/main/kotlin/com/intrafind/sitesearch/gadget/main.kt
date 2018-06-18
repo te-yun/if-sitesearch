@@ -143,7 +143,7 @@ private fun trackEnabledSearch() {
             "hitType: 'event'," +
             "eventCategory: 'GSG'," +
             "eventAction: 'enabledSearch'," +
-            "eventLabel: document.getElementById('siteId').textContent + ' - ' + window.document.referrer" +
+            "eventLabel: document.getElementById('siteId').textContent + ' - ' + window.document.referrer + ' - ' + document.getElementById('url').value" +
             "})")
 }
 
