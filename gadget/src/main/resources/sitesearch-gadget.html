@@ -47,17 +47,17 @@
 <div class="wrapper">
     <div class="form-inline defaultValidity" id="websiteUrl-container">
         <label for="url">
-            <span class="fa fa-wordpress"></span>
+            <span class="fa fa-globe"></span>
             Website URL
         </label>
+        <div class="tipsy"
+             title="Provide the URL of your website to create an initial index for your website.">
+        </div>
         <div class="tipsy-container">
             <input type="text" id="url"
                    placeholder="Website URL, e.g. https://sitesearch.cloud"
                    value="https://sitesearch.cloud"
             >
-            <div class="tipsy"
-                 title="Provide the URL of your website to create an initial index for your website.">
-            </div>
             <div class="error">Invalid URL - consider omitting/adding <em>www</em> or replacing <em>http</em> with <em>https</em>
             </div>
             <div class="subline">Up to 500 pages of a website are crawled in this <strong>evaluation mode</strong></div>
@@ -101,7 +101,7 @@
         </label>
         <div class="tipsy-container">
             <input type="text" id="email"
-                   placeholder="search.integrator@example.com"
+                   placeholder="info@example.com"
                    value="">
             <div class="tipsy"
                  title="E-mail address to receive all integration data, incl. Site Secret."></div>
@@ -152,7 +152,7 @@
 
 <div class="button-wrapper">
     <button id="index" class="button-wrapper" title="Extract content from website"
-            onclick="gadget.com.intrafind.sitesearch.gadget.triggerFirstUsageOwnership(); gtag_report_conversion();"
+            onclick="gtag_report_conversion(); gadget.com.intrafind.sitesearch.gadget.triggerFirstUsageOwnership();"
             disabled>
         Enable Search
     </button>
