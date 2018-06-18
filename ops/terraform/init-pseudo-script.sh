@@ -1,9 +1,17 @@
 #!/usr/bin/env sh
 return 0
 
-gcloud config set disable_prompts true
+#execute as UID 1000 user
+#gcloud config set disable_prompts true
+#gcloud config set compute/zone europe-west3-c
+
+gcloud compute disks delete elasticsearch-disk-1
+gcloud compute disks delete elasticsearch-disk-2
+gcloud compute disks delete elasticsearch-disk-quorum
+gcloud compute disks delete searchservice-disk-1
+gcloud compute disks delete searchservice-disk-2
+
 cd /srv/if-sitesearch/ops/terraform/prod-provisioning/
-sudo su ubuntu
 
 sudo -u ubuntu terraform destroy
 
