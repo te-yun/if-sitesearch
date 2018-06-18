@@ -31,6 +31,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -72,6 +73,7 @@ public class SmokeTest {
     @Autowired
     private TestRestTemplate caller;
 
+    @Ignore("deprecate crawler")
     @Test
     public void assureCrawlerProtection() throws Exception {
         final Request request = new Request.Builder()
