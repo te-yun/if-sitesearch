@@ -128,17 +128,6 @@ public class SmokeTest {
         assertEquals(HttpStatus.MOVED_PERMANENTLY, response.getStatusCode());
     }
 
-//    @Test
-//    public void redirectFromUnencryptedWWW() { // fails quite often because of 1&1
-//        final ResponseEntity<String> response = caller.exchange(
-//                "http://www.sitesearch.cloud",
-//                HttpMethod.GET,
-//                HttpEntity.EMPTY,
-//                String.class
-//        );
-//        assertEquals(HttpStatus.MOVED_PERMANENTLY, response.getStatusCode());
-//    }
-
     @Test
     public void redirectFromWWW() { // fails quite often because of 1&1
         final ResponseEntity<String> response = caller.exchange(
@@ -149,18 +138,6 @@ public class SmokeTest {
         );
         assertEquals(HttpStatus.MOVED_PERMANENTLY, response.getStatusCode());
     }
-
-//    @Test
-//    public void productFrontpageContent() {
-//        final ResponseEntity<String> response = caller.exchange(
-//                "https://sitesearch.cloud",
-//                HttpMethod.GET,
-//                HttpEntity.EMPTY,
-//                String.class
-//        );
-//        assertEquals(HttpStatus.OK, response.getStatusCode());
-//        assertTrue(response.getBody().contains(PRODUCT_FRONTPAGE_MARKER));
-//    }
 
     @Test
     public void redirectFromHttpApiDomain() {
