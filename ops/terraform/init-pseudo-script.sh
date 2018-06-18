@@ -13,7 +13,7 @@ gcloud compute disks delete searchservice-disk-2
 
 cd /srv/if-sitesearch/ops/terraform/prod-provisioning/
 
-sudo -u ubuntu terraform destroy
+terraform destroy
 
 #sudo -u ubuntu terraform destroy -target=module.kubernetes.null_resource.Sitesearch-Elasticsearch
 #sudo -u ubuntu kubectl delete -f /home/ubuntu/kube_elasticsearch.yaml
@@ -72,11 +72,12 @@ sudo chown 1000:1000 -R /mnt/searchservice-disk-1
 sudo chown 1000:1000 -R /mnt/searchservice-disk-2
 
 
-# detach disks before this step; also possible via VM Instance UI
+# detach disks before terraform; also possible via VM Instance UI
 gcloud compute instances detach-disk dev --disk elasticsearch-disk-1
 gcloud compute instances detach-disk dev --disk elasticsearch-disk-2
 gcloud compute instances detach-disk dev --disk elasticsearch-disk-quorum
 gcloud compute instances detach-disk dev --disk searchservice-disk-1
 gcloud compute instances detach-disk dev --disk searchservice-disk-2
 
-sudo -u ubuntu terraform apply
+#sudo -u ubuntu terraform apply
+terraform apply
