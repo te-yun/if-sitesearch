@@ -253,9 +253,15 @@ a:hover {
 }
 
 .if-checkbox:disabled + label:before {
+    background-color: transparent;
+    box-shadow: none;
+    border-color: #dedede;
+}
+
+.if-checkbox:disabled:checked + label:before {
     background-color: #bbb;
     box-shadow: none;
-    border-color: #ddd;
+    border-color: #dedede;
 }
 
 .if-checkbox:checked + label:after {
