@@ -235,11 +235,8 @@ a:hover {
     vertical-align: text-bottom;
     width: 20px;
     height: 20px;
-    background: #00aeef;
-}
-
-.if-checkbox:hover + label:before {
-    background: #00aeef;
+    box-sizing: border-box;
+    border: 2px solid #00aeef;
 }
 
 .if-checkbox:focus + label:before {
@@ -256,8 +253,15 @@ a:hover {
 }
 
 .if-checkbox:disabled + label:before {
+    background-color: transparent;
     box-shadow: none;
-    background: #ddd;
+    border-color: #dedede;
+}
+
+.if-checkbox:disabled:checked + label:before {
+    background-color: #bbb;
+    box-shadow: none;
+    border-color: #dedede;
 }
 
 .if-checkbox:checked + label:after {
