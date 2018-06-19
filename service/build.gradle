@@ -74,6 +74,7 @@ dependencies {
     compile "com.google.apis:google-api-services-gmail:v1-rev82-1.23.0"
 
     compile "org.jsoup:jsoup:1.11.3"
+    compile "org.elasticsearch:elasticsearch:6.3.0"
 }
 
 //test {

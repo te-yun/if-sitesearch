@@ -11,7 +11,7 @@ gcloud compute disks delete elasticsearch-disk-quorum
 gcloud compute disks delete searchservice-disk-1
 gcloud compute disks delete searchservice-disk-2
 
-cd /srv/if-sitesearch/ops/terraform/prod-provisioning/
+cd /srv/if-sitesearch/ops/terraform/prod-provisioning
 
 terraform destroy
 

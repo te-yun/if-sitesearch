@@ -122,7 +122,6 @@ resource "null_resource" "Sitesearch-Api"{
 }
 */
 
-//Tagging Service
 resource "null_resource" "Tagging-Service"{
 
 	depends_on=["module.master","null_resource.Kubernetes-Metaobjects"]
@@ -149,7 +148,6 @@ resource "null_resource" "Tagging-Service"{
 	}
 }
 
-//Elasticsearch
 resource "null_resource" "Sitesearch-Elasticsearch"{
 
 	depends_on=["module.master","null_resource.Kubernetes-Metaobjects"]
@@ -177,10 +175,12 @@ resource "null_resource" "Sitesearch-Elasticsearch"{
 	}
 }
 
-//Seach Service
 resource "null_resource" "Sitesearch-SearchService"{
 
-	depends_on=["null_resource.Sitesearch-Elasticsearch","module.master","null_resource.Kubernetes-Metaobjects"]
+  depends_on = [
+    "null_resource.Sitesearch-Elasticsearch",
+    "module.master",
+    "null_resource.Kubernetes-Metaobjects"]
 
 	triggers = {
 		kubernetes_configuration_hash = "${sha1(file("./modules/setup/kubernetes_module/kubernetes_templates/kube_searchservice-template.yaml"))}"

@@ -3,8 +3,8 @@
 echo "== startup-script =="
 # toolchain
 docker start teamcity-server
-sudo rm /home/alexander_orlov/buildAgent/logs/buildAgent.properties.lock
-/home/alexander_orlov/buildAgent/bin/agent.sh start
+sudo rm /home/ubuntu/buildAgent/logs/buildAgent.properties.lock
+/home/ubuntu/buildAgent/bin/agent.sh start
 docker start teamcity-agent-venus
 docker start teamcity-agent-merkur
 
