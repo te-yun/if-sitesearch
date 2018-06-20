@@ -48,7 +48,7 @@ public class Application {
     ResponseEntity<Subscription> subscribeViaSite(
             @PathVariable(value = "siteId") UUID siteId,
             @PathVariable(value = "subscriptionId") String subscriptionId,
-            @RequestBody(required = false) Subscription subscription
+            @RequestBody Subscription subscription
     ) {
         LOG.info("subscriptions - subscriptionId: " + subscriptionId);
         LOG.info("subscriptions - siteId: " + siteId);

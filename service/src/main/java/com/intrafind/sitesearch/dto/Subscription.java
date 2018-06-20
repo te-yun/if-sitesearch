@@ -21,12 +21,12 @@ import java.util.UUID;
 public class Subscription {
     private String id;
     private UUID siteId;
-    private Object rasSubscription;
+    private Object rawSubscription;
 
-    public Subscription(String id, UUID siteId, Object rasSubscription) {
+    public Subscription(String id, UUID siteId, Object rawSubscription) {
         this.id = id;
         this.siteId = siteId;
-        this.rasSubscription = rasSubscription;
+        this.rawSubscription = rawSubscription;
     }
 
     public String getId() {
@@ -37,7 +37,7 @@ public class Subscription {
         return siteId;
     }
 
-    public Object getRasSubscription() {
-        return rasSubscription;
+    public Object getRawSubscription() {
+        return rawSubscription;
     }
 }
