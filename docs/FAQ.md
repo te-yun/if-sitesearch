@@ -83,7 +83,7 @@ Or what should be the first thing, I need to do, to **get started** with Site Se
     You need to provide a *siteSecret* as a query parameter to authorize operations that modify the index of a site.
 
 * How can I make my website searchable?
-    * The easiest & quickest way is to use the [Site Search Gadget](https://api.sitesearch.cloud/sitesearch-gadget.html)
+    * The easiest & quickest way is to use the [Site Search Gadget](https://sitesearch.cloud/getting-started/)
     to **create an index** from an RSS / Atom feed and make it **instantly searchable** without even embedding it into a website.
     If your website does not expose any feeds, you need to use our open [API](https://api.sitesearch.cloud/swagger-ui.html#!/page45controller/indexNewSiteUsingPOST)
     to **index your website page by page** calling the API.
