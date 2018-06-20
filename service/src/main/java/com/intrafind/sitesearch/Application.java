@@ -16,6 +16,7 @@
 
 package com.intrafind.sitesearch;
 
+import com.intrafind.sitesearch.dto.Subscription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -25,6 +26,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.net.URI;
+import java.util.UUID;
 
 @SpringBootApplication
 @RestController
@@ -40,6 +43,21 @@ import java.net.URI;
 public class Application {
     private final static Logger LOG = LoggerFactory.getLogger(Application.class);
     public static final URI IFINDER_CORE = URI.create("https://sitesearch:" + System.getenv("SERVICE_SECRET") + "@" + System.getenv("SIS_SERVICE_HOST") + "/hessian"); // TODO consider trying json endpoint
+
+    @RequestMapping(path = "/sites/{siteId}/subscriptions/{subscriptionId}", method = RequestMethod.POST)
+    ResponseEntity<Subscription> subscribeViaSite(
+            @PathVariable(value = "siteId") UUID siteId,
+            @PathVariable(value = "subscriptionId") String subscriptionId,
+            @RequestBody(required = false) Subscription subscription
+    ) {
+        LOG.info("subscriptions - subscriptionId: " + subscriptionId);
+        LOG.info("subscriptions - siteId: " + siteId);
+        LOG.info("subscriptions - subscription: " + subscription);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(new Subscription(subscriptionId, siteId, subscription));
+    }
 
     @RequestMapping(path = "/subscriptions", method = RequestMethod.POST)
     ResponseEntity<Object> subscribe(
