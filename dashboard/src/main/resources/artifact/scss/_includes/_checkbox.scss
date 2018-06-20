@@ -19,11 +19,8 @@
     vertical-align: text-bottom;
     width: 20px;
     height: 20px;
-    background: $blue;
-}
-
-.sis-checkbox:hover + label:before {
-    background: $blue;
+    box-sizing: border-box;
+    border: 2px solid $blue;
 }
 
 .sis-checkbox:focus + label:before {
@@ -40,8 +37,15 @@
 }
 
 .sis-checkbox:disabled + label:before {
+    background: #bbb;
     box-shadow: none;
-    background: #ddd;
+    border-color: #dedede;
+}
+
+.if-checkbox:disabled:checked + label:before {
+    background-color: #bbb;
+    box-shadow: none;
+    border-color: #dedede;
 }
 
 .sis-checkbox:checked + label:after {

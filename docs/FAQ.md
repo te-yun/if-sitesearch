@@ -123,6 +123,14 @@ Or what should be the first thing, I need to do, to **get started** with Site Se
     * The crawler can either crawl a site using its sitemaps or using its links. 
     Nested sitemaps are supported as well.
     
+* What is the impact on my web server when Site Search crawls my site to index their pages?
+    * The [Getting Started Gadget](https://sitesearch.cloud/getting-started/) 
+    crawls a site with a speed of around *two pages per second*. 
+    Even very moderate web servers are able to handle this load. The *regular recrawls for subscribed customers
+    happen with around the same speed*, except for very huge websites, with more than 10k pages, where we can increase
+    the recrawling speed to 100 pages per second or even more. However in this case we are going to notify 
+    a service subscriber and provide our subscribers with a speed their web servers can handle without any disruption to their customers.     
+
 * Content Extraction Selector
     * This is a feature that gives you the opportunity to provide a CSS selector that is used
     to extract a page's content. Instead of indexing everything in a page's body, one can limit
