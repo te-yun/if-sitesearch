@@ -80,7 +80,14 @@ public class Application {
                 LOG.info("siteId: " + siteId + " - subscriptionId: " + subscriptionId);
                 return ResponseEntity
                         .status(HttpStatus.CREATED)
-                        .body(new Subscription(subscriptionId, order.getPaymentMethod(), siteId, subscription));
+                        .body(new Subscription(
+                                subscriptionId,
+                                order.getLineItems().<WooCommerceOrder.LineItem>get(0).getSku(),
+                                order.getPaymentMethod(),
+                                siteId,
+                                "",
+                                subscription)
+                        );
             }
         } catch (final IOException e) {
             LOG.error("siteId: " + siteId + " - subscriptionId: " + subscriptionId + " - subscribeViaSite_ERROR: " + e.getMessage());

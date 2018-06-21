@@ -16,22 +16,42 @@
 
 package com.intrafind.sitesearch.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WooCommerceOrder {
-    @JsonProperty("payment_method")
     private String paymentMethod;
+    private List<LineItem> lineItems;
 
-    private WooCommerceOrder() {
-    }
-
-    public WooCommerceOrder(String paymentMethod) {
+    @JsonCreator
+    public WooCommerceOrder(@JsonProperty("payment_method") String paymentMethod, @JsonProperty("line_items") List<LineItem> lineItems) {
         this.paymentMethod = paymentMethod;
+        this.lineItems = lineItems;
     }
 
     public String getPaymentMethod() {
         return paymentMethod;
+    }
+
+    public List<LineItem> getLineItems() {
+        return lineItems;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static final class LineItem {
+        private String sku;
+
+        @JsonCreator
+        public LineItem(@JsonProperty("sku") String sku) {
+            this.sku = sku;
+        }
+
+        public String getSku() {
+            return sku;
+        }
     }
 }

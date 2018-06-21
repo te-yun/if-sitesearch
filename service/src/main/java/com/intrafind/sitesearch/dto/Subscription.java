@@ -21,13 +21,17 @@ import java.util.UUID;
 public class Subscription {
     private String id;
     private String plan;
+    private String paymentMethod;
     private UUID siteId;
+    private String affiliate;
     private Object rawSubscription;
 
-    public Subscription(String id, String plan, UUID siteId, Object rawSubscription) {
+    public Subscription(String id, String plan, String paymentMethod, UUID siteId, String affiliate, Object rawSubscription) {
         this.id = id;
         this.plan = plan;
+        this.paymentMethod = paymentMethod;
         this.siteId = siteId;
+        this.affiliate = affiliate;
         this.rawSubscription = rawSubscription;
     }
 
@@ -41,6 +45,14 @@ public class Subscription {
 
     public UUID getSiteId() {
         return siteId;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public String getAffiliate() {
+        return affiliate;
     }
 
     public Object getRawSubscription() {
