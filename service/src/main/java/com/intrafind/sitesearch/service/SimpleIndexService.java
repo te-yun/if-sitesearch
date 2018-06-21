@@ -14,36 +14,26 @@
  * limitations under the License.
  */
 
-package com.intrafind.sitesearch.dto;
+package com.intrafind.sitesearch.service;
 
-import java.util.UUID;
+import com.intrafind.api.Document;
+import com.intrafind.api.index.Index;
 
-public class Subscription {
-    private String id;
-    private String plan;
-    private UUID siteId;
-    private Object rawSubscription;
+import java.util.List;
 
-    public Subscription(String id, String plan, UUID siteId, Object rawSubscription) {
-        this.id = id;
-        this.plan = plan;
-        this.siteId = siteId;
-        this.rawSubscription = rawSubscription;
+public class SimpleIndexService implements Index {
+    @Override
+    public void index(Document... documents) {
+
     }
 
-    public String getPlan() {
-        return plan;
+    @Override
+    public List<Document> fetch(String[] strings, String... strings1) {
+        return null;
     }
 
-    public String getId() {
-        return id;
-    }
+    @Override
+    public void delete(String... strings) {
 
-    public UUID getSiteId() {
-        return siteId;
-    }
-
-    public Object getRawSubscription() {
-        return rawSubscription;
     }
 }

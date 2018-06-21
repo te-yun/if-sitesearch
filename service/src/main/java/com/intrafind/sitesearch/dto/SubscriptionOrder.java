@@ -16,34 +16,5 @@
 
 package com.intrafind.sitesearch.dto;
 
-import java.util.UUID;
-
-public class Subscription {
-    private String id;
-    private String plan;
-    private UUID siteId;
-    private Object rawSubscription;
-
-    public Subscription(String id, String plan, UUID siteId, Object rawSubscription) {
-        this.id = id;
-        this.plan = plan;
-        this.siteId = siteId;
-        this.rawSubscription = rawSubscription;
-    }
-
-    public String getPlan() {
-        return plan;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public UUID getSiteId() {
-        return siteId;
-    }
-
-    public Object getRawSubscription() {
-        return rawSubscription;
-    }
+public class SubscriptionOrder {
 }

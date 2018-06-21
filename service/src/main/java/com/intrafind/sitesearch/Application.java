@@ -17,6 +17,7 @@
 package com.intrafind.sitesearch;
 
 import com.intrafind.sitesearch.dto.Subscription;
+import com.intrafind.sitesearch.dto.SubscriptionOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -48,15 +49,19 @@ public class Application {
     ResponseEntity<Subscription> subscribeViaSite(
             @PathVariable(value = "siteId") UUID siteId,
             @PathVariable(value = "subscriptionId") String subscriptionId,
-            @RequestBody Object subscription
+            @RequestBody SubscriptionOrder subscription
     ) {
         LOG.info("subscriptions - subscriptionId: " + subscriptionId);
         LOG.info("subscriptions - siteId: " + siteId);
         LOG.info("subscriptions - subscription: " + subscription);
 
+        // TODO fetch order via orderId from Woo Commerce REST API
+        // TODO update site profile to reflect a subscription
+        // >>>> add entire Subscription to SiteProfile
+        // TODO add siteId to crawlStatus for scheduled crawling (optional?)
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(new Subscription(subscriptionId, siteId, subscription));
+                .body(new Subscription(subscriptionId, "PLAN_NAME", siteId, subscription));
     }
 
     @RequestMapping(path = "/subscriptions", method = RequestMethod.POST)

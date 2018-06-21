@@ -27,19 +27,18 @@ import java.net.URL;
 
 /**
  * This class is a helper class for the instantiation of IntraFind's core services.
- * TODO consider trying JSON endpoint
  */
 public enum IfinderCoreClient {
     ;
     private static final Logger LOG = LoggerFactory.getLogger(IfinderCoreClient.class);
-    private final static HessianProxyFactory hessianProxyFactory;
+    private static final HessianProxyFactory HESSIAN_PROXY_FACTORY;
 
     static {
-        System.getProperties().put("http.maxConnections", "128"); // it might be necessary to change this during JVM startup!
+        System.getProperties().put("http.maxConnections", "256"); // it might be necessary to change this during JVM startup!
 
-        hessianProxyFactory = new HessianProxyFactory();
-        hessianProxyFactory.setHessian2Reply(true);
-        hessianProxyFactory.setHessian2Request(true);
+        HESSIAN_PROXY_FACTORY = new HessianProxyFactory();
+        HESSIAN_PROXY_FACTORY.setHessian2Reply(true);
+        HESSIAN_PROXY_FACTORY.setHessian2Request(true);
 
         initUrlAuthentication();
     }
@@ -54,7 +53,7 @@ public enum IfinderCoreClient {
     @SuppressWarnings("unchecked")
     public static <T> T newHessianClient(final Class<T> anInterface, final String url) {
         try {
-            return (T) hessianProxyFactory.create(anInterface, url);
+            return (T) HESSIAN_PROXY_FACTORY.create(anInterface, url);
         } catch (final MalformedURLException exception) {
             LOG.error("HESSIAN_CLIENT_ERROR: " + exception.getMessage());
             throw new RuntimeException(exception);
