@@ -16,8 +16,10 @@
 
 package com.intrafind.sitesearch.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class WooCommerceOrder {
     @JsonProperty("payment_method")
     private String paymentMethod;
