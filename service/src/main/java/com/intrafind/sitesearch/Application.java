@@ -17,7 +17,6 @@
 package com.intrafind.sitesearch;
 
 import com.intrafind.sitesearch.dto.Subscription;
-import com.intrafind.sitesearch.dto.SubscriptionOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -49,7 +48,7 @@ public class Application {
     ResponseEntity<Subscription> subscribeViaSite(
             @PathVariable(value = "siteId") UUID siteId,
             @PathVariable(value = "subscriptionId") String subscriptionId,
-            @RequestBody SubscriptionOrder subscription
+            @RequestBody Object subscription
     ) {
         LOG.info("subscriptions - subscriptionId: " + subscriptionId);
         LOG.info("subscriptions - siteId: " + siteId);
