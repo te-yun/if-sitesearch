@@ -92,7 +92,7 @@ public class CrawlerController {
         this.crawlerService = crawlerService;
     }
 
-    static final ObjectMapper MAPPER = new ObjectMapper();
+    public static final ObjectMapper MAPPER = new ObjectMapper();
     private static final List<String> SCOPES = Collections.singletonList(GmailScopes.GMAIL_SEND);
     private static final String SERVICE_CONFIG_PATH = "config/";
     private static final File DATA_STORE_DIR = new File(SERVICE_CONFIG_PATH + "gmail-api");

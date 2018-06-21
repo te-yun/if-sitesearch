@@ -64,6 +64,7 @@ public class BaseConfig {
                 .paths(Predicates.not(PathSelectors.regex("/autocomplete")))
                 .paths(Predicates.not(PathSelectors.regex("/sites/rss")))
                 .paths(Predicates.not(PathSelectors.regex("/sites/.+/pages/.*")))
+                .paths(Predicates.not(PathSelectors.regex("/sites/.+/recrawl")))
                 .paths(Predicates.not(PathSelectors.regex("/sites/.+/email.*")))
                 .paths(Predicates.not(PathSelectors.regex("/sites/.+/xml")))
                 .paths(Predicates.not(PathSelectors.regex("/sites/.+/rss")))

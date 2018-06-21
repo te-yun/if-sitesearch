@@ -16,7 +16,12 @@
 
 package com.intrafind.sitesearch;
 
+import com.intrafind.sitesearch.controller.CrawlerController;
 import com.intrafind.sitesearch.dto.Subscription;
+import com.intrafind.sitesearch.dto.WooCommerceOrder;
+import com.intrafind.sitesearch.service.SiteCrawler;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -34,6 +39,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.UUID;
 
@@ -50,17 +56,33 @@ public class Application {
             @PathVariable(value = "subscriptionId") String subscriptionId,
             @RequestBody Object subscription
     ) {
-        LOG.info("subscriptions - subscriptionId: " + subscriptionId);
-        LOG.info("subscriptions - siteId: " + siteId);
         LOG.info("subscriptions - subscription: " + subscription);
 
-        // TODO fetch order via orderId from Woo Commerce REST API
-        // TODO update site profile to reflect a subscription
-        // >>>> add entire Subscription to SiteProfile
-        // TODO add siteId to crawlStatus for scheduled crawling (optional?)
+        final Request request = new Request.Builder()
+                .url("https://example.com/ORDER_ID/?consumerkey&consumer_secret")
+                .build();
+        try {
+            final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
+            if (HttpStatus.OK.value() == response.code() && response.body() != null) {
+                final WooCommerceOrder order = CrawlerController.MAPPER.readValue(response.body().charStream(), WooCommerceOrder.class);
+                // TODO fetch order via orderId from Woo Commerce REST API
+
+                // TODO update site profile to reflect a subscription
+                // >>>> add entire Subscription to SiteProfile
+                // TODO add siteId to crawlStatus for scheduled crawling (optional?)
+
+                LOG.info("siteId: " + siteId + " - subscriptionId: " + subscriptionId);
+                return ResponseEntity
+                        .status(HttpStatus.CREATED)
+                        .body(new Subscription(subscriptionId, order.getSku(), siteId, subscription));
+            }
+        } catch (final IOException e) {
+            LOG.error("siteId: " + siteId + " - subscriptionId: " + subscriptionId + " - subscribeViaSite_ERROR: " + e.getMessage());
+        }
+
         return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(new Subscription(subscriptionId, "PLAN_NAME", siteId, subscription));
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .build();
     }
 
     @RequestMapping(path = "/subscriptions", method = RequestMethod.POST)
