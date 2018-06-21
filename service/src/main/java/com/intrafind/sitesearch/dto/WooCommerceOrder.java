@@ -16,14 +16,20 @@
 
 package com.intrafind.sitesearch.dto;
 
-public class WooCommerceOrder {
-    private String sku;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    public WooCommerceOrder(String sku) {
-        this.sku = sku;
+public class WooCommerceOrder {
+    @JsonProperty("payment_method")
+    private String paymentMethod;
+
+    private WooCommerceOrder() {
     }
 
-    public String getSku() {
-        return sku;
+    public WooCommerceOrder(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
     }
 }

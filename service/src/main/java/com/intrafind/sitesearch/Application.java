@@ -69,7 +69,7 @@ public class Application {
                 .build();
         try {
             final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
-            if (HttpStatus.OK.value() == response.code() && response.body() != null) {
+            if (isExistingOrder(response)) {
                 final WooCommerceOrder order = CrawlerController.MAPPER.readValue(response.body().charStream(), WooCommerceOrder.class);
                 // TODO fetch order via orderId from Woo Commerce REST API
 
@@ -80,7 +80,7 @@ public class Application {
                 LOG.info("siteId: " + siteId + " - subscriptionId: " + subscriptionId);
                 return ResponseEntity
                         .status(HttpStatus.CREATED)
-                        .body(new Subscription(subscriptionId, order.getSku(), siteId, subscription));
+                        .body(new Subscription(subscriptionId, order.getPaymentMethod(), siteId, subscription));
             }
         } catch (final IOException e) {
             LOG.error("siteId: " + siteId + " - subscriptionId: " + subscriptionId + " - subscribeViaSite_ERROR: " + e.getMessage());
@@ -89,6 +89,10 @@ public class Application {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .build();
+    }
+
+    private boolean isExistingOrder(final Response response) {
+        return HttpStatus.OK.value() == response.code() && response.body() != null;
     }
 
     @RequestMapping(path = "/subscriptions", method = RequestMethod.POST)

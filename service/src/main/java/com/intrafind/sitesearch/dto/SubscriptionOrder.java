@@ -17,4 +17,6 @@
 package com.intrafind.sitesearch.dto;
 
 public class SubscriptionOrder {
+    private SubscriptionOrder() {
+    }
 }
