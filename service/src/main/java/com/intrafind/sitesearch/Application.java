@@ -49,6 +49,8 @@ import java.util.UUID;
 public class Application {
     private final static Logger LOG = LoggerFactory.getLogger(Application.class);
     public static final URI IFINDER_CORE = URI.create("https://sitesearch:" + System.getenv("SERVICE_SECRET") + "@" + System.getenv("SIS_SERVICE_HOST") + "/hessian"); // TODO consider trying json endpoint
+    private static final String WOO_COMMERCE_CONSUMER_KEY = System.getenv("WOO_COMMERCE_CONSUMER_KEY");
+    private static final String WOO_COMMERCE_CONSUMER_SECRET = System.getenv("WOO_COMMERCE_CONSUMER_SECRET");
 
     @RequestMapping(path = "/sites/{siteId}/subscriptions/{subscriptionId}", method = RequestMethod.POST)
     ResponseEntity<Subscription> subscribeViaSite(
@@ -59,7 +61,11 @@ public class Application {
         LOG.info("subscriptions - subscription: " + subscription);
 
         final Request request = new Request.Builder()
-                .url("https://example.com/ORDER_ID/?consumerkey&consumer_secret")
+                .url("https://sitesearch.online/wp-json/wc/v1/orders/"
+                        + subscriptionId
+                        + "?consumer_key=" + WOO_COMMERCE_CONSUMER_KEY
+                        + "&consumer_secret=" + WOO_COMMERCE_CONSUMER_SECRET
+                )
                 .build();
         try {
             final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
