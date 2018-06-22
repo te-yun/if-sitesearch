@@ -77,7 +77,7 @@ public class Application {
                 final String affiliate = order.getAffiliate();
                 LOG.info("siteId: " + siteId + " - subscriptionId: " + subscriptionId + " - subscriptionPlan: " + subscriptionPlan + " - affiliate: " + affiliate);
                 return ResponseEntity
-                        .status(HttpStatus.CREATED)
+                        .status(HttpStatus.OK)
                         .body(new Subscription(
                                 subscriptionId,
                                 subscriptionPlan,
@@ -110,20 +110,13 @@ public class Application {
             @RequestParam(value = "redirect_uri", required = false) String redirect_uri,
             @RequestBody(required = false) Object subscription
     ) {
-        LOG.info("subscriptions - code: " + code);
-        LOG.info("subscriptions - token: " + token);
-        LOG.info("subscriptions - id: " + id);
-        LOG.info("subscriptions - secret: " + secret);
-        LOG.info("subscriptions - state: " + state);
-        LOG.info("subscriptions - redirect_uri: " + redirect_uri);
-        LOG.info("subscriptions - subscription: " + subscription);
+        LOG.info("subscriptions - code: " + code + " - token: " + token + " - id: " + id
+                + " - secret: " + secret + " - state: " + state + " - redirect_uri: " + redirect_uri + " - subscription: " + subscription);
 
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .status(HttpStatus.CREATED)
                 .body(subscription);
     }
-//
-//
 //
 //    @RequestMapping(path = "/login/test", method = RequestMethod.POST)
 //    ResponseEntity<Object> login(

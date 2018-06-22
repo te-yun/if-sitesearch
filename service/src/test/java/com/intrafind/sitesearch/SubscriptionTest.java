@@ -46,7 +46,7 @@ public class SubscriptionTest {
                 HttpEntity.EMPTY,
                 Subscription.class
         );
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         final Subscription subscription = response.getBody();
         assertNotNull(subscription);
         assertNotNull(subscription.getId());
