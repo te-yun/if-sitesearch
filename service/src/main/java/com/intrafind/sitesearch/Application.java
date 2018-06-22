@@ -71,21 +71,21 @@ public class Application {
             final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
             if (isExistingOrder(response)) {
                 final WooCommerceOrder order = CrawlerController.MAPPER.readValue(response.body().charStream(), WooCommerceOrder.class);
-                // TODO fetch order via orderId from Woo Commerce REST API
-
                 // TODO update site profile to reflect a subscription
                 // >>>> add entire Subscription to SiteProfile
                 // TODO add siteId to crawlStatus for scheduled crawling (optional?)
 
-                LOG.info("siteId: " + siteId + " - subscriptionId: " + subscriptionId);
+                final String subscriptionPlan = order.getLineItems().<WooCommerceOrder.LineItem>get(0).getSku();
+                final String affiliate = "NONE";
+                LOG.info("siteId: " + siteId + " - subscriptionId: " + subscriptionId + " - subscriptionPlan: " + subscriptionPlan + " - affiliate: " + affiliate);
                 return ResponseEntity
                         .status(HttpStatus.CREATED)
                         .body(new Subscription(
                                 subscriptionId,
-                                order.getLineItems().<WooCommerceOrder.LineItem>get(0).getSku(),
+                                subscriptionPlan,
                                 order.getPaymentMethod(),
                                 siteId,
-                                "",
+                                affiliate,
                                 subscription)
                         );
             }
