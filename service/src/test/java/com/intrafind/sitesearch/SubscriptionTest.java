@@ -16,11 +16,14 @@
 
 package com.intrafind.sitesearch;
 
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -29,8 +32,8 @@ public class SubscriptionTest {
     @Autowired
     private TestRestTemplate caller;
 
-//    @Test                       // TODO finalize
-//    public void subscribeViaSite() {
+    @Test                       // TODO finalize
+    public void subscribeViaSite() {
 //        final ResponseEntity<String> response = caller.exchange(
 //                "https://api.sitesearch.cloud/sites/"+ UUID.randomUUID(),
 //                HttpMethod.GET,
@@ -39,5 +42,6 @@ public class SubscriptionTest {
 //        );
 //        assertEquals(HttpStatus.CREATED, response.getStatusCode());
 //        assertTrue(response.getBody().contains(SmokeTest.PRODUCT_FRONTPAGE_MARKER));
-//    }
+        assertTrue(true);
+    }
 }
