@@ -126,12 +126,12 @@ public class Application {
             @RequestBody String subscription
     ) {
 
-        LOG.info(
-                "isAuthentic: " + verifySha1Signature(subscription, signature)
-                        + " - github-delivery: " + delivery
-                        + " - github-event: " + event
-                        + " - github-signature: " + signature
-                        + " - github-subscription: " + subscription
+        final boolean isAuthenticGitHubEvent = verifySha1Signature(subscription, signature);
+        LOG.info("isAuthentic: " + isAuthenticGitHubEvent
+                + " - github-delivery: " + delivery
+                + " - github-event: " + event
+                + " - github-signature: " + signature
+                + " - github-subscription: " + subscription
         );
 
         return ResponseEntity
