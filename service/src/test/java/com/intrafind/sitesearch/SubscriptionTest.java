@@ -16,14 +16,20 @@
 
 package com.intrafind.sitesearch;
 
+import com.intrafind.sitesearch.dto.Subscription;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -32,16 +38,22 @@ public class SubscriptionTest {
     @Autowired
     private TestRestTemplate caller;
 
-    @Test                       // TODO finalize
+    @Test
     public void subscribeViaSite() {
-//        final ResponseEntity<String> response = caller.exchange(
-//                "https://api.sitesearch.cloud/sites/"+ UUID.randomUUID(),
-//                HttpMethod.GET,
-//                HttpEntity.EMPTY,
-//                String.class
-//        );
-//        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-//        assertTrue(response.getBody().contains(SmokeTest.PRODUCT_FRONTPAGE_MARKER));
-        assertTrue(true);
+        final ResponseEntity<Subscription> response = caller.exchange(
+                "/subscriptions/woo-commerce/551",
+                HttpMethod.PUT,
+                HttpEntity.EMPTY,
+                Subscription.class
+        );
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        final Subscription subscription = response.getBody();
+        assertNotNull(subscription);
+        assertNotNull(subscription.getId());
+        assertNotNull(subscription.getSiteId());
+        assertNotNull(subscription.getPlan());
+        assertNotNull(subscription.getAffiliate());
+        assertNotNull(subscription.getPaymentMethod());
+        assertNotNull(subscription.getRawSubscription());
     }
 }

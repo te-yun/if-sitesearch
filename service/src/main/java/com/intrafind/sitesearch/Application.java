@@ -52,14 +52,10 @@ public class Application {
     private static final String WOO_COMMERCE_CONSUMER_KEY = System.getenv("WOO_COMMERCE_CONSUMER_KEY");
     private static final String WOO_COMMERCE_CONSUMER_SECRET = System.getenv("WOO_COMMERCE_CONSUMER_SECRET");
 
-    @RequestMapping(path = "/sites/{siteId}/subscriptions/{subscriptionId}", method = RequestMethod.POST)
+    @RequestMapping(path = "/subscriptions/woo-commerce/{subscriptionId}", method = RequestMethod.PUT)
     ResponseEntity<Subscription> subscribeViaSite(
-            @PathVariable(value = "siteId") UUID siteId,
-            @PathVariable(value = "subscriptionId") String subscriptionId,
-            @RequestBody Object subscription
+            @PathVariable(value = "subscriptionId") String subscriptionId
     ) {
-        LOG.info("subscriptions - subscription: " + subscription);
-
         final Request request = new Request.Builder()
                 .url("https://sitesearch.online/wp-json/wc/v1/orders/"
                         + subscriptionId
@@ -70,12 +66,14 @@ public class Application {
         try {
             final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
             if (isExistingOrder(response)) {
-                final WooCommerceOrder order = CrawlerController.MAPPER.readValue(response.body().charStream(), WooCommerceOrder.class);
-                // TODO update site profile to reflect a subscription
-                // >>>> add entire Subscription to SiteProfile
+                final byte[] rawSubscription = response.body().bytes();
+                final WooCommerceOrder order = CrawlerController.MAPPER.readValue(rawSubscription, WooCommerceOrder.class);
+                // TODO update site profile to reflect a subscription?
+                // >>>> add entire Subscription to SiteProfile?
                 // TODO add siteId to crawlStatus for scheduled crawling (optional?)
 
                 final String subscriptionPlan = order.getLineItems().<WooCommerceOrder.LineItem>get(0).getSku();
+                final UUID siteId = order.getSiteId();
                 final String affiliate = "NONE";
                 LOG.info("siteId: " + siteId + " - subscriptionId: " + subscriptionId + " - subscriptionPlan: " + subscriptionPlan + " - affiliate: " + affiliate);
                 return ResponseEntity
@@ -86,11 +84,11 @@ public class Application {
                                 order.getPaymentMethod(),
                                 siteId,
                                 affiliate,
-                                subscription)
+                                new String(rawSubscription))
                         );
             }
         } catch (final IOException e) {
-            LOG.error("siteId: " + siteId + " - subscriptionId: " + subscriptionId + " - subscribeViaSite_ERROR: " + e.getMessage());
+            LOG.error("subscriptionId: " + subscriptionId + " - subscribeViaSite_ERROR: " + e.getMessage());
         }
 
         return ResponseEntity
@@ -102,7 +100,7 @@ public class Application {
         return HttpStatus.OK.value() == response.code() && response.body() != null;
     }
 
-    @RequestMapping(path = "/subscriptions", method = RequestMethod.POST)
+    @RequestMapping(path = "/subscriptions/github", method = RequestMethod.POST)
     ResponseEntity<Object> subscribe(
             @RequestParam(value = "code", required = false) String code,
             @RequestParam(value = "access_token", required = false) String token,
