@@ -125,18 +125,21 @@ public class Application {
             @RequestHeader(value = "X-Hub-Signature") String signature,
             @RequestBody String subscription
     ) {
-
         final boolean isAuthenticGitHubEvent = verifySha1Signature(subscription, signature);
-        LOG.info("isAuthentic: " + isAuthenticGitHubEvent
-                + " - github-delivery: " + delivery
-                + " - github-event: " + event
-                + " - github-signature: " + signature
-                + " - github-subscription: " + subscription
-        );
+        if (isAuthenticGitHubEvent) {
+            LOG.info("github-delivery: " + delivery
+                    + " - github-event: " + event
+                    + " - github-signature: " + signature
+                    + " - github-subscription: " + subscription
+            );
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(subscription);
+        }
 
         return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(subscription);
+                .unprocessableEntity()
+                .build();
     }
 
     private boolean verifySha1Signature(String subscription, String signature) {
