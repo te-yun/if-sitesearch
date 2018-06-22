@@ -39,8 +39,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.net.URI;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 @SpringBootApplication
@@ -48,7 +53,8 @@ import java.util.UUID;
 @EnableSwagger2
 public class Application {
     private final static Logger LOG = LoggerFactory.getLogger(Application.class);
-    public static final URI IFINDER_CORE = URI.create("https://sitesearch:" + System.getenv("SERVICE_SECRET") + "@" + System.getenv("SIS_SERVICE_HOST") + "/hessian"); // TODO consider trying json endpoint
+    private static final String SERVICE_SECRET = System.getenv("SERVICE_SECRET");
+    public static final URI IFINDER_CORE = URI.create("https://sitesearch:" + SERVICE_SECRET + "@" + System.getenv("SIS_SERVICE_HOST") + "/hessian"); // TODO consider trying json endpoint
     private static final String WOO_COMMERCE_CONSUMER_KEY = System.getenv("WOO_COMMERCE_CONSUMER_KEY");
     private static final String WOO_COMMERCE_CONSUMER_SECRET = System.getenv("WOO_COMMERCE_CONSUMER_SECRET");
 
@@ -100,18 +106,37 @@ public class Application {
         return HttpStatus.OK.value() == response.code() && response.body() != null;
     }
 
+    private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
+
     @RequestMapping(path = "/subscriptions/github", method = RequestMethod.POST)
     ResponseEntity<Object> subscribeViaGitHub(
-            @RequestHeader(value = "X-GitHub-Delivery") String delivery,
+            @RequestHeader(value = "X-GitHub-Delivery") UUID delivery,
             @RequestHeader(value = "X-GitHub-Event") String event,
             @RequestHeader(value = "X-Hub-Signature") String signature,
-            @RequestBody Object subscription
+            @RequestBody String subscription
     ) {
-        LOG.info("github-delivery: " + delivery + " - github-event: " + event + " - github-signature: " + signature + " - github-subscription: " + subscription);
+
+        LOG.info("github-delivery: " + delivery + " - github-event: " + event + " - github-signature: " + signature + " - github-subscription: " + subscription
+                + " - isAuthentic: " + verifySha1Signature(subscription, signature));
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(subscription);
+    }
+
+    private boolean verifySha1Signature(String subscription, String signature) {
+        try {
+            final Mac mac = Mac.getInstance(HMAC_SHA1_ALGORITHM);
+            final SecretKeySpec secretKey = new SecretKeySpec(SERVICE_SECRET.getBytes(), HMAC_SHA1_ALGORITHM);
+            mac.init(secretKey);
+            final byte[] expectedSha1Hash = mac.doFinal(subscription.getBytes());
+            final String expectedSignature = "sha1=" + DatatypeConverter.printHexBinary(expectedSha1Hash);
+
+            return expectedSignature.toLowerCase().equals(signature);
+        } catch (final NoSuchAlgorithmException | InvalidKeyException e) {
+            LOG.error("verifySha1Signature_ERROR: " + e.getMessage());
+            return false;
+        }
     }
 //
 //    @RequestMapping(path = "/login/test", method = RequestMethod.POST)
