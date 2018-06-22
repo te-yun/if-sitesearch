@@ -57,6 +57,18 @@ public class Application {
     public static final URI IFINDER_CORE = URI.create("https://sitesearch:" + SERVICE_SECRET + "@" + System.getenv("SIS_SERVICE_HOST") + "/hessian"); // TODO consider trying json endpoint
     private static final String WOO_COMMERCE_CONSUMER_KEY = System.getenv("WOO_COMMERCE_CONSUMER_KEY");
     private static final String WOO_COMMERCE_CONSUMER_SECRET = System.getenv("WOO_COMMERCE_CONSUMER_SECRET");
+    private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
+    private static Mac macSha1Algorithm;
+
+    static {
+        try {
+            macSha1Algorithm = Mac.getInstance(HMAC_SHA1_ALGORITHM);
+            final SecretKeySpec secretKey = new SecretKeySpec(SERVICE_SECRET.getBytes(), HMAC_SHA1_ALGORITHM);
+            macSha1Algorithm.init(secretKey);
+        } catch (final NoSuchAlgorithmException | InvalidKeyException e) {
+            LOG.error("Application#static_ERROR: " + e.getMessage());
+        }
+    }
 
     @RequestMapping(path = "/subscriptions/woo-commerce/{subscriptionId}", method = RequestMethod.PUT)
     ResponseEntity<Subscription> subscribeViaSite(
@@ -106,8 +118,6 @@ public class Application {
         return HttpStatus.OK.value() == response.code() && response.body() != null;
     }
 
-    private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
-
     @RequestMapping(path = "/subscriptions/github", method = RequestMethod.POST)
     ResponseEntity<Object> subscribeViaGitHub(
             @RequestHeader(value = "X-GitHub-Delivery") UUID delivery,
@@ -116,8 +126,13 @@ public class Application {
             @RequestBody String subscription
     ) {
 
-        LOG.info("github-delivery: " + delivery + " - github-event: " + event + " - github-signature: " + signature + " - github-subscription: " + subscription
-                + " - isAuthentic: " + verifySha1Signature(subscription, signature));
+        LOG.info(
+                "isAuthentic: " + verifySha1Signature(subscription, signature)
+                        + " - github-delivery: " + delivery
+                        + " - github-event: " + event
+                        + " - github-signature: " + signature
+                        + " - github-subscription: " + subscription
+        );
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -125,18 +140,10 @@ public class Application {
     }
 
     private boolean verifySha1Signature(String subscription, String signature) {
-        try {
-            final Mac mac = Mac.getInstance(HMAC_SHA1_ALGORITHM);
-            final SecretKeySpec secretKey = new SecretKeySpec(SERVICE_SECRET.getBytes(), HMAC_SHA1_ALGORITHM);
-            mac.init(secretKey);
-            final byte[] expectedSha1Hash = mac.doFinal(subscription.getBytes());
-            final String expectedSignature = "sha1=" + DatatypeConverter.printHexBinary(expectedSha1Hash);
+        final byte[] expectedSha1Hash = macSha1Algorithm.doFinal(subscription.getBytes());
+        final String expectedSignature = "sha1=" + DatatypeConverter.printHexBinary(expectedSha1Hash);
 
-            return expectedSignature.toLowerCase().equals(signature);
-        } catch (final NoSuchAlgorithmException | InvalidKeyException e) {
-            LOG.error("verifySha1Signature_ERROR: " + e.getMessage());
-            return false;
-        }
+        return expectedSignature.toLowerCase().equals(signature);
     }
 //
 //    @RequestMapping(path = "/login/test", method = RequestMethod.POST)
