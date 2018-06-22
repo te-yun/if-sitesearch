@@ -28,16 +28,19 @@ public class WooCommerceOrder {
     private UUID siteId;
     private String paymentMethod;
     private List<LineItem> lineItems;
+    private String affiliate;
 
     @JsonCreator
     public WooCommerceOrder(
             @JsonProperty("customer_note") UUID siteId,
             @JsonProperty("payment_method") String paymentMethod,
-            @JsonProperty("line_items") List<LineItem> lineItems
+            @JsonProperty("line_items") List<LineItem> lineItems,
+            @JsonProperty("order_key") String affiliate
     ) {
         this.siteId = siteId;
         this.paymentMethod = paymentMethod;
         this.lineItems = lineItems;
+        this.affiliate = affiliate;
     }
 
     public String getPaymentMethod() {
@@ -50,6 +53,10 @@ public class WooCommerceOrder {
 
     public UUID getSiteId() {
         return siteId;
+    }
+
+    public String getAffiliate() {
+        return affiliate;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

@@ -74,7 +74,7 @@ public class Application {
 
                 final String subscriptionPlan = order.getLineItems().<WooCommerceOrder.LineItem>get(0).getSku();
                 final UUID siteId = order.getSiteId();
-                final String affiliate = "NONE";
+                final String affiliate = order.getAffiliate();
                 LOG.info("siteId: " + siteId + " - subscriptionId: " + subscriptionId + " - subscriptionPlan: " + subscriptionPlan + " - affiliate: " + affiliate);
                 return ResponseEntity
                         .status(HttpStatus.CREATED)
