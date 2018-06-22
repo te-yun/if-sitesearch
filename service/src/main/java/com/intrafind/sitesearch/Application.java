@@ -33,9 +33,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -101,17 +101,13 @@ public class Application {
     }
 
     @RequestMapping(path = "/subscriptions/github", method = RequestMethod.POST)
-    ResponseEntity<Object> subscribe(
-            @RequestParam(value = "code", required = false) String code,
-            @RequestParam(value = "access_token", required = false) String token,
-            @RequestParam(value = "client_id", required = false) String id,
-            @RequestParam(value = "client_secret", required = false) String secret,
-            @RequestParam(value = "state", required = false) String state,
-            @RequestParam(value = "redirect_uri", required = false) String redirect_uri,
-            @RequestBody(required = false) Object subscription
+    ResponseEntity<Object> subscribeViaGitHub(
+            @RequestHeader(value = "X-GitHub-Delivery") String delivery,
+            @RequestHeader(value = "X-GitHub-Event") String event,
+            @RequestHeader(value = "X-Hub-Signature") String signature,
+            @RequestBody Object subscription
     ) {
-        LOG.info("subscriptions - code: " + code + " - token: " + token + " - id: " + id
-                + " - secret: " + secret + " - state: " + state + " - redirect_uri: " + redirect_uri + " - subscription: " + subscription);
+        LOG.info("github-delivery: " + delivery + " - github-event: " + event + " - github-signature: " + signature + " - github-subscription: " + subscription);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
