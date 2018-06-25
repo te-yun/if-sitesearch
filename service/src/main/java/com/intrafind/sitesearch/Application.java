@@ -26,9 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -196,9 +193,9 @@ public class Application {
     }
 
     public static void main(final String... args) {
-        SpringApplication.exit(SpringApplication.run(Application.class, args));
-        final ConfigurableApplicationContext run = SpringApplication.run(Application.class, args);
-        run.addApplicationListener((ApplicationListener<ContextClosedEvent>) event ->
-                LOG.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Close Event triggered"));
+        SpringApplication.run(Application.class, args);
+//        final ConfigurableApplicationContext run = SpringApplication.run(Application.class, args);
+//        run.addApplicationListener((ApplicationListener<ContextClosedEvent>) event ->
+//                LOG.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Close Event triggered"));
     }
 }

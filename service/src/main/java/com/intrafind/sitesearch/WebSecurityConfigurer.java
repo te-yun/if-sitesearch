@@ -31,12 +31,12 @@ import java.security.Principal;
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @RequestMapping("user")
-    public Principal user(Principal principal) {
+    public Principal user(final Principal principal) {
         return principal;
     }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    protected void configure(final HttpSecurity http) throws Exception {
         http
                 .antMatcher("/**")
                 .csrf().disable()
@@ -46,7 +46,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                         "/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs"
                 )
                 .permitAll()
-                .and().logout().logoutSuccessUrl("/")
+                .and().logout().logoutSuccessUrl("https://sitesearch.cloud")
         ;
     }
 }

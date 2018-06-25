@@ -26,14 +26,13 @@ security:
       clientSecret: ${random.uuid} # add valid token to your local configuration
       accessTokenUri: https://github.com/login/oauth/access_token
       userAuthorizationUri: https://github.com/login/oauth/authorize
-      clientAuthenticationScheme: query
     resource:
       userInfoUri: https://api.github.com/user
                                                                           
 #github:
 #  client:
-#    clientId: 51ddf3aea6097a04b03c
-#    clientSecret: 23a073815a370e20fb6f1d786fc68ad9948d6af4
+#    clientId: ${random.uuid}
+#    clientSecret: ${random.uuid}
 #    accessTokenUri: https://github.com/login/oauth/access_token
 #    userAuthorizationUri: https://github.com/login/oauth/authorize
 #    clientAuthenticationScheme: form
