@@ -42,6 +42,8 @@ configurations {
 }
 
 dependencies {
+    compile "org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.0.1.RELEASE"
+
     compile "edu.uci.ics:crawler4j:4.4.0"
     compile "com.github.crawler-commons:crawler-commons:0.10"
 

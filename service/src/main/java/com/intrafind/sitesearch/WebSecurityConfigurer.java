@@ -16,6 +16,7 @@
 
 package com.intrafind.sitesearch;
 
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 
-//@EnableOAuth2Sso   // incompatible with Spring Boot v2
+@EnableOAuth2Sso
 @EnableWebSecurity
 @RestController
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {

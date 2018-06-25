@@ -58,5 +58,5 @@ spring:
   application:
     name: sitesearch
 
-app:
-  apiUrl: https://api.sitesearch.cloud
+#app:
+#  apiUrl: https://api.sitesearch.cloud

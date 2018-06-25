@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.intrafind.sitesearch;
+package com.intrafind.sitesearch.controller;
 
 import com.intrafind.sitesearch.service.CrawlerService;
 import com.intrafind.sitesearch.service.SiteCrawler;

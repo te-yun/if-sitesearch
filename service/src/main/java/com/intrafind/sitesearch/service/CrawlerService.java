@@ -16,7 +16,7 @@
 
 package com.intrafind.sitesearch.service;
 
-import com.intrafind.sitesearch.CrawlerControllerFactory;
+import com.intrafind.sitesearch.controller.CrawlerControllerFactory;
 import com.intrafind.sitesearch.dto.CrawlerJobResult;
 import com.intrafind.sitesearch.dto.SiteProfile;
 import crawlercommons.sitemaps.AbstractSiteMap;
