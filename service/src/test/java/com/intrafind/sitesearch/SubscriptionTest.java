@@ -17,6 +17,7 @@
 package com.intrafind.sitesearch;
 
 import com.intrafind.sitesearch.dto.Subscription;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,7 @@ public class SubscriptionTest {
     @Autowired
     private TestRestTemplate caller;
 
+    @Ignore("PHP API is broken")
     @Test
     public void subscribeViaSite() {
         final ResponseEntity<Subscription> response = caller.exchange(
