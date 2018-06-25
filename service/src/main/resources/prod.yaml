@@ -11,6 +11,8 @@ security:
     client:
       clientId: a4d43021fa657695d4a7
       clientSecret: ${random.uuid} # add valid token to your local configuration
+    resource:
+      userInfoUri: https://api.github.com/user
 
 github:
   client:

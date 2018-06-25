@@ -17,6 +17,7 @@
 package com.intrafind.sitesearch;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
@@ -63,7 +64,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     public FilterRegistrationBean oauth2ClientFilterRegistration(final OAuth2ClientContextFilter filter) {
         final FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<>();
         registration.setFilter(filter);
-        registration.setOrder(-100);
+        registration.setOrder(SecurityProperties.DEFAULT_FILTER_ORDER);
         return registration;
     }
 
