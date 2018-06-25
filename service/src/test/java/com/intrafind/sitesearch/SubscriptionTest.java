@@ -39,7 +39,7 @@ public class SubscriptionTest {
     @Autowired
     private TestRestTemplate caller;
 
-    @Ignore("PHP API is broken")
+    @Ignore("PHP API is broken") // TODO re-enable once PHP tinker quirks have been fixed!!!
     @Test
     public void subscribeViaSite() {
         final ResponseEntity<Subscription> response = caller.exchange(
