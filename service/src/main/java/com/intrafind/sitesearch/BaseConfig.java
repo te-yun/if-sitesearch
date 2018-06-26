@@ -17,6 +17,8 @@
 package com.intrafind.sitesearch;
 
 import com.google.common.base.Predicates;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.PathSelectors;
@@ -26,7 +28,15 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.paths.RelativePathProvider;
 import springfox.documentation.spring.web.plugins.Docket;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import javax.servlet.ServletContext;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.util.Collections;
 
 @Configuration
@@ -74,5 +84,30 @@ public class BaseConfig {
                 .paths(Predicates.not(PathSelectors.regex("/user")))
                 .paths(Predicates.not(PathSelectors.regex("/stats")))
                 .build();
+    }
+
+    public static class TrustAllX509TrustManager implements X509TrustManager {
+        private static final Logger LOG = LoggerFactory.getLogger(TrustAllX509TrustManager.class);
+
+        static {
+            try {
+                final SSLContext sslContext = SSLContext.getInstance("TLS");
+                sslContext.init(null, new TrustManager[]{new TrustAllX509TrustManager()}, new SecureRandom());
+                HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
+                HttpsURLConnection.setDefaultHostnameVerifier((string, sslSession) -> true);
+            } catch (final NoSuchAlgorithmException | KeyManagementException e) {
+                LOG.error("TrustAllX509TrustManager_ERROR: " + e.getMessage());
+            }
+        }
+
+        public X509Certificate[] getAcceptedIssuers() {
+            return new X509Certificate[0];
+        }
+
+        public void checkClientTrusted(X509Certificate[] certs, String authType) {
+        }
+
+        public void checkServerTrusted(X509Certificate[] certs, String authType) {
+        }
     }
 }
