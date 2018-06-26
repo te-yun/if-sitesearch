@@ -92,13 +92,19 @@ public class SiteCrawler extends WebCrawler {
         return robotRules.isAllowed(url);
     }
 
-    private boolean noQueryParameter(WebURL url) {
+    private boolean noQueryParameter(final WebURL url) {
         return URI.create(url.getURL()).getQuery() == null || URI.create(url.getURL()).getQuery().isEmpty();
     }
 
     @Override
-    public void visit(Page page) {
+    public void visit(final Page page) {
         final String url = page.getWebURL().getURL();
+        if (isPDF(page)) {
+            LOG.warn("siteId: " + siteId + " - IS_PDF: " + url);
+            // TODO translate to sitePage
+            // TODO indexPage(sitePage);
+            return;
+        }
 
         if (page.getParseData() instanceof HtmlParseData) {
             final HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
@@ -130,6 +136,11 @@ public class SiteCrawler extends WebCrawler {
         LOG.info("siteId: " + siteId + " - pageCount: " + currentPageCount);
 
         this.getMyController().getCrawlersLocalData().add(url);
+    }
+
+    private boolean isPDF(final Page page) {
+        final String url = page.getWebURL().getURL();
+        return page.getContentType().contains("application/pdf") || url.endsWith("pdf") || url.endsWith("PDF");
     }
 
     private void indexPage(final SitePage sitePage) {
