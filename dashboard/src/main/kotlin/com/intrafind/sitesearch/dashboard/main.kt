@@ -74,6 +74,8 @@ private fun applyQueryParameters() {
 
     siteIdElement.textContent = siteId
     siteSecretElement.textContent = siteSecret
+
+    console.warn(window.location.search)
 }
 
 fun updateSiteProfile() {

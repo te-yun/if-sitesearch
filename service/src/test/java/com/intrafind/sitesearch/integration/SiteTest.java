@@ -81,7 +81,7 @@ public class SiteTest {
     }
 
     private SiteCreation createNewSite(SiteProfileUpdate siteProfileCreation) {
-        ResponseEntity<SiteCreation> actual = caller.exchange(SiteController.ENDPOINT, HttpMethod.POST, new HttpEntity<>(siteProfileCreation), SiteCreation.class);
+        final ResponseEntity<SiteCreation> actual = caller.exchange(SiteController.ENDPOINT, HttpMethod.POST, new HttpEntity<>(siteProfileCreation), SiteCreation.class);
 
         assertEquals(HttpStatus.CREATED, actual.getStatusCode());
         assertNotNull(actual.getBody());

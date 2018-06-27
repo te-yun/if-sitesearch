@@ -54,7 +54,7 @@ public class CrawlerTest {
     private static final UUID CRAWL_SITE_SECRET = UUID.fromString("04a0afc6-d89a-45c9-8ba8-41d393d8d2f8");
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerTest.class);
     static final String TEST_EMAIL_ADDRESS = "Test - Site Search <0a4292be.intrafind.de@emea.teams.ms>";
-    private static final int API_SITE_PAGE_COUNT = 4;
+    private static final int API_SITE_PAGE_COUNT = 6;
 
     @Autowired
     private TestRestTemplate caller;
@@ -126,8 +126,8 @@ public class CrawlerTest {
 
         assertEquals(HttpStatus.OK, request.getStatusCode());
         assertNotNull(request.getBody());
-        assertEquals(5, request.getBody().getPageCount());
-        assertEquals(5, request.getBody().getUrls().size());
+        assertEquals(6, request.getBody().getPageCount());
+        assertEquals(6, request.getBody().getUrls().size());
         assertTrue(request.getBody().getUrls().contains("https://api.sitesearch.cloud/index.html"));
         assertTrue(request.getBody().getUrls().contains("https://dev.sitesearch.cloud/"));
 

@@ -81,7 +81,7 @@ import static com.intrafind.sitesearch.service.SiteCrawler.JSON_MEDIA_TYPE;
 public class CrawlerController {
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerController.class);
     private static final String PROSPECTS_EMAIL_ADDRESS = "Support - Site Search <f518c8ec.intrafind.de@emea.teams.ms>";
-    private static final String RECAPTCHA_SITE_SECRET = System.getenv("RECAPTCHA_SITE_SECRET");
+    private static final String INVISIBLE_RECAPTCHA_SITE_SECRET = System.getenv("INVISIBLE_RECAPTCHA_SITE_SECRET");
     private static final String DEV_SKIP_FLAG = System.getenv("DEV_SKIP_FLAG");
     private final SiteService siteService;
     private final CrawlerService crawlerService;
@@ -92,7 +92,7 @@ public class CrawlerController {
         this.crawlerService = crawlerService;
     }
 
-    static final ObjectMapper MAPPER = new ObjectMapper();
+    public static final ObjectMapper MAPPER = new ObjectMapper();
     private static final List<String> SCOPES = Collections.singletonList(GmailScopes.GMAIL_SEND);
     private static final String SERVICE_CONFIG_PATH = "config/";
     private static final File DATA_STORE_DIR = new File(SERVICE_CONFIG_PATH + "gmail-api");
@@ -302,7 +302,7 @@ public class CrawlerController {
         boolean captchaPassed = false;
         try {
             Request request = new Request.Builder()
-                    .url("https://www.google.com/recaptcha/api/siteverify?secret=" + RECAPTCHA_SITE_SECRET + "&response=" + captchaToken)
+                    .url("https://www.google.com/recaptcha/api/siteverify?secret=" + INVISIBLE_RECAPTCHA_SITE_SECRET + "&response=" + captchaToken)
                     .post(okhttp3.RequestBody.create(JSON_MEDIA_TYPE, ""))
                     .build();
             final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();

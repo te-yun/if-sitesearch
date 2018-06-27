@@ -1,10 +1,11 @@
-#Kubernetes cluster master node
+//Kubernetes cluster master node
 module "master"{
 
 	source="master"
 
 	ssh_user="${var.ssh_user}"
 	ssh_private_key="${var.ssh_private_key}"
+	ssh_private_key_path="${var.ssh_private_key_path}"
 	ip_address="${var.ip_address_list[0]}"
 
 	start_up_commands="${var.start_up_commands}"
@@ -23,6 +24,9 @@ module "master"{
 
 }
 
+//TODO insert resource for additional master nodes
+
+//Kubernetes worker node
 resource "null_resource" "kubelet"{
 	depends_on=["module.master"]
 
@@ -60,8 +64,8 @@ resource "null_resource" "kubelet"{
 	}
 }
 
-#Anything needed to get the container structure to work
-#Contains Persistent Volume Claims / Storage Class / Role Bindings / etc.
+//Anything needed to get the container structure to work
+//Contains Persistent Volume Claims / Storage Class / Role Bindings / etc.
 resource "null_resource" "Kubernetes-Metaobjects" {
 
 	depends_on=["module.master"]
@@ -76,7 +80,7 @@ resource "null_resource" "Kubernetes-Metaobjects" {
 						"cat <<EOT > kube_metaobjects.yaml",
 						"${data.template_file.kubernetes_metaobjects.rendered}",
 						"EOT",
-						"if [[ $(kubectl get pv elasticsearch-pv-1) ]]; then kubectl replace -f kube_metaobjects.yaml ; else kubectl apply -f kube_metaobjects.yaml; fi"]
+						"if [[ $(kubectl get pv elasticsearch-pv-1) ]]; then kubectl replace --force=true -f kube_metaobjects.yaml ; else kubectl apply -f kube_metaobjects.yaml; fi"]
 	}
 
 	connection {
@@ -89,36 +93,61 @@ resource "null_resource" "Kubernetes-Metaobjects" {
 
 }
 
-#Sitesearch-API
-#resource "null_resource" "Sitesearch-Api"{
-#
-#	depends_on=["module.master","null_resource.Kubernetes-Metaobjects"]
-#
-#	triggers = {
-#		kubernetes_configuration_hash = "${sha1(file("./modules/setup/kubernetes_module/kubernetes_templates/kube_sitesearch_api-template.yaml"))}"
-#		scale_elasticsearch = "${var.kube_counts["sitesearch"]}"
-#	}
-#
-#	//turning the rendered template to a file and then executing
-#	provisioner "remote-exec" {
-#		inline=["export KUBECONFIG=$HOME/admin.conf ",
-#						"cat <<EOT > kube_sitesearch_api.yaml",
-#						"${data.template_file.kubernetes_sitesearch.rendered}",
-#						"EOT",
-#						"kubectl apply -f kube_sitesearch_api.yaml"]
-#	}
-#
-#	connection {
-#			user = "${var.ssh_user}"
-#			//Access IP of newly provisioned machine
-#			host = "${var.ip_address_list[0]}"
-#			type = "ssh"
-#			private_key="${var.ssh_private_key}"
-#	}
-#}
+/*Sitesearch-API
+resource "null_resource" "Sitesearch-Api"{
 
+	depends_on=["module.master","null_resource.Kubernetes-Metaobjects"]
 
-#Elasticsearch
+	triggers = {
+		kubernetes_configuration_hash = "${sha1(file("./modules/setup/kubernetes_module/kubernetes_templates/kube_sitesearch_api-template.yaml"))}"
+		scale_elasticsearch = "${var.kube_counts["sitesearch"]}"
+	}
+
+	//turning the rendered template to a file and then executing
+	provisioner "remote-exec" {
+		inline=["export KUBECONFIG=$HOME/admin.conf ",
+						"cat <<EOT > kube_sitesearch_api.yaml",
+						"${data.template_file.kubernetes_sitesearch.rendered}",
+						"EOT",
+						"kubectl apply -f kube_sitesearch_api.yaml"]
+	}
+
+	connection {
+			user = "${var.ssh_user}"
+			//Access IP of newly provisioned machine
+			host = "${var.ip_address_list[0]}"
+			type = "ssh"
+			private_key="${var.ssh_private_key}"
+	}
+}
+*/
+
+resource "null_resource" "Tagging-Service"{
+
+	depends_on=["module.master","null_resource.Kubernetes-Metaobjects"]
+
+	triggers = {
+		kubernetes_configuration_hash = "${sha1(file("./modules/setup/kubernetes_module/kubernetes_templates/kube_tagging-service-template.yaml"))}"
+	}
+
+	//turning the rendered template to a file and then executing
+	provisioner "remote-exec" {
+		inline=["export KUBECONFIG=$HOME/admin.conf ",
+						"cat <<EOT > kube_tagging-service.yaml",
+						"${data.template_file.kubernetes_tagging-service.rendered}",
+						"EOT",
+						"if [[ $(kubectl get pod if-tagger) ]]; then kubectl replace --force=true -f kube_tagging-service.yaml ; else kubectl apply -f kube_tagging-service.yaml; fi"]
+	}
+
+	connection {
+			user = "${var.ssh_user}"
+			//Access IP of newly provisioned machine
+			host = "${var.ip_address_list[0]}"
+			type = "ssh"
+			private_key="${var.ssh_private_key}"
+	}
+}
+
 resource "null_resource" "Sitesearch-Elasticsearch"{
 
 	depends_on=["module.master","null_resource.Kubernetes-Metaobjects"]
@@ -134,7 +163,7 @@ resource "null_resource" "Sitesearch-Elasticsearch"{
 						"cat <<EOT > kube_elasticsearch.yaml",
 						"${data.template_file.kubernetes_elasticsearch.rendered}",
 						"EOT",
-						"if [[ $(kubectl get statefulset elasticsearch) ]]; then kubectl replace -f kube_elasticsearch.yaml ; else kubectl apply -f kube_elasticsearch.yaml; fi"]
+						"if [[ $(kubectl get statefulset elasticsearch) ]]; then kubectl replace --force=true -f kube_elasticsearch.yaml ; else kubectl apply -f kube_elasticsearch.yaml; fi"]
 	}
 
 	connection {
@@ -146,10 +175,12 @@ resource "null_resource" "Sitesearch-Elasticsearch"{
 	}
 }
 
-#Seach Service
 resource "null_resource" "Sitesearch-SearchService"{
 
-	depends_on=["null_resource.Sitesearch-Elasticsearch","module.master","null_resource.Kubernetes-Metaobjects"]
+  depends_on = [
+    "null_resource.Sitesearch-Elasticsearch",
+    "module.master",
+    "null_resource.Kubernetes-Metaobjects"]
 
 	triggers = {
 		kubernetes_configuration_hash = "${sha1(file("./modules/setup/kubernetes_module/kubernetes_templates/kube_searchservice-template.yaml"))}"
@@ -163,7 +194,7 @@ resource "null_resource" "Sitesearch-SearchService"{
 						"cat <<EOT > kube_searchservice.yaml",
 						"${data.template_file.kubernetes_searchservice.rendered}",
 						"EOT",
-						"if [[ $(kubectl get statefulset sitesearch-searchservice) ]]; then kubectl replace -f kube_searchservice.yaml ; else kubectl apply -f kube_searchservice.yaml; fi"]
+						"if [[ $(kubectl get statefulset sitesearch-searchservice) ]]; then kubectl replace --force=true -f kube_searchservice.yaml ; else kubectl apply -f kube_searchservice.yaml; fi"]
 	}
 
 	connection {

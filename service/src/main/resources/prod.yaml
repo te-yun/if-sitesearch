@@ -11,6 +11,11 @@ security:
     client:
       clientId: a4d43021fa657695d4a7
       clientSecret: ${random.uuid} # add valid token to your local configuration
-#      pre-established-redirect-uri: https://api.sitesearch.cloud/login
-#      registered-redirect-uri: https://api.sitesearch.cloud/login
-#      use-current-uri: true
+    resource:
+      userInfoUri: https://api.github.com/user
+
+github:
+  client:
+    clientId: ${security.oauth2.client.clientId}
+    clientSecret: ${security.oauth2.client.clientSecret}
+    userAuthorizationUri: https://github.com/login/oauth/authorize

@@ -39,13 +39,15 @@ spec:
       #Describing containers in the pods. In our case we only have 1 container per pod.
       containers:
         - name: sitesearch-searchservice
-          image: docker-registry.sitesearch.cloud/intrafind/sis-searchservice:1.7-no-auth-kube
+          image: docker-registry.sitesearch.cloud/intrafind/sis-search-service:2.4.6.7
           env:
             #The elasticsearch_hosts environment variable points to the service (the reverse proxy)
             - name: elasticsearch_hosts
               value: "sitesearch-elasticsearch"
             - name: DNS_SUFFIX
               value: "sitesearch-elasticsearch.default.svc.cluster.local:9300"
+            - name: Replace_Trigger
+              value: "REPLACE_TRIGGER_VALUEtrue"
           #This creates a PVC (Persistent Volume Claim) -> this is not the volume, just the claim
           #The volume is declared further down and connected to the claim by (in this case) the name parameter.
           volumeMounts:

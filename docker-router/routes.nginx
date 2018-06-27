@@ -76,20 +76,20 @@ server {
     }
 }
 
-server {
-    listen 443 ssl http2;
-    listen [::]:443 ssl http2;
-    server_name crawler.sitesearch.cloud;
-
-    include /etc/nginx/snippets/ssl.conf;
-
-    auth_basic "Crawler";
-    auth_basic_user_file /etc/nginx/.htpasswd; # supply this via env vars somehow or as raw file at build time
-
-    location / {
-        proxy_pass http://if-app-webcrawler:8090;
-    }
-}
+#server {
+#    listen 443 ssl http2;
+#    listen [::]:443 ssl http2;
+#    server_name crawler.sitesearch.cloud;
+#
+#    include /etc/nginx/snippets/ssl.conf;
+#
+#    auth_basic "Crawler";
+#    auth_basic_user_file /etc/nginx/.htpasswd; # supply this via env vars somehow or as raw file at build time
+#
+#    location / {
+#        proxy_pass http://if-app-webcrawler:8090;
+#    }
+#}
 
 server {
     listen 443 ssl http2;
@@ -104,7 +104,8 @@ server {
     large_client_header_buffers 4 32k;
 
     location / {
-        proxy_pass http://if-tagging-service:9603;
+        proxy_pass http://10.105.83.185:9603; # Kubernetes IP address
+        #        proxy_pass http://if-tagging-service:9603;
     }
 }
 

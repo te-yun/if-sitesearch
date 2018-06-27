@@ -36,5 +36,5 @@ resource "null_resource" "kubernetes_master"{
 data "external" "swarm_token_reader" {
 	depends_on=["null_resource.kubernetes_master"]
 	#TODO: Export private key file path
-	program = ["sh","script/get_leader_token.sh","${var.ssh_user}","${var.ip_address}","/home/bernard/.ssh/id_rsa.pem"]
+	program = ["sh","script/get_leader_token.sh","${var.ssh_user}","${var.ip_address}","${var.ssh_private_key_path}"]
 }

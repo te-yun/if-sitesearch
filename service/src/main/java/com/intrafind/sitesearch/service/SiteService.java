@@ -22,7 +22,7 @@ import com.intrafind.api.index.Index;
 import com.intrafind.api.search.Hits;
 import com.intrafind.api.search.Search;
 import com.intrafind.sitesearch.Application;
-import com.intrafind.sitesearch.TrustAllX509TrustManager;
+import com.intrafind.sitesearch.BaseConfig;
 import com.intrafind.sitesearch.dto.CrawlStatus;
 import com.intrafind.sitesearch.dto.FetchedPage;
 import com.intrafind.sitesearch.dto.IndexCleanupResult;
@@ -72,7 +72,7 @@ public class SiteService {
      */
     public static final UUID ADMIN_SITE_SECRET = UUID.fromString(System.getenv("ADMIN_SITE_SECRET"));
 
-    private static final Index INDEX_SERVICE = IfinderCoreClient.newHessianClient(Index.class, Application.IFINDER_CORE + "/index");
+    static final Index INDEX_SERVICE = IfinderCoreClient.newHessianClient(Index.class, Application.IFINDER_CORE + "/index");
     private static final String SITE_CONFIGURATION_DOCUMENT_PREFIX = "site-configuration-";
     private static final String CRAWL_STATUS_SINGLETON_DOCUMENT = "crawl-status";
     /**
@@ -304,7 +304,7 @@ public class SiteService {
     }
 
     static {
-        new TrustAllX509TrustManager();
+        new BaseConfig.TrustAllX509TrustManager();
     }
 
     private Optional<SiteIndexSummary> readXml(NodeList nodeList, AtomicInteger successfullyIndexed, List<String> documents, List<String> failedToIndex, UUID siteId) {

@@ -31,6 +31,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -72,6 +73,7 @@ public class SmokeTest {
     @Autowired
     private TestRestTemplate caller;
 
+    @Ignore("deprecate crawler")
     @Test
     public void assureCrawlerProtection() throws Exception {
         final Request request = new Request.Builder()
@@ -101,12 +103,21 @@ public class SmokeTest {
     }
 
     @Test
+    public void assureCDNavailability() throws Exception {
+        final Request request = new Request.Builder()
+                .url("https://cdn.sitesearch.cloud/searchbar/2018-01-15/config/sitesearch-roles.json") // lightweight file
+                .build();
+        final Response response = HTTP_CLIENT.newCall(request).execute();
+        assertEquals(HttpStatus.OK.value(), response.code());
+    }
+
+    @Test
     public void assureSiteSearchServiceBasicAuthProtectionForJsonPost() {
         final ResponseEntity<String> secureEndpointJson = caller.postForEntity(URI.create(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "json/index?method=index"), HttpEntity.EMPTY, String.class);
         assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJson.getStatusCode());
     }
 
-    private static final String PRODUCT_FRONTPAGE_MARKER = "<title>Site Search - Get the best search results from your Website</title>";
+    static final String PRODUCT_FRONTPAGE_MARKER = "<title>Site Search - Get the best search results from your Website</title>";
 
     @Test
     public void redirectFromHttpNakedDomain() { // fails quite often because of 1&1
@@ -117,40 +128,6 @@ public class SmokeTest {
                 String.class
         );
         assertEquals(HttpStatus.MOVED_PERMANENTLY, response.getStatusCode());
-    }
-
-    @Test
-    public void redirectFromUnencryptedWWW() { // fails quite often because of 1&1
-        final ResponseEntity<String> response = caller.exchange(
-                "http://www.sitesearch.cloud",
-                HttpMethod.GET,
-                HttpEntity.EMPTY,
-                String.class
-        );
-        assertEquals(HttpStatus.MOVED_PERMANENTLY, response.getStatusCode());
-    }
-
-    @Test
-    public void redirectFromWWW() { // fails quite often because of 1&1
-        final ResponseEntity<String> response = caller.exchange(
-                "https://www.sitesearch.cloud",
-                HttpMethod.GET,
-                HttpEntity.EMPTY,
-                String.class
-        );
-        assertEquals(HttpStatus.MOVED_PERMANENTLY, response.getStatusCode());
-    }
-
-    @Test
-    public void productFrontpageContent() {
-        final ResponseEntity<String> response = caller.exchange(
-                "https://sitesearch.cloud",
-                HttpMethod.GET,
-                HttpEntity.EMPTY,
-                String.class
-        );
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(response.getBody().contains(PRODUCT_FRONTPAGE_MARKER));
     }
 
     @Test

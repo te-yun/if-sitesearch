@@ -16,7 +16,7 @@
 
 package com.intrafind.sitesearch.service;
 
-import com.intrafind.sitesearch.CrawlerControllerFactory;
+import com.intrafind.sitesearch.controller.CrawlerControllerFactory;
 import com.intrafind.sitesearch.dto.CrawlerJobResult;
 import com.intrafind.sitesearch.dto.SiteProfile;
 import crawlercommons.sitemaps.AbstractSiteMap;
@@ -50,7 +50,7 @@ public class CrawlerService {
     private static final Logger LOG = LoggerFactory.getLogger(CrawlerService.class);
     private static final String CRAWLER_STORAGE = "data/crawler";
     private static final Random RANDOM_VERSION = new Random();
-    private static final String SITE_SEARCH_USER_AGENT = "SiteSearch.cloud";
+    public static final String SITE_SEARCH_USER_AGENT = "SiteSearch.cloud";
 
     public CrawlerJobResult recrawl(UUID siteId, UUID siteSecret, SiteProfile siteProfile, boolean clearIndex) {
         final List<String> urls = new ArrayList<>();
@@ -64,6 +64,7 @@ public class CrawlerService {
             final PageFetcher pageFetcher = new PageFetcher(config);
             final RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
             final RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
+            robotstxtConfig.setEnabled(false); // crawler-commons' robots.txt rules interpretation is used later on instead
 
             final CrawlController controller;
             try {
@@ -121,6 +122,7 @@ public class CrawlerService {
         final PageFetcher pageFetcher = new PageFetcher(config);
         final RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
         final RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
+        robotstxtConfig.setEnabled(false); // crawler-commons' robots.txt rules interpretation is used later on instead
 
         final CrawlController controller;
         try {
