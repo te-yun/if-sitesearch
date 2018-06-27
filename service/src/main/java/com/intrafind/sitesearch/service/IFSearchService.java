@@ -18,13 +18,24 @@ package com.intrafind.sitesearch.service;
 
 import com.intrafind.api.search.Hits;
 import com.intrafind.api.search.Search;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
-//@Profile("oss")
+//    @Profile("prod")
+//    @Profile("!oss")
+@Primary
 @Repository
-public class SimpleSearchService implements Search {
+public class IFSearchService implements Search {
+// to wire beans, use annotations below
+//    @Autowired
+//    @Qualifier(value = "mysqlMessageRepository")
+//    vs
+//    @Autowired
+//    @Qualifier(value = "inMemoryMessageRepository")
+
     @Override
     public Hits search(String searchQuery, Object... parameters) {
         return SearchService.SEARCH_SERVICE.search(searchQuery, parameters);
     }
 }
+

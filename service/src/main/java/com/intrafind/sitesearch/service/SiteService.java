@@ -72,7 +72,7 @@ public class SiteService {
      */
     public static final UUID ADMIN_SITE_SECRET = UUID.fromString(System.getenv("ADMIN_SITE_SECRET"));
 
-    private static final Index INDEX_SERVICE = IfinderCoreClient.newHessianClient(Index.class, Application.IFINDER_CORE + "/index");
+    static final Index INDEX_SERVICE = IfinderCoreClient.newHessianClient(Index.class, Application.IFINDER_CORE + "/index");
     private static final String SITE_CONFIGURATION_DOCUMENT_PREFIX = "site-configuration-";
     private static final String CRAWL_STATUS_SINGLETON_DOCUMENT = "crawl-status";
     /**

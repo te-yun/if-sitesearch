@@ -29,8 +29,8 @@ public class Test {
         final BodyContentHandler bodyContentHandler = new BodyContentHandler();
         final Metadata metadata = new Metadata();
 //        final URL url = new URL("http://unec.edu.az/application/uploads/2014/12/pdf-sample.pdf");
-//        final URL url = new URL("http://www.africau.edu/images/default/sample.pdf");
-        final URL url = new URL("http://www.pdf995.com/samples/pdf.pdf");
+        final URL url = new URL("http://www.africau.edu/images/default/sample.pdf");
+//        final URL url = new URL("http://www.pdf995.com/samples/pdf.pdf");
 
         final InputStream urlStream = url.openStream();
         final ParseContext parseContext = new ParseContext();

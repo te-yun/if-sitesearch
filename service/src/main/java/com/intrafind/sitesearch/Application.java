@@ -147,7 +147,7 @@ public class Application {
         return expectedSignature.toLowerCase().equals(signature);
     }
 
-    // for testing GitHub OAuth2 requests only
+    // for testing GitHub OAuth2 requests only // TODO remove altogether later on
     @RequestMapping(path = "/login/test", method = RequestMethod.POST)
     ResponseEntity<Object> login(
             @RequestParam(value = "code", required = false) String code,
@@ -171,7 +171,7 @@ public class Application {
                 .body("Error Message");
     }
 
-    // for testing GitHub OAuth2 requests only
+    // for testing GitHub OAuth2 requests only // TODO remove altogether later on
     @RequestMapping(path = "/login/test1", method = RequestMethod.GET)
     ResponseEntity<Object> login1(
             @RequestParam(value = "code", required = false) String code,

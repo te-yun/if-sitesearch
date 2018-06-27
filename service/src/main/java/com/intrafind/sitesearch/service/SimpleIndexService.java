@@ -18,22 +18,24 @@ package com.intrafind.sitesearch.service;
 
 import com.intrafind.api.Document;
 import com.intrafind.api.index.Index;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class SimpleIndexService implements Index {
     @Override
     public void index(Document... documents) {
-
+        SiteService.INDEX_SERVICE.index(documents);
     }
 
     @Override
-    public List<Document> fetch(String[] strings, String... strings1) {
-        return null;
+    public List<Document> fetch(String[] options, String... documents) {
+        return SiteService.INDEX_SERVICE.fetch(options, documents);
     }
 
     @Override
-    public void delete(String... strings) {
-
+    public void delete(String... documents) {
+        SiteService.INDEX_SERVICE.delete(documents);
     }
 }

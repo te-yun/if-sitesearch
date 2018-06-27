@@ -16,15 +16,26 @@
 
 package com.intrafind.sitesearch.service;
 
-import com.intrafind.api.search.Hits;
-import com.intrafind.api.search.Search;
+import com.intrafind.api.Document;
+import com.intrafind.api.index.Index;
 import org.springframework.stereotype.Repository;
 
-//@Profile("oss")
+import java.util.List;
+
 @Repository
-public class SimpleSearchService implements Search {
+public class IFIndexService implements Index {
     @Override
-    public Hits search(String searchQuery, Object... parameters) {
-        return SearchService.SEARCH_SERVICE.search(searchQuery, parameters);
+    public void index(Document... documents) {
+        SiteService.INDEX_SERVICE.index(documents);
+    }
+
+    @Override
+    public List<Document> fetch(String[] options, String... documents) {
+        return SiteService.INDEX_SERVICE.fetch(options, documents);
+    }
+
+    @Override
+    public void delete(String... documents) {
+        SiteService.INDEX_SERVICE.delete(documents);
     }
 }
