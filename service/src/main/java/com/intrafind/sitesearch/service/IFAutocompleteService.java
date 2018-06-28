@@ -22,12 +22,12 @@ import com.intrafind.sitesearch.Application;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class IFSearchService implements Search {
-    static final Search SEARCH_SERVICE_CLIENT = IfinderCoreClient.newHessianClient(Search.class, Application.IFINDER_CORE + "/search");
+public class IFAutocompleteService implements AutocompleteClient {
+    static final Search SEARCH_AUTOCOMPLETE_CLIENT = IfinderCoreClient.newHessianClient(Search.class, Application.IFINDER_CORE + "/autocomplete");
 
     @Override
     public Hits search(String searchQuery, Object... parameters) {
-        return SEARCH_SERVICE_CLIENT.search(searchQuery, parameters);
+        return SEARCH_AUTOCOMPLETE_CLIENT.search(searchQuery, parameters);
     }
 }
 

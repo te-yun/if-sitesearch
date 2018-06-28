@@ -21,6 +21,7 @@ import com.intrafind.api.search.Search;
 import com.intrafind.sitesearch.dto.Autocomplete;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -31,9 +32,15 @@ import java.util.UUID;
 @Service
 public class AutocompleteService {
     private static final Logger LOG = LoggerFactory.getLogger(AutocompleteService.class);
+    private final AutocompleteClient autocompleteClient;
+
+    @Autowired
+    public AutocompleteService(AutocompleteClient autocompleteClient) {
+        this.autocompleteClient = autocompleteClient;
+    }
 
     public Optional<Autocomplete> autocomplete(String query, UUID siteId) {
-        com.intrafind.api.search.Hits hits = IFSearchService.SEARCH_AUTOCOMPLETE_CLIENT.search(
+        com.intrafind.api.search.Hits hits = autocompleteClient.search(
                 query,
                 Search.FILTER_QUERY, Fields.TENANT + ":" + siteId,
                 "ac-dym.profile", "fuzzy",

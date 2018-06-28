@@ -17,17 +17,19 @@
 package com.intrafind.sitesearch.service;
 
 import com.intrafind.api.search.Hits;
-import com.intrafind.api.search.Search;
-import com.intrafind.sitesearch.Application;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
+@Profile("oss")
 @Repository
-public class IFSearchService implements Search {
-    static final Search SEARCH_SERVICE_CLIENT = IfinderCoreClient.newHessianClient(Search.class, Application.IFINDER_CORE + "/search");
+public class SimpleAutocompleteService implements AutocompleteClient {
+    private static final Logger LOG = LoggerFactory.getLogger(SimpleAutocompleteService.class);
 
     @Override
     public Hits search(String searchQuery, Object... parameters) {
-        return SEARCH_SERVICE_CLIENT.search(searchQuery, parameters);
+        LOG.warn("SimpleAutocompleteService");
+        return IFAutocompleteService.SEARCH_AUTOCOMPLETE_CLIENT.search(searchQuery, parameters);
     }
 }
-
