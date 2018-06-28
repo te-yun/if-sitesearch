@@ -25,10 +25,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Should serve as a persistence client that works on a different index than the search client.
+ */
 @Profile("oss")
 @Repository
-public class SimpleIndexService implements Index {
-    private static final Logger LOG = LoggerFactory.getLogger(SimpleIndexService.class);
+public class SimpleIndexClient implements Index {
+    private static final Logger LOG = LoggerFactory.getLogger(SimpleIndexClient.class);
 
     @Override
     public void index(Document... documents) {

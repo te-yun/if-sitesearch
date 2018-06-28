@@ -22,10 +22,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Should serve as a persistence client that works on a different index than the search client.
+ */
 @Profile("oss")
 @Repository
-public class SimpleAutocompleteService implements AutocompleteClient {
-    private static final Logger LOG = LoggerFactory.getLogger(SimpleAutocompleteService.class);
+public class SimpleAutocompleteClient implements AutocompleteClient {
+    private static final Logger LOG = LoggerFactory.getLogger(SimpleAutocompleteClient.class);
 
     @Override
     public Hits search(String searchQuery, Object... parameters) {
