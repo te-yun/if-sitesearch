@@ -18,6 +18,9 @@ package com.intrafind.sitesearch.service;
 
 import com.intrafind.api.search.Hits;
 import com.intrafind.api.search.Search;
+import com.intrafind.sitesearch.Application;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
@@ -26,6 +29,8 @@ import org.springframework.stereotype.Repository;
 @Primary
 @Repository
 public class IFSearchService implements Search {
+    static final Search SEARCH_SERVICE = IfinderCoreClient.newHessianClient(Search.class, Application.IFINDER_CORE + "/search");
+    private static final Logger LOG = LoggerFactory.getLogger(IFSearchService.class);
 // to wire beans, use annotations below
 //    @Autowired
 //    @Qualifier(value = "mysqlMessageRepository")
@@ -35,7 +40,12 @@ public class IFSearchService implements Search {
 
     @Override
     public Hits search(String searchQuery, Object... parameters) {
-        return SearchService.SEARCH_SERVICE.search(searchQuery, parameters);
+        LOG.info("IFSearchSe");
+        LOG.info("IFSearchS");
+        LOG.info("IFSearch");
+        System.out.println("IFSearchService-sout");
+        System.out.println("IFSearchService-sout1");
+        return SEARCH_SERVICE.search(searchQuery, parameters);
     }
 }
 

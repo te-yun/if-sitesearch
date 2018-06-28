@@ -25,6 +25,7 @@ import org.springframework.stereotype.Repository;
 public class SimpleSearchService implements Search {
     @Override
     public Hits search(String searchQuery, Object... parameters) {
-        return SearchService.SEARCH_SERVICE.search(searchQuery, parameters);
+        System.out.println("SimpleSearchService");
+        return IFSearchService.SEARCH_SERVICE.search(searchQuery, parameters);
     }
 }

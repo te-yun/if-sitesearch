@@ -18,9 +18,10 @@ package com.intrafind.sitesearch.service;
 
 import com.intrafind.api.Fields;
 import com.intrafind.api.search.Search;
-import com.intrafind.sitesearch.Application;
 import com.intrafind.sitesearch.dto.FoundPage;
 import com.intrafind.sitesearch.dto.Hits;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,12 +30,19 @@ import java.util.UUID;
 
 @Service
 public class SearchService {
-    static final Search SEARCH_SERVICE = IfinderCoreClient.newHessianClient(Search.class, Application.IFINDER_CORE + "/search");
     static final String QUERY_SEPARATOR = ",";
     private static final String HIT_TEASER_PREFIX = "hit.teaser.";
 
+    private final Search searchService;
+
+    @Autowired
+    public SearchService(@Qualifier(value = "IFSearchService") Search searchService) {
+        this.searchService = searchService;
+    }
+
     public Hits search(final String query, final UUID siteId) {
-        com.intrafind.api.search.Hits hits = SEARCH_SERVICE.search(
+//        com.intrafind.api.search.Hits hits = IFSearchService.SEARCH_SERVICE.search(
+        com.intrafind.api.search.Hits hits = searchService.search(
 //                query + " AND " + Fields.TENANT + ":" + siteId,
                 query, Search.FILTER_QUERY, Fields.TENANT + ":" + siteId,
 //  TODO optimize by not retrieving all fields              Search.RETURN_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL + QUERY_SEPARATOR + Fields.TENANT + QUERY_SEPARATOR + QUERY_SEPARATOR +SiteService.PAGE_THUMBNAIL,

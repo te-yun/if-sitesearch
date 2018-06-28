@@ -173,7 +173,7 @@ public class SiteService {
     }
 
     public Optional<List<String>> fetchAllDocuments(final UUID siteId) {
-        final Hits documentWithSiteSecret = SearchService.SEARCH_SERVICE.search(
+        final Hits documentWithSiteSecret = IFSearchService.SEARCH_SERVICE.search(
                 Fields.TENANT + ":" + siteId.toString(),
                 Search.RETURN_FIELDS, Fields.TENANT,
                 Search.HITS_LIST_SIZE, 10_000
@@ -518,7 +518,7 @@ public class SiteService {
 
     public Optional<IndexCleanupResult> removeOldSiteIndexPages(final UUID siteId) {
         final Instant obsoletePageThreshold = Instant.now().minus(4, ChronoUnit.HALF_DAYS);
-        final Hits documents = SearchService.SEARCH_SERVICE.search(
+        final Hits documents = IFSearchService.SEARCH_SERVICE.search(
                 Fields.TENANT + ":" + siteId.toString(),
                 Search.RETURN_FIELDS, Fields.TENANT + SearchService.QUERY_SEPARATOR + Fields.URL + SearchService.QUERY_SEPARATOR + PAGE_TIMESTAMP,
                 Search.HITS_LIST_SIZE, 10_000
