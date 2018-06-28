@@ -42,12 +42,12 @@ data "template_file" "kubernetes_metaobjects" {
 	}
 }
 
-data "template_file" "kubernetes_tagging-service" {
-	template = "${file("${path.module}/kubernetes_templates/kube_tagging-service-template.yaml")}"
-	vars {
-		//no variables
-	}
-}
+//data "template_file" "kubernetes_tagging-service" {
+//	template = "${file("${path.module}/kubernetes_templates/kube_tagging-service-template.yaml")}"
+//	vars {
+//		//no variables
+//	}
+//}
 
 data "template_file" "kubernetes_sitesearch" {
 	template = "${file("${path.module}/kubernetes_templates/kube_sitesearch_api-template.yaml")}"

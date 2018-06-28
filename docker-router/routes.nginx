@@ -91,37 +91,37 @@ server {
 #    }
 #}
 
-server {
-    listen 443 ssl http2;
-    listen [::]:443 ssl http2;
-    server_name tagger.analyzelaw.com;
+#server {
+#    listen 443 ssl http2;
+#    listen [::]:443 ssl http2;
+#    server_name tagger.analyzelaw.com;
+#
+#    include /etc/nginx/snippets/ssl.conf;
+#
+#    auth_basic "Tagger";
+#    auth_basic_user_file /etc/nginx/.htpasswd; # supply this via env vars somehow or as raw file at build time
+#
+#    large_client_header_buffers 4 32k;
+#
+#    location / {
+#        proxy_pass http://10.105.83.185:9603; # Kubernetes IP address
+#        #        proxy_pass http://if-tagging-service:9603;
+#    }
+#}
 
-    include /etc/nginx/snippets/ssl.conf;
-
-    auth_basic "Tagger";
-    auth_basic_user_file /etc/nginx/.htpasswd; # supply this via env vars somehow or as raw file at build time
-
-    large_client_header_buffers 4 32k;
-
-    location / {
-        proxy_pass http://10.105.83.185:9603; # Kubernetes IP address
-        #        proxy_pass http://if-tagging-service:9603;
-    }
-}
-
-server {
-    listen 443 ssl http2;
-    listen [::]:443 ssl http2;
-    server_name api.analyzelaw.com;
-
-    include /etc/nginx/snippets/ssl.conf;
-
-    location / {
-        include /etc/nginx/snippets/cors-headers.conf;
-
-        proxy_pass http://if-sitesearch:8001;
-    }
-}
+#server {
+#    listen 443 ssl http2;
+#    listen [::]:443 ssl http2;
+#    server_name api.analyzelaw.com;
+#
+#    include /etc/nginx/snippets/ssl.conf;
+#
+#    location / {
+#        include /etc/nginx/snippets/cors-headers.conf;
+#
+#        proxy_pass http://if-sitesearch:8001;
+#    }
+#}
 
 server {
     listen 443 ssl http2;

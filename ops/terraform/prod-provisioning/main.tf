@@ -47,10 +47,9 @@ module "kubernetes" {
 		elasticsearch = 3
 		searchservice = 2
 
-    //SiS_API
+		// SiS API
     sitesearch = 1
-
-		//The values from here are just for documentation and do not change anything
-		tagging_service = 1
+		// The values from here are just for documentation and do not change anything
+		//		tagging_service = 1
 	}
 }

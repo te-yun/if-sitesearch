@@ -122,31 +122,31 @@ resource "null_resource" "Sitesearch-Api"{
 }
 */
 
-resource "null_resource" "Tagging-Service"{
-
-	depends_on=["module.master","null_resource.Kubernetes-Metaobjects"]
-
-	triggers = {
-		kubernetes_configuration_hash = "${sha1(file("./modules/setup/kubernetes_module/kubernetes_templates/kube_tagging-service-template.yaml"))}"
-	}
-
-	//turning the rendered template to a file and then executing
-	provisioner "remote-exec" {
-		inline=["export KUBECONFIG=$HOME/admin.conf ",
-						"cat <<EOT > kube_tagging-service.yaml",
-						"${data.template_file.kubernetes_tagging-service.rendered}",
-						"EOT",
-						"if [[ $(kubectl get pod if-tagger) ]]; then kubectl replace --force=true -f kube_tagging-service.yaml ; else kubectl apply -f kube_tagging-service.yaml; fi"]
-	}
-
-	connection {
-			user = "${var.ssh_user}"
-			//Access IP of newly provisioned machine
-			host = "${var.ip_address_list[0]}"
-			type = "ssh"
-			private_key="${var.ssh_private_key}"
-	}
-}
+//resource "null_resource" "Tagging-Service"{
+//
+//	depends_on=["module.master","null_resource.Kubernetes-Metaobjects"]
+//
+//	triggers = {
+//		kubernetes_configuration_hash = "${sha1(file("./modules/setup/kubernetes_module/kubernetes_templates/kube_tagging-service-template.yaml"))}"
+//	}
+//
+//	//turning the rendered template to a file and then executing
+//	provisioner "remote-exec" {
+//		inline=["export KUBECONFIG=$HOME/admin.conf ",
+//						"cat <<EOT > kube_tagging-service.yaml",
+//						"${data.template_file.kubernetes_tagging-service.rendered}",
+//						"EOT",
+//						"if [[ $(kubectl get pod if-tagger) ]]; then kubectl replace --force=true -f kube_tagging-service.yaml ; else kubectl apply -f kube_tagging-service.yaml; fi"]
+//	}
+//
+//	connection {
+//			user = "${var.ssh_user}"
+//			//Access IP of newly provisioned machine
+//			host = "${var.ip_address_list[0]}"
+//			type = "ssh"
+//			private_key="${var.ssh_private_key}"
+//	}
+//}
 
 resource "null_resource" "Sitesearch-Elasticsearch"{
 
