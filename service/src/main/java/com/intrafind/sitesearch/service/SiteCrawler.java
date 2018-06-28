@@ -81,6 +81,12 @@ public class SiteCrawler extends WebCrawler {
     @Override
     public boolean shouldVisit(Page referringPage, WebURL webUrl) {
         final String href = webUrl.getURL().toLowerCase();
+        if (href.toLowerCase().endsWith("pdf"))
+            LOG.warn("siteId: " + siteId + " - IS_PDF-REMOVE_THIS-FIRST: " + url + "isCrawled"
+                    + Boolean.valueOf(!BLACKLIST.matcher(href).matches()
+                    && href.startsWith(url.toString())
+                    && isAllowedForRobot(webUrl.getURL())
+                    && (containsQuery || noQueryParameter(webUrl))));
         return !BLACKLIST.matcher(href).matches()
                 && href.startsWith(url.toString())
                 && isAllowedForRobot(webUrl.getURL())
@@ -100,7 +106,7 @@ public class SiteCrawler extends WebCrawler {
     public void visit(final Page page) {
         final String url = page.getWebURL().getURL();
         if (url.toLowerCase().endsWith("pdf"))
-            LOG.warn("siteId: " + siteId + " - IS_PDF-REMOVE_THIS: " + url);
+            LOG.warn("siteId: " + siteId + " - IS_PDF-REMOVE_THIS-SECOND: " + url);
         if (isPDF(page)) {
             LOG.warn("siteId: " + siteId + " - IS_PDF: " + url);
             // TODO translate to sitePage
