@@ -37,16 +37,16 @@ sudo chown $(id -u):$(id -g) $HOME/admin.conf
 export KUBECONFIG=$HOME/admin.conf
 echo "export KUBECONFIG=$HOME/admin.conf">> .profile
 
-#Make networking between nodes and master possible with Calico.
+# Make networking between nodes and master possible with Calico.
 kubectl apply -f https://docs.projectcalico.org/v3.0/getting-started/kubernetes/installation/hosted/kubeadm/1.7/calico.yaml
 
-#Create connection to registry. This secret has to be mentioned in the Pod definition.
+# Create connection to registry. This secret has to be mentioned in the Pod definition.
 kubectl create secret docker-registry ${docker_registry_secret_name} --docker-server=${docker_registry_address} --docker-username=${docker_registry_username} --docker-password=${docker_registry_password} --docker-email=this.field.is@deprecated.com
 
-#Make containers schedulable on master.
+# Make containers schedulable on master.
 kubectl taint nodes --all node-role.kubernetes.io/master-
 
-#Expose DNS
+# Expose DNS
 kubectl --namespace=kube-system get svc kube-dns -o yaml > kube-dns.yaml
 sed -i 's/ClusterIP/NodePort/' kube-dns.yaml
 kubectl --namespace=kube-system apply -f kube-dns.yaml
