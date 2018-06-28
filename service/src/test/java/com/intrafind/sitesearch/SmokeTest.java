@@ -83,6 +83,7 @@ public class SmokeTest {
         assertEquals(HttpStatus.UNAUTHORIZED.value(), response.code());
     }
 
+    @Ignore("Terraform/Kubernetes issue")
     @Test
     public void assureTaggerProtection() throws Exception {
         final Request request = new Request.Builder()
@@ -92,6 +93,7 @@ public class SmokeTest {
         assertEquals(HttpStatus.UNAUTHORIZED.value(), response.code());
     }
 
+    @Ignore("Terraform/Kubernetes issue")
     @Test
     public void assureTaggerContent() throws Exception {
         final Request request = new Request.Builder()
