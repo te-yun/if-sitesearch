@@ -81,7 +81,7 @@ public class SiteCrawler extends WebCrawler {
     @Override
     public boolean shouldVisit(Page referringPage, WebURL webUrl) {
         final String href = webUrl.getURL().toLowerCase();
-        if (href.toLowerCase().endsWith("pdf"))
+        if (href.endsWith("pdf"))
             LOG.warn("siteId: " + siteId + " - IS_PDF-REMOVE_THIS-FIRST: " + href + " - isCrawled: "
                     + Boolean.valueOf(!BLACKLIST.matcher(href).matches()
                     && href.startsWith(url.toString())
