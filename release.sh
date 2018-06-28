@@ -11,9 +11,9 @@ img_fqn=docker-registry.sitesearch.cloud/intrafind/${docker_image_name}:${docker
 cp -r /home/ubuntu/docker-build-data/api-sitesearch/service .
 cd service
 docker build --tag intrafind/${docker_image_name}:${docker_tag} .
-docker rm -f ${docker_image_name}
 cd ..
 
+docker rm -f ${docker_image_name}
 docker run -d --name ${docker_image_name} \
     --log-driver=gelf \
     --log-opt gelf-address=udp://localhost:12201 \
@@ -33,6 +33,7 @@ docker run -d --name ${docker_image_name} \
     intrafind/${docker_image_name}:${docker_tag}
 docker push ${img_fqn}
 
+docker rm -f sis-api
 docker run -d --name sis-api \
     --log-driver=gelf \
     --log-opt gelf-address=udp://localhost:12201 \
