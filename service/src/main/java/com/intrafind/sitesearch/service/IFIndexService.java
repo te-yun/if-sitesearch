@@ -18,24 +18,27 @@ package com.intrafind.sitesearch.service;
 
 import com.intrafind.api.Document;
 import com.intrafind.api.index.Index;
+import com.intrafind.sitesearch.Application;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public class IFIndexService implements Index {
+    static final Index INDEX_SERVICE = IfinderCoreClient.newHessianClient(Index.class, Application.IFINDER_CORE + "/index");
+
     @Override
     public void index(Document... documents) {
-        SiteService.INDEX_SERVICE.index(documents);
+        INDEX_SERVICE.index(documents);
     }
 
     @Override
     public List<Document> fetch(String[] options, String... documents) {
-        return SiteService.INDEX_SERVICE.fetch(options, documents);
+        return INDEX_SERVICE.fetch(options, documents);
     }
 
     @Override
     public void delete(String... documents) {
-        SiteService.INDEX_SERVICE.delete(documents);
+        INDEX_SERVICE.delete(documents);
     }
 }

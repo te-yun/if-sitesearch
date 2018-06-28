@@ -18,7 +18,6 @@ package com.intrafind.sitesearch.service;
 
 import com.intrafind.api.Fields;
 import com.intrafind.api.search.Search;
-import com.intrafind.sitesearch.Application;
 import com.intrafind.sitesearch.dto.Autocomplete;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,11 +30,10 @@ import java.util.UUID;
 
 @Service
 public class AutocompleteService {
-    private static final Search SEARCH_AUTOCOMPLETE_SERVICE = IfinderCoreClient.newHessianClient(Search.class, Application.IFINDER_CORE + "/autocomplete");
     private static final Logger LOG = LoggerFactory.getLogger(AutocompleteService.class);
 
     public Optional<Autocomplete> autocomplete(String query, UUID siteId) {
-        com.intrafind.api.search.Hits hits = SEARCH_AUTOCOMPLETE_SERVICE.search(
+        com.intrafind.api.search.Hits hits = IFSearchService.SEARCH_AUTOCOMPLETE_CLIENT.search(
                 query,
                 Search.FILTER_QUERY, Fields.TENANT + ":" + siteId,
                 "ac-dym.profile", "fuzzy",

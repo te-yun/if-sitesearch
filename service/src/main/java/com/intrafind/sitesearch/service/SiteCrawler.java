@@ -82,7 +82,7 @@ public class SiteCrawler extends WebCrawler {
     public boolean shouldVisit(Page referringPage, WebURL webUrl) {
         final String href = webUrl.getURL().toLowerCase();
         if (href.toLowerCase().endsWith("pdf"))
-            LOG.warn("siteId: " + siteId + " - IS_PDF-REMOVE_THIS-FIRST: " + url + "isCrawled"
+            LOG.warn("siteId: " + siteId + " - IS_PDF-REMOVE_THIS-FIRST: " + href + " - isCrawled"
                     + Boolean.valueOf(!BLACKLIST.matcher(href).matches()
                     && href.startsWith(url.toString())
                     && isAllowedForRobot(webUrl.getURL())

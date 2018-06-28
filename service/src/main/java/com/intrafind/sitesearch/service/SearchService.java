@@ -21,7 +21,6 @@ import com.intrafind.api.search.Search;
 import com.intrafind.sitesearch.dto.FoundPage;
 import com.intrafind.sitesearch.dto.Hits;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -36,12 +35,11 @@ public class SearchService {
     private final Search searchService;
 
     @Autowired
-    public SearchService(@Qualifier(value = "IFSearchService") Search searchService) {
+    public SearchService(final Search searchService) {
         this.searchService = searchService;
     }
 
     public Hits search(final String query, final UUID siteId) {
-//        com.intrafind.api.search.Hits hits = IFSearchService.SEARCH_SERVICE.search(
         com.intrafind.api.search.Hits hits = searchService.search(
 //                query + " AND " + Fields.TENANT + ":" + siteId,
                 query, Search.FILTER_QUERY, Fields.TENANT + ":" + siteId,

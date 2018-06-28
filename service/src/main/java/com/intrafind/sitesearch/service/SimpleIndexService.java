@@ -18,24 +18,33 @@ package com.intrafind.sitesearch.service;
 
 import com.intrafind.api.Document;
 import com.intrafind.api.index.Index;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Profile("oss")
 @Repository
 public class SimpleIndexService implements Index {
+    private static final Logger LOG = LoggerFactory.getLogger(SimpleIndexService.class);
+
     @Override
     public void index(Document... documents) {
-        SiteService.INDEX_SERVICE.index(documents);
+        LOG.warn("SimpleIndexService#index");
+        IFIndexService.INDEX_SERVICE.index(documents);
     }
 
     @Override
     public List<Document> fetch(String[] options, String... documents) {
-        return SiteService.INDEX_SERVICE.fetch(options, documents);
+        LOG.warn("SimpleIndexService#fetch");
+        return IFIndexService.INDEX_SERVICE.fetch(options, documents);
     }
 
     @Override
     public void delete(String... documents) {
-        SiteService.INDEX_SERVICE.delete(documents);
+        LOG.warn("SimpleIndexService#delete");
+        IFIndexService.INDEX_SERVICE.delete(documents);
     }
 }

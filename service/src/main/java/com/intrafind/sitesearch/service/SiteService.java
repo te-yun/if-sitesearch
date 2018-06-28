@@ -21,7 +21,6 @@ import com.intrafind.api.Fields;
 import com.intrafind.api.index.Index;
 import com.intrafind.api.search.Hits;
 import com.intrafind.api.search.Search;
-import com.intrafind.sitesearch.Application;
 import com.intrafind.sitesearch.BaseConfig;
 import com.intrafind.sitesearch.dto.CrawlStatus;
 import com.intrafind.sitesearch.dto.FetchedPage;
@@ -40,6 +39,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -67,12 +67,13 @@ import java.util.stream.Collectors;
 @Service
 public class SiteService {
     private static final Logger LOG = LoggerFactory.getLogger(SiteService.class);
+    private final Search searchService;
+    private final Index indexService;
     /**
      * This env initialization is just broken on Windows.
      */
     public static final UUID ADMIN_SITE_SECRET = UUID.fromString(System.getenv("ADMIN_SITE_SECRET"));
 
-    static final Index INDEX_SERVICE = IfinderCoreClient.newHessianClient(Index.class, Application.IFINDER_CORE + "/index");
     private static final String SITE_CONFIGURATION_DOCUMENT_PREFIX = "site-configuration-";
     private static final String CRAWL_STATUS_SINGLETON_DOCUMENT = "crawl-status";
     /**
@@ -83,6 +84,12 @@ public class SiteService {
     static final String PAGE_THUMBNAIL_META_NAME = "thumbnail";
     static final String PAGE_THUMBNAIL = "_store.thumbnail";
     private static final String PAGE_TIMESTAMP_NEW = "_store.timestamp";
+
+    @Autowired
+    public SiteService(final Search searchService, Index indexService) {
+        this.searchService = searchService;
+        this.indexService = indexService;
+    }
 
     public Optional<FetchedPage> indexExistingPage(String id, UUID siteId, UUID siteSecret, SitePage page) {
         if (siteId != null && siteSecret != null) { // credentials are provided as a tuple only
@@ -116,7 +123,7 @@ public class SiteService {
         doc.set(PAGE_THUMBNAIL, page.getThumbnail() == null ? "" : page.getThumbnail());
         doc.set(PAGE_TIMESTAMP, Instant.now());
         doc.set(PAGE_TIMESTAMP_NEW, Instant.now());
-        INDEX_SERVICE.index(doc);
+        indexService.index(doc);
 
         LOG.info("siteId: " + siteId + " - bodySize: " + page.getBody().length() + " - titleSize: " + page.getTitle().length() + " - URL: " + page.getUrl());
 
@@ -137,7 +144,7 @@ public class SiteService {
     }
 
     public Optional<SiteProfile> fetchSiteProfile(UUID siteId) {
-        final Optional<Document> siteProfile = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
+        final Optional<Document> siteProfile = indexService.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
         return siteProfile.map(document -> {
             final Set<URI> urls;
             if (document.getAll("urls") == null) {
@@ -168,12 +175,12 @@ public class SiteService {
     }
 
     public Optional<UUID> fetchSiteSecret(UUID siteId) {
-        Optional<Document> siteConfiguration = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
+        Optional<Document> siteConfiguration = indexService.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
         return siteConfiguration.map(document -> UUID.fromString(document.get("secret")));
     }
 
     public Optional<List<String>> fetchAllDocuments(final UUID siteId) {
-        final Hits documentWithSiteSecret = IFSearchService.SEARCH_SERVICE.search(
+        final Hits documentWithSiteSecret = searchService.search(
                 Fields.TENANT + ":" + siteId.toString(),
                 Search.RETURN_FIELDS, Fields.TENANT,
                 Search.HITS_LIST_SIZE, 10_000
@@ -193,11 +200,11 @@ public class SiteService {
     private void initSite(UUID siteId, UUID siteSecret) {
         final Document siteConfiguration = new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId);
         siteConfiguration.set("secret", siteSecret);
-        INDEX_SERVICE.index(siteConfiguration);
+        indexService.index(siteConfiguration);
     }
 
     private void storeSite(UUID siteId, UUID siteSecret, String email, List<SiteProfile.Config> configs) {
-        final Optional<Document> siteConfiguration = INDEX_SERVICE.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
+        final Optional<Document> siteConfiguration = indexService.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
         final Document siteConfigDoc;
         siteConfigDoc = siteConfiguration.orElseGet(() -> new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId));
         siteConfigDoc.set("secret", siteSecret);
@@ -206,7 +213,7 @@ public class SiteService {
         configs.forEach(config -> {
             siteConfigDoc.set(config.getUrl().toString(), Arrays.asList(config.getPageBodyCssSelector(), Boolean.toString(config.isSitemapsOnly())));
         });
-        INDEX_SERVICE.index(siteConfigDoc);
+        indexService.index(siteConfigDoc);
     }
 
     private void storeCrawlStatus(SitesCrawlStatus sitesCrawlStatus) {
@@ -215,7 +222,7 @@ public class SiteService {
                 .forEach(siteCrawlStatus ->
                         crawlStatus.set(siteCrawlStatus.getSiteId().toString(), Arrays.asList(siteCrawlStatus.getCrawled(), siteCrawlStatus.getPageCount())));
 
-        INDEX_SERVICE.index(crawlStatus);
+        indexService.index(crawlStatus);
     }
 
     public Optional<SitesCrawlStatus> updateCrawlStatusInShedule(UUID siteId, long pageCount) {
@@ -231,13 +238,13 @@ public class SiteService {
             final Document updatedCrawlStatusDoc = new Document(CRAWL_STATUS_SINGLETON_DOCUMENT);
             sitesCrawlStatus.getSites()
                     .forEach(updatedCrawlStatus -> updatedCrawlStatusDoc.set(updatedCrawlStatus.getSiteId().toString(), Arrays.asList(updatedCrawlStatus.getCrawled(), updatedCrawlStatus.getPageCount())));
-            INDEX_SERVICE.index(updatedCrawlStatusDoc);
+            indexService.index(updatedCrawlStatusDoc);
         });
         return fetchSitesCrawlStatus;
     }
 
     public Optional<FetchedPage> fetchById(String id) {
-        final Optional<Document> found = INDEX_SERVICE.fetch(Index.ALL, id).stream().findAny();
+        final Optional<Document> found = indexService.fetch(Index.ALL, id).stream().findAny();
 
         if (found.isPresent()) {
             final Document foundDocument = found.get();
@@ -265,7 +272,7 @@ public class SiteService {
             } else if (siteSecret.equals(fetchedSiteSecret.get())) { // authorized
                 if (clearIndex) {
                     final Optional<List<String>> allPages = fetchAllDocuments(siteId);
-                    allPages.ifPresent(pages -> INDEX_SERVICE.delete(pages.toArray(new String[]{})));
+                    allPages.ifPresent(pages -> indexService.delete(pages.toArray(new String[]{})));
                 }
                 if (isGeneric) {
                     return updateIndexGenerically(feedUrl, siteId, siteSecret, stripHtmlTags);
@@ -432,7 +439,7 @@ public class SiteService {
             if (pages.isPresent()) {
                 String[] documents = new String[pages.get().size()];
                 documents = pages.get().toArray(documents);
-                INDEX_SERVICE.delete(documents);
+                indexService.delete(documents);
                 return true;
             }
         }
@@ -442,7 +449,7 @@ public class SiteService {
     public boolean delete(UUID siteId, UUID siteSecret, String pageId) {
         if (isAllowedToModify(siteId, siteSecret)) {
             // just assume everything works... right?
-            INDEX_SERVICE.delete(pageId);
+            indexService.delete(pageId);
             return true;
         } else {
             return false;
@@ -450,7 +457,7 @@ public class SiteService {
     }
 
     private void deleteWithoutFurtherChecks(final String... pageIds) {
-        INDEX_SERVICE.delete(pageIds);
+        indexService.delete(pageIds);
     }
 
     public boolean clearIndex(UUID siteId, UUID siteSecret) {
@@ -490,7 +497,7 @@ public class SiteService {
 
     private Optional<SitesCrawlStatus> fetchSitesCrawlStatus() {
         final Set<CrawlStatus> sitesCrawlStatus = new HashSet<>();
-        final Optional<Document> crawlStatus = INDEX_SERVICE.fetch(Index.ALL, CRAWL_STATUS_SINGLETON_DOCUMENT).stream().findAny();
+        final Optional<Document> crawlStatus = indexService.fetch(Index.ALL, CRAWL_STATUS_SINGLETON_DOCUMENT).stream().findAny();
         crawlStatus.ifPresent(document -> document.getFields().forEach((uuidKey, crawledTimestamp) -> {
             if (!uuidKey.startsWith("_")) {
                 long pageCount;
@@ -518,7 +525,7 @@ public class SiteService {
 
     public Optional<IndexCleanupResult> removeOldSiteIndexPages(final UUID siteId) {
         final Instant obsoletePageThreshold = Instant.now().minus(4, ChronoUnit.HALF_DAYS);
-        final Hits documents = IFSearchService.SEARCH_SERVICE.search(
+        final Hits documents = searchService.search(
                 Fields.TENANT + ":" + siteId.toString(),
                 Search.RETURN_FIELDS, Fields.TENANT + SearchService.QUERY_SEPARATOR + Fields.URL + SearchService.QUERY_SEPARATOR + PAGE_TIMESTAMP,
                 Search.HITS_LIST_SIZE, 10_000
