@@ -10,6 +10,7 @@ docker start teamcity-agent-merkur
 
 docker start sitesearch-elasticsearch # replaced by Kubernetes
 docker start sitesearch-elasticsearch-1 # replaced by Kubernetes
+docker start sitesearch-elasticsearch-quorum # replaced by Kubernetes
 docker start sitesearch-search-service # replaced by Kubernetes
 docker start sitesearch-search-service-1 # replaced by Kubernetes
 
