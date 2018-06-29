@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk AS builder
+FROM openjdk:9-jdk AS builder
 
 MAINTAINER Alexander Orlov <alexander.orlov@intrafind.de>
 
