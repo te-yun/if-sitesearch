@@ -2,9 +2,9 @@
 
 #    --no-scan --parallel \
 #    --build-cache --continue \
-./gradlew clean :service:test \
+#    --continue \
+./gradlew :service:test \
     --no-scan --parallel \
-    --continue \
     --tests *Smoke* \
     --info \
     $1
