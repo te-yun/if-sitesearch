@@ -3,7 +3,7 @@
 #    --no-scan --parallel \
 #    --build-cache --continue \
 #    --continue \
-./gradlew :service:test \
+./gradlew clean :service:test \
     --no-scan --parallel \
     --tests *Smoke* \
     --info \
