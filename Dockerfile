@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk AS builder
+FROM openjdk:8-jre AS builder
 
 MAINTAINER Alexander Orlov <alexander.orlov@intrafind.de>
 
@@ -39,7 +39,6 @@ FROM openjdk:10-jre AS service
 WORKDIR /srv
 COPY --from=builder /opt/builder/service/build/libs/*.jar .
 COPY --from=builder /opt/builder/service/config config
-#COPY /root/.profile .
 ENV SPRING_CONFIG_NAME application, prod
 
 EXPOSE 8001
