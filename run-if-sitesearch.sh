@@ -33,8 +33,8 @@
 #    intrafind/${docker_image_name}:${docker_tag}
 #docker push ${img_fqn}
 
-docker rm -f sis-api
-docker run -d --name sis-api \
+docker rm -f if-sitesearch
+docker run -d --name if-sitesearch \
     --log-driver=gelf \
     --log-opt gelf-address=udp://localhost:12201 \
     --env SIS_API_SERVICE_URL=$SIS_API_SERVICE_URL \
@@ -50,8 +50,8 @@ docker run -d --name sis-api \
     --env SCM_HASH=$SCM_HASH \
     --env SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=$SECURITY_OAUTH2_CLIENT_CLIENT_SECRET \
     --network sitesearch \
-    intrafind/sis-api:latest
-docker push docker-registry.sitesearch.cloud/intrafind/sis-api:latest
+    intrafind/if-sitesearch:latest
+docker push docker-registry.sitesearch.cloud/intrafind/if-sitesearch:latest
 
 danglingImages=$(docker images -f "dangling=true" -q)
 if [ "$danglingImages" ]; then

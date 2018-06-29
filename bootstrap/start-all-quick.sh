@@ -14,7 +14,7 @@ docker start sitesearch-elasticsearch-quorum # replaced by Kubernetes
 docker start sitesearch-search-service # replaced by Kubernetes
 docker start sitesearch-search-service-1 # replaced by Kubernetes
 
-docker start sis-api
+docker start if-sitesearch
 docker start if-sitesearch-green
 docker start if-sitesearch-green-1
 docker start if-sitesearch-blue
