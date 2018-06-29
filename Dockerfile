@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk AS builder
+FROM openjdk:9-jdk AS builder
 
 MAINTAINER Alexander Orlov <alexander.orlov@intrafind.de>
 
@@ -43,6 +43,4 @@ ENV SPRING_CONFIG_NAME application, prod
 
 EXPOSE 8001
 
-#CMD ["java", "-jar", "-Xms256m", "-Xmx256m", "/srv/*.jar"]
 CMD ["java", "-jar", "-Xms256m", "-Xmx256m", "service.jar"]
-#CMD java -jar -Xms256m -Xmx256m /srv/*.jar
