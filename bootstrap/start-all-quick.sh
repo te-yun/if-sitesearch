@@ -8,10 +8,10 @@ sudo rm /home/ubuntu/buildAgent/logs/buildAgent.properties.lock
 docker start teamcity-agent-venus
 docker start teamcity-agent-merkur
 
-#docker start sitesearch-elasticsearch # replaced by Kubernetes
-#docker start sitesearch-elasticsearch-1 # replaced by Kubernetes
-#docker start sitesearch-search-service # replaced by Kubernetes
-#docker start sitesearch-search-service-1 # replaced by Kubernetes
+docker start sitesearch-elasticsearch # replaced by Kubernetes
+docker start sitesearch-elasticsearch-1 # replaced by Kubernetes
+docker start sitesearch-search-service # replaced by Kubernetes
+docker start sitesearch-search-service-1 # replaced by Kubernetes
 
 docker start if-sitesearch
 docker start if-sitesearch-green
