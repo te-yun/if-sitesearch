@@ -4,7 +4,7 @@ MAINTAINER Alexander Orlov <alexander.orlov@intrafind.de>
 
 WORKDIR /opt/builder
 COPY . /opt/builder
-RUN ./gradlew build --info
+RUN ./gradlew clean build --info
 
 FROM openjdk:10-jre as service
 
