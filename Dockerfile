@@ -32,7 +32,7 @@ ENV DEV_SKIP_FLAG true
 ENV SECURITY_OAUTH2_CLIENT_CLIENT_SECRET $SECURITY_OAUTH2_CLIENT_CLIENT_SECRET
 
 COPY . /opt/builder
-RUN ./gradlew clean build --info
+RUN ./gradlew build --info
 
 FROM openjdk:10-jre AS service
 
