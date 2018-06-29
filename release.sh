@@ -51,6 +51,7 @@ docker run -d --name sis-api \
     --env SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=$SECURITY_OAUTH2_CLIENT_CLIENT_SECRET \
     --network $docker_network \
     intrafind/sis-api:latest
+docker push docker-registry.sitesearch.cloud/intrafind/sis-api:latest
 
 danglingImages=$(docker images -f "dangling=true" -q)
 if [ "$danglingImages" ]; then
