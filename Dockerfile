@@ -39,7 +39,7 @@ FROM openjdk:10-jre AS service
 WORKDIR /srv
 COPY --from=builder /opt/builder/service/build/libs/*.jar .
 COPY --from=builder /opt/builder/service/config config
-COPY /root/.profile .
+#COPY /root/.profile .
 ENV SPRING_CONFIG_NAME application, prod
 
 EXPOSE 8001
