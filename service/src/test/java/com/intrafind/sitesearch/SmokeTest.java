@@ -68,7 +68,8 @@ public class SmokeTest {
     public static final String API_FRONTPAGE_MARKER = "<title>Site Search</title>";
     public static final String SITES_API = "https://api.sitesearch.cloud/sites/";
     private static final UUID BW_BANK_SITE_ID = UUID.fromString("269b0538-120b-44b1-a365-488c2f3fcc15");
-    private static final int HEADER_SIZE = 399;
+    private static final boolean IS_AFTER_JAVA_8 = System.getenv("JAVA_DEBIAN_VERSION") != null && System.getenv("JAVA_DEBIAN_VERSION").startsWith("8"); // TODO remove this later on
+    private static final int HEADER_SIZE = IS_AFTER_JAVA_8 ? 347 : 399;
 
     @Autowired
     private TestRestTemplate caller;
@@ -175,7 +176,7 @@ public class SmokeTest {
         assertEquals(HttpStatus.OK.value(), response.code());
         assertNull(response.headers().get("x-frame-options"));
         assertNull(response.headers().get("X-Frame-Options"));
-        assureCorsHeaders(response.headers(), 447);
+        assureCorsHeaders(response.headers(), IS_AFTER_JAVA_8 ? 395 : 447);
     }
 
     @Test
