@@ -10,11 +10,7 @@ FROM openjdk:10-jre as service
 
 WORKDIR /srv
 COPY --from=builder /opt/builder/service/build/libs/*.jar .
-COPY --from=builder /opt/builder/service/config .
-COPY --from=nginx:latest /etc/nginx/nginx.conf /opt/nginx.conf
-#COPY /home/ubuntu/docker-build-data/api-sitesearch/service/config .
-#COPY service/config .
-#COPY service/config fromLocalService-Config
+COPY --from=builder /opt/builder/service/config config
 ENV SPRING_CONFIG_NAME application, prod
 
 EXPOSE 8001
