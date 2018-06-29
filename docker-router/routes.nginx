@@ -173,7 +173,7 @@ server {
     location / {
         include /etc/nginx/snippets/cors-headers.conf;
 
-        proxy_pass http://if-sitesearch:8001;
+        proxy_pass http://sis-api:8001;
     }
 }
 
