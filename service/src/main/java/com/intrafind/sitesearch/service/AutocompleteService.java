@@ -25,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -40,14 +39,14 @@ public class AutocompleteService {
     }
 
     public Optional<Autocomplete> autocomplete(String query, UUID siteId) {
-        com.intrafind.api.search.Hits hits = autocompleteClient.search(
+        final var hits = autocompleteClient.search(
                 query,
                 Search.FILTER_QUERY, Fields.TENANT + ":" + siteId,
                 "ac-dym.profile", "fuzzy",
                 Search.HITS_LIST_SIZE, 10
         );
 
-        final List<String> terms = hits.getMetaData().getAll("autocomplete.terms");
+        final var terms = hits.getMetaData().getAll("autocomplete.terms");
         if (terms == null || terms.isEmpty()) {
             return Optional.of(new Autocomplete(Collections.emptyList()));
         } else {

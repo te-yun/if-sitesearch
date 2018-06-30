@@ -79,7 +79,7 @@ public class SiteController {
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "siteSecret") UUID siteSecret
     ) {
-        final Optional<SiteProfile> siteProfileFetch = siteService.fetchSiteProfile(siteId, siteSecret);
+        final var siteProfileFetch = siteService.fetchSiteProfile(siteId, siteSecret);
         if (siteProfileFetch.isPresent()) {
             final SiteProfile siteProfile = siteProfileFetch.get();
             return ResponseEntity.ok(siteProfile);
@@ -94,7 +94,7 @@ public class SiteController {
             @RequestParam(value = "siteSecret") UUID siteSecret,
             @RequestBody SiteProfileUpdate siteProfileUpdate
     ) {
-        final Optional<SiteProfile> siteProfileUpdated = siteService.updateSiteProfile(siteId, siteSecret, siteProfileUpdate);
+        final var siteProfileUpdated = siteService.updateSiteProfile(siteId, siteSecret, siteProfileUpdate);
         if (siteProfileUpdated.isPresent()) {
             final SiteProfile siteProfile = siteProfileUpdated.get();
             return ResponseEntity.ok(siteProfile);
@@ -110,7 +110,7 @@ public class SiteController {
     ) {
         final var pageId = SitePage.hashPageId(siteId, url);
 
-        final Optional<FetchedPage> fetched = siteService.fetchById(pageId);
+        final var fetched = siteService.fetchById(pageId);
         return fetched.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -120,7 +120,7 @@ public class SiteController {
             @RequestParam(name = "siteSecret") UUID siteSecret,
             @RequestBody SitePage page
     ) {
-        String pageId = SitePage.hashPageId(siteId, page.getUrl());
+        final var pageId = SitePage.hashPageId(siteId, page.getUrl());
         // TODO use SiteUpdate DTO with NO siteId & NO siteSecret provided
 
         // TODO make sure that an existing page is actually updated
@@ -149,7 +149,7 @@ public class SiteController {
     ResponseEntity<List<String>> fetchAll(
             @PathVariable(value = "siteId") UUID siteId
     ) {
-        Optional<List<String>> allDocumentsOfTenant = siteService.fetchAllDocuments(siteId);
+        final var allDocumentsOfTenant = siteService.fetchAllDocuments(siteId);
         return allDocumentsOfTenant.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -238,7 +238,7 @@ public class SiteController {
             siteId = cookieSite;
         }
 
-        Optional<Autocomplete> result = autocompleteService.autocomplete(query, siteId);
+        final var result = autocompleteService.autocomplete(query, siteId);
         if (result.isPresent()) {
             final Autocomplete autocomplete = result.get();
             final Instant stop = Instant.now();
