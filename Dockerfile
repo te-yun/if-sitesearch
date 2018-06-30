@@ -1,4 +1,4 @@
-FROM openjdk:10-jdk AS builder
+FROM openjdk:10-jre AS builder
 
 MAINTAINER Alexander Orlov <alexander.orlov@intrafind.de>
 
