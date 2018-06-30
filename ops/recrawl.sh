@@ -18,7 +18,6 @@ curl -X GET \
     "https://api.sitesearch.cloud/sites/crawl/status?serviceSecret=${ADMIN_SITE_SECRET}" \
     -o $SITE_CRAWL_STATUS_FILE
 
-sudo apt-get install -y jq
 apt-get install -y jq
 failedCrawlStatusList=$(cat $SITE_CRAWL_STATUS_FILE | jq -r '.sites[] | select (.pageCount | length  == 0 )');
 
