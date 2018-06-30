@@ -97,7 +97,7 @@ public class LoadTest {
 //                .include(".*")
 //                .include(LoadIndex2Users.class.getSimpleName())
                 .include(LoadTest.class.getSimpleName())
-                .forks(0)
+                .forks(1)
                 .threads(10)
                 .mode(Mode.Throughput)
                 .resultFormat(ResultFormatType.JSON)
