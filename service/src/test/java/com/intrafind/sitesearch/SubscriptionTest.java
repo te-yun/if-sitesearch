@@ -47,7 +47,7 @@ public class SubscriptionTest {
                 Subscription.class
         );
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        final Subscription subscription = response.getBody();
+        final var subscription = response.getBody();
         assertNotNull(subscription);
         assertNotNull(subscription.getId());
         assertNotNull(subscription.getSiteId());

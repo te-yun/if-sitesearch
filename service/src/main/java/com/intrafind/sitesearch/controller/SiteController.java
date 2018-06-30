@@ -108,7 +108,7 @@ public class SiteController {
             @PathVariable(value = "siteId") UUID siteId,
             @RequestParam(value = "url") String url
     ) {
-        final String pageId = SitePage.hashPageId(siteId, url);
+        final var pageId = SitePage.hashPageId(siteId, url);
 
         final Optional<FetchedPage> fetched = siteService.fetchById(pageId);
         return fetched.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
@@ -207,7 +207,7 @@ public class SiteController {
             @RequestParam(value = "url") String url,
             @RequestParam(name = "siteSecret") UUID siteSecret
     ) {
-        String pageId = SitePage.hashPageId(siteId, url);
+        final var pageId = SitePage.hashPageId(siteId, url);
 
         return deleteById(siteId, pageId, siteSecret);
     }
@@ -230,7 +230,7 @@ public class SiteController {
             @RequestParam(value = "query", defaultValue = "") String query,
             @PathVariable(value = "siteId") UUID siteId
     ) {
-        final Instant start = Instant.now();
+        final var start = Instant.now();
         if (query.isEmpty()) return ResponseEntity.badRequest().build();
 
         // override siteId with cookie value for debugging & speed up the getting started experience
@@ -256,7 +256,7 @@ public class SiteController {
             @RequestParam(value = "query", defaultValue = "") String query,
             @PathVariable(value = "siteId") UUID siteId
     ) {
-        final Instant start = Instant.now();
+        final var start = Instant.now();
         if (query.isEmpty()) return ResponseEntity.badRequest().build();
 
         // override siteId with cookie value for debugging & speed up the getting started experience
@@ -264,9 +264,9 @@ public class SiteController {
             siteId = cookieSite;
         }
 
-        final Hits searchResult = searchService.search(query, siteId);
-        final Instant stop = Instant.now();
-        final Instant searchDuration = stop.minusMillis(start.toEpochMilli());
+        final var searchResult = searchService.search(query, siteId);
+        final var stop = Instant.now();
+        final var searchDuration = stop.minusMillis(start.toEpochMilli());
         LOG.info("siteId: " + siteId + " - query: " + query + " - results: " + searchResult.getResults().size() + " - searchDurationInMs: " + searchDuration.toEpochMilli());
         return ResponseEntity.ok(searchResult);
     }

@@ -61,7 +61,7 @@ public class Application {
     static {
         try {
             macSha1Algorithm = Mac.getInstance(HMAC_SHA1_ALGORITHM);
-            final SecretKeySpec secretKey = new SecretKeySpec(SERVICE_SECRET.getBytes(), HMAC_SHA1_ALGORITHM);
+            final var secretKey = new SecretKeySpec(SERVICE_SECRET.getBytes(), HMAC_SHA1_ALGORITHM);
             macSha1Algorithm.init(secretKey);
         } catch (final NoSuchAlgorithmException | InvalidKeyException e) {
             LOG.error("Application#static_ERROR: " + e.getMessage());
@@ -72,7 +72,7 @@ public class Application {
     ResponseEntity<Subscription> subscribeViaSite(
             @PathVariable(value = "subscriptionId") String subscriptionId
     ) {
-        final Request request = new Request.Builder()
+        final var request = new Request.Builder()
                 .url("https://sitesearch.online/wp-json/wc/v1/orders/"
                         + subscriptionId
                         + "?consumer_key=" + WOO_COMMERCE_CONSUMER_KEY
@@ -142,7 +142,7 @@ public class Application {
 
     private boolean verifySha1Signature(String subscription, String signature) {
         final byte[] expectedSha1Hash = macSha1Algorithm.doFinal(subscription.getBytes());
-        final String expectedSignature = "sha1=" + DatatypeConverter.printHexBinary(expectedSha1Hash);
+        final var expectedSignature = "sha1=" + DatatypeConverter.printHexBinary(expectedSha1Hash);
 
         return expectedSignature.toLowerCase().equals(signature);
     }
