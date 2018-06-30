@@ -86,7 +86,7 @@ public class SiteCrawler extends WebCrawler {
                 && isAllowedForRobot(webUrl.getURL())
                 && (containsQuery || noQueryParameter(webUrl));
         if (isCrawled && href.endsWith("pdf")) // TODO replace with actual text from PDF extraction code
-            LOG.warn("siteId: " + siteId + " - IS_PDF-REMOVE_THIS-FIRST: " + href + " - isCrawled: " + Boolean.valueOf(isCrawled));
+            LOG.warn("siteId: " + siteId + " - IS_PDF-REMOVE_THIS-FIRST: " + href + " - isCrawled: " + isCrawled);
         return isCrawled;
     }
 

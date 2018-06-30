@@ -210,9 +210,7 @@ public class SiteService {
         siteConfigDoc.set("secret", siteSecret);
         siteConfigDoc.set("email", email);
         siteConfigDoc.set("urls", configs.stream().map(config -> config.getUrl().toString()).collect(Collectors.toList()));
-        configs.forEach(config -> {
-            siteConfigDoc.set(config.getUrl().toString(), Arrays.asList(config.getPageBodyCssSelector(), Boolean.toString(config.isSitemapsOnly())));
-        });
+        configs.forEach(config -> siteConfigDoc.set(config.getUrl().toString(), Arrays.asList(config.getPageBodyCssSelector(), Boolean.toString(config.isSitemapsOnly()))));
         indexService.index(siteConfigDoc);
     }
 
