@@ -196,10 +196,9 @@
     <orderEntry type="library" name="Gradle: io.netty:netty-common:4.1.25.Final" level="project" />
     <orderEntry type="library" name="Gradle: if-api-1.3.0.79-47216" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.tika:tika-parsers:1.18" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.ucar:netcdf4:4.5.5" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: net.java.dev.jna:jna:4.5.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.boot:spring-boot-devtools:2.0.3.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.uima:uimafit-core:2.2.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.ucar:netcdf4:4.5.5" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.ucar:grib:4.5.5" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.ucar:cdm:4.5.5" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.ucar:httpservices:4.5.5" level="project" />
@@ -260,6 +259,7 @@
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.cxf:cxf-rt-transports-http:3.0.16" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.cxf:cxf-core:3.0.16" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: net.jcip:jcip-annotations:1.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: net.java.dev.jna:jna:4.5.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.google.protobuf:protobuf-java:2.5.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.itadaki:bzip2:0.9.1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: com.beust:jcommander:1.35" level="project" />
@@ -292,10 +292,9 @@
     <orderEntry type="library" scope="TEST" name="Gradle: net.minidev:accessors-smart:1.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.ow2.asm:asm:5.0.4" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.apache.tika:tika-parsers:1.18" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: edu.ucar:netcdf4:4.5.5" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: net.java.dev.jna:jna:4.5.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.springframework.boot:spring-boot-devtools:2.0.3.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.apache.uima:uimafit-core:2.2.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: edu.ucar:netcdf4:4.5.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: edu.ucar:grib:4.5.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: edu.ucar:cdm:4.5.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: edu.ucar:httpservices:4.5.5" level="project" />
@@ -354,6 +353,7 @@
     <orderEntry type="library" scope="TEST" name="Gradle: org.apache.cxf:cxf-rt-transports-http:3.0.16" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.apache.cxf:cxf-core:3.0.16" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: net.jcip:jcip-annotations:1.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: net.java.dev.jna:jna:4.5.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.google.protobuf:protobuf-java:2.5.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.itadaki:bzip2:0.9.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.beust:jcommander:1.35" level="project" />

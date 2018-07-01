@@ -85,8 +85,10 @@ public class SiteCrawler extends WebCrawler {
                 && href.startsWith(url.toString())
                 && isAllowedForRobot(webUrl.getURL())
                 && (containsQuery || noQueryParameter(webUrl));
-        if (isCrawled && href.endsWith("pdf")) // TODO replace with actual text from PDF extraction code
-            LOG.warn("siteId: " + siteId + " - IS_PDF-REMOVE_THIS-FIRST: " + href + " - isCrawled: " + isCrawled);
+//        if (isCrawled && href.endsWith("pdf")) // TODO replace with actual text from PDF extraction code
+        if (isPDF(referringPage)) { // TODO replace with actual text from PDF extraction code
+            LOG.warn("siteId: " + siteId + " - IS_PDF: " + href + " - isCrawled: " + isCrawled);
+        }
         return isCrawled;
     }
 
