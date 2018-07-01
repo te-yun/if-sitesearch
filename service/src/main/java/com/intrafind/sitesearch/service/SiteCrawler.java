@@ -146,7 +146,7 @@ public class SiteCrawler extends WebCrawler {
 
     private boolean isPDF(final Page page) {
         final String url = page.getWebURL().getURL();
-        return page.getContentType().contains("application/pdf") || url.endsWith("pdf") || url.endsWith("PDF");
+        return (page.getContentType() != null && page.getContentType().contains("application/pdf")) || url.endsWith("pdf") || url.endsWith("PDF");
     }
 
     private void indexPage(final SitePage sitePage) {
