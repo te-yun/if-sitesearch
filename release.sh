@@ -10,7 +10,7 @@ img_fqn=docker-registry.sitesearch.cloud/intrafind/${docker_image_name}:${docker
 
 cp -r /home/ubuntu/docker-build-data/api-sitesearch/service . # TODO remove? Is already defined as first step in CI.
 cd service
-docker build --tag intrafind/${docker_image_name}:${docker_tag} .
+docker build --pull --tag intrafind/${docker_image_name}:${docker_tag} .
 cd ..
 
 docker rm -f ${docker_image_name}
