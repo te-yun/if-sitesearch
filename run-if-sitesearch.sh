@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
 
+cp -r /home/ubuntu/docker-build-data/api-sitesearch/service .
 cd service
 docker build --pull --tag intrafind/if-sitesearch:latest .
 
