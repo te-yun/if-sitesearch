@@ -33,7 +33,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -80,17 +79,17 @@ public class Application {
                 )
                 .build();
         try {
-            final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
+            final var response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
             if (isExistingOrder(response)) {
-                final byte[] rawSubscription = response.body().bytes();
-                final WooCommerceOrder order = CrawlerController.MAPPER.readValue(rawSubscription, WooCommerceOrder.class);
+                final var rawSubscription = response.body().bytes();
+                final var order = CrawlerController.MAPPER.readValue(rawSubscription, WooCommerceOrder.class);
                 // TODO update site profile to reflect a subscription?
                 // >>>> add entire Subscription to SiteProfile?
                 // TODO add siteId to crawlStatus for scheduled crawling (optional?)
 
-                final String subscriptionPlan = order.getLineItems().<WooCommerceOrder.LineItem>get(0).getSku();
-                final UUID siteId = order.getSiteId();
-                final String affiliate = order.getAffiliate();
+                final var subscriptionPlan = order.getLineItems().<WooCommerceOrder.LineItem>get(0).getSku();
+                final var siteId = order.getSiteId();
+                final var affiliate = order.getAffiliate();
                 LOG.info("siteId: " + siteId + " - subscriptionId: " + subscriptionId + " - subscriptionPlan: " + subscriptionPlan + " - affiliate: " + affiliate);
                 return ResponseEntity
                         .status(HttpStatus.OK)
@@ -123,7 +122,7 @@ public class Application {
             @RequestHeader(value = "X-Hub-Signature") String signature,
             @RequestBody String subscription
     ) {
-        final boolean isAuthenticGitHubEvent = verifySha1Signature(subscription, signature);
+        final var isAuthenticGitHubEvent = verifySha1Signature(subscription, signature);
         if (isAuthenticGitHubEvent) {
             LOG.info("github-delivery: " + delivery
                     + " - github-event: " + event
@@ -141,56 +140,56 @@ public class Application {
     }
 
     private boolean verifySha1Signature(String subscription, String signature) {
-        final byte[] expectedSha1Hash = macSha1Algorithm.doFinal(subscription.getBytes());
+        final var expectedSha1Hash = macSha1Algorithm.doFinal(subscription.getBytes());
         final var expectedSignature = "sha1=" + DatatypeConverter.printHexBinary(expectedSha1Hash);
 
         return expectedSignature.toLowerCase().equals(signature);
     }
 
-    // for testing GitHub OAuth2 requests only // TODO remove altogether later on
-    @RequestMapping(path = "/login/test", method = RequestMethod.POST)
-    ResponseEntity<Object> login(
-            @RequestParam(value = "code", required = false) String code,
-            @RequestParam(value = "access_token", required = false) String token,
-            @RequestParam(value = "client_id", required = false) String id,
-            @RequestParam(value = "client_secret", required = false) String secret,
-            @RequestParam(value = "state", required = false) String state,
-            @RequestParam(value = "redirect_uri", required = false) String redirect_uri,
-            @RequestBody(required = false) Object o
-    ) {
-
-        LOG.info("code: " + code);
-        LOG.info("token: " + token);
-        LOG.info("id: " + id);
-        LOG.info("secret: " + secret);
-        LOG.info("state: " + state);
-        LOG.info("redirect_uri: " + redirect_uri);
-        LOG.info("o: " + o);
-        return ResponseEntity
-                .status(HttpStatus.FORBIDDEN)
-                .body("Error Message");
-    }
-
-    // for testing GitHub OAuth2 requests only // TODO remove altogether later on
-    @RequestMapping(path = "/login/test1", method = RequestMethod.GET)
-    ResponseEntity<Object> login1(
-            @RequestParam(value = "code", required = false) String code,
-            @RequestParam(value = "access_token", required = false) String token,
-            @RequestParam(value = "client_id", required = false) String id,
-            @RequestParam(value = "client_secret", required = false) String secret,
-            @RequestParam(value = "state", required = false) String state,
-            @RequestParam(value = "redirect_uri", required = false) String redirect_uri,
-            @RequestBody(required = false) Object o
-    ) {
-        LOG.info("code: " + code);
-        LOG.info("token: " + token);
-        LOG.info("id: " + id);
-        LOG.info("secret: " + secret);
-        LOG.info("state: " + state);
-        LOG.info("redirect_uri: " + redirect_uri);
-        LOG.info("o: " + o);
-        return ResponseEntity.ok(o);
-    }
+//    // for testing GitHub OAuth2 requests only // TODO remove altogether later on
+//    @RequestMapping(path = "/login/test", method = RequestMethod.POST)
+//    ResponseEntity<Object> login(
+//            @RequestParam(value = "code", required = false) String code,
+//            @RequestParam(value = "access_token", required = false) String token,
+//            @RequestParam(value = "client_id", required = false) String id,
+//            @RequestParam(value = "client_secret", required = false) String secret,
+//            @RequestParam(value = "state", required = false) String state,
+//            @RequestParam(value = "redirect_uri", required = false) String redirect_uri,
+//            @RequestBody(required = false) Object o
+//    ) {
+//
+//        LOG.info("code: " + code);
+//        LOG.info("token: " + token);
+//        LOG.info("id: " + id);
+//        LOG.info("secret: " + secret);
+//        LOG.info("state: " + state);
+//        LOG.info("redirect_uri: " + redirect_uri);
+//        LOG.info("o: " + o);
+//        return ResponseEntity
+//                .status(HttpStatus.FORBIDDEN)
+//                .body("Error Message");
+//    }
+//
+//    // for testing GitHub OAuth2 requests only // TODO remove altogether later on
+//    @RequestMapping(path = "/login/test1", method = RequestMethod.GET)
+//    ResponseEntity<Object> login1(
+//            @RequestParam(value = "code", required = false) String code,
+//            @RequestParam(value = "access_token", required = false) String token,
+//            @RequestParam(value = "client_id", required = false) String id,
+//            @RequestParam(value = "client_secret", required = false) String secret,
+//            @RequestParam(value = "state", required = false) String state,
+//            @RequestParam(value = "redirect_uri", required = false) String redirect_uri,
+//            @RequestBody(required = false) Object o
+//    ) {
+//        LOG.info("code: " + code);
+//        LOG.info("token: " + token);
+//        LOG.info("id: " + id);
+//        LOG.info("secret: " + secret);
+//        LOG.info("state: " + state);
+//        LOG.info("redirect_uri: " + redirect_uri);
+//        LOG.info("o: " + o);
+//        return ResponseEntity.ok(o);
+//    }
 
     public static void main(final String... args) {
         SpringApplication.run(Application.class, args);

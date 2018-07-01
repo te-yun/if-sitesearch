@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+cd service
+docker build --pull --tag intrafind/if-sitesearch:latest .
+
 docker rm -f if-sitesearch
 docker run -d --name if-sitesearch \
     --log-driver=gelf \

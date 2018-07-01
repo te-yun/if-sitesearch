@@ -63,7 +63,7 @@ dependencies {
     compile "io.springfox:springfox-swagger2:$swagger_version"
     compile "io.springfox:springfox-swagger-ui:$swagger_version"
 
-    runtime "net.java.dev.jna:jna:4.5.1"
+//    runtimeOnly "net.java.dev.jna:jna:4.5.1"
 
     testAnnotationProcessor "org.openjdk.jmh:jmh-generator-annprocess:1.21"
     testCompile "org.openjdk.jmh:jmh-core:1.21"
