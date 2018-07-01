@@ -1,11 +1,12 @@
-FROM openjdk:10-jre as service
+FROM openjdk:10-jre AS service
 
 MAINTAINER Alexander Orlov <alexander.orlov@intrafind.de>
 
-ADD build/libs/*.jar service/
-ADD config config
+WORKDIR /srv
+COPY config config
+COPY build/libs/*.jar .
 ENV SPRING_CONFIG_NAME application, prod
 
 EXPOSE 8001
 
-CMD java -jar -Xms256m -Xmx256m service/*.jar
+CMD ["java", "-jar", "-Xms256m", "-Xmx256m", "service.jar"]

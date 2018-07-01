@@ -51,7 +51,7 @@ docker run -d --name if-sitesearch \
     --env SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=$SECURITY_OAUTH2_CLIENT_CLIENT_SECRET \
     --network sitesearch \
     intrafind/if-sitesearch:latest
-docker push docker-registry.sitesearch.cloud/intrafind/if-sitesearch:latest
+docker push intrafind/if-sitesearch:latest
 
 danglingImages=$(docker images -f "dangling=true" -q)
 if [ "$danglingImages" ]; then
