@@ -131,9 +131,9 @@ public class Application {
 
     @RequestMapping(path = "/subscriptions/github", method = RequestMethod.POST)
     ResponseEntity<Object> subscribeViaGitHub(
-            @RequestHeader(value = "X-GitHub-Delivery", required = false) UUID delivery,
-            @RequestHeader(value = "X-GitHub-Event", required = false) String event,
-            @RequestHeader(value = "X-Hub-Signature", required = false) String signature,
+            @RequestHeader(value = "X-GitHub-Delivery") UUID delivery,
+            @RequestHeader(value = "X-GitHub-Event") String event,
+            @RequestHeader(value = "X-Hub-Signature") String signature,
             @RequestBody String subscription
     ) {
         final var isAuthenticGitHubEvent = verifySha1Signature(subscription, signature);

@@ -17,7 +17,6 @@
 package com.intrafind.sitesearch;
 
 import com.intrafind.sitesearch.dto.Subscription;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -62,13 +61,12 @@ public class SubscriptionTest {
         assertNotNull(subscription.getRawSubscription());
     }
 
-    @Ignore
     @Test
     public void subscribeViaGitHub() {
-        final var gitHubEventPayload = "{\"zen\":\"Anything added dilutes everything else.\",\"hook_id\":16215959,\"hook\":{\"type\":\"Marketplace::Listing\",\"id\":16215959,\"name\":\"web\",\"active\":true,\"events\":[\"*\"],\"config\":{\"content_type\":\"json\",\"insecure_ssl\":\"0\",\"secret\":\"********\",\"url\":\"https://sitesearch.cloud/subscriptions\"},\"updated_at\":\"2017-09-18T07:48:02Z\",\"created_at\":\"2017-09-18T07:48:02Z\",\"marketplace_listing_id\":541},\"sender\":{\"login\":\"loxal\",\"id\":87507,\"avatar_url\":\"https://avatars0.githubusercontent.com/u/87507?v=4\",\"gravatar_id\":\"\",\"url\":\"https://api.github.com/users/loxal\",\"html_url\":\"https://github.com/loxal\",\"followers_url\":\"https://api.github.com/users/loxal/followers\",\"following_url\":\"https://api.github.com/users/loxal/following{/other_user}\",\"gists_url\":\"https://api.github.com/users/loxal/gists{/gist_id}\",\"starred_url\":\"https://api.github.com/users/loxal/starred{/owner}{/repo}\",\"subscriptions_url\":\"https://api.github.com/users/loxal/subscriptions\",\"organizations_url\":\"https://api.github.com/users/loxal/orgs\",\"repos_url\":\"https://api.github.com/users/loxal/repos\",\"events_url\":\"https://api.github.com/users/loxal/events{/privacy}\",\"received_events_url\":\"https://api.github.com/users/loxal/received_events\",\"type\":\"User\",\"site_admin\":false}}";
+        final var gitHubEventPayload = "{\"github-data\": \"Here is some salt to make a rainbow attack harder.\"}";
 
         final var gitHubWebhookHeaders = new HttpHeaders();
-        gitHubWebhookHeaders.add("X-GitHub-Signature", "sha1=4ccaada6d03ec965dbe09c4c08f69d89f3ec269b");
+        gitHubWebhookHeaders.add("X-Hub-Signature", "sha1=778a6bcb65bc5ff6d62ed91c4be70058d7f99a6a");
         gitHubWebhookHeaders.add("X-GitHub-Delivery", UUID.randomUUID().toString());
         gitHubWebhookHeaders.add("X-GitHub-Event", "ping");
         final var gitHubEvent = new HttpEntity<>(gitHubEventPayload, gitHubWebhookHeaders);
@@ -80,12 +78,6 @@ public class SubscriptionTest {
         );
         assertEquals(HttpStatus.OK, response.getStatusCode());
         final var subscription = response.getBody();
-        LOG.warn(">>>>>>>>>>>>>>>>>>>>>>>gitHubWebhookHeaders.size> " + gitHubEvent.getHeaders().size());
-        LOG.warn(">>>>>>>>>>>>>>>>>>>>>>>gitHubWebhookHeaders.Signature> " + gitHubEvent.getHeaders().get("X-GitHub-Signature"));
-        LOG.warn(">>>>>>>>>>>>>>>>>>>>>>>gitHubWebhookHeaders.Event> " + gitHubEvent.getHeaders().get("X-GitHub-Event"));
-        LOG.warn(">>>>>>>>>>>>>>>>>>>>>>>gitHubWebhookHeaders.Delivery> " + gitHubEvent.getHeaders().get("X-GitHub-Delivery"));
-        LOG.warn(">>>>>>>>>>>>>>>>>>>>>>>BODY> " + subscription);
-        LOG.warn(">>>>>>>>>>>>>>>>>>>>>>>CODE> " + response.getStatusCode());
         assertNotNull(subscription);
     }
 }
