@@ -110,10 +110,10 @@ public class SiteCrawler extends WebCrawler {
             // TODO translate to sitePage
             // TODO indexPage(sitePage);
         }
-        if (isPDF(page) || url.endsWith("pdf")) {
-            LOG.warn("siteId: " + siteId + " - IS_PDF-RETURN#visit: " + url);
-//            return;
-        }
+//        if (isPDF(page) || url.endsWith("pdf")) {
+//            LOG.warn("siteId: " + siteId + " - IS_PDF-RETURN#visit: " + url);
+////            return;
+//        }
 
         if (page.getParseData() instanceof HtmlParseData) {
             final HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
@@ -147,11 +147,11 @@ public class SiteCrawler extends WebCrawler {
         this.getMyController().getCrawlersLocalData().add(url);
     }
 
-    private boolean isPDF(final Page page) {
-        final String url = page.getWebURL().getURL();
-//        return (page.getContentType() != null && page.getContentType().contains("application/pdf")) || url.endsWith("pdf") || url.endsWith("PDF");
-        return url.endsWith("pdf") || url.endsWith("PDF");
-    }
+//    private boolean isPDF(final Page page) {
+//        final String url = page.getWebURL().getURL();
+////        return (page.getContentType() != null && page.getContentType().contains("application/pdf")) || url.endsWith("pdf") || url.endsWith("PDF");
+//        return url.endsWith("pdf") || url.endsWith("PDF");
+//    }
 
     private void indexPage(final SitePage sitePage) {
         try {
