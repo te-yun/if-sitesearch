@@ -88,9 +88,9 @@ public class SiteCrawler extends WebCrawler {
         if (isCrawled && href.endsWith("pdf")) { // TODO replace with actual text from PDF extraction code
             LOG.warn("siteId: " + siteId + " - IS_PDF-#shouldVisit: " + href + " - isCrawled: " + isCrawled);
         }
-        if (isPDF(referringPage)) { // TODO replace with actual text from PDF extraction code
-            LOG.warn("siteId: " + siteId + " - IS_PDF-#shouldVisit-isPDF: " + href + " - isCrawled: " + isCrawled);
-        }
+//        if (isPDF(referringPage)) { // TODO replace with actual text from PDF extraction code
+//            LOG.warn("siteId: " + siteId + " - IS_PDF-#shouldVisit-isPDF: " + href + " - isCrawled: " + isCrawled);
+//        }
         return isCrawled;
     }
 
@@ -107,11 +107,11 @@ public class SiteCrawler extends WebCrawler {
         final String url = page.getWebURL().getURL();
         if (url.toLowerCase().endsWith("pdf")) {
             LOG.warn("siteId: " + siteId + " - IS_PDF-REMOVE_THIS-SECOND#visit: " + url);
-        }
-        if (isPDF(page)) {
-            LOG.warn("siteId: " + siteId + " - IS_PDF-RETURN#visit: " + url);
             // TODO translate to sitePage
             // TODO indexPage(sitePage);
+        }
+        if (isPDF(page) || url.endsWith("pdf")) {
+            LOG.warn("siteId: " + siteId + " - IS_PDF-RETURN#visit: " + url);
 //            return;
         }
 
