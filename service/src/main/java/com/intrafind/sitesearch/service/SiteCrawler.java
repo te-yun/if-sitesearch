@@ -105,8 +105,9 @@ public class SiteCrawler extends WebCrawler {
     @Override
     public void visit(final Page page) {
         final String url = page.getWebURL().getURL();
-        if (url.toLowerCase().endsWith("pdf"))
+        if (url.toLowerCase().endsWith("pdf")) {
             LOG.warn("siteId: " + siteId + " - IS_PDF-REMOVE_THIS-SECOND#visit: " + url);
+        }
         if (isPDF(page)) {
             LOG.warn("siteId: " + siteId + " - IS_PDF-RETURN#visit: " + url);
             // TODO translate to sitePage
