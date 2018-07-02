@@ -22,6 +22,7 @@ import com.intrafind.sitesearch.dto.WooCommerceOrder;
 import com.intrafind.sitesearch.service.SiteCrawler;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -38,7 +39,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.net.URI;
 import java.security.InvalidKeyException;
@@ -65,6 +65,20 @@ public class Application {
         } catch (final NoSuchAlgorithmException | InvalidKeyException e) {
             LOG.error("Application#static_ERROR: " + e.getMessage());
         }
+    }
+
+    @RequestMapping(path = "/subscriptions/woo-commerce/{subscriptionId}", method = RequestMethod.POST)
+    ResponseEntity<Subscription> subscribeViaSitePost(
+            @PathVariable(value = "subscriptionId") String subscriptionId
+    ) {
+        return subscribeViaSite(subscriptionId);
+    }
+
+    @RequestMapping(path = "/subscriptions/woo-commerce/{subscriptionId}", method = RequestMethod.GET)
+    ResponseEntity<Subscription> subscribeViaSiteGet(
+            @PathVariable(value = "subscriptionId") String subscriptionId
+    ) {
+        return subscribeViaSite(subscriptionId);
     }
 
     @RequestMapping(path = "/subscriptions/woo-commerce/{subscriptionId}", method = RequestMethod.PUT)
@@ -117,9 +131,9 @@ public class Application {
 
     @RequestMapping(path = "/subscriptions/github", method = RequestMethod.POST)
     ResponseEntity<Object> subscribeViaGitHub(
-            @RequestHeader(value = "X-GitHub-Delivery") UUID delivery,
-            @RequestHeader(value = "X-GitHub-Event") String event,
-            @RequestHeader(value = "X-Hub-Signature") String signature,
+            @RequestHeader(value = "X-GitHub-Delivery", required = false) UUID delivery,
+            @RequestHeader(value = "X-GitHub-Event", required = false) String event,
+            @RequestHeader(value = "X-Hub-Signature", required = false) String signature,
             @RequestBody String subscription
     ) {
         final var isAuthenticGitHubEvent = verifySha1Signature(subscription, signature);
@@ -141,7 +155,7 @@ public class Application {
 
     private boolean verifySha1Signature(String subscription, String signature) {
         final var expectedSha1Hash = macSha1Algorithm.doFinal(subscription.getBytes());
-        final var expectedSignature = "sha1=" + DatatypeConverter.printHexBinary(expectedSha1Hash);
+        final var expectedSignature = "sha1=" + Hex.encodeHexString(expectedSha1Hash);
 
         return expectedSignature.toLowerCase().equals(signature);
     }

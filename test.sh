@@ -5,3 +5,5 @@ SPRING_CONFIG_NAME="application, local" ./gradlew :service:test \
     --no-scan --parallel \
     --build-cache --continuous --continue \
     $1
+
+#--tests *Subscription*.subscribeViaGitHub
