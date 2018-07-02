@@ -85,9 +85,11 @@ public class SiteCrawler extends WebCrawler {
                 && href.startsWith(url.toString())
                 && isAllowedForRobot(webUrl.getURL())
                 && (containsQuery || noQueryParameter(webUrl));
-//        if (isCrawled && href.endsWith("pdf")) // TODO replace with actual text from PDF extraction code
+        if (isCrawled && href.endsWith("pdf")) { // TODO replace with actual text from PDF extraction code
+            LOG.warn("siteId: " + siteId + " - IS_PDF-#shouldVisit: " + href + " - isCrawled: " + isCrawled);
+        }
         if (isPDF(referringPage)) { // TODO replace with actual text from PDF extraction code
-            LOG.warn("siteId: " + siteId + " - IS_PDF: " + href + " - isCrawled: " + isCrawled);
+            LOG.warn("siteId: " + siteId + " - IS_PDF-#shouldVisit-isPDF: " + href + " - isCrawled: " + isCrawled);
         }
         return isCrawled;
     }
@@ -104,12 +106,12 @@ public class SiteCrawler extends WebCrawler {
     public void visit(final Page page) {
         final String url = page.getWebURL().getURL();
         if (url.toLowerCase().endsWith("pdf"))
-            LOG.warn("siteId: " + siteId + " - IS_PDF-REMOVE_THIS-SECOND: " + url);
+            LOG.warn("siteId: " + siteId + " - IS_PDF-REMOVE_THIS-SECOND#visit: " + url);
         if (isPDF(page)) {
-            LOG.warn("siteId: " + siteId + " - IS_PDF: " + url);
+            LOG.warn("siteId: " + siteId + " - IS_PDF-RETURN#visit: " + url);
             // TODO translate to sitePage
             // TODO indexPage(sitePage);
-            return;
+//            return;
         }
 
         if (page.getParseData() instanceof HtmlParseData) {
@@ -146,7 +148,8 @@ public class SiteCrawler extends WebCrawler {
 
     private boolean isPDF(final Page page) {
         final String url = page.getWebURL().getURL();
-        return (page.getContentType() != null && page.getContentType().contains("application/pdf")) || url.endsWith("pdf") || url.endsWith("PDF");
+//        return (page.getContentType() != null && page.getContentType().contains("application/pdf")) || url.endsWith("pdf") || url.endsWith("PDF");
+        return url.endsWith("pdf") || url.endsWith("PDF");
     }
 
     private void indexPage(final SitePage sitePage) {
