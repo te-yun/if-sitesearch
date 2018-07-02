@@ -69,6 +69,7 @@ public class SubscriptionTest {
         gitHubWebhookHeaders.add("X-Hub-Signature", "sha1=778a6bcb65bc5ff6d62ed91c4be70058d7f99a6a");
         gitHubWebhookHeaders.add("X-GitHub-Delivery", UUID.randomUUID().toString());
         gitHubWebhookHeaders.add("X-GitHub-Event", "ping");
+
         final var gitHubEvent = new HttpEntity<>(gitHubEventPayload, gitHubWebhookHeaders);
         final var response = caller.exchange(
                 "/subscriptions/github",

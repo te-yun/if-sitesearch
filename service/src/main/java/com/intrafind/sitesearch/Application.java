@@ -68,20 +68,6 @@ public class Application {
     }
 
     @RequestMapping(path = "/subscriptions/woo-commerce/{subscriptionId}", method = RequestMethod.POST)
-    ResponseEntity<Subscription> subscribeViaSitePost(
-            @PathVariable(value = "subscriptionId") String subscriptionId
-    ) {
-        return subscribeViaSite(subscriptionId);
-    }
-
-    @RequestMapping(path = "/subscriptions/woo-commerce/{subscriptionId}", method = RequestMethod.GET)
-    ResponseEntity<Subscription> subscribeViaSiteGet(
-            @PathVariable(value = "subscriptionId") String subscriptionId
-    ) {
-        return subscribeViaSite(subscriptionId);
-    }
-
-    @RequestMapping(path = "/subscriptions/woo-commerce/{subscriptionId}", method = RequestMethod.PUT)
     ResponseEntity<Subscription> subscribeViaSite(
             @PathVariable(value = "subscriptionId") String subscriptionId
     ) {
