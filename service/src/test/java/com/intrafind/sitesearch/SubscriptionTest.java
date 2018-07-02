@@ -46,7 +46,7 @@ public class SubscriptionTest {
     public void subscribeViaSite() {
         final var response = caller.exchange(
                 "/subscriptions/woo-commerce/551",
-                HttpMethod.PUT,
+                HttpMethod.POST,
                 HttpEntity.EMPTY,
                 Subscription.class
         );
