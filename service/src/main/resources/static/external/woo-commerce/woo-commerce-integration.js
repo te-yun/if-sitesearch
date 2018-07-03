@@ -12,7 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
+ */
+ /*
  * How to integrate this code in WordPress:
  * Prerequisites:
  * - installed Woocommerce and created consumer_key and consumer_secret for woocommerce API
@@ -22,17 +23,21 @@
  * - Create a Tracking Code and add link to this js file
  * - choose in settings of Tracking code -> before </body>
  */
- var orderClass = document.querySelector('.woocommerce-order-overview__order.order > strong');
+ var orderClass = document.querySelector(".woocommerce-order-overview__order.order > strong");
  var orderId = orderClass.textContent;
- // console.log(orderId);
- if(orderId !== "" ){
+ console.info("Order ID: " + orderId);
+ if(orderId !== "undefined" && orderId !== null && orderId !== "" ) {
      var url = "https://api.sitesearch.cloud/subscriptions/woo-commerce/" + orderId;
      var xhr = new XMLHttpRequest();
      xhr.onload = function () {
-         console.warn(xhr.responseText);
+         if(xhr.status !== 200) {
+            console.warn(xhr.responseText);
+         } else {
+            console.info(xhr.responseText);
+         }
      };
      xhr.open("POST", url);
      xhr.send();
  } else {
-     console.warn("Nothing happened! Check the code again!");
- };
+     console.warn("Invalid orderId" + orderId);
+ }
