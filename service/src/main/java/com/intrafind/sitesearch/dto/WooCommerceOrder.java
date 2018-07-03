@@ -21,18 +21,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
-import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WooCommerceOrder {
-    private UUID siteId;
+    private String siteId;
     private String paymentMethod;
     private List<LineItem> lineItems;
     private String affiliate;
 
     @JsonCreator
     public WooCommerceOrder(
-            @JsonProperty("customer_note") UUID siteId,
+            @JsonProperty("customer_note") String siteId,
             @JsonProperty("payment_method") String paymentMethod,
             @JsonProperty("line_items") List<LineItem> lineItems,
             @JsonProperty("order_key") String affiliate
@@ -51,7 +50,7 @@ public class WooCommerceOrder {
         return lineItems;
     }
 
-    public UUID getSiteId() {
+    public String getSiteId() {
         return siteId;
     }
 

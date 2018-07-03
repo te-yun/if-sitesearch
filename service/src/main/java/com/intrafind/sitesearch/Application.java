@@ -88,7 +88,7 @@ public class Application {
                 // TODO add siteId to crawlStatus for scheduled crawling (optional?)
 
                 final var subscriptionPlan = order.getLineItems().<WooCommerceOrder.LineItem>get(0).getSku();
-                final var siteId = order.getSiteId();
+                final String siteId = order.getSiteId();
                 final var affiliate = order.getAffiliate();
                 LOG.info("siteId: " + siteId + " - subscriptionId: " + subscriptionId + " - subscriptionPlan: " + subscriptionPlan + " - affiliate: " + affiliate);
                 return ResponseEntity

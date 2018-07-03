@@ -21,29 +21,30 @@ import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.pdf.PDFParser;
 import org.apache.tika.sax.BodyContentHandler;
 
-import java.io.InputStream;
 import java.net.URL;
 
 public class Test {
     public static void main(final String... args) throws Exception {
         final BodyContentHandler bodyContentHandler = new BodyContentHandler();
         final Metadata metadata = new Metadata();
-//        final URL url = new URL("http://unec.edu.az/application/uploads/2014/12/pdf-sample.pdf");
-        final URL url = new URL("http://www.africau.edu/images/default/sample.pdf");
+        final var url = new URL("http://unec.edu.az/application/uploads/2014/12/pdf-sample.pdf");
+//        final URL url = new URL("http://www.africau.edu/images/default/sample.pdf");
 //        final URL url = new URL("http://www.pdf995.com/samples/pdf.pdf");
 
-        final InputStream urlStream = url.openStream();
-        final ParseContext parseContext = new ParseContext();
+        final var urlStream = url.openStream();
+        final var parseContext = new ParseContext();
 
-        final PDFParser pdfParser = new PDFParser();
+        final var pdfParser = new PDFParser();
         pdfParser.parse(urlStream, bodyContentHandler, metadata, parseContext);
         System.out.println("=== content ===" + bodyContentHandler.toString());
 
         System.out.println("=== metadata ===");
         final String[] metadataNames = metadata.names();
-
-        for (final String name : metadataNames) {
+        for (final var name : metadataNames) {
             System.out.println(name + " : " + metadata.get(name));
         }
+        System.out.println("metadata.get(title): " + metadata.get("title"));
+        System.out.println("metadata.get(pdf:docinfo:title): " + metadata.get("pdf:docinfo:title"));
+        System.out.println("metadata.get(dc:title): " + metadata.get("dc:title"));
     }
 }

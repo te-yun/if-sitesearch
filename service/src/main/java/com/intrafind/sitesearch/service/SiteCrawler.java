@@ -30,14 +30,22 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.apache.tika.exception.TikaException;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.pdf.PDFParser;
+import org.apache.tika.sax.BodyContentHandler;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
+import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -85,13 +93,51 @@ public class SiteCrawler extends WebCrawler {
                 && href.startsWith(url.toString())
                 && isAllowedForRobot(webUrl.getURL())
                 && (containsQuery || noQueryParameter(webUrl));
-        if (isCrawled && href.endsWith("pdf")) { // TODO replace with actual text from PDF extraction code
-            LOG.warn("siteId: " + siteId + " - IS_PDF-#shouldVisit: " + href + " - isCrawled: " + isCrawled);
-        }
-        if (isPDF(referringPage)) { // TODO replace with actual text from PDF extraction code
-            LOG.warn("siteId: " + siteId + " - IS_PDF-#shouldVisit-isPDF: " + href + " - isCrawled: " + isCrawled);
+        if (isCrawled && href.endsWith("pdf")) {
+            indexPdf(href);
         }
         return isCrawled;
+    }
+
+    private void indexPdf(final String href) {
+        final var bodyContentHandler = new BodyContentHandler();
+        final var metadata = new Metadata();
+        final var parseContext = new ParseContext();
+        final var pdfParser = new PDFParser();
+        try {
+            final var url = new URL(href);
+            final var urlStream = url.openStream();
+            pdfParser.parse(urlStream, bodyContentHandler, metadata, parseContext);
+
+            final var body = bodyContentHandler.toString();
+            final var title = extractPdfTitle(metadata);
+
+            final var sitePage = new SitePage(
+                    title,
+                    body,
+                    href,
+                    ""
+            );
+
+            indexPage(sitePage);
+            LOG.warn("siteId: " + siteId + " - IS_PDF-increment: " + href);
+        } catch (final IOException | TikaException | SAXException e) {
+            LOG.warn("indexPdf_ERROR - url: " + href);
+        }
+    }
+
+    private String extractPdfTitle(final Metadata metadata) {
+        final String title;
+        if (!StringUtils.isEmpty(metadata.get("title"))) {
+            title = metadata.get("title");
+        } else if (!StringUtils.isEmpty(metadata.get("pdf:docinfo:title"))) {
+            title = metadata.get("pdf:docinfo:title");
+        } else if (!StringUtils.isEmpty(metadata.get("dc:title"))) {
+            title = metadata.get("dc:title");
+        } else {
+            title = "";
+        }
+        return title;
     }
 
     private boolean isAllowedForRobot(final String url) {
@@ -104,24 +150,15 @@ public class SiteCrawler extends WebCrawler {
 
     @Override
     public void visit(final Page page) {
-        final String url = page.getWebURL().getURL();
-        if (url.toLowerCase().endsWith("pdf")) {
-            LOG.warn("siteId: " + siteId + " - IS_PDF-REMOVE_THIS-SECOND#visit: " + url);
-            // TODO translate to sitePage
-            // TODO indexPage(sitePage);
-        }
-        if (isPDF(page) || url.endsWith("pdf")) {
-            LOG.warn("siteId: " + siteId + " - IS_PDF-RETURN#visit: " + url);
-//            return;
-        }
+        final var url = page.getWebURL().getURL();
 
         if (page.getParseData() instanceof HtmlParseData) {
-            final HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
+            final var htmlParseData = (HtmlParseData) page.getParseData();
             if (isNoindexPage(htmlParseData)) {
                 return;
             }
-            final String htmlStrippedBody = extractTextFromMixedHtml(htmlParseData.getHtml(), pageBodyCssSelector);
-            final String title = htmlParseData.getTitle();
+            final var htmlStrippedBody = extractTextFromMixedHtml(htmlParseData.getHtml(), pageBodyCssSelector);
+            final var title = htmlParseData.getTitle();
             final String thumbnail;
             if (htmlParseData.getMetaTags().get(SiteService.PAGE_THUMBNAIL_META_NAME) != null && htmlParseData.getMetaTags().get(SiteService.PAGE_THUMBNAIL_META_NAME).length() < 100_000) {
                 thumbnail = htmlParseData.getMetaTags().get(SiteService.PAGE_THUMBNAIL_META_NAME);
@@ -129,7 +166,7 @@ public class SiteCrawler extends WebCrawler {
                 thumbnail = "";
             }
 
-            final SitePage sitePage = new SitePage(
+            final var sitePage = new SitePage(
                     title,
                     htmlStrippedBody,
                     url,
@@ -141,21 +178,15 @@ public class SiteCrawler extends WebCrawler {
         if (PAGE_COUNT.get(siteId) == null) {
             PAGE_COUNT.put(siteId, new AtomicInteger());
         }
-        final int currentPageCount = PAGE_COUNT.get(siteId).incrementAndGet();
+        final var currentPageCount = PAGE_COUNT.get(siteId).incrementAndGet();
         LOG.info("siteId: " + siteId + " - pageCount: " + currentPageCount);
 
         this.getMyController().getCrawlersLocalData().add(url);
     }
 
-    private boolean isPDF(final Page page) {
-        final String url = page.getWebURL().getURL();
-//        return (page.getContentType() != null && page.getContentType().contains("application/pdf")) || url.endsWith("pdf") || url.endsWith("PDF");
-        return url.endsWith("pdf") || url.endsWith("PDF");
-    }
-
     private void indexPage(final SitePage sitePage) {
         try {
-            final Request request = new Request.Builder()
+            final var request = new Request.Builder()
                     .url(SIS_API_SERVICE_URL + "/sites/" + siteId + "/pages?siteSecret=" + siteSecret) // TODO move this to a config property to switch between production and override with local
                     .put(RequestBody.create(JSON_MEDIA_TYPE, MAPPER.writeValueAsBytes(sitePage)))
                     .build();
@@ -172,7 +203,7 @@ public class SiteCrawler extends WebCrawler {
                     response.close();
                 }
             });
-        } catch (IOException e) {
+        } catch (final IOException e) {
             LOG.error(e.getMessage());
         }
     }

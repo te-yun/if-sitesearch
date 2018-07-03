@@ -16,17 +16,15 @@
 
 package com.intrafind.sitesearch.dto;
 
-import java.util.UUID;
-
 public class Subscription {
     private String id;
     private String plan;
     private String paymentMethod;
-    private UUID siteId;
+    private String siteId;
     private String affiliate;
     private Object rawSubscription;
 
-    public Subscription(String id, String plan, String paymentMethod, UUID siteId, String affiliate, Object rawSubscription) {
+    public Subscription(String id, String plan, String paymentMethod, String siteId, String affiliate, Object rawSubscription) {
         this.id = id;
         this.plan = plan;
         this.paymentMethod = paymentMethod;
@@ -43,7 +41,7 @@ public class Subscription {
         return id;
     }
 
-    public UUID getSiteId() {
+    public String getSiteId() {
         return siteId;
     }
 
