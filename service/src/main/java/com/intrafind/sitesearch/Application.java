@@ -72,7 +72,7 @@ public class Application {
             @PathVariable(value = "subscriptionId") String subscriptionId
     ) {
         final var request = new Request.Builder()
-                .url("https://sitesearch.online/wp-json/wc/v1/orders/"
+                .url("https://sitesearch.cloud/wp-json/wc/v1/orders/"
                         + subscriptionId
                         + "?consumer_key=" + WOO_COMMERCE_CONSUMER_KEY
                         + "&consumer_secret=" + WOO_COMMERCE_CONSUMER_SECRET
