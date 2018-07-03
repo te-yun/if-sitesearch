@@ -19,14 +19,12 @@
  * - replaced with the new keys the old ones in TC
  * - installed WordPress Plugin -> Tracking Code Manager and activated
  * HowTo:
- * - Create a Tracking Code and add the code as it is below
- * - Do not forget the closing tags to copy with
+ * - Create a Tracking Code and add link to this js file
  * - choose in settings of Tracking code -> before </body>
  */
- <script>
  var orderClass = document.querySelector('.woocommerce-order-overview__order.order > strong');
  var orderId = orderClass.textContent;
-
+ // console.log(orderId);
  if(orderId !== "" ){
      var url = "https://api.sitesearch.cloud/subscriptions/woo-commerce/" + orderId;
      var xhr = new XMLHttpRequest();
@@ -38,4 +36,3 @@
  } else {
      console.warn("Nothing happened! Check the code again!");
  };
- </script>
