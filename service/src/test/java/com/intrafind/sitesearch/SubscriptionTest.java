@@ -45,7 +45,7 @@ public class SubscriptionTest {
     @Test
     public void subscribeViaSite() {
         final var response = caller.exchange(
-                "/subscriptions/woo-commerce/697",
+                "/subscriptions/woo-commerce/699",
                 HttpMethod.POST,
                 HttpEntity.EMPTY,
                 Subscription.class

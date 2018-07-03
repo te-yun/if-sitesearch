@@ -1,0 +1,81 @@
+<!--
+  ~ Copyright 2018 IntraFind Software AG. All rights reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Trigger SiS API to get Data from Woocommerce API</title>
+</head>
+<body>
+<div class="wrapper"><!-- wrapper -->
+    <h1>Trigger SiS API to get Data from Woocommerce API</h1>
+    <div class="test">
+        <ul>
+           <li class="link woocommerce-order-overview__order order">Order number: <strong>699</strong></li>
+        </ul>
+    </div>
+    <div class="">
+        <!-- # table - Order details -->
+        <section class="woocommerce-order-details">
+            <h2 class="woocommerce-order-details__title">Order details</h2>
+            <table class="woocommerce-table woocommerce-table--order-details shop_table order_details">
+                <thead>
+                    <tr>
+                        <th class="woocommerce-table__product-name product-name">Product</th>
+                        <th class="woocommerce-table__product-table product-total">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="woocommerce-table__line-item order_item">
+                        <td class="woocommerce-table__product-name product-name">
+                            <a href="#">Site Search Test Product [Digital]</a> <strong class="product-quantity">× 1</strong>
+                        </td>
+                        <td class="woocommerce-table__product-total product-total">
+                            <span class="woocommerce-Price-amount amount">1,00<span class="woocommerce-Price-currencySymbol">€</span></span>
+                            <span class="product-tax"> Includes <span class="woocommerce-Price-amount amount">0,16<span  class="woocommerce-Price-currencySymbol">€</span></span> MwSt. (19%) </span>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th scope="row">Subtotal:</th>
+                        <td><span class="woocommerce-Price-amount amount">1,00<span class="woocommerce-Price-currencySymbol">€</span></span></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Payment method:</th>
+                        <td>PayPal/debits card/credit card</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Total:</th>
+                        <td>
+                            <span class="woocommerce-Price-amount amount">1,00<span class="woocommerce-Price-currencySymbol">€</span></span> <br class="wgm-break">
+                            <span class="wgm-tax includes_tax">Includes <span class="amount"><span class="woocommerce-Price-amount amount">0,16
+                                <span class="woocommerce-Price-currencySymbol">€</span></span></span> MwSt. (19%)</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Note:</th>
+                        <td>786e9418-72f1-11e8-87c6-cb7ebf44ec1a</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </section>
+    </div>
+    <script src="woo-commerce-integration.js"></script>
+</div><!-- wrapper -->
+</body>
+</html>
