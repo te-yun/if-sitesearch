@@ -97,7 +97,7 @@
         "resulttype": {
           "all": {
             "title": "ifs.category.all",
-            "hitTemplate": "thumbnail-result",
+            "hitTemplate": "app/templates/sitesearch/resultlist/crawler.hbs",
             "showMenu": false
           }
         }
