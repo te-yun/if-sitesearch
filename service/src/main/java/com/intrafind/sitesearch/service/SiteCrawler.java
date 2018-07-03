@@ -120,6 +120,7 @@ public class SiteCrawler extends WebCrawler {
             );
 
             indexPage(sitePage);
+            countPage(href);
             LOG.warn("siteId: " + siteId + " - IS_PDF-increment: " + href);
         } catch (final IOException | TikaException | SAXException e) {
             LOG.warn("indexPdf_ERROR - url: " + href);
@@ -174,7 +175,13 @@ public class SiteCrawler extends WebCrawler {
             );
 
             indexPage(sitePage);
+            countPage(url);
+        } else {
+            LOG.warn("visit_ERROR - siteId: " + siteId + " - url: " + url);
         }
+    }
+
+    private void countPage(String url) {
         if (PAGE_COUNT.get(siteId) == null) {
             PAGE_COUNT.put(siteId, new AtomicInteger());
         }
