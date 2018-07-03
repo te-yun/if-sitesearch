@@ -26,7 +26,7 @@
  var orderClass = document.querySelector(".woocommerce-order-overview__order.order > strong");
  var orderId = orderClass.textContent;
  console.info("Order ID: " + orderId);
- if(orderId !== "udefined" && orderId !== null && orderId !== "" ) {
+ if(orderId !== "undefined" && orderId !== null && orderId !== "" ) {
      var url = "https://api.sitesearch.cloud/subscriptions/woo-commerce/" + orderId;
      var xhr = new XMLHttpRequest();
      xhr.onload = function () {
