@@ -112,16 +112,16 @@ public class SiteCrawler extends WebCrawler {
             final var body = bodyContentHandler.toString();
             final var title = extractPdfTitle(metadata);
 
-            final var sitePage = new SitePage(
+            final var pdfAsPage = new SitePage(
                     title,
                     body,
                     href,
                     ""
             );
 
-            indexPage(sitePage);
+            indexPage(pdfAsPage);
             countPage(href);
-            LOG.warn("siteId: " + siteId + " - IS_PDF-increment: " + href);
+            LOG.warn("siteId: " + siteId + " - IS_PDF-next: " + href);
         } catch (final IOException | TikaException | SAXException e) {
             LOG.warn("indexPdf_ERROR - url: " + href);
         }
