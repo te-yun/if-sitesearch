@@ -369,7 +369,7 @@ public class SiteTest {
                 HttpMethod.POST, HttpEntity.EMPTY, SiteIndexSummary.class);
         final SiteIndexSummary creation = validateTenantSummary(exchange, 25);
 
-        TimeUnit.MILLISECONDS.sleep(8_000);
+        TimeUnit.MILLISECONDS.sleep(13_000);
         validateUpdatedSites(creation);
 
         final ResponseEntity<Object> clearSite = caller.exchange(SiteController.ENDPOINT + "/" + creation.getSiteId() + "?siteSecret=" + creation.getSiteSecret(),
@@ -441,7 +441,7 @@ public class SiteTest {
 
 
         // update index
-        final ResponseEntity<SiteIndexSummary> anotherFeedReplacement = caller.exchange(
+        final var anotherFeedReplacement = caller.exchange(
                 SiteController.ENDPOINT + "/" + siteIdFromCreation + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
                         + "&siteSecret=" + siteSecretFromCreation,
                 HttpMethod.PUT, HttpEntity.EMPTY, SiteIndexSummary.class);
@@ -453,42 +453,39 @@ public class SiteTest {
     }
 
     private void tryDeletionOfSites(UUID siteIdFromCreation, UUID siteSecretFromCreation) {
-        final ResponseEntity<List> fetchAll = caller.exchange(SiteController.ENDPOINT + "/" + siteIdFromCreation, HttpMethod.GET, HttpEntity.EMPTY, List.class);
-        assertTrue(HttpStatus.OK.equals(fetchAll.getStatusCode()));
-        @SuppressWarnings("unchecked")
-        List<String> pages = fetchAll.getBody();
+        final var fetchAll = caller.exchange(SiteController.ENDPOINT + "/" + siteIdFromCreation, HttpMethod.GET, HttpEntity.EMPTY, List.class);
+        assertEquals(HttpStatus.OK, fetchAll.getStatusCode());
+        @SuppressWarnings("unchecked") final List<String> pages = fetchAll.getBody();
         assertTrue(1 < pages.size());
         int siteCountBeforeDeletion = pages.size();
 
         for (String pageId : pages) {
-            LOG.info("pageId: " + pageId);
-
             // delete using an invalid siteSecret
-            UUID invalidSiteSecret = UUID.randomUUID();
-            final ResponseEntity<ResponseEntity> deletionWithInvalidSiteSecret = caller.exchange(SiteController.ENDPOINT + "/" + siteIdFromCreation + "/pages/" + pageId + "?siteSecret=" + invalidSiteSecret, HttpMethod.DELETE, HttpEntity.EMPTY, ResponseEntity.class);
+            final var invalidSiteSecret = UUID.randomUUID();
+            final var deletionWithInvalidSiteSecret = caller.exchange(SiteController.ENDPOINT + "/" + siteIdFromCreation + "/pages/" + pageId + "?siteSecret=" + invalidSiteSecret, HttpMethod.DELETE, HttpEntity.EMPTY, ResponseEntity.class);
             assertEquals(HttpStatus.NOT_FOUND, deletionWithInvalidSiteSecret.getStatusCode());
             assertNull(deletionWithInvalidSiteSecret.getBody());
 
             // delete using a valid siteSecret
-            final ResponseEntity<ResponseEntity> deletion = caller.exchange(SiteController.ENDPOINT + "/" + siteIdFromCreation + "/pages/" + pageId + "?siteSecret=" + siteSecretFromCreation, HttpMethod.DELETE, HttpEntity.EMPTY, ResponseEntity.class);
+            final var deletion = caller.exchange(SiteController.ENDPOINT + "/" + siteIdFromCreation + "/pages/" + pageId + "?siteSecret=" + siteSecretFromCreation, HttpMethod.DELETE, HttpEntity.EMPTY, ResponseEntity.class);
             assertEquals(HttpStatus.NO_CONTENT, deletion.getStatusCode());
             assertNull(deletion.getBody());
         }
 
-//        pages.stream().forEach(pageId -> {
-//            LOG.info("pageId: " + pageId);
-//            final ResponseEntity<ResponseEntity> deletion = caller.exchange(SitesController.ENDPOINT + "/" + siteIdFromCreation+"/pages/"+pageId +"?siteSecret="+siteSecretFromCreation, HttpMethod.DELETE, HttpEntity.EMPTY, ResponseEntity.class);
-//            assertEquals(HttpStatus.NO_CONTENT, deletion.getStatusCode());
-//            assertNull(deletion.getBody());
-//        });
+        pages.stream().forEach(pageId -> {
+            LOG.info("pageId: " + pageId);
+            final ResponseEntity<ResponseEntity> deletion = caller.exchange(SiteController.ENDPOINT + "/" + siteIdFromCreation + "/pages/" + pageId + "?siteSecret=" + siteSecretFromCreation, HttpMethod.DELETE, HttpEntity.EMPTY, ResponseEntity.class);
+            assertEquals(HttpStatus.NO_CONTENT, deletion.getStatusCode());
+            assertNull(deletion.getBody());
+        });
         LOG.info("siteCountBeforeDeletion: " + siteCountBeforeDeletion);
     }
 
     private SiteIndexSummary validateTenantSummary(ResponseEntity<SiteIndexSummary> anotherFeedReplacement, int indexEntriesCount) {
         assertEquals(HttpStatus.OK, anotherFeedReplacement.getStatusCode());
         final SiteIndexSummary siteIndexSummaryUpdate = anotherFeedReplacement.getBody();
-        assertTrue(siteIndexSummaryUpdate.getSiteId() != null);
-        assertTrue(siteIndexSummaryUpdate.getSiteSecret() != null);
+        assertNotNull(siteIndexSummaryUpdate.getSiteId());
+        assertNotNull(siteIndexSummaryUpdate.getSiteSecret());
         assertEquals(indexEntriesCount, siteIndexSummaryUpdate.getSuccessCount());
         assertEquals(indexEntriesCount, siteIndexSummaryUpdate.getDocuments().size());
         assertTrue(siteIndexSummaryUpdate.getFailed().isEmpty());
@@ -497,7 +494,7 @@ public class SiteTest {
 
     @Test
     public void indexIntrafindDe() throws Exception {
-        final SiteCreation newSite = createNewSite(null);
+        final var newSite = createNewSite(null);
         List<String> enIndexDocuments = new ArrayList<>();
         enIndexDocuments.add("en/2b4c27b0-6636-4a13-a911-4f495f99b604.xml");
         enIndexDocuments.add("en/32d2557e-7f03-48d9-ad60-bf7c0b70c487.xml");
@@ -505,7 +502,7 @@ public class SiteTest {
         enIndexDocuments.add("en/79f4cd25-39d1-42ad-8b2a-9247aabd7d13.xml");
 
         // create index without clearance
-        SiteIndexSummary siteIndexSummary = indexCrawlerPage(enIndexDocuments.get(0),
+        final var siteIndexSummary = indexCrawlerPage(enIndexDocuments.get(0),
                 newSite.getSiteId(),
                 newSite.getSiteSecret(), false
         );
@@ -513,43 +510,41 @@ public class SiteTest {
         validateUpdatedSites(siteIndexSummary);
         TimeUnit.MILLISECONDS.sleep(13_000);
 
-        final ResponseEntity<List> allPages = caller.exchange(SiteController.ENDPOINT + "/" + newSite.getSiteId(),
+        final var allPages = caller.exchange(SiteController.ENDPOINT + "/" + newSite.getSiteId(),
                 HttpMethod.GET, HttpEntity.EMPTY, List.class);
         @SuppressWarnings("unchecked")
         List<String> pageIds = allPages.getBody();
         assertEquals(siteIndexSummary.getDocuments().size(), pageIds.size());
 
         // update index without clearance
-        SiteIndexSummary siteIndexSummaryAfterUpdate = indexCrawlerPage(enIndexDocuments.get(1),
+        final var siteIndexSummaryAfterUpdate = indexCrawlerPage(enIndexDocuments.get(1),
                 newSite.getSiteId(),
                 newSite.getSiteSecret(), false
         );
         validateUpdatedSites(siteIndexSummaryAfterUpdate);
         TimeUnit.MILLISECONDS.sleep(13_000);
 
-        final ResponseEntity<List> allPagesAfterUpdate = caller.exchange(SiteController.ENDPOINT + "/" + newSite.getSiteId(),
+        final var allPagesAfterUpdate = caller.exchange(SiteController.ENDPOINT + "/" + newSite.getSiteId(),
                 HttpMethod.GET, HttpEntity.EMPTY, List.class);
-        @SuppressWarnings("unchecked")
-        List<String> allPageIdsAfterUpdate = allPagesAfterUpdate.getBody();
+        @SuppressWarnings("unchecked") final var allPageIdsAfterUpdate = allPagesAfterUpdate.getBody();
         assertEquals(siteIndexSummary.getDocuments().size() + siteIndexSummaryAfterUpdate.getDocuments().size(), allPageIdsAfterUpdate.size());
 
         // create index with clearance
-        SiteIndexSummary siteIndexSummaryAfterClearance = indexCrawlerPage(enIndexDocuments.get(2),
+        final var siteIndexSummaryAfterClearance = indexCrawlerPage(enIndexDocuments.get(2),
                 newSite.getSiteId(),
                 newSite.getSiteSecret(), true
         );
         validateUpdatedSites(siteIndexSummaryAfterClearance);
         TimeUnit.MILLISECONDS.sleep(13_000);
 
-        final ResponseEntity<List> allPagesAfterClearance = caller.exchange(SiteController.ENDPOINT + "/" + newSite.getSiteId(),
+        final var allPagesAfterClearance = caller.exchange(SiteController.ENDPOINT + "/" + newSite.getSiteId(),
                 HttpMethod.GET, HttpEntity.EMPTY, List.class);
-        @SuppressWarnings("unchecked")
-        List<String> allPageIdsAfterClearance = allPagesAfterClearance.getBody();
+        @SuppressWarnings("unchecked") final var allPageIdsAfterClearance = allPagesAfterClearance.getBody();
         assertEquals(siteIndexSummaryAfterClearance.getDocuments().size(), allPageIdsAfterClearance.size());
     }
 
     private SiteIndexSummary indexCrawlerPage(String indexedDocumentsPage, UUID siteId, UUID siteSecret, Boolean clearIndex) {
-        final ResponseEntity<SiteIndexSummary> response = caller.exchange(SiteController.ENDPOINT + "/" + siteId + "/xml" +
+        final var response = caller.exchange(SiteController.ENDPOINT + "/" + siteId + "/xml" +
                         "?xmlUrl=https://raw.githubusercontent.com/intrafind/if-sitesearch/master/service/src/test/resources/intrafind-de/" +
                         indexedDocumentsPage + "&siteSecret=" + siteSecret + "&clearIndex=" + clearIndex,
                 HttpMethod.PUT, HttpEntity.EMPTY, SiteIndexSummary.class);
