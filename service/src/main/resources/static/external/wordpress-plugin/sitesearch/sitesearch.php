@@ -32,9 +32,10 @@ Text Domain: sitesearch
 * This plugin will print a random text from var gestanzl on admin-ui to status line on the topline
 * To install this plugin just upload over FTP to your plugins folder and install it from admin-ui -> plugins -> sitesearch -> activate = voila!
 */
-function hello_sis_get_gestanzl() {
-	/** These are the gestanzl to Hello Sis */
-	$gestanzl = "Hello, SiS
+function hello_sis_get_gestanzl()
+{
+    /** These are the gestanzl to Hello Sis */
+    $gestanzl = "Hello, SiS
                 Search as a Service
                 Secure Search
                 Responsive Search
@@ -43,28 +44,30 @@ function hello_sis_get_gestanzl() {
                 High performance
                 Flexible pricing";
 
-	// Here we split it into lines
-	$gestanzl = explode( "\n", $gestanzl );
+    // Here we split it into lines
+    $gestanzl = explode("\n", $gestanzl);
 
-	// And then randomly choose a line
-	return wptexturize( $gestanzl[ mt_rand( 0, count( $gestanzl ) - 1 ) ] );
+    // And then randomly choose a line
+    return wptexturize($gestanzl[mt_rand(0, count($gestanzl) - 1)]);
 }
 
 // This just echoes the chosen line, we'll position it later
-function hello_sis() {
-	$chosen = hello_sis_get_gestanzl();
-	echo "<p id='text'>$chosen</p>";
+function hello_sis()
+{
+    $chosen = hello_sis_get_gestanzl();
+    echo "<p id='text'>$chosen</p>";
 }
 
 // Now we set that function up to execute when the admin_notices action is called
-add_action( 'admin_notices', 'hello_sis' );
+add_action('admin_notices', 'hello_sis');
 
 // We need some CSS to position the paragraph
-function sis_css() {
-	// This makes sure that the positioning is also good for right-to-left languages
-	$x = is_rtl() ? 'left' : 'right';
+function sis_css()
+{
+    // This makes sure that the positioning is also good for right-to-left languages
+    $x = is_rtl() ? 'left' : 'right';
 
-	echo "
+    echo "
 	<style type='text/css'>
 	#text {
 		float: $x;
@@ -77,4 +80,4 @@ function sis_css() {
 	";
 }
 
-add_action( 'admin_head', 'sis_css' );
+add_action('admin_head', 'sis_css');
