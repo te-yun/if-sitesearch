@@ -198,13 +198,13 @@ public class SiteCrawler extends WebCrawler {
                     .build();
             HTTP_CLIENT.newCall(request).enqueue(new Callback() {
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(final Call call, final IOException e) {
                     call.cancel();
                     LOG.warn("siteId: " + siteId + " - URL: " + sitePage.getUrl() + " - exception: " + e.getMessage());
                 }
 
                 @Override
-                public void onResponse(Call call, Response response) {
+                public void onResponse(final Call call, final Response response) {
                     LOG.debug("siteId: " + siteId + " - URL: " + sitePage.getUrl() + " - responseCode: " + response.code());
                     response.close();
                 }
