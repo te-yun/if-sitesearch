@@ -369,9 +369,7 @@ public class SiteTest {
                 HttpMethod.POST, HttpEntity.EMPTY, SiteIndexSummary.class);
         final SiteIndexSummary creation = validateTenantSummary(exchange, 25);
 
-        TimeUnit.MILLISECONDS.sleep(13_000);
-        LOG.info("siteId: " + creation.getSiteId());
-        LOG.info("siteSecret: " + creation.getSiteSecret());
+        TimeUnit.MILLISECONDS.sleep(8_000);
         validateUpdatedSites(creation);
 
         final ResponseEntity<Object> clearSite = caller.exchange(SiteController.ENDPOINT + "/" + creation.getSiteId() + "?siteSecret=" + creation.getSiteSecret(),
@@ -395,8 +393,8 @@ public class SiteTest {
         siteIndexSummary.getDocuments().forEach(documentId -> {
             final ResponseEntity<FetchedPage> fetchedById = caller.exchange(
                     PageController.ENDPOINT + "/" + documentId, HttpMethod.GET, HttpEntity.EMPTY, FetchedPage.class);
-            assertTrue(HttpStatus.OK.equals(fetchedById.getStatusCode()));
-            assertTrue(siteIndexSummary.getSiteId().equals(fetchedById.getBody().getSiteId()));
+            assertEquals(HttpStatus.OK, fetchedById.getStatusCode());
+            assertEquals(siteIndexSummary.getSiteId(), fetchedById.getBody().getSiteId());
             assertFalse(fetchedById.getBody().getBody().isEmpty());
             assertNotNull(fetchedById.getBody().getUrl());
         });
@@ -421,24 +419,21 @@ public class SiteTest {
     @Test
     public void importFeedAndUpdate() throws Exception {
         // create index
-        final ResponseEntity<SiteIndexSummary> initialIndexCreation = caller.exchange(
+        final var initialIndexCreation = caller.exchange(
                 SiteController.ENDPOINT + "/rss?feedUrl=https://raw.githubusercontent.com/intrafind/if-sitesearch/master/service/src/test/resources/steem-blockchain-rss-feed-init.xml",
                 HttpMethod.POST, HttpEntity.EMPTY, SiteIndexSummary.class);
-        TimeUnit.MILLISECONDS.sleep(13_000);
+        TimeUnit.MILLISECONDS.sleep(8_000);
         final SiteIndexSummary siteIndexSummaryCreation = validateTenantSummary(initialIndexCreation, 10);
 
-        UUID siteIdFromCreation = siteIndexSummaryCreation.getSiteId();
-        UUID siteSecretFromCreation = siteIndexSummaryCreation.getSiteSecret();
+        final var siteIdFromCreation = siteIndexSummaryCreation.getSiteId();
+        final var siteSecretFromCreation = siteIndexSummaryCreation.getSiteSecret();
 
-        LOG.info("siteIdFromCreation: " + siteIdFromCreation);
-        LOG.info("siteSecretFromCreation: " + siteSecretFromCreation);
-
-        final ResponseEntity<SiteIndexSummary> updateWithoutSecret = caller.exchange(
+        final var updateWithoutSecret = caller.exchange(
                 SiteController.ENDPOINT + "/" + siteIdFromCreation + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml",
                 HttpMethod.PUT, HttpEntity.EMPTY, SiteIndexSummary.class);
         assertEquals(HttpStatus.BAD_REQUEST, updateWithoutSecret.getStatusCode());
 
-        final ResponseEntity<SiteIndexSummary> updateWithInvalidSecret = caller.exchange(
+        final var updateWithInvalidSecret = caller.exchange(
                 SiteController.ENDPOINT + "/" + siteIdFromCreation + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml"
                         + "&siteSecret=" + UUID.randomUUID(),
                 HttpMethod.PUT, HttpEntity.EMPTY, SiteIndexSummary.class);
