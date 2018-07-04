@@ -6,11 +6,12 @@ package com.intrafind.api.search;
 
 import com.intrafind.api.Document;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public final class Hits {
+public final class Hits implements Serializable {
     public static final String KEY_HIT_SCORE = "hit.score";
     public static final String PREFIX_TEASER = "hit.teaser.";
     public static final String PREFIX_TERM_FACET = "term-facet.";

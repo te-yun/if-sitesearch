@@ -4,12 +4,13 @@
 
 package com.intrafind.api;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public final class Document {
+public final class Document implements Serializable {
     private final String id;
     private final Map<String, List<String>> fields = new TreeMap<>();
 
