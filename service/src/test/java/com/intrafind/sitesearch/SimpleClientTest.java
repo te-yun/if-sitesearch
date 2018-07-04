@@ -48,5 +48,21 @@ public class SimpleClientTest {
         doc.set("key", "value");
         simpleIndex.index(doc);
         assertTrue(true);
+        assertTrue(true);
+
+
+//        final CreateIndexRequest request = new CreateIndexRequest("sis-config");
+//        request.settings(Settings.builder()
+//                .put("index.number_of_shards", 3)
+//                .put("index.number_of_replicas", 2)
+//        );
+//
+//
+//        final RestHighLevelClient client = new RestHighLevelClient(
+//                RestClient.builder(
+//                        new HttpHost("localhost", 9200, "http"),
+//                        new HttpHost("localhost", 9201, "http")));
+//        final CreateIndexResponse createIndexResponse = client.indices().create(request);
+//        client.close();
     }
 }

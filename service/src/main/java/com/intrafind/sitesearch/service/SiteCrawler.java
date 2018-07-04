@@ -36,8 +36,6 @@ import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.pdf.PDFParser;
 import org.apache.tika.sax.BodyContentHandler;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -87,9 +85,9 @@ public class SiteCrawler extends WebCrawler {
     }
 
     @Override
-    public boolean shouldVisit(Page referringPage, WebURL webUrl) {
-        final String href = webUrl.getURL().toLowerCase();
-        final boolean isCrawled = !BLACKLIST.matcher(href).matches()
+    public boolean shouldVisit(final Page referringPage, final WebURL webUrl) {
+        final var href = webUrl.getURL().toLowerCase();
+        final var isCrawled = !BLACKLIST.matcher(href).matches()
                 && href.startsWith(url.toString())
                 && isAllowedForRobot(webUrl.getURL())
                 && (containsQuery || noQueryParameter(webUrl));
@@ -219,12 +217,12 @@ public class SiteCrawler extends WebCrawler {
     }
 
     private String extractTextFromMixedHtml(String body, String pageBodyCssSelector) {
-        final Document docPage = Jsoup.parse(body);
-        final Element selectedBodyFragment = docPage.body().selectFirst(pageBodyCssSelector);
+        final var docPage = Jsoup.parse(body);
+        final var selectedBodyFragment = docPage.body().selectFirst(pageBodyCssSelector);
         if (selectedBodyFragment == null) {
             return docPage.body().text();
         }
-        final String extractedPageBody = selectedBodyFragment.text();
+        final var extractedPageBody = selectedBodyFragment.text();
         if (extractedPageBody.isEmpty()) {
             return docPage.body().text();
         }
