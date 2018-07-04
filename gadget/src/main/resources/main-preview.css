@@ -130,7 +130,7 @@ h3 .tipsy {
 }
 
 .form-inline.defaultValidity input[type="text"] {
-    background: #c4e9c2;
+    /*background: #c4e9c2;*/
 }
 
 .form-inline.invalidField input[type="text"] {

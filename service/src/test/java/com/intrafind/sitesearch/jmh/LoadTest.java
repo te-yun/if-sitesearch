@@ -31,7 +31,6 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.results.format.ResultFormatType;
 import org.openjdk.jmh.runner.Runner;
-import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,7 +90,7 @@ public class LoadTest {
     }
 
     public static void main(String... args) throws Exception {
-        final Options options = new OptionsBuilder()
+        final var options = new OptionsBuilder()
                 .warmupIterations(1)
                 .measurementIterations(5)
 //                .include(".*")
@@ -145,19 +144,19 @@ public class LoadTest {
 
     @Benchmark
     public void autocomplete() throws IOException {
-        final int randomSiteIndex = PSEUDO_ENTROPY.nextInt(SEARCH_DATA.size());
-        final UUID randomSiteId = (UUID) AUTOCOMPLETE_DATA.keySet().toArray()[randomSiteIndex];
-        final Map<String, Integer> randomSite = AUTOCOMPLETE_DATA.get(randomSiteId);
-        final int randomQueryIndex = PSEUDO_ENTROPY.nextInt(AUTOCOMPLETE_QUERIES.size());
-        final String randomQuery = (String) randomSite.keySet().toArray()[randomQueryIndex];
-        final int queryHits = randomSite.get(randomQuery);
+        final var randomSiteIndex = PSEUDO_ENTROPY.nextInt(SEARCH_DATA.size());
+        final var randomSiteId = (UUID) AUTOCOMPLETE_DATA.keySet().toArray()[randomSiteIndex];
+        final var randomSite = AUTOCOMPLETE_DATA.get(randomSiteId);
+        final var randomQueryIndex = PSEUDO_ENTROPY.nextInt(AUTOCOMPLETE_QUERIES.size());
+        final var randomQuery = (String) randomSite.keySet().toArray()[randomQueryIndex];
+        final var queryHits = randomSite.get(randomQuery);
 
-        final Request request = new Request.Builder()
+        final var request = new Request.Builder()
                 .url(LOAD_TARGET + SiteController.ENDPOINT + "/" + randomSiteId + AutocompleteController.ENDPOINT + "?query=" + randomQuery)
                 .build();
-        final Response response = CALLER.newCall(request).execute();
+        final var response = CALLER.newCall(request).execute();
         assertEquals(HttpStatus.OK.value(), response.code());
-        final Autocomplete result = MAPPER.readValue(response.body().charStream(), Autocomplete.class);
+        final var result = MAPPER.readValue(response.body().charStream(), Autocomplete.class);
         assertTrue(queryHits + " - " + result.getResults().size(), queryHits <= result.getResults().size());
         response.close();
     }
