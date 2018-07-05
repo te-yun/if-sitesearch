@@ -81,3 +81,29 @@ function sis_css()
 }
 
 add_action('admin_head', 'sis_css');
+
+// adding sis searchbar in this hook function
+function my_search_form( $form ) {
+    $form = '<div id="sitesearch-searchbar" class="searchbar">
+    <div id="ifs-searchbar" class="ifs-component ifs-sb"></div>
+    <script src="https://cdn.sitesearch.cloud/searchbar/2018-05-15/app/js/app.js"></script>
+    <script>
+        IFS.initClient({
+            customConfig: {
+                overwrite: {
+                    "appLang": "en"
+                }
+            },
+            configurl: "https://cdn.sitesearch.cloud/searchbar/2018-05-15/config/sitesearch.json",
+            siteId: "3a5dfd07-a463-45f8-863b-dfc3c9f09152"
+        });
+    </script>
+</div>';
+    return $form;
+}
+// add filter with high priority
+// call filter in themes = get_search_form();
+add_filter( 'get_search_form', 'my_search_form', 100 );
+// adding shortcode
+// use it in posts you want as [wpbsearch]
+add_shortcode('wpbsearch', 'get_search_form');
