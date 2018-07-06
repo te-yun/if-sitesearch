@@ -26,8 +26,11 @@ public final class Document implements Serializable {
     private final String id;
     private final Map<String, List<String>> fields = new TreeMap<>();
 
-    private Document() {
-        this.id = "";
+    //    private Document() {
+//        this.id = "";
+//    }
+    protected Document() {
+        this.id = null;
     }
 
     public Document(final String id) {
