@@ -67,7 +67,7 @@ public class SiteTest {
     private TestRestTemplate caller;
 
     public static SitePage buildPage() {
-        final String url = "https://api.sitesearch.cloud";
+        final var url = "https://api.sitesearch.cloud";
         return new SitePage(
                 "Cloud Solution",
                 "Site Search is IntraFind's on-demand solution for site search.",
@@ -81,7 +81,7 @@ public class SiteTest {
     }
 
     private SiteCreation createNewSite(SiteProfileUpdate siteProfileCreation) {
-        final ResponseEntity<SiteCreation> actual = caller.exchange(SiteController.ENDPOINT, HttpMethod.POST, new HttpEntity<>(siteProfileCreation), SiteCreation.class);
+        final var actual = caller.exchange(SiteController.ENDPOINT, HttpMethod.POST, new HttpEntity<>(siteProfileCreation), SiteCreation.class);
 
         assertEquals(HttpStatus.CREATED, actual.getStatusCode());
         assertNotNull(actual.getBody());
@@ -93,8 +93,8 @@ public class SiteTest {
     }
 
     private FetchedPage createNewPage(UUID siteId, UUID siteSecret) {
-        final SitePage simple = buildPage();
-        final ResponseEntity<FetchedPage> newlyCreatedPage = caller.exchange(SiteController.ENDPOINT + "/" + siteId + "/pages?siteSecret=" + siteSecret, HttpMethod.PUT, new HttpEntity<>(simple), FetchedPage.class);
+        final var simple = buildPage();
+        final var newlyCreatedPage = caller.exchange(SiteController.ENDPOINT + "/" + siteId + "/pages?siteSecret=" + siteSecret, HttpMethod.PUT, new HttpEntity<>(simple), FetchedPage.class);
         assertEquals(HttpStatus.OK, newlyCreatedPage.getStatusCode());
         assertNotNull(newlyCreatedPage.getBody());
         assertNotNull(newlyCreatedPage.getBody().getBody());
@@ -111,22 +111,22 @@ public class SiteTest {
 
     @Test
     public void fetchAndUpdateCrawlStatus() {
-        final ResponseEntity<SitesCrawlStatus> crawlStatus = caller.exchange(SiteController.ENDPOINT + "/crawl/status?serviceSecret=" +
+        final var crawlStatus = caller.exchange(SiteController.ENDPOINT + "/crawl/status?serviceSecret=" +
                 ADMIN_SITE_SECRET, HttpMethod.GET, HttpEntity.EMPTY, SitesCrawlStatus.class);
         assertEquals(HttpStatus.OK, crawlStatus.getStatusCode());
-        int initSize = crawlStatus.getBody().getSites().size();
+        final var initSize = crawlStatus.getBody().getSites().size();
         assertTrue(1 <= initSize);
         assertNotNull(findSearchSiteCrawlStatus(crawlStatus.getBody()).getSiteId());
         assertTrue(Instant.now().isAfter(Instant.parse(findSearchSiteCrawlStatus(crawlStatus.getBody()).getCrawled())));
 
         // update crawl status of a specific site
-        Instant now = Instant.now();
+        final var now = Instant.now();
         final var updatedCrawlStatus = crawlStatus.getBody();
         final var searchSiteCrawlStatus = findSearchSiteCrawlStatus(updatedCrawlStatus);
         assertNotEquals(now.toString(), searchSiteCrawlStatus.getCrawled());
         searchSiteCrawlStatus.setCrawled(now.toString());
         updatedCrawlStatus.getSites().add(searchSiteCrawlStatus);
-        final ResponseEntity<SitesCrawlStatus> crawlStatusUpdate = caller.exchange(SiteController.ENDPOINT + "/crawl/status?serviceSecret=" +
+        final var crawlStatusUpdate = caller.exchange(SiteController.ENDPOINT + "/crawl/status?serviceSecret=" +
                 ADMIN_SITE_SECRET, HttpMethod.PUT, new HttpEntity<>(updatedCrawlStatus), SitesCrawlStatus.class);
         assertEquals(HttpStatus.OK, crawlStatus.getStatusCode());
         assertNotNull(findSearchSiteCrawlStatus(crawlStatusUpdate.getBody()).getSiteId());
@@ -134,7 +134,7 @@ public class SiteTest {
         assertTrue(Instant.now().isAfter(Instant.parse(findSearchSiteCrawlStatus(crawlStatusUpdate.getBody()).getCrawled())));
 
         // verify crawl status of a specific site
-        final ResponseEntity<SitesCrawlStatus> crawlStatusUpdated = caller.exchange(SiteController.ENDPOINT + "/crawl/status?serviceSecret=" +
+        final var crawlStatusUpdated = caller.exchange(SiteController.ENDPOINT + "/crawl/status?serviceSecret=" +
                 ADMIN_SITE_SECRET, HttpMethod.GET, HttpEntity.EMPTY, SitesCrawlStatus.class);
         assertEquals(HttpStatus.OK, crawlStatusUpdated.getStatusCode());
         assertEquals(initSize, crawlStatusUpdated.getBody().getSites().size());

@@ -43,7 +43,7 @@ public final class Hits implements Serializable {
     }
 
     public Hits(final long totalHits) {
-        this.getMetaData().set("totalHits", totalHits);
+        this.getMetaData().set(KEY_TOTAL_HITS, totalHits);
     }
 
     public List<Document> getDocuments() {
@@ -55,7 +55,7 @@ public final class Hits implements Serializable {
     }
 
     public long getTotalHits() {
-        return Long.parseLong(Objects.requireNonNull(this.metaData.get("totalHits")));
+        return Long.parseLong(Objects.requireNonNull(this.metaData.get(KEY_TOTAL_HITS)));
     }
 
     @Override

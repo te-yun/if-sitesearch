@@ -69,7 +69,6 @@ public class EmailController {
         return ResponseEntity.ok().build();
     }
 
-
     //    @RequestMapping(path = "verify", method = RequestMethod.POST)
     ResponseEntity<Object> verify(
             @RequestParam(value = "data-callback", required = false) String dataCallback,
