@@ -20,6 +20,7 @@ import com.intrafind.sitesearch.dto.CaptchaVerification;
 import com.intrafind.sitesearch.service.SiteCrawler;
 import com.intrafind.sitesearch.service.SiteService;
 import okhttp3.Request;
+import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,12 +79,12 @@ public class EmailController {
         LOG.info("payload: " + payload);
 
         try {
-            final var request = new Request.Builder()
+            Request request = new Request.Builder()
                     .url("https://www.google.com/recaptcha/api/siteverify?secret=" + System.getenv("INVISIBLE_RECAPTCHA_SITE_SECRET") + "&response=" + payload)
                     .post(okhttp3.RequestBody.create(JSON_MEDIA_TYPE, ""))
                     .build();
-            final var response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
-            final var captchaVerification = CrawlerController.MAPPER.readValue(response.body().bytes(), CaptchaVerification.class);
+            final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
+            final CaptchaVerification captchaVerification = CrawlerController.MAPPER.readValue(response.body().bytes(), CaptchaVerification.class);
 
             return ResponseEntity.ok(dataCallback);
         } catch (IOException e) {
