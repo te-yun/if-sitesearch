@@ -61,6 +61,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.time.Instant;
@@ -109,10 +110,10 @@ public class CrawlerController {
     }
 
     private static MimeMessage createEmail(String to, String subject, String bodyText) throws Exception {
-        final var props = new Properties();
-        final var session = Session.getDefaultInstance(props, null);
+        final Properties props = new Properties();
+        final Session session = Session.getDefaultInstance(props, null);
 
-        final var email = new MimeMessage(session);
+        final MimeMessage email = new MimeMessage(session);
         email.setFrom(new InternetAddress("team@sitesearch.cloud"));
         email.setReplyTo(new InternetAddress[]{new InternetAddress("feedback@sitesearch.cloud")});
         email.addRecipient(javax.mail.Message.RecipientType.TO, new InternetAddress(to));
@@ -123,17 +124,17 @@ public class CrawlerController {
     }
 
     private static com.google.api.services.gmail.model.Message createMessageWithEmail(MimeMessage emailContent) throws Exception {
-        final var buffer = new ByteArrayOutputStream();
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         emailContent.writeTo(buffer);
-        final var bytes = buffer.toByteArray();
-        final var encodedEmail = Base64.encodeBase64URLSafeString(bytes);
-        final var message = new com.google.api.services.gmail.model.Message();
+        byte[] bytes = buffer.toByteArray();
+        String encodedEmail = Base64.encodeBase64URLSafeString(bytes);
+        com.google.api.services.gmail.model.Message message = new com.google.api.services.gmail.model.Message();
         message.setRaw(encodedEmail);
         return message;
     }
 
     private static com.google.api.services.gmail.model.Message sendMessage(Gmail service, String userId, MimeMessage emailContent) throws Exception {
-        var message = createMessageWithEmail(emailContent);
+        com.google.api.services.gmail.model.Message message = createMessageWithEmail(emailContent);
         message = service.users().messages().send(userId, message).execute();
 
         LOG.debug(message.toPrettyString());
@@ -141,15 +142,15 @@ public class CrawlerController {
     }
 
     public static Credential authorize() throws IOException {
-        final var resourceAsStream = new FileInputStream(new File(SERVICE_CONFIG_PATH + "gmail-api-client_secret.json"));
-        final var clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(resourceAsStream));
+        final InputStream resourceAsStream = new FileInputStream(new File(SERVICE_CONFIG_PATH + "gmail-api-client_secret.json"));
+        final GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(resourceAsStream));
 
-        final var flow =
+        final GoogleAuthorizationCodeFlow flow =
                 new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
                         .setDataStoreFactory(DATA_STORE_FACTORY)
                         .setAccessType("offline")
                         .build();
-        final var credential = new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
+        final Credential credential = new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
         LOG.debug("Credentials saved to: " + DATA_STORE_DIR.getAbsolutePath());
         return credential;
     }

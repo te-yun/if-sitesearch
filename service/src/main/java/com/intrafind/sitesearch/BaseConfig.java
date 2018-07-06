@@ -91,7 +91,7 @@ public class BaseConfig {
 
         static {
             try {
-                final var sslContext = SSLContext.getInstance("TLS");
+                final SSLContext sslContext = SSLContext.getInstance("TLS");
                 sslContext.init(null, new TrustManager[]{new TrustAllX509TrustManager()}, new SecureRandom());
                 HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
                 HttpsURLConnection.setDefaultHostnameVerifier((string, sslSession) -> true);
