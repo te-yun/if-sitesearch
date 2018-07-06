@@ -62,7 +62,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Bean
     public FilterRegistrationBean oauth2ClientFilterRegistration(final OAuth2ClientContextFilter filter) {
-        final FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<>();
+        final var registration = new FilterRegistrationBean<>();
         registration.setFilter(filter);
         registration.setOrder(SecurityProperties.DEFAULT_FILTER_ORDER);
         return registration;
@@ -75,7 +75,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     }
 
     private Filter ssoFilter() {
-        final CompositeFilter filter = new CompositeFilter();
+        final var filter = new CompositeFilter();
         final List<Filter> filters = new ArrayList<>();
         filters.add(ssoFilter(github(), "/login/github"));
         filter.setFilters(filters);
@@ -83,10 +83,10 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     }
 
     private Filter ssoFilter(final ClientResources client, final String path) {
-        final OAuth2ClientAuthenticationProcessingFilter filter = new OAuth2ClientAuthenticationProcessingFilter(path);
-        final OAuth2RestTemplate template = new OAuth2RestTemplate(client.getClient(), oauth2ClientContext);
+        final var filter = new OAuth2ClientAuthenticationProcessingFilter(path);
+        final var template = new OAuth2RestTemplate(client.getClient(), oauth2ClientContext);
         filter.setRestTemplate(template);
-        final UserInfoTokenServices tokenServices = new UserInfoTokenServices(client.getResource().getUserInfoUri(), client.getClient().getClientId());
+        final var tokenServices = new UserInfoTokenServices(client.getResource().getUserInfoUri(), client.getClient().getClientId());
         tokenServices.setRestTemplate(template);
         filter.setTokenServices(tokenServices);
         return filter;
