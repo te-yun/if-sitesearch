@@ -1,5 +1,17 @@
 /*
  * Copyright 2018 IntraFind Software AG. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.intrafind.api;
@@ -48,7 +60,7 @@ public final class Document implements Serializable {
         return this.add(key, values);
     }
 
-    public Document set(String key, Iterable<?> values) {
+    public Document set(final String key, final Iterable<?> values) {
         this.del(key);
         return this.add(key, values);
     }
@@ -57,10 +69,10 @@ public final class Document implements Serializable {
         if (values != null) {
             for (final var value : values) {
                 if (value != null) {
-                    final var string = value.toString().trim();
-                    if (!string.isEmpty()) {
+                    final var trimmedValue = value.toString().trim();
+                    if (!trimmedValue.isEmpty()) {
                         final var field = this.getFields().computeIfAbsent(key, k -> new ArrayList<>());
-                        field.add(string);
+                        field.add(trimmedValue);
                     }
                 }
             }
