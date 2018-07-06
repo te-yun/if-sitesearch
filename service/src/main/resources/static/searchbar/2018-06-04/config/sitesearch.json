@@ -3,7 +3,7 @@
     "baseUrl": "https://api.sitesearch.cloud/sites/{{siteId}}/",
     "endpointSearch": "search",
     "start": 0,
-    "limit": 20
+    "limit": 50
   },
   "localstorage": {
     "storagePrefix": "ifs_"
