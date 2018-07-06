@@ -121,8 +121,8 @@ public class SiteTest {
 
         // update crawl status of a specific site
         Instant now = Instant.now();
-        final SitesCrawlStatus updatedCrawlStatus = crawlStatus.getBody();
-        final CrawlStatus searchSiteCrawlStatus = findSearchSiteCrawlStatus(updatedCrawlStatus);
+        final var updatedCrawlStatus = crawlStatus.getBody();
+        final var searchSiteCrawlStatus = findSearchSiteCrawlStatus(updatedCrawlStatus);
         assertNotEquals(now.toString(), searchSiteCrawlStatus.getCrawled());
         searchSiteCrawlStatus.setCrawled(now.toString());
         updatedCrawlStatus.getSites().add(searchSiteCrawlStatus);
@@ -149,17 +149,17 @@ public class SiteTest {
 
     @Test
     public void createNewSiteWithProfile() {
-        final List<SiteProfile.Config> configs = Arrays.asList(
+        final var configs = Arrays.asList(
                 new SiteProfile.Config(URI.create("https://subdomain.example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false),
                 new SiteProfile.Config(URI.create("https://example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false)
         );
-        final SiteProfileUpdate siteProfileCreation = new SiteProfileUpdate(
+        final var siteProfileCreation = new SiteProfileUpdate(
                 configs,
                 CrawlerTest.TEST_EMAIL_ADDRESS
         );
-        final SiteCreation createdSiteProfile = createNewSite(siteProfileCreation);
+        final var createdSiteProfile = createNewSite(siteProfileCreation);
 
-        ResponseEntity<SiteProfile> actual = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() +
+        final var actual = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() +
                 "/profile?siteSecret=" + createdSiteProfile.getSiteSecret(), HttpMethod.GET, HttpEntity.EMPTY, SiteProfile.class);
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertEquals(createdSiteProfile.getSiteId(), actual.getBody().getId());
@@ -176,12 +176,12 @@ public class SiteTest {
         assertEquals(HttpStatus.NOT_FOUND, siteProfileWithInvalidSecret.getStatusCode());
 
         // update site profile
-        final List<SiteProfile.Config> updateSiteProfileConfigs = new ArrayList<>(configs);
+        final var updateSiteProfileConfigs = new ArrayList<>(configs);
         updateSiteProfileConfigs.add(new SiteProfile.Config(URI.create("https://update.example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false));
 //        configs.add(new SiteProfile.Config(URI.create("https://update.example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false));
 
-        final SiteProfileUpdate siteProfileUpdate = new SiteProfileUpdate(createdSiteProfile.getSiteSecret(), "update." + CrawlerTest.TEST_EMAIL_ADDRESS, configs);
-        final ResponseEntity<SiteProfileUpdate> updatedSite = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + createdSiteProfile.getSiteSecret(),
+        final var siteProfileUpdate = new SiteProfileUpdate(createdSiteProfile.getSiteSecret(), "update." + CrawlerTest.TEST_EMAIL_ADDRESS, configs);
+        final var updatedSite = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + createdSiteProfile.getSiteSecret(),
                 HttpMethod.PUT, new HttpEntity<>(siteProfileUpdate), SiteProfileUpdate.class);
         assertEquals(createdSiteProfile.getSiteSecret(), updatedSite.getBody().getSecret());
         assertEquals("update." + CrawlerTest.TEST_EMAIL_ADDRESS, updatedSite.getBody().getEmail());
@@ -189,18 +189,18 @@ public class SiteTest {
         assertEquals(configs.size(), updatedSite.getBody().getConfigs().size());
 
         // assure site profile is impossible with wrong site secret
-        final ResponseEntity<SiteProfileUpdate> updatedSiteWithInvalidSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + UUID.randomUUID(),
+        final var updatedSiteWithInvalidSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + UUID.randomUUID(),
                 HttpMethod.PUT, new HttpEntity<>(siteProfileUpdate), SiteProfileUpdate.class);
         assertEquals(HttpStatus.NOT_FOUND, updatedSiteWithInvalidSecret.getStatusCode());
 
-        final ResponseEntity<SiteProfileUpdate> updatedSiteWithAdminSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + ADMIN_SITE_SECRET,
+        final var updatedSiteWithAdminSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + ADMIN_SITE_SECRET,
                 HttpMethod.PUT, new HttpEntity<>(siteProfileUpdate), SiteProfileUpdate.class);
         assertEquals(HttpStatus.NOT_FOUND, updatedSiteWithAdminSecret.getStatusCode());
 
         // update site profile's secret
-        final UUID newSiteSecret = UUID.randomUUID();
-        final SiteProfileUpdate siteProfileUpdateWithSecret = new SiteProfileUpdate(newSiteSecret, "update." + CrawlerTest.TEST_EMAIL_ADDRESS, updateSiteProfileConfigs);
-        final ResponseEntity<SiteProfileUpdate> updatedSiteWithSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + createdSiteProfile.getSiteSecret(),
+        final var newSiteSecret = UUID.randomUUID();
+        final var siteProfileUpdateWithSecret = new SiteProfileUpdate(newSiteSecret, "update." + CrawlerTest.TEST_EMAIL_ADDRESS, updateSiteProfileConfigs);
+        final var updatedSiteWithSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + createdSiteProfile.getSiteSecret(),
                 HttpMethod.PUT, new HttpEntity<>(siteProfileUpdateWithSecret), SiteProfileUpdate.class);
         assertEquals(newSiteSecret, updatedSiteWithSecret.getBody().getSecret());
         assertEquals("update." + CrawlerTest.TEST_EMAIL_ADDRESS, updatedSiteWithSecret.getBody().getEmail());
