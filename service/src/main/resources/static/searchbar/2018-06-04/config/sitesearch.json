@@ -1,6 +1,6 @@
 {
   "ajax": {
-    "baseUrl": "https://cdn.sitesearch.cloud/sites/{{siteId}}/",
+    "baseUrl": "https://api.sitesearch.cloud/sites/{{siteId}}/",
     "endpointSearch": "search",
     "start": 0,
     "limit": 20
