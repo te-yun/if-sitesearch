@@ -2,7 +2,7 @@ version: "2.0"
 
 services:
   consul:
-    image: consul:1.0.3
+    image: consul:1.2.0
     container_name: consul
     restart: always
     ports:
@@ -66,7 +66,7 @@ services:
 #  ops-consul:
 #    driver: local
 
-networks:
-  sitesearch:
-    external:
-      name: sitesearch
+#networks:
+#  sitesearch:
+#    external:
+#      name: sitesearch
