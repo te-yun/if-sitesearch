@@ -62,7 +62,7 @@ services:
 #  ops-consul:
 #    driver: local
 
-#networks:
-#  sitesearch:
-#    external:
-#      name: sitesearch
+networks:
+  sitesearch:
+    external:
+      name: sitesearch
