@@ -23,7 +23,6 @@ import crawlercommons.robots.SimpleRobotRulesParser;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import okhttp3.Request;
-import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -49,12 +48,12 @@ public class CrawlerControllerFactory<T extends WebCrawler> implements CrawlCont
     }
 
     private byte[] fetchRobotsTxt() {
-        byte[] robotsTxtContent = new byte[]{};
+        var robotsTxtContent = new byte[]{};
         try {
-            final Request request = new Request.Builder()
+            final var request = new Request.Builder()
                     .url(url + "/robots.txt")
                     .build();
-            final Response robotsResponse = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
+            final var robotsResponse = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
             if (HttpStatus.OK.value() == robotsResponse.code()) {
                 if (robotsResponse.body() != null) {
                     robotsTxtContent = robotsResponse.body().bytes();
@@ -72,7 +71,7 @@ public class CrawlerControllerFactory<T extends WebCrawler> implements CrawlCont
     }
 
     private BaseRobotRules initRobotRules() {
-        final SimpleRobotRulesParser simpleRobotRulesParser = new SimpleRobotRulesParser();
+        final var simpleRobotRulesParser = new SimpleRobotRulesParser();
         return simpleRobotRulesParser.parseContent(
                 url.toString(),
                 fetchRobotsTxt(),

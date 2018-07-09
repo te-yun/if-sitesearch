@@ -21,6 +21,14 @@ terraform destroy
 #sudo -u ubuntu terraform destroy -target=module.kubernetes.null_resource.Sitesearch-SearchService
 #sudo -u ubuntu kubectl delete -f /home/ubuntu/kube_searchservice.yaml
 
+# attach all disks
+
+gcloud compute instances attach-disk dev --disk elasticsearch-disk-1
+gcloud compute instances attach-disk dev --disk elasticsearch-disk-2
+gcloud compute instances attach-disk dev --disk elasticsearch-disk-quorum
+gcloud compute instances attach-disk dev --disk searchservice-disk-1
+gcloud compute instances attach-disk dev --disk searchservice-disk-2
+
 #---------elasticsearch normal disks---------------
 
 gcloud compute disks create elasticsearch-disk-1 --size 200 --type pd-ssd
