@@ -29,6 +29,7 @@ docker run -d --name ${docker_image_name} \
     --env BUILD_NUMBER=$BUILD_NUMBER \
     --env SCM_HASH=$SCM_HASH \
     --env SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=$SECURITY_OAUTH2_CLIENT_CLIENT_SECRET \
+    --restart unless-stopped \
     --network $docker_network \
     intrafind/${docker_image_name}:${docker_tag}
 docker push ${img_fqn}
