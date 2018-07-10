@@ -14,35 +14,41 @@
  * limitations under the License.
  */
 
- /*
- * How to integrate this code in WordPress:
- * Prerequisites:
- * - installed Woo Commerce and created consumer_key and consumer_secret for the Woo Commerce API
- * - replaced with the new keys the old ones in TC
- * - installed WordPress Plugin -> Tracking Code Manager and activated
- * HowTo:
- * - Create a Tracking Code and add link to this js file
- * - choose in settings of Tracking code -> before </body>
- */
+/*
+* How to integrate this code in WordPress:
+* Prerequisites:
+* - installed Woo Commerce and created consumer_key and consumer_secret for the Woo Commerce API
+* - replaced with the new keys the old ones in TC
+* - installed WordPress Plugin -> Tracking Code Manager and activated
+* HowTo:
+* - Create a Tracking Code and add link to this js file
+* - choose in settings of Tracking code -> before </body>
+*/
 
-// if element with #additional_affiliate id exists read cookie and split to use cookie individually
-// on the checkout page
-var affiliateField = document.querySelector("#additional_affiliate");
-if (affiliateField){
-    // reading and splitting cookie in parts with name
-    function readCookie(name) {
-         var nameEQ = name + "=";
-         var cookieAll = document.cookie.split(';');
-         for(var i=0;i < cookieAll.length;i++) {
-             var myCookie = cookieAll[i];
-             while (myCookie.charAt(0)==' ') myCookie = myCookie.substring(1,myCookie.length);
-             if (myCookie.indexOf(nameEQ) == 0) return myCookie.substring(nameEQ.length,myCookie.length);
-         }
-         return null;
-     }
-     var affiliateId = readCookie("affiliate");
-     // add value of cookie affiliate to the element
-     document.querySelector("#additional_affiliate").value = affiliateId;
-} else {
-    return null;
+function applyAffiliateIdFromCookie() {
+    function isCheckoutPage() {
+        return affiliateField !== "undefined" || affiliateField !== "" || affiliateField !== null;
+    }
+
+    var affiliateField = document.querySelector("#additional_affiliate");
+    if (isCheckoutPage()) {
+        // reading and splitting cookie in parts with name
+        function getCookieValueForKey(cookieKey) {
+            var keyWithExtension = cookieKey + "=";
+            var cookiePairs = document.cookie.split(';');
+            for (var index = 0; index < cookiePairs.length; index++) {
+                var cookiePairTarget = cookiePairs[index];
+                while (cookiePairTarget.charAt(0) === " ")
+                    cookiePairTarget = cookiePairTarget.substring(1, cookiePairTarget.length);
+                if (cookiePairTarget.indexOf(keyWithExtension) === 0)
+                    return cookiePairTarget.substring(keyWithExtension.length, cookiePairTarget.length);
+            }
+            return "";
+        }
+
+        var affiliateId = getCookieValueForKey("affiliate");
+        document.querySelector("#additional_affiliate").value = affiliateId;
+    }
 }
+
+applyAffiliateIdFromCookie();
