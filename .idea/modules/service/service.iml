@@ -40,7 +40,7 @@
     <orderEntry type="library" name="Gradle: com.google.oauth-client:google-oauth-client-jetty:1.23.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.apis:google-api-services-gmail:v1-rev82-1.23.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jsoup:jsoup:1.11.3" level="project" />
-    <orderEntry type="library" name="Gradle: org.elasticsearch.client:elasticsearch-rest-high-level-client:6.3.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.elasticsearch.client:elasticsearch-rest-high-level-client:6.3.1" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-json:2.0.3.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.9.6" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.6" level="project" />
@@ -81,7 +81,7 @@
     <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-to-slf4j:2.10.0" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.25" level="project" />
     <orderEntry type="library" name="Gradle: com.google.guava:guava:24.0-jre" level="project" />
-    <orderEntry type="library" name="Gradle: org.elasticsearch.client:elasticsearch-rest-client:6.3.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.elasticsearch.client:elasticsearch-rest-client:6.3.1" level="project" />
     <orderEntry type="library" name="Gradle: com.google.oauth-client:google-oauth-client-java6:1.23.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.api-client:google-api-client:1.23.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.oauth-client:google-oauth-client:1.23.0" level="project" />
@@ -116,9 +116,9 @@
     <orderEntry type="library" name="Gradle: commons-logging:commons-logging:1.2" level="project" />
     <orderEntry type="library" name="Gradle: org.mortbay.jetty:jetty:6.1.26" level="project" />
     <orderEntry type="library" name="Gradle: org.elasticsearch:elasticsearch:5.6.10" level="project" />
-    <orderEntry type="library" name="Gradle: org.elasticsearch.plugin:parent-join-client:6.3.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.elasticsearch.plugin:aggs-matrix-stats-client:6.3.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.elasticsearch.plugin:rank-eval-client:6.3.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.elasticsearch.plugin:parent-join-client:6.3.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.elasticsearch.plugin:aggs-matrix-stats-client:6.3.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.elasticsearch.plugin:rank-eval-client:6.3.1" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.9.6" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-beans:5.0.7.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-expression:5.0.7.RELEASE" level="project" />

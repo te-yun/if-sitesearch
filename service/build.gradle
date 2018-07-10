@@ -74,10 +74,10 @@ dependencies {
 
     compile "org.jsoup:jsoup:1.11.3"
     
-//    compile "org.elasticsearch:elasticsearch:6.3.0"
-    compile "org.elasticsearch.client:elasticsearch-rest-high-level-client:6.3.0"
-//    compile "org.elasticsearch.client:elasticsearch-rest-client:6.3.0"
-//    compile "org.elasticsearch.client:transport:6.3.0"
+//    compile "org.elasticsearch:elasticsearch:6.3.1"
+    compile "org.elasticsearch.client:elasticsearch-rest-high-level-client:6.3.1"
+//    compile "org.elasticsearch.client:elasticsearch-rest-client:6.3.1"
+//    compile "org.elasticsearch.client:transport:6.3.1"
 }
 
 //test {

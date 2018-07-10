@@ -27,12 +27,11 @@
 
 function applyAffiliateIdFromCookie() {
     function isCheckoutPage() {
-        return affiliateField !== "undefined" || affiliateField !== "" || affiliateField !== null;
+        return affiliateField !== "undefined" && affiliateField !== "" && affiliateField !== null;
     }
 
     var affiliateField = document.querySelector("#additional_affiliate");
     if (isCheckoutPage()) {
-        // reading and splitting cookie in parts with name
         function getCookieValueForKey(cookieKey) {
             var keyWithExtension = cookieKey + "=";
             var cookiePairs = document.cookie.split(';');
