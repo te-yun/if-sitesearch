@@ -76,7 +76,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     private Filter ssoFilter() {
         final var filter = new CompositeFilter();
-        final List<Filter> filters = new ArrayList<>();
+        final var filters = new ArrayList<Filter>();
         filters.add(ssoFilter(github(), "/login/github"));
         filter.setFilters(filters);
         return filter;
