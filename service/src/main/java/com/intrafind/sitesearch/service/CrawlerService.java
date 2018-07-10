@@ -52,7 +52,7 @@ public class CrawlerService {
     private static final Random RANDOM_VERSION = new Random();
     public static final String SITE_SEARCH_USER_AGENT = "SiteSearch.cloud";
 
-    public CrawlerJobResult recrawl(UUID siteId, UUID siteSecret, SiteProfile siteProfile, boolean clearIndex) {
+    public CrawlerJobResult recrawl(UUID siteId, UUID siteSecret, SiteProfile siteProfile) {
         final List<String> urls = new ArrayList<>();
         for (final SiteProfile.Config siteConfig : siteProfile.getConfigs()) {
             final CrawlConfig config = new CrawlConfig();
@@ -80,7 +80,10 @@ public class CrawlerService {
                 controller.addSeed(siteConfig.getUrl().toString());
             }
 
-            final CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(siteId, siteSecret, siteConfig.getUrl(), siteConfig.getPageBodyCssSelector());
+            final CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(
+                    siteId, siteSecret, siteConfig.getUrl(), siteConfig.getPageBodyCssSelector(),
+                    siteId.equals(UUID.fromString("c7d080ff-6eec-496e-a70e-db5ec81948ab")) /*mh, should come from siteProfile */
+            );
             controller.start(factory, crawlerThreads);
 
             final List<String> configUrls = controller.getCrawlersLocalData().stream()
@@ -138,11 +141,7 @@ public class CrawlerService {
             controller.addSeed(url);
         }
 
-//        if (clearIndex && !clearIndex(siteId, siteSecret)) {
-//            return null;
-//        }
-
-        final CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url), pageBodyCssSelector);
+        final CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url), pageBodyCssSelector, false);
             controller.start(factory, crawlerThreads);
 
         final List<String> urls = controller.getCrawlersLocalData().stream()

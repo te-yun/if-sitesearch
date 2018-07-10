@@ -269,7 +269,7 @@ public class CrawlerController {
             if (clearIndex) {
                 siteService.clearIndex(siteId, siteSecret);
             }
-            final CrawlerJobResult crawlerJobResult = crawlerService.recrawl(siteId, siteSecret, siteProfile.get(), clearIndex);
+            final CrawlerJobResult crawlerJobResult = crawlerService.recrawl(siteId, siteSecret, siteProfile.get());
 
             final Optional<IndexCleanupResult> indexCleanupResultOptional = siteService.removeOldSiteIndexPages(siteId);
             indexCleanupResultOptional.ifPresent(indexCleanupResult -> {

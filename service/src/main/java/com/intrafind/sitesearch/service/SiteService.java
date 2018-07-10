@@ -109,12 +109,12 @@ public class SiteService {
     }
 
     public boolean isAllowedToModify(UUID siteId, UUID siteSecret) {
-        final Optional<UUID> fetchedSiteSecret = fetchSiteSecret(siteId);
+        final var fetchedSiteSecret = fetchSiteSecret(siteId);
         return fetchedSiteSecret.isPresent() && siteSecret.equals(fetchedSiteSecret.get());
     }
 
     private Optional<FetchedPage> indexDocument(final String id, final UUID siteId, final SitePage page) {
-        final Document doc = new Document(id);
+        final var doc = new Document(id);
         doc.set(Fields.BODY, page.getBody());
         doc.set(Fields.TITLE, page.getTitle());
         doc.set(Fields.URL, page.getUrl());

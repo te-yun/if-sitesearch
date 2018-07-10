@@ -36,15 +36,17 @@ public class CrawlerControllerFactory<T extends WebCrawler> implements CrawlCont
     private final UUID siteId;
     private final UUID siteSecret;
     private final URI url;
+    private final boolean allowUrlWithQuery;
     private final String pageBodyCssSelector;
     private final BaseRobotRules robotRules;
 
-    public CrawlerControllerFactory(UUID siteId, UUID siteSecret, URI url, String pageBodyCssSelector) {
+    public CrawlerControllerFactory(UUID siteId, UUID siteSecret, URI url, String pageBodyCssSelector, final boolean allowUrlWithQuery) {
         this.siteId = siteId;
         this.siteSecret = siteSecret;
         this.url = url;
         this.pageBodyCssSelector = pageBodyCssSelector;
         this.robotRules = initRobotRules();
+        this.allowUrlWithQuery = allowUrlWithQuery;
     }
 
     private byte[] fetchRobotsTxt() {
@@ -82,6 +84,6 @@ public class CrawlerControllerFactory<T extends WebCrawler> implements CrawlCont
 
     @Override
     public SiteCrawler newInstance() {
-        return new SiteCrawler(siteId, siteSecret, url, pageBodyCssSelector, robotRules);
+        return new SiteCrawler(siteId, siteSecret, url, pageBodyCssSelector, robotRules, allowUrlWithQuery);
     }
 }

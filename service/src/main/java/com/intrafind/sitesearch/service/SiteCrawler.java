@@ -68,19 +68,18 @@ public class SiteCrawler extends WebCrawler {
     private UUID siteSecret;
     private URI url;
     private String pageBodyCssSelector;
-    private boolean containsQuery;
+    private boolean allowUrlWithQuery;
     private BaseRobotRules robotRules;
 
-    private SiteCrawler() {
+    private SiteCrawler() { // comment out to make `pageBodyCssSelector`, `url` etc. final
     }
 
-    public SiteCrawler(final UUID siteId, final UUID siteSecret, final URI url, final String pageBodyCssSelector, final BaseRobotRules robotRules) {
+    public SiteCrawler(final UUID siteId, final UUID siteSecret, final URI url, final String pageBodyCssSelector, final BaseRobotRules robotRules, final boolean allowUrlWithQuery) {
         this.siteId = siteId;
         this.siteSecret = siteSecret;
         this.url = url;
         this.pageBodyCssSelector = pageBodyCssSelector;
-        this.containsQuery = siteId.equals(UUID.fromString("c7d080ff-6eec-496e-a70e-db5ec81948ab")); // mh
-
+        this.allowUrlWithQuery = allowUrlWithQuery;
         this.robotRules = robotRules;
     }
 
@@ -90,7 +89,7 @@ public class SiteCrawler extends WebCrawler {
         final var isCrawled = !BLACKLIST.matcher(href).matches()
                 && href.startsWith(url.toString())
                 && isAllowedForRobot(webUrl.getURL())
-                && (containsQuery || noQueryParameter(webUrl));
+                && (allowUrlWithQuery || noQueryParameter(webUrl));
         if (isCrawled && href.endsWith("pdf")) {
             indexPdf(href);
         }
