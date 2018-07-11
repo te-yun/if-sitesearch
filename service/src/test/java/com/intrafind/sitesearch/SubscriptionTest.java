@@ -42,6 +42,9 @@ public class SubscriptionTest {
     @Autowired
     private TestRestTemplate caller;
 
+    /**
+     * Use https://www.sitesearch.cloud/pricing?affiliate=sis-integration_test to create an affiliate ID cookie.
+     */
     @Test
     public void subscribeViaSite() {
         final var response = caller.exchange(
