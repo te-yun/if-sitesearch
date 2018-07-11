@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -70,7 +71,7 @@ public class Application {
     @RequestMapping(path = "/subscriptions/woo-commerce/{subscriptionId}", method = RequestMethod.POST)
     ResponseEntity<Subscription> subscribeViaSite(
             @PathVariable(value = "subscriptionId") String subscriptionId,
-            @PathVariable(value = "affiliate", required = false) String affiliate
+            @RequestParam(value = "affiliate", required = false) String affiliate
     ) {
         final var request = new Request.Builder()
                 .url("https://sitesearch.cloud/wp-json/wc/v1/orders/"
@@ -84,13 +85,9 @@ public class Application {
             if (isExistingOrder(response)) {
                 final var rawSubscription = response.body().bytes();
                 final var order = CrawlerController.MAPPER.readValue(rawSubscription, WooCommerceOrder.class);
-                // TODO update site profile to reflect a subscription?
-                // >>>> add entire Subscription to SiteProfile?
-                // TODO add siteId to crawlStatus for scheduled crawling (optional?)
 
                 final var subscriptionPlan = order.getLineItems().<WooCommerceOrder.LineItem>get(0).getSku();
                 final String siteId = order.getSiteId();
-//                final var affiliate = order.getAffiliate();
                 LOG.info("siteId: " + siteId + " - subscriptionId: " + subscriptionId + " - subscriptionPlan: " + subscriptionPlan + " - affiliate: " + affiliate);
                 return ResponseEntity
                         .status(HttpStatus.OK)

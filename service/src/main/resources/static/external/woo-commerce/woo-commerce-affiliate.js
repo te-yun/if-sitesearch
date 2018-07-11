@@ -46,7 +46,7 @@ function applyAffiliateIdFromCookie() {
         }
 
         var affiliateId = getCookieValueForKey("affiliate");
-        console.log("affiliateId: " + affiliateId);
+        console.log("affiliate: " + affiliateId);
         document.querySelector("#additional_affiliate").value = affiliateId;
     }
 }
