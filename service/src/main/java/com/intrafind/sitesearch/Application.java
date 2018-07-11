@@ -69,7 +69,8 @@ public class Application {
 
     @RequestMapping(path = "/subscriptions/woo-commerce/{subscriptionId}", method = RequestMethod.POST)
     ResponseEntity<Subscription> subscribeViaSite(
-            @PathVariable(value = "subscriptionId") String subscriptionId
+            @PathVariable(value = "subscriptionId") String subscriptionId,
+            @PathVariable(value = "affiliate", required = false) String affiliate
     ) {
         final var request = new Request.Builder()
                 .url("https://sitesearch.cloud/wp-json/wc/v1/orders/"
@@ -89,7 +90,7 @@ public class Application {
 
                 final var subscriptionPlan = order.getLineItems().<WooCommerceOrder.LineItem>get(0).getSku();
                 final String siteId = order.getSiteId();
-                final var affiliate = order.getAffiliate();
+//                final var affiliate = order.getAffiliate();
                 LOG.info("siteId: " + siteId + " - subscriptionId: " + subscriptionId + " - subscriptionPlan: " + subscriptionPlan + " - affiliate: " + affiliate);
                 return ResponseEntity
                         .status(HttpStatus.OK)
