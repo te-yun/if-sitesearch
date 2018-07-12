@@ -47,8 +47,10 @@ public class SubscriptionTest {
      */
     @Test
     public void subscribeViaSite() {
+        final var orderId = "699";
+        final var affiliateId = "sis-integration_test";
         final var response = caller.exchange(
-                "/subscriptions/woo-commerce/699?affiliate=sis-integration_test",
+                "/subscriptions/woo-commerce/" + orderId + "?affiliate=" + affiliateId,
                 HttpMethod.POST,
                 HttpEntity.EMPTY,
                 Subscription.class
@@ -56,10 +58,10 @@ public class SubscriptionTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         final var subscription = response.getBody();
         assertNotNull(subscription);
-        assertNotNull(subscription.getId());
+        assertNotNull(orderId, subscription.getId());
         assertNotNull(subscription.getSiteId());
         assertNotNull(subscription.getPlan());
-        assertNotNull(subscription.getAffiliate());
+        assertEquals(affiliateId, subscription.getAffiliate());
         assertNotNull(subscription.getPaymentMethod());
         assertNotNull(subscription.getRawSubscription());
     }
