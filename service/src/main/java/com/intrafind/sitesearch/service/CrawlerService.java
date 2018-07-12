@@ -115,7 +115,7 @@ public class CrawlerService {
         final int crawlerThreads;
         if (isThrottled) {
             crawlerThreads = 2;
-            config.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0." + RANDOM_VERSION.nextInt(9999) + ".94 Safari/537.36");
+            config.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0." + RANDOM_VERSION.nextInt(9999) + ".94 Safari/537.36");
             config.setPolitenessDelay(200); // to avoid being blocked by crawled websites
             config.setMaxPagesToFetch(500);
         } else {
