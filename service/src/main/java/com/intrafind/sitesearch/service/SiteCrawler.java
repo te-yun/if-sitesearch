@@ -68,11 +68,11 @@ public class SiteCrawler extends WebCrawler {
     private UUID siteSecret;
     private URI url;
     private String pageBodyCssSelector;
-    private boolean allowUrlWithQuery;
+    private final boolean allowUrlWithQuery;
     private BaseRobotRules robotRules;
 
-    private SiteCrawler() { // comment out to make `pageBodyCssSelector`, `url` etc. final
-    }
+//    private SiteCrawler() { // comment out to make `pageBodyCssSelector`, `url` etc. final
+//    }
 
     public SiteCrawler(final UUID siteId, final UUID siteSecret, final URI url, final String pageBodyCssSelector, final BaseRobotRules robotRules, final boolean allowUrlWithQuery) {
         this.siteId = siteId;

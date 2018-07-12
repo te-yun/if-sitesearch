@@ -69,6 +69,7 @@ public class SiteProfile {
     public static class Config {
         public static final String DEFAULT_PAGE_BODY_CSS_SELECTOR = "body";
         private URI url;
+        private boolean allowUrlWithQuery;
         /**
          * Defaults to "body", overridable with any other CSS selector.
          */
@@ -78,10 +79,16 @@ public class SiteProfile {
         private Config() {
         }
 
-        public Config(URI url, String pageBodyCssSelector, boolean sitemapsOnly) {
+        public Config(final URI url, final String pageBodyCssSelector, final boolean sitemapsOnly, final boolean allowUrlWithQuery) {
             this.url = url;
             this.pageBodyCssSelector = pageBodyCssSelector;
             this.sitemapsOnly = sitemapsOnly;
+            this.allowUrlWithQuery = allowUrlWithQuery;
+        }
+
+        public boolean allowUrlWithQuery(final UUID siteId) {
+            final var mhSiteId = UUID.fromString("c7d080ff-6eec-496e-a70e-db5ec81948ab"); // save `allowUrlWithQuery` in sitePrfoile
+            return siteId.equals(mhSiteId);
         }
 
         public String getPageBodyCssSelector() {

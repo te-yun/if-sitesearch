@@ -40,7 +40,7 @@ public class CrawlerControllerFactory<T extends WebCrawler> implements CrawlCont
     private final String pageBodyCssSelector;
     private final BaseRobotRules robotRules;
 
-    public CrawlerControllerFactory(UUID siteId, UUID siteSecret, URI url, String pageBodyCssSelector, final boolean allowUrlWithQuery) {
+    public CrawlerControllerFactory(final UUID siteId, final UUID siteSecret, final URI url, final String pageBodyCssSelector, final boolean allowUrlWithQuery) {
         this.siteId = siteId;
         this.siteSecret = siteSecret;
         this.url = url;

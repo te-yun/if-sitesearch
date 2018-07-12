@@ -164,9 +164,9 @@ public class SiteService {
             urls.forEach(configUrl -> {
                 final List<String> config = document.getAll(configUrl.toString());
                 if (config != null && config.size() > 1) {
-                    configs.add(new SiteProfile.Config(configUrl, config.get(0), Boolean.valueOf(config.get(1))));
+                    configs.add(new SiteProfile.Config(configUrl, config.get(0), Boolean.valueOf(config.get(1)), false));
                 } else {
-                    configs.add(new SiteProfile.Config(configUrl, SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false));
+                    configs.add(new SiteProfile.Config(configUrl, SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false, false));
                 }
             });
 

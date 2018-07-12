@@ -80,10 +80,12 @@ public class CrawlerService {
                 controller.addSeed(siteConfig.getUrl().toString());
             }
 
-            final CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(
-                    siteId, siteSecret, siteConfig.getUrl(), siteConfig.getPageBodyCssSelector(),
-                    siteId.equals(UUID.fromString("c7d080ff-6eec-496e-a70e-db5ec81948ab")) /*mh, should come from siteProfile */
-            );
+            final CrawlController.WebCrawlerFactory<?> factory =
+                    new CrawlerControllerFactory(
+                            siteId, siteSecret, siteConfig.getUrl(),
+                            siteConfig.getPageBodyCssSelector(),
+                            siteConfig.allowUrlWithQuery(siteId)
+                    );
             controller.start(factory, crawlerThreads);
 
             final List<String> configUrls = controller.getCrawlersLocalData().stream()
@@ -141,8 +143,9 @@ public class CrawlerService {
             controller.addSeed(url);
         }
 
-        final CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(siteId, siteSecret, URI.create(url), pageBodyCssSelector, false);
-            controller.start(factory, crawlerThreads);
+        final CrawlController.WebCrawlerFactory<?> factory =
+                new CrawlerControllerFactory(siteId, siteSecret, URI.create(url), pageBodyCssSelector, false);
+        controller.start(factory, crawlerThreads);
 
         final List<String> urls = controller.getCrawlersLocalData().stream()
                 .filter(Objects::nonNull)
