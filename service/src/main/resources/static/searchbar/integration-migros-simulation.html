@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Searchbar | Site Search</title>
+
+
+<script src="https://api.sitesearch.cloud/searchbar/migros-jq.js"></script>
+
+<!--Searchbar's jQuery v2.2.4 should not override the previous version-->
+<div id="ifs-searchbar"></div>
+<script src="https://cdn.sitesearch.cloud/searchbar/2018-07-06/app/js/app.js"></script>
+<script>
+    IFS.initClient({
+        customConfig: {
+            overwrite: {
+                "components.searchbar.typeaheadProps.hint": false,
+                "components.searchbar.resultlist.resulttype.all.hitTemplate": "hit-template",
+                "components.searchbar.templatesUrl": "https://cdn.sitesearch.cloud/searchbar/2018-07-06/config/migros.hbs",
+                "appLang": "de"
+            }
+        },
+        configurl: "https://cdn.sitesearch.cloud/searchbar/2018-07-06/config/sitesearch.json",
+        siteId: "563714f1-96c0-4500-b366-4fc7e734fa1d"
+    });
+</script>
+<link rel="stylesheet" type="text/css" href="https://cdn.sitesearch.cloud/searchbar/2018-07-06/config/migros.css">
