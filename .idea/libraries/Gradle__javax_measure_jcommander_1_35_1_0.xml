@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: javax.measure:jcommander-1.35:1.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.beust/jcommander/1.35/47592e181b0bdbbeb63029e08c5e74f6803c4edd/jcommander-1.35.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.measure/unit-api/1.0/8d60af295fc95714c210c795ce63b48b9d183213/unit-api-1.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
