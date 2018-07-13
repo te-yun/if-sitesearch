@@ -115,6 +115,15 @@ public class SmokeTest {
     }
 
     @Test
+    public void CDNavailability() throws Exception {
+        final var request = new Request.Builder()
+                .url("https://cdn.sitesearch.cloud/searchbar/2018-07-06/config/sitesearch.json")
+                .build();
+        final var response = HTTP_CLIENT.newCall(request).execute();
+        assertEquals(HttpStatus.OK.value(), response.code());
+    }
+
+    @Test
     public void assureSiteSearchServiceBasicAuthProtectionForJsonPost() {
         final ResponseEntity<String> secureEndpointJson = caller.postForEntity(URI.create(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "json/index?method=index"), HttpEntity.EMPTY, String.class);
         assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJson.getStatusCode());
