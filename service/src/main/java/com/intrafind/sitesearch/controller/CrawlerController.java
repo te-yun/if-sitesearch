@@ -40,7 +40,6 @@ import com.intrafind.sitesearch.service.CrawlerService;
 import com.intrafind.sitesearch.service.SiteCrawler;
 import com.intrafind.sitesearch.service.SiteService;
 import okhttp3.Request;
-import okhttp3.Response;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -299,14 +298,15 @@ public class CrawlerController {
 
         boolean captchaPassed = false;
         try {
-            Request request = new Request.Builder()
+            final var request = new Request.Builder()
                     .url("https://www.google.com/recaptcha/api/siteverify?secret=" + INVISIBLE_RECAPTCHA_SITE_SECRET + "&response=" + captchaToken)
                     .post(okhttp3.RequestBody.create(JSON_MEDIA_TYPE, ""))
                     .build();
-            final Response response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
-            final CaptchaVerification captchaVerification = MAPPER.readValue(response.body().charStream(), CaptchaVerification.class);
+            final var response = SiteCrawler.HTTP_CLIENT.newCall(request).execute();
+            final var captchaVerification = MAPPER.readValue(response.body().charStream(), CaptchaVerification.class);
 
-            if (captchaVerification.getSuccess() || "true".equals(DEV_SKIP_FLAG)) {
+            // temporarily allow pseudo-abuse-protection, using a fixed token
+            if (captchaVerification.getSuccess() || "true".equals(DEV_SKIP_FLAG) || "1a46b7c0-8684-11e8-8f10-d74554b855dc".equals(captchaToken)) {
                 captchaPassed = true;
             }
         } catch (final IOException e) {
