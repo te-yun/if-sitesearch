@@ -31,6 +31,8 @@ plugins {
 
 sourceCompatibility = JavaVersion.VERSION_1_10
 targetCompatibility = JavaVersion.VERSION_1_10
+//sourceCompatibility = "11"
+//targetCompatibility = "11"
 
 repositories {
     jcenter()
@@ -66,7 +68,7 @@ dependencies {
 
     testRuntimeOnly "org.springframework.boot:spring-boot-devtools:$spring_boot_version"
 
-    compile "com.squareup.okhttp3:okhttp:3.10.0" 
+    compile "com.squareup.okhttp3:okhttp:3.11.0"
 
     compile "org.mnode.mstor:mstor:1.0.0"
     compile "com.google.oauth-client:google-oauth-client-jetty:1.23.0"
@@ -77,7 +79,6 @@ dependencies {
     compile "org.elasticsearch:elasticsearch:6.3.1"
     compile "org.elasticsearch.client:elasticsearch-rest-high-level-client:6.3.1"
     compile "org.elasticsearch.client:elasticsearch-rest-client:6.3.1"
-//    compile "org.elasticsearch.client:transport:6.3.1"
 }
 
 //test {

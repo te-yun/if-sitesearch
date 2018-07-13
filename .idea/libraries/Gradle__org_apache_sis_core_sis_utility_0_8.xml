@@ -5,7 +5,7 @@
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.sis.core/sis-referencing/0.8/40c8b9937291b6df24ec5b18a6a6b86b1c9139ab/sis-referencing-0.8-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.sis.core/sis-utility/0.8/97a0947fb604b9989b8838af7d7ccba4baa28a0a/sis-utility-0.8-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

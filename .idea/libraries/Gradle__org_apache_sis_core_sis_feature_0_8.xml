@@ -5,7 +5,7 @@
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.sis.core/sis-metadata/0.8/f66abf0128df3d96d53f9bdd1d7be0620a24384/sis-metadata-0.8-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.sis.core/sis-feature/0.8/b4d46e7aa00f31203b2b3e8898259152484a02c9/sis-feature-0.8-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

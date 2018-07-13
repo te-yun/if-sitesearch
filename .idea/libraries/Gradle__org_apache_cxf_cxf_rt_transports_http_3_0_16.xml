@@ -5,7 +5,7 @@
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.cxf/cxf-rt-frontend-jaxrs/3.0.16/6744358453f64795b971a3fab4139c494fe1b93b/cxf-rt-frontend-jaxrs-3.0.16-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.cxf/cxf-rt-transports-http/3.0.16/136ee01019f9db642d7e52bf2adac01385207360/cxf-rt-transports-http-3.0.16-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
