@@ -33,7 +33,6 @@ import com.google.api.services.gmail.model.Message;
 import com.intrafind.sitesearch.dto.CaptchaVerification;
 import com.intrafind.sitesearch.dto.CrawlStatus;
 import com.intrafind.sitesearch.dto.CrawlerJobResult;
-import com.intrafind.sitesearch.dto.IndexCleanupResult;
 import com.intrafind.sitesearch.dto.SiteProfile;
 import com.intrafind.sitesearch.dto.SitesCrawlStatus;
 import com.intrafind.sitesearch.service.CrawlerService;
@@ -160,7 +159,7 @@ public class CrawlerController {
     }
 
     private static void sendSetupInfoEmail(UUID siteId, UUID siteSecret, URI url, String email, int pageCount) throws Exception {
-        final Gmail service = initGmailService();
+        final var service = initGmailService();
         LOG.debug("servicePath: " + service.getServicePath());
 
         final Message message = sendMessage(service, "me",
@@ -192,14 +191,14 @@ public class CrawlerController {
             @RequestParam(required = false, value = "isThrottled", defaultValue = "true") boolean isThrottled,
             @RequestParam(required = false, value = "clearIndex", defaultValue = "false") boolean clearIndex
     ) {
-        final Optional<SitesCrawlStatus> sitesCrawlStatus = crawlSite(serviceSecret, sitesCrawlStatusUpdate, allSitesCrawl, isThrottled, clearIndex);
+        final var sitesCrawlStatus = crawlSite(serviceSecret, sitesCrawlStatusUpdate, allSitesCrawl, isThrottled, clearIndex);
         return sitesCrawlStatus.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     private Optional<SitesCrawlStatus> crawlSite(UUID serviceSecret, SitesCrawlStatus sitesCrawlStatusUpdate, boolean allSiteCrawl, boolean isThrottled, boolean clearIndex) {
-        final SitesCrawlStatus sitesCrawlStatusOverall = new SitesCrawlStatus(new HashSet<>());
+        final var sitesCrawlStatusOverall = new SitesCrawlStatus(new HashSet<>());
         if (SiteService.ADMIN_SITE_SECRET.equals(serviceSecret)) {
-            final Instant halfDayAgo = Instant.now().minus(1, ChronoUnit.HALF_DAYS);
+            final var halfDayAgo = Instant.now().minus(1, ChronoUnit.HALF_DAYS);
             sitesCrawlStatusUpdate.getSites().stream()
                     .filter(crawlStatus -> Instant.parse(crawlStatus.getCrawled()).isBefore(halfDayAgo) || allSiteCrawl) // TODO filter to achieve crawling distribution across the entire day
                     .forEach(crawlStatus -> {
@@ -242,7 +241,7 @@ public class CrawlerController {
             @RequestParam(value = "serviceSecret") UUID serviceSecret,
             @RequestBody SitesCrawlStatus sitesCrawlStatusUpdate
     ) {
-        final Optional<SitesCrawlStatus> sitesCrawlStatus = siteService.storeCrawlStatus(serviceSecret, sitesCrawlStatusUpdate);
+        final var sitesCrawlStatus = siteService.storeCrawlStatus(serviceSecret, sitesCrawlStatusUpdate);
         return sitesCrawlStatus.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
@@ -250,7 +249,7 @@ public class CrawlerController {
     ResponseEntity<SitesCrawlStatus> fetchCrawlStatus(
             @RequestParam(value = "serviceSecret") UUID serviceSecret
     ) {
-        final Optional<SitesCrawlStatus> sitesCrawlStatus = siteService.fetchCrawlStatus(serviceSecret);
+        final var sitesCrawlStatus = siteService.fetchCrawlStatus(serviceSecret);
         return sitesCrawlStatus.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
@@ -263,14 +262,14 @@ public class CrawlerController {
         if (!siteService.isAllowedToModify(siteId, siteSecret)) {
             return ResponseEntity.notFound().build();
         }
-        final Optional<SiteProfile> siteProfile = siteService.fetchSiteProfile(siteId, siteSecret);
+        final var siteProfile = siteService.fetchSiteProfile(siteId, siteSecret);
         if (siteProfile.isPresent()) {
             if (clearIndex) {
                 siteService.clearIndex(siteId, siteSecret);
             }
-            final CrawlerJobResult crawlerJobResult = crawlerService.recrawl(siteId, siteSecret, siteProfile.get());
+            final var crawlerJobResult = crawlerService.recrawl(siteId, siteSecret, siteProfile.get());
 
-            final Optional<IndexCleanupResult> indexCleanupResultOptional = siteService.removeOldSiteIndexPages(siteId);
+            final var indexCleanupResultOptional = siteService.removeOldSiteIndexPages(siteId);
             indexCleanupResultOptional.ifPresent(indexCleanupResult -> {
                 LOG.info("siteId: " + siteId + " - deletedPageCount: " + indexCleanupResult.getPageCount()); // TODO consolidate with the main&final LOG.info, add to logstash
             });
@@ -315,8 +314,8 @@ public class CrawlerController {
         }
 
         if (captchaPassed) {
-            final CrawlerJobResult crawlerJobResult = crawlerService.crawl(url.toString(), siteId, siteSecret, true, false, sitemapsOnly, pageBodyCssSelector);
-            final String emailAddress = determineEmailAddress(email);
+            final var crawlerJobResult = crawlerService.crawl(url.toString(), siteId, siteSecret, true, false, sitemapsOnly, pageBodyCssSelector);
+            final var emailAddress = determineEmailAddress(email);
             try {
                 sendSetupInfoEmail(siteId, siteSecret, url, emailAddress, crawlerJobResult.getPageCount());
             } catch (Exception e) {
