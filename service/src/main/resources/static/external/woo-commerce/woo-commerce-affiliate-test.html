@@ -1,0 +1,48 @@
+<!--
+  ~ Copyright 2018 IntraFind Software AG. All rights reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Affiliate ID</title>
+</head>
+<body>
+    <div class="wrapper"><!-- wrapper -->
+        <h1>Read and Use Affiliate ID from Cookie</h1>
+        <div class="woocommerce-additional-fields">
+            <h3>Additional information</h3>
+            <div class="woocommerce-additional-fields__field-wrapper">
+                <p class="form-row notes validate-required" id="order_comments_field" data-priority="10">
+                    <label for="order_comments" class="">Site ID&nbsp;<abbr class="required" title="required">*</abbr></label>
+                    <span class="woocommerce-input-wrapper">
+                        <textarea name="order_comments" class="input-text " id="order_comments" placeholder="Please enter your Site ID here" value=""></textarea>
+                    </span>
+                </p>
+                <p class="form-row form-row-wide validate-required" id="additional_affiliate_field" data-priority="20">
+                    <label for="additional_affiliate" class="">Affiliate ID&nbsp;<abbr class="required" title="required">*</abbr></label>
+                    <span class="woocommerce-input-wrapper">
+                        <input type="text" class="input-text " name="additional_affiliate" id="additional_affiliate" placeholder="Please enter your Affiliate id" value=""></span>
+                </p>
+            </div>
+        </div>
+    </div><!-- wrapper -->
+    <script>
+        document.cookie = "affiliate=my-affiliate-id";
+    </script>
+    <script src="https://api.sitesearch.cloud/external/woo-commerce/woo-commerce-affiliate.js"></script>
+</body>
+</html>
