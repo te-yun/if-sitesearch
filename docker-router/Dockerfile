@@ -4,8 +4,8 @@ MAINTAINER Alexander Orlov <alexander.orlov@intrafind.de>
 
 RUN apt-get update
 RUN apt-get -y install unzip vim
-ADD https://releases.hashicorp.com/consul-template/0.19.4/consul-template_0.19.4_linux_amd64.zip /usr/bin/
-RUN unzip /usr/bin/consul-template_0.19.4_linux_amd64.zip -d /usr/local/bin
+ADD https://releases.hashicorp.com/consul-template/0.19.5/consul-template_0.19.5_linux_amd64.zip /usr/bin/
+RUN unzip /usr/bin/consul-template_0.19.5_linux_amd64.zip -d /usr/local/bin
 
 COPY opt/* /bin/
 RUN chmod +x /bin/switch.sh /bin/start.sh
