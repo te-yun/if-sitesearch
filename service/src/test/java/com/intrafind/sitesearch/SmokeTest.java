@@ -119,6 +119,7 @@ public class SmokeTest {
                 .build();
         final var response = HTTP_CLIENT.newCall(request).execute();
         assertEquals(HttpStatus.OK.value(), response.code());
+        assertFalse(true);
     }
 
     @Test
