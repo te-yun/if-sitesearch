@@ -167,18 +167,18 @@ public class SiteTest {
         assertEquals(CrawlerTest.TEST_EMAIL_ADDRESS, actual.getBody().getEmail());
         assertEquals(configs, actual.getBody().getConfigs());
 
-        ResponseEntity<SiteProfile> siteProfileWithAdminSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() +
+        var siteProfileWithAdminSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() +
                 "/profile?siteSecret=" + ADMIN_SITE_SECRET, HttpMethod.GET, HttpEntity.EMPTY, SiteProfile.class);
         assertEquals(HttpStatus.OK, siteProfileWithAdminSecret.getStatusCode());
 
-        ResponseEntity<SiteProfile> siteProfileWithInvalidSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() +
+        var siteProfileWithInvalidSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() +
                 "/profile?siteSecret=" + UUID.randomUUID(), HttpMethod.GET, HttpEntity.EMPTY, SiteProfile.class);
         assertEquals(HttpStatus.NOT_FOUND, siteProfileWithInvalidSecret.getStatusCode());
 
         // update site profile
         final var updateSiteProfileConfigs = new ArrayList<>(configs);
         updateSiteProfileConfigs.add(new SiteProfile.Config(URI.create("https://update.example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false, false));
-//        configs.add(new SiteProfile.Config(URI.create("https://update.example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false));
+//        updateSiteProfileConfigs.add(new SiteProfile.Config(URI.create("https://allowUrlWithQuery.example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false, true));
 
         final var siteProfileUpdate = new SiteProfileUpdate(createdSiteProfile.getSiteSecret(), "update." + CrawlerTest.TEST_EMAIL_ADDRESS, configs);
         final var updatedSite = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + createdSiteProfile.getSiteSecret(),
@@ -186,6 +186,7 @@ public class SiteTest {
         assertEquals(createdSiteProfile.getSiteSecret(), updatedSite.getBody().getSecret());
         assertEquals("update." + CrawlerTest.TEST_EMAIL_ADDRESS, updatedSite.getBody().getEmail());
         assertEquals(configs, updatedSite.getBody().getConfigs());
+        assertFalse(updatedSite.getBody().getConfigs().get(0).allowUrlWithQuery());
         assertEquals(configs.size(), updatedSite.getBody().getConfigs().size());
 
         // assure site profile is impossible with wrong site secret
