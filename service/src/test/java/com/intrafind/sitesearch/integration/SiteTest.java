@@ -178,7 +178,7 @@ public class SiteTest {
         // update site profile
         final var updateSiteProfileConfigs = new ArrayList<>(configs);
         updateSiteProfileConfigs.add(new SiteProfile.Config(URI.create("https://update.example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false, false));
-//        updateSiteProfileConfigs.add(new SiteProfile.Config(URI.create("https://allowUrlWithQuery.example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false, true));
+        updateSiteProfileConfigs.add(new SiteProfile.Config(URI.create("https://allowUrlWithQuery.example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false, true));
 
         final var siteProfileUpdate = new SiteProfileUpdate(createdSiteProfile.getSiteSecret(), "update." + CrawlerTest.TEST_EMAIL_ADDRESS, configs);
         final var updatedSite = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + createdSiteProfile.getSiteSecret(),
@@ -186,8 +186,10 @@ public class SiteTest {
         assertEquals(createdSiteProfile.getSiteSecret(), updatedSite.getBody().getSecret());
         assertEquals("update." + CrawlerTest.TEST_EMAIL_ADDRESS, updatedSite.getBody().getEmail());
         assertEquals(configs, updatedSite.getBody().getConfigs());
-        assertFalse(updatedSite.getBody().getConfigs().get(0).allowUrlWithQuery());
         assertEquals(configs.size(), updatedSite.getBody().getConfigs().size());
+        assertFalse(updatedSite.getBody().getConfigs().get(0).allowUrlWithQuery());
+        assertEquals(SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, updatedSite.getBody().getConfigs().get(0).getPageBodyCssSelector());
+        assertTrue(updatedSite.getBody().getConfigs().get(1).allowUrlWithQuery());
 
         // assure site profile is impossible with wrong site secret
         final var updatedSiteWithInvalidSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + UUID.randomUUID(),
