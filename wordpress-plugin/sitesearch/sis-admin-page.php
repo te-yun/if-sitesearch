@@ -1,9 +1,5 @@
-<script>
-    var registerSiteInSiS = function () {
-        console.warn("TODO: Create siteId/siteSecret with a POST to api.sitesearch.cloud/sites" + document.getElementById("sis-url").value);
-        console.warn("TODO: Submit URL to api.sitesearch.cloud, using siteId/Secret from the previous call." + document.getElementById("sis-url").value);
-	};
-</script>
+<script src="sitesearch-client.js"></script>
+
 <?php
   $if_sis_url_for_crawling = get_site_url();
   // actions
