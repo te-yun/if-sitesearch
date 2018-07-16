@@ -69,7 +69,7 @@ public class SiteProfile {
     public static class Config {
         public static final String DEFAULT_PAGE_BODY_CSS_SELECTOR = "body";
         private URI url;
-        private boolean allowUrlWithQuery;
+        private boolean allowUrlWithQuery = false;
         /**
          * Defaults to "body", overridable with any other CSS selector.
          */

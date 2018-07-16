@@ -204,12 +204,12 @@ public class SiteService {
     }
 
     private void initSite(UUID siteId, UUID siteSecret) {
-        final Document siteConfiguration = new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId);
+        final var siteConfiguration = new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId);
         siteConfiguration.set("secret", siteSecret);
         indexService.index(siteConfiguration);
     }
 
-    private void storeSite(UUID siteId, UUID siteSecret, String email, List<SiteProfile.Config> configs) {
+    private void storeSite(UUID siteId, UUID siteSecret, String email, final List<SiteProfile.Config> configs) {
         final var siteConfiguration = indexService.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
         final Document siteConfigDoc;
         siteConfigDoc = siteConfiguration.orElseGet(() -> new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId));
@@ -302,15 +302,15 @@ public class SiteService {
     }
 
     public SiteCreation createSite() {
-        UUID siteId = UUID.randomUUID();
-        UUID siteSecret = UUID.randomUUID();
+        final var siteId = UUID.randomUUID();
+        final var siteSecret = UUID.randomUUID();
         initSite(siteId, siteSecret);
         return new SiteCreation(siteId, siteSecret);
     }
 
     public SiteCreation createSite(String email, List<SiteProfile.Config> configs) {
-        UUID siteId = UUID.randomUUID();
-        UUID siteSecret = UUID.randomUUID();
+        final var siteId = UUID.randomUUID();
+        final var siteSecret = UUID.randomUUID();
         storeSite(siteId, siteSecret, email, configs);
         return new SiteCreation(siteId, siteSecret);
     }
