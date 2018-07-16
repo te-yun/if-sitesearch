@@ -64,12 +64,12 @@ public class SiteCrawler extends WebCrawler {
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final String SIS_API_SERVICE_URL = System.getenv("SIS_API_SERVICE_URL");
 
-    private UUID siteId;
-    private UUID siteSecret;
-    private URI url;
-    private String pageBodyCssSelector;
+    private final UUID siteId;
+    private final UUID siteSecret;
+    private final URI url;
+    private final String pageBodyCssSelector;
     private final boolean allowUrlWithQuery;
-    private BaseRobotRules robotRules;
+    private final BaseRobotRules robotRules;
 
 //    private SiteCrawler() { // comment out to make `pageBodyCssSelector`, `url` etc. final
 //    }

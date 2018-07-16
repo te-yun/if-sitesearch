@@ -204,7 +204,7 @@ public class SiteService {
     }
 
     private void storeSite(UUID siteId, UUID siteSecret, String email, List<SiteProfile.Config> configs) {
-        final Optional<Document> siteConfiguration = indexService.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
+        final var siteConfiguration = indexService.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
         final Document siteConfigDoc;
         siteConfigDoc = siteConfiguration.orElseGet(() -> new Document(SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId));
         siteConfigDoc.set("secret", siteSecret);
