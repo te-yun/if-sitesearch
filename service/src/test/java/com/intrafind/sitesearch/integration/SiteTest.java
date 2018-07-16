@@ -176,7 +176,7 @@ public class SiteTest {
         assertEquals(HttpStatus.NOT_FOUND, siteProfileWithInvalidSecret.getStatusCode());
 
         // update site profile
-        final var updateSiteProfileConfigs = new ArrayList<>(configs);
+        final List<SiteProfile.Config> updateSiteProfileConfigs = new ArrayList<>(configs);
         updateSiteProfileConfigs.add(new SiteProfile.Config(URI.create("https://update.example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false, false));
 //        updateSiteProfileConfigs.add(new SiteProfile.Config(URI.create("https://allowUrlWithQuery.example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false, true));
 
@@ -189,6 +189,7 @@ public class SiteTest {
         assertEquals(2, updatedSite.getBody().getConfigs().size());
         assertFalse(updatedSite.getBody().getConfigs().get(0).allowUrlWithQuery());
         assertEquals(SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, updatedSite.getBody().getConfigs().get(0).getPageBodyCssSelector());
+        assertTrue(updatedSite.getBody().getConfigs().stream().anyMatch(SiteProfile.Config::allowUrlWithQuery));
         assertTrue(updatedSite.getBody().getConfigs().get(1).allowUrlWithQuery());
 
         // assure site profile is impossible with wrong site secret
