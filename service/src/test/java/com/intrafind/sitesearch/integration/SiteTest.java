@@ -151,7 +151,7 @@ public class SiteTest {
     public void createNewSiteWithProfile() {
         final var configs = Arrays.asList(
                 new SiteProfile.Config(URI.create("https://subdomain.example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false, false),
-                new SiteProfile.Config(URI.create("https://example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false, false)
+                new SiteProfile.Config(URI.create("https://example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false, true)
         );
         final var siteProfileCreation = new SiteProfileUpdate(
                 configs,
@@ -178,7 +178,7 @@ public class SiteTest {
         // update site profile
         final var updateSiteProfileConfigs = new ArrayList<>(configs);
         updateSiteProfileConfigs.add(new SiteProfile.Config(URI.create("https://update.example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false, false));
-        updateSiteProfileConfigs.add(new SiteProfile.Config(URI.create("https://allowUrlWithQuery.example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false, true));
+//        updateSiteProfileConfigs.add(new SiteProfile.Config(URI.create("https://allowUrlWithQuery.example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false, true));
 
         final var siteProfileUpdate = new SiteProfileUpdate(createdSiteProfile.getSiteSecret(), "update." + CrawlerTest.TEST_EMAIL_ADDRESS, configs);
         final var updatedSite = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + createdSiteProfile.getSiteSecret(),
@@ -186,7 +186,7 @@ public class SiteTest {
         assertEquals(createdSiteProfile.getSiteSecret(), updatedSite.getBody().getSecret());
         assertEquals("update." + CrawlerTest.TEST_EMAIL_ADDRESS, updatedSite.getBody().getEmail());
         assertEquals(configs, updatedSite.getBody().getConfigs());
-        assertEquals(configs.size(), updatedSite.getBody().getConfigs().size());
+        assertEquals(2, updatedSite.getBody().getConfigs().size());
         assertFalse(updatedSite.getBody().getConfigs().get(0).allowUrlWithQuery());
         assertEquals(SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, updatedSite.getBody().getConfigs().get(0).getPageBodyCssSelector());
         assertTrue(updatedSite.getBody().getConfigs().get(1).allowUrlWithQuery());
