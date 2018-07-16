@@ -179,7 +179,7 @@ public class SiteTest {
         final List<SiteProfile.Config> updateSiteProfileConfigs = new ArrayList<>(configs);
         updateSiteProfileConfigs.add(new SiteProfile.Config(URI.create("https://update.example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false, false));
         // TODO delete the bellow list insertion?
-        updateSiteProfileConfigs.add(new SiteProfile.Config(URI.create("https://allowUrlWithQuery.example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false, true));
+        updateSiteProfileConfigs.add(new SiteProfile.Config(URI.create("https://isAllowUrlWithQuery.example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false, true));
 
         final var siteProfileUpdate = new SiteProfileUpdate(createdSiteProfile.getSiteSecret(), "update." + CrawlerTest.TEST_EMAIL_ADDRESS, configs);
         final var updatedSite = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + createdSiteProfile.getSiteSecret(),
@@ -188,10 +188,10 @@ public class SiteTest {
         assertEquals("update." + CrawlerTest.TEST_EMAIL_ADDRESS, updatedSite.getBody().getEmail());
         assertEquals(configs, updatedSite.getBody().getConfigs());
         assertEquals(2, updatedSite.getBody().getConfigs().size());
-        assertFalse(updatedSite.getBody().getConfigs().get(0).allowUrlWithQuery());
+        assertFalse(updatedSite.getBody().getConfigs().get(0).isAllowUrlWithQuery());
         assertEquals(SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, updatedSite.getBody().getConfigs().get(0).getPageBodyCssSelector());
-        assertTrue(updatedSite.getBody().getConfigs().stream().anyMatch(SiteProfile.Config::allowUrlWithQuery));
-        assertTrue(updatedSite.getBody().getConfigs().get(1).allowUrlWithQuery());
+        assertTrue(updatedSite.getBody().getConfigs().stream().anyMatch(SiteProfile.Config::isAllowUrlWithQuery));
+        assertTrue(updatedSite.getBody().getConfigs().get(1).isAllowUrlWithQuery());
 
         // assure site profile is impossible with wrong site secret
         final var updatedSiteWithInvalidSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + UUID.randomUUID(),

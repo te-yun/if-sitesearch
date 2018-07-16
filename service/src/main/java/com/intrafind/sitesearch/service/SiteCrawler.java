@@ -87,7 +87,7 @@ public class SiteCrawler extends WebCrawler {
     public boolean shouldVisit(final Page referringPage, final WebURL webUrl) {
         final var mhSiteId = UUID.fromString("c7d080ff-6eec-496e-a70e-db5ec81948ab");
         if (this.siteId.equals(mhSiteId)) { // TODO remove this
-            LOG.warn("TEMPORARY_CHECK_FOR_MH - allowUrlWithQuery: " + allowUrlWithQuery);
+            LOG.warn("TEMPORARY_CHECK_FOR_MH - isAllowUrlWithQuery: " + allowUrlWithQuery);
         }
 
         final var href = webUrl.getURL().toLowerCase();

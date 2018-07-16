@@ -87,11 +87,11 @@ public class SiteProfile {
         }
 
         public boolean allowUrlWithQuery(final UUID siteId) {
-            final var mhSiteId = UUID.fromString("c7d080ff-6eec-496e-a70e-db5ec81948ab"); // save `allowUrlWithQuery` in sitePrfoile
+            final var mhSiteId = UUID.fromString("c7d080ff-6eec-496e-a70e-db5ec81948ab"); // save `isAllowUrlWithQuery` in sitePrfoile
             return siteId.equals(mhSiteId);
         }
 
-        public boolean allowUrlWithQuery() {
+        public boolean isAllowUrlWithQuery() {
             return allowUrlWithQuery;
         }
 

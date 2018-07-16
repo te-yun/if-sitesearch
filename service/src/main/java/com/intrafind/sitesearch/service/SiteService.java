@@ -217,7 +217,7 @@ public class SiteService {
         siteConfigDoc.set("email", email);
         siteConfigDoc.set("urls", configs.stream().map(config -> config.getUrl().toString()).collect(Collectors.toList()));
         configs.forEach(config -> siteConfigDoc.set(config.getUrl().toString(),
-                Arrays.asList(config.getPageBodyCssSelector(), Boolean.toString(config.isSitemapsOnly()), Boolean.toString(config.allowUrlWithQuery()))));
+                Arrays.asList(config.getPageBodyCssSelector(), Boolean.toString(config.isSitemapsOnly()), Boolean.toString(config.isAllowUrlWithQuery()))));
         indexService.index(siteConfigDoc);
     }
 
