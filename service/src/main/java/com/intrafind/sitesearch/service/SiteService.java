@@ -164,7 +164,13 @@ public class SiteService {
             urls.forEach(configUrl -> {
                 final List<String> config = document.getAll(configUrl.toString());
                 if (config != null && config.size() > 1) {
-                    configs.add(new SiteProfile.Config(configUrl, config.get(0), Boolean.valueOf(config.get(1)), false));
+                    final boolean allowUrlWithQuery;
+                    if (config.size() > 2) {
+                        allowUrlWithQuery = Boolean.valueOf(config.get(2));
+                    } else {
+                        allowUrlWithQuery = false;
+                    }
+                    configs.add(new SiteProfile.Config(configUrl, config.get(0), Boolean.valueOf(config.get(1)), allowUrlWithQuery));
                 } else {
                     configs.add(new SiteProfile.Config(configUrl, SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false, false));
                 }
@@ -210,7 +216,8 @@ public class SiteService {
         siteConfigDoc.set("secret", siteSecret);
         siteConfigDoc.set("email", email);
         siteConfigDoc.set("urls", configs.stream().map(config -> config.getUrl().toString()).collect(Collectors.toList()));
-        configs.forEach(config -> siteConfigDoc.set(config.getUrl().toString(), Arrays.asList(config.getPageBodyCssSelector(), Boolean.toString(config.isSitemapsOnly()))));
+        configs.forEach(config -> siteConfigDoc.set(config.getUrl().toString(),
+                Arrays.asList(config.getPageBodyCssSelector(), Boolean.toString(config.isSitemapsOnly()), Boolean.toString(config.allowUrlWithQuery()))));
         indexService.index(siteConfigDoc);
     }
 
@@ -224,7 +231,7 @@ public class SiteService {
     }
 
     public Optional<SitesCrawlStatus> updateCrawlStatusInShedule(UUID siteId, long pageCount) {
-        final Optional<SitesCrawlStatus> fetchSitesCrawlStatus = fetchSitesCrawlStatus();
+        final var fetchSitesCrawlStatus = fetchSitesCrawlStatus();
         fetchSitesCrawlStatus.ifPresent(sitesCrawlStatus -> {
             sitesCrawlStatus.getSites().forEach(crawlStatus -> {
                 if (siteId.equals(crawlStatus.getSiteId())) {

@@ -91,6 +91,10 @@ public class SiteProfile {
             return siteId.equals(mhSiteId);
         }
 
+        public boolean allowUrlWithQuery() {
+            return allowUrlWithQuery;
+        }
+
         public String getPageBodyCssSelector() {
             // Empty strings cannot be saved by the search service. Hence a non-empty default is required.
             return pageBodyCssSelector.isEmpty() ? DEFAULT_PAGE_BODY_CSS_SELECTOR : pageBodyCssSelector;
