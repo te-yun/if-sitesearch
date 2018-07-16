@@ -124,7 +124,7 @@ public class SmokeTest {
     @Test
     public void assureSiteSearchServiceBasicAuthProtectionForJsonPost() {
         final var searchService = URI.create(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "json/index?method=index");
-        final var secureEndpointJson = caller.postForEntity(searchService, HttpEntity.EMPTY, Object.class);
+        final var secureEndpointJson = caller.postForEntity(searchService, HttpEntity.EMPTY, String.class);
         assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJson.getStatusCode());
     }
 
