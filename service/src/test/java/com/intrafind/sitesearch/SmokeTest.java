@@ -21,7 +21,6 @@ import com.intrafind.sitesearch.dto.Autocomplete;
 import com.intrafind.sitesearch.dto.FetchedPage;
 import com.intrafind.sitesearch.dto.FoundPage;
 import com.intrafind.sitesearch.dto.Hits;
-import com.intrafind.sitesearch.dto.SitePage;
 import com.intrafind.sitesearch.integration.SearchTest;
 import com.intrafind.sitesearch.integration.SiteTest;
 import com.intrafind.sitesearch.jmh.LoadIndex2Users;
@@ -76,7 +75,7 @@ public class SmokeTest {
     @Ignore("deprecate crawler")
     @Test
     public void assureCrawlerProtection() throws Exception {
-        final Request request = new Request.Builder()
+        final var request = new Request.Builder()
                 .url("https://crawler.sitesearch.cloud")
                 .build();
         final Response response = HTTP_CLIENT.newCall(request).execute();
@@ -86,7 +85,7 @@ public class SmokeTest {
     @Ignore("Terraform/Kubernetes issue")
     @Test
     public void assureTaggerProtection() throws Exception {
-        final Request request = new Request.Builder()
+        final var request = new Request.Builder()
                 .url("https://tagger.analyzelaw.com")
                 .build();
         final Response response = HTTP_CLIENT.newCall(request).execute();
@@ -96,7 +95,7 @@ public class SmokeTest {
     @Ignore("Terraform/Kubernetes issue")
     @Test
     public void assureTaggerContent() throws Exception {
-        final Request request = new Request.Builder()
+        final var request = new Request.Builder()
                 .header(HttpHeaders.AUTHORIZATION, BASIC_ENCODED_PASSWORD)
                 .url("https://tagger.analyzelaw.com/json/tagger?method=tag&param0=test")
                 .build();
@@ -106,7 +105,7 @@ public class SmokeTest {
 
     @Test
     public void assureCDNavailability() throws Exception {
-        final Request request = new Request.Builder()
+        final var request = new Request.Builder()
                 .url("https://cdn.sitesearch.cloud/searchbar/2018-01-15/config/sitesearch-roles.json") // lightweight file
                 .build();
         final Response response = HTTP_CLIENT.newCall(request).execute();
@@ -124,7 +123,8 @@ public class SmokeTest {
 
     @Test
     public void assureSiteSearchServiceBasicAuthProtectionForJsonPost() {
-        final var secureEndpointJson = caller.postForEntity(URI.create(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "json/index?method=index"), HttpEntity.EMPTY, String.class);
+        final var searchService = URI.create(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "json/index?method=index");
+        final var secureEndpointJson = caller.postForEntity(searchService, HttpEntity.EMPTY, Object.class);
         assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJson.getStatusCode());
     }
 
@@ -172,11 +172,11 @@ public class SmokeTest {
 
     @Test
     public void apiFrontpageContent() throws Exception {
-        final Request request = new Request.Builder()
+        final var request = new Request.Builder()
                 .url("https://api.sitesearch.cloud")
                 .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
                 .build();
-        final Response response = HTTP_CLIENT.newCall(request).execute();
+        final var response = HTTP_CLIENT.newCall(request).execute();
         assertEquals(HttpStatus.OK.value(), response.code());
         assertNotNull(response.body());
         assertTrue(response.body().string().contains(API_FRONTPAGE_MARKER));
@@ -189,15 +189,15 @@ public class SmokeTest {
 
     @Test
     public void searchDeprecated() throws Exception {
-        Request request = new Request.Builder()
+        final var request = new Request.Builder()
                 .url("https://api.sitesearch.cloud/search?query=Knowledge&siteId=" + SearchTest.SEARCH_SITE_ID)
                 .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
                 .build();
-        final Response response = HTTP_CLIENT.newCall(request).execute();
+        final var response = HTTP_CLIENT.newCall(request).execute();
 
         assertEquals(HttpStatus.OK.value(), response.code());
         assertNotNull(response.body());
-        Hits result = MAPPER.readValue(response.body().bytes(), Hits.class);
+        final var result = MAPPER.readValue(response.body().bytes(), Hits.class);
         assertEquals("Knowledge", result.getQuery());
         assertEquals(1, result.getResults().size());
         FoundPage found = result.getResults().get(0);
@@ -212,19 +212,19 @@ public class SmokeTest {
 
     @Test
     public void searchBwBank() throws Exception {
-        final String query = "bank";
-        Request request = new Request.Builder()
+        final var query = "bank";
+        final var request = new Request.Builder()
                 .url(SITES_API + BW_BANK_SITE_ID + "/search?query=" + query)
                 .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
                 .build();
-        final Response response = HTTP_CLIENT.newCall(request).execute();
+        final var response = HTTP_CLIENT.newCall(request).execute();
 
         assertEquals(HttpStatus.OK.value(), response.code());
         assertNotNull(response.body());
-        Hits result = MAPPER.readValue(response.body().bytes(), Hits.class);
+        var result = MAPPER.readValue(response.body().bytes(), Hits.class);
         assertEquals(query, result.getQuery());
         assertTrue(40 < result.getResults().size());
-        FoundPage found = result.getResults().get(0);
+        var found = result.getResults().get(0);
         assertTrue(100 < found.getBody().length());
 
         assureCorsHeaders(response.headers(), HEADER_SIZE);
@@ -232,18 +232,18 @@ public class SmokeTest {
 
     @Test
     public void search() throws Exception {
-        Request request = new Request.Builder()
+        var request = new Request.Builder()
                 .url(SITES_API + SearchTest.SEARCH_SITE_ID + "/search?query=Knowledge")
                 .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
                 .build();
-        final Response response = HTTP_CLIENT.newCall(request).execute();
+        final var response = HTTP_CLIENT.newCall(request).execute();
 
         assertEquals(HttpStatus.OK.value(), response.code());
         assertNotNull(response.body());
-        Hits result = MAPPER.readValue(response.body().bytes(), Hits.class);
+        var result = MAPPER.readValue(response.body().bytes(), Hits.class);
         assertEquals("Knowledge", result.getQuery());
         assertEquals(1, result.getResults().size());
-        FoundPage found = result.getResults().get(0);
+        var found = result.getResults().get(0);
         assertEquals("Wie die Semantische Suche vom <span class=\"if-teaser-highlight\">Knowledge</span> Graph profitiert", found.getTitle());
         assertEquals("http:&#x2F;&#x2F;intrafind.de&#x2F;blog&#x2F;wie-die-semantische-suche-vom-<span class=\"if-teaser-highlight\">knowledge</span>-graph-profitiert", found.getUrl());
         assertEquals("http://intrafind.de/blog/wie-die-semantische-suche-vom-knowledge-graph-profitiert", found.getUrlRaw());
@@ -254,21 +254,21 @@ public class SmokeTest {
 
     @Test
     public void autocompleteDeprecated() throws Exception {
-        Request request = new Request.Builder()
+        var request = new Request.Builder()
                 .url("https://api.sitesearch.cloud/autocomplete?query=Knowledge&siteId=" + SearchTest.SEARCH_SITE_ID)
                 .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
                 .build();
-        final Response response = HTTP_CLIENT.newCall(request).execute();
+        final var response = HTTP_CLIENT.newCall(request).execute();
 
         assertEquals(HttpStatus.OK.value(), response.code());
-        Autocomplete results = MAPPER.readValue(response.body().bytes(), Autocomplete.class);
+        var results = MAPPER.readValue(response.body().bytes(), Autocomplete.class);
         assertEquals(1, results.getResults().size());
         assureCorsHeaders(response.headers(), HEADER_SIZE);
     }
 
     @Test
     public void autocomplete() throws Exception {
-        Request request = new Request.Builder()
+        var request = new Request.Builder()
                 .url(SITES_API + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=Knowledge")
                 .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
                 .build();
@@ -283,11 +283,11 @@ public class SmokeTest {
 
     @Test
     public void autocompleteBwBank() throws Exception {
-        Request request = new Request.Builder()
+        var request = new Request.Builder()
                 .url(SITES_API + BW_BANK_SITE_ID + "/autocomplete?query=bank")
                 .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
                 .build();
-        final Response response = HTTP_CLIENT.newCall(request).execute();
+        final var response = HTTP_CLIENT.newCall(request).execute();
         assertEquals(HttpStatus.OK.value(), response.code());
         Autocomplete result = MAPPER.readValue(response.body().bytes(), Autocomplete.class);
         assertTrue(3 < result.getResults().size());
@@ -296,7 +296,7 @@ public class SmokeTest {
 
     @Test
     public void logsUp() throws Exception {
-        Request request = new Request.Builder()
+        var request = new Request.Builder()
                 .url("https://logs.sitesearch.cloud")
                 .build();
         final Response response = HTTP_CLIENT.newCall(request).execute();
@@ -305,34 +305,34 @@ public class SmokeTest {
 
     @Test
     public void dockerRegistryIsSecure() throws Exception {
-        Request request = new Request.Builder()
+        var request = new Request.Builder()
                 .url("https://docker-registry.sitesearch.cloud")
                 .build();
-        final Response response = HTTP_CLIENT.newCall(request).execute();
+        final var response = HTTP_CLIENT.newCall(request).execute();
         assertEquals(HttpStatus.UNAUTHORIZED.value(), response.code());
     }
 
     @Test
     public void dockerRegistryIsUp() throws Exception {
-        Request request = new Request.Builder()
+        var request = new Request.Builder()
                 .header(HttpHeaders.AUTHORIZATION, BASIC_ENCODED_PASSWORD)
                 .url("https://docker-registry.sitesearch.cloud")
                 .build();
-        final Response response = HTTP_CLIENT.newCall(request).execute();
+        final var response = HTTP_CLIENT.newCall(request).execute();
         assertEquals(HttpStatus.OK.value(), response.code());
     }
 
     @Test
     public void updatePage() throws Exception {
-        String entropyToCheckInUpdate = "https://example.com/" + UUID.randomUUID();
-        final SitePage pageToUpdate = SiteTest.buildPage();
+        var entropyToCheckInUpdate = "https://example.com/" + UUID.randomUUID();
+        final var pageToUpdate = SiteTest.buildPage();
         pageToUpdate.setUrl(entropyToCheckInUpdate);
-        Request request = new Request.Builder()
+        var request = new Request.Builder()
                 .url(SITES_API + LoadIndex2Users.SEARCH_SITE_ID + "/pages?siteSecret=" + LoadIndex2Users.SEARCH_SITE_SECRET)
                 .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
                 .put(RequestBody.create(SiteCrawler.JSON_MEDIA_TYPE, MAPPER.writeValueAsBytes(pageToUpdate)))
                 .build();
-        final Response response = HTTP_CLIENT.newCall(request).execute();
+        final var response = HTTP_CLIENT.newCall(request).execute();
 
         assertEquals(HttpStatus.OK.value(), response.code());
         assertNull(response.headers().get(HttpHeaders.LOCATION));
