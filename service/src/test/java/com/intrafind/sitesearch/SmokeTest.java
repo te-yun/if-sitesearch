@@ -43,7 +43,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.net.URI;
@@ -125,7 +124,7 @@ public class SmokeTest {
 
     @Test
     public void assureSiteSearchServiceBasicAuthProtectionForJsonPost() {
-        final ResponseEntity<String> secureEndpointJson = caller.postForEntity(URI.create(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "json/index?method=index"), HttpEntity.EMPTY, String.class);
+        final var secureEndpointJson = caller.postForEntity(URI.create(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "json/index?method=index"), HttpEntity.EMPTY, String.class);
         assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJson.getStatusCode());
     }
 
@@ -133,7 +132,7 @@ public class SmokeTest {
 
     @Test
     public void redirectFromHttpNakedDomain() { // fails quite often because of 1&1
-        final ResponseEntity<String> response = caller.exchange(
+        final var response = caller.exchange(
                 "http://sitesearch.cloud",
                 HttpMethod.GET,
                 HttpEntity.EMPTY,
@@ -144,7 +143,7 @@ public class SmokeTest {
 
     @Test
     public void redirectFromHttpApiDomain() {
-        final ResponseEntity<String> response = caller.exchange(
+        final var response = caller.exchange(
                 "http://api.sitesearch.cloud",
                 HttpMethod.GET,
                 HttpEntity.EMPTY,
