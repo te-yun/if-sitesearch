@@ -16,22 +16,46 @@
 
 
 var registerSiteInSiS = function () {
-    // console.warn("TODO: (1) Create siteId/siteSecret with a POST to api.sitesearch.cloud/sites" + document.getElementById("sis-url").value);
+    var status = document.getElementById("sis-status");
+    status.textContent = "Crawling... please give us a minute or two.";
 
     var siteCreation = new XMLHttpRequest();
     siteCreation.open("POST", "https://api.sitesearch.cloud/sites");
     siteCreation.onload = function () {
-        console.warn(siteCreation.responseText);
+        function setupCrawling() {
+            console.warn(siteCreation.responseText);
+            var newSite = JSON.parse(siteCreation.responseText);
+
+            var siteIdElement = document.getElementById("sis-siteId");
+            var siteSecretElement = document.getElementById("sis-siteSecret");
+
+            siteIdElement.value = newSite.siteId;
+            siteSecretElement.value = newSite.siteSecret;
+
+            var siteUrlElement = document.getElementById("sis-url");
+            var siteUrl = siteUrlElement.value;
+            console.warn(siteUrl);
+            return {newSite, siteUrl};
+        }
+
+        function crawlSite() {
+            var {newSite, siteUrl} = setupCrawling();
+            var siteCrawl = new XMLHttpRequest();
+            siteCrawl.open("POST", "https://api.sitesearch.cloud/sites/" + newSite.siteId + "/crawl?siteSecret=" + newSite.siteSecret + "&url=" + siteUrl + "&token=1a46b7c0-8684-11e8-8f10-d74554b855dc&email=&sitemapsOnly=true&pageBodyCssSelector=body");
+            siteCrawl.onload = function () {
+                function showStatus() {
+                    console.warn(siteCrawl.responseText);
+                    var pageCount = JSON.parse(siteCrawl.responseText).pageCount;
+                    status.textContent = "Pages crawled: " + pageCount;
+                }
+
+                showStatus();
+
+            };
+            siteCrawl.send();
+        }
+
+        crawlSite();
     };
     siteCreation.send();
-
-    // var siteIdElement = document.getElementById("sis-siteId");
-    // var siteSecretElement = document.getElementById("sis-siteSecret");
-    //
-    // var siteId = siteIdElement.value;
-    // var siteSecret = siteSecretElement.value;
-
-    console.warn("TODO: (2) Submit URL to api.sitesearch.cloud, using siteId/Secret from the previous call." + document.getElementById("sis-url").value);
 };
-
-registerSiteInSiS();
