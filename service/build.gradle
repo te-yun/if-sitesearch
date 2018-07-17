@@ -30,10 +30,10 @@ plugins {
     id "io.morethan.jmhreport" version "0.7.0"
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_10
-targetCompatibility = JavaVersion.VERSION_1_10
-//sourceCompatibility = "11"
-//targetCompatibility = "11"
+//sourceCompatibility = JavaVersion.VERSION_1_10
+//targetCompatibility = JavaVersion.VERSION_1_10
+sourceCompatibility = "11"
+targetCompatibility = "11"
 
 repositories {
     jcenter()
