@@ -12,7 +12,11 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="service" target="11" />
+      <module name="client" target="1.8" />
+      <module name="dashboard" target="1.8" />
+      <module name="finder" target="1.8" />
+      <module name="gadget" target="1.8" />
+      <module name="service" target="1.10" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

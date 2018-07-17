@@ -3,7 +3,6 @@
   <component name="FacetManager">
     <facet type="kotlin-language" name="Kotlin">
       <configuration version="3" platform="JavaScript " useProjectSettings="false">
-        <productionOutputPath>$MODULE_DIR$/../../../client/build/classes/kotlin/main/client.js</productionOutputPath>
         <testOutputPath>$MODULE_DIR$/../../../client/build/classes/kotlin/test/client_test.js</testOutputPath>
         <compilerSettings />
         <compilerArguments>
@@ -28,7 +27,7 @@
       </configuration>
     </facet>
   </component>
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_10">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output url="file://$MODULE_DIR$/../../../client/out/production/classes" />
     <output-test url="file://$MODULE_DIR$/../../../client/out/test/classes" />
     <exclude-output />
