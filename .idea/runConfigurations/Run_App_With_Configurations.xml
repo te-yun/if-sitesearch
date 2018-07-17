@@ -1,13 +1,12 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Run App With Configurations" type="BashConfigurationType" factoryName="Bash" singleton="true">
     <option name="INTERPRETER_OPTIONS" value="" />
-    <option name="INTERPRETER_PATH" value="C:\Windows\System32\bash.exe" />
+    <option name="INTERPRETER_PATH" value="/bin/sh" />
     <option name="WORKING_DIRECTORY" value="" />
     <option name="PARENT_ENVS" value="true" />
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run.sh" />
     <option name="PARAMETERS" value="" />
     <module name="" />
-    <envs />
-    <method />
+    <method v="2" />
   </configuration>
 </component>
