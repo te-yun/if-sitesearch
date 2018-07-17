@@ -22,4 +22,4 @@ script:
 notifications:
   email:
     on_success: change
-    on_failure: chnage
+    on_failure: change
