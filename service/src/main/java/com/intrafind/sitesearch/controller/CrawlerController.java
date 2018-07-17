@@ -30,11 +30,7 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.Message;
-import com.intrafind.sitesearch.dto.CaptchaVerification;
-import com.intrafind.sitesearch.dto.CrawlStatus;
-import com.intrafind.sitesearch.dto.CrawlerJobResult;
-import com.intrafind.sitesearch.dto.SiteProfile;
-import com.intrafind.sitesearch.dto.SitesCrawlStatus;
+import com.intrafind.sitesearch.dto.*;
 import com.intrafind.sitesearch.service.CrawlerService;
 import com.intrafind.sitesearch.service.SiteCrawler;
 import com.intrafind.sitesearch.service.SiteService;
@@ -45,30 +41,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URI;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.intrafind.sitesearch.service.SiteCrawler.JSON_MEDIA_TYPE;
@@ -200,7 +182,7 @@ public class CrawlerController {
         if (SiteService.ADMIN_SITE_SECRET.equals(serviceSecret)) {
             final var halfDayAgo = Instant.now().minus(1, ChronoUnit.HALF_DAYS);
             sitesCrawlStatusUpdate.getSites().stream()
-                    .filter(crawlStatus -> Instant.parse(crawlStatus.getCrawled()).isBefore(halfDayAgo) || allSiteCrawl) // TODO filter to achieve crawling distribution across the entire day
+//                    .filter(crawlStatus -> Instant.parse(crawlStatus.getCrawled()).isBefore(halfDayAgo) || allSiteCrawl)
                     .forEach(crawlStatus -> {
                         final Optional<UUID> fetchedSiteSecret = siteService.fetchSiteSecret(crawlStatus.getSiteId());
                         fetchedSiteSecret.ifPresent(uuid -> {

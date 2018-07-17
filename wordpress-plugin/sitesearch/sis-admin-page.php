@@ -1,4 +1,4 @@
-<script src="sitesearch-client.js"></script>
+<script src="sitesearch-admin-client.js"></script>
 
 <?php
   $if_sis_url_for_crawling = get_site_url();

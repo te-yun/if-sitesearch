@@ -43,17 +43,17 @@ public class CrawlerService {
     public static final String SITE_SEARCH_USER_AGENT = "SiteSearch.cloud";
 
     public CrawlerJobResult recrawl(UUID siteId, UUID siteSecret, SiteProfile siteProfile) {
-        final List<String> urls = new ArrayList<>();
-        for (final SiteProfile.Config siteConfig : siteProfile.getConfigs()) {
-            final CrawlConfig config = new CrawlConfig();
+        final var urls = new ArrayList<String>();
+        for (final var siteConfig : siteProfile.getConfigs()) {
+            final var config = new CrawlConfig();
             config.setCrawlStorageFolder(CRAWLER_STORAGE);
-            final int crawlerThreads = 2;
+            final var crawlerThreads = 2;
             config.setUserAgentString(SITE_SEARCH_USER_AGENT);
             config.setPolitenessDelay(200); // to avoid being blocked by crawled websites
 
-            final PageFetcher pageFetcher = new PageFetcher(config);
-            final RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
-            final RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
+            final var pageFetcher = new PageFetcher(config);
+            final var robotstxtConfig = new RobotstxtConfig();
+            final var robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
             robotstxtConfig.setEnabled(false); // crawler-commons' robots.txt rules interpretation is used later on instead
 
             final CrawlController controller;
