@@ -1,4 +1,7 @@
-<script src="sitesearch-admin-client.js"></script>
+<script src="https://api.sitesearch.cloud/external/wordpress-plugin/admin-client.js"></script>
+
+<!-- TODO load this script everywhere the default WordPress searchbar is loaded -->
+<script src="https://api.sitesearch.cloud/external/wordpress-plugin/searchbar-injection.js"></script>
 
 <?php
   $if_sis_url_for_crawling = get_site_url();

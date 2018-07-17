@@ -182,7 +182,7 @@ public class CrawlerController {
         if (SiteService.ADMIN_SITE_SECRET.equals(serviceSecret)) {
             final var halfDayAgo = Instant.now().minus(1, ChronoUnit.HALF_DAYS);
             sitesCrawlStatusUpdate.getSites().stream()
-//                    .filter(crawlStatus -> Instant.parse(crawlStatus.getCrawled()).isBefore(halfDayAgo) || allSiteCrawl)
+                    .filter(crawlStatus -> Instant.parse(crawlStatus.getCrawled()).isBefore(halfDayAgo) || allSiteCrawl)
                     .forEach(crawlStatus -> {
                         final Optional<UUID> fetchedSiteSecret = siteService.fetchSiteSecret(crawlStatus.getSiteId());
                         fetchedSiteSecret.ifPresent(uuid -> {

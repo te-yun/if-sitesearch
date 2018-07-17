@@ -71,10 +71,14 @@ public class CrawlerService {
             }
 
             final CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(
-                            siteId, siteSecret, siteConfig.getUrl(),
-                            siteConfig.getPageBodyCssSelector(),
+                    siteId, siteSecret, siteConfig.getUrl(),
+                    siteConfig.getPageBodyCssSelector(),
                     siteConfig.isAllowUrlWithQuery()
-                    );
+            );
+            final var mhSiteId = UUID.fromString("c7d080ff-6eec-496e-a70e-db5ec81948ab");
+            if (siteId.equals(mhSiteId)) { // TODO remove this
+                LOG.warn("TEMPORARY_CHECK_FOR_MH - isAllowUrlWithQuery: " + siteConfig.isAllowUrlWithQuery());
+            }
             controller.start(factory, crawlerThreads);
 
             final List<String> configUrls = controller.getCrawlersLocalData().stream()
@@ -99,7 +103,7 @@ public class CrawlerService {
     }
 
     public CrawlerJobResult crawl(String url, UUID siteId, UUID siteSecret, boolean isThrottled, boolean clearIndex, boolean sitemapsOnly, String pageBodyCssSelector) {
-        final CrawlConfig config = new CrawlConfig();
+        final var config = new CrawlConfig();
         config.setCrawlStorageFolder(CRAWLER_STORAGE);
         final int crawlerThreads;
         if (isThrottled) {
@@ -113,9 +117,9 @@ public class CrawlerService {
             config.setPolitenessDelay(200); // to avoid being blocked by crawled websites
         }
 
-        final PageFetcher pageFetcher = new PageFetcher(config);
-        final RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
-        final RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
+        final var pageFetcher = new PageFetcher(config);
+        final var robotstxtConfig = new RobotstxtConfig();
+        final var robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
         robotstxtConfig.setEnabled(false); // crawler-commons' robots.txt rules interpretation is used later on instead
 
         final CrawlController controller;

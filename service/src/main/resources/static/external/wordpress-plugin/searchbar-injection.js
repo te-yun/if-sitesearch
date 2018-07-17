@@ -15,7 +15,7 @@
  */
 
 var injectSearchbar = function () {
-
+    console.warn("injectSearchbar");
 };
 
 injectSearchbar();
