@@ -86,7 +86,7 @@ public class SiteProfile {
             this.allowUrlWithQuery = allowUrlWithQuery;
         }
 
-        public boolean allowUrlWithQuery(final UUID siteId) {
+        public boolean allowUrlWithQuery(final UUID siteId) {// TODO remove
             final var mhSiteId = UUID.fromString("c7d080ff-6eec-496e-a70e-db5ec81948ab"); // save `isAllowUrlWithQuery` in sitePrfoile
             return siteId.equals(mhSiteId);
         }

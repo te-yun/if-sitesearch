@@ -19,14 +19,7 @@ package com.intrafind.sitesearch.integration;
 import com.intrafind.sitesearch.SmokeTest;
 import com.intrafind.sitesearch.controller.PageController;
 import com.intrafind.sitesearch.controller.SiteController;
-import com.intrafind.sitesearch.dto.CrawlStatus;
-import com.intrafind.sitesearch.dto.FetchedPage;
-import com.intrafind.sitesearch.dto.SiteCreation;
-import com.intrafind.sitesearch.dto.SiteIndexSummary;
-import com.intrafind.sitesearch.dto.SitePage;
-import com.intrafind.sitesearch.dto.SiteProfile;
-import com.intrafind.sitesearch.dto.SiteProfileUpdate;
-import com.intrafind.sitesearch.dto.SitesCrawlStatus;
+import com.intrafind.sitesearch.dto.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,28 +28,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.net.URI;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -150,7 +130,7 @@ public class SiteTest {
     @Test
     public void createNewSiteWithProfile() {
         final var configs = Arrays.asList(
-                new SiteProfile.Config(URI.create("https://subdomain.example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false, false),
+                new SiteProfile.Config(URI.create("https://subdomain.example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, true, false),
                 new SiteProfile.Config(URI.create("https://example.com"), SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR, false, true)
         );
         final var siteProfileCreation = new SiteProfileUpdate(
@@ -189,6 +169,8 @@ public class SiteTest {
         assertTrue(updatedSite.getBody().getConfigs().stream().anyMatch(SiteProfile.Config::isAllowUrlWithQuery));
         assertFalse(updatedSite.getBody().getConfigs().get(0).isAllowUrlWithQuery());
         assertTrue(updatedSite.getBody().getConfigs().get(1).isAllowUrlWithQuery());
+        assertTrue(updatedSite.getBody().getConfigs().get(0).isSitemapsOnly());
+        assertFalse(updatedSite.getBody().getConfigs().get(1).isSitemapsOnly());
 
         // assure site profile is impossible with wrong site secret
         final var updatedSiteWithInvalidSecret = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + UUID.randomUUID(),

@@ -23,13 +23,7 @@ import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
+import okhttp3.*;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.ParseContext;
@@ -70,9 +64,6 @@ public class SiteCrawler extends WebCrawler {
     private final String pageBodyCssSelector;
     private final boolean allowUrlWithQuery;
     private final BaseRobotRules robotRules;
-
-//    private SiteCrawler() { // comment out to make `pageBodyCssSelector`, `url` etc. final
-//    }
 
     public SiteCrawler(final UUID siteId, final UUID siteSecret, final URI url, final String pageBodyCssSelector, final BaseRobotRules robotRules, final boolean allowUrlWithQuery) {
         this.siteId = siteId;

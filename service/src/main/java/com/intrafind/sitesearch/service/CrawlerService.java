@@ -19,12 +19,7 @@ package com.intrafind.sitesearch.service;
 import com.intrafind.sitesearch.controller.CrawlerControllerFactory;
 import com.intrafind.sitesearch.dto.CrawlerJobResult;
 import com.intrafind.sitesearch.dto.SiteProfile;
-import crawlercommons.sitemaps.AbstractSiteMap;
-import crawlercommons.sitemaps.SiteMap;
-import crawlercommons.sitemaps.SiteMapIndex;
-import crawlercommons.sitemaps.SiteMapParser;
-import crawlercommons.sitemaps.SiteMapURL;
-import crawlercommons.sitemaps.UnknownFormatException;
+import crawlercommons.sitemaps.*;
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.fetcher.PageFetcher;
@@ -37,12 +32,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -80,11 +70,10 @@ public class CrawlerService {
                 controller.addSeed(siteConfig.getUrl().toString());
             }
 
-            final CrawlController.WebCrawlerFactory<?> factory =
-                    new CrawlerControllerFactory(
+            final CrawlController.WebCrawlerFactory<?> factory = new CrawlerControllerFactory(
                             siteId, siteSecret, siteConfig.getUrl(),
                             siteConfig.getPageBodyCssSelector(),
-                            siteConfig.allowUrlWithQuery(siteId)
+                    siteConfig.isAllowUrlWithQuery()
                     );
             controller.start(factory, crawlerThreads);
 
