@@ -71,7 +71,7 @@ dependencies {
 
     compile "com.squareup.okhttp3:okhttp:3.11.0"
 
-    compile "org.mnode.mstor:mstor:1.0.0"
+//    compile "org.mnode.mstor:mstor:1.0.0"
     compile "com.google.oauth-client:google-oauth-client-jetty:1.23.0"
     compile "com.google.apis:google-api-services-gmail:v1-rev82-1.23.0"
 
