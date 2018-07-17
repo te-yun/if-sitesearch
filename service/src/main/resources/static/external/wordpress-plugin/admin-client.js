@@ -16,7 +16,7 @@
 
 
 var registerSiteInSiS = function () {
-    console.warn("TODO: (1) Create siteId/siteSecret with a POST to api.sitesearch.cloud/sites" + document.getElementById("sis-url").value);
+    // console.warn("TODO: (1) Create siteId/siteSecret with a POST to api.sitesearch.cloud/sites" + document.getElementById("sis-url").value);
 
     var siteCreation = new XMLHttpRequest();
     siteCreation.open("POST", "https://api.sitesearch.cloud/sites");
@@ -25,11 +25,11 @@ var registerSiteInSiS = function () {
     };
     siteCreation.send();
 
-    var siteIdElement = document.getElementById("sis-siteId");
-    var siteSecretElement = document.getElementById("sis-siteSecret");
-
-    var siteId = siteIdElement.value;
-    var siteSecret = siteSecretElement.value;
+    // var siteIdElement = document.getElementById("sis-siteId");
+    // var siteSecretElement = document.getElementById("sis-siteSecret");
+    //
+    // var siteId = siteIdElement.value;
+    // var siteSecret = siteSecretElement.value;
 
     console.warn("TODO: (2) Submit URL to api.sitesearch.cloud, using siteId/Secret from the previous call." + document.getElementById("sis-url").value);
 };
