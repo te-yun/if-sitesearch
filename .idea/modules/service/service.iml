@@ -197,6 +197,7 @@
     <orderEntry type="library" name="Gradle: io.netty:netty-resolver:4.1.25.Final" level="project" />
     <orderEntry type="library" name="Gradle: io.netty:netty-common:4.1.25.Final" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.tika:tika-parsers:1.18" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.springframework.boot:spring-boot-devtools:2.0.3.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.apache.uima:uimafit-core:2.2.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.ucar:netcdf4:4.5.5" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: edu.ucar:grib:4.5.5" level="project" />

@@ -75,13 +75,9 @@ public class CrawlerService {
                     siteConfig.getPageBodyCssSelector(),
                     siteConfig.isAllowUrlWithQuery()
             );
-            final var mhSiteId = UUID.fromString("c7d080ff-6eec-496e-a70e-db5ec81948ab");
-            if (siteId.equals(mhSiteId)) { // TODO remove this
-                LOG.warn("TEMPORARY_CHECK_FOR_MH - isAllowUrlWithQuery: " + siteConfig.isAllowUrlWithQuery());
-            }
             controller.start(factory, crawlerThreads);
 
-            final List<String> configUrls = controller.getCrawlersLocalData().stream()
+            final var configUrls = controller.getCrawlersLocalData().stream()
                     .filter(Objects::nonNull)
                     .map(url -> (String) url)
                     .collect(Collectors.toList());
@@ -96,8 +92,8 @@ public class CrawlerService {
     private void useSitemapsOnly(CrawlConfig config, CrawlController controller, String url) {
         config.setMaxOutgoingLinksToFollow(0);
         config.setMaxDepthOfCrawling(0);
-        final List<URL> seedUrls = extractSeedUrls(url);
-        for (final URL pageUrl : seedUrls) {
+        final var seedUrls = extractSeedUrls(url);
+        for (final var pageUrl : seedUrls) {
             controller.addSeed(pageUrl.toString());
         }
     }

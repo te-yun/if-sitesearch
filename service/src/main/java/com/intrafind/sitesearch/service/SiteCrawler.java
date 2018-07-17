@@ -72,15 +72,12 @@ public class SiteCrawler extends WebCrawler {
         this.pageBodyCssSelector = pageBodyCssSelector;
         this.allowUrlWithQuery = allowUrlWithQuery;
         this.robotRules = robotRules;
+
+        LOG.warn("TEMPORARY_CHECK_FOR_MH - " + siteId + " - isAllowUrlWithQuery: " + allowUrlWithQuery); // TODO remove this
     }
 
     @Override
     public boolean shouldVisit(final Page referringPage, final WebURL webUrl) {
-        final var mhSiteId = UUID.fromString("c7d080ff-6eec-496e-a70e-db5ec81948ab");
-        if (this.siteId.equals(mhSiteId)) { // TODO remove this
-            LOG.warn("TEMPORARY_CHECK_FOR_MH - isAllowUrlWithQuery: " + allowUrlWithQuery);
-        }
-
         final var href = webUrl.getURL().toLowerCase();
         final var isCrawled = !BLACKLIST.matcher(href).matches()
                 && href.startsWith(url.toString())
@@ -173,7 +170,7 @@ public class SiteCrawler extends WebCrawler {
         }
     }
 
-    private void countPage(String url) {
+    private void countPage(final String url) {
         if (PAGE_COUNT.get(siteId) == null) {
             PAGE_COUNT.put(siteId, new AtomicInteger());
         }
