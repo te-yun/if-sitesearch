@@ -35,6 +35,7 @@ var registerSiteInSiS = function () {
             var siteUrlElement = document.getElementById("sis-url");
             var siteUrl = siteUrlElement.value;
             console.warn(siteUrl);
+            IFS.jQuery.ifs.shared.clientOptions.siteId = newSite.siteId;
             return {newSite, siteUrl};
         }
 
