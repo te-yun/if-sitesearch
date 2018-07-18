@@ -1,6 +1,15 @@
 #!/usr/bin/env sh
 
 # TODO team productize
+searchbarVersion="2018-04-06-dummy"
+
+function init_and_set_CDN_metadata() {
+    gsutil cors set cdn-cors-configuration.json gs://site-search-europe
+    gsutil setmeta  -h "content-encoding"  gs://site-search-europe/searchbar/$searchbarVersion/app/css/app.css
+    gsutil -m setmeta -r -h "Content-Encoding: gzip"  gs://site-search-europe/searchbar/$searchbarVersion
+    gsutil -m acl -r ch -u AllUsers:READER gs://site-search-europe/searchbar/$searchbarVersion
+    gsutil -m iam -r ch allUsers:objectViewer gs://site-search-europe/$searchbarVersion
+}
 
 today=`date -u +"%Y-%m-%d"`
 cd service/src/main/resources/static/searchbar/build

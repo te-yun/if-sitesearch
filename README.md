@@ -50,17 +50,5 @@ to the `config` folder inside this project.
 ## Release
     ./release.sh
    
-## Set CDN Metadata
-* gsutil cors set cdn-cors-configuration.json gs://site-search-europe
-* gsutil setmeta  -h "content-encoding"  gs://site-search-europe/searchbar/2018-04-06/app/css/app.css
-* gsutil -m setmeta -r -h "Content-Encoding: gzip"  gs://site-search-europe/searchbar/2018-04-06
-* gsutil -m acl -r ch -u AllUsers:READER gs://site-search-europe/searchbar/2018-04-06
-* gsutil -m iam -r ch allUsers:objectViewer gs://site-search-europe/test5
-* gsutil -m cp -r ./2018-04-06 gs://site-search-europe/test3
-* gsutil -m rm -r gs://site-search-europe/test1
-* gsutil cp -z css -a public-read app.css gs://site-search-europe/searchbar/2018-04-06/app/css/
-* gsutil cp -z js -a public-read app.js gs://site-search-europe/searchbar/2018-04-06/app/js/
-* gsutil cp -z json -a public-read sitesearch.json gs://site-search-europe/searchbar/2018-04-06/config/
-    
 # Attribution
 * Made with ♥ in Munich
