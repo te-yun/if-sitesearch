@@ -18,6 +18,7 @@ package com.intrafind.sitesearch.integration;
 
 import com.intrafind.sitesearch.controller.AutocompleteController;
 import com.intrafind.sitesearch.dto.Autocomplete;
+import com.intrafind.sitesearch.jmh.LoadTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -28,6 +29,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.reactive.server.EntityExchangeResult;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -39,6 +42,7 @@ public class AutocompleteTest {
     private static final Logger LOG = LoggerFactory.getLogger(AutocompleteTest.class);
     @Autowired
     private TestRestTemplate caller;
+    private WebTestClient webTestClient = WebTestClient.bindToServer().build();
 
     @Test
     public void referenceDeprecated() {
@@ -74,13 +78,21 @@ public class AutocompleteTest {
     }
 
     @Test
-    public void complexPositive() {
-        final ResponseEntity<Autocomplete> actual = caller.getForEntity("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=ifinder", Autocomplete.class);
+    public void complexPositive() throws Exception {
+        final var actual = caller.getForEntity("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=ifinder", Autocomplete.class);
+        final WebTestClient.ResponseSpec exchange = webTestClient.get().uri("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=ifinder").exchange();
 
-        assertEquals(HttpStatus.OK, actual.getStatusCode());
-        assertNotNull(actual.getBody());
-        assertTrue(1 <= actual.getBody().getResults().size());
-        actual.getBody().getResults().forEach(term -> {
+        final EntityExchangeResult<byte[]> entityExchangeResult = exchange.expectBody().returnResult();
+
+//        assertEquals(HttpStatus.OK, actual.getStatusCode());
+        assertEquals(HttpStatus.OK, entityExchangeResult.getStatus());
+//        assertNotNull(actual.getBody());
+        assertNotNull(entityExchangeResult.getResponseBody());
+//        assertTrue(1 <= actual.getBody().getResults().size());
+        final var autocomplete = LoadTest.MAPPER.readValue(entityExchangeResult.getResponseBody(), Autocomplete.class);
+        assertTrue(1 <= autocomplete.getResults().size());
+//        actual.getBody().getResults().forEach(term -> {
+        autocomplete.getResults().forEach(term -> {
             LOG.info("term: " + term);
             assertTrue(term.toLowerCase().contains("ifinder"));
         });

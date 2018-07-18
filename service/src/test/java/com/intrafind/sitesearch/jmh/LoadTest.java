@@ -60,7 +60,7 @@ public class LoadTest {
             .followRedirects(false)
             .followSslRedirects(false)
             .build();
-    static final ObjectMapper MAPPER = new ObjectMapper();
+    public static final ObjectMapper MAPPER = new ObjectMapper();
     static final Random PSEUDO_ENTROPY = new Random();
     static final Map<String, Integer> SEARCH_QUERIES = new HashMap<>();
     static final Map<String, Integer> AUTOCOMPLETE_QUERIES = new HashMap<>();
