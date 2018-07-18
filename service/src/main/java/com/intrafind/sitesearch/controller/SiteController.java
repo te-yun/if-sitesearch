@@ -236,7 +236,7 @@ public class SiteController {
             LOG.info("siteId: " + siteId + " - query-fragment: " + query + " - autocompletes: " + autocomplete.getResults().size() + " - autocompleteDurationInMs: " + searchDuration.toEpochMilli());
 //            return ResponseEntity.ok(autocomplete);
 //            return ServerResponse.ok().syncBody(autocomplete);
-            return Mono.just(autocomplete);
+            return Mono.justOrEmpty(autocomplete);
         } else {
             return Mono.empty();
 //            return ServerResponse.notFound().build();
@@ -267,6 +267,6 @@ public class SiteController {
         final var searchDuration = stop.minusMillis(start.toEpochMilli());
         LOG.info("siteId: " + siteId + " - query: " + query + " - results: " + searchResult.getResults().size() + " - searchDurationInMs: " + searchDuration.toEpochMilli());
 //        return ServerResponse.ok().syncBody(searchResult);
-        return Mono.just(searchResult);
+        return Mono.justOrEmpty(searchResult);
     }
 }
