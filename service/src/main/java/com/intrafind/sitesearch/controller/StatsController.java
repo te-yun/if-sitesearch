@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 IntraFind Software AG. All rights reserved.
+ * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@
 package com.intrafind.sitesearch.controller;
 
 import com.intrafind.sitesearch.dto.Stats;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 import java.util.UUID;
 
@@ -31,10 +31,13 @@ public class StatsController {
 
     public static final String ENDPOINT = "/stats";
 
+    //    http://www.baeldung.com/spring-webflux
     @RequestMapping(method = RequestMethod.GET)
-    ResponseEntity<Stats> stats(
-            @RequestParam(value = "siteId") UUID siteId
+//    ResponseEntity<Stats> stats(
+    Mono<Stats> stats(
+            @RequestParam(value = "siteId", required = false) UUID siteId
     ) {
-        return ResponseEntity.ok(new Stats(System.getenv("BUILD_NUMBER"), System.getenv("SCM_HASH"), System.getenv("HOSTNAME")));
+        return Mono.just(new Stats(System.getenv("BUILD_NUMBER"), System.getenv("SCM_HASH"), System.getenv("HOSTNAME")));
+//        return ResponseEntity.ok(new Stats(System.getenv("BUILD_NUMBER"), System.getenv("SCM_HASH"), System.getenv("HOSTNAME")));
     }
 }

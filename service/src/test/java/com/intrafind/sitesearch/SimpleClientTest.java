@@ -40,6 +40,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.net.http.HttpClient;
 import java.net.http.HttpHeaders;
@@ -56,11 +58,21 @@ public class SimpleClientTest {
     @Autowired
     private TestRestTemplate caller;
 
+    //    http://www.baeldung.com/spring-5-webclient
+    private WebTestClient webTestClient = WebTestClient
+            .bindToServer()
+            .baseUrl("http://localhost:8080")
+            .build();
+
     @Test
     public void test() {
         final var simpleIndex = new SimpleIndexClient();
         final var simpleAutocomplete = new SimpleAutocompleteClient();
         final var simpleSearch = new SimpleSearchClient();
+
+        //    http://www.baeldung.com/spring-5-webclient
+        WebClient client1 = WebClient.create();
+        WebClient client2 = WebClient.create("http://localhost:8080");
 
         IndexRequest indexRequest = new IndexRequest(
                 "sis",
