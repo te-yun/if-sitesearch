@@ -24,9 +24,9 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -41,8 +41,7 @@ import static org.junit.Assert.assertTrue;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AutocompleteTest {
     private static final Logger LOG = LoggerFactory.getLogger(AutocompleteTest.class);
-    //    @Value("${local.server.port}")
-    @LocalServerPort
+    @Value("${local.server.port}")
     private int port;
     @Autowired
     private TestRestTemplate caller;
@@ -59,13 +58,19 @@ public class AutocompleteTest {
     }
 
     @Test
-    public void reference() {
-        final ResponseEntity<Autocomplete> actual = caller.getForEntity("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=Knowledge", Autocomplete.class);
+    public void reference() throws Exception {
+//        final var actual = caller.getForEntity("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=Knowledge", Autocomplete.class);
+        final WebTestClient.ResponseSpec exchange = webTestClient.get().uri("http://localhost:" + port + "/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=Knowledge").exchange();
 
-        assertEquals(HttpStatus.OK, actual.getStatusCode());
-        assertNotNull(actual.getBody());
-        assertTrue(1 <= actual.getBody().getResults().size());
-        assertEquals("knowledge graph", actual.getBody().getResults().get(0).toLowerCase());
+//        assertEquals(HttpStatus.OK, actual.getStatusCode());
+        assertEquals(HttpStatus.OK, exchange.expectBody().returnResult().getStatus());
+//        assertNotNull(actual.getBody());
+        assertNotNull(exchange.expectBody().returnResult().getResponseBody());
+//        assertTrue(1 <= actual.getBody().getResults().size());
+        final Autocomplete autocomplete = LoadTest.MAPPER.readValue(exchange.expectBody().returnResult().getResponseBody(), Autocomplete.class);
+        assertTrue(1 <= autocomplete.getResults().size());
+        assertEquals("knowledge graph", autocomplete.getResults().get(0).toLowerCase());
+//        assertEquals("knowledge graph", actual.getBody().getResults().get(0).toLowerCase());
     }
 
     @Test
@@ -84,7 +89,7 @@ public class AutocompleteTest {
     @Test
     public void complexPositive() throws Exception {
 //        final var actual = caller.getForEntity("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=ifinder", Autocomplete.class);
-        final WebTestClient.ResponseSpec exchange = webTestClient.get().uri("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=ifinder").exchange();
+        final WebTestClient.ResponseSpec exchange = webTestClient.get().uri("http://localhost:" + port + "/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=ifinder").exchange();
 
         final EntityExchangeResult<byte[]> entityExchangeResult = exchange.expectBody().returnResult();
 
