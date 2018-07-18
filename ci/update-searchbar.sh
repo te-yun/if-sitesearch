@@ -17,12 +17,13 @@ cp -r ../latest/gadget ../$today
 
 # check if a ./$today folder is created and delete it, if that is the case
 
-gsutil -m rm -r gs://site-search-europe/searchbar/2018-04-06
-gsutil -m cp -r ./service/src/main/resources/static/searchbar/2018-05-15 gs://site-search-europe/searchbar/
+# Google Storage Operations
 
-# transfer whole searchbar release first completely
-gsutil -m cp -r service/src/main/resources/static/searchbar/2018-05-15/ gs://site-search-europe/searchbar/
+searchbarVersion="2018-04-06-disabled"
+gsutil -m rm -r gs://site-search-europe/searchbar/$searchbarVersion
+gsutil -m cp -r ./service/src/main/resources/static/searchbar/$searchbarVersion gs://site-search-europe/searchbar/
+
 # transfer as gzip files to cdn with real metadata so that browser knows what to do with those gzip files
-gsutil cp -z css -a public-read service/src/main/resources/static/searchbar/2018-05-15/app/css/app.css gs://site-search-europe/searchbar/2018-05-15/app/css/
-gsutil cp -z js -a public-read service/src/main/resources/static/searchbar/2018-05-15/app/js/app.js gs://site-search-europe/searchbar/2018-05-15/app/js/
-gsutil cp -z json -a public-read service/src/main/resources/static/searchbar/2018-05-15/config/sitesearch.json gs://site-search-europe/searchbar/2018-05-15/config/
+gsutil cp -z css -a public-read ./service/src/main/resources/static/searchbar/$searchbarVersion/app/css/app.css gs://site-search-europe/searchbar/$searchbarVersion/app/css/
+gsutil cp -z js -a public-read ./service/src/main/resources/static/searchbar/$searchbarVersion/app/js/app.js gs://site-search-europe/searchbar/$searchbarVersion/app/js/
+gsutil cp -z json -a public-read ./service/src/main/resources/static/searchbar/$searchbarVersion/config/sitesearch.json gs://site-search-europe/searchbar/$searchbarVersion/config/
