@@ -86,10 +86,11 @@ function sis_css()
 add_action('admin_head', 'sis_css');
 
 // adding sis searchbar in this hook function
-function my_search_form( $form ) {
+function my_search_form($form)
+{
     $form = '<div id="sitesearch-searchbar" class="searchbar">
     <div id="ifs-searchbar" class="ifs-component ifs-sb"></div>
-    <script src="https://cdn.sitesearch.cloud/searchbar/2018-05-15/app/js/app.js"></script>
+    <script src="https://cdn.sitesearch.cloud/searchbar/2018-07-18/app/js/app.js"></script>
     <script>
         IFS.initClient({
             customConfig: {
@@ -97,22 +98,23 @@ function my_search_form( $form ) {
                     "appLang": "en"
                 }
             },
-            configurl: "https://cdn.sitesearch.cloud/searchbar/2018-05-15/config/sitesearch.json",
+            configurl: "https://cdn.sitesearch.cloud/searchbar/2018-07-18/config/sitesearch.json",
             siteId: "3a5dfd07-a463-45f8-863b-dfc3c9f09152"
         });
     </script>
 </div>';
     return $form;
 }
+
 // add filter with high priority
 // call filter in themes = get_search_form();
-add_filter( 'get_search_form', 'my_search_form', 100 );
+add_filter('get_search_form', 'my_search_form', 100);
 // adding shortcode
 // use it in posts you want as text directly in an element (ie = body) injecting ('b' = is for to not duplicate anything in wordpress hooks) =  [wpbsearch] 
 add_shortcode('wpbsearch', 'get_search_form');
 // adding sis admin menu in wordpress
 
-add_action( 'admin_menu', 'sis_admin_menu' );
+add_action('admin_menu', 'sis_admin_menu');
 // Arguments described below:
 // 1. Tab name
 // 2. Left side admin menu name
@@ -121,12 +123,14 @@ add_action( 'admin_menu', 'sis_admin_menu' );
 // 5. function call to integrate activity on the admin page
 // 6. icon url
 // 7. position, maybe not important
-function sis_admin_menu() {
-	add_menu_page( 'Site Search Title', 'Site Search Menu', 'manage_options', 'sis-admin-page.php', 'sis_admin_page', plugins_url( 'cropped-favicon.png', __FILE__ ) );
+function sis_admin_menu()
+{
+    add_menu_page('Setup | Site Search', 'Site Search', 'manage_options', 'sis-admin-page.php', 'sis_admin_page', plugins_url('cropped-favicon.png', __FILE__));
 }
+
 // add_action( 'admin_init', 'sis_admin_menu' );
 
-function sis_admin_page() {
-	echo '<h1>It works!</h1>';
-	include( 'sis-admin-page.php' );
+function sis_admin_page()
+{
+    include('sis-admin-page.php');
 }
