@@ -41,7 +41,7 @@ import static org.junit.Assert.assertTrue;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AutocompleteTest {
     private static final Logger LOG = LoggerFactory.getLogger(AutocompleteTest.class);
-    @Value("#{@nettyContext.address().getPort()}")
+    @Value("${local.server.port}")
     int port;
     @Autowired
     private TestRestTemplate caller;
