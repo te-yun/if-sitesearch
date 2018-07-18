@@ -24,6 +24,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
@@ -40,9 +41,11 @@ import static org.junit.Assert.assertTrue;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AutocompleteTest {
     private static final Logger LOG = LoggerFactory.getLogger(AutocompleteTest.class);
+    @Value("#{@nettyContext.address().getPort()}")
+    int port;
     @Autowired
     private TestRestTemplate caller;
-    private WebTestClient webTestClient = WebTestClient.bindToServer().build();
+    private WebTestClient webTestClient = WebTestClient.bindToServer().baseUrl("http://localhost:" + this.port).build();
 
     @Test
     public void referenceDeprecated() {
@@ -79,7 +82,7 @@ public class AutocompleteTest {
 
     @Test
     public void complexPositive() throws Exception {
-        final var actual = caller.getForEntity("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=ifinder", Autocomplete.class);
+//        final var actual = caller.getForEntity("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=ifinder", Autocomplete.class);
         final WebTestClient.ResponseSpec exchange = webTestClient.get().uri("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=ifinder").exchange();
 
         final EntityExchangeResult<byte[]> entityExchangeResult = exchange.expectBody().returnResult();
