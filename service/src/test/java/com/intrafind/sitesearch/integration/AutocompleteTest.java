@@ -17,6 +17,7 @@
 package com.intrafind.sitesearch.integration;
 
 import com.intrafind.sitesearch.controller.AutocompleteController;
+import com.intrafind.sitesearch.controller.SiteController;
 import com.intrafind.sitesearch.dto.Autocomplete;
 import com.intrafind.sitesearch.jmh.LoadTest;
 import org.junit.Test;
@@ -42,7 +43,7 @@ public class AutocompleteTest {
     private static final Logger LOG = LoggerFactory.getLogger(AutocompleteTest.class);
     @Autowired
     private TestRestTemplate caller;
-    private WebTestClient webTestClient = WebTestClient.bindToServer().baseUrl("http://localhost:8001").build();
+    private WebTestClient webTestClient = WebTestClient.bindToController(SiteController.class).build();
 
     @Test
     public void referenceDeprecated() {
