@@ -23,7 +23,13 @@ import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
-import okhttp3.*;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.ParseContext;
@@ -186,6 +192,7 @@ public class SiteCrawler extends WebCrawler {
                     .url(SIS_API_SERVICE_URL + "/sites/" + siteId + "/pages?siteSecret=" + siteSecret) // TODO move this to a config property to switch between production and override with local
                     .put(RequestBody.create(JSON_MEDIA_TYPE, MAPPER.writeValueAsBytes(sitePage)))
                     .build();
+            // TODO replace with WebClient from http://www.baeldung.com/spring-5-webclient | http://www.baeldung.com/spring-webflux
             HTTP_CLIENT.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(final Call call, final IOException e) {

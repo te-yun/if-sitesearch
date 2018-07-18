@@ -37,7 +37,11 @@ public class StatsController {
     Mono<Stats> stats(
             @RequestParam(value = "siteId", required = false) UUID siteId
     ) {
-        return Mono.just(new Stats(System.getenv("BUILD_NUMBER"), System.getenv("SCM_HASH"), System.getenv("HOSTNAME")));
+        return Mono.just(new Stats(
+                System.getenv("BUILD_NUMBER"),
+                System.getenv("SCM_HASH"),
+                System.getenv("HOSTNAME"))
+        );
 //        return ResponseEntity.ok(new Stats(System.getenv("BUILD_NUMBER"), System.getenv("SCM_HASH"), System.getenv("HOSTNAME")));
     }
 }

@@ -27,8 +27,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping(PageController.ENDPOINT)
 public class PageController {
@@ -43,7 +41,7 @@ public class PageController {
 
     @RequestMapping(method = RequestMethod.GET, path = "{id}")
     ResponseEntity<FetchedPage> fetchById(@PathVariable("id") String id) {
-        Optional<FetchedPage> fetched = service.fetchById(id);
+        final var fetched = service.fetchById(id);
         return fetched.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

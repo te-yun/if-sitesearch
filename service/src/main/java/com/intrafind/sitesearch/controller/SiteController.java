@@ -42,7 +42,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -124,7 +123,7 @@ public class SiteController {
         // TODO use SiteUpdate DTO with NO siteId & NO siteSecret provided
 
         // TODO make sure that an existing page is actually updated
-        Optional<FetchedPage> indexed = siteService.indexExistingPage(pageId, siteId, siteSecret, page);
+        final var indexed = siteService.indexExistingPage(pageId, siteId, siteSecret, page);
         return indexed.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -141,7 +140,7 @@ public class SiteController {
         // TODO use SiteUpdate DTO with NO siteId & NO siteSecret provided
 
         // TODO make sure that an existing page is actually updated
-        Optional<FetchedPage> indexed = siteService.indexExistingPage(pageId, siteId, siteSecret, page);
+        final var indexed = siteService.indexExistingPage(pageId, siteId, siteSecret, page);
         return indexed.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -183,7 +182,7 @@ public class SiteController {
     }
 
     private ResponseEntity<SiteIndexSummary> indexAsRssFeed(UUID siteId, UUID siteSecret, URI feedUrl, Boolean stripHtmlTags, Boolean isGeneric, Boolean clearIndex) {
-        Optional<SiteIndexSummary> siteCreatedInfo = siteService.indexFeed(feedUrl, siteId, siteSecret, stripHtmlTags, isGeneric, clearIndex);
+        final var siteCreatedInfo = siteService.indexFeed(feedUrl, siteId, siteSecret, stripHtmlTags, isGeneric, clearIndex);
         return siteCreatedInfo.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
