@@ -83,7 +83,7 @@ function deleteSiS_Options_WP_DB()
 <script src="https://api.sitesearch.cloud/external/wordpress-plugin/admin-client.js"></script>
 
 <!-- TODO load this script everywhere the default WordPress searchbar is loaded -->
-<script src="https://api.sitesearch.cloud/external/wordpress-plugin/searchbar-injection.js"></script>
+<!--<script src="https://api.sitesearch.cloud/external/wordpress-plugin/searchbar-injection.js"></script>-->
 
 <div class="form-wrapper">
     <style>
@@ -109,11 +109,12 @@ function deleteSiS_Options_WP_DB()
            name="crawl" value="Add Site Search searchbar to your site &amp; crawl your site's content."
            onclick="registerSiteInSiS();">
     <br><br>
-    <input type="submit" name="create" value="Create DB Fields and initialize ...">
-    <br><br>
-    <input type="submit" name="read" value="Read site credentials">
-    <input type="submit" name="update" value="Update site credentials">
-    <input type="submit" name="delete" value="Delete DB Fields">
+    <p id="sis-status"></p>
+    <!--    <input type="submit" name="create" value="Create DB Fields and initialize ...">-->
+    <!--    <br><br>-->
+    <!--    <input type="submit" name="read" value="Read site credentials">-->
+    <!--    <input type="submit" name="update" value="Update site credentials">-->
+    <!--    <input type="submit" name="delete" value="Delete DB Fields">-->
 
 
     <div id="sitesearch-searchbar" class="searchbar">
