@@ -50,12 +50,9 @@ import java.util.UUID;
 public class SiteController {
     public static final String ENDPOINT = "/sites";
     private static final Logger LOG = LoggerFactory.getLogger(SiteController.class);
-    private SiteService siteService;
-    private SearchService searchService;
-    private AutocompleteService autocompleteService;
-
-    public SiteController() {
-    }
+    private final SiteService siteService;
+    private final SearchService searchService;
+    private final AutocompleteService autocompleteService;
 
     @Autowired
     private SiteController(SiteService siteService, SearchService searchService, AutocompleteService autocompleteService) {
