@@ -16,13 +16,7 @@
 
 package com.intrafind.sitesearch.controller;
 
-import com.intrafind.sitesearch.dto.Autocomplete;
-import com.intrafind.sitesearch.dto.FetchedPage;
-import com.intrafind.sitesearch.dto.SiteCreation;
-import com.intrafind.sitesearch.dto.SiteIndexSummary;
-import com.intrafind.sitesearch.dto.SitePage;
-import com.intrafind.sitesearch.dto.SiteProfile;
-import com.intrafind.sitesearch.dto.SiteProfileUpdate;
+import com.intrafind.sitesearch.dto.*;
 import com.intrafind.sitesearch.service.AutocompleteService;
 import com.intrafind.sitesearch.service.SearchService;
 import com.intrafind.sitesearch.service.SiteService;
@@ -30,14 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.server.ServerResponse;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
@@ -226,13 +213,14 @@ public class SiteController {
 
     @RequestMapping(path = "{siteId}/autocomplete", method = RequestMethod.GET)
 //    ResponseEntity<Autocomplete> autocompleteSuggestion(
-    Mono<ServerResponse> autocompleteSuggestion(
+//    Mono<ServerResponse> autocompleteSuggestion(
+    Mono<Autocomplete> autocompleteSuggestion(
             @CookieValue(value = "override-site", required = false) UUID cookieSite,
             @RequestParam(value = "query", defaultValue = "") String query,
             @PathVariable(value = "siteId") UUID siteId
     ) {
         final var start = Instant.now();
-        if (query.isEmpty()) return ServerResponse.badRequest().build();
+//        if (query.isEmpty()) return ServerResponse.badRequest().build();
 //        if (query.isEmpty()) return ResponseEntity.badRequest().build();
 
         // override siteId with cookie value for debugging & speed up the getting started experience
@@ -247,24 +235,27 @@ public class SiteController {
             final Instant searchDuration = stop.minusMillis(start.toEpochMilli());
             LOG.info("siteId: " + siteId + " - query-fragment: " + query + " - autocompletes: " + autocomplete.getResults().size() + " - autocompleteDurationInMs: " + searchDuration.toEpochMilli());
 //            return ResponseEntity.ok(autocomplete);
-            return ServerResponse.ok().syncBody(autocomplete);
+//            return ServerResponse.ok().syncBody(autocomplete);
+            return Mono.just(autocomplete);
         } else {
-            return ServerResponse.notFound().build();
+            return Mono.empty();
+//            return ServerResponse.notFound().build();
 //            return ResponseEntity.notFound().build();
         }
     }
 
     @RequestMapping(path = "{siteId}/search", method = RequestMethod.GET)
 //    ResponseEntity<Hits> search(
-//    Mono<Hits> search(
-    Mono<ServerResponse> search(
+    Mono<Hits> search(
+//    Mono<ServerResponse> search(
             @CookieValue(value = "override-site", required = false) UUID cookieSite,
             @RequestParam(value = "query", defaultValue = "") String query,
             @PathVariable(value = "siteId") UUID siteId
     ) {
         final var start = Instant.now();
 //        if (query.isEmpty()) return ResponseEntity.badRequest().build();
-        if (query.isEmpty()) return ServerResponse.badRequest().build();
+//        if (query.isEmpty()) return ServerResponse.badRequest().build();
+//        if (query.isEmpty()) return ServerResponse.badRequest().build();
 
         // override siteId with cookie value for debugging & speed up the getting started experience
         if (cookieSite != null) {
@@ -275,6 +266,7 @@ public class SiteController {
         final var stop = Instant.now();
         final var searchDuration = stop.minusMillis(start.toEpochMilli());
         LOG.info("siteId: " + siteId + " - query: " + query + " - results: " + searchResult.getResults().size() + " - searchDurationInMs: " + searchDuration.toEpochMilli());
-        return ServerResponse.ok().syncBody(searchResult);
+//        return ServerResponse.ok().syncBody(searchResult);
+        return Mono.just(searchResult);
     }
 }
