@@ -42,7 +42,7 @@ public class AutocompleteTest {
     private static final Logger LOG = LoggerFactory.getLogger(AutocompleteTest.class);
     @Autowired
     private TestRestTemplate caller;
-    private WebTestClient webTestClient = WebTestClient.bindToServer().build();
+    private WebTestClient webTestClient = WebTestClient.bindToServer().baseUrl("http://localhost:8001").build();
 
     @Test
     public void referenceDeprecated() {
