@@ -108,12 +108,18 @@ public class AutocompleteTest {
     }
 
     @Test
-    public void nonExisting() {
-        final ResponseEntity<Autocomplete> actual = caller.getForEntity("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=not_found", Autocomplete.class);
+    public void nonExisting() throws Exception {
+//        final ResponseEntity<Autocomplete> actual = caller.getForEntity("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=not_found", Autocomplete.class);
+        final var actual = webTestClient.get().uri("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=not_found").exchange();
 
-        assertEquals(HttpStatus.OK, actual.getStatusCode());
-        assertNotNull(actual.getBody());
-        assertTrue(actual.getBody().getResults().isEmpty());
+        final EntityExchangeResult<byte[]> entityExchangeResult = actual.expectBody().returnResult();
+//        assertEquals(HttpStatus.OK, actual.getStatusCode());
+        assertEquals(HttpStatus.OK, entityExchangeResult.getStatus());
+//        assertNotNull(actual.getBody());
+        assertNotNull(entityExchangeResult.getResponseBody());
+//        assertTrue(actual.getBody().getResults().isEmpty());
+        final var autocomplete = LoadTest.MAPPER.readValue(entityExchangeResult.getResponseBody(), Autocomplete.class);
+        assertTrue(autocomplete.getResults().isEmpty());
     }
 
     @Test
