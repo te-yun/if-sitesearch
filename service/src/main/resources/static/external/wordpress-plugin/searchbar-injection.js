@@ -22,7 +22,15 @@ var injectSearchbar = function () {
     var hiddenSiteSearchSearchbar = document.querySelector("#searchform");
     var defaultSearchbar = document.querySelector("#mk-header-1 > div.mk-header-holder > div.mk-header-inner.add-header-height > div.mk-grid.header-grid > div.mk-header-nav-container.one-row-style.menu-hover-style-5 > div.main-nav-side-search");
     defaultSearchbar.firstElementChild.remove();
+
+    var sisSearchbar = document.getElementById("sitesearch-searchbar");
+    if (sisSearchbar !== undefined && sisSearchbar !== null && sisSearchbar !== "") {
+        console.warn("sitesearch-searchbar exists");
+    }
+
     defaultSearchbar.appendChild(hiddenSiteSearchSearchbar);
+
+
     // defaultSearchbar.innerHTML = '<div id="sitesearch-searchbar" class="searchbar">\n' +
     //     '    <div id="ifs-searchbar" class="ifs-component ifs-sb">BLAH!!!???????!</div>\n' +
     //     '    <script src="https://cdn.sitesearch.cloud/searchbar/2018-05-15/app/js/app.js"></script>\n' +

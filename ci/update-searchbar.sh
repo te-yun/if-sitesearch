@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 # TODO team productize
-searchbarVersion="2018-04-06-dummy"
+searchbarVersion="2018-07-18-dummy"
 
 function init_and_set_CDN_metadata() {
     gsutil cors set cdn-cors-configuration.json gs://site-search-europe
@@ -28,7 +28,6 @@ cp -r ../latest/gadget ../$today
 
 # Google Storage Operations
 
-searchbarVersion="2018-04-06-disabled"
 gsutil -m rm -r gs://site-search-europe/searchbar/$searchbarVersion
 gsutil -m cp -r ./service/src/main/resources/static/searchbar/$searchbarVersion gs://site-search-europe/searchbar/
 
