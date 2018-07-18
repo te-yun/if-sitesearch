@@ -200,9 +200,9 @@ public class CrawlerController {
                                                     crawlStatus.getSiteId(),
                                                     siteSecret,
                                                     isThrottled,
-                                                    clearIndex, configBundle.isSitemapsOnly(),
-                                                    configBundle.getPageBodyCssSelector()
-                                            );
+                                                    configBundle.isSitemapsOnly(),
+                                                    configBundle.getPageBodyCssSelector(),
+                                                    config.isAllowUrlWithQuery());
                                             pageCount.addAndGet(crawlerJobResult.getPageCount());
                                             final Optional<SitesCrawlStatus> sitesCrawlStatus = siteService.updateCrawlStatusInShedule(crawlStatus.getSiteId(), pageCount.get());// TODO fix PATCH update instead of a regular PUT
                                             sitesCrawlStatus.ifPresent(element -> sitesCrawlStatusOverall.getSites().addAll(element.getSites()));
@@ -271,6 +271,7 @@ public class CrawlerController {
             @RequestParam(value = "email") String email,
             @RequestParam(value = "token") String captchaToken,
             @RequestParam(value = "sitemapsOnly", required = false, defaultValue = "false") boolean sitemapsOnly,
+            @RequestParam(value = "allowUrlWithQuery", required = false, defaultValue = "false") boolean allowUrlWithQuery,
             @RequestParam(value = "pageBodyCssSelector", required = false, defaultValue = SiteProfile.Config.DEFAULT_PAGE_BODY_CSS_SELECTOR) String pageBodyCssSelector
     ) {
         if (!siteService.isAllowedToModify(siteId, siteSecret)) {
@@ -296,7 +297,7 @@ public class CrawlerController {
         }
 
         if (captchaPassed) {
-            final var crawlerJobResult = crawlerService.crawl(url.toString(), siteId, siteSecret, true, false, sitemapsOnly, pageBodyCssSelector);
+            final var crawlerJobResult = crawlerService.crawl(url.toString(), siteId, siteSecret, true, sitemapsOnly, pageBodyCssSelector, allowUrlWithQuery);
             final var emailAddress = determineEmailAddress(email);
             try {
                 sendSetupInfoEmail(siteId, siteSecret, url, emailAddress, crawlerJobResult.getPageCount());

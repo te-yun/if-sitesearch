@@ -98,7 +98,8 @@ public class CrawlerService {
         }
     }
 
-    public CrawlerJobResult crawl(String url, UUID siteId, UUID siteSecret, boolean isThrottled, boolean clearIndex, boolean sitemapsOnly, String pageBodyCssSelector) {
+    public CrawlerJobResult crawl(String url, UUID siteId, UUID siteSecret, boolean isThrottled,
+                                  boolean sitemapsOnly, String pageBodyCssSelector, boolean allowUrlWithQuery) {
         final var config = new CrawlConfig();
         config.setCrawlStorageFolder(CRAWLER_STORAGE);
         final int crawlerThreads;
@@ -133,24 +134,24 @@ public class CrawlerService {
         }
 
         final CrawlController.WebCrawlerFactory<?> factory =
-                new CrawlerControllerFactory(siteId, siteSecret, URI.create(url), pageBodyCssSelector, false);
+                new CrawlerControllerFactory(siteId, siteSecret, URI.create(url), pageBodyCssSelector, allowUrlWithQuery);
         controller.start(factory, crawlerThreads);
 
-        final List<String> urls = controller.getCrawlersLocalData().stream()
+        final var urls = controller.getCrawlersLocalData().stream()
                 .filter(Objects::nonNull)
                 .map(urlElement -> (String) urlElement)
                 .collect(Collectors.toList());
-        final int pageCount = urls.size();
+        final var pageCount = urls.size();
         SiteCrawler.PAGE_COUNT.remove(siteId);
 
         return new CrawlerJobResult(pageCount, urls);
     }
 
     private List<URL> extractSeedUrls(final String url) {
-        final List<URL> seedUrls = new ArrayList<>();
-        final SiteMapParser siteMapParser = new SiteMapParser(false, true);
+        final var seedUrls = new ArrayList<URL>();
+        final var siteMapParser = new SiteMapParser(false, true);
         try {
-            final AbstractSiteMap abstractSiteMap = siteMapParser.parseSiteMap(new URL(url + "/sitemap.xml"));
+            final var abstractSiteMap = siteMapParser.parseSiteMap(new URL(url + "/sitemap.xml"));
             walkSiteMap(abstractSiteMap, seedUrls);
         } catch (UnknownFormatException | IOException e) {
             LOG.error(e.getMessage());
