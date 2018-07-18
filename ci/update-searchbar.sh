@@ -19,3 +19,10 @@ cp -r ../latest/gadget ../$today
 
 gsutil -m rm -r gs://site-search-europe/searchbar/2018-04-06
 gsutil -m cp -r ./service/src/main/resources/static/searchbar/2018-05-15 gs://site-search-europe/searchbar/
+
+# transfer whole searchbar release first completely
+gsutil -m cp -r service/src/main/resources/static/searchbar/2018-05-15/ gs://site-search-europe/searchbar/
+# transfer as gzip files to cdn with real metadata so that browser knows what to do with those gzip files
+gsutil cp -z css -a public-read service/src/main/resources/static/searchbar/2018-05-15/app/css/app.css gs://site-search-europe/searchbar/2018-05-15/app/css/
+gsutil cp -z js -a public-read service/src/main/resources/static/searchbar/2018-05-15/app/js/app.js gs://site-search-europe/searchbar/2018-05-15/app/js/
+gsutil cp -z json -a public-read service/src/main/resources/static/searchbar/2018-05-15/config/sitesearch.json gs://site-search-europe/searchbar/2018-05-15/config/
