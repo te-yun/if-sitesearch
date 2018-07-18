@@ -114,7 +114,7 @@ public class AutocompleteTest {
     @Test
     public void nonExisting() throws Exception {
 //        final ResponseEntity<Autocomplete> actual = caller.getForEntity("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=not_found", Autocomplete.class);
-        final var actual = webTestClient.get().uri("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=not_found").exchange();
+        final var actual = webTestClient.get().uri("http://localhost:" + port + "/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=not_found").exchange();
 
         final EntityExchangeResult<byte[]> entityExchangeResult = actual.expectBody().returnResult();
 //        assertEquals(HttpStatus.OK, actual.getStatusCode());
