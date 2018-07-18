@@ -24,9 +24,9 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -41,8 +41,9 @@ import static org.junit.Assert.assertTrue;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AutocompleteTest {
     private static final Logger LOG = LoggerFactory.getLogger(AutocompleteTest.class);
-    @Value("${local.server.port}")
-    int port;
+    //    @Value("${local.server.port}")
+    @LocalServerPort
+    private int port;
     @Autowired
     private TestRestTemplate caller;
     private WebTestClient webTestClient = WebTestClient.bindToServer().baseUrl("http://localhost:" + this.port).build();
