@@ -159,35 +159,28 @@ Or what should be the first thing, I need to do, to **get started** with Site Se
     * Yes, you can *fully customize the appearance of the search bar* using HBS templates.
     * Alternative you can customize the search bar overriding its CSS classes which is appropriate for minor customizations only.
 
+* Can I *customize* the highligthed words within the search snippet previews?
+    * To customize the highligthed words, you need to override the **if-teaser-highlight** CSS class with you desired definitions.
+
 * How do I integrate Site Search' search bar into my website?
     * Embed the following HTML fragment into your website and **adjust the siteId** provided in the snippet:
     
         
-            <link rel="stylesheet" href="https://cdn.sitesearch.cloud/searchbar/latest/app/css/app.css"/>
-            <div id="searchbarContainer">
-                <div class="container" style="width: 530px;">
-                    <div id="searchbar"></div>
-                    <div id="resultlist"></div>
-                </div>
-            
-                <script src="https://cdn.sitesearch.cloud/searchbar/latest/app/js/app.js"></script>
+            <div id="sitesearch-searchbar" class="searchbar">
+                <div id="ifs-searchbar" class="ifs-component ifs-sb"></div>
+                <script src="https://cdn.sitesearch.cloud/searchbar/2018-07-18/app/js/app.js"></script>
                 <script>
-                    jQuery.noConflict();
-                    jQuery(document).ready(function ($) {
-                        IFS.initClient({
-                            customConfig: {
-                                overwrite: {
-                                    "appLang": "de"
-                                }
-                            },
-                            sbTarget: "#searchbar",
-                            configurl: "https://cdn.sitesearch.cloud/searchbar/latest/config/sitesearch.json",
-                            sitesearch: true,
-                            siteId: "4bcccea2-8bcf-4280-88c7-8736e9c3d15c"
-                        });
+                    IFS.initClient({
+                        customConfig: {
+                            overwrite: {
+                                "appLang": "en"
+                            }
+                        },
+                        configurl: "https://cdn.sitesearch.cloud/searchbar/2018-07-18/config/sitesearch.json",
+                        siteId: "4bcccea2-8bcf-4280-88c7-8736e9c3d15c"
                     });
                 </script>
-            </div>  
+            </div> 
 
 * I want to change the *tooltips* provided by the search bar. Does the search bar support **i18n / l10n**?
     * Yes, you need to download the [search bar](https://github.com/intrafind/if-sitesearch/tree/master/service/src/main/resources/static/searchbar/2018-05-15), adjust the translations inside `searchbar/data/language/` and replace 
@@ -196,20 +189,19 @@ Or what should be the first thing, I need to do, to **get started** with Site Se
 * How can I override search bar's *default language selection mechanism*?
     * The below example specifies German as search bar's user interface language. 
     
-            <script>
-                jQuery.noConflict();
-                jQuery(document).ready(function ($) {
+            <div id="sitesearch-searchbar" class="searchbar">
+                <div id="ifs-searchbar" class="ifs-component ifs-sb"></div>
+                <script src="https://cdn.sitesearch.cloud/searchbar/2018-07-18/app/js/app.js"></script>
+                <script>
                     IFS.initClient({
                         customConfig: {
                             overwrite: {
                                 "appLang": "de"
                             }
                         },
-                        sbTarget: "#searchbar",
-                        configurl: "https://cdn.sitesearch.cloud/searchbar/latest/config/sitesearch.json",
-                        sitesearch: true,
+                        configurl: "https://cdn.sitesearch.cloud/searchbar/2018-07-18/config/sitesearch.json",
                         siteId: "4bcccea2-8bcf-4280-88c7-8736e9c3d15c"
                     });
-                });
-            </script>
+                </script>
+            </div>
     
