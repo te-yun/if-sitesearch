@@ -134,3 +134,18 @@ function sis_admin_page()
 {
     include('sis-admin-page.php');
 }
+
+// include javascript = to activate uncomment below
+function no_dependencies_enqueue_scripts()
+{
+    if (!is_admin()) {
+
+        wp_register_script('script-handle', 'https://api.sitesearch.cloud/external/wordpress-plugin/searchbar-injection.js', false, '1.0.0', true);
+        wp_enqueue_script('script-handle');
+
+    }
+}
+add_action('wp_enqueue_scripts', 'no_dependencies_enqueue_scripts');
+/**
+ * EOF
+ */
