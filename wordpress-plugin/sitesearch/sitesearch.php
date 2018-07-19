@@ -35,7 +35,7 @@ Text Domain: Site Search
 * 1. Added if-searchbar
 * 2. Added Admin Menu
 */
-function hello_sis_get_gestanzl()
+function hello_sis_get_gestanzl() // TODO cleanup, consider to remove this
 {
     /** These are the gestanzl to Hello Sis */
     $gestanzl = "Hello, SiS
@@ -65,7 +65,7 @@ function hello_sis()
 add_action('admin_notices', 'hello_sis');
 
 // We need some CSS to position the paragraph
-function sis_css()
+function sis_css() // TODO do we really need this? isn't this already handled by the global CSS rules? Consider removing this.
 {
     // This makes sure that the positioning is also good for right-to-left languages
     $x = is_rtl() ? 'left' : 'right';
