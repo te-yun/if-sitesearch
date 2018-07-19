@@ -28,14 +28,8 @@ Version: 1.0.0
 Author URI: https://intrafind.de/
 Text Domain: Site Search
 */
-/*
-* This plugin will print a random text from var gestanzl on admin-ui to status line on the topline
-* To install this plugin just upload over FTP to your plugins folder and install it from admin-ui -> plugins -> sitesearch -> activate = voila!
-* Now we starting to integrate our Site Search in this plugin ...
-* 1. Added if-searchbar
-* 2. Added Admin Menu
-*/
-function hello_sis_get_gestanzl() // TODO cleanup, consider to remove this
+
+function hello_sis_get_gestanzl()
 {
     /** These are the gestanzl to Hello Sis */
     $gestanzl = "Hello, SiS
@@ -65,7 +59,7 @@ function hello_sis()
 add_action('admin_notices', 'hello_sis');
 
 // We need some CSS to position the paragraph
-function sis_css() // TODO do we really need this? isn't this already handled by the global CSS rules? Consider removing this.
+function sis_css()
 {
     // This makes sure that the positioning is also good for right-to-left languages
     $x = is_rtl() ? 'left' : 'right';
@@ -88,7 +82,7 @@ add_action('admin_head', 'sis_css');
 // adding sis searchbar in this hook function
 function my_search_form($form)
 {
-    $form = '<div id="sitesearch-searchbar" class="searchbar">
+    $form = '<div id="sitesearch-searchbar" class="searchbar" style="display:none">
     <div id="ifs-searchbar" class="ifs-component ifs-sb"></div>
     <script src="https://cdn.sitesearch.cloud/searchbar/2018-07-18/app/js/app.js"></script>
     <script>
@@ -103,47 +97,31 @@ function my_search_form($form)
         });
     </script>
 </div>';
-    return $form;
+    echo $form;
+    // return $form;
 }
-
-// add filter with high priority
-// call filter in themes = get_search_form();
-add_filter('get_search_form', 'my_search_form', 100);
-// adding shortcode
-// use it in posts you want as text directly in an element (ie = body) injecting ('b' = is for to not duplicate anything in wordpress hooks) =  [wpbsearch] 
+add_filter('get_search_form', 'my_search_form');
 add_shortcode('wpbsearch', 'get_search_form');
-// adding sis admin menu in wordpress
+add_action('wp_footer', 'my_search_form');
+add_action('admin_footer', 'my_search_form');
 
+// adding sis admin menu in wordpress
 add_action('admin_menu', 'sis_admin_menu');
-// Arguments described below:
-// 1. Tab name
-// 2. Left side admin menu name
-// 3. permission to access level
-// 4. slug or url to admin page
-// 5. function call to integrate activity on the admin page
-// 6. icon url
-// 7. position, maybe not important
 function sis_admin_menu()
 {
     add_menu_page('Setup | Site Search', 'Site Search', 'manage_options', 'sis-admin-page.php', 'sis_admin_page', plugins_url('cropped-favicon.png', __FILE__));
 }
-
-// add_action( 'admin_init', 'sis_admin_menu' );
 
 function sis_admin_page()
 {
     include('sis-admin-page.php');
 }
 
-// include javascript = to activate uncomment below
+// include external javascript
 function no_dependencies_enqueue_scripts()
 {
-    if (!is_admin()) {
-
-        wp_register_script('script-handle', 'https://api.sitesearch.cloud/external/wordpress-plugin/searchbar-injection.js', false, '1.0.0', true);
-        wp_enqueue_script('script-handle');
-
-    }
+    wp_register_script('script-handle', 'https://api.sitesearch.cloud/external/wordpress-plugin/searchbar-injection.js', false, '1.0.0', true);
+    wp_enqueue_script('script-handle');
 }
 add_action('wp_enqueue_scripts', 'no_dependencies_enqueue_scripts');
 /**

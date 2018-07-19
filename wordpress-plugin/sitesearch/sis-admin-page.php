@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
@@ -22,19 +21,30 @@
  * else create and add data
  * 
  */
-$if_sis_url_for_crawling = $_POST['sis-url'];
-$if_sis_siteId = $_POST['sis-siteId'];
-$if_sis_siteSecret = $_POST['sis-siteSecret'];
-
-$if_sis_url_for_crawling = get_option("if_sis_url_for_crawling");
-$if_sis_siteId = get_option("if_sis_siteId");
-$if_sis_siteSecret = get_option("if_sis_siteSecret");
-
-if ($if_sis_url_for_crawling != "undefined" && $if_sis_url_for_crawling != "" && $if_sis_url_for_crawling != "null") {
-    $if_sis_url_for_crawling = get_option("if_sis_url_for_crawling");
-} else {
-    $if_sis_url_for_crawling = get_site_url();
+function getSiteUrl()
+{
+    if (get_option("if_sis_url_for_crawling")) {
+        $if_sis_url_for_crawling = get_option("if_sis_url_for_crawling");
+    } else {
+        $if_sis_url_for_crawling = get_site_url();
+    }
+    return $if_sis_url_for_crawling;
 }
+//     $if_sis_siteId = get_option("if_sis_siteId");
+//     $if_sis_siteSecret = get_option("if_sis_siteSecret");
+// } else {
+//     $if_sis_url_for_crawling = get_site_url();
+// }
+
+// if ($if_sis_url_for_crawling != "undefined" && $if_sis_url_for_crawling != "" && $if_sis_url_for_crawling != "null") {
+//     $if_sis_url_for_crawling = get_option("if_sis_url_for_crawling");
+// } else {
+//     $if_sis_url_for_crawling = get_site_url();
+// }
+
+// $if_sis_url_for_crawling = $_POST['sis-url'];
+// $if_sis_siteId = $_POST['sis-siteId'];
+// $if_sis_siteSecret = $_POST['sis-siteSecret'];
 
 // $if_sis_url_for_crawling = get_site_url();
 // actions
@@ -90,6 +100,7 @@ function updateSiS_Options_WP_DB()
     $if_sis_siteId = $_POST['sis-siteId'];
     $if_sis_siteSecret = $_POST['sis-siteSecret'];
     // update db with new values
+    update_option("if_sis_url_for_crawling", $if_sis_url_for_crawling);
     update_option("if_sis_siteId", $if_sis_siteId);
     update_option("if_sis_siteSecret", $if_sis_siteSecret);
     $if_sis_siteId = get_option("if_sis_siteId");
@@ -122,15 +133,26 @@ function deleteSiS_Options_WP_DB()
             width: 100%;
             clear: both;
         }
+        #for-testing {
+            width:500px;
+            background-color: red;
+            clear:both;          
+        }
+        #for-testing input {
+            width: 80%;
+            clear: both;
+            font-size: 2em;
+            font-color: green;
+        }
     </style>
     <form method="POST">
         <h1>Configuration</h1>
-        Website URL: <input type="text" id="sis-url" name="sis-url" value="<?php echo $if_sis_url_for_crawling; ?>">
+        Website URL: <input type="text" id="sis-url" name="sis-url" value="<?php echo getSiteUrl(); ?>">
         <br><br>
-        Site ID: <input type="text" id="sis-siteId" name="sis-siteId" value="<?php echo $if_sis_siteId; ?>">
+        Site ID: <input type="text" id="sis-siteId" name="sis-siteId" value="<?php echo $if_sis_siteId = get_option("if_sis_siteId"); ?>">
         <br><br>
         Site Secret: <input type="text" id="sis-siteSecret" name="sis-siteSecret"
-                            value="<?php echo $if_sis_siteSecret; ?>">
+                            value="<?php echo get_option("if_sis_siteSecret"); ?>">
         <br><br>
         <input type="submit"
             name="crawl" value="Add Site Search searchbar to your site &amp; crawl your site's content."
@@ -138,13 +160,17 @@ function deleteSiS_Options_WP_DB()
         <br>
         <p id="sis-status"></p>
         <br>
-        <input type="submit" name="createUpdate" value="Create DB Fields">  <!-- style="display:none" -->
-        <br>
-        <input type="submit" name="read" value="Read site credentials">
-        <br>
-        <input type="submit" name="update" value="Update site credentials">
-        <br>
-        <input type="submit" name="delete" value="Delete DB Fields">
+        <div id="for-testing">
+            <p>Those buttons below are only for Dev-Testing purpose! They will be later removed, 😉.</p>
+            <input type="submit" name="createUpdate" value="Create DB Fields">  <!-- style="display:none" -->
+            <br>
+            <input type="submit" name="read" value="Read site credentials">
+            <br>
+            <input type="submit" name="update" value="Update site credentials">
+            <br>
+            <input type="submit" name="delete" value="Delete DB Fields">
+            <br><br>
+        </div>
     </form>
     <div id="sitesearch-searchbar" class="searchbar">
         <div id="ifs-searchbar" class="ifs-component ifs-sb"></div>
