@@ -15,16 +15,21 @@
  * limitations under the License.
  */
 
-$if_sis_url_for_crawling = get_site_url();
-// actions
-if (isset($_POST['crawl'])) {
-    update_option("if_sis_url_for_crawling", $if_sis_url_for_crawling);
-    update_option("if_sis_siteId", $if_sis_siteId);
-    update_option("if_sis_siteSecret", $if_sis_siteSecret);
+$if_sis_url_for_crawling = $_POST['sis-url'];
+$if_sis_url_for_crawling = "";
+if ($if_sis_url_for_crawling !== "undefined" && $if_sis_url_for_crawling !== "" && $if_sis_url_for_crawling !== "null") {
+    $if_sis_url_for_crawling = get_option("if_sis_url_for_crawling");
+} else {
+    $if_sis_url_for_crawling = get_site_url();
 }
-if (isset($_POST['create'])) {
+
+// actions
+if (isset($_POST['createUpdate'])) {
     createSiS_Options_WP_DB();
 }
+// if (isset($_POST['create'])) {
+//     createSiS_Options_WP_DB();
+// }
 if (isset($_POST['read'])) {
     readSiS_Options_WP_DB();
 }
@@ -38,8 +43,10 @@ if (isset($_POST['delete'])) {
 // functions
 function createSiS_Options_WP_DB()
 {
-    $if_sis_siteId = "3bbf4db0-85ab-11e8-8c2f-3fec88e4efa0";
-    $if_sis_siteSecret = "4671e29a-85ab-11e8-9206-4b12904e274a";
+    //get data from form fields
+    $if_sis_url_for_crawling = $_POST['sis-url'];
+    $if_sis_siteId = $_POST['sis-siteId'];
+    $if_sis_siteSecret = $_POST['sis-siteSecret'];
     if (!get_option("if_sis_url_for_crawling")) {
         update_option("if_sis_url_for_crawling", $if_sis_url_for_crawling);
     }
@@ -49,6 +56,10 @@ function createSiS_Options_WP_DB()
     if (!get_option("if_sis_siteSecret")) {
         update_option("if_sis_siteSecret", $if_sis_siteSecret);
     }
+    $if_sis_url_for_crawling = get_option("if_sis_url_for_crawling");
+    $if_sis_siteId = get_option("if_sis_siteId");
+    $if_sis_siteSecret = get_option("if_sis_siteSecret");
+    echo "Aktuellen Werte:" . $if_sis_url_for_crawling . "<br>" . $if_sis_siteId . "<br>" . $if_sis_siteSecret;
 }
 
 function readSiS_Options_WP_DB()
@@ -61,8 +72,9 @@ function readSiS_Options_WP_DB()
 
 function updateSiS_Options_WP_DB()
 {
-    $if_sis_siteId = "my-site-id";
-    $if_sis_siteSecret = "my-site-secret";
+    $if_sis_url_for_crawling = $_POST['sis-url'];
+    $if_sis_siteId = $_POST['sis-siteId'];
+    $if_sis_siteSecret = $_POST['sis-siteSecret'];
     // update db with new values
     update_option("if_sis_siteId", $if_sis_siteId);
     update_option("if_sis_siteSecret", $if_sis_siteSecret);
@@ -97,6 +109,7 @@ function deleteSiS_Options_WP_DB()
             clear: both;
         }
     </style>
+
     <h1>Configuration</h1>
     Website URL: <input type="text" id="sis-url" name="sis-url" value="<?php echo $if_sis_url_for_crawling; ?>">
     <br><br>
@@ -110,12 +123,13 @@ function deleteSiS_Options_WP_DB()
            onclick="registerSiteInSiS();">
     <br><br>
     <p id="sis-status"></p>
-    <!--    <input type="submit" name="create" value="Create DB Fields and initialize ...">-->
-    <!--    <br><br>-->
-    <!--    <input type="submit" name="read" value="Read site credentials">-->
-    <!--    <input type="submit" name="update" value="Update site credentials">-->
-    <!--    <input type="submit" name="delete" value="Delete DB Fields">-->
 
+    <form method="post">
+        <input type="submit" name="createUpdate" value="Create DB Fields">  <!-- style="visibility:hidden" -->
+        <input type="submit" name="read" value="Read site credentials">
+        <input type="submit" name="update" value="Update site credentials">
+        <input type="submit" name="delete" value="Delete DB Fields">
+    </form>
 
     <div id="sitesearch-searchbar" class="searchbar">
         <div id="ifs-searchbar" class="ifs-component ifs-sb"></div>
