@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.time.Instant;
@@ -212,15 +211,12 @@ public class SiteController {
     }
 
     @RequestMapping(path = "{siteId}/autocomplete", method = RequestMethod.GET)
-//    ResponseEntity<Autocomplete> autocompleteSuggestion(
-//    Mono<ServerResponse> autocompleteSuggestion(
-    Mono<Autocomplete> autocompleteSuggestion(
+    ResponseEntity<Autocomplete> autocompleteSuggestion(
             @CookieValue(value = "override-site", required = false) UUID cookieSite,
             @RequestParam(value = "query", defaultValue = "") String query,
             @PathVariable(value = "siteId") UUID siteId
     ) {
         final var start = Instant.now();
-//        if (query.isEmpty()) return ServerResponse.badRequest().build();
 //        if (query.isEmpty()) return ResponseEntity.badRequest().build();
 
         // override siteId with cookie value for debugging & speed up the getting started experience
@@ -234,28 +230,20 @@ public class SiteController {
             final Instant stop = Instant.now();
             final Instant searchDuration = stop.minusMillis(start.toEpochMilli());
             LOG.info("siteId: " + siteId + " - query-fragment: " + query + " - autocompletes: " + autocomplete.getResults().size() + " - autocompleteDurationInMs: " + searchDuration.toEpochMilli());
-//            return ResponseEntity.ok(autocomplete);
-//            return ServerResponse.ok().syncBody(autocomplete);
-            return Mono.justOrEmpty(autocomplete);
+            return ResponseEntity.ok(autocomplete);
         } else {
-            return Mono.empty();
-//            return ServerResponse.notFound().build();
-//            return ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
     }
 
     @RequestMapping(path = "{siteId}/search", method = RequestMethod.GET)
-//    ResponseEntity<Hits> search(
-    Mono<Hits> search(
-//    Mono<ServerResponse> search(
+    ResponseEntity<Hits> search(
             @CookieValue(value = "override-site", required = false) UUID cookieSite,
             @RequestParam(value = "query", defaultValue = "") String query,
             @PathVariable(value = "siteId") UUID siteId
     ) {
         final var start = Instant.now();
 //        if (query.isEmpty()) return ResponseEntity.badRequest().build();
-//        if (query.isEmpty()) return ServerResponse.badRequest().build();
-//        if (query.isEmpty()) return ServerResponse.badRequest().build();
 
         // override siteId with cookie value for debugging & speed up the getting started experience
         if (cookieSite != null) {
@@ -266,7 +254,6 @@ public class SiteController {
         final var stop = Instant.now();
         final var searchDuration = stop.minusMillis(start.toEpochMilli());
         LOG.info("siteId: " + siteId + " - query: " + query + " - results: " + searchResult.getResults().size() + " - searchDurationInMs: " + searchDuration.toEpochMilli());
-//        return ServerResponse.ok().syncBody(searchResult);
-        return Mono.justOrEmpty(searchResult);
+        return ResponseEntity.ok(searchResult);
     }
 }
