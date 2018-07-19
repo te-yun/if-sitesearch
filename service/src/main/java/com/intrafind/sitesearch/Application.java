@@ -29,13 +29,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.crypto.Mac;
@@ -86,8 +80,8 @@ public class Application {
                 final var rawSubscription = response.body().bytes();
                 final var order = CrawlerController.MAPPER.readValue(rawSubscription, WooCommerceOrder.class);
 
-                final var subscriptionPlan = order.getLineItems().<WooCommerceOrder.LineItem>get(0).getSku();
-                final String siteId = order.getSiteId();
+                final var subscriptionPlan = order.getLineItems().get(0).getSku();
+                final var siteId = order.getSiteId();
                 LOG.info("siteId: " + siteId + " - subscriptionId: " + subscriptionId + " - subscriptionPlan: " + subscriptionPlan + " - affiliate: " + affiliate);
                 return ResponseEntity
                         .status(HttpStatus.OK)
@@ -191,8 +185,5 @@ public class Application {
 
     public static void main(final String... args) {
         SpringApplication.run(Application.class, args);
-//        final ConfigurableApplicationContext run = SpringApplication.run(Application.class, args);
-//        run.addApplicationListener((ApplicationListener<ContextClosedEvent>) event ->
-//                LOG.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Close Event triggered"));
     }
 }

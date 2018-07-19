@@ -17,7 +17,6 @@
 package com.intrafind.sitesearch.integration;
 
 import com.intrafind.sitesearch.controller.SearchController;
-import com.intrafind.sitesearch.dto.FoundPage;
 import com.intrafind.sitesearch.dto.Hits;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Collections;
@@ -45,13 +43,13 @@ public class SearchTest {
 
     @Test
     public void simpleSearchDeprecated() {
-        final ResponseEntity<Hits> searchResults = caller.getForEntity(SearchController.ENDPOINT + "?query=Knowledge&siteId=" + SEARCH_SITE_ID, Hits.class);
+        final var searchResults = caller.getForEntity(SearchController.ENDPOINT + "?query=Knowledge&siteId=" + SEARCH_SITE_ID, Hits.class);
 
         assertEquals(HttpStatus.OK, searchResults.getStatusCode());
         assertNotNull(searchResults.getBody());
         assertEquals("Knowledge", searchResults.getBody().getQuery());
         assertEquals(1, searchResults.getBody().getResults().size());
-        final FoundPage found = searchResults.getBody().getResults().get(0);
+        final var found = searchResults.getBody().getResults().get(0);
         assertEquals("Wie die Semantische Suche vom <span class=\"if-teaser-highlight\">Knowledge</span> Graph profitiert", found.getTitle());
         assertEquals("http:&#x2F;&#x2F;intrafind.de&#x2F;blog&#x2F;wie-die-semantische-suche-vom-<span class=\"if-teaser-highlight\">knowledge</span>-graph-profitiert", found.getUrl());
         assertEquals("http://intrafind.de/blog/wie-die-semantische-suche-vom-knowledge-graph-profitiert", found.getUrlRaw());
@@ -60,13 +58,13 @@ public class SearchTest {
 
     @Test
     public void simpleSearch() {
-        final ResponseEntity<Hits> searchResults = caller.getForEntity("/sites/" + SEARCH_SITE_ID + "/search?query=Knowledge", Hits.class);
+        final var searchResults = caller.getForEntity("/sites/" + SEARCH_SITE_ID + "/search?query=Knowledge", Hits.class);
 
         assertEquals(HttpStatus.OK, searchResults.getStatusCode());
         assertNotNull(searchResults.getBody());
         assertEquals("Knowledge", searchResults.getBody().getQuery());
         assertEquals(1, searchResults.getBody().getResults().size());
-        final FoundPage found = searchResults.getBody().getResults().get(0);
+        final var found = searchResults.getBody().getResults().get(0);
         assertEquals("Wie die Semantische Suche vom <span class=\"if-teaser-highlight\">Knowledge</span> Graph profitiert", found.getTitle());
         assertEquals("http:&#x2F;&#x2F;intrafind.de&#x2F;blog&#x2F;wie-die-semantische-suche-vom-<span class=\"if-teaser-highlight\">knowledge</span>-graph-profitiert", found.getUrl());
         assertEquals("http://intrafind.de/blog/wie-die-semantische-suche-vom-knowledge-graph-profitiert", found.getUrlRaw());
@@ -77,7 +75,7 @@ public class SearchTest {
 
     @Test
     public void simpleSearchNotFoundDeprecated() {
-        final ResponseEntity<Hits> actual = caller.getForEntity(SearchController.ENDPOINT + "?query=not_found&siteId=" + SEARCH_SITE_ID, Hits.class);
+        final var actual = caller.getForEntity(SearchController.ENDPOINT + "?query=not_found&siteId=" + SEARCH_SITE_ID, Hits.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertNotNull(actual.getBody());
@@ -87,7 +85,7 @@ public class SearchTest {
 
     @Test
     public void simpleSearchNotFound() {
-        final ResponseEntity<Hits> actual = caller.getForEntity("/sites/" + SEARCH_SITE_ID + "/search?query=not_found", Hits.class);
+        final var actual = caller.getForEntity("/sites/" + SEARCH_SITE_ID + "/search?query=not_found", Hits.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertNotNull(actual.getBody());
@@ -97,25 +95,25 @@ public class SearchTest {
 
     @Test
     public void searchWithoutSiteIdDeprecated() {
-        final ResponseEntity<Hits> actual = caller.getForEntity(SearchController.ENDPOINT + "?query=not_found", Hits.class);
+        final var actual = caller.getForEntity(SearchController.ENDPOINT + "?query=not_found", Hits.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
-//        assertNotNull(actual.getBody()); // TODO reenable once legacy hack for searchbar is removed
+        assertNotNull(actual.getBody());
     }
 
     @Test
     public void searchWithoutSiteId() {
-        final ResponseEntity<Hits> actual = caller.getForEntity("/sites/" + "/search?query=not_found", Hits.class);
+        final var actual = caller.getForEntity("/sites/" + "/search?query=not_found", Hits.class);
         assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
 
-        final ResponseEntity<Hits> response = caller.getForEntity("/sites" + "?query=not_found", Hits.class);
+        final var response = caller.getForEntity("/sites" + "?query=not_found", Hits.class);
         assertEquals(HttpStatus.METHOD_NOT_ALLOWED, response.getStatusCode());
-//        assertNotNull(actual.getBody()); // TODO reenable once legacy hack for searchbar is removed
+        assertNotNull(actual.getBody());
     }
 
     @Test
     public void searchWithInvalidSiteId() {
-        final ResponseEntity<Hits> actual = caller.getForEntity("/sites/invalid-siteId" + "/search?query=not_found", Hits.class);
+        final var actual = caller.getForEntity("/sites/invalid-siteId" + "/search?query=not_found", Hits.class);
         assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
     }
 }
