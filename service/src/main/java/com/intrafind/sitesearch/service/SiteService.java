@@ -22,15 +22,7 @@ import com.intrafind.api.index.Index;
 import com.intrafind.api.search.Hits;
 import com.intrafind.api.search.Search;
 import com.intrafind.sitesearch.BaseConfig;
-import com.intrafind.sitesearch.dto.CrawlStatus;
-import com.intrafind.sitesearch.dto.FetchedPage;
-import com.intrafind.sitesearch.dto.IndexCleanupResult;
-import com.intrafind.sitesearch.dto.SiteCreation;
-import com.intrafind.sitesearch.dto.SiteIndexSummary;
-import com.intrafind.sitesearch.dto.SitePage;
-import com.intrafind.sitesearch.dto.SiteProfile;
-import com.intrafind.sitesearch.dto.SiteProfileUpdate;
-import com.intrafind.sitesearch.dto.SitesCrawlStatus;
+import com.intrafind.sitesearch.dto.*;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
@@ -52,15 +44,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -93,7 +77,7 @@ public class SiteService {
 
     public Optional<FetchedPage> indexExistingPage(String id, UUID siteId, UUID siteSecret, SitePage page) {
         if (siteId != null && siteSecret != null) { // credentials are provided as a tuple only
-            final Optional<UUID> fetchedSiteSecret = fetchSiteSecret(siteId);
+            final var fetchedSiteSecret = fetchSiteSecret(siteId);
             if (!fetchedSiteSecret.isPresent()) { // site does not exist
                 return Optional.empty();
             } else if (siteSecret.equals(fetchedSiteSecret.get())) { // authorized
@@ -134,7 +118,7 @@ public class SiteService {
         if (ADMIN_SITE_SECRET.equals(siteSecret)) {
             return fetchSiteProfile(siteId);
         } else {
-            Optional<UUID> actualSiteSecret = fetchSiteSecret(siteId);
+            final var actualSiteSecret = fetchSiteSecret(siteId);
             if (actualSiteSecret.isPresent() && actualSiteSecret.get().equals(siteSecret)) {
                 return fetchSiteProfile(siteId);
             } else {
@@ -144,7 +128,7 @@ public class SiteService {
     }
 
     public Optional<SiteProfile> fetchSiteProfile(UUID siteId) {
-        final Optional<Document> siteProfile = indexService.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
+        final var siteProfile = indexService.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
         return siteProfile.map(document -> {
             final Set<URI> urls;
             if (document.getAll("urls") == null) {
@@ -160,9 +144,9 @@ public class SiteService {
                 email = document.get("email");
             }
 
-            final List<SiteProfile.Config> configs = new ArrayList<>();
+            final var configs = new ArrayList<SiteProfile.Config>();
             urls.forEach(configUrl -> {
-                final List<String> config = document.getAll(configUrl.toString());
+                final var config = document.getAll(configUrl.toString());
                 if (config != null && config.size() > 1) {
                     final boolean allowUrlWithQuery;
                     if (config.size() > 2) {
@@ -181,12 +165,12 @@ public class SiteService {
     }
 
     public Optional<UUID> fetchSiteSecret(UUID siteId) {
-        Optional<Document> siteConfiguration = indexService.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
+        final var siteConfiguration = indexService.fetch(Index.ALL, SITE_CONFIGURATION_DOCUMENT_PREFIX + siteId).stream().findAny();
         return siteConfiguration.map(document -> UUID.fromString(document.get("secret")));
     }
 
     public Optional<List<String>> fetchAllDocuments(final UUID siteId) {
-        final Hits documentWithSiteSecret = searchService.search(
+        final var documentWithSiteSecret = searchService.search(
                 Fields.TENANT + ":" + siteId.toString(),
                 Search.RETURN_FIELDS, Fields.TENANT,
                 Search.HITS_LIST_SIZE, 10_000
@@ -195,8 +179,6 @@ public class SiteService {
         if (documentWithSiteSecret.getDocuments().isEmpty()) {
             return Optional.empty();
         } else {
-//            List<String> documents = new ArrayList<>();
-//            documentWithSiteSecret.getDocuments().forEach(document -> documents.add(document.getId()));
             final List<String> documents = documentWithSiteSecret.getDocuments().stream()
                     .map(Document::getId).collect(Collectors.toList());
             return Optional.of(documents);

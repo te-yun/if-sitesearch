@@ -67,7 +67,7 @@ public class SiteController {
     ) {
         final var siteProfileFetch = siteService.fetchSiteProfile(siteId, siteSecret);
         if (siteProfileFetch.isPresent()) {
-            final SiteProfile siteProfile = siteProfileFetch.get();
+            final var siteProfile = siteProfileFetch.get();
             return ResponseEntity.ok(siteProfile);
         } else {
             return ResponseEntity.notFound().build();
@@ -82,7 +82,7 @@ public class SiteController {
     ) {
         final var siteProfileUpdated = siteService.updateSiteProfile(siteId, siteSecret, siteProfileUpdate);
         if (siteProfileUpdated.isPresent()) {
-            final SiteProfile siteProfile = siteProfileUpdated.get();
+            final var siteProfile = siteProfileUpdated.get();
             return ResponseEntity.ok(siteProfile);
         } else {
             return ResponseEntity.notFound().build();
@@ -226,9 +226,9 @@ public class SiteController {
 
         final var result = autocompleteService.autocomplete(query, siteId);
         if (result.isPresent()) {
-            final Autocomplete autocomplete = result.get();
-            final Instant stop = Instant.now();
-            final Instant searchDuration = stop.minusMillis(start.toEpochMilli());
+            final var autocomplete = result.get();
+            final var stop = Instant.now();
+            final var searchDuration = stop.minusMillis(start.toEpochMilli());
             LOG.info("siteId: " + siteId + " - query-fragment: " + query + " - autocompletes: " + autocomplete.getResults().size() + " - autocompleteDurationInMs: " + searchDuration.toEpochMilli());
             return ResponseEntity.ok(autocomplete);
         } else {

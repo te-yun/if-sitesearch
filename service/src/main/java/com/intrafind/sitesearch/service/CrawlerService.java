@@ -161,7 +161,7 @@ public class CrawlerService {
 
     private void walkSiteMap(final AbstractSiteMap abstractSiteMap, final List<URL> seedUrls) throws UnknownFormatException, IOException {
         if (abstractSiteMap.isIndex()) {
-            final Collection<AbstractSiteMap> siteMaps = ((SiteMapIndex) abstractSiteMap).getSitemaps();
+            final var siteMaps = ((SiteMapIndex) abstractSiteMap).getSitemaps();
             siteMaps.forEach(siteMapIndex -> {
                 try {
                     walkSiteMap(siteMapIndex, seedUrls);
@@ -170,9 +170,9 @@ public class CrawlerService {
                 }
             });
         } else {
-            final SiteMapParser siteMapParser = new SiteMapParser(false, true);
-            final SiteMap siteMap = (SiteMap) siteMapParser.parseSiteMap(abstractSiteMap.getUrl());
-            final Collection<SiteMapURL> siteMapUrls = siteMap.getSiteMapUrls();
+            final var siteMapParser = new SiteMapParser(false, true);
+            final var siteMap = (SiteMap) siteMapParser.parseSiteMap(abstractSiteMap.getUrl());
+            final var siteMapUrls = siteMap.getSiteMapUrls();
             siteMapUrls.forEach(siteMapUrl -> seedUrls.add(siteMapUrl.getUrl()));
 
         }
