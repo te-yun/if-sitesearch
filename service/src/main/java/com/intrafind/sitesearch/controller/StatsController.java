@@ -33,7 +33,6 @@ public class StatsController {
 
     //    http://www.baeldung.com/spring-webflux
     @RequestMapping(method = RequestMethod.GET)
-//    ResponseEntity<Stats> stats(
     Mono<Stats> stats(
             @RequestParam(value = "siteId", required = false) UUID siteId
     ) {
@@ -42,6 +41,5 @@ public class StatsController {
                 System.getenv("SCM_HASH"),
                 System.getenv("HOSTNAME"))
         );
-//        return ResponseEntity.ok(new Stats(System.getenv("BUILD_NUMBER"), System.getenv("SCM_HASH"), System.getenv("HOSTNAME")));
     }
 }

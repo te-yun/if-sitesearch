@@ -32,6 +32,8 @@ plugins {
 
 sourceCompatibility = JavaVersion.VERSION_1_10
 targetCompatibility = JavaVersion.VERSION_1_10
+//sourceCompatibility = JavaVersion.VERSION_1_11
+//targetCompatibility = JavaVersion.VERSION_1_11
 //sourceCompatibility = "11"
 //targetCompatibility = "11"
 
@@ -67,7 +69,8 @@ dependencies {
     testCompile "org.openjdk.jmh:jmh-core:1.21"
     testCompile "org.springframework.boot:spring-boot-starter-test:$spring_boot_version"
 
-    testRuntimeOnly "org.springframework.boot:spring-boot-devtools:$spring_boot_version"
+//    testRuntimeOnly "org.springframework.boot:spring-boot-devtools:$spring_boot_version"
+    runtimeOnly "org.springframework.boot:spring-boot-devtools:$spring_boot_version"
 
     compile "com.squareup.okhttp3:okhttp:3.11.0"
 
@@ -82,11 +85,11 @@ dependencies {
     compile "org.elasticsearch.client:elasticsearch-rest-client:6.3.1"
 }
 
-//test {
-//    testLogging {
-//        exceptionFormat = "full"
-//    }
-//}
+test {
+    testLogging {
+        exceptionFormat = "full"
+    }
+}
 
 jmhReport {
     jmhResultPath = project.file("$buildDir/jmh-result.json")

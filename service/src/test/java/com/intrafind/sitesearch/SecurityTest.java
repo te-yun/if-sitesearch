@@ -27,8 +27,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -47,6 +47,8 @@ public class SecurityTest {
 
     @Autowired
     private TestRestTemplate caller;
+
+    private WebTestClient webTestClient = WebTestClient.bindToServer().build();
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -82,7 +84,7 @@ public class SecurityTest {
 
     @Test
     public void assureSiteSearchServiceBasicAuthProtectionForJsonPost() {
-        final ResponseEntity<String> secureEndpointJson = caller.postForEntity(URI.create(SmokeTest.INVALID_CREDENTIALS + SmokeTest.SEARCH_SERVICE_DOMAIN + "json/index?method=index"), HttpEntity.EMPTY, String.class);
+        final var secureEndpointJson = caller.postForEntity(URI.create(SmokeTest.INVALID_CREDENTIALS + SmokeTest.SEARCH_SERVICE_DOMAIN + "json/index?method=index"), HttpEntity.EMPTY, String.class);
         assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJson.getStatusCode());
     }
 

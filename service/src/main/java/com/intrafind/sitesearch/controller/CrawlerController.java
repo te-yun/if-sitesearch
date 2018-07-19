@@ -29,12 +29,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.GmailScopes;
-import com.google.api.services.gmail.model.Message;
-import com.intrafind.sitesearch.dto.CaptchaVerification;
-import com.intrafind.sitesearch.dto.CrawlStatus;
-import com.intrafind.sitesearch.dto.CrawlerJobResult;
-import com.intrafind.sitesearch.dto.SiteProfile;
-import com.intrafind.sitesearch.dto.SitesCrawlStatus;
+import com.intrafind.sitesearch.dto.*;
 import com.intrafind.sitesearch.service.CrawlerService;
 import com.intrafind.sitesearch.service.SiteCrawler;
 import com.intrafind.sitesearch.service.SiteService;
@@ -45,30 +40,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URI;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.intrafind.sitesearch.service.SiteCrawler.JSON_MEDIA_TYPE;
@@ -162,7 +143,7 @@ public class CrawlerController {
         final var service = initGmailService();
         LOG.debug("servicePath: " + service.getServicePath());
 
-        final Message message = sendMessage(service, "me",
+        final var message = sendMessage(service, "me",
                 createEmail(
                         email,
                         "Evaluation Information - Site Search",
@@ -202,15 +183,15 @@ public class CrawlerController {
             sitesCrawlStatusUpdate.getSites().stream()
                     .filter(crawlStatus -> Instant.parse(crawlStatus.getCrawled()).isBefore(halfDayAgo) || allSiteCrawl)
                     .forEach(crawlStatus -> {
-                        final Optional<UUID> fetchedSiteSecret = siteService.fetchSiteSecret(crawlStatus.getSiteId());
+                        final var fetchedSiteSecret = siteService.fetchSiteSecret(crawlStatus.getSiteId());
                         fetchedSiteSecret.ifPresent(uuid -> {
-                            final UUID siteSecret = uuid;
-                            final Optional<SiteProfile> siteProfile = siteService.fetchSiteProfile(crawlStatus.getSiteId());
+                            final var siteSecret = uuid;
+                            final var siteProfile = siteService.fetchSiteProfile(crawlStatus.getSiteId());
                             siteProfile.ifPresent(profile -> {
                                 if (clearIndex && !siteService.clearIndex(profile.getId(), profile.getSecret())) {
                                     return;
                                 }
-                                final AtomicLong pageCount = new AtomicLong();
+                                final var pageCount = new AtomicLong();
                                 profile.getConfigs().forEach(configBundle ->
                                         profile.getConfigs().stream().filter(config -> config.getUrl().equals(configBundle.getUrl())).findAny().ifPresent(config -> {
                                             final CrawlerJobResult crawlerJobResult = crawlerService.crawl(
@@ -222,7 +203,7 @@ public class CrawlerController {
                                                     configBundle.getPageBodyCssSelector(),
                                                     config.isAllowUrlWithQuery());
                                             pageCount.addAndGet(crawlerJobResult.getPageCount());
-                                            final Optional<SitesCrawlStatus> sitesCrawlStatus = siteService.updateCrawlStatusInShedule(crawlStatus.getSiteId(), pageCount.get());// TODO fix PATCH update instead of a regular PUT
+                                            final var sitesCrawlStatus = siteService.updateCrawlStatusInShedule(crawlStatus.getSiteId(), pageCount.get());// TODO fix PATCH update instead of a regular PUT
                                             sitesCrawlStatus.ifPresent(element -> sitesCrawlStatusOverall.getSites().addAll(element.getSites()));
                                             siteService.removeOldSiteIndexPages(crawlStatus.getSiteId());
                                             LOG.info("siteId: " + crawlStatus.getSiteId() + " - siteUrl: " + configBundle.getUrl().toString() + " - pageCount: " + crawlerJobResult.getPageCount()); // TODO add pattern to logstash
