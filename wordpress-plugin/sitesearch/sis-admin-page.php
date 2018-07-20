@@ -15,12 +15,6 @@
  * limitations under the License.
  */
 
-/**
- * 
- * if db-field exist, not null, not empty and not undefined -> get data
- * else create and add data
- * 
- */
 function getSiteUrl()
 {
     if (get_option("if_sis_url_for_crawling")) {
@@ -30,30 +24,12 @@ function getSiteUrl()
     }
     return $if_sis_url_for_crawling;
 }
-//     $if_sis_siteId = get_option("if_sis_siteId");
-//     $if_sis_siteSecret = get_option("if_sis_siteSecret");
-// } else {
-//     $if_sis_url_for_crawling = get_site_url();
-// }
 
-// if ($if_sis_url_for_crawling != "undefined" && $if_sis_url_for_crawling != "" && $if_sis_url_for_crawling != "null") {
-//     $if_sis_url_for_crawling = get_option("if_sis_url_for_crawling");
-// } else {
-//     $if_sis_url_for_crawling = get_site_url();
-// }
-
-// $if_sis_url_for_crawling = $_POST['sis-url'];
-// $if_sis_siteId = $_POST['sis-siteId'];
-// $if_sis_siteSecret = $_POST['sis-siteSecret'];
-
-// $if_sis_url_for_crawling = get_site_url();
 // actions
 if (isset($_POST['createUpdate'])) {
     createSiS_Options_WP_DB();
 }
-// if (isset($_POST['create'])) {
-//     createSiS_Options_WP_DB();
-// }
+
 if (isset($_POST['read'])) {
     readSiS_Options_WP_DB();
 }
@@ -153,12 +129,7 @@ function deleteSiS_Options_WP_DB()
         <br><br>
         Site Secret: <input type="text" id="sis-siteSecret" name="sis-siteSecret"
                             value="<?php echo get_option("if_sis_siteSecret"); ?>">
-        <br><br>
-        <input type="submit"
-            name="crawl" value="Add Site Search searchbar to your site &amp; crawl your site's content."
-            onclick="registerSiteInSiS();">
-        <br>
-        <p id="sis-status"></p>
+        <br><br>        
         <br>
         <div id="for-testing">
             <p>Those buttons below are only for Dev-Testing purpose! They will be later removed, 😉.</p>
@@ -172,6 +143,15 @@ function deleteSiS_Options_WP_DB()
             <br><br>
         </div>
     </form>
+    <div id="triggerCrawler">
+        <input type="submit"
+            name="crawl" value="Add Site Search searchbar to your site &amp; crawl your site's content."
+            onclick="registerSiteInSiS();">
+        <br>
+        <p id="sis-status"></p>
+        <div id="searchbar"></div>
+        <br><br>
+    </div>
     <div id="sitesearch-searchbar" class="searchbar">
         <div id="ifs-searchbar" class="ifs-component ifs-sb"></div>
         <script src="https://cdn.sitesearch.cloud/searchbar/2018-07-18/app/js/app.js"></script>

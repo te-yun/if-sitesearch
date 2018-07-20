@@ -29,74 +29,24 @@ Author URI: https://intrafind.de/
 Text Domain: Site Search
 */
 
-function hello_sis_get_gestanzl()
-{
-    /** These are the gestanzl to Hello Sis */
-    $gestanzl = "Hello, SiS
-                Search as a Service
-                Secure Search
-                Responsive Search
-                Simple to install
-                Search in realtime
-                High performance
-                Flexible pricing";
-
-    // Here we split it into lines
-    $gestanzl = explode("\n", $gestanzl);
-
-    // And then randomly choose a line
-    return wptexturize($gestanzl[mt_rand(0, count($gestanzl) - 1)]);
-}
-
-// This just echoes the chosen line, we'll position it later
-function hello_sis()
-{
-    $chosen = hello_sis_get_gestanzl();
-    echo "<p id='text'>$chosen</p>";
-}
-
-// Now we set that function up to execute when the admin_notices action is called
-add_action('admin_notices', 'hello_sis');
-
-// We need some CSS to position the paragraph
-function sis_css()
-{
-    // This makes sure that the positioning is also good for right-to-left languages
-    $x = is_rtl() ? 'left' : 'right';
-
-    echo "
-	<style type='text/css'>
-	#text {
-		float: $x;
-		padding-$x: 15px;
-		padding-top: 5px;
-		margin: 0;
-		font-size: 11px;
-	}
-	</style>
-	";
-}
-
-add_action('admin_head', 'sis_css');
-
-// adding sis searchbar in this hook function
+// add sis searchbar in this hook function
 function my_search_form($form)
 {
-    $form = '<div id="sitesearch-searchbar" class="searchbar" style="display:none">
+    $form = '<div id="sitesearch-searchbar" class="searchbar">
     <div id="ifs-searchbar" class="ifs-component ifs-sb"></div>
-    <script src="https://cdn.sitesearch.cloud/searchbar/2018-07-18/app/js/app.js"></script>
-    <script>
-        IFS.initClient({
-            customConfig: {
-                overwrite: {
-                    "appLang": "en"
-                }
-            },
-            configurl: "https://cdn.sitesearch.cloud/searchbar/2018-07-18/config/sitesearch.json",
-            siteId: "3a5dfd07-a463-45f8-863b-dfc3c9f09152"
-        });
-    </script>
-</div>';
+        <script src="https://cdn.sitesearch.cloud/searchbar/2018-07-18/app/js/app.js"></script>
+        <script>
+            IFS.initClient({
+                customConfig: {
+                    overwrite: {
+                        "appLang": "en"
+                    }
+                },
+                configurl: "https://cdn.sitesearch.cloud/searchbar/2018-07-18/config/sitesearch.json",
+                siteId: "3a5dfd07-a463-45f8-863b-dfc3c9f09152"
+            });
+        </script>
+    </div>';
     echo $form;
     // return $form;
 }
@@ -105,7 +55,7 @@ add_shortcode('wpbsearch', 'get_search_form');
 add_action('wp_footer', 'my_search_form');
 add_action('admin_footer', 'my_search_form');
 
-// adding sis admin menu in wordpress
+// add sis admin menu in wordpress
 add_action('admin_menu', 'sis_admin_menu');
 function sis_admin_menu()
 {
@@ -124,6 +74,3 @@ function no_dependencies_enqueue_scripts()
     wp_enqueue_script('script-handle');
 }
 add_action('wp_enqueue_scripts', 'no_dependencies_enqueue_scripts');
-/**
- * EOF
- */
