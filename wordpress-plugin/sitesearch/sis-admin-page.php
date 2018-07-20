@@ -37,9 +37,9 @@ if (isset($_POST['createUpdate'])) {
     CreateSiS_Options_WP_DB();
 }
 
-// if (isset($_POST['delete'])) {
-//     deleteSiS_Options_WP_DB();
-// }
+if (isset($_POST['delete'])) {
+    deleteSiS_Options_WP_DB();
+}
 
 /**
  * Create & update database settings fields
@@ -75,12 +75,12 @@ function CreateSiS_Options_WP_DB()
     // echo "Aktuellen Werte: <br>" . $if_sis_url_for_crawling . "<br>" . $if_sis_siteId . "<br>" . $if_sis_siteSecret;
 }
 
-// function deleteSiS_Options_WP_DB()
-// {
-//     delete_option("if_sis_url_for_crawling");
-//     delete_option("if_sis_siteId");
-//     delete_option("if_sis_siteSecret");
-// }
+function deleteSiS_Options_WP_DB()
+{
+    delete_option("if_sis_url_for_crawling");
+    delete_option("if_sis_siteId");
+    delete_option("if_sis_siteSecret");
+}
 ?>
 
 <script src="https://api.sitesearch.cloud/external/wordpress-plugin/admin-client.js"></script>
@@ -106,7 +106,9 @@ function CreateSiS_Options_WP_DB()
         Site Secret: <input type="text" id="sis-siteSecret" name="sis-siteSecret"
                             value="<?php echo get_option("if_sis_siteSecret"); ?>">
         <br><br>
-        <input type="submit" name="createUpdate" value="Save Site Search Setup">   
+        <input type="submit" name="createUpdate" value="Save Site Search Setup">
+        <br>
+        <input type="submit" name="delete" value="Reset Site Search Setup">
         <br>
     </form>
     <div id="triggerCrawler">

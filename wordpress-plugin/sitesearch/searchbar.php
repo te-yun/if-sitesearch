@@ -39,8 +39,14 @@ function If_Sis_searchbar($form)
             });
         </script>
     </div>';
-    echo $form;
-    // return $form;
+
+    if (!get_option("if_sis_siteId")) { 
+        echo $form;
+    } else {
+        $if_sis_siteId = get_option("if_sis_siteId");
+        $form = str_replace("3a5dfd07-a463-45f8-863b-dfc3c9f09152", $if_sis_siteId, $form);
+        echo $form;
+    }
 }
 add_filter('get_search_form', 'If_Sis_searchbar');
 add_shortcode('wpbsearch', 'get_search_form');
