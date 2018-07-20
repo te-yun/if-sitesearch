@@ -63,7 +63,7 @@ function Sis_Admin_page()
  */
 function No_Dependencies_Enqueue_scripts()
 {
-    wp_register_script('script-handle', 'https://api.sitesearch.cloud/external/wordpress-plugin/searchbar-injection.js', false, '1.0.0', true);
+    wp_register_script('script-handle', plugin_dir_url(__FILE__) . 'searchbar-integration.js', false, '1.0.0', true);
     wp_enqueue_script('script-handle');
 }
 add_action('wp_enqueue_scripts', 'No_Dependencies_Enqueue_scripts');
