@@ -49,12 +49,20 @@ function createSiS_Options_WP_DB()
     $if_sis_siteSecret = $_POST['sis-siteSecret'];
     if (!get_option("if_sis_url_for_crawling")) {
         update_option("if_sis_url_for_crawling", $if_sis_url_for_crawling);
+    } else {
+        update_option("if_sis_url_for_crawling", $if_sis_url_for_crawling);
     }
     if (!get_option("if_sis_siteId")) {
         update_option("if_sis_siteId", $if_sis_siteId);
+    } else {
+        update_option("if_sis_siteId", $if_sis_siteId);
+
     }
     if (!get_option("if_sis_siteSecret")) {
         update_option("if_sis_siteSecret", $if_sis_siteSecret);
+    } else {
+        update_option("if_sis_siteSecret", $if_sis_siteSecret);
+
     }
     $if_sis_url_for_crawling = get_option("if_sis_url_for_crawling");
     $if_sis_siteId = get_option("if_sis_siteId");
@@ -134,7 +142,7 @@ function deleteSiS_Options_WP_DB()
         <br>
         <div id="for-testing">
             <p>Those buttons below are only for Dev-Testing purpose! They will be later removed, 😉.</p>
-            <input type="submit" name="createUpdate" value="Create DB Fields">  <!-- style="display:none" -->
+            <!-- <input type="submit" name="createUpdate" value="Create DB Fields">  style="display:none" -->
             <br>
             <input type="submit" name="read" value="Read site credentials">
             <br>
