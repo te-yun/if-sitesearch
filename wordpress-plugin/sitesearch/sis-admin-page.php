@@ -103,9 +103,6 @@ function deleteSiS_Options_WP_DB()
 
 <script src="https://api.sitesearch.cloud/external/wordpress-plugin/admin-client.js"></script>
 
-<!-- TODO load this script everywhere the default WordPress searchbar is loaded -->
-<!--<script src="https://api.sitesearch.cloud/external/wordpress-plugin/searchbar-injection.js"></script>-->
-
 <div class="form-wrapper">
     <style>
         .form-wrapper {
@@ -117,7 +114,7 @@ function deleteSiS_Options_WP_DB()
             width: 100%;
             clear: both;
         }
-        #for-testing {
+        /* #for-testing {
             width:500px;
             background-color: red;
             clear:both;          
@@ -127,7 +124,7 @@ function deleteSiS_Options_WP_DB()
             clear: both;
             font-size: 2em;
             font-color: green;
-        }
+        } */
     </style>
     <form method="POST">
         <h1>Configuration</h1>
@@ -140,9 +137,8 @@ function deleteSiS_Options_WP_DB()
         <br><br>
         <input type="submit" name="createUpdate" value="Save Site Search Setup">   
         <br>
-        <div id="for-testing">
+        <!-- <div id="for-testing">
             <p>Those buttons below are only for Dev-Testing purpose! They will be later removed, 😉.</p>
-            <!-- <input type="submit" name="createUpdate" value="Create DB Fields">  style="display:none" -->
             <br>
             <input type="submit" name="read" value="Read site credentials">
             <br>
@@ -150,7 +146,7 @@ function deleteSiS_Options_WP_DB()
             <br>
             <input type="submit" name="delete" value="Delete DB Fields">
             <br><br>
-        </div>
+        </div> -->
     </form>
     <div id="triggerCrawler">
         <br>
