@@ -129,7 +129,8 @@ function deleteSiS_Options_WP_DB()
         <br><br>
         Site Secret: <input type="text" id="sis-siteSecret" name="sis-siteSecret"
                             value="<?php echo get_option("if_sis_siteSecret"); ?>">
-        <br><br>        
+        <br><br>
+        <input type="submit" name="createUpdate" value="Save Site Search Setup">   
         <br>
         <div id="for-testing">
             <p>Those buttons below are only for Dev-Testing purpose! They will be later removed, 😉.</p>
@@ -144,6 +145,7 @@ function deleteSiS_Options_WP_DB()
         </div>
     </form>
     <div id="triggerCrawler">
+        <br>
         <input type="submit"
             name="crawl" value="Add Site Search searchbar to your site &amp; crawl your site's content."
             onclick="registerSiteInSiS();">
