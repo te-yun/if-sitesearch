@@ -16,9 +16,12 @@
  */
 
 /**
+ * Package for if-sis
+ * 
  * @package sitesearch
  * @version 1.0.0
  */
+
 /*
 Plugin Name: Site Search
 Plugin URI: https://sitesearch.cloud
@@ -29,48 +32,38 @@ Author URI: https://intrafind.de/
 Text Domain: Site Search
 */
 
-// add sis searchbar in this hook function
-function my_search_form($form)
-{
-    $form = '<div id="sitesearch-searchbar" class="searchbar">
-    <div id="ifs-searchbar" class="ifs-component ifs-sb"></div>
-        <script src="https://cdn.sitesearch.cloud/searchbar/2018-07-18/app/js/app.js"></script>
-        <script>
-            IFS.initClient({
-                customConfig: {
-                    overwrite: {
-                        "appLang": "en"
-                    }
-                },
-                configurl: "https://cdn.sitesearch.cloud/searchbar/2018-07-18/config/sitesearch.json",
-                siteId: "3a5dfd07-a463-45f8-863b-dfc3c9f09152"
-            });
-        </script>
-    </div>';
-    echo $form;
-    // return $form;
-}
-add_filter('get_search_form', 'my_search_form');
-add_shortcode('wpbsearch', 'get_search_form');
-add_action('wp_footer', 'my_search_form');
-add_action('admin_footer', 'my_search_form');
+require_once 'searchbar.php';
 
 // add sis admin menu in wordpress
-add_action('admin_menu', 'sis_admin_menu');
-function sis_admin_menu()
+add_action('admin_menu', 'Sis_Admin_menu');
+/**
+ * Create if-sis-admin-menu
+ * 
+ * @return sis-admin-menu
+ */
+function Sis_Admin_menu()
 {
-    add_menu_page('Setup | Site Search', 'Site Search', 'manage_options', 'sis-admin-page.php', 'sis_admin_page', plugins_url('cropped-favicon.png', __FILE__));
+    add_menu_page('Setup | Site Search', 'Site Search', 'manage_options', 'sis-admin-page.php', 'Sis_Admin_page', plugins_url('cropped-favicon.png', __FILE__));
 }
 
-function sis_admin_page()
+/**
+ * Include sis-admin-page
+ * 
+ * @return sis-admin-page
+ */
+function Sis_Admin_page()
 {
-    include('sis-admin-page.php');
+    include_once 'sis-admin-page.php';
 }
 
-// include external javascript
-function no_dependencies_enqueue_scripts()
+/**
+ * Add external javascript for all pages
+ * 
+ * @return external-js-calls
+ */
+function No_Dependencies_Enqueue_scripts()
 {
     wp_register_script('script-handle', 'https://api.sitesearch.cloud/external/wordpress-plugin/searchbar-injection.js', false, '1.0.0', true);
     wp_enqueue_script('script-handle');
 }
-add_action('wp_enqueue_scripts', 'no_dependencies_enqueue_scripts');
+add_action('wp_enqueue_scripts', 'No_Dependencies_Enqueue_scripts');

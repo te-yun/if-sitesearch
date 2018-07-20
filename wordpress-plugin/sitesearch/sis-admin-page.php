@@ -15,6 +15,13 @@
  * limitations under the License.
  */
 
+require_once 'searchbar.php';
+
+/**
+ * Get site url
+ * 
+ * @return site url
+ */
 function getSiteUrl()
 {
     if (get_option("if_sis_url_for_crawling")) {
@@ -27,21 +34,19 @@ function getSiteUrl()
 
 // actions
 if (isset($_POST['createUpdate'])) {
-    createSiS_Options_WP_DB();
+    CreateSiS_Options_WP_DB();
 }
 
-if (isset($_POST['read'])) {
-    readSiS_Options_WP_DB();
-}
-if (isset($_POST['update'])) {
-    updateSiS_Options_WP_DB();
-}
-if (isset($_POST['delete'])) {
-    deleteSiS_Options_WP_DB();
-}
+// if (isset($_POST['delete'])) {
+//     deleteSiS_Options_WP_DB();
+// }
 
-// functions
-function createSiS_Options_WP_DB()
+/**
+ * Create & update database settings fields
+ * 
+ * @return sis-url, sis-siteId and sis-siteSecret
+ */
+function CreateSiS_Options_WP_DB()
 {
     //get data from form fields
     $if_sis_url_for_crawling = $_POST['sis-url'];
@@ -64,41 +69,18 @@ function createSiS_Options_WP_DB()
         update_option("if_sis_siteSecret", $if_sis_siteSecret);
 
     }
-    $if_sis_url_for_crawling = get_option("if_sis_url_for_crawling");
-    $if_sis_siteId = get_option("if_sis_siteId");
-    $if_sis_siteSecret = get_option("if_sis_siteSecret");
-    echo "Aktuellen Werte:" . $if_sis_url_for_crawling . "<br>" . $if_sis_siteId . "<br>" . $if_sis_siteSecret;
+    // $if_sis_url_for_crawling = get_option("if_sis_url_for_crawling");
+    // $if_sis_siteId = get_option("if_sis_siteId");
+    // $if_sis_siteSecret = get_option("if_sis_siteSecret");
+    // echo "Aktuellen Werte: <br>" . $if_sis_url_for_crawling . "<br>" . $if_sis_siteId . "<br>" . $if_sis_siteSecret;
 }
 
-function readSiS_Options_WP_DB()
-{
-    $if_sis_url_for_crawling = get_option("if_sis_url_for_crawling");
-    $if_sis_siteId = get_option("if_sis_siteId");
-    $if_sis_siteSecret = get_option("if_sis_siteSecret");
-    echo "Aktuellen Werte:" . $if_sis_url_for_crawling . "<br>" . $if_sis_siteId . "<br>" . $if_sis_siteSecret;
-}
-
-function updateSiS_Options_WP_DB()
-{
-    $if_sis_url_for_crawling = $_POST['sis-url'];
-    $if_sis_siteId = $_POST['sis-siteId'];
-    $if_sis_siteSecret = $_POST['sis-siteSecret'];
-    // update db with new values
-    update_option("if_sis_url_for_crawling", $if_sis_url_for_crawling);
-    update_option("if_sis_siteId", $if_sis_siteId);
-    update_option("if_sis_siteSecret", $if_sis_siteSecret);
-    $if_sis_siteId = get_option("if_sis_siteId");
-    $if_sis_siteSecret = get_option("if_sis_siteSecret");
-    echo "Neue Werte:" . $if_sis_url_for_crawling . "<br>" . $if_sis_siteId . "<br>" . $if_sis_siteSecret;
-}
-
-function deleteSiS_Options_WP_DB()
-{
-    delete_option("if_sis_url_for_crawling");
-    delete_option("if_sis_siteId");
-    delete_option("if_sis_siteSecret");
-}
-
+// function deleteSiS_Options_WP_DB()
+// {
+//     delete_option("if_sis_url_for_crawling");
+//     delete_option("if_sis_siteId");
+//     delete_option("if_sis_siteSecret");
+// }
 ?>
 
 <script src="https://api.sitesearch.cloud/external/wordpress-plugin/admin-client.js"></script>
@@ -114,17 +96,6 @@ function deleteSiS_Options_WP_DB()
             width: 100%;
             clear: both;
         }
-        /* #for-testing {
-            width:500px;
-            background-color: red;
-            clear:both;          
-        }
-        #for-testing input {
-            width: 80%;
-            clear: both;
-            font-size: 2em;
-            font-color: green;
-        } */
     </style>
     <form method="POST">
         <h1>Configuration</h1>
@@ -137,16 +108,6 @@ function deleteSiS_Options_WP_DB()
         <br><br>
         <input type="submit" name="createUpdate" value="Save Site Search Setup">   
         <br>
-        <!-- <div id="for-testing">
-            <p>Those buttons below are only for Dev-Testing purpose! They will be later removed, 😉.</p>
-            <br>
-            <input type="submit" name="read" value="Read site credentials">
-            <br>
-            <input type="submit" name="update" value="Update site credentials">
-            <br>
-            <input type="submit" name="delete" value="Delete DB Fields">
-            <br><br>
-        </div> -->
     </form>
     <div id="triggerCrawler">
         <br>
@@ -154,23 +115,8 @@ function deleteSiS_Options_WP_DB()
             name="crawl" value="Add Site Search searchbar to your site &amp; crawl your site's content."
             onclick="registerSiteInSiS();">
         <br>
-        <p id="sis-status"></p>
-        <div id="searchbar"></div>
+        <p id="sis-status"></p>        
         <br><br>
     </div>
-    <div id="sitesearch-searchbar" class="searchbar">
-        <div id="ifs-searchbar" class="ifs-component ifs-sb"></div>
-        <script src="https://cdn.sitesearch.cloud/searchbar/2018-07-18/app/js/app.js"></script>
-        <script>
-            IFS.initClient({
-                customConfig: {
-                    overwrite: {
-                        "appLang": "en"
-                    }
-                },
-                configurl: "https://cdn.sitesearch.cloud/searchbar/2018-07-18/config/sitesearch.json",
-                siteId: "3a5dfd07-a463-45f8-863b-dfc3c9f09152"
-            });
-        </script>
-    </div>
+    <div id="searchbar"><?php echo If_Sis_searchbar($form);?></div>
 </div>
