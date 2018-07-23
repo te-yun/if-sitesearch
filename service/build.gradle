@@ -57,7 +57,8 @@ dependencies {
 
     compile "com.rometools:rome:1.11.0"
 
-    compile "com.caucho:hessian:4.0.51"
+//    compile "com.caucho:hessian:4.0.51"
+    compile "com.alipay.sofa:hessian:3.3.2"
 
     compile "org.springframework.boot:spring-boot-starter-webflux:$spring_boot_version"
     compile "org.springframework.boot:spring-boot-starter-undertow:$spring_boot_version"

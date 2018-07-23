@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.alipay.sofa:hessian:3.3.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.alipay.sofa/hessian/3.3.2/7eb76dad66a98fa4eae3831777523566fbe6c2c/hessian-3.3.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.alipay.sofa/hessian/3.3.2/ddbe403f741da84900de139075b7a262711ace24/hessian-3.3.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
