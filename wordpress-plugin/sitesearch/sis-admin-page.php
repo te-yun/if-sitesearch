@@ -120,5 +120,11 @@ function deleteSiS_Options_WP_DB()
         <p id="sis-status"></p>        
         <br><br>
     </div>
-    <div id="searchbar"><?php echo If_Sis_searchbar($form);?></div>
+    <div id="sisSelector">
+        <form action="REQUEST">
+            CSS Selector, where should be Site Search - Searchbar injected:
+            <input type="text" id="sis-cssSelector" value="">
+        </form>
+    </div>
+    <div id="searchbar"><?php echo If_Sis_searchbar($new_form);?></div>
 </div>

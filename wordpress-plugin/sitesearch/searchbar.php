@@ -22,6 +22,8 @@
  * 
  * @return form
  */
+remove_all_filters('get_search_form');
+add_filter('get_search_form', 'If_Sis_searchbar');
 function If_Sis_searchbar($form)
 {
     $form = '<div id="sitesearch-searchbar" class="searchbar">
@@ -47,8 +49,9 @@ function If_Sis_searchbar($form)
         $form = str_replace("3a5dfd07-a463-45f8-863b-dfc3c9f09152", $if_sis_siteId, $form);
         echo $form;
     }
+    $form = $form;    
 }
-add_filter('get_search_form', 'If_Sis_searchbar');
-add_shortcode('wpbsearch', 'get_search_form');
-add_action('wp_footer', 'If_Sis_searchbar');
-add_action('admin_footer', 'If_Sis_searchbar');
+// add_filter('get_search_form', 'If_Sis_searchbar', 1);
+// add_shortcode('wpbsearch', 'get_search_form');
+// add_action('wp_footer', 'If_Sis_searchbar');
+// add_action('admin_footer', 'If_Sis_searchbar');

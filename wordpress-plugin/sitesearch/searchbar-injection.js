@@ -14,55 +14,12 @@
  * limitations under the License.
  */
 
-// should be loaded after DOMContentLoaded or in the head but then a DOMContentLoaded listener is required
-// TODO address different DOM structure in mobile view
 var injectSearchbar = function () {
-    console.warn("injectSearchbar");
-
-    var hiddenSiteSearchSearchbar = document.querySelector("#searchform");
-    var defaultSearchbar = document.querySelector("#mk-header-1 > div.mk-header-holder > div.mk-header-inner.add-header-height > div.mk-grid.header-grid > div.mk-header-nav-container.one-row-style.menu-hover-style-5 > div.main-nav-side-search");
+    
+    var defaultSearchbar = document.querySelector("#mk-nav-search-wrapper");
+    // #mk-nav-search-wrapper
     defaultSearchbar.firstElementChild.remove();
+    defaultSearchbar.innerHTML = '<div id="searchbar"><?php echo If_Sis_searchbar($form);?></div>';
 
-    var sisSearchbar = document.getElementById("sitesearch-searchbar");
-    if (sisSearchbar !== undefined && sisSearchbar !== null && sisSearchbar !== "") {
-        console.warn("sitesearch-searchbar exists");
-    }
-
-    defaultSearchbar.appendChild(hiddenSiteSearchSearchbar);
-
-
-    // defaultSearchbar.innerHTML = '<div id="sitesearch-searchbar" class="searchbar">\n' +
-    //     '    <div id="ifs-searchbar" class="ifs-component ifs-sb">BLAH!!!???????!</div>\n' +
-    //     '    <script src="https://cdn.sitesearch.cloud/searchbar/2018-05-15/app/js/app.js"></script>\n' +
-    //     '    <script>\n' +
-    //     '        IFS.initClient({\n' +
-    //     '            customConfig: {\n' +
-    //     '                overwrite: {\n' +
-    //     '                    "appLang": "en"\n' +
-    //     '                }\n' +
-    //     '            },\n' +
-    //     '            configurl: "https://cdn.sitesearch.cloud/searchbar/2018-05-15/config/sitesearch.json",\n' +
-    //     '            siteId: "3a5dfd07-a463-45f8-863b-dfc3c9f09152"\n' +
-    //     '        });\n' +
-    //     '    </script>\n' +
-    //     '</div>';
-    //
-    //
-    // defaultSearchbar.innerHTML = '<div id="sitesearch-searchbar" class="searchbar">\n' +
-    //     '    <div id="ifs-searchbar" class="ifs-component ifs-sb"></div>\n' +
-    //     '    <script src="https://cdn.sitesearch.cloud/searchbar/2018-05-15/app/js/app.js"></script>\n' +
-    //     '    <script>\n' +
-    //     '        IFS.initClient({\n' +
-    //     '            customConfig: {\n' +
-    //     '                overwrite: {\n' +
-    //     '                    "appLang": "en"\n' +
-    //     '                }\n' +
-    //     '            },\n' +
-    //     '            configurl: "https://cdn.sitesearch.cloud/searchbar/2018-05-15/config/sitesearch.json",\n' +
-    //     '            siteId: "3a5dfd07-a463-45f8-863b-dfc3c9f09152"\n' +
-    //     '        });\n' +
-    //     '    </script>\n' +
-    //     '</div>';
 };
-
 injectSearchbar();
