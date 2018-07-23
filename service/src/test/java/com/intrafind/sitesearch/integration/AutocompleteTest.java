@@ -26,10 +26,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -40,7 +41,7 @@ public class AutocompleteTest {
 
     @Test
     public void referenceDeprecated() {
-        final ResponseEntity<Autocomplete> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=Knowledge&siteId=" + SearchTest.SEARCH_SITE_ID, Autocomplete.class);
+        final var actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=Knowledge&siteId=" + SearchTest.SEARCH_SITE_ID, Autocomplete.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertNotNull(actual.getBody());
@@ -50,7 +51,7 @@ public class AutocompleteTest {
 
     @Test
     public void reference() {
-        final ResponseEntity<Autocomplete> actual = caller.getForEntity("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=Knowledge", Autocomplete.class);
+        final var actual = caller.getForEntity("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=Knowledge", Autocomplete.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertNotNull(actual.getBody());
@@ -60,7 +61,7 @@ public class AutocompleteTest {
 
     @Test
     public void complexPositiveDeprecated() {
-        final ResponseEntity<Autocomplete> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=ifinder&siteId=" + SearchTest.SEARCH_SITE_ID, Autocomplete.class);
+        final var actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=ifinder&siteId=" + SearchTest.SEARCH_SITE_ID, Autocomplete.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertNotNull(actual.getBody());
@@ -73,7 +74,7 @@ public class AutocompleteTest {
 
     @Test
     public void complexPositive() {
-        final ResponseEntity<Autocomplete> actual = caller.getForEntity("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=ifinder", Autocomplete.class);
+        final var actual = caller.getForEntity("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=ifinder", Autocomplete.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertNotNull(actual.getBody());
@@ -86,7 +87,7 @@ public class AutocompleteTest {
 
     @Test
     public void nonExistingDeprecated() {
-        final ResponseEntity<Autocomplete> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=not_found&siteId=" + SearchTest.SEARCH_SITE_ID, Autocomplete.class);
+        final var actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=not_found&siteId=" + SearchTest.SEARCH_SITE_ID, Autocomplete.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertNotNull(actual.getBody());
@@ -95,7 +96,7 @@ public class AutocompleteTest {
 
     @Test
     public void nonExisting() {
-        final ResponseEntity<Autocomplete> actual = caller.getForEntity("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=not_found", Autocomplete.class);
+        final var actual = caller.getForEntity("/sites/" + SearchTest.SEARCH_SITE_ID + "/autocomplete?query=not_found", Autocomplete.class);
 
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertNotNull(actual.getBody());
@@ -104,7 +105,7 @@ public class AutocompleteTest {
 
     @Test
     public void withoutSiteIdDeprecated() {
-        final ResponseEntity<Autocomplete> actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=not_found", Autocomplete.class);
+        final var actual = caller.getForEntity(AutocompleteController.ENDPOINT + "?query=not_found", Autocomplete.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
         assertNotNull(actual.getBody());
@@ -112,17 +113,17 @@ public class AutocompleteTest {
 
     @Test
     public void withoutSiteId() {
-        final ResponseEntity<Autocomplete> actual = caller.getForEntity("/sites/" + "/autocomplete?query=not_found", Autocomplete.class);
+        final var actual = caller.getForEntity("/sites/" + "/autocomplete?query=not_found", Autocomplete.class);
         assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
 
-        final ResponseEntity<Autocomplete> response = caller.getForEntity("/sites" + "?query=not_found", Autocomplete.class);
+        final var response = caller.getForEntity("/sites" + "?query=not_found", Autocomplete.class);
         assertEquals(HttpStatus.METHOD_NOT_ALLOWED, response.getStatusCode());
         assertNotNull(actual.getBody());
     }
 
     @Test
     public void withoutInvalidSiteId() {
-        final ResponseEntity<Autocomplete> actual = caller.getForEntity("/sites/invalid-siteId/autocomplete?query=not_found", Autocomplete.class);
+        final var actual = caller.getForEntity("/sites/invalid-siteId/autocomplete?query=not_found", Autocomplete.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
         assertNotNull(actual.getBody());
