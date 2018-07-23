@@ -171,7 +171,7 @@ server {
     location / {
         include /etc/nginx/snippets/cors-headers.conf;
 
-        proxy_pass http://main.analyzelaw.com;
+        proxy_pass http://95.216.41.34;
     }
 }
 
@@ -185,7 +185,7 @@ server {
     location / {
         include /etc/nginx/snippets/cors-headers.conf;
 
-        proxy_pass http://main.analyzelaw.com;
+        proxy_pass http://95.216.41.34;
     }
 }
 
