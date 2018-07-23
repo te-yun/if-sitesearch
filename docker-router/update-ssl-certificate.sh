@@ -7,6 +7,7 @@ sudo add-apt-repository ppa:certbot/certbot -y
 sudo apt update -y
 sudo apt install certbot -y
 
+# CDN IPs: 35.227.226.37 / 2600:1901:0:c2e3::
 sudo certbot certonly --webroot -w /etc/letsencrypt --expand \
     -d main.sitesearch.cloud \
     -d test.sitesearch.cloud \
@@ -14,7 +15,7 @@ sudo certbot certonly --webroot -w /etc/letsencrypt --expand \
     -d crawler.sitesearch.cloud \
     -d api.sitesearch.cloud \
     -d dev.sitesearch.cloud \
-    -d cdn.sitesearch.cloud \ # 35.227.226.37 # 2600:1901:0:c2e3::
+    -d cdn.sitesearch.cloud \
     -d doc.sitesearch.cloud \
     -d logs.sitesearch.cloud \
     -d docker-registry.sitesearch.cloud \
