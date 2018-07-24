@@ -32,6 +32,7 @@ var injectSearchbar = function () {
     var sisDefaultWordPressSearchbarSelector = getCookieValueForKey("sisDefaultWordPressSearchbarSelector");
     var defaultWordPressSearchbar = document.querySelector(sisDefaultWordPressSearchbarSelector);
     var hiddenSiSsearchbar = document.querySelector("#sitesearch-searchbar");
+    hiddenSiSsearchbar.style.display = "block";
     defaultWordPressSearchbar.firstElementChild.remove();
     defaultWordPressSearchbar.appendChild(hiddenSiSsearchbar);
 
@@ -40,7 +41,7 @@ var injectSearchbar = function () {
         IFS.jQuery.ifs.shared.clientOptions.siteId = getCookieValueForKey("sis-siteId");
         console.warn("cookie: " + getCookieValueForKey("sis-siteId"));
         console.warn("after: " + IFS.jQuery.ifs.shared.clientOptions.siteId);
-    }, 3235);
+    }, 1235);
 };
 
 injectSearchbar();
