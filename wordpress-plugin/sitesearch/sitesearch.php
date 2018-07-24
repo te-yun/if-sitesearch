@@ -69,7 +69,7 @@ function No_Dependencies_Enqueue_scripts()
     setcookie("sis-siteId", get_option("if_sis_siteId"));
 //    setcookie("sis-defaultWordPressSearchbarSelector", get_option("if_sis_wordpress_searchbar_selector")); // TODO adjust, fetch from database
 //    setrawcookie("sisDefaultWordPressSearchbarSelector", "#mk-nav-search-wrapper"); // TODO remove this mock value
-    $cookieSafeCssSelector = base64_encode('body > .main-nav-side-search');
+    $cookieSafeCssSelector = base64_encode(get_option("sis_cssSelector"));
     setrawcookie("sisDefaultWordPressSearchbarSelector", $cookieSafeCssSelector); // TODO remove this mock value
 
 }
