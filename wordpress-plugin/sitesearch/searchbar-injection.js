@@ -31,7 +31,9 @@ var injectSearchbar = function () {
 
     var defaultWordPressSearchbar = document.querySelector("#mk-nav-search-wrapper");
     var hiddenSiSsearchbar = document.querySelector("#sitesearch-searchbar");
+    console.warn(hiddenSiSsearchbar);
     defaultWordPressSearchbar.firstElementChild.remove();
+    defaultWordPressSearchbar.appendChild(hiddenSiSsearchbar);
     console.warn(defaultWordPressSearchbar);
 
     setTimeout(function () {

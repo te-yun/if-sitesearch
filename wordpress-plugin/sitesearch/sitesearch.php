@@ -51,7 +51,7 @@ function Sis_Admin_menu()
  * 
  * @return sis-admin-page
  */
-function Sis_Admin_page()
+function Sis_Admin_page()       
 {
     include_once 'sis-admin-page.php';
 }
@@ -65,8 +65,9 @@ function No_Dependencies_Enqueue_scripts()
 {
     wp_register_script('script-handle', plugin_dir_url(__FILE__) . 'searchbar-injection.js', false, '1.0.0', true);
     wp_enqueue_script('script-handle');
-    setcookie("sis-siteId", "563714f1-96c0-4500-b366-4fc7e734fa1d");
-    setcookie("sis-siteId1", get_option("if_sis_siteId"));
+//    setcookie("sis-siteId", "563714f1-96c0-4500-b366-4fc7e734fa1d");
+    setcookie("sis-siteId", get_option("if_sis_siteId"));
+    setcookie("sis-defaultWordPressSearchbarSelector", get_option("if_sis_wordpress_searchbar_selector")); // TODO adjust
 
 }
 

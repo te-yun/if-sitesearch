@@ -27,7 +27,7 @@ add_filter('get_search_form', 'If_Sis_searchbar', 1);
 function If_Sis_searchbar($form)
 {
     if (!get_option("if_sis_siteId")) {
-        $form = '<div id="sitesearch-searchbar" class="searchbar">
+        $form = '<div id="sitesearch-searchbar" class="searchbar" style="display: none;">
         <div id="ifs-searchbar" class="ifs-component ifs-sb"></div>
             <script src="https://cdn.sitesearch.cloud/searchbar/2018-07-18/app/js/app.js"></script>
             <script>
@@ -44,7 +44,7 @@ function If_Sis_searchbar($form)
         </div>';
         echo $form;
     } else {
-        $form = '<div id="sitesearch-searchbar" class="searchbar">
+        $form = '<div id="sitesearch-searchbar" class="searchbar" style="display: none;">
         <div id="ifs-searchbar" class="ifs-component ifs-sb"></div>
             <script src="https://cdn.sitesearch.cloud/searchbar/2018-07-18/app/js/app.js"></script>
             <script>
@@ -59,8 +59,8 @@ function If_Sis_searchbar($form)
                 });
             </script>
         </div>';
-        $if_sis_siteId = get_option("if_sis_siteId");
-        $form = str_replace("3a5dfd07-a463-45f8-863b-dfc3c9f09152", $if_sis_siteId, $form);
+//        $if_sis_siteId = get_option("if_sis_siteId");
+//        $form = str_replace("3a5dfd07-a463-45f8-863b-dfc3c9f09152", $if_sis_siteId, $form);
         echo $form;
     }
 }
