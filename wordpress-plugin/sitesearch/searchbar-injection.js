@@ -49,5 +49,6 @@ var injectSearchbar = function () {
 };
 
 window.addEventListener("DOMContentLoaded", function () {
+    console.warn("DOMContentLoaded: " + getCookieValueForKey("sis-siteId"));
     injectSearchbar();
 });
