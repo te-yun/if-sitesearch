@@ -115,7 +115,7 @@ function deleteSiS_Options_WP_DB()
         Site Secret: <input type="text" id="sis-siteSecret" name="sis-siteSecret"
                             value="<?php echo get_option("if_sis_siteSecret"); ?>">
         <br><br>
-        Choose your CSS Selector, where Site Search - Searchbar should be injected:
+        Append Site Search to the following CSS selector:
         <input type="text" id="sis-cssSelector" value="<?php echo get_option("sis_cssSelector"); ?>">
         <br><br>
         <input type="submit" name="createUpdate" value="Save Site Search Setup">
