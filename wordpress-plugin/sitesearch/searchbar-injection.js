@@ -36,16 +36,18 @@ var injectSearchbar = function () {
     defaultWordPressSearchbar.firstElementChild.remove();
     defaultWordPressSearchbar.appendChild(hiddenSiSsearchbar);
 
-    setTimeout(function () {
-        console.warn("before: " + IFS.jQuery.ifs.shared.clientOptions.siteId);
-        IFS.jQuery.ifs.shared.clientOptions.siteId = getCookieValueForKey("sis-siteId");
-        console.warn("cookie: " + getCookieValueForKey("sis-siteId"));
-        console.warn("after: " + IFS.jQuery.ifs.shared.clientOptions.siteId);
-    }, 1235);
+    // setTimeout(function () {
+    //     console.warn("before: " + IFS.jQuery.ifs.shared.clientOptions.siteId);
+    //     IFS.jQuery.ifs.shared.clientOptions.siteId = getCookieValueForKey("sis-siteId");
+    //     console.warn("cookie: " + getCookieValueForKey("sis-siteId"));
+    //     console.warn("after: " + IFS.jQuery.ifs.shared.clientOptions.siteId);
+    // }, 1235);
 
-    window.addEventListener("DOMContentLoaded", function () {
-        console.warn("DOMContentLoaded-----------------------------------");
-    });
+    // window.addEventListener("DOMContentLoaded", function () {
+    IFS.jQuery.ifs.shared.clientOptions.siteId = getCookieValueForKey("sis-siteId");
+    // });
 };
 
-injectSearchbar();
+window.addEventListener("DOMContentLoaded", function () {
+    injectSearchbar();
+});
