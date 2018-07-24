@@ -49,6 +49,7 @@ var injectSearchbar = function () {
 };
 
 window.addEventListener("DOMContentLoaded", function () {
-    console.warn("DOMContentLoaded: " + getCookieValueForKey("sis-siteId"));
+    console.warn("DOMContentLoaded - before: " + IFS.jQuery.ifs.shared.clientOptions.siteId);
     injectSearchbar();
+    console.warn("DOMContentLoaded - after: " + IFS.jQuery.ifs.shared.clientOptions.siteId);
 });
