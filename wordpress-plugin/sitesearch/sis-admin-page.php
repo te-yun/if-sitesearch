@@ -71,8 +71,8 @@ function CreateSiS_Options_WP_DB()
 
     }
     if (!get_option("sis_cssSelector")) {
-        $sis_cssSelector = "body > .main-nav-side-search";
-        update_option("sis_cssSelector", $sis_cssSelector);
+        $sis_safeCSSselector = ".main-nav-side-search";
+        update_option("sis_cssSelector", $sis_safeCSSselector);
     } else {
         update_option("sis_cssSelector", $sis_cssSelector);
     }
@@ -116,7 +116,8 @@ function deleteSiS_Options_WP_DB()
                             value="<?php echo get_option("if_sis_siteSecret"); ?>">
         <br><br>
         Append Site Search to the following CSS selector:
-        <input type="text" id="sis-cssSelector" value="<?php echo get_option("sis_cssSelector"); ?>">
+        <input type="text" id="sis-cssSelector" name="sis-cssSelector"
+               value="<?php echo get_option("sis_cssSelector"); ?>">
         <br><br>
         <input type="submit" name="createUpdate" value="Save Site Search Setup">
         <br>
