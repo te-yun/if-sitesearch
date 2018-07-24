@@ -30,24 +30,13 @@ var injectSearchbar = function () {
     
     var sisDefaultWordPressSearchbarSelectorBase64 = getCookieValueForKey("sisDefaultWordPressSearchbarSelector");
     var sisDefaultWordPressSearchbarSelector = atob(sisDefaultWordPressSearchbarSelectorBase64);
-    // var sisDefaultWordPressSearchbarSelector = atob("Ym9keSA+IC5tYWluLW5hdi1zaWRlLXNlYXJjaA==");
     console.warn(sisDefaultWordPressSearchbarSelector + " wrong selector?");
     var defaultWordPressSearchbar = document.querySelector(sisDefaultWordPressSearchbarSelector);
     var hiddenSiSsearchbar = document.querySelector("#sitesearch-searchbar");
     hiddenSiSsearchbar.style.display = "block";
     defaultWordPressSearchbar.firstElementChild.remove();
     defaultWordPressSearchbar.appendChild(hiddenSiSsearchbar);
-
-    // setTimeout(function () {
-    //     console.warn("before: " + IFS.jQuery.ifs.shared.clientOptions.siteId);
-    //     IFS.jQuery.ifs.shared.clientOptions.siteId = getCookieValueForKey("sis-siteId");
-    //     console.warn("cookie: " + getCookieValueForKey("sis-siteId"));
-    //     console.warn("after: " + IFS.jQuery.ifs.shared.clientOptions.siteId);
-    // }, 1235);
-
-    // window.addEventListener("DOMContentLoaded", function () {
     IFS.jQuery.ifs.shared.clientOptions.siteId = getCookieValueForKey("sis-siteId");
-    // });
 };
 
 window.addEventListener("DOMContentLoaded", function () {

@@ -48,43 +48,39 @@ if (isset($_POST['delete'])) {
  */
 function CreateSiS_Options_WP_DB()
 {
-    //get data from form fields
+    //get data from fields
     $if_sis_url_for_crawling = $_POST['sis-url'];
     $if_sis_siteId = $_POST['sis-siteId'];
     $if_sis_siteSecret = $_POST['sis-siteSecret'];
     $sis_cssSelector = $_POST['sis-cssSelector'];
     if (!get_option("if_sis_url_for_crawling")) {
         update_option("if_sis_url_for_crawling", $if_sis_url_for_crawling);
-        echo "URL is standard url: " + getSiteUrl();
+        echo "URL is standard url: ". getSiteUrl() ."<br>";
     } else {
         update_option("if_sis_url_for_crawling", $if_sis_url_for_crawling);
-        echo "Site url is updated: " + get_option("if_sis_url_for_crawling");
+        echo "Site url is updated: ". get_option("if_sis_url_for_crawling") ."<br>";
     }
     if (!get_option("if_sis_siteId")) {
         update_option("if_sis_siteId", $if_sis_siteId);
-        echo "Site ID now saved: " + get_option("if_sis_siteId");
+        echo "Site ID now saved: ". get_option("if_sis_siteId") ."<br>";
     } else {
         update_option("if_sis_siteId", $if_sis_siteId);
-        echo "Site ID is now updated:" + get_option("if_sis_siteId");
+        echo "Site ID is now updated:". get_option("if_sis_siteId") ."<br>";
     }
     if (!get_option("if_sis_siteSecret")) {
         update_option("if_sis_siteSecret", $if_sis_siteSecret);
-        echo "Site Secret is now saved: " + get_option("if_sis_siteSecret");
+        echo "Site Secret is now saved: ". get_option("if_sis_siteSecret") ."<br>";
     } else {
         update_option("if_sis_siteSecret", $if_sis_siteSecret);
-        echo "Site Secret is now updated: " + get_option("if_sis_siteSecret");
+        echo "Site Secret is now updated: ". get_option("if_sis_siteSecret") ."<br>";
     }
-    if (!get_option("sis_cssSelector")) {        
-        update_option("sis_cssSelector", $sis_cssSelector);
-        echo "CSS selector is a standard selector: " + get_option("sis_cssSelector");
+    if (!get_option("sis_cssSelector")) {
+        $sis_safeCSSselector = ".main-nav-side-search";
+        update_option("sis_cssSelector", $sis_safeCSSselector);
     } else {
         update_option("sis_cssSelector", $sis_cssSelector);
-        echo "CSS selector is now updated: " + get_option("sis_cssSelector");
+        echo "CSS selector is now updated: ". get_option("sis_cssSelector") ."<br>";
     }
-    // $if_sis_url_for_crawling = get_option("if_sis_url_for_crawling");
-    // $if_sis_siteId = get_option("if_sis_siteId");
-    // $if_sis_siteSecret = get_option("if_sis_siteSecret");
-    // echo "Aktuellen Werte: <br>" . $if_sis_url_for_crawling . "<br>" . $if_sis_siteId . "<br>" . $if_sis_siteSecret;
 }
 
 function deleteSiS_Options_WP_DB()
@@ -99,10 +95,10 @@ function setSafeCssSelector() {
     $sis_SafeCssSelector = "div > .main-nav-side-search";
     if (!get_option("sis_cssSelector")) {
         update_option("sis_cssSelector", $sis_SafeCssSelector);
-        echo "CSS selector is a standard selector: " + get_option("sis_cssSelector");
+        echo "CSS selector is a standard selector: " + get_option("sis_cssSelector") ."<br>";
     } else {
         $sis_cssSelector = get_option("sis_cssSelector");
-        echo "CSS selector is: " + get_option("sis_cssSelector");
+        echo "CSS selector is: ". get_option("sis_cssSelector") ."<br>";
     }
 }
 ?>
@@ -120,6 +116,12 @@ function setSafeCssSelector() {
             width: 100%;
             clear: both;
         }
+        .saveButton {
+            z-index: 1001;
+        }
+        .crawlButton {
+            z-index: 1000;
+        }
     </style>
     <form method="POST">
         <h1>Configuration</h1>
@@ -130,22 +132,25 @@ function setSafeCssSelector() {
         Site Secret: <input type="text" id="sis-siteSecret" name="sis-siteSecret"
                             value="<?php echo get_option("if_sis_siteSecret"); ?>">
         <br><br>
-        Choose your CSS Selector, where Site Search - Searchbar should be injected:
-        <input type="text" id="sis-cssSelector" value="<?php echo setSafeCssSelector(); ?>">
+        Append Site Search to the following CSS selector:
+        <input type="text" id="sis-cssSelector" name="sis-cssSelector"
+               value="<?php echo get_option("sis_cssSelector"); ?>">
         <br><br>
-        <input type="submit" name="createUpdate" value="Save Site Search Setup">
-        <br>
-        <input type="submit" name="delete" value="Reset Site Search Setup">
+        <input type="submit" name="createUpdate" class="saveButton" value="Save Site Search Setup">
         <br>
     </form>
     <div id="triggerCrawler">
         <br>
         <input type="submit"
-            name="crawl" value="Add Site Search searchbar to your site &amp; crawl your site's content."
+            name="crawl" class="crawlButton" value="Add Site Search searchbar to your site &amp; crawl your site's content."
             onclick="registerSiteInSiS();">
         <br>
         <p id="sis-status"></p>        
         <br><br>
     </div>    
     <div id="searchbar"><?php echo If_Sis_searchbar($form);?></div>
+    <script>
+        var hiddenSiSsearchbar = document.querySelector("#sitesearch-searchbar");
+        hiddenSiSsearchbar.style.display = "block";
+    </script>
 </div>
