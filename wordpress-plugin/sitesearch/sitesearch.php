@@ -67,7 +67,8 @@ function No_Dependencies_Enqueue_scripts()
     wp_enqueue_script('script-handle');
 //    setcookie("sis-siteId", "563714f1-96c0-4500-b366-4fc7e734fa1d");
     setcookie("sis-siteId", get_option("if_sis_siteId"));
-    setcookie("sis-defaultWordPressSearchbarSelector", get_option("if_sis_wordpress_searchbar_selector")); // TODO adjust
+//    setcookie("sis-defaultWordPressSearchbarSelector", get_option("if_sis_wordpress_searchbar_selector")); // TODO adjust, fetch from database
+    setcookie("sisDefaultWordPressSearchbarSelector", "#mk-nav-search-wrapper"); // TODO remove this mock value
 
 }
 

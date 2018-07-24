@@ -29,20 +29,18 @@ var injectSearchbar = function () {
     }
 
 
-    var defaultWordPressSearchbar = document.querySelector("#mk-nav-search-wrapper");
+    var sisDefaultWordPressSearchbarSelector = getCookieValueForKey("sisDefaultWordPressSearchbarSelector");
+    var defaultWordPressSearchbar = document.querySelector(sisDefaultWordPressSearchbarSelector);
     var hiddenSiSsearchbar = document.querySelector("#sitesearch-searchbar");
-    console.warn(hiddenSiSsearchbar);
     defaultWordPressSearchbar.firstElementChild.remove();
     defaultWordPressSearchbar.appendChild(hiddenSiSsearchbar);
-    console.warn(defaultWordPressSearchbar);
 
     setTimeout(function () {
-        console.warn(IFS.jQuery.ifs.shared.clientOptions.siteId);
+        console.warn("before: " + IFS.jQuery.ifs.shared.clientOptions.siteId);
         IFS.jQuery.ifs.shared.clientOptions.siteId = getCookieValueForKey("sis-siteId");
-        console.warn(getCookieValueForKey("sis-siteId"));
-        console.warn(getCookieValueForKey("sis-siteId1"));
-        console.warn(IFS.jQuery.ifs.shared.clientOptions.siteId);
-    }, 9235);
+        console.warn("cookie: " + getCookieValueForKey("sis-siteId"));
+        console.warn("after: " + IFS.jQuery.ifs.shared.clientOptions.siteId);
+    }, 3235);
 };
 
 injectSearchbar();
