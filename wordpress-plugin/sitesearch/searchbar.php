@@ -23,11 +23,9 @@
  * @return form
  */
 remove_all_filters('get_search_form');
-add_filter('get_search_form', 'If_Sis_searchbar', 1);
 function If_Sis_searchbar($form)
 {
-    if (!get_option("if_sis_siteId")) {
-        $form = '<div id="sitesearch-searchbar" class="searchbar" style="display: none;">
+    $form = '<div id="sitesearch-searchbar" class="searchbar" style="display: none;">
         <div id="ifs-searchbar" class="ifs-component ifs-sb"></div>
             <script src="https://cdn.sitesearch.cloud/searchbar/2018-07-18/app/js/app.js"></script>
             <script>
@@ -42,30 +40,15 @@ function If_Sis_searchbar($form)
                 });
             </script>
         </div>';
+    if (!get_option("if_sis_siteId")) {        
         echo $form;
     } else {
-        $form = '<div id="sitesearch-searchbar" class="searchbar" style="display: none;">
-        <div id="ifs-searchbar" class="ifs-component ifs-sb"></div>
-            <script src="https://cdn.sitesearch.cloud/searchbar/2018-07-18/app/js/app.js"></script>
-            <script>
-                IFS.initClient({
-                    customConfig: {
-                        overwrite: {
-                            "appLang": "en"
-                        }
-                    },
-                    configurl: "https://cdn.sitesearch.cloud/searchbar/2018-07-18/config/sitesearch.json",
-                    siteId: "3a5dfd07-a463-45f8-863b-dfc3c9f09152"
-                });
-            </script>
-        </div>';
-//        $if_sis_siteId = get_option("if_sis_siteId");
-//        $form = str_replace("3a5dfd07-a463-45f8-863b-dfc3c9f09152", $if_sis_siteId, $form);
+        $if_sis_siteId = get_option("if_sis_siteId");
+        $form = str_replace("3a5dfd07-a463-45f8-863b-dfc3c9f09152", $if_sis_siteId, $form);
         echo $form;
     }
 }
-
-add_filter('get_search_form', 'If_Sis_searchbar', 1);
-add_shortcode('wpbsearch', 'get_search_form');
+add_filter('get_search_form', 'If_Sis_searchbar');
 add_action('wp_footer', 'If_Sis_searchbar');
 add_action('admin_footer', 'If_Sis_searchbar');
+add_shortcode('wpbsearch', 'get_search_form');

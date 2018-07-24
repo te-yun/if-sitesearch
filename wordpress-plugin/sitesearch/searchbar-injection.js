@@ -27,9 +27,10 @@ var injectSearchbar = function () {
         }
         return "";
     }
-
-
-    var sisDefaultWordPressSearchbarSelector = getCookieValueForKey("sisDefaultWordPressSearchbarSelector");
+    
+    var sisDefaultWordPressSearchbarSelectorBase64 = getCookieValueForKey("sisDefaultWordPressSearchbarSelector");
+    var sisDefaultWordPressSearchbarSelector = atob(sisDefaultWordPressSearchbarSelectorBase64);
+    // var sisDefaultWordPressSearchbarSelector = atob("Ym9keSA+IC5tYWluLW5hdi1zaWRlLXNlYXJjaA==");
     var defaultWordPressSearchbar = document.querySelector(sisDefaultWordPressSearchbarSelector);
     var hiddenSiSsearchbar = document.querySelector("#sitesearch-searchbar");
     hiddenSiSsearchbar.style.display = "block";

@@ -69,22 +69,8 @@ function No_Dependencies_Enqueue_scripts()
     setcookie("sis-siteId", get_option("if_sis_siteId"));
 //    setcookie("sis-defaultWordPressSearchbarSelector", get_option("if_sis_wordpress_searchbar_selector")); // TODO adjust, fetch from database
 //    setrawcookie("sisDefaultWordPressSearchbarSelector", "#mk-nav-search-wrapper"); // TODO remove this mock value
-    setrawcookie("sisDefaultWordPressSearchbarSelector", 'body > .main-nav-side-search'); // TODO remove this mock value
+    $cookieSafeCssSelector = base64_encode('body > .main-nav-side-search');
+    setrawcookie("sisDefaultWordPressSearchbarSelector", $cookieSafeCssSelector); // TODO remove this mock value
 
 }
-
 add_action('wp_enqueue_scripts', 'No_Dependencies_Enqueue_scripts');
-
-//add_action('wp_enqueue_scripts', 'No_Dependencies_Enqueue_scripts');
-//function No_Dependencies_Enqueue_scripts()
-//{
-//    if (!is_admin()) {
-//        wp_register_script('getSiteId_handle', plugin_dir_url(__FILE__) . 'searchbar-injection.js');
-//        wp_enqueue_script('getSiteId_handle', array('jquery'));
-//        $getDataFromWP = array(
-//            'siteId' => get_option("if_sis_siteId")
-//        );
-//        wp_localize_script('getSiteId_handle', 'getDataFromWP', $getDataFromWP);
-//    }
-//}
-//getDataFromWP.siteId

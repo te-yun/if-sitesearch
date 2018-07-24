@@ -71,6 +71,7 @@ function CreateSiS_Options_WP_DB()
 
     }
     if (!get_option("sis_cssSelector")) {
+        $sis_cssSelector = "body > .main-nav-side-search";
         update_option("sis_cssSelector", $sis_cssSelector);
     } else {
         update_option("sis_cssSelector", $sis_cssSelector);
@@ -86,7 +87,9 @@ function deleteSiS_Options_WP_DB()
     delete_option("if_sis_url_for_crawling");
     delete_option("if_sis_siteId");
     delete_option("if_sis_siteSecret");
+    delete_option("sis_cssSelector");
 }
+
 ?>
 
 <script src="https://api.sitesearch.cloud/external/wordpress-plugin/admin-client.js"></script>
