@@ -38,11 +38,10 @@ function If_Sis_searchbar($form)
                         }
                     },
                     configurl: "https://cdn.sitesearch.cloud/searchbar/2018-07-18/config/sitesearch.json",
-                    siteId: "bla-bla-bla"
+                    siteId: "3a5dfd07-a463-45f8-863b-dfc3c9f09152"
                 });
             </script>
         </div>';
-        // $siteId = "3a5dfd07-a463-45f8-863b-dfc3c9f09152";
         echo $form;
     } else {
         $form = '<div id="sitesearch-searchbar" class="searchbar">
@@ -56,16 +55,17 @@ function If_Sis_searchbar($form)
                         }
                     },
                     configurl: "https://cdn.sitesearch.cloud/searchbar/2018-07-18/config/sitesearch.json",
-                    siteId: "bla-bla-bla"
+                    siteId: "3a5dfd07-a463-45f8-863b-dfc3c9f09152"
                 });
             </script>
         </div>';
         $if_sis_siteId = get_option("if_sis_siteId");
-        $form = str_replace("bla-bla-bla", $if_sis_siteId, $form);
+        $form = str_replace("3a5dfd07-a463-45f8-863b-dfc3c9f09152", $if_sis_siteId, $form);
         echo $form;
     }
 }
-// add_filter('get_search_form', 'If_Sis_searchbar', 1);
-// add_shortcode('wpbsearch', 'get_search_form');
-// add_action('wp_footer', 'If_Sis_searchbar');
-// add_action('admin_footer', 'If_Sis_searchbar');
+
+add_filter('get_search_form', 'If_Sis_searchbar', 1);
+add_shortcode('wpbsearch', 'get_search_form');
+add_action('wp_footer', 'If_Sis_searchbar');
+add_action('admin_footer', 'If_Sis_searchbar');
