@@ -52,6 +52,7 @@ function CreateSiS_Options_WP_DB()
     $if_sis_url_for_crawling = $_POST['sis-url'];
     $if_sis_siteId = $_POST['sis-siteId'];
     $if_sis_siteSecret = $_POST['sis-siteSecret'];
+    $sis_cssSelector = $_POST['sis-cssSelector'];
     if (!get_option("if_sis_url_for_crawling")) {
         update_option("if_sis_url_for_crawling", $if_sis_url_for_crawling);
     } else {
@@ -68,6 +69,11 @@ function CreateSiS_Options_WP_DB()
     } else {
         update_option("if_sis_siteSecret", $if_sis_siteSecret);
 
+    }
+    if (!get_option("sis_cssSelector")) {
+        update_option("sis_cssSelector", $sis_cssSelector);
+    } else {
+        update_option("sis_cssSelector", $sis_cssSelector);
     }
     // $if_sis_url_for_crawling = get_option("if_sis_url_for_crawling");
     // $if_sis_siteId = get_option("if_sis_siteId");
@@ -101,10 +107,13 @@ function deleteSiS_Options_WP_DB()
         <h1>Configuration</h1>
         Website URL: <input type="text" id="sis-url" name="sis-url" value="<?php echo getSiteUrl(); ?>">
         <br><br>
-        Site ID: <input type="text" id="sis-siteId" name="sis-siteId" value="<?php echo $if_sis_siteId = get_option("if_sis_siteId"); ?>">
+        Site ID: <input type="text" id="sis-siteId" name="sis-siteId" value="<?php echo get_option("if_sis_siteId"); ?>">
         <br><br>
         Site Secret: <input type="text" id="sis-siteSecret" name="sis-siteSecret"
                             value="<?php echo get_option("if_sis_siteSecret"); ?>">
+        <br><br>
+        Choose your CSS Selector, where Site Search - Searchbar should be injected:
+        <input type="text" id="sis-cssSelector" value="<?php echo get_option("sis_cssSelector"); ?>">
         <br><br>
         <input type="submit" name="createUpdate" value="Save Site Search Setup">
         <br>
@@ -119,12 +128,6 @@ function deleteSiS_Options_WP_DB()
         <br>
         <p id="sis-status"></p>        
         <br><br>
-    </div>
-    <div id="sisSelector">
-        <form action="REQUEST">
-            CSS Selector, where should be Site Search - Searchbar injected:
-            <input type="text" id="sis-cssSelector" value="">
-        </form>
-    </div>
-    <div id="searchbar"><?php echo If_Sis_searchbar($new_form);?></div>
+    </div>    
+    <div id="searchbar"><?php echo If_Sis_searchbar($form);?></div>
 </div>
