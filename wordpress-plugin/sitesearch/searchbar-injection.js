@@ -42,6 +42,10 @@ var injectSearchbar = function () {
         console.warn("cookie: " + getCookieValueForKey("sis-siteId"));
         console.warn("after: " + IFS.jQuery.ifs.shared.clientOptions.siteId);
     }, 1235);
+
+    window.addEventListener("DOMContentLoaded", function () {
+        console.warn("DOMContentLoaded-----------------------------------");
+    });
 };
 
 injectSearchbar();
