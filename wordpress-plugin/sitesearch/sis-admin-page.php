@@ -76,13 +76,14 @@ function CreateSiS_Options_WP_DB()
     }
 }
 
-function setSafeCssSelector() {
-    $sis_SafeCssSelector = "div > .main-nav-side-search";
-    if (!get_option("sis_cssSelector")) {
-        update_option("sis_cssSelector", $sis_SafeCssSelector);
-    } else {
+function setSafeCssSelector() 
+{    
+    if (get_option("sis_cssSelector")) {
         $sis_cssSelector = get_option("sis_cssSelector");
+    } else {
+        $sis_cssSelector = "div > .main-nav-side-search";
     }
+    return $sis_cssSelector;
 }
 ?>
 
@@ -106,7 +107,7 @@ function setSafeCssSelector() {
         <br><br>
         Append the Site Search searchbar to the following <strong>CSS selector</strong>:
         <input type="text" id="sis-cssSelector" name="sis-cssSelector"
-               value="<?php echo get_option("sis_cssSelector"); ?>">
+               value="<?php echo setSafeCssSelector(); ?>">
         <input type="submit" id="sis-save-setup" name="createUpdate" class="saveButton"
                value="Save Site Search Setup"
                style="display: none;">
