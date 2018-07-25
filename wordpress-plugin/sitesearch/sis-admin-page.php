@@ -141,19 +141,17 @@ function setSafeCssSelector() {
         Append Site Search to the following CSS selector:
         <input type="text" id="sis-cssSelector" name="sis-cssSelector"
                value="<?php echo get_option("sis_cssSelector"); ?>">
-        <br><br>
-        <input type="submit" name="createUpdate" class="saveButton" value="Save Site Search Setup">
-        <br>
+        <input type="submit" name="createUpdate" class="saveButton" value="2. Save Site Search Setup"
+               style="display: inline; float: left;">
     </form>
+    <input type="submit"
+           style="display: inline; float: right;"
+           name="crawl" class="crawlButton" value="1. Crawl your site"
+           onclick="registerSiteInSiS();">
     <div id="triggerCrawler">
-        <br>
-        <input type="submit"
-            name="crawl" class="crawlButton" value="Add Site Search searchbar to your site &amp; crawl your site's content."
-            onclick="registerSiteInSiS();">
-        <br>
-        <p id="sis-status"></p>        
-        <br><br>
-    </div>    
+        <p id="sis-status"></p>
+    </div>
+    <br><br>
     <div id="searchbar"><?php echo If_Sis_searchbar($form);?></div>
     <script>
         var hiddenSiSsearchbar = document.querySelector("#sitesearch-searchbar");
