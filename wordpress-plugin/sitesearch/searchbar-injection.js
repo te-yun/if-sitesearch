@@ -27,14 +27,15 @@ var injectSearchbar = function () {
         }
         return "";
     }
-    
+
     var sisDefaultWordPressSearchbarSelectorBase64 = getCookieValueForKey("sisDefaultWordPressSearchbarSelector");
     var sisDefaultWordPressSearchbarSelector = atob(sisDefaultWordPressSearchbarSelectorBase64);
-    console.warn(sisDefaultWordPressSearchbarSelector + " wrong selector?");
+    console.warn("Site Search selector: " + sisDefaultWordPressSearchbarSelector);
     var defaultWordPressSearchbar = document.querySelector(sisDefaultWordPressSearchbarSelector);
     var hiddenSiSsearchbar = document.querySelector("#sitesearch-searchbar");
     hiddenSiSsearchbar.style.display = "block";
-    defaultWordPressSearchbar.firstElementChild.remove();
+    defaultWordPressSearchbar.innerHTML = "";
+
     defaultWordPressSearchbar.appendChild(hiddenSiSsearchbar);
     IFS.jQuery.ifs.shared.clientOptions.siteId = getCookieValueForKey("sis-siteId");
 };
