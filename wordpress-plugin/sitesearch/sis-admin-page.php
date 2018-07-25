@@ -19,7 +19,7 @@ require_once 'searchbar.php';
 
 /**
  * Get site url
- * 
+ *
  * @return site url
  */
 function getSiteUrl()
@@ -43,7 +43,7 @@ if (isset($_POST['delete'])) {
 
 /**
  * Create & update database settings fields
- * 
+ *
  * @return sis-url, sis-siteId and sis-siteSecret
  */
 function CreateSiS_Options_WP_DB()
@@ -68,15 +68,15 @@ function CreateSiS_Options_WP_DB()
     } else {
         update_option("if_sis_siteSecret", $if_sis_siteSecret);
     }
-    if (!get_option("sis_cssSelector")) {        
+    if (!get_option("sis_cssSelector")) {
         update_option("sis_cssSelector", $sis_cssSelector);
     } else {
         update_option("sis_cssSelector", $sis_cssSelector);
     }
 }
 
-function setSafeCssSelector() 
-{    
+function setSafeCssSelector()
+{
     if (get_option("sis_cssSelector")) {
         $sis_cssSelector = get_option("sis_cssSelector");
     } else {
@@ -84,19 +84,21 @@ function setSafeCssSelector()
     }
     return $sis_cssSelector;
 }
+
 ?>
 
 <script src="https://api.sitesearch.cloud/external/wordpress-plugin/admin-client.js"></script>
 
+<style>
+    .form-wrapper input {
+        width: 500px;
+    }
+</style>
 <div class="form-wrapper" style="width: 500px;">
-    <style>
-        .form-wrapper input {
-            width: 500px;
-        }
-    </style>
     <form method="POST">
-        <h1>Configuration</h1>
-        Website URL: <input type="text" id="sis-url" name="sis-url" value="<?php echo getSiteUrl(); ?>">
+        <h1>Site Search Setup</h1>
+        Website URL: <input type="text" id="sis-url" name="sis-url" value="<?php echo getSiteUrl(); ?>"
+            <?php if (get_option("if_sis_siteId")) echo "readonly"; ?>>
         <br><br>
         Site ID: <input type="text" id="sis-siteId" name="sis-siteId" readonly
                         value="<?php echo get_option("if_sis_siteId"); ?>">
@@ -104,7 +106,13 @@ function setSafeCssSelector()
         Site Secret: <input type="text" id="sis-siteSecret" name="sis-siteSecret" readonly
                             value="<?php echo get_option("if_sis_siteSecret"); ?>">
         <br><br>
-        Append the Site Search searchbar to the following <strong>CSS selector</strong>:
+        <p>Append the Site Search searchbar to the following CSS selector.
+            It is recommended to <strong>provide the CSS selector of the container of the default WordPress
+                searchbar</strong>
+            which might depend on the theme that is used.
+            This CSS selector can be updated anytime, to reflect your theme's specific layout.
+            Providing an invalid CSS selector disables the searchbar.
+        </p>
         <input type="text" id="sis-cssSelector" name="sis-cssSelector"
                value="<?php echo setSafeCssSelector(); ?>">
         <input type="submit" id="sis-save-setup" name="createUpdate" class="saveButton"
@@ -118,14 +126,14 @@ function setSafeCssSelector()
     <div id="triggerCrawler">
         <p id="sis-status"></p>
     </div>
-    <br><br>
-    <div id="searchbar"><?php echo If_Sis_searchbar($form);?></div>
-    <script>
-        var hiddenSiSsearchbar = document.querySelector("#sitesearch-searchbar");
-        hiddenSiSsearchbar.style.display = "block";        
-    </script>
-    <br><br><br>
     <input type="submit"
            value="Update CSS selector for the searchbar"
            onclick="document.getElementById('sis-save-setup').click();">
+    <br><br>
+    <p>Search here before your visitors start searching</p>
+    <div id="searchbar"><?php echo If_Sis_searchbar($form); ?></div>
+    <script>
+        var hiddenSiSsearchbar = document.querySelector("#sitesearch-searchbar");
+        hiddenSiSsearchbar.style.display = "block";
+    </script>
 </div>

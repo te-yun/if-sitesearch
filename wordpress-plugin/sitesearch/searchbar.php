@@ -15,13 +15,6 @@
  * limitations under the License.
  */
 
-/**
- * If-sis-searchbar form
- * 
- * @param string $form to deploy sis searchbar
- * 
- * @return form
- */
 remove_all_filters('get_search_form');
 function If_Sis_searchbar($form)
 {
@@ -48,6 +41,15 @@ function If_Sis_searchbar($form)
         echo $form;
     }
 }
+
+function applyTransporterCookies()
+{
+    setcookie("sis-siteId", get_option("if_sis_siteId"));
+    $cookieSafeCssSelector = base64_encode(get_option("sis_cssSelector"));
+    setrawcookie("sisDefaultWordPressSearchbarSelector", $cookieSafeCssSelector);
+}
+
+applyTransporterCookies();
 add_filter('get_search_form', 'If_Sis_searchbar');
 add_action('wp_footer', 'If_Sis_searchbar');
 add_action('admin_footer', 'If_Sis_searchbar');
