@@ -88,16 +88,14 @@ function setSafeCssSelector() {
 
 <script src="https://api.sitesearch.cloud/external/wordpress-plugin/admin-client.js"></script>
 
-<div class="form-wrapper">
+<div class="form-wrapper" style="width: 500px;">
     <style>
-        .form-wrapper {
-            width: 500px;
-            clear: both;
-        }
+        /*.form-wrapper {*/
+        /*width: 500px;*/
+        /*}*/
 
         .form-wrapper input {
             width: 500px;
-            clear: both;
         }
     </style>
     <form method="POST">
@@ -122,6 +120,8 @@ function setSafeCssSelector() {
     <div id="triggerCrawler">
         <p id="sis-status"></p>
     </div>
+    <br><br>
+    <br><br>
     <br><br>
     <div id="searchbar"><?php echo If_Sis_searchbar($form);?></div>
     <script>

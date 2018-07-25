@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+docker network create dev
+
 docker rm -f wordpress-mysql
 docker run --name wordpress-mysql -d \
     -e MYSQL_ROOT_PASSWORD=$SERVICE_SECRET \
