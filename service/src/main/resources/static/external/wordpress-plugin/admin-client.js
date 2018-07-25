@@ -44,14 +44,17 @@ var registerSiteInSiS = function () {
             var siteCrawl = new XMLHttpRequest();
             siteCrawl.open("POST", "https://api.sitesearch.cloud/sites/" + newSite.siteId + "/crawl?siteSecret=" + newSite.siteSecret + "&url=" + siteUrl + "&token=1a46b7c0-8684-11e8-8f10-d74554b855dc&email=&sitemapsOnly=true&pageBodyCssSelector=body");
             siteCrawl.onload = function () {
-                function showStatus() {
+                function showStatusAndSaveSetup() {
                     console.warn(siteCrawl.responseText);
                     var pageCount = JSON.parse(siteCrawl.responseText).pageCount;
                     status.textContent = "Pages crawled: " + pageCount;
+                    console.info("Pages crawled: " + pageCount);
+
+                    var saveSiteSearchSetup = document.getElementById("sis-save-setup");
+                    saveSiteSearchSetup.click();
                 }
 
-                showStatus();
-
+                showStatusAndSaveSetup();
             };
             siteCrawl.send();
         }

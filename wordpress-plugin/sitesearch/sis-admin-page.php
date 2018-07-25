@@ -110,12 +110,12 @@ function setSafeCssSelector() {
         Append Site Search to the following CSS selector:
         <input type="text" id="sis-cssSelector" name="sis-cssSelector"
                value="<?php echo get_option("sis_cssSelector"); ?>">
-        <input type="submit" name="createUpdate" class="saveButton" value="2. Save Site Search Setup"
-               style="display: inline; float: left;">
+        <input type="submit" id="sis-save-setup" name="createUpdate" class="saveButton"
+               value="2. Save Site Search Setup"
+               style="display: none;">
     </form>
     <input type="submit"
-           style="display: inline; float: right;"
-           name="crawl" class="crawlButton" value="1. Crawl your site"
+           name="crawl" class="crawlButton" value="Crawl your site and save your Site Search setup"
            onclick="registerSiteInSiS();">
     <div id="triggerCrawler">
         <p id="sis-status"></p>
