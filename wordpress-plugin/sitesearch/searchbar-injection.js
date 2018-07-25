@@ -15,11 +15,32 @@
  */
 
 var injectSearchbar = function () {
+    function getCookieValueForKey(cookieKey) {
+        var keyWithExtension = cookieKey + "=";
+        var cookiePairs = document.cookie.split(';');
+        for (var index = 0; index < cookiePairs.length; index++) {
+            var cookiePairTarget = cookiePairs[index];
+            while (cookiePairTarget.charAt(0) === " ")
+                cookiePairTarget = cookiePairTarget.substring(1, cookiePairTarget.length);
+            if (cookiePairTarget.indexOf(keyWithExtension) === 0)
+                return cookiePairTarget.substring(keyWithExtension.length, cookiePairTarget.length);
+        }
+        return "";
+    }
     
-    var defaultSearchbar = document.querySelector("#mk-nav-search-wrapper");
-    // #mk-nav-search-wrapper
-    defaultSearchbar.firstElementChild.remove();
-    defaultSearchbar.innerHTML = '<div id="searchbar"><?php echo If_Sis_searchbar($form);?></div>';
-
+    var sisDefaultWordPressSearchbarSelectorBase64 = getCookieValueForKey("sisDefaultWordPressSearchbarSelector");
+    var sisDefaultWordPressSearchbarSelector = atob(sisDefaultWordPressSearchbarSelectorBase64);
+    console.warn(sisDefaultWordPressSearchbarSelector + " wrong selector?");
+    var defaultWordPressSearchbar = document.querySelector(sisDefaultWordPressSearchbarSelector);
+    var hiddenSiSsearchbar = document.querySelector("#sitesearch-searchbar");
+    hiddenSiSsearchbar.style.display = "block";
+    defaultWordPressSearchbar.firstElementChild.remove();
+    defaultWordPressSearchbar.appendChild(hiddenSiSsearchbar);
+    IFS.jQuery.ifs.shared.clientOptions.siteId = getCookieValueForKey("sis-siteId");
 };
-injectSearchbar();
+
+window.addEventListener("DOMContentLoaded", function () {
+    console.warn("DOMContentLoaded - before: " + IFS.jQuery.ifs.shared.clientOptions.siteId);
+    injectSearchbar();
+    console.warn("DOMContentLoaded - after: " + IFS.jQuery.ifs.shared.clientOptions.siteId);
+});
