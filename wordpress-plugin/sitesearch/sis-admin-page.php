@@ -109,18 +109,24 @@ function setSafeCssSelector() {
     <style>
         .form-wrapper {
             width: 500px;
-            clear: both;
+            clear: none;
         }
 
         .form-wrapper input {
-            width: 100%;
-            clear: both;
+            width: 500px;
+            clear: none;
         }
         .saveButton {
-            z-index: 1001;
+            position: absolute;
+            top: 450px;
+            width: 500px;
+            clear: none;
         }
         .crawlButton {
-            z-index: 1000;
+            position: absolute;
+            top: 400px;
+            width: 500px;
+            clear: none;
         }
     </style>
     <form method="POST">
@@ -151,6 +157,6 @@ function setSafeCssSelector() {
     <div id="searchbar"><?php echo If_Sis_searchbar($form);?></div>
     <script>
         var hiddenSiSsearchbar = document.querySelector("#sitesearch-searchbar");
-        hiddenSiSsearchbar.style.display = "block";
+        hiddenSiSsearchbar.style.display = "block";        
     </script>
 </div>
