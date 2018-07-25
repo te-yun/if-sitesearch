@@ -68,9 +68,8 @@ function CreateSiS_Options_WP_DB()
     } else {
         update_option("if_sis_siteSecret", $if_sis_siteSecret);
     }
-    if (!get_option("sis_cssSelector")) {
-        $sis_safeCSSselector = ".main-nav-side-search";
-        update_option("sis_cssSelector", $sis_safeCSSselector);
+    if (!get_option("sis_cssSelector")) {        
+        update_option("sis_cssSelector", $sis_cssSelector);
     } else {
         update_option("sis_cssSelector", $sis_cssSelector);
     }
@@ -81,7 +80,7 @@ function setSafeCssSelector()
     if (get_option("sis_cssSelector")) {
         $sis_cssSelector = get_option("sis_cssSelector");
     } else {
-        $sis_cssSelector = "div > .main-nav-side-search";
+        $sis_cssSelector = "#search-2";
     }
     return $sis_cssSelector;
 }
