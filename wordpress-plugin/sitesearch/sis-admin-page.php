@@ -118,13 +118,13 @@ function setSafeCssSelector() {
     <div id="triggerCrawler">
         <p id="sis-status"></p>
     </div>
-    <br><br><br>
+    <br><br>
     <div id="searchbar"><?php echo If_Sis_searchbar($form);?></div>
     <script>
         var hiddenSiSsearchbar = document.querySelector("#sitesearch-searchbar");
         hiddenSiSsearchbar.style.display = "block";        
     </script>
-
+    <br><br><br>
     <input type="submit"
            value="Update CSS selector for the searchbar"
            onclick="document.getElementById('sis-save-setup').click();">
