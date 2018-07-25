@@ -102,16 +102,17 @@ function setSafeCssSelector() {
         <h1>Configuration</h1>
         Website URL: <input type="text" id="sis-url" name="sis-url" value="<?php echo getSiteUrl(); ?>">
         <br><br>
-        Site ID: <input type="text" id="sis-siteId" name="sis-siteId" value="<?php echo get_option("if_sis_siteId"); ?>">
+        Site ID: <input type="text" id="sis-siteId" name="sis-siteId" readonly
+                        value="<?php echo get_option("if_sis_siteId"); ?>">
         <br><br>
-        Site Secret: <input type="text" id="sis-siteSecret" name="sis-siteSecret"
+        Site Secret: <input type="text" id="sis-siteSecret" name="sis-siteSecret" readonly
                             value="<?php echo get_option("if_sis_siteSecret"); ?>">
         <br><br>
         Append Site Search to the following CSS selector:
         <input type="text" id="sis-cssSelector" name="sis-cssSelector"
                value="<?php echo get_option("sis_cssSelector"); ?>">
         <input type="submit" id="sis-save-setup" name="createUpdate" class="saveButton"
-               value="2. Save Site Search Setup"
+               value="Save Site Search Setup"
                style="display: none;">
     </form>
     <input type="submit"
