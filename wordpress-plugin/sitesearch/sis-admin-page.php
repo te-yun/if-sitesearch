@@ -108,7 +108,7 @@ function setSafeCssSelector() {
         Site Secret: <input type="text" id="sis-siteSecret" name="sis-siteSecret" readonly
                             value="<?php echo get_option("if_sis_siteSecret"); ?>">
         <br><br>
-        Append Site Search to the following CSS selector:
+        Append the Site Search searchbar to the following <strong>CSS selector</strong>:
         <input type="text" id="sis-cssSelector" name="sis-cssSelector"
                value="<?php echo get_option("sis_cssSelector"); ?>">
         <input type="submit" id="sis-save-setup" name="createUpdate" class="saveButton"
@@ -121,12 +121,14 @@ function setSafeCssSelector() {
     <div id="triggerCrawler">
         <p id="sis-status"></p>
     </div>
-    <br><br>
-    <br><br>
-    <br><br>
+    <br><br><br>
     <div id="searchbar"><?php echo If_Sis_searchbar($form);?></div>
     <script>
         var hiddenSiSsearchbar = document.querySelector("#sitesearch-searchbar");
         hiddenSiSsearchbar.style.display = "block";        
     </script>
+
+    <input type="submit"
+           value="Update CSS selector for the searchbar"
+           onclick="document.getElementById('sis-save-setup').click();">
 </div>
