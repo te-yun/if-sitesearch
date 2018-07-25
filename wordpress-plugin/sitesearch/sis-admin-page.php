@@ -55,50 +55,33 @@ function CreateSiS_Options_WP_DB()
     $sis_cssSelector = $_POST['sis-cssSelector'];
     if (!get_option("if_sis_url_for_crawling")) {
         update_option("if_sis_url_for_crawling", $if_sis_url_for_crawling);
-        echo "URL is standard url: ". getSiteUrl() ."<br>";
     } else {
         update_option("if_sis_url_for_crawling", $if_sis_url_for_crawling);
-        echo "Site url is updated: ". get_option("if_sis_url_for_crawling") ."<br>";
     }
     if (!get_option("if_sis_siteId")) {
         update_option("if_sis_siteId", $if_sis_siteId);
-        echo "Site ID now saved: ". get_option("if_sis_siteId") ."<br>";
     } else {
         update_option("if_sis_siteId", $if_sis_siteId);
-        echo "Site ID is now updated:". get_option("if_sis_siteId") ."<br>";
     }
     if (!get_option("if_sis_siteSecret")) {
         update_option("if_sis_siteSecret", $if_sis_siteSecret);
-        echo "Site Secret is now saved: ". get_option("if_sis_siteSecret") ."<br>";
     } else {
         update_option("if_sis_siteSecret", $if_sis_siteSecret);
-        echo "Site Secret is now updated: ". get_option("if_sis_siteSecret") ."<br>";
     }
     if (!get_option("sis_cssSelector")) {
         $sis_safeCSSselector = ".main-nav-side-search";
         update_option("sis_cssSelector", $sis_safeCSSselector);
     } else {
         update_option("sis_cssSelector", $sis_cssSelector);
-        echo "CSS selector is now updated: ". get_option("sis_cssSelector") ."<br>";
     }
-}
-
-function deleteSiS_Options_WP_DB()
-{
-    delete_option("if_sis_url_for_crawling");
-    delete_option("if_sis_siteId");
-    delete_option("if_sis_siteSecret");
-    delete_option("sis_cssSelector");
 }
 
 function setSafeCssSelector() {
     $sis_SafeCssSelector = "div > .main-nav-side-search";
     if (!get_option("sis_cssSelector")) {
         update_option("sis_cssSelector", $sis_SafeCssSelector);
-        echo "CSS selector is a standard selector: " + get_option("sis_cssSelector") ."<br>";
     } else {
         $sis_cssSelector = get_option("sis_cssSelector");
-        echo "CSS selector is: ". get_option("sis_cssSelector") ."<br>";
     }
 }
 ?>
@@ -109,24 +92,12 @@ function setSafeCssSelector() {
     <style>
         .form-wrapper {
             width: 500px;
-            clear: none;
+            clear: both;
         }
 
         .form-wrapper input {
             width: 500px;
-            clear: none;
-        }
-        .saveButton {
-            position: absolute;
-            top: 450px;
-            width: 500px;
-            clear: none;
-        }
-        .crawlButton {
-            position: absolute;
-            top: 400px;
-            width: 500px;
-            clear: none;
+            clear: both;
         }
     </style>
     <form method="POST">
