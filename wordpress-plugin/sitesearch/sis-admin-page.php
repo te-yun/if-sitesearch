@@ -90,10 +90,6 @@ function setSafeCssSelector() {
 
 <div class="form-wrapper" style="width: 500px;">
     <style>
-        /*.form-wrapper {*/
-        /*width: 500px;*/
-        /*}*/
-
         .form-wrapper input {
             width: 500px;
         }
@@ -115,6 +111,7 @@ function setSafeCssSelector() {
                value="Save Site Search Setup"
                style="display: none;">
     </form>
+    <br><br>
     <input type="submit"
            name="crawl" class="crawlButton" value="Crawl your site and save your Site Search setup"
            onclick="registerSiteInSiS();">
