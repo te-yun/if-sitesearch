@@ -118,19 +118,22 @@ function setSafeCssSelector()
         <input type="submit" id="sis-save-setup" name="createUpdate" class="saveButton"
                value="Save Site Search Setup"
                style="display: none;">
+        <!--        TODO add "Reset Site Search setup" button-->
     </form>
     <br><br>
     <input type="submit"
            name="crawl" class="crawlButton" value="Crawl your site and save your Site Search setup"
-           onclick="registerSiteInSiS();">
+           onclick="registerSiteInSiS();"
+        <?php if (get_option("if_sis_siteId")) echo "style='display: none'"; ?>>
     <div id="triggerCrawler">
         <p id="sis-status"></p>
     </div>
     <input type="submit"
            value="Update CSS selector for the searchbar"
-           onclick="document.getElementById('sis-save-setup').click();">
+           onclick="document.getElementById('sis-save-setup').click();"
+        <?php if (!get_option("if_sis_siteId")) echo "style='display: none'"; ?>>
     <br><br>
-    <p>Search here before your visitors start searching</p>
+    <p>Search here before your visitors start searching...</p>
     <div id="searchbar"><?php echo If_Sis_searchbar($form); ?></div>
     <script>
         var hiddenSiSsearchbar = document.querySelector("#sitesearch-searchbar");

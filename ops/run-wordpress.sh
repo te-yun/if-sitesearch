@@ -1,20 +1,22 @@
 #!/usr/bin/env sh
 
-docker network create dev
+docker network create sitesearch
 
 docker rm -f wordpress-mysql
 docker run --name wordpress-mysql -d \
     -e MYSQL_ROOT_PASSWORD=$SERVICE_SECRET \
-    --network dev \
-    mysql:5.7
+    --restart unless-stopped \
+    --network sitesearch \
+    mariadb:10
 
 docker rm -f wordpress
 docker run --name wordpress -it \
     --link wordpress-mysql:mysql \
     -e WORDPRESS_DB_PASSWORD=$SERVICE_SECRET \
     -p 7080:80 \
-    --network dev \
-    wordpress:4.9.7-apache
+    --restart unless-stopped \
+    --network sitesearch \
+    wordpress:4.9-apache
 
 #docker network create dev
 #docker-compose --file ./ops/docker-compose-wordpress.yaml -p sitesearch down
