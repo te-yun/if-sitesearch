@@ -11,7 +11,7 @@ docker run --name wordpress-mariadb -d \
 
 docker rm -f wordpress
 docker run --name wordpress -it \
-    --link wordpress-mariadb:mariadb \
+    --link wordpress-mariadb:mysql \
     -e WORDPRESS_DB_PASSWORD=$SERVICE_SECRET \
     -p 7080:80 \
     --restart unless-stopped \
