@@ -24,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -40,7 +39,7 @@ public class SearchService {
     }
 
     public Hits search(final String query, final UUID siteId) {
-        com.intrafind.api.search.Hits hits = searchService.search(
+        final var hits = searchService.search(
 //                query + " AND " + Fields.TENANT + ":" + siteId,
                 query, Search.FILTER_QUERY, Fields.TENANT + ":" + siteId,
 //  TODO optimize by not retrieving all fields              Search.RETURN_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL + QUERY_SEPARATOR + Fields.TENANT + QUERY_SEPARATOR + QUERY_SEPARATOR +SiteService.PAGE_THUMBNAIL,
@@ -56,7 +55,7 @@ public class SearchService {
                 Search.HITS_LIST_SIZE, 50 // max total results
         );
 
-        final List<FoundPage> siteDocuments = new ArrayList<>();
+        final var siteDocuments = new ArrayList<FoundPage>();
         hits.getDocuments().forEach(document -> {
             final FoundPage site = new FoundPage(
                     document.get(HIT_TEASER_PREFIX + Fields.TITLE),
