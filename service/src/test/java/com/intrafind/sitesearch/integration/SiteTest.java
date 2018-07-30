@@ -19,7 +19,14 @@ package com.intrafind.sitesearch.integration;
 import com.intrafind.sitesearch.SmokeTest;
 import com.intrafind.sitesearch.controller.PageController;
 import com.intrafind.sitesearch.controller.SiteController;
-import com.intrafind.sitesearch.dto.*;
+import com.intrafind.sitesearch.dto.CrawlStatus;
+import com.intrafind.sitesearch.dto.FetchedPage;
+import com.intrafind.sitesearch.dto.SiteCreation;
+import com.intrafind.sitesearch.dto.SiteIndexSummary;
+import com.intrafind.sitesearch.dto.SitePage;
+import com.intrafind.sitesearch.dto.SiteProfile;
+import com.intrafind.sitesearch.dto.SiteProfileUpdate;
+import com.intrafind.sitesearch.dto.SitesCrawlStatus;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,15 +35,28 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.net.URI;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -156,7 +176,7 @@ public class SiteTest {
         assertEquals(HttpStatus.NOT_FOUND, siteProfileWithInvalidSecret.getStatusCode());
 
         // update site profile
-        final List<SiteProfile.Config> updateSiteProfileConfigs = new ArrayList<>(configs);
+        final var updateSiteProfileConfigs = new ArrayList<>(configs);
 
         final var siteProfileUpdate = new SiteProfileUpdate(createdSiteProfile.getSiteSecret(), "update." + CrawlerTest.TEST_EMAIL_ADDRESS, configs);
         final var updatedSite = caller.exchange(SiteController.ENDPOINT + "/" + createdSiteProfile.getSiteId() + "/profile?siteSecret=" + createdSiteProfile.getSiteSecret(),
@@ -336,17 +356,6 @@ public class SiteTest {
         assertNull(updateWithInvalidPageId.getBody());
     }
 
-//    @Test
-//    public void importFeed() throws Exception {
-//        final ResponseEntity<SiteIndexSummary> exchange = caller.exchange(
-//                SitesController.ENDPOINT + "/rss?feedUrl=http://www.mvv-muenchen.de/de/aktuelles/fahrplanaenderungen/detail/rss.xml",
-//                HttpMethod.POST, HttpEntity.EMPTY, SiteIndexSummary.class);
-//        final SiteIndexSummary creation = validateTenantSummary(exchange, 10);
-//
-//        TimeUnit.MILLISECONDS.sleep(8_000);
-//        validateUpdatedSites(creation);
-//    }
-
     @Test
     public void importFeedAndClearSite() throws Exception {
         final var exchange = caller.exchange(SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml",
@@ -391,10 +400,12 @@ public class SiteTest {
                 SiteController.ENDPOINT + "/rss?feedUrl=http://intrafind.de/share/enterprise-search-blog.xml&stripHtmlTags=true",
                 HttpMethod.POST, HttpEntity.EMPTY, SiteIndexSummary.class);
         TimeUnit.MILLISECONDS.sleep(8_000);
-        final SiteIndexSummary siteIndexSummaryCreation = validateTenantSummary(initialIndexCreation, 25);
+        final var siteIndexSummaryCreation = validateTenantSummary(initialIndexCreation, 25);
 
         final var siteIdFromCreation = siteIndexSummaryCreation.getSiteId();
+        assertNotNull(siteIdFromCreation);
         final var siteSecretFromCreation = siteIndexSummaryCreation.getSiteSecret();
+        assertNotNull(siteSecretFromCreation);
     }
 
     @Test
@@ -464,7 +475,7 @@ public class SiteTest {
 
     private SiteIndexSummary validateTenantSummary(ResponseEntity<SiteIndexSummary> anotherFeedReplacement, int indexEntriesCount) {
         assertEquals(HttpStatus.OK, anotherFeedReplacement.getStatusCode());
-        final SiteIndexSummary siteIndexSummaryUpdate = anotherFeedReplacement.getBody();
+        final var siteIndexSummaryUpdate = anotherFeedReplacement.getBody();
         assertNotNull(siteIndexSummaryUpdate.getSiteId());
         assertNotNull(siteIndexSummaryUpdate.getSiteSecret());
         assertEquals(indexEntriesCount, siteIndexSummaryUpdate.getSuccessCount());
@@ -476,7 +487,7 @@ public class SiteTest {
     @Test
     public void indexIntrafindDe() throws Exception {
         final var newSite = createNewSite(null);
-        List<String> enIndexDocuments = new ArrayList<>();
+        final var enIndexDocuments = new ArrayList<String>();
         enIndexDocuments.add("en/2b4c27b0-6636-4a13-a911-4f495f99b604.xml");
         enIndexDocuments.add("en/32d2557e-7f03-48d9-ad60-bf7c0b70c487.xml");
         enIndexDocuments.add("en/534706ba-da98-4b45-b920-8ec0486d79fb.xml");
@@ -493,7 +504,7 @@ public class SiteTest {
 
         final var allPages = caller.exchange(SiteController.ENDPOINT + "/" + newSite.getSiteId(),
                 HttpMethod.GET, HttpEntity.EMPTY, List.class);
-        @SuppressWarnings("unchecked") final var pageIds = allPages.getBody();
+        final var pageIds = allPages.getBody();
         assertEquals(siteIndexSummary.getDocuments().size(), pageIds.size());
 
         // update index without clearance
@@ -506,7 +517,7 @@ public class SiteTest {
 
         final var allPagesAfterUpdate = caller.exchange(SiteController.ENDPOINT + "/" + newSite.getSiteId(),
                 HttpMethod.GET, HttpEntity.EMPTY, List.class);
-        @SuppressWarnings("unchecked") final var allPageIdsAfterUpdate = allPagesAfterUpdate.getBody();
+        final var allPageIdsAfterUpdate = allPagesAfterUpdate.getBody();
         assertEquals(siteIndexSummary.getDocuments().size() + siteIndexSummaryAfterUpdate.getDocuments().size(), allPageIdsAfterUpdate.size());
 
         // create index with clearance

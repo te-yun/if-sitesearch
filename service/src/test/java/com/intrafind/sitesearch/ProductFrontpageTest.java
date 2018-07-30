@@ -24,7 +24,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.assertEquals;
@@ -39,7 +38,7 @@ public class ProductFrontpageTest {
 
     @Test
     public void redirectFromWWW() { // fails quite often because of 1&1
-        final ResponseEntity<String> response = caller.exchange(
+        final var response = caller.exchange(
                 "https://www.sitesearch.cloud",
                 HttpMethod.GET,
                 HttpEntity.EMPTY,
@@ -50,7 +49,7 @@ public class ProductFrontpageTest {
 
     @Test
     public void redirectFromUnencryptedWWW() { // fails quite often because of 1&1
-        final ResponseEntity<String> response = caller.exchange(
+        final var response = caller.exchange(
                 "http://www.sitesearch.cloud",
                 HttpMethod.GET,
                 HttpEntity.EMPTY,
@@ -61,7 +60,7 @@ public class ProductFrontpageTest {
 
     @Test
     public void productFrontpageContent() { // fails quite often because of 1&1
-        final ResponseEntity<String> response = caller.exchange(
+        final var response = caller.exchange(
                 "https://sitesearch.cloud",
                 HttpMethod.GET,
                 HttpEntity.EMPTY,

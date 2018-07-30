@@ -88,10 +88,9 @@ public class SecurityTest {
         assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJson.getStatusCode());
     }
 
-//    @Test
-//    public void assureSiteSearchServiceBasicAuthProtectionForJsonGet() throws Exception {
-//        final ResponseEntity<String> secureEndpointJsonGet = caller.getForEntity(URI.create(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "json/index?method=index"), String.class);
-//        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJsonGet.getStatusCode());
-//        assertNull(secureEndpointJsonGet.getBody());
-//    }
+    @Test
+    public void assureSiteSearchServiceBasicAuthProtectionForJsonGet() {
+        final var secureEndpointJsonGet = caller.getForEntity(URI.create(SmokeTest.INVALID_CREDENTIALS + SmokeTest.SEARCH_SERVICE_DOMAIN + "json/index?method=index"), String.class);
+        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointJsonGet.getStatusCode());
+    }
 }
