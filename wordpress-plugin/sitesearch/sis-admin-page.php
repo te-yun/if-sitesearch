@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2018 IntraFind Software AG. All rights reserved.
  *
@@ -33,11 +34,11 @@ function getSiteUrl()
 }
 
 // actions
-if (isset($_POST['createUpdate'])) {
+if (isset($_POST['create-saveSetup'])) {
     CreateSiS_Options_WP_DB();
 }
 
-if (isset($_POST['delete'])) {
+if (isset($_POST['sis-removeSetup'])) {
     deleteSiS_Options_WP_DB();
 }
 
@@ -75,6 +76,14 @@ function CreateSiS_Options_WP_DB()
     }
 }
 
+function deleteSiS_Options_WP_DB()
+{
+    delete_option("if_sis_url_for_crawling");
+    delete_option("if_sis_siteId");
+    delete_option("if_sis_siteSecret");
+    delete_option("sis_cssSelector");
+}
+
 function setSafeCssSelector()
 {
     if (get_option("sis_cssSelector")) {
@@ -84,7 +93,6 @@ function setSafeCssSelector()
     }
     return $sis_cssSelector;
 }
-
 ?>
 
 <script src="https://api.sitesearch.cloud/external/wordpress-plugin/admin-client.js"></script>
@@ -115,14 +123,17 @@ function setSafeCssSelector()
         </p>
         <input type="text" id="sis-cssSelector" name="sis-cssSelector"
                value="<?php echo setSafeCssSelector(); ?>">
-        <input type="submit" id="sis-save-setup" name="createUpdate" class="saveButton"
+        <input type="submit" id="sis-save-setup" name="create-saveSetup" 
                value="Save Site Search Setup"
                style="display: none;">
         <!--        TODO add "Reset Site Search setup" button-->
+        <input type="submit" id="sis-remove-setup" name="sis-removeSetup"
+               value="Remove Site Search Setup"
+               style="display: none;">
     </form>
     <br><br>
     <input type="submit"
-           name="crawl" class="crawlButton" value="Crawl your site and save your Site Search setup"
+           name="crawl" value="Crawl your site and save your Site Search setup"
            onclick="registerSiteInSiS();"
         <?php if (get_option("if_sis_siteId")) echo "style='display: none'"; ?>>
     <div id="triggerCrawler">
@@ -135,6 +146,13 @@ function setSafeCssSelector()
     <br><br>
     <p>Search here before your visitors start searching...</p>
     <div id="searchbar"><?php echo If_Sis_searchbar($form); ?></div>
+    <br><br>
+    <div>
+        <input type="submit" 
+               value="Reset Site Search setup" 
+               onclick="document.getElementById('sis-remove-setup').click();" 
+            <?php if (!get_option("if_sis_siteId")) echo "style='display: none'"; ?>>
+    </div>    
     <script>
         var hiddenSiSsearchbar = document.querySelector("#sitesearch-searchbar");
         hiddenSiSsearchbar.style.display = "block";
