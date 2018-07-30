@@ -132,6 +132,10 @@ function setSafeCssSelector()
                style="display: none;">
     </form>
     <br><br>
+    <p>Using this Site Search plugin, you accept our
+        <a href="https://sitesearch.cloud/terms" title="Terms &amp; Conditions" target="_blank">terms &amp;
+            conditions</a>.
+    </p>
     <input type="submit"
            name="crawl" value="Crawl your site and save your Site Search setup"
            onclick="registerSiteInSiS();"
