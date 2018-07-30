@@ -64,6 +64,11 @@ public class SimpleClientTest {
             .baseUrl("http://localhost:8080")
             .build();
 
+    private WebClient webClient = WebClient
+            .builder()
+            .baseUrl("http://localhost:8080")
+            .build();
+
     @Test
     public void test() {
         final var simpleIndex = new SimpleIndexClient();
@@ -81,7 +86,7 @@ public class SimpleClientTest {
         final var jsonString = "{" +
                 "\"java11\":\"KIMCHY\"," +
                 "\"post\":\"2013-01-30\"," +
-                "\"message\":\"TRYING 12 ELASTICSEARCH\"" +
+                "\"message\":\"TRYING 13 ELASTICSEARCH\"" +
                 "}";
         indexRequest.source(jsonString, XContentType.JSON);
 

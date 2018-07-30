@@ -16,7 +16,14 @@
 
 package com.intrafind.sitesearch.controller;
 
-import com.intrafind.sitesearch.dto.*;
+import com.intrafind.sitesearch.dto.Autocomplete;
+import com.intrafind.sitesearch.dto.FetchedPage;
+import com.intrafind.sitesearch.dto.Hits;
+import com.intrafind.sitesearch.dto.SiteCreation;
+import com.intrafind.sitesearch.dto.SiteIndexSummary;
+import com.intrafind.sitesearch.dto.SitePage;
+import com.intrafind.sitesearch.dto.SiteProfile;
+import com.intrafind.sitesearch.dto.SiteProfileUpdate;
 import com.intrafind.sitesearch.service.AutocompleteService;
 import com.intrafind.sitesearch.service.SearchService;
 import com.intrafind.sitesearch.service.SiteService;
@@ -24,7 +31,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.time.Instant;
@@ -217,7 +230,6 @@ public class SiteController {
             @PathVariable(value = "siteId") UUID siteId
     ) {
         final var start = Instant.now();
-//        if (query.isEmpty()) return ResponseEntity.badRequest().build();
 
         // override siteId with cookie value for debugging & speed up the getting started experience
         if (cookieSite != null) {
@@ -243,7 +255,6 @@ public class SiteController {
             @PathVariable(value = "siteId") UUID siteId
     ) {
         final var start = Instant.now();
-//        if (query.isEmpty()) return ResponseEntity.badRequest().build();
 
         // override siteId with cookie value for debugging & speed up the getting started experience
         if (cookieSite != null) {

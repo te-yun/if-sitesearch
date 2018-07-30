@@ -261,7 +261,7 @@ public class SmokeTest {
         final var response = HTTP_CLIENT.newCall(request).execute();
 
         assertEquals(HttpStatus.OK.value(), response.code());
-        var results = MAPPER.readValue(response.body().bytes(), Autocomplete.class);
+        final var results = MAPPER.readValue(response.body().bytes(), Autocomplete.class);
         assertEquals(1, results.getResults().size());
         assureCorsHeaders(response.headers(), HEADER_SIZE);
     }
@@ -275,7 +275,7 @@ public class SmokeTest {
         final Response response = HTTP_CLIENT.newCall(request).execute();
 
         assertEquals(HttpStatus.OK.value(), response.code());
-        Autocomplete result = MAPPER.readValue(response.body().bytes(), Autocomplete.class);
+        final var result = MAPPER.readValue(response.body().bytes(), Autocomplete.class);
         assertEquals(1, result.getResults().size());
         assertEquals("knowledge graph", result.getResults().get(0).toLowerCase());
         assureCorsHeaders(response.headers(), HEADER_SIZE);
@@ -283,7 +283,7 @@ public class SmokeTest {
 
     @Test
     public void autocompleteBwBank() throws Exception {
-        var request = new Request.Builder()
+        final var request = new Request.Builder()
                 .url(SITES_API + BW_BANK_SITE_ID + "/autocomplete?query=bank")
                 .headers(Headers.of(CORS_TRIGGERING_REQUEST_HEADER))
                 .build();
