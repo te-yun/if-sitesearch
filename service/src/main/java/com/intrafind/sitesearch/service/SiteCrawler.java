@@ -116,7 +116,7 @@ public class SiteCrawler extends WebCrawler {
             indexPage(pdfAsPage);
             countPage(href);
         } catch (final IOException | TikaException | SAXException e) {
-            LOG.warn("indexPdf_ERROR - url: " + href);
+            LOG.warn("indexPdf_ERROR - url: " + href + " - e: " + e.getMessage());
         }
     }
 
