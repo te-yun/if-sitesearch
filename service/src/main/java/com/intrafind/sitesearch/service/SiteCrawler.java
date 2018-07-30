@@ -78,8 +78,6 @@ public class SiteCrawler extends WebCrawler {
         this.pageBodyCssSelector = pageBodyCssSelector;
         this.allowUrlWithQuery = allowUrlWithQuery;
         this.robotRules = robotRules;
-
-        LOG.warn("TEMPORARY_CHECK_FOR_MH - " + siteId + " - isAllowUrlWithQuery: " + allowUrlWithQuery); // TODO remove this
     }
 
     @Override
