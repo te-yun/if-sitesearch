@@ -152,7 +152,8 @@ function setSafeCssSelector()
     <div id="searchbar"><?php echo If_Sis_searchbar($form); ?></div>
     <br><br>
     <div>
-        <p>
+        <p
+            <?php if (!get_option("if_sis_siteId")) echo "style='display: none'"; ?>>
             To <strong>start over and recrawl</strong> a new site, click the <strong>reset</strong> button below.
             This will purge all Site Search settings from WordPress, without affecting any other WordPress settings.
             If you just want to adjust the CSS selector, you do not need to reset these configuration settings
