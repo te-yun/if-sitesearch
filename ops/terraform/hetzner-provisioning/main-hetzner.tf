@@ -12,7 +12,6 @@ variable "zones" {
 # terraform plan
 # terraform apply
 # terraform destroy
-variable "hcloud_token" {}
 
 # Configure the Hetzner Cloud Provider
 provider "hcloud" {
@@ -21,7 +20,7 @@ provider "hcloud" {
 
 resource "hcloud_server" "vm" {
   name = "vm-${count.index+1}"
-  count = "2"
+  count = "1"
   datacenter = "${lookup(var.zones, "zone${count.index % 2}")}"
   image = "debian-9"
   server_type = "cx11"
