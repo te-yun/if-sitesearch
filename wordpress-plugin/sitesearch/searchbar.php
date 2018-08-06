@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 
-remove_all_filters('get_search_form');
 function If_Sis_searchbar($form)
 {
     $form = '<div id="sitesearch-searchbar" class="searchbar" style="display: none;">
@@ -50,7 +49,7 @@ function applyTransporterCookies()
 }
 
 applyTransporterCookies();
-add_filter('get_search_form', 'If_Sis_searchbar');
+// add_filter('get_search_form', 'If_Sis_searchbar');
 add_action('wp_footer', 'If_Sis_searchbar');
-add_action('admin_footer', 'If_Sis_searchbar');
-add_shortcode('wpbsearch', 'get_search_form');
+// add_action('admin_footer', 'If_Sis_searchbar');
+// add_shortcode('wpbsearch', 'get_search_form');
