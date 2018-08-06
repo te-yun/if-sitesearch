@@ -49,7 +49,4 @@ function applyTransporterCookies()
 }
 
 applyTransporterCookies();
-// add_filter('get_search_form', 'If_Sis_searchbar');
 add_action('wp_footer', 'If_Sis_searchbar');
-// add_action('admin_footer', 'If_Sis_searchbar');
-// add_shortcode('wpbsearch', 'get_search_form');
