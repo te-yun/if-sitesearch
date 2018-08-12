@@ -6,6 +6,10 @@ sudo apt install software-properties-common -y
 sudo add-apt-repository ppa:certbot/certbot -y
 sudo apt update -y
 sudo apt install certbot -y
+sudo apt update -y
+
+# sudo apt install gcloud -y
+# sh change-sis-cdn-dns-records.sh
 
 # CDN IPs: 35.227.226.37 / 2600:1901:0:c2e3::
 sudo certbot certonly --webroot -w /etc/letsencrypt --expand \
