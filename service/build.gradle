@@ -31,11 +31,11 @@ plugins {
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_10
-//targetCompatibility = JavaVersion.VERSION_1_10
+targetCompatibility = JavaVersion.VERSION_1_10
 //sourceCompatibility = JavaVersion.VERSION_1_11
 //targetCompatibility = JavaVersion.VERSION_1_11
 //sourceCompatibility = "11"
-targetCompatibility = "11"
+//targetCompatibility = "11"
 
 repositories {
     jcenter()
