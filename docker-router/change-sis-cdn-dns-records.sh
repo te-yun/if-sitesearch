@@ -6,13 +6,14 @@
 # gcloud projects list
 # gcloud config set project woven-alpha-150909
 # gcloud dns managed-zones list --project woven-alpha-150909
-# gcloud dns record-sets list --zone=sis --project woven-alpha-150909
+# gcloud dns record-sets list --zone sis --project woven-alpha-150909
 
 sudo apt install gcloud -y
 # TODO gcloud init is missing
 # TODO gcloud is not part of the regular packages repository, add a corresponding debian repository first
 # TODO: write "simple" bash script
 
+# setup SSL update mode
 gcloud dns record-sets transaction start --zone=sis --project woven-alpha-150909
 gcloud dns record-sets transaction remove --zone=sis --project woven-alpha-150909 \
         --name="cdn.sitesearch.cloud." \
@@ -31,9 +32,9 @@ gcloud dns record-sets transaction execute --zone=sis --project woven-alpha-1509
 # if transaction not successfull reset transaction with below code
 # gcloud dns record-sets transaction abort --zone=sis --project woven-alpha-150909
 
-# update SSL certs
+# sh update-ssl-certificate.sh
 
-# rollback changes on DNS records
+# revert to regular DNS setup mode
 gcloud dns record-sets transaction start --zone=sis --project woven-alpha-150909
 gcloud dns record-sets transaction add --zone=sis --project woven-alpha-150909 \
         --name="cdn.sitesearch.cloud." \

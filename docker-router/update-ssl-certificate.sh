@@ -8,7 +8,7 @@ sudo apt update -y
 sudo apt install certbot -y
 sudo apt update -y
 
-# sh change-sis-cdn-dns-records.sh
+# TODO incorporate this script into `change-sis-cdn-dns-records.sh`
 
 # CDN IPs: 35.227.226.37 / 2600:1901:0:c2e3::
 sudo certbot certonly --webroot -w /etc/letsencrypt --expand \
