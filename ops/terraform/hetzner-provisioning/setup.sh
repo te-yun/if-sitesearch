@@ -20,6 +20,9 @@ echo 'common.config-store: com.intrafind.common.config.configstore.ConfigStores.
 /etc/init.d/if-sv-tagging restart; sleep 15;
 /etc/init.d/if-sv-base restart; sleep 15;
 /etc/init.d/if-sv-converter restart; sleep 15
+/etc/init.d/if-sv-tagging restart; sleep 15;
+/etc/init.d/if-sv-base restart; sleep 15;
+/etc/init.d/if-sv-converter restart; sleep 15;
 curl http://localhost:9603/json/tagger?method=tag&param0=/root/20180726152906.docx&param1=[plainTextSwitch,something]
 
 # sleep 15; export INTRAFIND_LICENSE=/root/default.lic && /etc/init.d/if-sv-tagging restart
