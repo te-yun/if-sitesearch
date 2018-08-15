@@ -7,14 +7,15 @@ provider "hcloud" {
 
 resource "hcloud_floating_ip" "main" {
   depends_on = [
-    "hcloud_server.node"]
+    "hcloud_server.node"
+  ]
 
   type = "ipv4"
   server_id = "${hcloud_server.node.id}"
   description = "DNS 'A' record"
   home_location = "nbg1"
 
-  provisioner "local-exec" {
+  provisioner "local-exec" "ip" {
     //    command = "echo ${hcloud_floating_ip.main.id} 'blub'  >> applied-main.txt"
     command = "echo 'blub' >> applied-main.txt"
   }
@@ -25,15 +26,15 @@ resource "hcloud_server" "node" {
   count = "1"
   datacenter = "nbg1-dc3"
   image = "ubuntu-18.04"
-  server_type = "cx11-ceph"
+  server_type = "cx31-ceph"
   ssh_keys = [
     "${hcloud_ssh_key.minion.id}"
   ]
 
 
   provisioner "file" "al-license" {
-    source = "~/my/project/intrafind/docker-container/tagging-service/intrafind.lic"
-    destination = "default.lic"
+    source = "~/Desktop/al-tagger/intrafind-dev.lic"
+    destination = "/srv/al-contract-analyzer.lic"
   }
 
   provisioner "file" "if-jdk" {
@@ -81,7 +82,7 @@ resource "hcloud_server" "node" {
     script = "setup.sh"
   }
 
-  provisioner "local-exec" {
+  provisioner "local-exec" "server" {
     command = "echo ${hcloud_server.node.ipv4_address} > applied-node.txt"
   }
 }
