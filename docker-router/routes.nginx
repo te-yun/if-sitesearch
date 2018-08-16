@@ -156,7 +156,7 @@ server {
     include /etc/nginx/snippets/ssl.conf;
 
     location / {
-        proxy_pass https://sitesearch.cloud;
+        proxy_pass http://217.160.0.69;
     }
 }
 
