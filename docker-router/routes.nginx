@@ -144,22 +144,21 @@ server {
     include /etc/nginx/snippets/ssl.conf;
 
     location / {
-        add_header set-cookie 'affiliate = $arg_affiliate; domain = sitesearch.cloud';
-        return 301 https://sitesearch.cloud$request_uri;
+        proxy_pass http://sitesearch.cloud;
     }
 }
 
-#server {
-#    listen 443 ssl http2;
-#    listen [::]:443 ssl http2;
-#    server_name blue.sitesearch.cloud;
-#
-#    include /etc/nginx/snippets/ssl.conf;
-#
-#    location / {
-#        proxy_pass http://wordpress:7080;
-#    }
-#}
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name blue.sitesearch.cloud;
+
+    include /etc/nginx/snippets/ssl.conf;
+
+    location / {
+        proxy_pass https://sitesearch.cloud;
+    }
+}
 
 server {
     listen 443 ssl http2;
