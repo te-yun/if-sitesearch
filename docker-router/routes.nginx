@@ -178,6 +178,20 @@ server {
 server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
+    server_name esche-demo.analyzelaw.com;
+
+    include /etc/nginx/snippets/ssl.conf;
+
+    location / {
+        include /etc/nginx/snippets/cors-headers.conf;
+
+        proxy_pass http://94.130.190.226;
+    }
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
     server_name dev.analyzelaw.com;
 
     include /etc/nginx/snippets/ssl.conf;
