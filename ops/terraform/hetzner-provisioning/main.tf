@@ -28,18 +28,17 @@ resource "hcloud_server" "node" {
   }
 
   provisioner "local-exec" "server" {
-    command = "echo $OLD_IP_ADDRESS-- -$NEW_IP_ADDRESS > ${path.module}/applied-node.txt"
+    command = "echo $OLD_IP_ADDRESS - $NEW_IP_ADDRESS > ${path.module}/applied-node.txt"
     environment {
       OLD_IP_ADDRESS = "${hcloud_server.node.ipv4_address}"
-      NEW_IP_ADDRESS = "195.201.100.22"
+      NEW_IP_ADDRESS = "94.130.188.186"
     }
   }
 
   provisioner "remote-exec" "install" {
     inline = [
-      "sleep 25 && apt-get update && apt-get install docker.io -y",
-      //      "ip addr add ${hcloud_floating_ip.main.description} dev eth0",
-      "touch /test.txt.blub"
+      "sleep 20 && apt-get update && apt-get install docker.io -y",
+      "docker ps",
     ]
   }
 }
@@ -66,7 +65,6 @@ resource "hcloud_floating_ip" "main" {
   server_id = "${hcloud_server.node.id}"
   description = "DNS 'A' record"
   home_location = "nbg1"
-  //94.130.188.186
 
   provisioner "remote-exec" "install" {
     inline = [

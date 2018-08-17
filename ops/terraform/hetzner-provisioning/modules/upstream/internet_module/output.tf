@@ -1,3 +1,3 @@
 output "dummy" "placeholder" {
-  value = "literal"
+  value = "literal 123"
 }
