@@ -14,23 +14,23 @@ variable "password" {
   description = "Default Password"
 }
 
-//resource "hcloud_floating_ip" "main" {
-//  type = "ipv4"
-//  server_id = "${hcloud_server.node.id}"
-//  description = "DNS 'A' record"
-//  home_location = "nbg1"
-//
-//  provisioner "remote-exec" "install" {
-//    inline = [
-//      "ip addr add ${hcloud_floating_ip.main.id} dev eth0",
-//    ]
-//  }
-//
-//  provisioner "local-exec" "ip" {
-//    //    command = "echo ${hcloud_floating_ip.main.id} 'blub'  >> applied-main.txt"
-//    command = "echo blub > applied-main.txt"
-//  }
-//}
+resource "hcloud_floating_ip" "main" {
+  type = "ipv4"
+  server_id = "${hcloud_server.node.id}"
+  description = "DNS 'A' record"
+  home_location = "nbg1"
+
+  provisioner "remote-exec" "install" {
+    inline = [
+      "ip addr add ${hcloud_floating_ip.main.id} dev eth0",
+    ]
+  }
+
+  provisioner "local-exec" "ip" {
+    //    command = "echo ${hcloud_floating_ip.main.id} 'blub'  >> applied-main.txt"
+    command = "echo blub > applied-main.txt"
+  }
+}
 
 provider "hcloud" "Hetzner" {
   token = "${file("~/.ssh/hetzner-api-token-analyze-law.txt")}"
