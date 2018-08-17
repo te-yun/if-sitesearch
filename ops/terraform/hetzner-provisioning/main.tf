@@ -8,6 +8,30 @@ variable "tenant" {
   description = "Customer Name"
 }
 
+variable "password" {
+  type = "string"
+  default = "invalid dummy"
+  description = "Default Password"
+}
+
+//resource "hcloud_floating_ip" "main" {
+//  type = "ipv4"
+//  server_id = "${hcloud_server.node.id}"
+//  description = "DNS 'A' record"
+//  home_location = "nbg1"
+//
+//  provisioner "remote-exec" "install" {
+//    inline = [
+//      "ip addr add ${hcloud_floating_ip.main.id} dev eth0",
+//    ]
+//  }
+//
+//  provisioner "local-exec" "ip" {
+//    //    command = "echo ${hcloud_floating_ip.main.id} 'blub'  >> applied-main.txt"
+//    command = "echo blub > applied-main.txt"
+//  }
+//}
+
 provider "hcloud" "Hetzner" {
   token = "${file("~/.ssh/hetzner-api-token-analyze-law.txt")}"
 }
@@ -23,8 +47,8 @@ resource "hcloud_server" "node" {
   ]
 
   provisioner "file" "al-license" {
-    source = "~/Desktop/al-tagger/intrafind-dev.lic"
-    destination = "/srv/al-contract-analyzer.lic"
+    source = "~/my/project/intrafind/docker-container/intrafind-dev.license"
+    destination = "/srv/al-contract-analyzer.license"
   }
 
   provisioner "local-exec" "server" {
@@ -38,6 +62,8 @@ resource "hcloud_server" "node" {
   provisioner "remote-exec" "install" {
     inline = [
       "sleep 20 && apt-get update && apt-get install docker.io -y",
+      "docker login docker-registry.sitesearch.cloud --username sitesearch --password ${var.password}",
+      "docker run --name al-tagger -d -p 9603:9603 docker-registry.sitesearch.cloud/intrafind/al-tagger:latest",
       "docker ps",
     ]
   }
@@ -55,26 +81,3 @@ resource "hcloud_ssh_key" "minion" {
   name = "minion"
   public_key = "${file("~/.ssh/if-minion-id_rsa.pub")}"
 }
-
-resource "hcloud_floating_ip" "main" {
-  depends_on = [
-    "hcloud_server.node"
-  ]
-  type = "ipv4"
-
-  server_id = "${hcloud_server.node.id}"
-  description = "DNS 'A' record"
-  home_location = "nbg1"
-
-  provisioner "remote-exec" "install" {
-    inline = [
-      "ip addr add ${hcloud_floating_ip.main.id} dev eth0",
-    ]
-  }
-
-  provisioner "local-exec" "ip" {
-    //    command = "echo ${hcloud_floating_ip.main.id} 'blub'  >> applied-main.txt"
-    command = "echo blub > applied-main.txt"
-  }
-}
-
