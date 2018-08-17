@@ -14,24 +14,6 @@ variable "password" {
   description = "Default Password"
 }
 
-resource "hcloud_floating_ip" "main" {
-  type = "ipv4"
-  server_id = "${hcloud_server.node.id}"
-  description = "DNS 'A' record"
-  home_location = "nbg1"
-
-  provisioner "remote-exec" "install" {
-    inline = [
-      "ip addr add ${hcloud_floating_ip.main.id} dev eth0",
-    ]
-  }
-
-  provisioner "local-exec" "ip" {
-    //    command = "echo ${hcloud_floating_ip.main.id} 'blub'  >> applied-main.txt"
-    command = "echo blub > applied-main.txt"
-  }
-}
-
 provider "hcloud" "Hetzner" {
   token = "${file("~/.ssh/hetzner-api-token-analyze-law.txt")}"
 }
@@ -41,7 +23,7 @@ resource "hcloud_server" "node" {
   count = "1"
   datacenter = "nbg1-dc3"
   image = "ubuntu-18.04"
-  server_type = "cx31-ceph"
+  server_type = "cx21-ceph"
   ssh_keys = [
     "${hcloud_ssh_key.minion.id}"
   ]
@@ -63,7 +45,7 @@ resource "hcloud_server" "node" {
     inline = [
       "sleep 20 && apt-get update && apt-get install docker.io -y",
       "docker login docker-registry.sitesearch.cloud --username sitesearch --password ${var.password}",
-      "docker run --name al-tagger -d -p 9603:9603 docker-registry.sitesearch.cloud/intrafind/al-tagger:latest",
+      "docker run --name al-tagger -d -v /opt:/srv -p 9603:9603 docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
       "docker ps",
     ]
   }
@@ -80,4 +62,25 @@ provider "google" "GCE Cloud" {
 resource "hcloud_ssh_key" "minion" {
   name = "minion"
   public_key = "${file("~/.ssh/if-minion-id_rsa.pub")}"
+}
+
+resource "hcloud_floating_ip" "main" {
+  type = "ipv4"
+  server_id = "${hcloud_server.node.id}"
+  description = "DNS 'A' record"
+  home_location = "nbg1"
+
+  provisioner "remote-exec" "setup" {
+    inline = [
+      "ip addr add ${hcloud_floating_ip.main.ip_address} dev eth0",
+    ]
+
+    connection {
+      host = "${hcloud_server.node.ipv4_address}"
+    }
+  }
+
+  provisioner "local-exec" "ip" {
+    command = "echo ${hcloud_floating_ip.main.id} ${hcloud_floating_ip.main.ip_address}  >> applied-main.txt"
+  }
 }
