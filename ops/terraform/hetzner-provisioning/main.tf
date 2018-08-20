@@ -45,7 +45,7 @@ resource "hcloud_server" "node" {
     inline = [
       "sleep 20 && apt-get update && apt-get install docker.io -y",
       "docker login docker-registry.sitesearch.cloud --username sitesearch --password ${var.password}",
-      "docker run --name al-tagger -d -v /opt:/opt -v /srv/al-tagger/tmp:/srv/contract-analyzer/al-tagger/tmp -p 9603:9603 docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
+      "docker run --name al-tagger -d -v /srv/contract-analyzer:/srv/contract-analyzer -p 9603:9603 docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
       "docker ps",
     ]
   }

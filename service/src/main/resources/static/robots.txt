@@ -1,4 +1,7 @@
 User-agent: *
+Disallow: /
+
+User-agent: SiteSearch.cloud
 Disallow: /tmp
 Disallow: /searchbar
 Disallow: /*-exclude.html
