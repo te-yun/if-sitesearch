@@ -1,6 +1,6 @@
 FROM nginx:stable
 
-MAINTAINER Alexander Orlov <alexander.orlov@intrafind.de>
+MAINTAINER IntraFind Software AG <alexander.orlov@intrafind.de>
 
 RUN apt-get update
 RUN apt-get -y install unzip vim

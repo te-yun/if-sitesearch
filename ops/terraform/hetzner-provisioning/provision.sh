@@ -7,6 +7,7 @@
 #terraform plan -var tenant=esche
 #terraform taint hcloud_server.node ;terraform apply -auto-approve -var password=$PASSWORD
 #terraform apply -auto-approve
+terraform taint hcloud_floating_ip.main
 terraform taint hcloud_server.node
 terraform apply -auto-approve -var tenant=esche -var password=$PASSWORD
 

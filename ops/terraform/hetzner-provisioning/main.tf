@@ -33,19 +33,19 @@ resource "hcloud_server" "node" {
     destination = "/srv/al-contract-analyzer.license"
   }
 
-  provisioner "local-exec" "server" {
-    command = "echo $OLD_IP_ADDRESS - $NEW_IP_ADDRESS > ${path.module}/applied-node.txt"
-    environment {
-      OLD_IP_ADDRESS = "${hcloud_server.node.ipv4_address}"
-      NEW_IP_ADDRESS = "94.130.188.186"
-    }
-  }
+  //  provisioner "local-exec" "server" {
+  //    command = "echo $OLD_IP_ADDRESS - $NEW_IP_ADDRESS > ${path.module}/applied-node.txt"
+  //    environment {
+  //      OLD_IP_ADDRESS = "${hcloud_server.node.ipv4_address}"
+  //      NEW_IP_ADDRESS = "94.130.188.186"
+  //    }
+  //  }
 
   provisioner "remote-exec" "install" {
     inline = [
       "sleep 20 && apt-get update && apt-get install docker.io -y",
       "docker login docker-registry.sitesearch.cloud --username sitesearch --password ${var.password}",
-      "docker run --name al-tagger -d -v /opt:/srv -p 9603:9603 docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
+      "docker run --name al-tagger -d -v /opt:/opt -v /srv/al-tagger/tmp:/srv/contract-analyzer/al-tagger/tmp -p 9603:9603 docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
       "docker ps",
     ]
   }
@@ -80,7 +80,7 @@ resource "hcloud_floating_ip" "main" {
     }
   }
 
-  provisioner "local-exec" "ip" {
-    command = "echo ${hcloud_floating_ip.main.id} ${hcloud_floating_ip.main.ip_address}  >> applied-main.txt"
-  }
+  //  provisioner "local-exec" "ip" {
+  //    command = "echo ${hcloud_floating_ip.main.id} ${hcloud_floating_ip.main.ip_address}  >> applied-main.txt"
+  //  }
 }
