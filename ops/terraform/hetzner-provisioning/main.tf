@@ -14,15 +14,36 @@ variable "password" {
   description = "Default Password"
 }
 
+variable "hetzner_cloud_analyze_law" {
+  type = "string"
+  default = "invalid dummy"
+  description = "Analyze Law API Token"
+}
+
+locals {
+  hcloud_token = "${var.hetzner_cloud_analyze_law}"
+  server_image = "ubuntu-18.04"
+  datacenter_prefix = "nbg1"
+}
+
+output "floating_ip" "IPv4" {
+  value = "${hcloud_floating_ip.main.ip_address}"
+  sensitive = false
+}
+
+output "ip" "IPv4" {
+  value = "${hcloud_server.node.ipv4_address}"
+}
+
 provider "hcloud" "Hetzner" {
-  token = "${file("~/.ssh/hetzner-api-token-analyze-law.txt")}"
+  token = "${local.hcloud_token}"
 }
 
 resource "hcloud_server" "node" {
   name = "${var.tenant}-${count.index}"
   count = "1"
-  datacenter = "nbg1-dc3"
-  image = "ubuntu-18.04"
+  datacenter = "${local.datacenter_prefix}-dc3"
+  image = "${local.server_image}"
   server_type = "cx21-ceph"
   ssh_keys = [
     "${hcloud_ssh_key.minion.id}"
@@ -68,11 +89,12 @@ resource "hcloud_floating_ip" "main" {
   type = "ipv4"
   server_id = "${hcloud_server.node.id}"
   description = "DNS 'A' record"
-  home_location = "nbg1"
+  home_location = "${local.datacenter_prefix}"
 
   provisioner "remote-exec" "setup" {
     inline = [
       "ip addr add ${hcloud_floating_ip.main.ip_address} dev eth0",
+      "sleep 5 && docker restart al-tagger",
     ]
 
     connection {
