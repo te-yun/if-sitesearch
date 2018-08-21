@@ -33,13 +33,14 @@ locals {
   datacenter_prefix = "nbg1"
 }
 
-output "floating_ip" "IPv4" {
-  value = "${hcloud_floating_ip.main.ip_address}"
-  sensitive = false
-}
+//output "floating_ip" "IPv4" {
+//  value = "${hcloud_floating_ip.main.ip_address}"
+//  sensitive = false
+//}
 
 output "ip" "IPv4" {
   value = "${hcloud_server.node.ipv4_address}"
+  sensitive = false
 }
 
 output "workspace" "server" {
@@ -57,7 +58,7 @@ resource "hcloud_server" "node" {
   image = "${local.server_image}"
   server_type = "cx21-ceph"
   ssh_keys = [
-    "minion",
+    //    "minion",
     "alex",
     "bachka",
   ]
@@ -71,7 +72,8 @@ resource "hcloud_server" "node" {
     inline = [
       "sleep 20 && apt-get update && apt-get install docker.io -y",
       "docker login docker-registry.sitesearch.cloud --username sitesearch --password ${var.password}",
-      //      "docker run --name al-tagger -d -v /srv/contract-analyzer:/srv/contract-analyzer -p 9603:9603 docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
+      "docker run --name al-tagger -d -v /srv/contract-analyzer:/srv/contract-analyzer -p 9603:9603 docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
+      "docker run --name al-api -d -p 8001:8001 docker-registry.sitesearch.cloud/intrafind/if-sitesearch",
       "docker ps",
     ]
   }
@@ -98,25 +100,25 @@ resource "google_dns_record_set" "tenant-domain" {
   managed_zone = "${data.google_dns_managed_zone.analyze-law.name}"
 
   rrdatas = [
-    "${hcloud_floating_ip.main.ip_address}",
+    //    "${hcloud_floating_ip.main.ip_address}",
     "${hcloud_server.node.ipv4_address}",
   ]
 }
 
-resource "hcloud_floating_ip" "main" {
-  type = "ipv4"
-  server_id = "${hcloud_server.node.id}"
-  home_location = "${local.datacenter_prefix}"
-
-  provisioner "remote-exec" "setup" {
-    inline = [
-      "ip addr add ${hcloud_floating_ip.main.ip_address} dev eth0",
-      "docker run --name al-tagger -d -v /srv/contract-analyzer:/srv/contract-analyzer -p 9603:9603 docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
-      "docker run --name al-api -d -p 8001:8001 docker-registry.sitesearch.cloud/intrafind/if-sitesearch",
-    ]
-
-    connection {
-      host = "${hcloud_server.node.ipv4_address}"
-    }
-  }
-}
+//resource "hcloud_floating_ip" "main" {
+//  type = "ipv4"
+//  server_id = "${hcloud_server.node.id}"
+//  home_location = "${local.datacenter_prefix}"
+//
+//  provisioner "remote-exec" "setup" {
+//    inline = [
+//      "ip addr add ${hcloud_floating_ip.main.ip_address} dev eth0",
+//      "docker run --name al-tagger -d -v /srv/contract-analyzer:/srv/contract-analyzer -p 9603:9603 docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
+//      "docker run --name al-api -d -p 8001:8001 docker-registry.sitesearch.cloud/intrafind/if-sitesearch",
+//    ]
+//
+//    connection {
+//      host = "${hcloud_server.node.ipv4_address}"
+//    }
+//  }
+//}
