@@ -36,17 +36,23 @@ output "ip" "IPv4" {
 }
 
 provider "hcloud" "Hetzner" {
-  token = "${local.hcloud_token}"
+  token = "${var.hetzner_cloud_analyze_law}"
 }
 
+//resource "hcloud_ssh_key" "minion" {
+//  name = "minion"
+//  public_key = "${file("~/.ssh/if-minion-id_rsa.pub")}"
+//}
+
 resource "hcloud_server" "node" {
-  name = "${var.tenant}-${count.index}"
+  name = "${terraform.workspace}-${var.tenant}-${count.index}"
   count = "1"
   datacenter = "${local.datacenter_prefix}-dc3"
   image = "${local.server_image}"
   server_type = "cx21-ceph"
   ssh_keys = [
-    "${hcloud_ssh_key.minion.id}"
+    "minion"
+    //    "${hcloud_ssh_key.minion.name}"
   ]
 
   provisioner "file" "al-license" {
@@ -66,7 +72,7 @@ resource "hcloud_server" "node" {
     inline = [
       "sleep 20 && apt-get update && apt-get install docker.io -y",
       "docker login docker-registry.sitesearch.cloud --username sitesearch --password ${var.password}",
-      "docker run --name al-tagger -d -v /srv/contract-analyzer:/srv/contract-analyzer -p 9603:9603 docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
+      //      "docker run --name al-tagger -d -v /srv/contract-analyzer:/srv/contract-analyzer -p 9603:9603 docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
       "docker ps",
     ]
   }
@@ -80,11 +86,6 @@ provider "google" "GCE Cloud" {
   project = "analyze-law"
 }
 
-resource "hcloud_ssh_key" "minion" {
-  name = "minion"
-  public_key = "${file("~/.ssh/if-minion-id_rsa.pub")}"
-}
-
 resource "hcloud_floating_ip" "main" {
   type = "ipv4"
   server_id = "${hcloud_server.node.id}"
@@ -94,15 +95,12 @@ resource "hcloud_floating_ip" "main" {
   provisioner "remote-exec" "setup" {
     inline = [
       "ip addr add ${hcloud_floating_ip.main.ip_address} dev eth0",
-      "sleep 5 && docker restart al-tagger",
+      "docker run --name al-tagger -d -v /srv/contract-analyzer:/srv/contract-analyzer -p 9603:9603 docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
+      "docker run --name al-api -d -p 8001:8001 docker-registry.sitesearch.cloud/intrafind/if-sitesearch",
     ]
 
     connection {
       host = "${hcloud_server.node.ipv4_address}"
     }
   }
-
-  //  provisioner "local-exec" "ip" {
-  //    command = "echo ${hcloud_floating_ip.main.id} ${hcloud_floating_ip.main.ip_address}  >> applied-main.txt"
-  //  }
 }
