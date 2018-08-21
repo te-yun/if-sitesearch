@@ -9,6 +9,7 @@ sudo apt install certbot -y
 sudo apt update -y
 
 # TODO incorporate this script into `change-sis-cdn-dns-records.sh`
+# TODO issue a wildcard certificate https://community.letsencrypt.org/t/acme-v2-production-environment-wildcards/55578
 
 # CDN IPs: 35.227.226.37 / 2600:1901:0:c2e3::
 sudo certbot certonly --webroot -w /etc/letsencrypt --expand \
