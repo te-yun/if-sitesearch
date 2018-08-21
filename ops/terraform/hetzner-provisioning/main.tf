@@ -70,10 +70,11 @@ resource "hcloud_server" "node" {
 
   provisioner "remote-exec" "install" {
     inline = [
-      "sleep 20 && apt-get update && apt-get install docker.io -y",
+      "sleep 20 && apt-get update && apt-get install docker.io certbot -y",
       "docker login docker-registry.sitesearch.cloud --username sitesearch --password ${var.password}",
-      "docker run --name al-tagger -d -v /srv/contract-analyzer:/srv/contract-analyzer -p 9603:9603 docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
-      "docker run --name al-api -d -p 80:80 --restart unless-stopped --network default intrafind/al-tagger:latest",
+      "docker network create default1",
+      "docker run --name al-tagger -d -v /srv/contract-analyzer:/srv/contract-analyzer -p 9603:9603 --network default1 docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
+      "docker run --name al-router -d -p 80:80 -p 443:443 --restart unless-stopped --network default1 docker-registry.sitesearch.cloud/intrafind/al-router:latest",
       "docker ps",
     ]
   }
