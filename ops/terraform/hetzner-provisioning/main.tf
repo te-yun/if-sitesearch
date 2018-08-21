@@ -2,6 +2,13 @@ module "upstream" {
   source = "./modules/upstream/internet_module"
 }
 
+// Can be added only once per project, which leads to a singleton problem.
+// Hence hcloud_ssh_key, should be a default workspace singleton only.
+//resource "hcloud_ssh_key" "minion" {
+//  name = "minion"
+//  public_key = "${file("~/.ssh/if-minion-id_rsa.pub")}"
+//}
+
 variable "tenant" {
   type = "string"
   default = "node"
@@ -35,14 +42,13 @@ output "ip" "IPv4" {
   value = "${hcloud_server.node.ipv4_address}"
 }
 
+output "workspace" "server" {
+  value = "${terraform.workspace}-${var.tenant}"
+}
+
 provider "hcloud" "Hetzner" {
   token = "${var.hetzner_cloud_analyze_law}"
 }
-
-//resource "hcloud_ssh_key" "minion" {
-//  name = "minion"
-//  public_key = "${file("~/.ssh/if-minion-id_rsa.pub")}"
-//}
 
 resource "hcloud_server" "node" {
   name = "${terraform.workspace}-${var.tenant}-${count.index}"
@@ -51,22 +57,15 @@ resource "hcloud_server" "node" {
   image = "${local.server_image}"
   server_type = "cx21-ceph"
   ssh_keys = [
-    "minion"
-    //    "${hcloud_ssh_key.minion.name}"
+    "minion",
+    "alex",
+    "bachka",
   ]
 
   provisioner "file" "al-license" {
     source = "~/my/project/intrafind/docker-container/intrafind-dev.license"
     destination = "/srv/al-contract-analyzer.license"
   }
-
-  //  provisioner "local-exec" "server" {
-  //    command = "echo $OLD_IP_ADDRESS - $NEW_IP_ADDRESS > ${path.module}/applied-node.txt"
-  //    environment {
-  //      OLD_IP_ADDRESS = "${hcloud_server.node.ipv4_address}"
-  //      NEW_IP_ADDRESS = "94.130.188.186"
-  //    }
-  //  }
 
   provisioner "remote-exec" "install" {
     inline = [
@@ -83,13 +82,30 @@ provider "docker" "container runtime" {
 }
 
 provider "google" "GCE Cloud" {
+  credentials = "${file("~/.ssh/analyze-law-owner-service-account.json")}"
   project = "analyze-law"
+}
+
+data "google_dns_managed_zone" "analyze-law" {
+  name = "analyzelaw-com"
+}
+
+resource "google_dns_record_set" "tenant-domain" {
+  name = "${var.tenant}.${data.google_dns_managed_zone.analyze-law.dns_name}"
+  type = "A"
+  ttl = 300
+
+  managed_zone = "${data.google_dns_managed_zone.analyze-law.name}"
+
+  rrdatas = [
+    "${hcloud_floating_ip.main.ip_address}",
+    "${hcloud_server.node.ipv4_address}",
+  ]
 }
 
 resource "hcloud_floating_ip" "main" {
   type = "ipv4"
   server_id = "${hcloud_server.node.id}"
-  description = "DNS 'A' record"
   home_location = "${local.datacenter_prefix}"
 
   provisioner "remote-exec" "setup" {
