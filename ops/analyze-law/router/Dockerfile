@@ -1,4 +1,4 @@
-FROM nginx:stable
+FROM nginx:stable-alpine
 
 MAINTAINER IntraFind Software AG <alexander.orlov@intrafind.de>
 

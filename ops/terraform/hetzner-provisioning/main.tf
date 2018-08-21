@@ -72,9 +72,9 @@ resource "hcloud_server" "node" {
     inline = [
       "sleep 20 && apt-get update && apt-get install docker.io certbot -y",
       "docker login docker-registry.sitesearch.cloud --username sitesearch --password ${var.password}",
-      "docker network create default1",
-      "docker run --name al-tagger -d -v /srv/contract-analyzer:/srv/contract-analyzer -p 9603:9603 --network default1 docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
-      "docker run --name al-router -d -p 80:80 -p 443:443 --restart unless-stopped --network default1 docker-registry.sitesearch.cloud/intrafind/al-router:latest",
+      "docker network create main",
+      "docker run --name al-tagger -d -v /srv/contract-analyzer:/srv/contract-analyzer -p 9603:9603 --network main docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
+      "docker run --name al-router -d -p 80:80 -p 443:443 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-router:latest",
       "docker ps",
     ]
   }
