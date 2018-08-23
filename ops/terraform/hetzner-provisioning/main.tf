@@ -56,7 +56,7 @@ resource "hcloud_server" "node" {
   count = "1"
   datacenter = "${local.datacenter_prefix}-dc3"
   image = "${local.server_image}"
-  server_type = "cx21-ceph"
+  server_type = "cx31-ceph"
   ssh_keys = [
     //    "minion",
     "alex",
@@ -68,6 +68,17 @@ resource "hcloud_server" "node" {
     destination = "/srv/al-contract-analyzer.license"
   }
 
+  //  provisioner "file" "iFinder" {
+  //    source = "~/Desktop/contract-analyzer/iFinder5-Installer/iFinder_linux_v2.zip"
+  //    destination = "/srv/iFinder_linux_v2.zip"
+  ////    connection {
+  ////      type = "ssh"
+  ////      user = "root"
+  ////      host = "195.201.100.226"
+  ////      private_key = "${file("~/.ssh/id_rsa")}"
+  ////    }
+  //  }
+
   provisioner "remote-exec" "install" {
     inline = [
       "sleep 20 && apt-get update && apt-get install docker.io certbot -y",
@@ -75,10 +86,13 @@ resource "hcloud_server" "node" {
       "docker network create main",
       "docker run --name al-tagger -d -v /srv/contract-analyzer:/srv/contract-analyzer -p 9603:9603 --network main docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
       "docker run --name al-router -d -p 443:443 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-router:latest",
-      "docker run --name al-api -d -p 8080:8080 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-api:release",
-      "docker run --name al-ui -d -p 80:80 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-frontend:release",
+      "docker run --name al-api -d -p 8080:8080 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-api:latest",
+      "docker run --name al-ui -d -p 80:80 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-frontend:latest",
       "docker run --name elasticsearch -d --env discovery.type=single-node --restart unless-stopped --network main docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4",
       "docker ps",
+      "sed -i -e 's/%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL:ALL) NOPASSWD:ALL/g' /etc/sudoers",
+      //      "adduser --disabled-password --gecos '' minion && usermod -aG sudo minion && usermod --lock minion && su minon",
+      //      "cd /srv && sudo unzip iFinder_linux_v2.zip && ln -s /srv/al-contract-analyzer.license /srv/intrafind/license/ && cd intrafind && sudo chmod +x *.sh && sudo ./1_SetEnvironmentVars.sh /srv minion && source /etc/environment && sudo ./2_RegisterSystemDServices.sh ",
     ]
   }
 }

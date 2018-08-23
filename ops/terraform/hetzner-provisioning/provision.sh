@@ -2,7 +2,6 @@
 
 #export TF_VAR_hetzner_cloud_analyze_law=dummy-token
 
-#terraform import hcloud_ssh_key.minion 105040
 #terraform taint hcloud_ssh_key.minion
 #terraform taint hcloud_floating_ip.main
 terraform taint hcloud_server.node
