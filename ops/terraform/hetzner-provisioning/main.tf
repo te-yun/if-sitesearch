@@ -93,7 +93,10 @@ resource "hcloud_server" "node" {
       "sed -i -e 's/%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL:ALL) NOPASSWD:ALL/g' /etc/sudoers",
       //      "adduser --disabled-password --gecos '' minion && usermod -aG sudo minion && usermod --lock minion && su minon",
       //      "cd /srv && sudo unzip iFinder_linux_v2.zip && ln -s /srv/al-contract-analyzer.license /srv/intrafind/license/ && cd intrafind && sudo chmod +x *.sh && sudo ./1_SetEnvironmentVars.sh /srv minion && source /etc/environment && sudo ./2_RegisterSystemDServices.sh ",
-      "java -jar if-sv-clausedetection-0.0.0.2-SNAPSHOT-jar-with-dependencies.jar -mode excel -convert http://localhost:9602/hessian/converter -tag http://localhost:9603/hessian/tagger -indexer http://ml-jis-linux:9605/hessian/index -mode excel -excelformat alternative -categorize None -input ./input"
+      //      "java -jar if-sv-clausedetection-0.0.0.2-SNAPSHOT-jar-with-dependencies.jar -mode excel -convert http://localhost:9602/hessian/converter -tag http://localhost:9603/hessian/tagger -indexer http://ml-jis-linux:9605/hessian/index -mode excel -excelformat alternative -categorize None -input ./input"
+
+      //      "java -jar if-sv-clausedetection-0.0.0.2-SNAPSHOT-jar-with-dependencies.jar -mode excel -convert http://localhost:9602/hessian/converter -tag http://localhost:9603/hessian/tagger -mode excel -excelformat alternative -categorize None -input ./input"
+      //      "java -jar if-sv-clausedetection-0.0.0.2-SNAPSHOT-jar-with-dependencies.jar -mode excel -convert http://localhost:9602/hessian/converter -tag http://localhost:9603/hessian/tagger -mode excel -excelformat single -categorize None -input ./input"
     ]
   }
 }
