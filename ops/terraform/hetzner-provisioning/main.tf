@@ -87,12 +87,13 @@ resource "hcloud_server" "node" {
       "docker run --name al-tagger -d -v /srv/contract-analyzer:/srv/contract-analyzer -p 9603:9603 --network main docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
       "docker run --name al-router -d -p 443:443 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-router:latest",
       "docker run --name al-api -d -p 8080:8080 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-api:latest",
-      "docker run --name al-ui -d -p 80:80 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-frontend:latest",
+      "docker run --name al-ui -d -p 80:80 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-ui:latest",
       "docker run --name elasticsearch -d --env discovery.type=single-node --restart unless-stopped --network main docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4",
       "docker ps",
       "sed -i -e 's/%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL:ALL) NOPASSWD:ALL/g' /etc/sudoers",
       //      "adduser --disabled-password --gecos '' minion && usermod -aG sudo minion && usermod --lock minion && su minon",
       //      "cd /srv && sudo unzip iFinder_linux_v2.zip && ln -s /srv/al-contract-analyzer.license /srv/intrafind/license/ && cd intrafind && sudo chmod +x *.sh && sudo ./1_SetEnvironmentVars.sh /srv minion && source /etc/environment && sudo ./2_RegisterSystemDServices.sh ",
+      "java -jar if-sv-clausedetection-0.0.0.2-SNAPSHOT-jar-with-dependencies.jar -mode excel -convert http://localhost:9602/hessian/converter -tag http://localhost:9603/hessian/tagger -indexer http://ml-jis-linux:9605/hessian/index -mode excel -excelformat alternative -categorize None -input ./input"
     ]
   }
 }

@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-sudo sysctl -w vm.max_map_count=262144 # required for ELK's Elasticsearch
+sudo sysctl -w vm.max_map_count=262144 # required for Elasticsearch
 
 sudo chown -R 1000:1000 /srv/ops-logstash
 sudo chown -R 1000:1000 /srv/elk-elasticsearch

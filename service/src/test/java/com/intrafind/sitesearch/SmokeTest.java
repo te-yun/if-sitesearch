@@ -30,7 +30,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -72,36 +71,26 @@ public class SmokeTest {
     @Autowired
     private TestRestTemplate caller;
 
-    @Ignore("deprecate crawler")
-    @Test
-    public void assureCrawlerProtection() throws Exception {
-        final var request = new Request.Builder()
-                .url("https://crawler.sitesearch.cloud")
-                .build();
-        final Response response = HTTP_CLIENT.newCall(request).execute();
-        assertEquals(HttpStatus.UNAUTHORIZED.value(), response.code());
-    }
-
-    @Ignore("Terraform/Kubernetes issue")
-    @Test
-    public void assureTaggerProtection() throws Exception {
-        final var request = new Request.Builder()
-                .url("https://tagger.analyzelaw.com")
-                .build();
-        final Response response = HTTP_CLIENT.newCall(request).execute();
-        assertEquals(HttpStatus.UNAUTHORIZED.value(), response.code());
-    }
-
-    @Ignore("Terraform/Kubernetes issue")
-    @Test
-    public void assureTaggerContent() throws Exception {
-        final var request = new Request.Builder()
-                .header(HttpHeaders.AUTHORIZATION, BASIC_ENCODED_PASSWORD)
-                .url("https://tagger.analyzelaw.com/json/tagger?method=tag&param0=test")
-                .build();
-        final Response response = HTTP_CLIENT.newCall(request).execute();
-        assertEquals(HttpStatus.OK.value(), response.code());
-    }
+//    @Ignore("Terraform/Kubernetes issue")
+//    @Test
+//    public void assureTaggerProtection() throws Exception {
+//        final var request = new Request.Builder()
+//                .url("https://tagger.analyzelaw.com")
+//                .build();
+//        final Response response = HTTP_CLIENT.newCall(request).execute();
+//        assertEquals(HttpStatus.UNAUTHORIZED.value(), response.code());
+//    }
+//
+//    @Ignore("Terraform/Kubernetes issue")
+//    @Test
+//    public void assureTaggerContent() throws Exception {
+//        final var request = new Request.Builder()
+//                .header(HttpHeaders.AUTHORIZATION, BASIC_ENCODED_PASSWORD)
+//                .url("https://tagger.analyzelaw.com/json/tagger?method=tag&param0=test")
+//                .build();
+//        final Response response = HTTP_CLIENT.newCall(request).execute();
+//        assertEquals(HttpStatus.OK.value(), response.code());
+//    }
 
     @Test
     public void assureCDNavailability() throws Exception {
