@@ -7,3 +7,4 @@ SPRING_CONFIG_NAME="application, local" ./gradlew :service:test \
     $1
 
 #--tests *Subscription*.subscribeViaGitHub
+#--tests SimpleClientTest
