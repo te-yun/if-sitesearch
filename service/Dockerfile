@@ -1,6 +1,6 @@
 FROM openjdk:11-jre AS service
 
-MAINTAINER Alexander Orlov <alexander.orlov@intrafind.de>
+MAINTAINER IntraFind Software AG <alexander.orlov@intrafind.de>
 
 WORKDIR /srv
 COPY config config
