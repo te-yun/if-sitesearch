@@ -1,5 +1,5 @@
 module "upstream" {
-  source = "./modules/upstream/internet_module"
+  source = "modules\/upstream\/internet_module"
 }
 
 // Can be added only once per project, which leads to a singleton problem.
