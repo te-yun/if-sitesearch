@@ -89,23 +89,33 @@ resource "hcloud_server" "node" {
       "sleep 20 && apt-get update && apt-get install docker.io certbot -y",
       "docker login docker-registry.sitesearch.cloud --username sitesearch --password ${var.password}",
       "docker network create main",
-      "docker run --name al-elasticsearch -d -v /opt/al-demo-data/volumes/analyzelaw_esdata1/_data:/usr/share/elasticsearch/data --env discovery.type=single-node --restart unless-stopped --network main docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4",
+      //      "cd /opt && tar xfz al-demo-data.tgz && chmod -R 777 al-demo-data && mv /opt/al-demo-data/volumes/analyzelaw_esdata1/_data /opt/al-data",
+      "cd /opt && tar xfz al-demo-data.tgz && mv /opt/al-demo-data/volumes/analyzelaw_esdata1/_data /opt/al-data",
+      "docker run --name elasticsearch -d -v /opt/al-data:/usr/share/elasticsearch/data --env discovery.type=single-node --restart unless-stopped --network main docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4",
       "docker run --name al-api -d -p 8080:8080 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-api:latest",
       "docker run --name al-tagger -d -v /srv/contract-analyzer:/srv/contract-analyzer -p 9603:9603 --network main docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
       "docker run --name al-router -d -p 443:443 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-router:latest",
       "docker run --name al-ui -d -p 80:80 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-ui:latest",
       "docker ps",
       "sed -i -e 's/%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL:ALL) NOPASSWD:ALL/g' /etc/sudoers",
-      "cd /opt && tar xfz al-demo-data.tgz && chmod -R 777 al-demo-data",
-      "docker exec -it al-api ./ingest-essential-data.sh",
       "adduser --disabled-password --gecos '' minion && usermod -aG sudo minion && usermod --lock minion",
+      "docker exec -it al-api ./ingest-essential-data.sh",
       //      "java -jar if-sv-clausedetection-0.0.0.2-SNAPSHOT-jar-with-dependencies.jar -mode excel -convert http://localhost:9602/hessian/converter -tag http://localhost:9603/hessian/tagger -mode excel -excelformat multiple -categorize None -input ./input"
     ]
   }
 }
 
 provider "docker" "container runtime" {
-  host = "195.201.29.34"
+  host = "unix:///var/run/docker.sock"
+}
+
+resource "docker_container" "foo" {
+  image = "${docker_image.ubuntu.latest}"
+  name = "my"
+}
+
+resource "docker_image" "ubuntu" {
+  name = "ubuntu:latest"
 }
 
 provider "google" "GCE Cloud" {
