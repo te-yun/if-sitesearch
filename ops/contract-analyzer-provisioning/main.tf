@@ -70,7 +70,7 @@ resource "hcloud_server" "node" {
 
   provisioner "file" "al-demo-data" {
     source = "~/my/project/intrafind/docker-container/al-demo-data.tgz"
-    destination = "/opt/"
+    destination = "/opt/al-demo-data.tgz"
   }
 
   //  provisioner "file" "iFinder" {
@@ -89,23 +89,17 @@ resource "hcloud_server" "node" {
       "sleep 20 && apt-get update && apt-get install docker.io certbot -y",
       "docker login docker-registry.sitesearch.cloud --username sitesearch --password ${var.password}",
       "docker network create main",
-      //      "docker run --name elasticsearch -d -v /opt/demo-data/volumes/analyzelaw_esdata1/_data:/usr/share/elasticsearch/data --env discovery.type=single-node --restart unless-stopped --network main docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4",
-      //      "docker run --name elasticsearch -d --env discovery.type=single-node --restart unless-stopped --network main docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4",
-      "docker run --name al-elasticsearch -d --env discovery.type=single-node --restart unless-stopped --network main docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4",
+      "docker run --name al-elasticsearch -d -v /opt/al-demo-data/volumes/analyzelaw_esdata1/_data:/usr/share/elasticsearch/data --env discovery.type=single-node --restart unless-stopped --network main docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4",
       "docker run --name al-api -d -p 8080:8080 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-api:latest",
       "docker run --name al-tagger -d -v /srv/contract-analyzer:/srv/contract-analyzer -p 9603:9603 --network main docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
       "docker run --name al-router -d -p 443:443 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-router:latest",
       "docker run --name al-ui -d -p 80:80 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-ui:latest",
       "docker ps",
       "sed -i -e 's/%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL:ALL) NOPASSWD:ALL/g' /etc/sudoers",
+      "cd /opt && tar xfz al-demo-data.tgz && chmod -R 777 al-demo-data",
       "docker exec -it al-api ./ingest-essential-data.sh",
-      //      "adduser --disabled-password --gecos '' minion && usermod -aG sudo minion && usermod --lock minion && su minion",
       "adduser --disabled-password --gecos '' minion && usermod -aG sudo minion && usermod --lock minion",
-      //      "cd /srv && sudo unzip iFinder_linux_v2.zip && ln -s /srv/al-contract-analyzer.license /srv/intrafind/license/ && cd intrafind && sudo chmod +x *.sh && sudo ./1_SetEnvironmentVars.sh /srv minion && source /etc/environment && sudo ./2_RegisterSystemDServices.sh ",
-      //      "java -jar if-sv-clausedetection-0.0.0.2-SNAPSHOT-jar-with-dependencies.jar -mode excel -convert http://localhost:9602/hessian/converter -tag http://localhost:9603/hessian/tagger -indexer http://ml-jis-linux:9605/hessian/index -mode excel -excelformat alternative -categorize None -input ./input"
-
-      //      "java -jar if-sv-clausedetection-0.0.0.2-SNAPSHOT-jar-with-dependencies.jar -mode excel -convert http://localhost:9602/hessian/converter -tag http://localhost:9603/hessian/tagger -mode excel -excelformat alternative -categorize None -input ./input"
-      //      "java -jar if-sv-clausedetection-0.0.0.2-SNAPSHOT-jar-with-dependencies.jar -mode excel -convert http://localhost:9602/hessian/converter -tag http://localhost:9603/hessian/tagger -mode excel -excelformat single -categorize None -input ./input"
+      //      "java -jar if-sv-clausedetection-0.0.0.2-SNAPSHOT-jar-with-dependencies.jar -mode excel -convert http://localhost:9602/hessian/converter -tag http://localhost:9603/hessian/tagger -mode excel -excelformat multiple -categorize None -input ./input"
     ]
   }
 }
