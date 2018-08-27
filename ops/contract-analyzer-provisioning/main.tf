@@ -89,9 +89,8 @@ resource "hcloud_server" "node" {
       "sleep 20 && apt-get update && apt-get install docker.io certbot -y",
       "docker login docker-registry.sitesearch.cloud --username sitesearch --password ${var.password}",
       "docker network create main",
-      //      "cd /opt && tar xfz al-demo-data.tgz && chmod -R 777 al-demo-data && mv /opt/al-demo-data/volumes/analyzelaw_esdata1/_data /opt/al-data",
-      "cd /opt && tar xfz al-demo-data.tgz && mv /opt/al-demo-data/volumes/analyzelaw_esdata1/_data /opt/al-data",
-      "docker run --name elasticsearch -d -v /opt/al-data:/usr/share/elasticsearch/data --env discovery.type=single-node --restart unless-stopped --network main docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4",
+      "cd /opt && tar xfz al-demo-data.tgz && chmod -R 777 /opt/al-demo-data && mv /opt/al-demo-data/volumes/analyzelaw_esdata1/_data /opt/al-data",
+      "docker run --name al-elasticsearch -d -v /opt/al-data:/usr/share/elasticsearch/data --env discovery.type=single-node --restart unless-stopped --network main docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4",
       "docker run --name al-api -d -p 8080:8080 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-api:latest",
       "docker run --name al-tagger -d -v /srv/contract-analyzer:/srv/contract-analyzer -p 9603:9603 --network main docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
       "docker run --name al-router -d -p 443:443 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-router:latest",
@@ -138,6 +137,10 @@ resource "google_dns_record_set" "tenant-domain" {
     //    "${hcloud_floating_ip.main.ip_address}",
     "${hcloud_server.node.ipv4_address}",
   ]
+
+  provisioner "local-exec" {
+    command = "ssh root@${hcloud_server.node.ipv4_address}"
+  }
 }
 
 //resource "hcloud_floating_ip" "main" {
