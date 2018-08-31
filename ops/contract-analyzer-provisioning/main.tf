@@ -60,6 +60,7 @@ resource "hcloud_server" "node" {
   ssh_keys = [
     //    "minion",
     "alex",
+    "amer",
     "bachka",
   ]
 
@@ -73,17 +74,6 @@ resource "hcloud_server" "node" {
     destination = "/opt/al-demo-data.tgz"
   }
 
-  //  provisioner "file" "iFinder" {
-  //    source = "~/Desktop/contract-analyzer/iFinder5-Installer/iFinder_linux_v2.zip"
-  //    destination = "/srv/iFinder_linux_v2.zip"
-  ////    connection {
-  ////      type = "ssh"
-  ////      user = "root"
-  ////      host = "195.201.100.226"
-  ////      private_key = "${file("~/.ssh/id_rsa")}"
-  ////    }
-  //  }
-
   provisioner "remote-exec" "install" {
     inline = [
       "sleep 20 && apt-get update && apt-get install docker.io certbot -y",
@@ -91,9 +81,9 @@ resource "hcloud_server" "node" {
       "docker network create main",
       "cd /opt && tar xfz al-demo-data.tgz && chmod -R 777 /opt/al-demo-data && mv /opt/al-demo-data/volumes/analyzelaw_esdata1/_data /opt/al-data",
       "rm -rf /opt/al-data/nodes",
-      "docker run --name elasticsearch -d -v /opt/al-data:/usr/share/elasticsearch/data --env discovery.type=single-node --restart unless-stopped --network main docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4",
+      "docker run --name elasticsearch -p 9200:9200 -d -v /opt/al-data:/usr/share/elasticsearch/data --env discovery.type=single-node --restart unless-stopped --network main docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4",
       "docker run --name al-api -d -p 8080:8080 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-api:latest",
-      "docker run --name al-tagger -d -v /srv/contract-analyzer:/srv/contract-analyzer -p 9603:9603 --network main docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
+      "docker run --name al-tagger -p 9602:9602 -d -v /srv/contract-analyzer:/srv/contract-analyzer -p 9603:9603 --network main docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
       "docker run --name al-router -d -p 443:443 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-router:latest",
       "docker run --name al-ui -d -p 80:80 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-ui:latest",
       "docker ps",
@@ -113,11 +103,11 @@ provider "docker" "container runtime" {
 
 resource "docker_container" "ubuntu" {
   image = "${docker_image.ubuntu.latest}"
-  name = "my"
+  name = "${terraform.workspace}-my"
 }
 
 resource "docker_image" "ubuntu" {
-  name = "ubuntu:latest"
+  name = "ubuntu:bionic"
 }
 
 provider "google" "GCE Cloud" {
