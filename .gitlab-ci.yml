@@ -29,7 +29,6 @@ assemble:
   image: docker:stable
   stage: assemble
   script:
-  - echo "PASSWORD $PASSWORD"
   - echo PASSWORD $PASSWORD
   - cd ops/analyze-law/router
-  - build.sh
+  - sh build.sh
