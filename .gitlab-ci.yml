@@ -3,10 +3,10 @@ stages:
 - assemble
 
 before_script:
-- touch before.txt
+- df -h
 
 after_script:
-- touch after.txt
+- ls -la
 
 build-service:
   image: openjdk:11-jre
