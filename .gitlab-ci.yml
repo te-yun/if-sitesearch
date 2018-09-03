@@ -1,0 +1,31 @@
+stages:
+- build-service
+- assemble
+
+before_script:
+- touch /tmp/before.txt
+
+after_script:
+- touch /tmp/after.txt
+
+build-service:
+  image: openjdk:11-jre
+  stage: build-service
+  script:
+  - ./gradlew build --build-cache --info -x test
+  artifacts:
+    paths:
+    - service/build/libs/*.jar
+    expire_in: 1 month
+
+assemble:
+  services:
+  - docker:dind
+  after_script:
+  - docker ps
+  image: docker:stable
+  stage: assemble
+  script:
+  - cd service
+  - docker ps
+  - docker build --pull --tag intrafind/if-sitesearch:latest .

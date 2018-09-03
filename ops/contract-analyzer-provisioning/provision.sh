@@ -12,7 +12,7 @@ terraform taint hcloud_server.node
 #terraform apply -auto-approve -var tenant=fps-law -var password=$PASSWORD -lock=true
 #terraform apply -auto-approve -var tenant=dev $1
 #terraform apply -auto-approve $1
-terraform apply $1
+terraform apply -auto-approve $1
 #terraform destroy -auto-approve -var tenant=fps-law -var password=$PASSWORD
 
 

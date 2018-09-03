@@ -8,7 +8,8 @@ server {
     }
 
     location / {
-        return 301 https://$host$request_uri;
+        #        return 301 https://$host$request_uri;
+        proxy_pass http://al-ui:81;
     }
 }
 
@@ -19,7 +20,7 @@ server {
     #    include /etc/nginx/snippets/ssl.conf;
 
     location / {
-        proxy_pass http://al-tagger:9603;
+        proxy_pass http://al-ui:81;
     }
 }
 
