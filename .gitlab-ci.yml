@@ -1,5 +1,5 @@
 stages:
-- build-service
+#- build-service
 - assemble
 
 before_script:
@@ -20,7 +20,7 @@ build-service:
 
 assemble:
   variables:
-    PPASSWORD: "some-test-password"
+    PASSWORD: "some-test-password"
   environment:
     name: main
     url: https://api.sitesearch.cloud
@@ -28,11 +28,12 @@ assemble:
   - docker:dind
   after_script:
   - docker ps
-  - echo $PPASSWORD
+  - echo $PASSWORD
   image: docker:stable
   stage: assemble
   script:
-  - echo BLUB $PPASSWORD
+  - echo BLUB $PASSWORD
+  - echo BLIB $SERVICE_SECRET
   - cd ops/analyze-law/router
   - docker ps
   - ls -lash
