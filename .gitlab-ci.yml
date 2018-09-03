@@ -20,20 +20,17 @@ after_script:
 
 assemble:
   variables:
-    PASSWORD1: some-test-password-without-quotes
+    PASSWORD: some-test-password-without-quotes
   environment:
     name: main
     url: https://api.sitesearch.cloud
   services:
   - docker:dind
-  after_script:
-  - docker ps
-  - echo $PASSWORD1
   image: docker:stable
   stage: assemble
   script:
-  - echo BLUB $PASSWORD1
-  - echo BLIB $SERVICE_SECRET
+  - echo PASSWORD-$PASSWORD
+  - echo SERVICE_SECRET-$SERVICE_SECRET
   - cd ops/analyze-law/router
   - docker ps
   - ls -lash
