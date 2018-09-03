@@ -20,7 +20,7 @@ build-service:
 
 assemble:
   variables:
-    PASSWORD: password-via-yml
+    PASSWORD: dummy
   environment:
     name: main
     url: https://api.sitesearch.cloud
@@ -29,6 +29,5 @@ assemble:
   image: docker:stable
   stage: assemble
   script:
-  - echo PASSWORD $PASSWORD
   - cd ops/analyze-law/router
   - sh build.sh

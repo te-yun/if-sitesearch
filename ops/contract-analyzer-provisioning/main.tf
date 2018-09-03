@@ -80,7 +80,7 @@ resource "hcloud_server" "node" {
 
   provisioner "remote-exec" "install" {
     inline = [
-      "ip addr add ${hcloud_floating_ip.main.ip_address} dev eth0",
+      //      "ip addr add ${hcloud_floating_ip.main.ip_address} dev eth0",
       "sleep 20 && apt-get update && apt-get install docker.io certbot -y",
       "docker login docker-registry.sitesearch.cloud --username sitesearch --password ${var.password}",
       "docker network create main",
@@ -133,7 +133,7 @@ resource "google_dns_record_set" "tenant-domain" {
 
   rrdatas = [
     "${hcloud_floating_ip.main.ip_address}",
-    //    "${hcloud_server.node.ipv4_address}",
+    "${hcloud_server.node.ipv4_address}",
   ]
 
   provisioner "local-exec" {

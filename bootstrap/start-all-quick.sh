@@ -20,11 +20,11 @@ docker start if-sitesearch-green-1
 docker start if-sitesearch-blue
 docker start if-sitesearch-blue-1
 
-docker start consul
+docker restart consul
 
 #docker restart if-tagging-service # replaced by Kubernetes
 
-docker start router
+docker restart router
 #docker start if-app-webcrawler # removed/deprecated for good
 
 sudo sysctl -w vm.max_map_count=262144 # required for Elasticsearch
