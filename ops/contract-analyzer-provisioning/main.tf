@@ -30,7 +30,6 @@ variable "hetzner_cloud_analyze_law" {
 locals {
   hcloud_token = "${var.hetzner_cloud_analyze_law}"
   server_image = "ubuntu-18.04"
-  //  server_image = "debian-9"
   datacenter_prefix = "nbg1"
 }
 
@@ -53,16 +52,12 @@ provider "hcloud" "Hetzner" {
 }
 
 resource "hcloud_server" "node" {
-  //  depends_on = [
-  //    "hcloud_floating_ip.main"
-  //  ]
   name = "${terraform.workspace}-${var.tenant}-${count.index}"
   count = "1"
   datacenter = "${local.datacenter_prefix}-dc3"
   image = "${local.server_image}"
   server_type = "cx31-ceph"
   ssh_keys = [
-    //    "minion",
     "alex",
     "amer",
     "bachka",
@@ -80,7 +75,6 @@ resource "hcloud_server" "node" {
 
   provisioner "remote-exec" "install" {
     inline = [
-      //      "ip addr add ${hcloud_floating_ip.main.ip_address} dev eth0",
       "sleep 20 && apt-get update && apt-get install docker.io certbot -y",
       "docker login docker-registry.sitesearch.cloud --username sitesearch --password ${var.password}",
       "docker network create main",
@@ -124,6 +118,7 @@ data "google_dns_managed_zone" "analyze-law" {
   name = "analyzelaw-com"
 }
 
+//terraform import google_dns_record_set.tenant-domain analyzelaw-com/demo.analyzelaw.com./A
 resource "google_dns_record_set" "tenant-domain" {
   name = "${var.tenant}.${data.google_dns_managed_zone.analyze-law.dns_name}"
   type = "A"
@@ -142,23 +137,18 @@ resource "google_dns_record_set" "tenant-domain" {
 }
 
 resource "hcloud_floating_ip" "main" {
-  depends_on = [
-    "hcloud_server.node"
-  ]
   type = "ipv4"
   server_id = "${hcloud_server.node.id}"
   home_location = "${local.datacenter_prefix}"
   description = "${terraform.workspace}-${var.tenant}"
 
-//  provisioner "remote-exec" "setup" {
-//    inline = [
-//      "ip addr add ${hcloud_floating_ip.main.ip_address} dev eth0",
-//      "docker run --name al-tagger -d -v /srv/contract-analyzer:/srv/contract-analyzer -p 9603:9603 docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
-//      "docker run --name al-api -d -p 8001:8001 docker-registry.sitesearch.cloud/intrafind/if-sitesearch",
-//    ]
-//
-//    connection {
-//      host = "${hcloud_server.node.ipv4_address}"
-//    }
-//  }
+  provisioner "remote-exec" "setup" {
+    inline = [
+      "ip addr add ${hcloud_floating_ip.main.ip_address} dev eth0",
+    ]
+
+    connection {
+      host = "${hcloud_server.node.ipv4_address}"
+    }
+  }
 }
