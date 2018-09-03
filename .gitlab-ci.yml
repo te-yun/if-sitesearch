@@ -19,6 +19,8 @@ build-service:
     expire_in: 1 month
 
 assemble:
+  variables:
+    PASSWORD: "some-test-password"
   environment:
     name: main
     url: https://api.sitesearch.cloud
@@ -26,6 +28,7 @@ assemble:
   - docker:dind
   after_script:
   - docker ps
+  - echo $PASSWORD
   image: docker:stable
   stage: assemble
   script:
