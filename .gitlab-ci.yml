@@ -3,7 +3,7 @@ stages:
 - assemble
 
 before_script:
-- touch /tmp/before.txt
+- docker ps
 
 after_script:
 - touch /tmp/after.txt
