@@ -3,10 +3,10 @@ stages:
 - assemble
 
 before_script:
-- docker ps
+- touch before.txt
 
 after_script:
-- touch /tmp/after.txt
+- touch after.txt
 
 build-service:
   image: openjdk:11-jre
