@@ -15,6 +15,6 @@
 #    intrafind/al-router:latest
 
 
-#docker login docker-registry.sitesearch.cloud --username sitesearch --password $PASSWORD
+docker login docker-registry.sitesearch.cloud --username sitesearch --password $PASSWORD
 docker build --pull --tag docker-registry.sitesearch.cloud/intrafind/al-router:dev .
-#docker push docker-registry.sitesearch.cloud/intrafind/al-router:dev
+docker push docker-registry.sitesearch.cloud/intrafind/al-router:dev
