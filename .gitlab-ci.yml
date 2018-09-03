@@ -19,6 +19,9 @@ build-service:
     expire_in: 1 month
 
 assemble:
+  environment:
+    name: main
+    url: https://api.sitesearch.cloud
   services:
   - docker:dind
   after_script:
@@ -26,6 +29,6 @@ assemble:
   image: docker:stable
   stage: assemble
   script:
-  - cd service
+  - cd ops/analyze-law/router
   - docker ps
-  - docker build --pull --tag intrafind/if-sitesearch:latest .
+  - ./build.sh

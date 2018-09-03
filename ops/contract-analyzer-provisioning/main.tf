@@ -30,13 +30,14 @@ variable "hetzner_cloud_analyze_law" {
 locals {
   hcloud_token = "${var.hetzner_cloud_analyze_law}"
   server_image = "ubuntu-18.04"
+  //  server_image = "debian-9"
   datacenter_prefix = "nbg1"
 }
 
-//output "floating_ip" "IPv4" {
-//  value = "${hcloud_floating_ip.main.ip_address}"
-//  sensitive = false
-//}
+output "floating_ip" "IPv4" {
+  value = "${hcloud_floating_ip.main.ip_address}"
+  sensitive = false
+}
 
 output "ip" "IPv4" {
   value = "${hcloud_server.node.ipv4_address}"
@@ -52,6 +53,9 @@ provider "hcloud" "Hetzner" {
 }
 
 resource "hcloud_server" "node" {
+  //  depends_on = [
+  //    "hcloud_floating_ip.main"
+  //  ]
   name = "${terraform.workspace}-${var.tenant}-${count.index}"
   count = "1"
   datacenter = "${local.datacenter_prefix}-dc3"
@@ -76,6 +80,7 @@ resource "hcloud_server" "node" {
 
   provisioner "remote-exec" "install" {
     inline = [
+      "ip addr add ${hcloud_floating_ip.main.ip_address} dev eth0",
       "sleep 20 && apt-get update && apt-get install docker.io certbot -y",
       "docker login docker-registry.sitesearch.cloud --username sitesearch --password ${var.password}",
       "docker network create main",
@@ -84,8 +89,8 @@ resource "hcloud_server" "node" {
       "docker run --name elasticsearch -p 9200:9200 -d -v /opt/al-data:/usr/share/elasticsearch/data --env discovery.type=single-node --restart unless-stopped --network main docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4",
       "docker run --name al-api -d -p 8080:8080 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-api:latest",
       "docker run --name al-tagger -p 9602:9602 -d -v /srv/contract-analyzer:/srv/contract-analyzer -p 9603:9603 --network main docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
-      "docker run --name al-router -d -p 443:443 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-router:latest",
-      "docker run --name al-ui -d -p 80:80 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-ui:latest",
+      "docker run --name al-router -d -p 80:80 -p 443:443 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-router:latest",
+      "docker run --name al-ui -d -p 81:80 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-ui:latest",
       "docker ps",
       "sed -i -e 's/%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL:ALL) NOPASSWD:ALL/g' /etc/sudoers",
       "adduser --disabled-password --gecos '' minion && usermod -aG sudo minion && usermod --lock minion",
@@ -127,8 +132,8 @@ resource "google_dns_record_set" "tenant-domain" {
   managed_zone = "${data.google_dns_managed_zone.analyze-law.name}"
 
   rrdatas = [
-    //    "${hcloud_floating_ip.main.ip_address}",
-    "${hcloud_server.node.ipv4_address}",
+    "${hcloud_floating_ip.main.ip_address}",
+    //    "${hcloud_server.node.ipv4_address}",
   ]
 
   provisioner "local-exec" {
@@ -136,11 +141,15 @@ resource "google_dns_record_set" "tenant-domain" {
   }
 }
 
-//resource "hcloud_floating_ip" "main" {
-//  type = "ipv4"
-//  server_id = "${hcloud_server.node.id}"
-//  home_location = "${local.datacenter_prefix}"
-//
+resource "hcloud_floating_ip" "main" {
+  depends_on = [
+    "hcloud_server.node"
+  ]
+  type = "ipv4"
+  server_id = "${hcloud_server.node.id}"
+  home_location = "${local.datacenter_prefix}"
+  description = "${terraform.workspace}-${var.tenant}"
+
 //  provisioner "remote-exec" "setup" {
 //    inline = [
 //      "ip addr add ${hcloud_floating_ip.main.ip_address} dev eth0",
@@ -152,4 +161,4 @@ resource "google_dns_record_set" "tenant-domain" {
 //      host = "${hcloud_server.node.ipv4_address}"
 //    }
 //  }
-//}
+}
