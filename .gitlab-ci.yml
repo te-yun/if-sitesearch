@@ -8,19 +8,19 @@ before_script:
 after_script:
 - touch /tmp/after.txt
 
-build-service:
-  image: openjdk:11-jre
-  stage: build-service
-  script:
-  - ./gradlew build --build-cache --info -x test
-  artifacts:
-    paths:
-    - service/build/libs/*.jar
-    expire_in: 1 month
+#build-service:
+#  image: openjdk:11-jre
+#  stage: build-service
+#  script:
+#  - ./gradlew build --build-cache --info -x test
+#  artifacts:
+#    paths:
+#    - service/build/libs/*.jar
+#    expire_in: 1 month
 
 assemble:
   variables:
-    PASSWORD: "some-test-password"
+    PASSWORD1: some-test-password-without-quotes
   environment:
     name: main
     url: https://api.sitesearch.cloud
@@ -28,11 +28,11 @@ assemble:
   - docker:dind
   after_script:
   - docker ps
-  - echo $PASSWORD
+  - echo $PASSWORD1
   image: docker:stable
   stage: assemble
   script:
-  - echo BLUB $PASSWORD
+  - echo BLUB $PASSWORD1
   - echo BLIB $SERVICE_SECRET
   - cd ops/analyze-law/router
   - docker ps
