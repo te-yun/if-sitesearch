@@ -3,13 +3,22 @@ server {
     listen [::]:80 default_server;
 
     #    Letsencrypt
-    #    location ^~ /.well-known/acme-challenge/ {
-    #        root /etc/letsencrypt;
-    #    }
+    location ^~ /.well-known/acme-challenge/ {
+        root /etc/letsencrypt;
+    }
 
     location / {
         #        return 301 https://$host$request_uri;
         proxy_pass http://al-ui:80;
+    }
+}
+
+server {
+    listen 9602;
+    listen [::]:9602;
+
+    location / {
+        proxy_pass http://al-tagger:9602;
     }
 }
 
