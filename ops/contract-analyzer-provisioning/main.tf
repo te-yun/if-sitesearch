@@ -6,7 +6,7 @@ module "upstream" {
 // Hence hcloud_ssh_key, should be a default workspace singleton only.
 resource "hcloud_ssh_key" "minion" {
   name = "minion"
-  public_key = "${file("~/.ssh/if-minion-id_rsa.pub")}"
+  public_key = "${file("~/.ssh/if-minion-id_rsa.pub")}-${terraform.workspace}"
 }
 
 variable "tenant" {
@@ -85,7 +85,8 @@ resource "hcloud_server" "node" {
       "docker run --name al-api -d -p 8080:8080 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-api:latest",
       "docker run --name al-tagger -p 9602:9602 -d -v /srv/contract-analyzer:/srv/contract-analyzer -p 9603:9603 --network main docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
       "docker run --name al-router -d -p 80:80 -p 443:443 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-router:latest",
-      "docker run --name al-ui -d -p 81:80 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-ui:latest",
+      //      "docker run --name al-ui -d -p 81:80 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-ui:latest",
+      "docker run --name al-ui -d --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-ui:latest",
       "docker ps",
       "sed -i -e 's/%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL:ALL) NOPASSWD:ALL/g' /etc/sudoers",
       "adduser --disabled-password --gecos '' minion && usermod -aG sudo minion && usermod --lock minion",
@@ -149,9 +150,6 @@ resource "hcloud_floating_ip" "main" {
     ]
 
     connection {
-      private_key = "${file("~/.ssh/id_rsa")}"
-      type = "ssh"
-      user = "root"
       host = "${hcloud_server.node.ipv4_address}"
     }
   }

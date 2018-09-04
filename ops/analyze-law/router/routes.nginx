@@ -9,7 +9,7 @@ server {
 
     location / {
         #        return 301 https://$host$request_uri;
-        proxy_pass http://al-ui:81;
+        proxy_pass http://al-ui:80;
     }
 }
 
