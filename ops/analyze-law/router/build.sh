@@ -2,7 +2,7 @@
 
 #docker_network=default
 #docker_redirect_image=al-router
-#docker_tag=latest
+tag=latest
 
 #docker build --pull --tag intrafind/${docker_redirect_image}:${docker_tag} .
 #docker rm -f $docker_redirect_image
@@ -16,5 +16,5 @@
 
 
 docker login docker-registry.sitesearch.cloud --username sitesearch --password $PASSWORD
-docker build --pull --tag docker-registry.sitesearch.cloud/intrafind/al-router:dev .
-docker push docker-registry.sitesearch.cloud/intrafind/al-router:dev
+docker build --pull --tag docker-registry.sitesearch.cloud/intrafind/al-router:$tag .
+docker push docker-registry.sitesearch.cloud/intrafind/al-router:$tag

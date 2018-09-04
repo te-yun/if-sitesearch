@@ -4,10 +4,10 @@ module "upstream" {
 
 // Can be added only once per project, which leads to a singleton problem.
 // Hence hcloud_ssh_key, should be a default workspace singleton only.
-//resource "hcloud_ssh_key" "minion" {
-//  name = "minion"
-//  public_key = "${file("~/.ssh/if-minion-id_rsa.pub")}"
-//}
+resource "hcloud_ssh_key" "minion" {
+  name = "minion"
+  public_key = "${file("~/.ssh/if-minion-id_rsa.pub")}"
+}
 
 variable "tenant" {
   type = "string"
@@ -56,11 +56,12 @@ resource "hcloud_server" "node" {
   count = "1"
   datacenter = "${local.datacenter_prefix}-dc3"
   image = "${local.server_image}"
-  server_type = "cx31-ceph"
+  server_type = "cx31"
   ssh_keys = [
     "alex",
     "amer",
     "bachka",
+    "minion",
   ]
 
   provisioner "file" "al-license" {
@@ -91,7 +92,7 @@ resource "hcloud_server" "node" {
       "docker exec -it al-api ./ingest-essential-data.sh",
       //      "java -jar if-sv-clausedetection-0.0.0.2-SNAPSHOT-jar-with-dependencies.jar -mode excel -convert http://localhost:9602/hessian/converter -tag http://localhost:9603/hessian/tagger -mode excel -excelformat multiple -categorize None -input ./input"
       //      docker run -it -v $(pwd):/app/ -w /app/ hashicorp/terraform:light plan
-      //      docker run -it -v $(pwd):/app hashicorp/terraform:full init /app
+      //      docker run -it -v $(pwd):/app hashicorp/terraform:full plan /app
     ]
   }
 }
@@ -142,12 +143,15 @@ resource "hcloud_floating_ip" "main" {
   home_location = "${local.datacenter_prefix}"
   description = "${terraform.workspace}-${var.tenant}"
 
-  provisioner "remote-exec" "setup" {
+  provisioner "remote-exec" "attach-ip" {
     inline = [
       "ip addr add ${hcloud_floating_ip.main.ip_address} dev eth0",
     ]
 
     connection {
+      private_key = "${file("~/.ssh/id_rsa")}"
+      type = "ssh"
+      user = "root"
       host = "${hcloud_server.node.ipv4_address}"
     }
   }
