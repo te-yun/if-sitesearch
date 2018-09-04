@@ -4,10 +4,10 @@ module "upstream" {
 
 // Can be added only once per project, which leads to a singleton problem.
 // Hence hcloud_ssh_key, should be a default workspace singleton only.
-resource "hcloud_ssh_key" "minion" {
-  name = "minion"
-  public_key = "${file("~/.ssh/if-minion-id_rsa.pub")}-${terraform.workspace}"
-}
+//resource "hcloud_ssh_key" "minion" {
+//  name = "minion"
+//  public_key = "${file("~/.ssh/if-minion-id_rsa.pub")}"
+//}
 
 variable "tenant" {
   type = "string"
@@ -55,6 +55,7 @@ resource "hcloud_server" "node" {
   name = "${terraform.workspace}-${var.tenant}-${count.index}"
   count = "1"
   datacenter = "${local.datacenter_prefix}-dc3"
+  //  datacenter = "fsn1-dc14"
   image = "${local.server_image}"
   server_type = "cx31"
   ssh_keys = [
@@ -81,12 +82,10 @@ resource "hcloud_server" "node" {
       "docker network create main",
       "cd /opt && tar xfz al-demo-data.tgz && chmod -R 777 /opt/al-demo-data && mv /opt/al-demo-data/volumes/analyzelaw_esdata1/_data /opt/al-data",
       "rm -rf /opt/al-data/nodes",
-      "docker run --name elasticsearch -p 9200:9200 -d -v /opt/al-data:/usr/share/elasticsearch/data --env discovery.type=single-node --restart unless-stopped --network main docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4",
-      "docker run --name al-api -d -p 8080:8080 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-api:latest",
-      //      "docker run --name al-tagger -p 9602:9602 -d -v /srv/contract-analyzer:/srv/contract-analyzer -p 9603:9603 --network main docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
-      "docker run --name al-tagger -d -v /srv/contract-analyzer:/srv/contract-analyzer -p 9603:9603 --network main docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
-      "docker run --name al-router -d -p 9602:9602 -p 80:80 -p 443:443 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-router:latest",
-      //      "docker run --name al-ui -d -p 81:80 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-ui:latest",
+      "docker run --name elasticsearch -d -v /opt/al-data:/usr/share/elasticsearch/data --env discovery.type=single-node --restart unless-stopped --network main docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4",
+      "docker run --name al-api -d --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-api:latest",
+      "docker run --name al-tagger -d -v /srv/contract-analyzer:/srv/contract-analyzer --network main docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
+      "docker run --name al-router -d -p 8080:8080 -p 9200:9200 -p 9602:9602 -p 9603:9603 -p 80:80 -p 443:443 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-router:latest",
       "docker run --name al-ui -d --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-ui:latest",
       "docker ps",
       "sed -i -e 's/%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL:ALL) NOPASSWD:ALL/g' /etc/sudoers",

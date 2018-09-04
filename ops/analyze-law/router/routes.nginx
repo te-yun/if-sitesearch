@@ -22,6 +22,42 @@ server {
     }
 }
 
+server {
+    listen 9603;
+    listen [::]:9603;
+
+    location / {
+        proxy_pass http://al-tagger:9603;
+    }
+}
+
+server {
+    listen 9200;
+    listen [::]:9200;
+
+    location / {
+        proxy_pass http://elasticsearch:9200;
+    }
+}
+
+server {
+    listen 8080;
+    listen [::]:8080;
+
+    location / {
+        proxy_pass http://al-api:8080;
+    }
+}
+
+server {
+    listen 443;
+    listen [::]:443;
+
+    location / {
+        proxy_pass http://al-api:8080;
+    }
+}
+
 #server {
 #    listen 80 default_server;
 #    listen [::]:80 default_server;
