@@ -3,9 +3,9 @@
 #export TF_VAR_hetzner_cloud_analyze_law=dummy-token
 
 #terraform taint hcloud_ssh_key.minion
-#terraform taint hcloud_floating_ip.main
+terraform taint hcloud_floating_ip.main
 terraform taint hcloud_server.node
-#terraform taint docker_container.ubuntu
+terraform taint docker_container.ubuntu
 #terraform taint hcloud_ssh_key.minion
 #terraform taint google_dns_record_set.tenant-domain
 

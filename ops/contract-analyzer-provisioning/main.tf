@@ -38,13 +38,14 @@ output "floating_ip" "IPv4" {
   sensitive = false
 }
 
-output "ip" "IPv4" {
-  value = "${hcloud_server.node.ipv4_address}"
+output "ip" "SSH via primary IP" {
+  //  value = "${hcloud_server.node.ipv4_address}"
+  value = "ssh -o StrictHostKeyChecking=no root@${hcloud_server.node.ipv4_address}"
   sensitive = false
 }
 
 output "workspace" "server" {
-  value = "${terraform.workspace}-${var.tenant}"
+  value = "${terraform.workspace}-${var.tenant} - http://${var.tenant}.analyzelaw.com"
 }
 
 provider "hcloud" "Hetzner" {
@@ -62,7 +63,7 @@ resource "hcloud_server" "node" {
     "alex",
     "amer",
     "bachka",
-    "minion",
+    //    "minion",
   ]
 
   provisioner "file" "al-license" {
@@ -77,7 +78,7 @@ resource "hcloud_server" "node" {
 
   provisioner "remote-exec" "install" {
     inline = [
-      "sleep 20 && apt-get update && apt-get install docker.io certbot -y",
+      "sleep 35 && apt-get update && apt-get install docker.io certbot -y",
       "docker login docker-registry.sitesearch.cloud --username sitesearch --password ${var.password}",
       "docker network create main",
       "cd /opt && tar xfz al-demo-data.tgz && chmod -R 777 /opt/al-demo-data && mv /opt/al-demo-data/volumes/analyzelaw_esdata1/_data /opt/al-data",
@@ -96,20 +97,24 @@ resource "hcloud_server" "node" {
       //      docker run -it -v $(pwd):/app hashicorp/terraform:full plan /app
     ]
   }
+
+  provisioner "local-exec" "ssh-alias1" {
+    command = "echo alias al-${terraform.workspace}@${hcloud_server.node.ipv4_address} >> ~/.bash_ssh_connections"
+  }
 }
 
-provider "docker" "container runtime" {
-  host = "unix:///var/run/docker.sock"
-}
-
-resource "docker_container" "ubuntu" {
-  image = "${docker_image.ubuntu.latest}"
-  name = "${terraform.workspace}-my"
-}
-
-resource "docker_image" "ubuntu" {
-  name = "ubuntu:bionic"
-}
+//provider "docker" "container runtime" {
+//  host = "unix:///var/run/docker.sock"
+//}
+//
+//resource "docker_container" "ubuntu" {
+//  image = "${docker_image.ubuntu.latest}"
+//  name = "${terraform.workspace}-my"
+//}
+//
+//resource "docker_image" "ubuntu" {
+//  name = "ubuntu:bionic"
+//}
 
 provider "google" "GCE Cloud" {
   credentials = "${file("~/.ssh/analyze-law-owner-service-account.json")}"
@@ -132,10 +137,6 @@ resource "google_dns_record_set" "tenant-domain" {
     "${hcloud_floating_ip.main.ip_address}",
     "${hcloud_server.node.ipv4_address}",
   ]
-
-  provisioner "local-exec" {
-    command = "ssh -o StrictHostKeyChecking=no root@${hcloud_server.node.ipv4_address}"
-  }
 }
 
 resource "hcloud_floating_ip" "main" {
@@ -152,5 +153,9 @@ resource "hcloud_floating_ip" "main" {
     connection {
       host = "${hcloud_server.node.ipv4_address}"
     }
+  }
+
+  provisioner "local-exec" "ssh-alias" {
+    command = "echo 'alias lsab=ls' >> ~/.bash_ssh_connections"
   }
 }
