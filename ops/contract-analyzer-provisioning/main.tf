@@ -71,7 +71,8 @@ resource "hcloud_server" "node" {
   }
 
   provisioner "file" "al-demo-data" {
-    source = "~/my/project/intrafind/docker-container/al-demo-data.tgz"
+    //    tar -zcvf al-demo-data.tgz demo-data; scp root@domain:/opt/al-demo-data.tgz .
+    source = "~/my/project/intrafind/docker-container/al-demo-data-2018-09-06.tgz"
     destination = "/opt/al-demo-data.tgz"
   }
 
@@ -80,8 +81,8 @@ resource "hcloud_server" "node" {
       "sleep 35 && apt-get update && apt-get install docker.io certbot -y",
       "docker login docker-registry.sitesearch.cloud --username sitesearch --password ${var.password}",
       "docker network create main",
-      "cd /opt && tar xfz al-demo-data.tgz && chmod -R 777 /opt/al-demo-data && mv /opt/al-demo-data/volumes/analyzelaw_esdata1/_data /opt/al-data",
-      "rm -rf /opt/al-data/nodes",
+      "cd /opt && tar xfz al-demo-data.tgz && mv /opt/demo-data/volumes/analyzelaw_esdata1/_data /opt/al-data && rm -rf /opt/demo-data",
+      //      "rm -rf /opt/al-data/nodes",
       "docker run --name elasticsearch -d -v /opt/al-data:/usr/share/elasticsearch/data --env discovery.type=single-node --restart unless-stopped --network main docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4",
       "docker run --name al-api -d --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-api:test",
       "docker run --name al-tagger -d -v /srv/contract-analyzer:/srv/contract-analyzer --network main docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
@@ -98,7 +99,7 @@ resource "hcloud_server" "node" {
   }
 
   provisioner "local-exec" "ssh-alias" {
-    command = "cat << EOF > ~/.bash_ssh_connections\nalias al-${terraform.workspace}='ssh -o StrictHostKeyChecking=no root@${hcloud_server.node.ipv4_address}'"
+    command = "cat << EOF >> ~/.bash_ssh_connections\nalias al-${terraform.workspace}='ssh -o StrictHostKeyChecking=no root@${hcloud_server.node.ipv4_address}'"
   }
 
   //  provisioner "local-exec" "ssh-alias1" {
