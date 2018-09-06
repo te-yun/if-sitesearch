@@ -33,19 +33,18 @@ locals {
   datacenter_prefix = "nbg1"
 }
 
-output "floating_ip" "IPv4" {
+output "Floating IP" "IPv4" {
   value = "${hcloud_floating_ip.main.ip_address}"
   sensitive = false
 }
 
-output "ip" "SSH via primary IP" {
-  //  value = "${hcloud_server.node.ipv4_address}"
+output "SSH via primary IP" {
   value = "ssh -o StrictHostKeyChecking=no root@${hcloud_server.node.ipv4_address}"
   sensitive = false
 }
 
-output "workspace" "server" {
-  value = "${terraform.workspace}-${var.tenant} - http://${var.tenant}.analyzelaw.com"
+output "Environment" "server" {
+  value = "${terraform.workspace}-${var.tenant} http://${var.tenant}.analyzelaw.com"
 }
 
 provider "hcloud" "Hetzner" {
@@ -84,10 +83,10 @@ resource "hcloud_server" "node" {
       "cd /opt && tar xfz al-demo-data.tgz && chmod -R 777 /opt/al-demo-data && mv /opt/al-demo-data/volumes/analyzelaw_esdata1/_data /opt/al-data",
       "rm -rf /opt/al-data/nodes",
       "docker run --name elasticsearch -d -v /opt/al-data:/usr/share/elasticsearch/data --env discovery.type=single-node --restart unless-stopped --network main docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4",
-      "docker run --name al-api -d --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-api:latest",
+      "docker run --name al-api -d --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-api:test",
       "docker run --name al-tagger -d -v /srv/contract-analyzer:/srv/contract-analyzer --network main docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
       "docker run --name al-router -d -p 8080:8080 -p 9200:9200 -p 9602:9602 -p 9603:9603 -p 80:80 -p 443:443 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-router:latest",
-      "docker run --name al-ui -d --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-ui:latest",
+      "docker run --name al-ui -d --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-ui:test",
       "docker ps",
       "sed -i -e 's/%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL:ALL) NOPASSWD:ALL/g' /etc/sudoers",
       "adduser --disabled-password --gecos '' minion && usermod -aG sudo minion && usermod --lock minion",
@@ -98,9 +97,17 @@ resource "hcloud_server" "node" {
     ]
   }
 
-  provisioner "local-exec" "ssh-alias1" {
-    command = "echo alias al-${terraform.workspace}@${hcloud_server.node.ipv4_address} >> ~/.bash_ssh_connections"
+  provisioner "local-exec" "ssh-alias" {
+    command = "cat << EOF > ~/.bash_ssh_connections\nalias al-${terraform.workspace}='ssh -o StrictHostKeyChecking=no root@${hcloud_server.node.ipv4_address}'"
   }
+
+  //  provisioner "local-exec" "ssh-alias1" {
+  //    command = "bash -c '. ~/.bash_ssh_connections'"
+  //  }
+  //
+  //  provisioner "local-exec" "ssh-alias1" {
+  //    command = "bash -c 'alias al-${terraform.workspace}=ls'"
+  //  }
 }
 
 //provider "docker" "container runtime" {
@@ -153,9 +160,5 @@ resource "hcloud_floating_ip" "main" {
     connection {
       host = "${hcloud_server.node.ipv4_address}"
     }
-  }
-
-  provisioner "local-exec" "ssh-alias" {
-    command = "echo 'alias lsab=ls' >> ~/.bash_ssh_connections"
   }
 }

@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 #export TF_VAR_hetzner_cloud_analyze_law=dummy-token
 
@@ -17,4 +17,7 @@ terraform taint docker_container.ubuntu
 terraform apply -auto-approve $1
 #terraform destroy -auto-approve -var tenant=fps-law -var password=$PASSWORD
 
-
+source ~/.bash_ssh_connections
+bash -c "source ~/.bash_ssh_connections"
+. ~/.bash_ssh_connections
+bash -c ". ~/.bash_ssh_connections"
