@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
 
-#docker_network=default
+#docker_network=main
 #docker_redirect_image=al-router
-tag=latest
+tag=dev
 
 #docker build --pull --tag intrafind/${docker_redirect_image}:${docker_tag} .
 #docker rm -f $docker_redirect_image
@@ -11,7 +11,7 @@ tag=latest
 #    -p 443:443 \
 #    -v /etc/letsencrypt:/etc/letsencrypt \
 #    --restart unless-stopped \
-#    --network default \
+#    --network main \
 #    intrafind/al-router:latest
 
 

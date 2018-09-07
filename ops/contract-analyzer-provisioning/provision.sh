@@ -12,9 +12,9 @@ terraform taint docker_container.ubuntu
 #terraform apply -auto-approve -var tenant=fps-law -var password=$PASSWORD
 #terraform apply -auto-approve -target hcloud_ssh_key.minion -var tenant=fps-law1 -var password=$PASSWORD -lock=true
 #terraform apply -auto-approve -var tenant=fps-law -var password=$PASSWORD -lock=true
-#terraform apply -auto-approve -var tenant=dev $1
+terraform apply -auto-approve -var tenant=test $1
 #terraform apply -auto-approve $1
-terraform apply -auto-approve $1
+#terraform apply -auto-approve $1
 #terraform destroy -auto-approve -var tenant=fps-law -var password=$PASSWORD
 
 source ~/.bash_ssh_connections

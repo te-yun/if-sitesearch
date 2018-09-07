@@ -87,8 +87,9 @@ resource "hcloud_server" "node" {
       "docker run --name al-api -d --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-api:test",
       "docker run --name al-tagger -d -v /srv/contract-analyzer:/srv/contract-analyzer --network main docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
       "docker run --name al-router -d -p 8080:8080 -p 9200:9200 -p 9602:9602 -p 9603:9603 -p 80:80 -p 443:443 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-router:latest",
-      "docker run --name al-ui -d --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-ui:test",
+      "docker run --name al-ui -d --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-ui:latest",
       "docker ps",
+      "docker-compose ps",
       "sed -i -e 's/%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL:ALL) NOPASSWD:ALL/g' /etc/sudoers",
       "adduser --disabled-password --gecos '' minion && usermod -aG sudo minion && usermod --lock minion",
       "docker exec -it al-api ./ingest-essential-data.sh",
@@ -99,7 +100,7 @@ resource "hcloud_server" "node" {
   }
 
   provisioner "local-exec" "ssh-alias" {
-    command = "cat << EOF >> ~/.bash_ssh_connections\nalias al-${terraform.workspace}='ssh -o StrictHostKeyChecking=no root@${hcloud_server.node.ipv4_address}'"
+    command = "cat << EOF >> ~/.bash_ssh_connections\nalias al-${terraform.workspace}='ssh -o StrictHostKeyChecking=no root@${hcloud_server.node.ipv4_address}'\n"
   }
 
   //  provisioner "local-exec" "ssh-alias1" {
