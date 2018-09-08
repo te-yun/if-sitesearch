@@ -1,6 +1,6 @@
-module "upstream" {
-  source = "modules/upstream/internet_module"
-}
+//module "upstream" {
+//  source = "modules/upstream/internet_module"
+//}
 
 // Can be added only once per project, which leads to a singleton problem.
 // Hence hcloud_ssh_key, should be a default workspace singleton only.
@@ -35,7 +35,8 @@ variable "google_al_owner_service_account" {
 
 locals {
   hcloud_token = "${var.hetzner_cloud_analyze_law}"
-  server_image = "ubuntu-18.04"
+  //  server_image = "ubuntu-18.04"
+  server_image = "debian-9"
   datacenter_prefix = "nbg1"
 }
 
@@ -84,7 +85,14 @@ resource "hcloud_server" "node" {
 
   provisioner "remote-exec" "install" {
     inline = [
-      "sleep 35 && apt-get update && apt-get install docker.io certbot -y",
+      //      "sleep 35 && apt-get update && apt-get install docker.io certbot -y",
+      //      "sleep 35 && apt-get update && apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common",
+
+      //      "apt-get update && apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common",
+      "apt-get update && apt-get install -y curl software-properties-common",
+      "curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -",
+      "add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable\"",
+      "apt-get update && apt-get install docker-ce -y",
       "docker login docker-registry.sitesearch.cloud --username sitesearch --password ${var.password}",
       "docker network create main",
       "cd /opt && tar xfz al-demo-data.tgz && mv /opt/demo-data/volumes/analyzelaw_esdata1/_data /opt/al-data && rm -rf /opt/demo-data",
