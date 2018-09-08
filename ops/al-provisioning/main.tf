@@ -85,9 +85,6 @@ resource "hcloud_server" "node" {
 
   provisioner "remote-exec" "install" {
     inline = [
-      //      "sleep 35 && apt-get update && apt-get install docker.io certbot -y",
-      //      "sleep 35 && apt-get update && apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common",
-
       //      "apt-get update && apt-get install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common",
       "apt-get install -y curl software-properties-common",
       "curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -",
@@ -160,16 +157,6 @@ resource "google_dns_record_set" "tenant-domain" {
     "${hcloud_floating_ip.main.ip_address}",
     "${hcloud_server.node.ipv4_address}",
   ]
-
-  provisioner "remote-exec" "attach-ip" {
-    inline = [
-      "ip addr add ${hcloud_floating_ip.main.ip_address} dev eth0",
-    ]
-
-    connection {
-      host = "${hcloud_server.node.ipv4_address}"
-    }
-  }
 }
 
 resource "hcloud_floating_ip" "main" {
@@ -177,14 +164,4 @@ resource "hcloud_floating_ip" "main" {
   server_id = "${hcloud_server.node.id}"
   home_location = "${local.datacenter_prefix}"
   description = "${terraform.workspace}-${var.tenant}"
-
-  provisioner "remote-exec" "attach-ip1" {
-    inline = [
-      "ip addr add ${hcloud_floating_ip.main.ip_address} dev eth0",
-    ]
-
-    connection {
-      host = "${hcloud_server.node.ipv4_address}"
-    }
-  }
 }
