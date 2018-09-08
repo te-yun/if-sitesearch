@@ -1,6 +1,9 @@
-//module "upstream" {
-//  source = "modules/upstream/internet_module"
-//}
+module "iFinder" {
+  version = "1.0"
+  source = "intrafind/iFinder"
+
+  user = "admin"
+}
 
 // Can be added only once per project, which leads to a singleton problem.
 // Hence hcloud_ssh_key, should be a default workspace singleton only.
@@ -40,14 +43,13 @@ locals {
   datacenter_prefix = "nbg1"
 }
 
-output "Floating IP" "IPv4" {
-  value = "${hcloud_floating_ip.main.ip_address}"
-  sensitive = false
-}
+//output "Floating IP" "IPv4" {
+//  value = "${hcloud_floating_ip.main.ip_address}"
+//  sensitive = false
+//}
 
 output "SSH via primary IP" {
   value = "ssh -o StrictHostKeyChecking=no root@${hcloud_server.node.ipv4_address}"
-  sensitive = false
 }
 
 output "Environment" "server" {
@@ -122,10 +124,11 @@ resource "hcloud_server" "node" {
   }
 }
 
-//provider "docker" "container runtime" {
-//  host = "unix:///var/run/docker.sock"
-//}
-//
+provider "docker" "container runtime" {
+  //  host = "unix:///var/run/docker.sock"
+  host = "tcp://${hcloud_server.node.ipv4_address}:2375"
+}
+
 //resource "docker_container" "ubuntu" {
 //  image = "${docker_image.ubuntu.latest}"
 //  name = "${terraform.workspace}-my"
@@ -136,7 +139,6 @@ resource "hcloud_server" "node" {
 //}
 
 provider "google" "GCE Cloud" {
-  //  credentials = "${file("~/.ssh/analyze-law-owner-service-account.json")}"
   credentials = "${var.google_al_owner_service_account}"
   project = "analyze-law"
 }
@@ -154,14 +156,14 @@ resource "google_dns_record_set" "tenant-domain" {
   managed_zone = "${data.google_dns_managed_zone.analyze-law.name}"
 
   rrdatas = [
-    "${hcloud_floating_ip.main.ip_address}",
     "${hcloud_server.node.ipv4_address}",
   ]
 }
 
-resource "hcloud_floating_ip" "main" {
-  type = "ipv4"
-  server_id = "${hcloud_server.node.id}"
-  home_location = "${local.datacenter_prefix}"
-  description = "${terraform.workspace}-${var.tenant}"
-}
+//resource "hcloud_floating_ip" "main" {
+//  type = "ipv4"
+//  server_id = "${hcloud_server.node.id}"
+//  home_location = "${local.datacenter_prefix}"
+//  description = "${terraform.workspace}-${var.tenant}"
+//}
+
