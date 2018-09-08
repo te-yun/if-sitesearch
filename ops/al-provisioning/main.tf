@@ -91,7 +91,7 @@ resource "hcloud_server" "node" {
       "apt-get install -y curl software-properties-common",
       "curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -",
       "add-apt-repository \"deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable\"",
-      "apt-get update && apt-get install docker-ce -y",
+      "apt-get update && apt-get install docker-compose docker-ce -y",
       "docker login docker-registry.sitesearch.cloud --username sitesearch --password ${var.password}",
       "docker network create main",
       "cd /opt && tar xfz al-demo-data.tgz && mv /opt/demo-data/volumes/analyzelaw_esdata1/_data /opt/al-data && rm -rf /opt/demo-data",
@@ -114,29 +114,7 @@ resource "hcloud_server" "node" {
   provisioner "local-exec" "ssh-alias" {
     command = "cat << EOF >> ~/.bash_ssh_connections\nalias al-${terraform.workspace}='ssh -o StrictHostKeyChecking=no root@${hcloud_server.node.ipv4_address}'\n"
   }
-
-  provisioner "local-exec" "ssh-alias1" {
-    command = "bash -c '. ~/.bash_ssh_connections'"
-  }
-
-  provisioner "local-exec" "ssh-alias1" {
-    command = "bash -c 'alias al-${terraform.workspace}=ls'"
-  }
 }
-
-provider "docker" "container runtime" {
-  //  host = "unix:///var/run/docker.sock"
-  host = "tcp://${hcloud_server.node.ipv4_address}:2375"
-}
-
-//resource "docker_container" "ubuntu" {
-//  image = "${docker_image.ubuntu.latest}"
-//  name = "${terraform.workspace}-my"
-//}
-//
-//resource "docker_image" "ubuntu" {
-//  name = "ubuntu:bionic"
-//}
 
 provider "google" "GCE Cloud" {
   credentials = "${var.google_al_owner_service_account}"
