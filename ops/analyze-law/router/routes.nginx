@@ -62,7 +62,7 @@ server {
     listen 443;
     listen [::]:443;
 
-    include /etc/nginx/snippets/ssl.conf;
+    #    include /etc/nginx/snippets/ssl.conf;
 
     location / {
         proxy_pass http://al-api:8080;
@@ -70,15 +70,15 @@ server {
 }
 
 
-server {
-    listen 443;
-    listen [::]:443;
-
-    location / {
-        #        proxy_pass http://al-api:8080;
-        return 301 http://$host$request_uri;
-    }
-}
+#server {
+#    listen 443;
+#    listen [::]:443;
+#
+#    location / {
+#        #        proxy_pass http://al-api:8080;
+#        return 301 http://$host$request_uri;
+#    }
+#}
 
 #server {
 #    listen 80 default_server;

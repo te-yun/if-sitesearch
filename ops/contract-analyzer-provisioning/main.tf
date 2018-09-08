@@ -27,6 +27,12 @@ variable "hetzner_cloud_analyze_law" {
   description = "Analyze Law API Token"
 }
 
+variable "google_al_owner_service_account" {
+  type = "string"
+  default = "invalid dummy"
+  description = "Analyze Law Owner Service Account - Google"
+}
+
 locals {
   hcloud_token = "${var.hetzner_cloud_analyze_law}"
   server_image = "ubuntu-18.04"
@@ -84,16 +90,15 @@ resource "hcloud_server" "node" {
       "cd /opt && tar xfz al-demo-data.tgz && mv /opt/demo-data/volumes/analyzelaw_esdata1/_data /opt/al-data && rm -rf /opt/demo-data",
       //      "rm -rf /opt/al-data/nodes",
       "docker run --name elasticsearch -d -v /opt/al-data:/usr/share/elasticsearch/data --env discovery.type=single-node --restart unless-stopped --network main docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.4",
-      "docker run --name al-api -d --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-api:test",
+      "docker run --name al-api -d --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-api:dev",
       "docker run --name al-tagger -d -v /srv/contract-analyzer:/srv/contract-analyzer --network main docker-registry.sitesearch.cloud/intrafind/al-tagger:release",
       "docker run --name al-router -d -p 8080:8080 -p 9200:9200 -p 9602:9602 -p 9603:9603 -p 80:80 -p 443:443 --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-router:latest",
-      "docker run --name al-ui -d --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-ui:latest",
+      "docker run --name al-ui -d --restart unless-stopped --network main docker-registry.sitesearch.cloud/intrafind/al-ui:dev",
       "docker ps",
       "docker-compose ps",
       "sed -i -e 's/%sudo\tALL=(ALL:ALL) ALL/%sudo\tALL=(ALL:ALL) NOPASSWD:ALL/g' /etc/sudoers",
       "adduser --disabled-password --gecos '' minion && usermod -aG sudo minion && usermod --lock minion",
       "docker exec -it al-api ./ingest-essential-data.sh",
-      //      "java -jar if-sv-clausedetection-0.0.0.2-SNAPSHOT-jar-with-dependencies.jar -mode excel -convert http://localhost:9602/hessian/converter -tag http://localhost:9603/hessian/tagger -mode excel -excelformat multiple -categorize None -input ./input"
       //      docker run -it -v $(pwd):/app/ -w /app/ hashicorp/terraform:light plan
       //      docker run -it -v $(pwd):/app hashicorp/terraform:full plan /app
     ]
@@ -103,13 +108,13 @@ resource "hcloud_server" "node" {
     command = "cat << EOF >> ~/.bash_ssh_connections\nalias al-${terraform.workspace}='ssh -o StrictHostKeyChecking=no root@${hcloud_server.node.ipv4_address}'\n"
   }
 
-  //  provisioner "local-exec" "ssh-alias1" {
-  //    command = "bash -c '. ~/.bash_ssh_connections'"
-  //  }
-  //
-  //  provisioner "local-exec" "ssh-alias1" {
-  //    command = "bash -c 'alias al-${terraform.workspace}=ls'"
-  //  }
+  provisioner "local-exec" "ssh-alias1" {
+    command = "bash -c '. ~/.bash_ssh_connections'"
+  }
+
+  provisioner "local-exec" "ssh-alias1" {
+    command = "bash -c 'alias al-${terraform.workspace}=ls'"
+  }
 }
 
 //provider "docker" "container runtime" {
@@ -126,7 +131,8 @@ resource "hcloud_server" "node" {
 //}
 
 provider "google" "GCE Cloud" {
-  credentials = "${file("~/.ssh/analyze-law-owner-service-account.json")}"
+  //  credentials = "${file("~/.ssh/analyze-law-owner-service-account.json")}"
+  credentials = "${var.google_al_owner_service_account}"
   project = "analyze-law"
 }
 
@@ -146,6 +152,16 @@ resource "google_dns_record_set" "tenant-domain" {
     "${hcloud_floating_ip.main.ip_address}",
     "${hcloud_server.node.ipv4_address}",
   ]
+
+  provisioner "remote-exec" "attach-ip" {
+    inline = [
+      "ip addr add ${hcloud_floating_ip.main.ip_address} dev eth0",
+    ]
+
+    connection {
+      host = "${hcloud_server.node.ipv4_address}"
+    }
+  }
 }
 
 resource "hcloud_floating_ip" "main" {
@@ -154,7 +170,7 @@ resource "hcloud_floating_ip" "main" {
   home_location = "${local.datacenter_prefix}"
   description = "${terraform.workspace}-${var.tenant}"
 
-  provisioner "remote-exec" "attach-ip" {
+  provisioner "remote-exec" "attach-ip1" {
     inline = [
       "ip addr add ${hcloud_floating_ip.main.ip_address} dev eth0",
     ]

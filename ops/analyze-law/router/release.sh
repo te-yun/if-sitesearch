@@ -2,7 +2,7 @@
 
 #docker_network=main
 #docker_redirect_image=al-router
-tag=dev
+tag=test
 
 #docker build --pull --tag intrafind/${docker_redirect_image}:${docker_tag} .
 #docker rm -f $docker_redirect_image
