@@ -46,7 +46,8 @@ server {
     location / {
         add_header set-cookie 'affiliate = $arg_affiliate; domain = sitesearch.cloud';
         #        return 301 https://sitesearch.cloud$request_uri; # works
-        proxy_pass http://217.160.0.69;
+        #        proxy_pass http://217.160.0.69;
+        proxy_pass http://s521388388.online.de;
         #        root /etc/letsencrypt/sitesearch.cloud;
     }
 }
