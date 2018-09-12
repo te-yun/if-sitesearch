@@ -27,14 +27,15 @@ sudo certbot certonly --webroot -w /etc/letsencrypt --expand \
     -d blue.sitesearch.cloud \
     -d green.sitesearch.cloud \
     -d www.sitesearch.cloud \
-    -d affiliate.sitesearch.cloud \
-    \
-    -d main.analyzelaw.com \
-    -d demo.analyzelaw.com \
-    -d dev.analyzelaw.com \
-    -d test.analyzelaw.com \
-    -d esche-demo.analyzelaw.com \
-    -d contract-analyzer.analyzelaw.com \
+    -d sitesearch.cloud \
+    -d affiliate.sitesearch.cloud 
+#    \
+#    -d main.analyzelaw.com \
+#    -d demo.analyzelaw.com \
+#    -d dev.analyzelaw.com \
+#    -d test.analyzelaw.com \
+#    -d esche-demo.analyzelaw.com \
+#    -d contract-analyzer.analyzelaw.com \
 #    -d tagger.analyzelaw.com \
 #    -d api.analyzelaw.com
 
