@@ -17,7 +17,7 @@
 // Migrate to Kotlin https://guides.gradle.org/migrating-build-logic-from-groovy-to-kotlin/
 buildscript {
     ext {
-        spring_boot_version = "2.0.4.RELEASE"
+        spring_boot_version = "2.0.5.RELEASE"
         swagger_version = "2.9.2"
     }
 }
@@ -25,7 +25,7 @@ buildscript {
 plugins {
     id "java"
     id "idea"
-    id "org.springframework.boot" version "2.0.4.RELEASE"
+    id "org.springframework.boot" version "2.0.5.RELEASE"
     id "io.spring.dependency-management" version "1.0.6.RELEASE"
     id "io.morethan.jmhreport" version "0.8.0"
 }
