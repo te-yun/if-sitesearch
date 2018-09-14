@@ -31,7 +31,8 @@ server {
     include /etc/nginx/snippets/ssl.conf;
 
     location / {
-        proxy_pass http://217.160.0.69;
+        proxy_pass http://mirror.sitesearch.online;
+        #        proxy_pass http://217.160.0.69;
         #        root /etc/letsencrypt/sitesearch.cloud;
     }
 }
@@ -47,7 +48,7 @@ server {
         add_header set-cookie 'affiliate = $arg_affiliate; domain = sitesearch.cloud';
         #        return 301 https://sitesearch.cloud$request_uri; # works
         #        proxy_pass http://217.160.0.69;
-        proxy_pass http://s521388388.online.de;
+        proxy_pass http://mirror.sitesearch.online;
         #        root /etc/letsencrypt/sitesearch.cloud;
     }
 }
