@@ -39,20 +39,20 @@ function config_new_release_data() {
 }
 config_new_release_data
 
-function init_gcloud(){
-    sudo apt install software-properties-common -y
-    sudo apt install curl -y
-    sudo apt update -y
-    export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
-    echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-    sudo apt-get update && sudo apt-get install google-cloud-sdk -y
-    sudo mkdir /srv/minion/
-    scp -r ichinnorovb@35.198.71.123:/srv/minion/compute-engine-admin.json /srv/minion/
-    gcloud auth activate-service-account --key-file=/srv/minion/compute-engine-admin.json
-    gcloud config set project woven-alpha-150909
-}
-init_gcloud
+#function init_gcloud(){
+#    sudo apt install software-properties-common -y
+#    sudo apt install curl -y
+#    sudo apt update -y
+#    export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
+#    echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+#    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+#    sudo apt-get update && sudo apt-get install google-cloud-sdk -y
+#    sudo mkdir /srv/minion/
+#    scp -r ichinnorovb@35.198.71.123:/srv/minion/compute-engine-admin.json /srv/minion/
+#    gcloud auth activate-service-account --key-file=/srv/minion/compute-engine-admin.json
+#    gcloud config set project woven-alpha-150909
+#}
+#init_gcloud
 
 function deploy_searchbar_on_cdn() {
     gsutil -m rm -r gs://site-search-europe/searchbar/$searchbarVersion
