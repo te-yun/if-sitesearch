@@ -20,9 +20,6 @@ function get_old_release_deployment_fragments() {
     mv $searchbarVersion/ service/src/main/resources/static/searchbar/
     mv service/src/main/resources/static/searchbar/latestSearchbarRelease.xml service/src/main/resources/static/searchbar/oldSearchbarRelease.xml
     mv latestSearchbarRelease.xml service/src/main/resources/static/searchbar/
-#    oldReleaseDate=$(cat service/src/main/resources/static/searchbar/oldSearchbarRelease.xml | sed -ne '/<lastUpdated>/s#\s*<[^>]*>\s*##gp')
-#    oldReleaseDate=${oldReleaseDate:0:8}
-#    oldReleaseDate=`date -d $oldReleaseDate +'%Y-%m-%d'`
     cp -r service/src/main/resources/static/searchbar/"$oldReleaseDate"/config/ service/src/main/resources/static/searchbar/"$searchbarVersion"/
     cp -r service/src/main/resources/static/searchbar/"$oldReleaseDate"/gadget/ service/src/main/resources/static/searchbar/"$searchbarVersion"/
 }
@@ -31,7 +28,7 @@ get_old_release_deployment_fragments
 function config_new_release_data() {
     sed -i -e "s/$oldReleaseDate/$searchbarVersion/g" service/src/main/resources/static/searchbar/"$searchbarVersion"/config/sitesearch.json
     sed -i -e "s/$oldReleaseDate/$searchbarVersion/g" service/src/main/resources/static/searchbar/"$searchbarVersion"/gadget/main.xml
-#    sed -i -e "s/$oldReleaseDate/$searchbarVersion/g" service/src/main/resources/static/searchbar/integration.html
+    sed -i -e "s/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/$searchbarVersion/g" service/src/main/resources/static/searchbar/integration.html
 }
 config_new_release_data
 
