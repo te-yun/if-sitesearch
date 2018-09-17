@@ -1,4 +1,7 @@
 #!/usr/bin/env sh
+# TODO: Wildcard subdomain SSL-Certs integration
+# TODO: nginx cert path change and reload nginx
+# TODO: add new certs to load balancer
 
 sudo apt install software-properties-common -y
 sudo add-apt-repository ppa:certbot/certbot -y
@@ -7,7 +10,6 @@ sudo apt install certbot -y
 sudo apt update -y
 
 # install and init gcloud
-sudo apt update -y
 export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
 echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
 curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -

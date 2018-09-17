@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 
 # Do not run! Not to the end tested! Bachka
+# TODO: push to repo to finalize deployment
 
 searchbarVersion=`date -u +"%Y-%m-%d"`
 
