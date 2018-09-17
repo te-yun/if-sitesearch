@@ -27,7 +27,7 @@ function get_old_release_deployment_fragments() {
     oldReleaseDate=$(cat service/src/main/resources/static/searchbar/oldSearchbarRelease.xml | sed -ne '/<lastUpdated>/s#\s*<[^>]*>\s*##gp')
     oldReleaseDate=${oldReleaseDate:0:8}
     oldReleaseDate=`date -d $oldReleaseDate +'%Y-%m-%d'`
-    cp -r service/src/main/resources/static/searchbar/"$oldReleaseDate"/config/ service/src/main/resources/static/searchbar/$searchbarVersion/
+    cp -r service/src/main/resources/static/searchbar/"$oldReleaseDate"/config/ service/src/main/resources/static/searchbar/"$searchbarVersion"/
     cp -r service/src/main/resources/static/searchbar/"$oldReleaseDate"/gadget/ service/src/main/resources/static/searchbar/"$searchbarVersion"/
 }
 get_old_release_deployment_fragments
