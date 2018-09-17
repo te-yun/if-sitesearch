@@ -41,6 +41,7 @@ config_new_release_data
 
 function init_gcloud(){
     sudo apt install software-properties-common -y
+    sudo apt install curl -y
     sudo apt update -y
     export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
     echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
