@@ -7,13 +7,13 @@
 
 searchbarVersion=`date -u +"%Y-%m-%d"`
 
-function init_and_set_CDN_metadata() {
-    gsutil cors set cdn-cors-configuration.json gs://site-search-europe
-    gsutil setmeta  -h "content-encoding"  gs://site-search-europe/searchbar/$searchbarVersion/app/css/app.css
-    gsutil -m setmeta -r -h "Content-Encoding: gzip"  gs://site-search-europe/searchbar/$searchbarVersion
-    gsutil -m acl -r ch -u AllUsers:READER gs://site-search-europe/searchbar/$searchbarVersion
-    gsutil -m iam -r ch allUsers:objectViewer gs://site-search-europe/$searchbarVersion
-}
+#function init_and_set_CDN_metadata() {
+#    gsutil cors set cdn-cors-configuration.json gs://site-search-europe
+#    gsutil setmeta  -h "content-encoding"  gs://site-search-europe/searchbar/$searchbarVersion/app/css/app.css
+#    gsutil -m setmeta -r -h "Content-Encoding: gzip"  gs://site-search-europe/searchbar/$searchbarVersion
+#    gsutil -m acl -r ch -u AllUsers:READER gs://site-search-europe/searchbar/$searchbarVersion
+#    gsutil -m iam -r ch allUsers:objectViewer gs://site-search-europe/$searchbarVersion
+#}
 
 function get_latest_searchbar_release(){
     mkdir -p $searchbarVersion/app
