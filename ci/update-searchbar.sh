@@ -39,3 +39,7 @@ deploy_searchbar_on_cdn() {
     gsutil cp -z json -a public-read service/src/main/resources/static/searchbar/$searchbarVersion/config/sitesearch.json gs://site-search-europe/searchbar/$searchbarVersion/config/
 }
 deploy_searchbar_on_cdn
+
+# Next steps
+# reference this release to if-sitesearch/gadget/src/main/resources/sitesearch-gadget.html
+# reference this release on sitesearch.cloud (WordPress)
