@@ -25,8 +25,8 @@ get_old_release_deployment_fragments() {
 get_old_release_deployment_fragments
 
 config_new_release_data() {
-    sed -i -e "s/$oldReleaseDate/$searchbarVersion/g" service/src/main/resources/static/searchbar/"$searchbarVersion"/config/sitesearch.json
-    sed -i -e "s/$oldReleaseDate/$searchbarVersion/g" service/src/main/resources/static/searchbar/"$searchbarVersion"/gadget/main.xml
+    sed -i -e "s/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/$searchbarVersion/g" service/src/main/resources/static/searchbar/"$searchbarVersion"/config/sitesearch.json
+    sed -i -e "s/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/$searchbarVersion/g" service/src/main/resources/static/searchbar/"$searchbarVersion"/gadget/main.xml
     sed -i -e "s/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/$searchbarVersion/g" service/src/main/resources/static/searchbar/integration.html
 }
 config_new_release_data
