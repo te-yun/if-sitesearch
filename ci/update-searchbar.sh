@@ -28,6 +28,7 @@ config_new_release_data() {
     sed -i -e "s/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/$searchbarVersion/g" service/src/main/resources/static/searchbar/"$searchbarVersion"/config/sitesearch.json
     sed -i -e "s/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/$searchbarVersion/g" service/src/main/resources/static/searchbar/"$searchbarVersion"/gadget/main.xml
     sed -i -e "s/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/$searchbarVersion/g" service/src/main/resources/static/searchbar/integration.html
+    sed -i -e "s/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/$searchbarVersion/g" gadget/src/main/resources/sitesearch-gadget.html
 }
 config_new_release_data
 
@@ -41,5 +42,4 @@ deploy_searchbar_on_cdn() {
 deploy_searchbar_on_cdn
 
 # Next steps
-# reference this release to if-sitesearch/gadget/src/main/resources/sitesearch-gadget.html
 # reference this release on sitesearch.cloud (WordPress)
