@@ -25,7 +25,6 @@ buildscript {
 plugins {
     id "java"
     id "idea"
-    id "jacoco"
     id "org.springframework.boot" version "2.0.5.RELEASE"
     id "io.spring.dependency-management" version "1.0.6.RELEASE"
     id "io.morethan.jmhreport" version "0.8.0"
