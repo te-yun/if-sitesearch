@@ -21,8 +21,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Gradle: org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.0.1.RELEASE" level="project" />
-    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-security:2.0.3.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.0.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-security:2.0.5.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: edu.uci.ics:crawler4j:4.4.0" level="project" />
     <orderEntry type="library" name="Gradle: com.github.crawler-commons:crawler-commons:0.10" level="project" />
     <orderEntry type="library" name="Gradle: com.rometools:rome:1.11.0" level="project" />
@@ -50,7 +50,7 @@
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter:2.0.5.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-autoconfigure:2.0.5.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot:2.0.5.RELEASE" level="project" />
-    <orderEntry type="library" name="Gradle: org.springframework.security.oauth:spring-security-oauth2:2.2.1.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework.security.oauth:spring-security-oauth2:2.2.2.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.security:spring-security-jwt:1.0.9.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.security:spring-security-web:5.0.8.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-webflux:5.0.9.RELEASE" level="project" />
