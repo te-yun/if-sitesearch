@@ -24,7 +24,7 @@ require_once 'searchbar.php';
  *
  * @return site url
  */
-function getSiteUrl()
+function sis_getSiteUrl()
 {
     if (get_option("if_sis_url_for_crawling")) {
         $if_sis_url_for_crawling = get_option("if_sis_url_for_crawling");
@@ -85,7 +85,7 @@ function deleteSiS_Options_WP_DB()
     delete_option("sis_cssSelector");
 }
 
-function setSafeCssSelector()
+function sis_setSafeCssSelector()
 {
     if (get_option("sis_cssSelector")) {
         $sis_cssSelector = get_option("sis_cssSelector");
@@ -106,7 +106,7 @@ function setSafeCssSelector()
 <div class="form-wrapper" style="width: 500px;">
     <form method="POST">
         <h1>Site Search Setup</h1>
-        Website URL: <input type="text" id="sis-url" name="sis-url" value="<?php echo getSiteUrl(); ?>"
+        Website URL: <input type="text" id="sis-url" name="sis-url" value="<?php echo sis_getSiteUrl(); ?>"
             <?php if (get_option("if_sis_siteId")) echo "readonly"; ?>>
         <br><br>
         Site ID: <input type="text" id="sis-siteId" name="sis-siteId" readonly
@@ -123,7 +123,7 @@ function setSafeCssSelector()
             Providing an invalid CSS selector disables the searchbar.
         </p>
         <input type="text" id="sis-cssSelector" name="sis-cssSelector"
-               value="<?php echo setSafeCssSelector(); ?>">
+               value="<?php echo sis_setSafeCssSelector(); ?>">
         <input type="submit" id="sis-save-setup" name="create-saveSetup" 
                value="Save Site Search Setup"
                style="display: none;">
