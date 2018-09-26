@@ -75,7 +75,7 @@ build.doLast {
         into "$serviceBuildPath/$project.name/resources" // TODO create rather a symlink to above directory?
     }
 
-    configurations.compile.each { File file ->
+    configurations.compile.each { file ->
         copy {
             from zipTree(file.absolutePath)
             into "$artifactPath/runtime"
