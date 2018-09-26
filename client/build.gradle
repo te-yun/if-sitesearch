@@ -37,7 +37,7 @@ dependencies {
 
 compileKotlin2Js {
     kotlinOptions.metaInfo = true
-    kotlinOptions.outputFile = "$project.buildDir.path/classes/kotlin/main/${project.name}.js"
+    kotlinOptions.outputFile = "$buildDir.path/classes/kotlin/main/${project.name}.js"
     kotlinOptions.sourceMap = true
     kotlinOptions.moduleKind = "umd"
     kotlinOptions.main = "call"
