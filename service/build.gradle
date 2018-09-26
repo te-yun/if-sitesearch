@@ -30,8 +30,6 @@ plugins {
     id "io.morethan.jmhreport" version "0.8.0"
 }
 
-//sourceCompatibility = JavaVersion.VERSION_1_10
-//targetCompatibility = JavaVersion.VERSION_1_10
 //sourceCompatibility = JavaVersion.VERSION_1_11
 //targetCompatibility = JavaVersion.VERSION_1_11
 sourceCompatibility = "11"
@@ -70,7 +68,6 @@ dependencies {
     testCompile "org.springframework.boot:spring-boot-starter-test:$spring_boot_version"
 
     testRuntimeOnly "org.springframework.boot:spring-boot-devtools:$spring_boot_version"
-//    runtimeOnly "org.springframework.boot:spring-boot-devtools:$spring_boot_version"
 
     compile "com.squareup.okhttp3:okhttp:3.11.0"
 
