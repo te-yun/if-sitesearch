@@ -51,7 +51,7 @@ compileKotlin2Js {
 
 build.doLast {
     def serviceBuildPath = "../service/build/resources/main/static/app"
-    artifactPath = "../service/src/main/resources/static/app"
+    def artifactPath = "../service/src/main/resources/static/app"
     project.file("$artifactPath/$project.name").deleteDir()
     project.file("$serviceBuildPath/$project.name").deleteDir()
 
