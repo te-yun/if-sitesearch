@@ -78,7 +78,7 @@ build.doLast {
 //        }
 //    }
 
-    configurations.testCompile.each { File file ->
+    configurations.testCompile.each { file ->
         copy {
             includeEmptyDirs = true
             from zipTree(file.absolutePath)
