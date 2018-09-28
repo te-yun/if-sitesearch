@@ -44,12 +44,11 @@ function If_Sis_searchbar($form)
     }
 }
 
-function sis_applyTransporterCookies()
+function If_Sis_applyTransporterCookies()
 {
     setcookie("sis-siteId", get_option("if_sis_siteId"));
     $cookieSafeCssSelector = base64_encode(get_option("sis_cssSelector"));
     setrawcookie("sisDefaultWordPressSearchbarSelector", $cookieSafeCssSelector);
 }
-
-sis_applyTransporterCookies();
+If_Sis_applyTransporterCookies();
 add_action('wp_footer', 'If_Sis_searchbar');

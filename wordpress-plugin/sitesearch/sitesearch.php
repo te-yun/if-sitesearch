@@ -58,9 +58,9 @@ function Sis_Admin_page()
 }
 
 /**
- * Add external javascript for all pages
+ * Load javascript on all pages
  * 
- * @return external-js-calls
+ * @return js-calls
  */
 function No_Dependencies_Enqueue_scripts()
 {

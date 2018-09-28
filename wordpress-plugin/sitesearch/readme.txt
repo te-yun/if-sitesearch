@@ -10,6 +10,8 @@ License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 With Site Search, IntraFind offers a search application that every website operator can easily set up on his own website without any programming knowledge.
+Site Search is an on-demand SaaS offering from IntraFind Software AG to enable website operators to provide search functionality for their websites. Hereby Site Search is run and operated by IntraFind whereas you simply integrate the provided Searchbar into your website to use our service.
+IntraFind Site Search thus complies with German and European data protection laws (DSGVO).
 
 == Description ==
 

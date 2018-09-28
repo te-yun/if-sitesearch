@@ -18,6 +18,8 @@
 */
 
 require_once 'searchbar.php';
+wp_enqueue_style('if-sis-admin-page-styles', plugin_dir_url(__FILE__) . 'style.css', array(), filemtime(plugin_dir_url(__FILE__) . 'style.css'), false);
+wp_enqueue_script('if-sis-admin-client-js', 'https://api.sitesearch.cloud/external/wordpress-plugin/admin-client.js', array(), null, true);
 
 /**
  * Get site url
@@ -96,13 +98,13 @@ function sis_setSafeCssSelector()
 }
 ?>
 
-<script src="https://api.sitesearch.cloud/external/wordpress-plugin/admin-client.js"></script>
+<!-- <script src="https://api.sitesearch.cloud/external/wordpress-plugin/admin-client.js"></script> -->
 
-<style>
+<!-- <style>
     .form-wrapper input {
         width: 500px;
     }
-</style>
+</style> -->
 <div class="form-wrapper" style="width: 500px;">
     <form method="POST">
         <h1>Site Search Setup</h1>
