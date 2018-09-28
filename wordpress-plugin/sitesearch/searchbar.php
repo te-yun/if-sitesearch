@@ -26,12 +26,12 @@ function If_Sis_searchbar($form)
                 IFS.initClient({
                     customConfig: {
                         overwrite: {
-                            "appLang": "en",
-                            "FREEMIUM": true
+                            "appLang": "en"
                         }
                     },
                     configurl: "https://cdn.sitesearch.cloud/searchbar/2018-09-18/config/sitesearch.json",
-                    siteId: "3a5dfd07-a463-45f8-863b-dfc3c9f09152"
+                    siteId: "3a5dfd07-a463-45f8-863b-dfc3c9f09152",
+                    "freemium": true
                 });
             </script>
         </div>';
