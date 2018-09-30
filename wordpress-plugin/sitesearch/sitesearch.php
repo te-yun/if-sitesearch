@@ -62,9 +62,9 @@ function Sis_Admin_page()
  * 
  * @return js-calls
  */
-function No_Dependencies_Enqueue_scripts()
+function If_Sis_load_scripts()
 {
     wp_register_script('script-handle', plugin_dir_url(__FILE__) . 'searchbar-injection.js', false, '1.0.0', false);
     wp_enqueue_script('script-handle');
 }
-add_action('wp_enqueue_scripts', 'No_Dependencies_Enqueue_scripts', 1);
+add_action('wp_enqueue_scripts', 'If_Sis_load_scripts', 1);
