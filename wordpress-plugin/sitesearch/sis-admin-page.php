@@ -101,7 +101,7 @@ function sis_setSafeCssSelector()
 }
 ?>
 
-<div class="form-wrapper" style="width: 500px;">
+<div class="form-wrapper">
     <form method="POST">
         <h1>Site Search Setup</h1>
         Website URL: <input type="url" pattern="^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$"  id="sis-url" name="sis-url" value="<?php echo sis_getSiteUrl(); ?>"
@@ -120,8 +120,8 @@ function sis_setSafeCssSelector()
             This CSS selector can be updated anytime, to reflect your theme's specific layout.
             Providing an invalid CSS selector disables the searchbar.
         </p>
-        <input required pattern="[.#]([\w.-]+)" id="sis-cssSelector" name="sis-cssSelector"
-               value="<?php echo sis_setSafeCssSelector(); ?>">
+        <input dir="ltr" type="text" pattern="[.#]([\w.-]+)" title="Enter CSS Selectors only" id="sis-cssSelector" name="sis-cssSelector" 
+               value="<?php echo sis_setSafeCssSelector(); ?>" placeholder="#search-2 or .search-2" autocomplete="off" required>
         <input type="submit" id="sis-save-setup" name="create-saveSetup" 
                value="Save Site Search Setup"
                style="display: none;">
