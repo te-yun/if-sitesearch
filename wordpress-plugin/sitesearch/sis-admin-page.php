@@ -53,10 +53,13 @@ if (isset($_POST['sis-removeSetup'])) {
 function CreateSiS_Options_WP_DB()
 {
     //get data from fields
-    $if_sis_url_for_crawling = $_POST['sis-url'];
-    $if_sis_siteId = $_POST['sis-siteId'];
-    $if_sis_siteSecret = $_POST['sis-siteSecret'];
-    $sis_cssSelector = $_POST['sis-cssSelector'];
+    // $string = sanitize_text_field( $str );
+
+    $if_sis_url_for_crawling = sanitize_text_field( $_POST['sis-url']);
+    $if_sis_siteId = sanitize_text_field( $_POST['sis-siteId']);
+    $if_sis_siteSecret = sanitize_text_field($_POST['sis-siteSecret']);
+    $sis_cssSelector = sanitize_text_field($_POST['sis-cssSelector']);
+
     if (!get_option("if_sis_url_for_crawling")) {
         update_option("if_sis_url_for_crawling", $if_sis_url_for_crawling);
     } else {
@@ -98,17 +101,10 @@ function sis_setSafeCssSelector()
 }
 ?>
 
-<!-- <script src="https://api.sitesearch.cloud/external/wordpress-plugin/admin-client.js"></script> -->
-
-<!-- <style>
-    .form-wrapper input {
-        width: 500px;
-    }
-</style> -->
 <div class="form-wrapper" style="width: 500px;">
     <form method="POST">
         <h1>Site Search Setup</h1>
-        Website URL: <input type="text" id="sis-url" name="sis-url" value="<?php echo sis_getSiteUrl(); ?>"
+        Website URL: <input type="url" pattern="^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$"  id="sis-url" name="sis-url" value="<?php echo sis_getSiteUrl(); ?>"
             <?php if (get_option("if_sis_siteId")) echo "readonly"; ?>>
         <br><br>
         Site ID: <input type="text" id="sis-siteId" name="sis-siteId" readonly
@@ -124,12 +120,11 @@ function sis_setSafeCssSelector()
             This CSS selector can be updated anytime, to reflect your theme's specific layout.
             Providing an invalid CSS selector disables the searchbar.
         </p>
-        <input type="text" id="sis-cssSelector" name="sis-cssSelector"
+        <input required pattern="[.#]([\w.-]+)" id="sis-cssSelector" name="sis-cssSelector"
                value="<?php echo sis_setSafeCssSelector(); ?>">
         <input type="submit" id="sis-save-setup" name="create-saveSetup" 
                value="Save Site Search Setup"
                style="display: none;">
-        <!--        TODO add "Reset Site Search setup" button-->
         <input type="submit" id="sis-remove-setup" name="sis-removeSetup"
                value="Remove Site Search Setup"
                style="display: none;">
