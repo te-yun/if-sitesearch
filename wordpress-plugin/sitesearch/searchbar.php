@@ -21,7 +21,7 @@ function If_Sis_searchbar($form)
 {
     $form = '<div id="sitesearch-searchbar" class="searchbar" style="display: none;">
         <div id="ifs-searchbar" class="ifs-component ifs-sb"></div>
-            <script src="https://cdn.sitesearch.cloud/searchbar/2018-07-18/app/js/app.js"></script>
+            <script src="https://cdn.sitesearch.cloud/searchbar/2018-09-18/app/js/app.js"></script>
             <script>
                 IFS.initClient({
                     customConfig: {
@@ -29,8 +29,9 @@ function If_Sis_searchbar($form)
                             "appLang": "en"
                         }
                     },
-                    configurl: "https://cdn.sitesearch.cloud/searchbar/2018-07-18/config/sitesearch.json",
-                    siteId: "3a5dfd07-a463-45f8-863b-dfc3c9f09152"
+                    configurl: "https://cdn.sitesearch.cloud/searchbar/2018-09-18/config/sitesearch.json",
+                    siteId: "3a5dfd07-a463-45f8-863b-dfc3c9f09152",
+                    "freemium": true
                 });
             </script>
         </div>';
@@ -43,12 +44,11 @@ function If_Sis_searchbar($form)
     }
 }
 
-function sis_applyTransporterCookies()
+function If_Sis_applyTransporterCookies()
 {
     setcookie("sis-siteId", get_option("if_sis_siteId"));
     $cookieSafeCssSelector = base64_encode(get_option("sis_cssSelector"));
     setrawcookie("sisDefaultWordPressSearchbarSelector", $cookieSafeCssSelector);
 }
-
-sis_applyTransporterCookies();
+If_Sis_applyTransporterCookies();
 add_action('wp_footer', 'If_Sis_searchbar');
