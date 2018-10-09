@@ -1,0 +1,57 @@
+{
+  "manifest_version": 2,
+  "name": "Test Injector",
+  "version": "1.0.0",
+  "description": "Injects tests",
+  "icons": {
+    "48": "img/icon_48.png",
+    "128": "img/icon_128.png"
+  },
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": false
+  },
+  "page_action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "48": "img/icon_48.png",
+      "128": "img/icon_128.png"
+    }
+  },
+  "options_ui": {
+    "page": "options.html",
+    "chrome_style": false,
+    "open_in_tab": false
+  },
+  "content_scripts": [
+    {
+      "run_at": "document_end",
+      "matches": [
+        //        "http://*/*",
+        //        "https://*/*",
+        "https://example.com/*"
+      ],
+      "css": [
+        //        "customization.css"
+      ],
+      "js": [
+        //        "customization.js",
+        "popup.js"
+      ]
+    }
+  ],
+  //  "browser_action": {
+  //    "default_title": "Popup Injector",
+  //    "default_popup": "popup.html"
+  //  },
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "storage",
+    "https://ajax.googleapis.com/",
+    "http://*/*",
+    "https://*/*"
+  ]
+}
