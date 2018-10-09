@@ -20,18 +20,10 @@ import com.intrafind.sitesearch.dto.Subscription;
 import com.intrafind.sitesearch.service.SimpleAutocompleteClient;
 import com.intrafind.sitesearch.service.SimpleIndexClient;
 import com.intrafind.sitesearch.service.SimpleSearchClient;
-import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
-import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.client.RestClient;
-import org.elasticsearch.client.RestClientBuilder;
-import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.common.xcontent.XContentType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -48,7 +40,6 @@ import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
@@ -79,26 +70,6 @@ public class SimpleClientTest {
         WebClient client1 = WebClient.create();
         WebClient client2 = WebClient.create("http://localhost:8080");
 
-        IndexRequest indexRequest = new IndexRequest(
-                "sis",
-                "doc",
-                "4");
-        final var jsonString = "{" +
-                "\"java11\":\"KIMCHY\"," +
-                "\"post\":\"2013-01-30\"," +
-                "\"message\":\"TRYING 13 ELASTICSEARCH\"" +
-                "}";
-        indexRequest.source(jsonString, XContentType.JSON);
-
-        final CreateIndexRequest createIndexRequest = new CreateIndexRequest("sis");
-//        createIndexRequest.settings(Settings.builder()
-//                .put("index.number_of_shards", 3)
-//                .put("index.number_of_replicas", 2)
-//        );
-//        LOG.warn(createIndexRequest.validate().getMessage());
-
-//        GetIndexRequest getIndexRequest = new GetIndexRequest();
-
 //        --add-modules java.net.http
         final HttpClient httpClient = HttpClient.newHttpClient();
         HttpRequest httpRequest;
@@ -109,26 +80,6 @@ public class SimpleClientTest {
         credentialsProvider.setCredentials(AuthScope.ANY,
                 new UsernamePasswordCredentials("sitesearch", System.getenv("SERVICE_SECRET"))
         );
-
-        RestClientBuilder builder = RestClient.builder(new HttpHost("es.loxal.net", 443, "https"))
-                .setHttpClientConfigCallback(httpClientBuilder -> {
-                    httpClientBuilder.disableAuthCaching();
-                    return httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
-                });
-
-        final RestHighLevelClient client = new RestHighLevelClient(builder);
-
-        try {
-            LOG.info(">>>>>>>>>>>>>>>>>>>>>>><<<<<<");
-            IndexResponse indexResponse = client.index(indexRequest);
-            assertEquals("OK", indexResponse.status().name());
-            assertEquals(200, indexResponse.status().getStatus());
-//            final boolean exists = client.indices().exists(getIndexRequest);
-//            final CreateIndexResponse createIndexResponse = client.indices().create(createIndexRequest);
-//            client.close();
-        } catch (Exception e) {
-            LOG.error("ERROR >>>>>>>>>>>>>>>>>>>>>> " + e.getCause().getMessage());
-        }
         assertTrue(true);
     }
 }
