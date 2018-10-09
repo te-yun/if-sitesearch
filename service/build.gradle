@@ -42,7 +42,7 @@ repositories {
 configurations {
     compile.exclude module: "spring-boot-starter-tomcat"
     compile.exclude module: "undertow-websockets-jsr"
-//    compile.exclude module: "logback-classic"
+    compile.exclude module: "logback-classic"
     compile.exclude module: "spring-boot-starter-logging"
 }
 
