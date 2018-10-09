@@ -45,8 +45,8 @@ configurations {
 }
 
 dependencies {
-    compile "org.apache.tika:tika:1.19"
-    runtimeOnly "org.apache.tika:tika-parsers:1.19"
+    compile "org.apache.tika:tika:1.18"
+    runtimeOnly "org.apache.tika:tika-parsers:1.18"
     compile "org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.0.5.RELEASE"
     compile "org.springframework.boot:spring-boot-starter-security:2.0.5.RELEASE"
 
@@ -76,10 +76,6 @@ dependencies {
     compile "com.google.apis:google-api-services-gmail:v1-rev82-1.23.0"
 
     compile "org.jsoup:jsoup:1.11.3"
-
-//    compile "org.elasticsearch:elasticsearch:6.4.2"
-//    compile "org.elasticsearch.client:elasticsearch-rest-high-level-client:6.4.2"
-//    compile "org.elasticsearch.client:elasticsearch-rest-client:6.4.2"
 }
 
 test {
