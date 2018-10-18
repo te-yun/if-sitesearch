@@ -25,7 +25,7 @@ failedCrawlStatusList=$(cat $SITE_CRAWL_STATUS_FILE | jq -r '.sites[] | select (
 # if failedCrawlStatusList not empty give me the siteIDs
 if [ -n "$failedCrawlStatusList" ]; then
    echo "CRAWLING_FAILED"
-   failedSiteIds=$(cat status.json | jq -r '.sites[] | select (.pageCount | length == 0) | .siteId')
+   failedSiteIds=$(cat $SITE_CRAWL_STATUS_FILE | jq -r '.sites[] | select (.pageCount | length == 0) | .siteId')
    echo "SiteIDs: $failedSiteIds"
 else
   echo "CRAWLING_SUCCESS"
