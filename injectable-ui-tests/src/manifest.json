@@ -31,7 +31,8 @@
       "matches": [
         //        "http://*/*",
         //        "https://*/*",
-        "https://example.com/*"
+        "https://example.com/*",
+        "https://summit.analyzelaw.com/*"
       ],
       "css": [
         //        "customization.css"

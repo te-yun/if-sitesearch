@@ -15,3 +15,4 @@
  */
 
 console.warn("popup.js");
+document.querySelector("#root > div").className = "al-app al-enable-preview";
