@@ -61,6 +61,7 @@ private fun createSite() {
 @JsName("overrideSite")
 fun overrideSite(siteId: String) {
     document.cookie = "override-site = $siteId; domain = .sitesearch.cloud; path = /"
+    document.cookie = "sis.websiteUrl = ${url.value}"
 }
 
 private lateinit var captchaToken: String
@@ -317,7 +318,6 @@ private fun applyQueryOverrides() {
     websiteUrl = when {
         longExtraction.isNotEmpty() -> longExtraction // relies on cookie-setting code in embedding iframe container
         shortExtraction.isNotEmpty() -> shortExtraction // relies on cookie-setting code in embedding iframe container
-//        window.location.search.indexOf("url=") != -1 -> window.location.search.substring(window.location.search.indexOf("url=") + 4)
         else -> "Site Validation Warning" // just a pseudo message to avoid blank field
     }
     if (siteId.isNotEmpty()) {
