@@ -6,7 +6,9 @@ docker_tag=latest
 
 docker network create $docker_network
 cd main-router
-docker build --pull --tag intrafind/${docker_redirect_image}:${docker_tag} .
+sudo cp -r /etc/letsencrypt .
+sudo docker build --pull --tag intrafind/${docker_redirect_image}:${docker_tag} .
+rm -rf letsencrypt
 docker push docker-registry.sitesearch.cloud/intrafind/${docker_redirect_image}:${docker_tag}
 #docker rm -f $docker_redirect_image
 #docker run -d --name $docker_redirect_image \
