@@ -14,8 +14,7 @@ docker run -d --name $docker_redirect_image \
 
 docker rm -f docker-registry
 docker run -d --name docker-registry \
-    -v /srv/registry1:/var/lib/registry \
-    --restart unless-stopped \
+    -v /srv/docker-registry/_data:/var/lib/registry \
     --network $docker_network \
     registry:2
 
