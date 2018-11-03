@@ -25,4 +25,3 @@ ENV CONSUL_URL consul:8500
 ENV constraint:node master
 
 EXPOSE 80 443
-ENTRYPOINT ["/bin/start.sh"]
