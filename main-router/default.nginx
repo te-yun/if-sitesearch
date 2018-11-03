@@ -25,27 +25,30 @@ http {
         }
     }
 
-    #    server {
-    #        listen 443 ssl http2;
-    #        listen [::]:443 ssl http2;
-    #
-#        #        include /etc/nginx/snippets/ssl.conf;
-    #
-#        location / {
-    #            client_max_body_size 3G;
-    #            proxy_pass http://docker-registry:5000;
-    #        }
-    #    }
+    server {
+        listen 443 ssl http2;
+        listen [::]:443 ssl http2;
+
+        include /etc/nginx/snippets/ssl.conf;
+
+        auth_basic "Docker Registry";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+
+        location / {
+            client_max_body_size 3G;
+            proxy_pass http://docker-registry:5000;
+        }
+    }
 
     server {
         listen 443 ssl http2;
         listen [::]:443 ssl http2;
         server_name docker-registry1.sitesearch.cloud;
 
-        #        include /etc/nginx/snippets/ssl.conf;
-        #
-#        auth_basic "Docker Registry";
-        #        auth_basic_user_file /etc/nginx/.htpasswd; # supply this via env vars somehow or as raw file at build time
+        include /etc/nginx/snippets/ssl.conf;
+
+        auth_basic "Docker Registry";
+        auth_basic_user_file /etc/nginx/.htpasswd; # supply this via env vars somehow or as raw file at build time
 
         location / {
             client_max_body_size 3G;
