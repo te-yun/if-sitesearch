@@ -12,7 +12,7 @@ RUN apt-get -y install unzip vim
 #COPY opt/default.* /templates/
 
 #RUN mkdir -p /etc/letsencrypt/.well-known # enables Letsencrypt validation
-COPY letsencrypt /etc/
+COPY letsencrypt /etc/letsencrypt
 COPY ssl.nginx /etc/nginx/snippets/ssl.conf
 COPY cors-headers.nginx /etc/nginx/snippets/cors-headers.conf
 #COPY routes.nginx /etc/nginx/conf.d/default.conf
