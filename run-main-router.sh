@@ -4,11 +4,12 @@ docker_network=main
 docker_redirect_image=main-router
 docker_tag=latest
 
+chmod -R 777 /srv/maven-repository
 docker rm -f $docker_redirect_image
-#docker rmi -f f4e9c1e52aa6
 docker run -d --name $docker_redirect_image \
     -p 80:80 \
     -p 443:443 \
+    -v /srv/maven-repository:/srv/maven-repository \
     --network $docker_network \
     docker-registry.sitesearch.cloud/intrafind/${docker_redirect_image}:${docker_tag}
 

@@ -70,9 +70,9 @@ http {
             dav_methods  PUT DELETE MKCOL COPY MOVE;
             create_full_put_path  on;
             dav_access  user:rw group:rw all:r;
+            #            proxy_cache maven_cache;
             client_max_body_size 3G;
-            #            proxy_pass http://docker-registry:5000;
-            #            sudo chmod +777 /var/www/html/repository
+            root /srv/maven-repository;
         }
     }
 
