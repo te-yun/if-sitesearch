@@ -272,7 +272,7 @@ public class SmokeTest {
 
     @Test
     public void dockerRegistryIsSecure() throws Exception {
-        var request = new Request.Builder()
+        final var request = new Request.Builder()
                 .url("https://docker-registry.sitesearch.cloud")
                 .build();
         final var response = HTTP_CLIENT.newCall(request).execute();
@@ -281,9 +281,28 @@ public class SmokeTest {
 
     @Test
     public void dockerRegistryIsUp() throws Exception {
-        var request = new Request.Builder()
+        final var request = new Request.Builder()
                 .header(HttpHeaders.AUTHORIZATION, BASIC_ENCODED_PASSWORD)
                 .url("https://docker-registry.sitesearch.cloud")
+                .build();
+        final var response = HTTP_CLIENT.newCall(request).execute();
+        assertEquals(HttpStatus.OK.value(), response.code());
+    }
+
+    @Test
+    public void mavenRepositoryIsSecure() throws Exception {
+        final var request = new Request.Builder()
+                .url("https://maven.sitesearch.cloud")
+                .build();
+        final var response = HTTP_CLIENT.newCall(request).execute();
+        assertEquals(HttpStatus.UNAUTHORIZED.value(), response.code());
+    }
+
+    @Test
+    public void mavenRepositoryIsUp() throws Exception {
+        final var request = new Request.Builder()
+                .header(HttpHeaders.AUTHORIZATION, BASIC_ENCODED_PASSWORD)
+                .url("https://maven.sitesearch.cloud")
                 .build();
         final var response = HTTP_CLIENT.newCall(request).execute();
         assertEquals(HttpStatus.OK.value(), response.code());

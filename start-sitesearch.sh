@@ -23,9 +23,6 @@ docker run -d --name if-sitesearch \
     --network sitesearch \
     intrafind/if-sitesearch:latest
 
-#docker tag intrafind/if-sitesearch docker-registry.sitesearch.cloud/intrafind/if-sitesearch
-#docker push docker-registry.sitesearch.cloud/intrafind/if-sitesearch
-
 danglingImages=$(docker images -f "dangling=true" -q)
 if [ "$danglingImages" ]; then
     docker rmi -f $danglingImages # cleanup, GC for dangling images
