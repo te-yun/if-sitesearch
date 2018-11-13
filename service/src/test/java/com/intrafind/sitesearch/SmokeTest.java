@@ -305,7 +305,7 @@ public class SmokeTest {
                 .url("https://maven.sitesearch.cloud")
                 .build();
         final var response = HTTP_CLIENT.newCall(request).execute();
-        assertEquals(HttpStatus.OK.value(), response.code());
+        assertEquals(HttpStatus.FORBIDDEN.value(), response.code());
     }
 
     @Test
