@@ -29,7 +29,6 @@ spring:
       name: ${spring.security.user.password}
       password: ESqIMPNz7I2l3F6lnotc87Jh9ud97GD5bsaSKsJJafk=
   main:
-    allow-bean-definition-overriding: true
     banner-mode: "off"
   output:
     ansi:
