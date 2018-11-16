@@ -49,7 +49,8 @@ dependencies {
     runtimeOnly "org.apache.tika:tika-parsers:1.18"
 //    compile "org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:$spring_boot_version"
     compile "org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.0.6.RELEASE"
-    compile "org.springframework.boot:spring-boot-starter-security:$spring_boot_version"
+    compile "org.springframework.boot:spring-boot-starter-security:2.0.6.RELEASE"
+//    compile "org.springframework.boot:spring-boot-starter-security:$spring_boot_version"
 
     compile "edu.uci.ics:crawler4j:4.4.0"
     compile "com.github.crawler-commons:crawler-commons:0.10"
