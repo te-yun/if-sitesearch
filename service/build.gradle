@@ -94,8 +94,7 @@ task runJMH(type: JavaExec) {
 }
 tasks.runJMH.finalizedBy tasks.jmhReport
 
-tasks.withType(JavaCompile) {
-    options.fork = true
-    options.incremental = true
-    jvmArgs += ['--add-opens', 'java.base/java.lang=ALL-UNNAMED']
-}
+//tasks.withType(JavaCompile) {
+//    options.fork = true
+//    options.incremental = true
+//}
