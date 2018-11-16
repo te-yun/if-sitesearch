@@ -78,15 +78,11 @@ dependencies {
     compile "org.jsoup:jsoup:1.11.3"
 }
 
-tasks.withType(Test) {
-    jvmArgs += ['--add-opens', 'java.base/java.lang=ALL-UNNAMED']
-}
-
-test {
-    testLogging {
-        exceptionFormat = "full"
-    }
-}
+//test {
+//    testLogging {
+//        exceptionFormat = "full"
+//    }
+//}
 
 jmhReport {
     jmhResultPath = "$buildDir/jmh-result.json"
@@ -101,4 +97,5 @@ tasks.runJMH.finalizedBy tasks.jmhReport
 tasks.withType(JavaCompile) {
     options.fork = true
     options.incremental = true
+    jvmArgs += ['--add-opens', 'java.base/java.lang=ALL-UNNAMED']
 }
