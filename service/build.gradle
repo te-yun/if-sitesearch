@@ -78,6 +78,10 @@ dependencies {
     compile "org.jsoup:jsoup:1.11.3"
 }
 
+tasks.withType(Test) {
+    jvmArgs += ['--add-opens', 'java.base/java.lang=ALL-UNNAMED']
+}
+
 test {
     testLogging {
         exceptionFormat = "full"
