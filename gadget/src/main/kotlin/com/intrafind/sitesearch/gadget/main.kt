@@ -52,6 +52,7 @@ private fun createSite() {
         siteIdContainer.textContent = siteId
         siteSecretContainer.textContent = siteSecret
         overrideSite(siteId)
+        enableSearch(waitWhileCrawlerIsRunningMsg) // required for IE11 because it's belongs in a museum
         document.dispatchEvent(Event("sis.triggerFirstUsageOwnershipEvent"))
     }
     xhr.setRequestHeader("content-type", "application/json")
@@ -121,22 +122,26 @@ private fun init() {
     enableProactiveValidation()
     validateDomain()
 
-    val waitWhileCrawlerIsRunningMsg = "Crawler is running... please give us just a minute or two."
     document.addEventListener("sis.triggerFirstUsageOwnershipEvent", {
-        startCrawler()
-        triggerButton.textContent = waitWhileCrawlerIsRunningMsg
-        triggerButton.disabled = true
-        siteSearchSetupUrl.innerHTML = "<strong>Copy this search setup URL to resume evaluation later:</strong> " +
-                "<a href='https://sitesearch.cloud/getting-started?siteId=$siteId&siteSecret=$siteSecret&url=${url.value}'>" +
-                "https://sitesearch.cloud/getting-started?siteId=$siteId&siteSecret=$siteSecret&url=${url.value}" +
-                "</a>"
-        (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = waitWhileCrawlerIsRunningMsg
-        insertSiteIdIntoIntegrationCode()
-
-        trackEnabledSearch()
+        enableSearch(waitWhileCrawlerIsRunningMsg)
     })
 
     applyQueryOverrides()
+}
+
+val waitWhileCrawlerIsRunningMsg = "Crawler is running... please give us just a minute or two."
+private fun enableSearch(waitWhileCrawlerIsRunningMsg: String) {
+    startCrawler()
+    triggerButton.textContent = waitWhileCrawlerIsRunningMsg
+    triggerButton.disabled = true
+    siteSearchSetupUrl.innerHTML = "<strong>Copy this search setup URL to resume evaluation later:</strong> " +
+            "<a href='https://sitesearch.cloud/getting-started?siteId=$siteId&siteSecret=$siteSecret&url=${url.value}'>" +
+            "https://sitesearch.cloud/getting-started?siteId=$siteId&siteSecret=$siteSecret&url=${url.value}" +
+            "</a>"
+    (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = waitWhileCrawlerIsRunningMsg
+    insertSiteIdIntoIntegrationCode()
+
+    trackEnabledSearch()
 }
 
 private fun trackEnabledSearch() {
