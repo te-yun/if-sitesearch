@@ -109,9 +109,7 @@ private fun init() {
     integrationCode.value = enterpriseSearchbar.outerHTML
 
     document.addEventListener("sis.crawlerFinishedEvent", {
-        triggerButton.textContent = "Enable Search"
-        triggerButton.disabled = false
-        (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = "$crawlerPageCount pages from ${url.value} have been crawled."
+        showEnableSearchInfo()
     })
 
     termsAccepted.addEventListener("change", {
@@ -127,6 +125,12 @@ private fun init() {
     })
 
     applyQueryOverrides()
+}
+
+private fun showEnableSearchInfo() {
+    triggerButton.textContent = "Enable Search"
+    triggerButton.disabled = false
+    (document.getElementById("ifs-sb-searchfield") as HTMLInputElement).placeholder = "$crawlerPageCount pages from ${url.value} have been crawled."
 }
 
 val waitWhileCrawlerIsRunningMsg = "Crawler is running... please give us just a minute or two."
@@ -354,6 +358,7 @@ fun startCrawler() {
     xhr.onload = {
         if (xhr.status.equals(200)) {
             crawlerPageCount = JSON.parse<dynamic>(xhr.responseText).pageCount as Int
+            showEnableSearchInfo()
             document.dispatchEvent(Event("sis.crawlerFinishedEvent"))
         } else {
             console.error("startCrawler failed")
