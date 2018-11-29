@@ -52,7 +52,7 @@ private fun createSite() {
         siteIdContainer.textContent = siteId
         siteSecretContainer.textContent = siteSecret
         overrideSite(siteId)
-        enableSearch(waitWhileCrawlerIsRunningMsg) // required for IE11 because it's belongs in a museum
+        enableSearch(waitWhileCrawlerIsRunningMsg) // required for IE11 because it belongs in a museum
         document.dispatchEvent(Event("sis.triggerFirstUsageOwnershipEvent"))
     }
     xhr.setRequestHeader("content-type", "application/json")
@@ -358,7 +358,7 @@ fun startCrawler() {
     xhr.onload = {
         if (xhr.status.equals(200)) {
             crawlerPageCount = JSON.parse<dynamic>(xhr.responseText).pageCount as Int
-            showEnableSearchInfo()
+            showEnableSearchInfo() // required for IE11 because it belongs in a museum
             document.dispatchEvent(Event("sis.crawlerFinishedEvent"))
         } else {
             console.error("startCrawler failed")
