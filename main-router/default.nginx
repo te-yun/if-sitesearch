@@ -39,6 +39,11 @@ http {
             client_max_body_size 9G;
             proxy_pass http://docker-registry:5000;
         }
+
+        location /datev/ {
+            client_max_body_size 9G;
+            proxy_pass http://docker-registry:5000/v2/datev/;
+        }
     }
 
     server {
@@ -54,6 +59,11 @@ http {
         location / {
             client_max_body_size 9G;
             proxy_pass http://docker-registry:5000;
+        }
+
+        location /datev/ {
+            client_max_body_size 9G;
+            proxy_pass http://docker-registry:5000/v2/datev/;
         }
     }
 
