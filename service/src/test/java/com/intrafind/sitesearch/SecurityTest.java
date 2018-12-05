@@ -68,20 +68,6 @@ public class SecurityTest {
         ;
     }
 
-//    @Test
-//    public void assureSiteSearchServiceBasicAuthProtectionForHessianPost() throws Exception {
-//        final ResponseEntity<String> secureEndpointHessian = caller.postForEntity(URI.create(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "hessian/index?method=index"), HttpEntity.EMPTY, String.class);
-//        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointHessian.getStatusCode());
-//        assertNull(secureEndpointHessian.getBody());
-//    }
-
-//    @Test
-//    public void assureSiteSearchServiceBasicAuthProtectionForHessianGet() throws Exception {
-//        final ResponseEntity<String> secureEndpointHessianGet = caller.exchange(INVALID_CREDENTIALS + SEARCH_SERVICE_DOMAIN + "hessian/index?method=index", HttpMethod.GET, HttpEntity.EMPTY, String.class);
-//        assertEquals(HttpStatus.UNAUTHORIZED, secureEndpointHessianGet.getStatusCode());
-//        assertNull(secureEndpointHessianGet.getBody());
-//    }
-
     @Test
     public void assureSiteSearchServiceBasicAuthProtectionForJsonPost() {
         final var secureEndpointJson = caller.postForEntity(URI.create(SmokeTest.INVALID_CREDENTIALS + SmokeTest.SEARCH_SERVICE_DOMAIN + "json/index?method=index"), HttpEntity.EMPTY, String.class);
