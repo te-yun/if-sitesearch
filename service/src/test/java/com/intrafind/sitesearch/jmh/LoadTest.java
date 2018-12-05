@@ -26,12 +26,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.results.format.ResultFormatType;
-import org.openjdk.jmh.runner.Runner;
-import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -89,23 +85,23 @@ public class LoadTest {
         AUTOCOMPLETE_DATA.put(LOAD_SITE_ID, AUTOCOMPLETE_QUERIES); // https://www.migrosbank.ch/de, https://blog.migrosbank.ch/de
     }
 
-    public static void main(String... args) throws Exception {
-        final var options = new OptionsBuilder()
-                .warmupIterations(1)
-                .measurementIterations(5)
-//                .include(".*")
-//                .include(LoadIndex2Users.class.getSimpleName())
-                .include(LoadTest.class.getSimpleName())
-                .forks(1)
-                .threads(10)
-                .mode(Mode.Throughput)
-                .resultFormat(ResultFormatType.JSON)
-                .result("build/jmh-result.json")
-                .shouldFailOnError(true)
-                .build();
-
-        new Runner(options).run();
-    }
+//    public static void main(String... args) throws Exception {
+//        final var options = new OptionsBuilder()
+//                .warmupIterations(1)
+//                .measurementIterations(5)
+////                .include(".*")
+////                .include(LoadIndex2Users.class.getSimpleName())
+//                .include(LoadTest.class.getSimpleName())
+//                .forks(1)
+//                .threads(10)
+//                .mode(Mode.Throughput)
+//                .resultFormat(ResultFormatType.JSON)
+//                .result("build/jmh-result.json")
+//                .shouldFailOnError(true)
+//                .build();
+//
+//        new Runner(options).run();
+//    }
 
     @Benchmark
     public void staticFiles() throws IOException {
