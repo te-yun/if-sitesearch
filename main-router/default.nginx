@@ -39,31 +39,35 @@ http {
             client_max_body_size 9G;
             proxy_pass http://docker-registry:5000;
         }
-
-        location /datev/ {
-            client_max_body_size 9G;
-            proxy_pass http://docker-registry:5000/v2/datev/;
-        }
     }
 
     server {
         listen 443 ssl http2;
         listen [::]:443 ssl http2;
-        server_name docker-registry.intrafind.org;
+        server_name docker-registry.intrafind.net;
 
         include /etc/nginx/snippets/ssl.conf;
-
-        auth_basic "Docker Registry";
-        auth_basic_user_file /etc/nginx/.htpasswd; # supply this via env vars somehow or as raw file at build time
+        client_max_body_size 9G;
 
         location / {
-            client_max_body_size 9G;
+            auth_basic "Docker Registry";
+            auth_basic_user_file /etc/nginx/.htpasswd;
+
             proxy_pass http://docker-registry:5000;
         }
 
         location /datev/ {
-            client_max_body_size 9G;
+            auth_basic "Docker Registry";
+            auth_basic_user_file /etc/nginx/.htpasswd-datev;
+
             proxy_pass http://docker-registry:5000/v2/datev/;
+        }
+
+        location /bfst/ {
+            auth_basic "Docker Registry";
+            auth_basic_user_file /etc/nginx/.htpasswd-bfst;
+
+            proxy_pass http://docker-registry:5000/v2/bfst/;
         }
     }
 
