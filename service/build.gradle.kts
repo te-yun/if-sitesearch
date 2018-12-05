@@ -31,12 +31,12 @@
  */
 
 // Migrate to Kotlin https://guides.gradle.org/migrating-build-logic-from-groovy-to-kotlin/
-buildscript {
-    //    ext {
+//buildscript {
+//        ext {
 //        val spring_boot_version = "2.0.7.RELEASE"
 //        val swagger_version = "2.9.2"
 //    }
-}
+//}
 
 plugins {
     java
@@ -54,20 +54,20 @@ java {
 
 repositories {
     jcenter()
-//    maven { url "https://repo.spring.io/snapshot" }
 }
 
 dependencies {
-    val spring_boot_version = "2.0.7.RELEASE"
-    val swagger_version = "2.9.2"
+    val springBootVersion = "2.0.7.RELEASE"
+    val swaggerVersion = "2.9.2"
+    val tikaVersion = "1.19.1"
 
 //    configurations.compile.exclude(module = "spring-boot-starter-tomcat")
 //    configurations.compile.exclude(group = "org.springframework.boot", module = "undertow-websockets-jsr")
 
-    compile("org.apache.tika:tika:1.18")
-    runtimeOnly("org.apache.tika:tika-parsers:1.18")
-    compile("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:$spring_boot_version")
-    compile("org.springframework.boot:spring-boot-starter-security:$spring_boot_version")
+    runtimeOnly("org.apache.tika:tika-parsers:$tikaVersion")
+    compile("org.apache.tika:tika:$tikaVersion")
+    compile("org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:$springBootVersion")
+    compile("org.springframework.boot:spring-boot-starter-security:$springBootVersion")
 
     compile("edu.uci.ics:crawler4j:4.4.0")
     compile("com.github.crawler-commons:crawler-commons:0.10")
@@ -76,32 +76,25 @@ dependencies {
 
     compile("com.caucho:hessian:4.0.51")
 
-    compile("org.springframework.boot:spring-boot-starter-webflux:$spring_boot_version")
-    compile("org.springframework.boot:spring-boot-starter-undertow:$spring_boot_version")
+    compile("org.springframework.boot:spring-boot-starter-webflux:$springBootVersion")
+    compile("org.springframework.boot:spring-boot-starter-undertow:$springBootVersion")
 
-    compile("io.springfox:springfox-swagger2:$swagger_version")
-    compile("io.springfox:springfox-swagger-ui:$swagger_version")
+    compile("io.springfox:springfox-swagger2:$swaggerVersion")
+    compile("io.springfox:springfox-swagger-ui:$swaggerVersion")
 
-    testAnnotationProcessor("org.openjdk.jmh:jmh-generator-annprocess:1.21")
+//    testAnnotationProcessor("org.openjdk.jmh:jmh-generator-annprocess:1.21")
     testCompile("org.openjdk.jmh:jmh-core:1.21")
-    testCompile("org.springframework.boot:spring-boot-starter-test:$spring_boot_version")
+    testCompile("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
 
-    testRuntimeOnly("org.springframework.boot:spring-boot-devtools:$spring_boot_version")
+    testRuntimeOnly("org.springframework.boot:spring-boot-devtools:$springBootVersion")
 
     compile("com.squareup.okhttp3:okhttp:3.12.0")
+    compile("org.jsoup:jsoup:1.11.3")
 
     compile("org.mnode.mstor:mstor:1.0.0")
     compile("com.google.oauth-client:google-oauth-client-jetty:1.26.0")
     compile("com.google.apis:google-api-services-gmail:v1-rev96-1.25.0")
-
-    compile("org.jsoup:jsoup:1.11.3")
 }
-
-//test {
-//    testLogging {
-//        exceptionFormat = "full"
-//    }
-//}
 
 jmh {
     include = listOf("com.intrafind.sitesearch.jmh.LoadTest")
@@ -110,27 +103,4 @@ jmh {
     fork = 0
     iterations = 1
     resultFormat = "JSON"
-//    duplicateClassesStrategy = DuplicatesStrategy.WARN
 }
-
-//jmhReport {
-//    jmhResultPath = "$buildDir/jmh-result.json"
-//    jmhReportOutput = buildDir.toString()
-//}
-//tasks.named<JavaExec>("runJMH") {
-//    main = "com.intrafind.sitesearch.jmh.LoadTest"
-//    classpath = sourceSets["test"].runtimeClasspath
-////    classpath = sourceSets.test.runtimeClasspath
-////    sourceSets.main.get().allSource
-//}
-//tasks{
-//    getByName("JavaExec").finalizedBy("jmhReport")
-////    withType<JavaExec> {
-////        finalizedBy(tasks.jmhReport)
-////    }
-//}
-
-//tasks.withType(JavaCompile) {
-//    options.fork = true
-//    options.incremental = true
-//}
