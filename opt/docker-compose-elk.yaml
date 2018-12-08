@@ -1,7 +1,7 @@
 version: "2.0"
 services:
   ops-kibana:
-    image: docker.elastic.co/kibana/kibana:6.4.2
+    image: docker.elastic.co/kibana/kibana:6.5.2
     container_name: ops-kibana
     restart: always
     depends_on:
@@ -22,7 +22,7 @@ services:
       - sitesearch
 
   elk-elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.5.2
     container_name: elk-elasticsearch
     restart: always
     environment:
@@ -42,7 +42,7 @@ services:
       - sitesearch
       
   ops-elasticsearch-ying:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.5.2
     container_name: ops-elasticsearch-ying
     restart: always
     environment:
@@ -62,7 +62,7 @@ services:
       - sitesearch
 
   ops-elasticsearch-yang:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.5.2
     container_name: ops-elasticsearch-yang
     restart: always
     environment:
@@ -82,7 +82,7 @@ services:
       - sitesearch
 
   ops-logstash:
-    image: docker.elastic.co/logstash/logstash:6.4.2
+    image: docker.elastic.co/logstash/logstash:6.5.2
     container_name: ops-logstash
     restart: always
 #    logging:
