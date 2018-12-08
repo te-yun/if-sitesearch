@@ -12,12 +12,12 @@ docker run -d -t --name $service_name \
     --network sitesearch \
     jetbrains/${service_name}:${version}
 
-sudo ~/buildAgent/bin/agent.sh stop kill # stop localhost-agent
+sudo ~/BuildAgent/bin/agent.sh stop kill # stop localhost-agent
 
 # Run for major version upgrades
-#cd ~/buildAgent/bin
+#cd ~/BuildAgent/bin
 #    ./install.sh https://ci.sitesearch.cloud
-#~/buildAgent/bin/agent.sh run
+#~/BuildAgent/bin/agent.sh run
 
 start_ci_agent() {
     docker rm -f teamcity-agent-$1
@@ -32,4 +32,4 @@ start_ci_agent() {
 start_ci_agent merkur
 start_ci_agent venus
 
-sudo ~/buildAgent/bin/agent.sh start # run localhost-agent on host machine
+sudo ~/BuildAgent/bin/agent.sh start # run localhost-agent on host machine
