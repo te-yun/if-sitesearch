@@ -42,6 +42,14 @@ public class SitePage {
         this.thumbnail = thumbnail;
     }
 
+    public SitePage(String title, String body, String url, String thumbnail, List<String> sisLabels) {
+        this.title = title;
+        this.body = body;
+        this.url = url;
+        this.thumbnail = thumbnail;
+        this.sisLabels = sisLabels;
+    }
+
     public String getThumbnail() {
         return thumbnail;
     }

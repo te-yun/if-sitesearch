@@ -44,6 +44,7 @@ import java.util.HashSet;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -158,6 +159,8 @@ public class CrawlerTest {
         assertEquals(HttpStatus.OK, fetchThumbnailPage.getStatusCode());
         assertEquals(pageWithThumbnail, fetchThumbnailPage.getBody().getUrl());
         assertEquals("https://api.sitesearch.cloud/theme/logo.png", fetchThumbnailPage.getBody().getThumbnail());
+        assertEquals(Arrays.asList("Portal", "homepage", "Start"), fetchThumbnailPage.getBody().getSisLabels());
+        assertNotEquals(Arrays.asList("Portal", "Homepage", "Start"), fetchThumbnailPage.getBody().getSisLabels());
     }
 
     @Test

@@ -44,7 +44,10 @@ import org.xml.sax.SAXException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -147,24 +150,22 @@ public class SiteCrawler extends WebCrawler {
         final var url = page.getWebURL().getURL();
 
         if (page.getParseData() instanceof HtmlParseData) {
-            final var htmlParseData = (HtmlParseData) page.getParseData();
-            if (isNoindexPage(htmlParseData)) {
+            final var parsedHtml = (HtmlParseData) page.getParseData();
+            if (isNoindexPage(parsedHtml)) {
                 return;
             }
-            final var htmlStrippedBody = extractTextFromMixedHtml(htmlParseData.getHtml(), pageBodyCssSelector);
-            final var title = htmlParseData.getTitle();
-            final String thumbnail;
-            if (htmlParseData.getMetaTags().get(SiteService.PAGE_THUMBNAIL_META_NAME) != null && htmlParseData.getMetaTags().get(SiteService.PAGE_THUMBNAIL_META_NAME).length() < 100_000) {
-                thumbnail = htmlParseData.getMetaTags().get(SiteService.PAGE_THUMBNAIL_META_NAME);
-            } else {
-                thumbnail = "";
-            }
+            final var htmlStrippedBody = extractTextFromMixedHtml(parsedHtml.getHtml(), pageBodyCssSelector);
+            final var title = parsedHtml.getTitle();
+
+            final String thumbnail = enhancePageWithThumbnail(parsedHtml);
+            final List<String> sisLabels = enhancePageWithLabels(parsedHtml);
 
             final var sitePage = new SitePage(
                     title,
                     htmlStrippedBody,
                     url,
-                    thumbnail
+                    thumbnail,
+                    sisLabels
             );
 
             indexPage(sitePage);
@@ -172,6 +173,25 @@ public class SiteCrawler extends WebCrawler {
         } else {
             LOG.warn("visit_ERROR - siteId: " + siteId + " - url: " + url);
         }
+    }
+
+    private String enhancePageWithThumbnail(HtmlParseData htmlParseData) {
+        final String thumbnail;
+        if (htmlParseData.getMetaTags().get(SiteService.PAGE_THUMBNAIL_META_NAME) != null && htmlParseData.getMetaTags().get(SiteService.PAGE_THUMBNAIL_META_NAME).length() < 100_000) {
+            thumbnail = htmlParseData.getMetaTags().get(SiteService.PAGE_THUMBNAIL_META_NAME);
+        } else {
+            thumbnail = "";
+        }
+        return thumbnail;
+    }
+
+    private List<String> enhancePageWithLabels(HtmlParseData htmlParseData) {
+        final List<String> sisLabels = new ArrayList<>();
+        final String rawSisLabels = htmlParseData.getMetaTags().get(SiteService.PAGE_LABELS_META_NAME);
+        if (rawSisLabels != null && rawSisLabels.length() < 100_000) {
+            Collections.addAll(sisLabels, rawSisLabels.split(","));
+        }
+        return sisLabels;
     }
 
     private void countPage(final String url) {
