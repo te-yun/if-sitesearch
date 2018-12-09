@@ -1,7 +1,7 @@
 version: "2.0"
 services:
   ops-kibana:
-    image: docker.elastic.co/kibana/kibana:6.5.2
+    image: docker.elastic.co/kibana/kibana:6.4.2
     container_name: ops-kibana
     restart: always
     depends_on:
@@ -14,10 +14,6 @@ services:
       - xpack.monitoring.report_stats=false
       - xpack.monitoring.collection.enabled=true
       - ELASTICSEARCH_URL=http://elk-elasticsearch:9200
-    #      SERVER_NAME: elk-elasticsearch
-    #      KIBANA_DEFAULTAPPID: kibana.defaultAppId
-    #      XPACK_MONITORING_ENABLED: xpack.monitoring.enabled
-    #
     networks:
       - sitesearch
 
@@ -85,13 +81,6 @@ services:
     image: docker.elastic.co/logstash/logstash:6.5.2
     container_name: ops-logstash
     restart: always
-    #    logging:
-    #      driver: syslog
-    #      options:
-    #        syslog-address: "udp://$IP_LOGSTASH:5000"
-    #        syslog-tag: "nginx-with-syslog"
-    #    environment:
-    #      - "xpack.monitoring.elasticsearch.url=http://ops-elasticsearch:9200"
     volumes:
       - /srv/ops-logstash/_data:/usr/share/logstash:rw
     ports:
