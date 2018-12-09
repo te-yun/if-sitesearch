@@ -1,7 +1,7 @@
-version: "2.0"
+version: "3"
 services:
   ops-kibana:
-    image: docker.elastic.co/kibana/kibana:6.5.1
+    image: docker.elastic.co/kibana/kibana:6.4.3
     container_name: ops-kibana
     depends_on:
       - elk-elasticsearch
@@ -26,10 +26,6 @@ services:
       - node.name=elk-elasticsearch
       - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
       - discovery.zen.ping.unicast.hosts=elk-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
     volumes:
       - /srv/elk-elasticsearch/data:/usr/share/elasticsearch/data:rw
     networks:
@@ -45,10 +41,6 @@ services:
       - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
       - node.name=ops-elasticsearch-ying
       - discovery.zen.ping.unicast.hosts=elk-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
     volumes:
       - /srv/ops-elasticsearch-ying/data:/usr/share/elasticsearch/data:rw
     networks:
@@ -64,10 +56,6 @@ services:
       - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
       - node.name=ops-elasticsearch-yang
       - discovery.zen.ping.unicast.hosts=elk-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
     volumes:
       - /srv/ops-elasticsearch-yang/data:/usr/share/elasticsearch/data:rw
     networks:
