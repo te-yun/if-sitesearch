@@ -2,6 +2,8 @@ version: "3"
 services:
   ops-kibana:
     image: docker.elastic.co/kibana/kibana:6.5.2
+    container_name: ops-kibana
+    restart: always
     depends_on:
       - elk-elasticsearch
       - ops-elasticsearch-yang
@@ -17,6 +19,8 @@ services:
 
   elk-elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.5.2
+    container_name: elk-elasticsearch
+    restart: always
     environment:
       - xpack.security.enabled=false
       - cluster.name=sitesearch-ops-cluster
@@ -31,6 +35,8 @@ services:
 
   ops-elasticsearch-ying:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.5.2
+    container_name: ops-elasticsearch-ying
+    restart: always
     environment:
       - xpack.security.enabled=false
       - cluster.name=sitesearch-ops-cluster
@@ -45,6 +51,8 @@ services:
 
   ops-elasticsearch-yang:
     image: docker.elastic.co/elasticsearch/elasticsearch:6.5.2
+    container_name: ops-elasticsearch-yang
+    restart: always
     environment:
       - xpack.security.enabled=false
       - cluster.name=sitesearch-ops-cluster
@@ -59,6 +67,8 @@ services:
 
   ops-logstash:
     image: docker.elastic.co/logstash/logstash:6.5.2
+    container_name: ops-logstash
+    restart: always
     volumes:
       - /srv/ops-logstash/_data:/usr/share/logstash:rw
     ports:
