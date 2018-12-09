@@ -32,7 +32,7 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - /srv/elk-elasticsearch/data:/usr/share/elasticsearch/data:rw
+      - /mnt/elk/elk-elasticsearch/data:/usr/share/elasticsearch/data:rw
     networks:
       - sitesearch
 
@@ -51,7 +51,7 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - /srv/ops-elasticsearch-ying/data:/usr/share/elasticsearch/data:rw
+      - /mnt/elk/ops-elasticsearch-ying/data:/usr/share/elasticsearch/data:rw
     networks:
       - sitesearch
 
@@ -70,7 +70,7 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - /srv/ops-elasticsearch-yang/data:/usr/share/elasticsearch/data:rw
+      - /mnt/elk/ops-elasticsearch-yang/data:/usr/share/elasticsearch/data:rw
     networks:
       - sitesearch
 
@@ -78,7 +78,7 @@ services:
     image: docker.elastic.co/logstash/logstash:6.4.3
     container_name: ops-logstash
     volumes:
-      - /srv/ops-logstash/_data:/usr/share/logstash:rw
+      - /mnt/elk/ops-logstash/_data:/usr/share/logstash:rw
     ports:
       - 12201:12201/udp
     networks:

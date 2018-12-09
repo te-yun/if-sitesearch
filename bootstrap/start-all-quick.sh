@@ -28,7 +28,7 @@ docker restart router
 #docker start if-app-webcrawler # removed/deprecated for good
 
 sudo sysctl -w vm.max_map_count=262144 # required for Elasticsearch
-docker-compose --file opt/docker-compose-elk.yaml -p sitesearch up -d
+#docker-compose --file opt/docker-compose-elk.yaml -p sitesearch up -d # moved to Hetzner main
 docker-compose --file opt/docker-compose-bg.yaml -p tmp up -d
 
 docker exec router nginx -s reload
