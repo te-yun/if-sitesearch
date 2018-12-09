@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+network=main
+docker network create $network
 sudo sysctl -w vm.max_map_count=262144 # required for Elasticsearch
 
 sudo chown -R 1000:1000 /mnt/elk/ops-logstash
@@ -7,11 +9,11 @@ sudo chown -R 1000:1000 /mnt/elk/elk-elasticsearch
 sudo chown -R 1000:1000 /mnt/elk/ops-elasticsearch-ying
 sudo chown -R 1000:1000 /mnt/elk/ops-elasticsearch-yang
 
-docker-compose --file opt/docker-compose-elk.yaml -p sitesearch down
-docker-compose --file opt/docker-compose-elk.yaml -p sitesearch up -d --force-recreate
-docker-compose --file opt/docker-compose-elk.yaml -p sitesearch ps
+docker-compose --file opt/docker-compose-elk.yaml -p $network down
+docker-compose --file opt/docker-compose-elk.yaml -p $network up -d --force-recreate
+docker-compose --file opt/docker-compose-elk.yaml -p $network ps
 
-docker exec router nginx -s reload
+docker exec main-router nginx -s reload
 
 # Provide Basic License
 #docker exec -it ops-elasticsearch bash
