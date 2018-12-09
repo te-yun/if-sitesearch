@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   ops-kibana:
-    image: docker.elastic.co/kibana/kibana:6.4.2
+    image: docker.elastic.co/kibana/kibana:6.4.3
     container_name: ops-kibana
     depends_on:
       - elk-elasticsearch
@@ -17,7 +17,7 @@ services:
       - sitesearch
 
   elk-elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.3
     container_name: elk-elasticsearch
     environment:
       - xpack.security.enabled=false
@@ -37,7 +37,7 @@ services:
       - sitesearch
 
   #  ops-elasticsearch-ying:
-  #    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
+  #    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.3
   #    container_name: ops-elasticsearch-ying
   #    environment:
   #      - xpack.security.enabled=false
@@ -52,7 +52,7 @@ services:
   #      - sitesearch
   #
   #  ops-elasticsearch-yang:
-  #    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
+  #    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.3
   #    container_name: ops-elasticsearch-yang
   #    environment:
   #      - xpack.security.enabled=false
@@ -67,7 +67,7 @@ services:
   #      - sitesearch
 
   ops-logstash:
-    image: docker.elastic.co/logstash/logstash:6.4.2
+    image: docker.elastic.co/logstash/logstash:6.4.3
     container_name: ops-logstash
     volumes:
       - /srv/ops-logstash/_data:/usr/share/logstash:rw
