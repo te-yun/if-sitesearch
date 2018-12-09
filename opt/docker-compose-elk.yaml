@@ -5,8 +5,8 @@ services:
     container_name: ops-kibana
     depends_on:
       - elk-elasticsearch
-      #      - ops-elasticsearch-yang
-      #      - ops-elasticsearch-ying
+      - ops-elasticsearch-yang
+      - ops-elasticsearch-ying
       - ops-logstash
     environment:
       - xpack.security.enabled=false
@@ -21,12 +21,12 @@ services:
     container_name: elk-elasticsearch
     environment:
       - xpack.security.enabled=false
-      - "discovery.type=single-node"
-      #      - cluster.name=sitesearch-ops-cluster
-      #      - bootstrap.memory_lock=true
-      #      - node.name=elk-elasticsearch
+      - cluster.name=sitesearch-ops-cluster
+      - bootstrap.memory_lock=true
+      - node.name=elk-elasticsearch
+      - discovery.zen.ping.unicast.hosts=elk-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
+      #      - "discovery.type=single-node"
     #      - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
-    #      - discovery.zen.ping.unicast.hosts=elk-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
     ulimits:
       memlock:
         soft: -1
@@ -36,35 +36,43 @@ services:
     networks:
       - sitesearch
 
-  #  ops-elasticsearch-ying:
-  #    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.3
-  #    container_name: ops-elasticsearch-ying
-  #    environment:
-  #      - xpack.security.enabled=false
-  #      - cluster.name=sitesearch-ops-cluster
-  #      - bootstrap.memory_lock=true
-  #      - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
-  #      - node.name=ops-elasticsearch-ying
-  #      - discovery.zen.ping.unicast.hosts=elk-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
-  #    volumes:
-  #      - /srv/ops-elasticsearch-ying/data:/usr/share/elasticsearch/data:rw
-  #    networks:
-  #      - sitesearch
-  #
-  #  ops-elasticsearch-yang:
-  #    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.3
-  #    container_name: ops-elasticsearch-yang
-  #    environment:
-  #      - xpack.security.enabled=false
-  #      - cluster.name=sitesearch-ops-cluster
-  #      - bootstrap.memory_lock=true
-  #      - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
-  #      - node.name=ops-elasticsearch-yang
-  #      - discovery.zen.ping.unicast.hosts=elk-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
-  #    volumes:
-  #      - /srv/ops-elasticsearch-yang/data:/usr/share/elasticsearch/data:rw
-  #    networks:
-  #      - sitesearch
+    ops-elasticsearch-ying:
+      image: docker.elastic.co/elasticsearch/elasticsearch:6.4.3
+      container_name: ops-elasticsearch-ying
+      environment:
+        - xpack.security.enabled=false
+        - cluster.name=sitesearch-ops-cluster
+        - bootstrap.memory_lock=true
+        - node.name=ops-elasticsearch-ying
+        - discovery.zen.ping.unicast.hosts=elk-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
+        #        - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
+      ulimits:
+        memlock:
+          soft: -1
+          hard: -1
+      volumes:
+        - /srv/ops-elasticsearch-ying/data:/usr/share/elasticsearch/data:rw
+      networks:
+        - sitesearch
+
+    ops-elasticsearch-yang:
+      image: docker.elastic.co/elasticsearch/elasticsearch:6.4.3
+      container_name: ops-elasticsearch-yang
+      environment:
+        - xpack.security.enabled=false
+        - cluster.name=sitesearch-ops-cluster
+        - bootstrap.memory_lock=true
+        - node.name=ops-elasticsearch-yang
+        - discovery.zen.ping.unicast.hosts=elk-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
+        #        - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
+      ulimits:
+        memlock:
+          soft: -1
+          hard: -1
+      volumes:
+        - /srv/ops-elasticsearch-yang/data:/usr/share/elasticsearch/data:rw
+      networks:
+        - sitesearch
 
   ops-logstash:
     image: docker.elastic.co/logstash/logstash:6.4.3
