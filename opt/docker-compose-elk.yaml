@@ -85,6 +85,6 @@ services:
       - main
 
 networks:
-  sitesearch:
+  main:
     external:
       name: main
