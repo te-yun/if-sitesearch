@@ -32,20 +32,9 @@
 
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
-//buildscript {
-//    repositories {
-//        gradlePluginPortal()
-//    }
-//    val kotlin_version = "1.3.11"
-//    dependencies {
-//        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
-//    }
-//}
-
 plugins {
     id("kotlin2js") version "1.3.11"
 }
-
 
 repositories {
     jcenter()

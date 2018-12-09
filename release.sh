@@ -10,7 +10,7 @@ img_fqn=docker-registry.sitesearch.cloud/intrafind/${docker_image_name}:${docker
 
 cp -r /home/ubuntu/docker-build-data/api-sitesearch/service . # TODO remove? Is already defined as first step in CI.
 cd service
-docker build --pull --tag intrafind/${docker_image_name}:${docker_tag} .
+docker build --pull --tag ${img_fqn} .
 cd ..
 
 docker rm -f ${docker_image_name}
@@ -31,7 +31,7 @@ docker run -d --name ${docker_image_name} \
     --env SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=$SECURITY_OAUTH2_CLIENT_CLIENT_SECRET \
     --restart unless-stopped \
     --network $docker_network \
-    intrafind/${docker_image_name}:${docker_tag}
+    ${img_fqn}
 docker push ${img_fqn}
 
 danglingImages=$(docker images -f "dangling=true" -q)
