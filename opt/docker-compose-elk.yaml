@@ -1,4 +1,4 @@
-version: "3"
+version: "3.7"
 services:
   ops-kibana:
     image: docker.elastic.co/kibana/kibana:6.4.3
@@ -21,9 +21,9 @@ services:
     container_name: elk-elasticsearch
     environment:
       - xpack.security.enabled=false
-      #      - cluster.name=sitesearch-ops-cluster
+      - cluster.name=sitesearch-ops-cluster
       - bootstrap.memory_lock=true
-      - node.name=elk-elasticsearch
+      #      - node.name=elk-elasticsearch
       - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
     #      - discovery.zen.ping.unicast.hosts=elk-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
     ulimits:
