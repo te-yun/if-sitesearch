@@ -16,7 +16,7 @@ cd ..
 docker rm -f ${docker_image_name}
 docker run -d --name ${docker_image_name} \
     --log-driver=gelf \
-    --log-opt gelf-address=udp://localhost:12201 \
+    --log-opt gelf-address=udp://logs.sitesearch.cloud:12201 \
     --env SIS_API_SERVICE_URL=$SIS_API_SERVICE_URL \
     --env SERVICE_SECRET=$SERVICE_SECRET \
     --env SIS_SERVICE_HOST=$SIS_SERVICE_HOST \

@@ -33,6 +33,9 @@
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
 //buildscript {
+//    repositories {
+//        gradlePluginPortal()
+//    }
 //    val kotlin_version = "1.3.11"
 //    dependencies {
 //        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
@@ -55,7 +58,7 @@ dependencies {
 }
 
 tasks {
-    compileKotlin2Js {
+    "compileKotlin2Js"(Kotlin2JsCompile::class) {
         kotlinOptions {
             metaInfo = true
             outputFile = "${buildDir}/classes/kotlin/main/${project.name}.js"
