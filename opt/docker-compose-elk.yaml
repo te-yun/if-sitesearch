@@ -25,8 +25,8 @@ services:
       - bootstrap.memory_lock=true
       - node.name=elk-elasticsearch
       - discovery.zen.ping.unicast.hosts=elk-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
+      - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
       #      - "discovery.type=single-node"
-    #      - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
     ulimits:
       memlock:
         soft: -1
@@ -45,7 +45,7 @@ services:
         - bootstrap.memory_lock=true
         - node.name=ops-elasticsearch-ying
         - discovery.zen.ping.unicast.hosts=elk-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
-        #        - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
+        - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
       ulimits:
         memlock:
           soft: -1
@@ -64,7 +64,7 @@ services:
         - bootstrap.memory_lock=true
         - node.name=ops-elasticsearch-yang
         - discovery.zen.ping.unicast.hosts=elk-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
-        #        - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
+        - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
       ulimits:
         memlock:
           soft: -1
