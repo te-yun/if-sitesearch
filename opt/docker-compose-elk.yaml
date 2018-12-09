@@ -22,7 +22,7 @@ services:
     environment:
       #      - "discovery.type=single-node"
       - xpack.security.enabled=false
-      - cluster.name=sitesearch-ops-cluster
+      #      - cluster.name=sitesearch-ops-cluster
       - bootstrap.memory_lock=true
       - node.name=elk-elasticsearch
       - discovery.zen.ping.unicast.hosts=elk-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
@@ -41,7 +41,7 @@ services:
     container_name: ops-elasticsearch-ying
     environment:
       - xpack.security.enabled=false
-      - cluster.name=sitesearch-ops-cluster
+      #      - cluster.name=sitesearch-ops-cluster
       - bootstrap.memory_lock=true
       - node.name=ops-elasticsearch-ying
       - discovery.zen.ping.unicast.hosts=elk-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
@@ -60,7 +60,7 @@ services:
     container_name: ops-elasticsearch-yang
     environment:
       - xpack.security.enabled=false
-      - cluster.name=sitesearch-ops-cluster
+      #      - cluster.name=sitesearch-ops-cluster
       - bootstrap.memory_lock=true
       - node.name=ops-elasticsearch-yang
       - discovery.zen.ping.unicast.hosts=elk-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
