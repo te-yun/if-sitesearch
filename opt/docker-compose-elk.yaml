@@ -26,10 +26,10 @@ services:
       #      - node.name=elk-elasticsearch
     #      - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
     #      - discovery.zen.ping.unicast.hosts=elk-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
-    #    ulimits:
-    #      memlock:
-    #        soft: -1
-    #        hard: -1
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     volumes:
       - /srv/elk-elasticsearch/data:/usr/share/elasticsearch/data:rw
     networks:
