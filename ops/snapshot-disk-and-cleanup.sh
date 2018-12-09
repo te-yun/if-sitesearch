@@ -20,3 +20,7 @@ fi
 gcloud compute snapshots list --filter="creationTimestamp<$from_date" --uri | while read SNAPSHOT_URI; do
    gcloud compute snapshots delete $SNAPSHOT_URI  --quiet
 done
+
+
+# TODO make such builds fail https://ci.sitesearch.cloud/viewLog.html?tab=buildLog&buildTypeId=IntraFind_Oss_DailySnapshotsAndCleanups&buildId=616155&_focus=63#_state=58
+# TODO fix this script 

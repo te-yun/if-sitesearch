@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   ops-kibana:
-    image: docker.elastic.co/kibana/kibana:6.5.2
+    image: docker.elastic.co/kibana/kibana:6.4.2
     container_name: ops-kibana
     depends_on:
       - elk-elasticsearch
@@ -17,7 +17,7 @@ services:
       - sitesearch
 
   elk-elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.5.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
     container_name: elk-elasticsearch
     environment:
       - xpack.security.enabled=false
