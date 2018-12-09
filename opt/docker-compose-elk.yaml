@@ -21,11 +21,11 @@ services:
     container_name: elk-elasticsearch
     environment:
       - xpack.security.enabled=false
-      - cluster.name=sitesearch-ops-cluster
+      #      - cluster.name=sitesearch-ops-cluster
       - bootstrap.memory_lock=true
       - node.name=elk-elasticsearch
       - "ES_JAVA_OPTS=-Xms1G -Xmx1G"
-      - discovery.zen.ping.unicast.hosts=elk-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
+    #      - discovery.zen.ping.unicast.hosts=elk-elasticsearch,ops-elasticsearch-ying,ops-elasticsearch-yang
     ulimits:
       memlock:
         soft: -1
