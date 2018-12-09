@@ -48,7 +48,7 @@ to the `config` folder inside this project.
     ./js-app-build.sh
 
 ## Release
-    ./release.sh
+    ./start-sitesearch.sh
    
 # Attribution
 * Made with ♥ in Munich

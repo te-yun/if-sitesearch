@@ -2,12 +2,12 @@
 
 cp -r /home/ubuntu/docker-build-data/api-sitesearch/service .
 cd service
-docker build --pull --tag intrafind/if-sitesearch:latest .
+docker build --pull --tag docker-registry.sitesearch.cloud/intrafind/if-sitesearch:latest .
 
 docker rm -f if-sitesearch
 docker run -d --name if-sitesearch \
     --log-driver=gelf \
-    --log-opt gelf-address=udp://localhost:12201 \
+    --log-opt gelf-address=udp://logs.sitesearch.cloud:12201 \
     --env SIS_API_SERVICE_URL=$SIS_API_SERVICE_URL \
     --env SERVICE_SECRET=$SERVICE_SECRET \
     --env SIS_SERVICE_HOST=$SIS_SERVICE_HOST \
@@ -21,7 +21,7 @@ docker run -d --name if-sitesearch \
     --env SCM_HASH=$SCM_HASH \
     --env SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=$SECURITY_OAUTH2_CLIENT_CLIENT_SECRET \
     --network sitesearch \
-    intrafind/if-sitesearch:latest
+    docker-registry.sitesearch.cloud/intrafind/if-sitesearch:latest
 
 danglingImages=$(docker images -f "dangling=true" -q)
 if [ "$danglingImages" ]; then
