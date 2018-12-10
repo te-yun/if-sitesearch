@@ -358,6 +358,7 @@
     <orderEntry type="library" scope="TEST" name="Gradle: javax.ws.rs:javax.ws.rs-api:2.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.mchange:mchange-commons-java:0.2.11" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.codehaus.woodstox:stax2-api:4.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: org.openjdk.jmh:jmh-generator-annprocess:1.21" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.openjdk.jmh:jmh-generator-bytecode:1.21" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.openjdk.jmh:jmh-generator-asm:1.21" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.openjdk.jmh:jmh-generator-reflection:1.21" level="project" />

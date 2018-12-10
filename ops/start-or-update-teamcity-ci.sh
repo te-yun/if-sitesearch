@@ -3,13 +3,14 @@
 
 version=2018.2
 service_name=teamcity-server
+network=main
 
 docker rm -f $service_name
 docker run -d -t --name $service_name \
     -e TEAMCITY_SERVER_MEM_OPTS="-Xmx2g -XX:MaxPermSize=270m -XX:ReservedCodeCacheSize=350m" \
     -v /srv/${service_name}:/data/teamcity_server/datadir \
     -v /srv/${service_name}/logs:/opt/teamcity/logs \
-    --network sitesearch \
+    --network $network \
     jetbrains/${service_name}:${version}
 
 sudo ~/BuildAgent/bin/agent.sh stop kill # stop localhost-agent
@@ -25,7 +26,7 @@ start_ci_agent() {
         -e SERVER_URL="https://ci.sitesearch.cloud" \
         -e AGENT_NAME=$1 \
         -v /srv/teamcity-agent-$1:/data/teamcity_agent/conf \
-        --network sitesearch \
+        --network $network \
         jetbrains/teamcity-agent:${version}
 }
 
