@@ -51,7 +51,7 @@ import java.util.UUID;
 @EnableSwagger2
 public class Application {
     private static final Logger LOG = LoggerFactory.getLogger(Application.class);
-    private static final String SERVICE_SECRET = System.getenv("SERVICE_SECRET");
+    static final String SERVICE_SECRET = System.getenv("SERVICE_SECRET");
     public static final URI IFINDER_CORE = URI.create("https://sitesearch:" + SERVICE_SECRET + "@" + System.getenv("SIS_SERVICE_HOST") + "/hessian"); // TODO consider trying json endpoint
     private static final String WOO_COMMERCE_CONSUMER_KEY = System.getenv("WOO_COMMERCE_CONSUMER_KEY");
     private static final String WOO_COMMERCE_CONSUMER_SECRET = System.getenv("WOO_COMMERCE_CONSUMER_SECRET");

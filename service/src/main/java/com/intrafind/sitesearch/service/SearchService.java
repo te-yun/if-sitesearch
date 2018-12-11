@@ -45,8 +45,6 @@ public class SearchService {
 //  TODO optimize by not retrieving all fields              Search.RETURN_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL + QUERY_SEPARATOR + Fields.TENANT + QUERY_SEPARATOR + QUERY_SEPARATOR +SiteService.PAGE_THUMBNAIL,
 
                 Search.RETURN_TEASER_FIELDS, Fields.BODY + QUERY_SEPARATOR + Fields.TITLE + QUERY_SEPARATOR + Fields.URL,
-//                Search.HITS_SORT, "-_date_",
-//                Search.HITS_SORT, "_date_",
                 Search.RETURN_TEASER_COUNT, 1,
                 Search.RETURN_TEASER_SIZE, 150,
                 Search.RETURN_TEASER_TAG_PRE, "<span class=\"if-teaser-highlight\">",
@@ -57,7 +55,7 @@ public class SearchService {
 
         final var siteDocuments = new ArrayList<FoundPage>();
         hits.getDocuments().forEach(document -> {
-            final FoundPage site = new FoundPage(
+            final var site = new FoundPage(
                     document.get(HIT_TEASER_PREFIX + Fields.TITLE),
                     document.get(HIT_TEASER_PREFIX + Fields.BODY),
                     document.get(HIT_TEASER_PREFIX + Fields.URL),

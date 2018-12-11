@@ -9,7 +9,7 @@ after_script:
 - ls -la
 
 build-service:
-  image: openjdk:11-jre
+  image: openjdk:11-jre-slim
   stage: build-service
   script:
   - ./gradlew build --build-cache --info -x test
@@ -29,5 +29,6 @@ assemble:
   image: docker:stable
   stage: assemble
   script:
-  - cd ops/analyze-law/router
-  - sh build.sh
+    - cd service
+    - docker build --tag docker-registry.sitesearch.cloud/intrafind/if-sitesearch:latest .
+#  - docker push docker-registry.sitesearch.cloud/intrafind/if-sitesearch:latest

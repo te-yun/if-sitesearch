@@ -20,6 +20,7 @@ import com.intrafind.api.Document;
 import com.intrafind.api.index.Index;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
@@ -29,6 +30,7 @@ import java.util.List;
  * Should serve as a persistence client that works on a different index than the search client.
  */
 @Profile("oss")
+@Primary
 @Repository
 public class SimpleIndexClient implements Index {
     private static final Logger LOG = LoggerFactory.getLogger(SimpleIndexClient.class);

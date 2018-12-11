@@ -19,6 +19,7 @@ package com.intrafind.sitesearch.service;
 import com.intrafind.api.search.Hits;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Repository;
  * Should serve as a persistence client that works on a different index than the search client.
  */
 @Profile("oss")
+@Primary
 @Repository
 public class SimpleAutocompleteClient implements AutocompleteClient {
     private static final Logger LOG = LoggerFactory.getLogger(SimpleAutocompleteClient.class);
