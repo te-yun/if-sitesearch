@@ -7,9 +7,9 @@ gcloud compute disks list --format='value(name,zone)'| while read DISK_NAME ZONE
 done
 
 if [ "$(uname)" = "Linux" ]; then
-  from_date=$(date -d "-60 days" "+%Y-%m-%d")
+  from_date=$(date -d "-30 days" "+%Y-%m-%d")
 else
-  from_date=$(date -v -60d "+%Y-%m-%d")
+  from_date=$(date -v -30d "+%Y-%m-%d")
 fi
 gcloud compute snapshots list --filter="creationTimestamp<$from_date" --uri | while read SNAPSHOT_URI; do
    gcloud compute snapshots delete $SNAPSHOT_URI  --quiet
