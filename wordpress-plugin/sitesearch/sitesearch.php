@@ -68,3 +68,12 @@ function If_Sis_load_scripts()
     wp_enqueue_script('script-handle');
 }
 add_action('wp_enqueue_scripts', 'If_Sis_load_scripts', 1);
+
+
+
+function sis_app_init() {
+	wp_register_script('sis-app', 'https://cdn.sitesearch.cloud/searchbar/2018-09-18/app/js/app.js', false, null, false);
+    wp_enqueue_script('sis-app');
+}
+add_action( 'admin_enqueue_scripts', 'sis_app_init' );
+add_action('wp_enqueue_scripts', 'sis_app_init');

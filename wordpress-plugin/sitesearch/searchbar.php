@@ -17,11 +17,11 @@
 * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-function If_Sis_searchbar($form)
+function If_Sis_searchbar()
 {
+	
     $form = '<div id="sitesearch-searchbar" class="searchbar" style="display: none;">
         <div id="ifs-searchbar" class="ifs-component ifs-sb"></div>
-            <script src="https://cdn.sitesearch.cloud/searchbar/2018-09-18/app/js/app.js"></script>
             <script>
                 IFS.initClient({
                     customConfig: {
@@ -35,6 +35,7 @@ function If_Sis_searchbar($form)
                 });
             </script>
         </div>';
+		
     if (!get_option("if_sis_siteId")) {        
         echo $form;
     } else {

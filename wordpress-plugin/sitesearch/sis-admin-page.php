@@ -18,7 +18,7 @@
 */
 
 require_once 'searchbar.php';
-wp_enqueue_style('if-sis-admin-page-styles', plugin_dir_url(__FILE__) . 'style.css', array(), filemtime(plugin_dir_url(__FILE__) . 'style.css'), false);
+wp_enqueue_style('if-sis-admin-page-styles', plugin_dir_url(__FILE__) . 'style.css', array(), filemtime(plugin_dir_path(__FILE__) . 'style.css'), false);
 wp_enqueue_script('if-sis-admin-client-js', 'https://api.sitesearch.cloud/external/wordpress-plugin/admin-client.js', array(), null, true);
 
 /**
@@ -37,11 +37,11 @@ function sis_getSiteUrl()
 }
 
 // actions
-if (isset($_POST['create-saveSetup'])) {
+if( current_user_can( 'mange_options' ) && isset( $_POST[ 'sis-nonce' ],  $_POST[ 'create-saveSetup' ] ) && wp_verify_nonce( $_POST[ 'sis-nonce' ], 'sis-nonce' ) ){
     CreateSiS_Options_WP_DB();
 }
 
-if (isset($_POST['sis-removeSetup'])) {
+if( current_user_can( 'mange_options' ) && isset( $_POST[ 'sis-nonce' ],  $_POST[ 'sis-removeSetup' ] ) && wp_verify_nonce( $_POST[ 'sis-nonce' ], 'sis-nonce' ) ){
     deleteSiS_Options_WP_DB();
 }
 
@@ -107,7 +107,7 @@ function sis_setSafeCssSelector()
         Website URL: <input type="url" pattern="^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$"  id="sis-url" name="sis-url" value="<?php echo sis_getSiteUrl(); ?>"
             <?php if (get_option("if_sis_siteId")) echo "readonly"; ?>>
         <br><br>
-        Site ID: <input type="text" id="sis-siteId" name="sis-siteId" readonly
+        Site ID: <input type="text" id="sis-siteId" name="sis-siteId"
                         value="<?php echo get_option("if_sis_siteId"); ?>">
         <br><br>
         Site Secret: <input type="text" id="sis-siteSecret" name="sis-siteSecret" readonly
@@ -128,6 +128,9 @@ function sis_setSafeCssSelector()
         <input type="submit" id="sis-remove-setup" name="sis-removeSetup"
                value="Remove Site Search Setup"
                style="display: none;">
+	<?php
+        wp_nonce_field( 'sis-nonce' );
+    ?>
     </form>
     <br><br>
     <p>Using this Site Search plugin, you accept our
@@ -147,7 +150,7 @@ function sis_setSafeCssSelector()
         <?php if (!get_option("if_sis_siteId")) echo "style='display: none'"; ?>>
     <br><br>
     <p>Search here before your visitors start searching...</p>
-    <div id="searchbar"><?php echo If_Sis_searchbar($form); ?></div>
+    <div id="searchbar"><?php echo If_Sis_searchbar(); ?></div>
     <br><br>
     <div>
         <p
